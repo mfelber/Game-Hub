@@ -1,0 +1,14 @@
+name: 'game-hub'
+version: '3.8'
+
+services:
+  db:
+    container_name: database_game_hub
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: game_hub_user
+      POSTGRES_PASSWORD: game_hub_password
+      POSTGRES_DB: game_hub_db
+    ports:
+        - "5432:5432"
