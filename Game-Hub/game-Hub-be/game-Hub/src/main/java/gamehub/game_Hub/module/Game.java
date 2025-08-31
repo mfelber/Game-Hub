@@ -37,6 +37,9 @@ public class Game {
       inverseJoinColumns = @JoinColumn(name = "genre_id"))
   private Set<Genre> genres;
 
+  @ManyToMany(mappedBy = "library")
+  private Set<User> owners;
+
   private String publisher;
 
   private int releaseYear;
