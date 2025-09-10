@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import gamehub.game_Hub.module.User;
+import gamehub.game_Hub.module.User.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
