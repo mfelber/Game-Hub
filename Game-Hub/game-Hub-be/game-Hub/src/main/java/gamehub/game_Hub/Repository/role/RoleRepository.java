@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import gamehub.game_Hub.role.Role;
+import gamehub.game_Hub.Role.Role;
 
 public interface RoleRepository extends JpaRepository<Role, Long> {
 

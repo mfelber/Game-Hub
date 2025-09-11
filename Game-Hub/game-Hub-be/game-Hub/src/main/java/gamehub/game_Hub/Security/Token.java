@@ -2,7 +2,7 @@ package gamehub.game_Hub.Security;
 
 import java.time.LocalDateTime;
 
-import gamehub.game_Hub.module.User.User;
+import gamehub.game_Hub.Module.User.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

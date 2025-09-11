@@ -1,8 +1,8 @@
-package gamehub.game_Hub.module;
+package gamehub.game_Hub.Module;
 
 import java.util.Set;
 
-import gamehub.game_Hub.module.User.User;
+import gamehub.game_Hub.Module.User.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

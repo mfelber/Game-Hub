@@ -1,4 +1,4 @@
-package gamehub.game_Hub.module.User;
+package gamehub.game_Hub.Module.User;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
@@ -14,8 +14,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import gamehub.game_Hub.module.Game;
-import gamehub.game_Hub.role.Role;
+import gamehub.game_Hub.Module.Game;
+import gamehub.game_Hub.Role.Role;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -56,13 +56,17 @@ public class User implements UserDetails, Principal {
   @Column(unique = true)
   private String email;
 
-  private String displayName;
-
   //TODO avatar field
 
   private boolean isBanned;
 
   @ManyToMany(fetch = FetchType.EAGER)
+  @JoinTable(
+      name = "user_roles",
+      schema = "game_hub",
+      joinColumns = @JoinColumn(name = "user_id"),
+      inverseJoinColumns = @JoinColumn(name = "role_id")
+  )
   private List<Role> roles;
 
   @CreatedDate

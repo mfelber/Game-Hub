@@ -12,3 +12,19 @@ services:
       POSTGRES_DB: game_hub_db
     ports:
         - "5432:5432"
+    networks:
+      - game-hub-network
+  mail-dev:
+    container_name: maildev-game-hub
+    image: maildev/maildev
+    ports:
+      - "1080:1080"
+      - "1025:1025"
+
+networks:
+  game-hub-network:
+    driver: bridge
+
+volumes:
+  db:
+    driver: local

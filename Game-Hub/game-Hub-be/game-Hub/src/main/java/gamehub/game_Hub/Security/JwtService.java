@@ -21,10 +21,10 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JwtService {
 
-  @Value("${security.jwt.expiration}")
+  @Value("${application.security.jwt.expiration}")
   private long jwtExpiration;
 
-  @Value("${security.jwt.secret}")
+  @Value("${application.security.jwt.secret-key}")
   private String secretKey;
 
   public String extractUsername(final String token) {
