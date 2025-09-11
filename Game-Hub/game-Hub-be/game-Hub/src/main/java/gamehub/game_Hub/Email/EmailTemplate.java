@@ -8,7 +8,7 @@ public enum EmailTemplate {
 
   WELCOME_EMAIL("welcome-email");
 
-  private final String name;
+  public final String name;
 
   EmailTemplate(String name) {
     this.name = name;

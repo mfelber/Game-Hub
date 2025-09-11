@@ -54,8 +54,10 @@
     <h1>Welcome to Game Hub!</h1>
   </div>
   <div class="content">
-<!--    <p th:text="'Hello' + ${userName} + ','"></p>-->
-    <p>Hi <strong> "${username}"</strong>,
+    <p>
+      Hi <strong th:text="${username}"></strong>,
+    </p>
+
     <p>Thank you for registering at <strong>Game Hub</strong>! We’re excited to have you on board.</p>
     <p>Start exploring and adding your favorite games to your library right away!</p>
     <a href="${loginUrl}" class="button">Go to Your Account</a>

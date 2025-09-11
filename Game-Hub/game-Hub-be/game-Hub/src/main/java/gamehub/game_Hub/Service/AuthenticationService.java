@@ -44,7 +44,7 @@ public class AuthenticationService {
 
   private void sendWelcomeEmail(final User user) throws MessagingException {
     emailService.sendEmail(user.getEmail(),
-        user.getUsername(),
+        user.getName(),
         EmailTemplate.WELCOME_EMAIL,
         logInUrl, "Welcome to GameHub!");
   }

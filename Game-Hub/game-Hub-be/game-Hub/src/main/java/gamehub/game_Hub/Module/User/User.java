@@ -96,12 +96,12 @@ public class User implements UserDetails, Principal {
 
   @Override
   public String getUsername() {
-    return email;
+    return username;
   }
 
   @Override
   public String getName() {
-    return email;
+    return username;
   }
 
   private String getFullName() {
