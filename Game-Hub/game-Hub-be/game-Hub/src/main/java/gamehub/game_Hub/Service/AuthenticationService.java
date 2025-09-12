@@ -1,18 +1,25 @@
 package gamehub.game_Hub.Service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import gamehub.game_Hub.Authentication.AuthenticationRequest;
+import gamehub.game_Hub.Authentication.AuthenticationResponse;
 import gamehub.game_Hub.Authentication.RegistrationRequest;
 import gamehub.game_Hub.Email.EmailService;
 import gamehub.game_Hub.Email.EmailTemplate;
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Repository.role.RoleRepository;
 import gamehub.game_Hub.Repository.user.UserRepository;
+import gamehub.game_Hub.Security.JwtService;
 import jakarta.mail.MessagingException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -23,6 +30,8 @@ public class AuthenticationService {
   private final PasswordEncoder passwordEncoder;
   private final UserRepository userRepository;
   private final EmailService emailService;
+  private final AuthenticationManager authenticationManager;
+  private final JwtService jwtService;
 
   @Value("${application.mailing.frontend.log-In-Url}")
   private String logInUrl;
@@ -49,6 +58,15 @@ public class AuthenticationService {
         logInUrl, "Welcome to GameHub!");
   }
 
-
+  public AuthenticationResponse authenticate(final @Valid AuthenticationRequest request) {
+    final var authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+        request.getEmail(), request.getPassword()
+    ));
+    var claims = new HashMap<String, Object>();
+    var user = (User) authentication.getPrincipal();
+    claims.put("fullName", user.getFullName());
+    var jwtToken = jwtService.generateToken(claims, user);
+    return AuthenticationResponse.builder().token(jwtToken).build();
+  }
 
 }

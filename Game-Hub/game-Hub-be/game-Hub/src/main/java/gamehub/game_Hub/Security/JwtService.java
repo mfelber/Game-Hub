@@ -45,12 +45,12 @@ public class JwtService {
 
   }
 
-  private String generateToken(final Map<String, Objects> claims, final UserDetails userDetails) {
+  public String generateToken(final Map<String, Object> claims, final UserDetails userDetails) {
     return buildToken(claims, userDetails, jwtExpiration);
   }
 
   private String buildToken(
-      final Map<String, Objects> extraClaims,
+      final Map<String, Object> extraClaims,
       final UserDetails userDetails,
       final long jwtExpiration) {
 
