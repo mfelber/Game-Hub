@@ -1,0 +1,50 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-100">
+
+  <div class="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700 login-container" role="alert">
+    <h3 class="text-center">
+      Create an Account
+    </h3>
+    <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-blue-400" role="alert" *ngIf="errorMessage.length">
+      <p *ngFor="let msg of errorMessage">{{msg}}</p>
+    </div>
+    <div class="mb-3">
+      <label for="firstname" class="form-label">First Name</label>
+      <input [(ngModel)]="registerRequest.firstName" type="text" class="form-control" id="firstname" placeholder="Test">
+    </div>
+    <div class="mb-3">
+      <label for="lastname" class="form-label">Last Name</label>
+      <input [(ngModel)]="registerRequest.lastName" type="text" class="form-control" id="lastname" placeholder="Test">
+    </div>
+    <div class="mb-3">
+      <label for="username" class="form-label">Username</label>
+      <input [(ngModel)]="registerRequest.username" type="email" class="form-control" id="username" placeholder="Gamer tag">
+    </div>
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input [(ngModel)]="registerRequest.email" type="email" class="form-control" id="email" placeholder="name@name.com">
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input [(ngModel)]="registerRequest.password" type="password" class="form-control" id="password" placeholder="Password">
+    </div>
+    <div class="d-flex justify-content-between mb-3">
+      <button (click)="register()" type="button" class="btn btn-primary">
+        <em class="fas fa-sign-in-alt"></em>&nbsp;Create an Account
+      </button>
+      <div>
+        Already have an account?&nbsp;
+        <button (click)="login()" type="button" class="btn btn-link">
+          Log In
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+
+
+
+
+
