@@ -1,4 +1,4 @@
-package gamehub.game_Hub.role;
+package gamehub.game_Hub.Role;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -9,7 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import gamehub.game_Hub.module.User.User;
+import gamehub.game_Hub.Module.User.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -17,6 +17,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,7 +29,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-
+@Table(name = "role", schema = "game_hub")
 public class Role {
 
   @Id

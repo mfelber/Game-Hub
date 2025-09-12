@@ -1,0 +1,43 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/game_hub_db
+    username: game_hub_user
+    password: game_hub_password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  mail:
+    host: localhost
+    port: 1025
+    username: user
+    password: password
+    properties:
+      mail:
+        smtp:
+          trust: "*"
+        auth: true
+        starttls:
+          enable: true
+        connectiontimeout: 5000
+        timeout: 3000
+        writetimeout: 5000
+
+application:
+    security:
+      jwt:
+        secret-key: d0c1b5cc8f6bc3c8de919015119e2342
+        expiration: 86400000
+    mailing:
+      frontend:
+        log-In-Url: http://localhost:4200/logIn
+
+server:
+  port: 8088

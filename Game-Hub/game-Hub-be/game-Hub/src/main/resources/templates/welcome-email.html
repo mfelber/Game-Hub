@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome Email</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      background-color: #ffffff;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .header {
+      text-align: center;
+      padding-bottom: 20px;
+    }
+    .header h1 {
+      color: #333333;
+    }
+    .content {
+      line-height: 1.6;
+      color: #555555;
+    }
+    .button {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 20px;
+      color: #ffffff !important;
+      background-color: #007bff;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+    .footer {
+      margin-top: 30px;
+      font-size: 12px;
+      text-align: center;
+      color: #aaaaaa;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>Welcome to Game Hub!</h1>
+  </div>
+  <div class="content">
+    <p>
+      Hi <strong th:text="${username}"></strong>,
+    </p>
+
+    <p>Thank you for registering at <strong>Game Hub</strong>! We’re excited to have you on board.</p>
+    <p>Start exploring and adding your favorite games to your library right away!</p>
+    <a href="${loginUrl}" class="button">Go to Your Account</a>
+  </div>
+  <div class="footer">
+    <p>If you didn’t register for Game Hub, please ignore this email.</p>
+    <p>&copy; 2025 Game Hub. All rights reserved.</p>
+  </div>
+</div>
+</body>
+</html>
