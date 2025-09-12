@@ -7,7 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:game-Hub-fe": "node dist/game-hub-fe/server/server.mjs"
+    "serve:ssr:game-Hub-fe": "node dist/game-hub-fe/server/server.mjs",
+    "api-gen": "ng-openapi-gen --input ./src/openapi/openapi.json --output  ./src/app/services"
   },
   "private": true,
   "dependencies": {
@@ -23,6 +24,7 @@
     "@fortawesome/fontawesome-free": "^7.0.1",
     "@tailwindcss/postcss": "^4.1.13",
     "express": "^4.18.2",
+    "ng-openapi-gen": "^0.53.0",
     "postcss": "^8.5.6",
     "rxjs": "~7.8.0",
     "tailwindcss": "^4.1.13",
