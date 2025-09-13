@@ -12,7 +12,6 @@ import {TokenService} from '../../services/token/token.service';
   imports: [
     NgForOf,
     NgIf,
-    RouterOutlet,
     FormsModule
   ],
   templateUrl: './login.component.html',
@@ -40,7 +39,7 @@ export class LoginComponent {
     }).subscribe({
       next: (res) => {
         this.tokenService.token = res.token as string;
-        this.router.navigate(['library']);
+        this.router.navigate(['gamehub']);
       },
       error: (err) => {
         console.log(err);

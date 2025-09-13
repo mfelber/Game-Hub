@@ -10,5 +10,9 @@ export const routes: Routes = [
   {
     path: 'register',
     component: RegisterComponent,
+  },
+  {
+    path: 'gamehub',
+    loadChildren: () => import('./modules/gamehub/gamehub.module').then(m => m.GamehubModule)
   }
 ];
