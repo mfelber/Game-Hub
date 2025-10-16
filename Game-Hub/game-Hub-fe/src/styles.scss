@@ -15,15 +15,3 @@ body{
   font-family: 'MyFont', sans-serif;
 }
 
-
-.login-container{
-  max-width: 800px !important;
-  margin-top: 15px;
-}
-
-input:focus, textarea:focus, select:focus {
-  outline: none !important;
-  border-color: gray !important;
-  box-shadow: none !important;
-}
-

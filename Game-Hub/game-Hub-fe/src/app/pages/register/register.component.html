@@ -1,50 +1,64 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-100">
+<div class="min-h-screen bg-gradient-to-b from-[#090C2D] to-[#1D2793] flex items-center justify-center p-4">
+  <div class="w-full max-w-6xl flex flex-col md:flex-row overflow-hidden justify-center">
 
-  <div class="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700 login-container" role="alert">
-    <h3 class="text-center">
-      Create an Account
-    </h3>
-    <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-blue-400" role="alert" *ngIf="errorMessage.length">
-      <p *ngFor="let msg of errorMessage">{{msg}}</p>
-    </div>
-    <div class="mb-3">
-      <label for="firstname" class="form-label">First Name</label>
-      <input [(ngModel)]="registerRequest.firstName" type="text" class="form-control" id="firstname" placeholder="Test">
-    </div>
-    <div class="mb-3">
-      <label for="lastname" class="form-label">Last Name</label>
-      <input [(ngModel)]="registerRequest.lastName" type="text" class="form-control" id="lastname" placeholder="Test">
-    </div>
-    <div class="mb-3">
-      <label for="username" class="form-label">Username</label>
-      <input [(ngModel)]="registerRequest.username" type="email" class="form-control" id="username" placeholder="Gamer tag">
-    </div>
-    <div class="mb-3">
-      <label for="email" class="form-label">Email</label>
-      <input [(ngModel)]="registerRequest.email" type="email" class="form-control" id="email" placeholder="name@name.com">
-    </div>
-    <div class="mb-3">
-      <label for="password" class="form-label">Password</label>
-      <input [(ngModel)]="registerRequest.password" type="password" class="form-control" id="password" placeholder="Password">
-    </div>
-    <div class="d-flex justify-content-between mb-3">
-      <button (click)="register()" type="button" class="btn btn-primary">
-        <em class="fas fa-sign-in-alt"></em>&nbsp;Create an Account
-      </button>
-      <div>
-        Already have an account?&nbsp;
-        <button (click)="login()" type="button" class="btn btn-link">
-          Log In
-        </button>
+
+    <div class="w-full md:w-[55%] p-8 justify-center">
+      <img ngSrc="joystick.png" alt="GameHub Logo" class="w-20 h-20 mx-auto mb-4" width="20" height="20"/>
+      <h3 class="text-[3em] font-semibold text-white text-center mb-5">Welcome</h3>
+      <h3 class="text-[1em] font-semibold text-[#76849D] text-center mb-5">Register to get access to hundreds of games </h3>
+
+      <div *ngIf="successMessage" class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 text-center">
+        {{ successMessage }}
       </div>
 
+      <div *ngIf="errorMessage.length" class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 text-center">
+        <p *ngFor="let msg of errorMessage">{{ msg }}</p>
+      </div>
+
+      <form class="space-y-5 w-[25em] mx-auto">
+        <div>
+          <input [(ngModel)]="registerRequest.firstName" type="text" id="firstName" name="firstName" placeholder="First Name"
+                 class="form-control w-[25em] border rounded-[10px] px-3 py-2 focus:ring-transparent bg-transparent text-white" />
+        </div>
+        <div>
+          <input [(ngModel)]="registerRequest.lastName" type="text" name="lastName" id="lastName" placeholder="Last Name"
+                 class=" form-control w-[25em] border rounded-[10px] px-3 py-2 focus:ring-transparent bg-transparent text-white" />
+        </div>
+
+        <div>
+          <input [(ngModel)]="registerRequest.username" type="text" name="username" id="userName" placeholder="Username"
+                 class=" form-control w-[25em] border rounded-[10px] px-3 py-2 focus:ring-transparent bg-transparent text-white" />
+        </div>
+
+        <div>
+          <input [(ngModel)]="registerRequest.email" type="email" name="email" id="email" placeholder="name@domain.com"
+                 class=" form-control w-[25em] border rounded-[10px] px-3 py-2 focus:ring-transparent bg-transparent text-white" />
+        </div>
+
+        <div>
+          <input [(ngModel)]="registerRequest.password" type="password" name="password" id="password" placeholder="Password"
+                 class=" form-control w-[25em] border rounded-[10px] px-3 py-2 focus:ring-transparent bg-transparent text-white" />
+        </div>
+
+        <div class="space-y-2">
+          <button (click)="register()" type="submit"
+                  class="w-full bg-[#1947C0] text-white rounded-[10px] py-2 hover:bg-blue-700 transition">
+            Register
+          </button>
+          <h3 class="text-[1em] text-[#76849D] text-center">Already have an account?
+            <button (click)="login()" class="text-[#2749AB] hover:underline cursor-pointer bg-transparent border-none outline-none p-0">Sign in
+            </button>
+            </h3>
+        </div>
+
+      </form>
+    </div>
+
+
+    <div class="hidden md:block md:w-[45%] ml-10">
+      <img ngSrc="assets/images/astronaut_register.svg" alt="Astronaut" class="w-120 h-full" height="1122"
+           width="793" />
     </div>
 
   </div>
 </div>
-
-
-
-
-
-

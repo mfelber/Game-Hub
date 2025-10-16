@@ -1,12 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser, CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import {MatIconModule} from '@angular/material/icon';
-import { initFlowbite } from 'flowbite';
-
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   imports: [RouterOutlet, CommonModule, MatIconModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
@@ -14,7 +13,12 @@ import { initFlowbite } from 'flowbite';
 export class AppComponent implements OnInit {
   title = 'game-Hub-fe';
 
-  ngOnInit(): void {
-    initFlowbite();
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+
+  async ngOnInit(): Promise<void> {
+    if (isPlatformBrowser(this.platformId)) {
+      const flowbite = await import('flowbite');
+      flowbite.initFlowbite();
+    }
   }
 }
