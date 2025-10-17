@@ -1,8 +1,17 @@
 @import "tailwindcss";
-@import "@fortawesome/fontawesome-free/css/all.min.css";
-@import "bootstrap/dist/css/bootstrap.min.css";
+@import "@fortawesome/fontawesome-free/css/all.css";
+@import "flowbite/src/themes/default";
+@plugin "flowbite/plugin";
+@source "../node_modules/flowbite";
 
-.login-container{
-  max-width: 800px !important;
-  margin-top: 15px;
+@font-face {
+  font-family: 'MyFont';
+  src: url('assets/fonts/RocknRollOne-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
 }
+
+body{
+  font-family: 'MyFont', sans-serif;
+}
+

@@ -3,6 +3,7 @@ import {LoginComponent} from './pages/login/login.component';
 import {RegisterComponent} from './pages/register/register.component';
 
 export const routes: Routes = [
+  { path: '', redirectTo: 'login', pathMatch: 'full' }, // default page
   {
     path: 'login',
     component: LoginComponent,
@@ -10,5 +11,9 @@ export const routes: Routes = [
   {
     path: 'register',
     component: RegisterComponent,
+  },
+  {
+    path: 'gamehub',
+    loadChildren: () => import('./modules/gamehub/gamehub.module').then(m => m.GamehubModule)
   }
 ];
