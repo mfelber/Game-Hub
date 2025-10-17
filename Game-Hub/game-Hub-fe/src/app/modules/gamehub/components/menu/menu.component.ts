@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {RouterLink} from '@angular/router';
+import {RouterLink, RouterLinkActive} from '@angular/router';
 import {MatIcon} from '@angular/material/icon';
 import {initFlowbite} from 'flowbite';
 
@@ -7,7 +7,8 @@ import {initFlowbite} from 'flowbite';
   selector: 'app-menu',
   imports: [
     MatIcon,
-    RouterLink
+    RouterLink,
+    RouterLinkActive
   ],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.scss'

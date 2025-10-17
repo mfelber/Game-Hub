@@ -1,0 +1,31 @@
+.menu-item {
+  position: relative;
+  cursor: pointer;
+
+  a,
+  mat-icon, i {
+    color: white;
+    transition: color 0.3s ease;
+  }
+
+  &.active {
+    &::before {
+      content: '';
+      width: 5px;
+      height: 25px;
+      background-color: white;
+      border-radius: 25%;
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      transition: color 0.3s ease;
+    }
+  }
+
+  &:hover a,
+  &:hover mat-icon,
+  &:hover i {
+    color: lightgrey;
+  }
+}
