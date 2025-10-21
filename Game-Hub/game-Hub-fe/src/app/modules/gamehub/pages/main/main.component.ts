@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import {RouterOutlet} from '@angular/router';
+import {AfterViewInit, Component} from '@angular/core';
+import {NavigationEnd, Router, RouterOutlet} from '@angular/router';
 import {MenuComponent} from '../../components/menu/menu.component';
 
 @Component({
@@ -11,6 +11,16 @@ import {MenuComponent} from '../../components/menu/menu.component';
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'
 })
-export class MainComponent {
+export class MainComponent implements AfterViewInit {
 
+  constructor(private router: Router) {}
+
+  ngAfterViewInit() {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        const contentDiv = document.querySelector('.scrollable-content');
+        if (contentDiv) contentDiv.scrollTop = 0;
+      }
+    });
+  }
 }

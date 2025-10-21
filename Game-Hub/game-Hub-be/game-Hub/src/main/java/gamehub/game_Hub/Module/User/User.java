@@ -14,6 +14,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import gamehub.game_Hub.Module.Game;
 import gamehub.game_Hub.Role.Role;
 import jakarta.persistence.Column;
@@ -96,7 +98,7 @@ public class User implements UserDetails, Principal {
 
   @Override
   public String getUsername() {
-    return username;
+    return email;
   }
 
   @Override
