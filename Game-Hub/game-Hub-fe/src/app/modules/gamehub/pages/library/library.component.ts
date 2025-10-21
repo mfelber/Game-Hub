@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
+import {NgOptimizedImage} from "@angular/common";
 
 @Component({
   selector: 'app-library',
-  imports: [],
+    imports: [
+        NgOptimizedImage
+    ],
   templateUrl: './library.component.html',
   styleUrl: './library.component.scss'
 })
