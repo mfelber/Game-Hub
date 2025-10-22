@@ -18,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import gamehub.game_Hub.Module.Game;
 import gamehub.game_Hub.Role.Role;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -28,6 +29,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -82,6 +85,9 @@ public class User implements UserDetails, Principal {
   @ManyToMany
   @JoinTable(name = "user_library", schema = "game_hub", inverseJoinColumns = @JoinColumn(name = "user_id"), joinColumns = @JoinColumn(name = "game_id"))
   private Set<Game> library;
+
+  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  private List<PasswordResetToken> passwordResetTokens;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {

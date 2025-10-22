@@ -6,7 +6,8 @@ import lombok.Getter;
 
 public enum EmailTemplate {
 
-  WELCOME_EMAIL("welcome-email");
+  WELCOME_EMAIL("welcome-email"),
+  RESET_PASSWORD_MAIL("reset-password-mail"),;
 
   public final String name;
 

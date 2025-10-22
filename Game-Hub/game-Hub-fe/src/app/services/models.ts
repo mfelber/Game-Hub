@@ -4,6 +4,7 @@
 
 export type { AuthenticationRequest } from './models/authentication-request';
 export type { AuthenticationResponse } from './models/authentication-response';
+export type { ForgotPasswordRequest } from './models/forgot-password-request';
 export type { Game } from './models/game';
 export type { GameRequest } from './models/game-request';
 export type { GameResponse } from './models/game-response';
@@ -11,3 +12,4 @@ export type { Genre } from './models/genre';
 export type { GenreResponse } from './models/genre-response';
 export type { PageResponseGameResponse } from './models/page-response-game-response';
 export type { RegistrationRequest } from './models/registration-request';
+export type { TokenExpiredResponse } from './models/token-expired-response';

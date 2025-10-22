@@ -54,6 +54,44 @@
         }
       }
     },
+    "/auth/reset-password": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "operationId": "resetPassword",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "newPassword",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/auth/register": {
       "post": {
         "tags": [
@@ -77,6 +115,36 @@
               "application/json": {
                 "schema": {
                   "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/forgot-password": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "operationId": "processForgotPasswordRequest",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
                 }
               }
             }
@@ -180,6 +248,36 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/PageResponseGameResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/reset-token-info": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "operationId": "getResetTokenInfo",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenExpiredResponse"
                 }
               }
             }
@@ -316,6 +414,17 @@
           }
         }
       },
+      "ForgotPasswordRequest": {
+        "required": [
+          "email"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          }
+        }
+      },
       "AuthenticationRequest": {
         "required": [
           "email",
@@ -422,6 +531,14 @@
             "type": "boolean"
           },
           "last": {
+            "type": "boolean"
+          }
+        }
+      },
+      "TokenExpiredResponse": {
+        "type": "object",
+        "properties": {
+          "expired": {
             "type": "boolean"
           }
         }
