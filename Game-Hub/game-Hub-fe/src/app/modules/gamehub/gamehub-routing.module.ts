@@ -8,6 +8,7 @@ import {CommunityComponent} from './pages/community/community.component';
 import {DiscountsComponent} from './pages/discounts/discounts.component';
 import {FriendRequestsComponent} from './pages/friend-requests/friend-requests.component';
 import {FriendsComponent} from './pages/friends/friends.component';
+import {GameDetailsComponent} from './pages/game-details/game-details.component';
 
 const routes: Routes = [
   {
@@ -41,6 +42,9 @@ const routes: Routes = [
       {
         path: 'friends',
         component: FriendsComponent
+      },
+      { path: 'game/:id',
+        component: GameDetailsComponent
       }
     ]
   }

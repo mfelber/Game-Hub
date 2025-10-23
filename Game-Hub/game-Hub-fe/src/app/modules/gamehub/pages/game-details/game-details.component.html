@@ -1,0 +1,6 @@
+<div *ngIf="game">
+  <h2>{{game.title}}</h2>
+  <h2>{{game.description}}</h2>
+  <h2>{{game.price}}</h2>
+  <div *ngFor="let genres of game.genres">{{genres.name}}</div>
+</div>
