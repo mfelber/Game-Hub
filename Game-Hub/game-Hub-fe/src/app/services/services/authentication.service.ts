@@ -14,13 +14,45 @@ import { StrictHttpResponse } from '../strict-http-response';
 import { authenticate } from '../fn/authentication/authenticate';
 import { Authenticate$Params } from '../fn/authentication/authenticate';
 import { AuthenticationResponse } from '../models/authentication-response';
+import { getResetTokenInfo } from '../fn/authentication/get-reset-token-info';
+import { GetResetTokenInfo$Params } from '../fn/authentication/get-reset-token-info';
+import { processForgotPasswordRequest } from '../fn/authentication/process-forgot-password-request';
+import { ProcessForgotPasswordRequest$Params } from '../fn/authentication/process-forgot-password-request';
 import { register } from '../fn/authentication/register';
 import { Register$Params } from '../fn/authentication/register';
+import { resetPassword } from '../fn/authentication/reset-password';
+import { ResetPassword$Params } from '../fn/authentication/reset-password';
+import { TokenExpiredResponse } from '../models/token-expired-response';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
+  }
+
+  /** Path part for operation `resetPassword()` */
+  static readonly ResetPasswordPath = '/auth/reset-password';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `resetPassword()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  resetPassword$Response(params: ResetPassword$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
+    return resetPassword(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `resetPassword$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  resetPassword(params: ResetPassword$Params, context?: HttpContext): Observable<string> {
+    return this.resetPassword$Response(params, context).pipe(
+      map((r: StrictHttpResponse<string>): string => r.body)
+    );
   }
 
   /** Path part for operation `register()` */
@@ -52,6 +84,31 @@ export class AuthenticationService extends BaseService {
     );
   }
 
+  /** Path part for operation `processForgotPasswordRequest()` */
+  static readonly ProcessForgotPasswordRequestPath = '/auth/forgot-password';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `processForgotPasswordRequest()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  processForgotPasswordRequest$Response(params: ProcessForgotPasswordRequest$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
+    return processForgotPasswordRequest(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `processForgotPasswordRequest$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  processForgotPasswordRequest(params: ProcessForgotPasswordRequest$Params, context?: HttpContext): Observable<string> {
+    return this.processForgotPasswordRequest$Response(params, context).pipe(
+      map((r: StrictHttpResponse<string>): string => r.body)
+    );
+  }
+
   /** Path part for operation `authenticate()` */
   static readonly AuthenticatePath = '/auth/authenticate';
 
@@ -74,6 +131,31 @@ export class AuthenticationService extends BaseService {
   authenticate(params: Authenticate$Params, context?: HttpContext): Observable<AuthenticationResponse> {
     return this.authenticate$Response(params, context).pipe(
       map((r: StrictHttpResponse<AuthenticationResponse>): AuthenticationResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `getResetTokenInfo()` */
+  static readonly GetResetTokenInfoPath = '/auth/reset-token-info';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getResetTokenInfo()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getResetTokenInfo$Response(params: GetResetTokenInfo$Params, context?: HttpContext): Observable<StrictHttpResponse<TokenExpiredResponse>> {
+    return getResetTokenInfo(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getResetTokenInfo$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getResetTokenInfo(params: GetResetTokenInfo$Params, context?: HttpContext): Observable<TokenExpiredResponse> {
+    return this.getResetTokenInfo$Response(params, context).pipe(
+      map((r: StrictHttpResponse<TokenExpiredResponse>): TokenExpiredResponse => r.body)
     );
   }
 
