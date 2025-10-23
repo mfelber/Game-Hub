@@ -41,6 +41,4 @@ public class GameController {
     return ResponseEntity.ok(gameService.findAllGames(page,size));
   }
 
-
-
 }

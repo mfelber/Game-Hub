@@ -16,7 +16,7 @@ import {PageResponseGameResponse} from '../../../../services/models/page-respons
 export class StoreComponent implements OnInit{
   gameResponse: PageResponseGameResponse = {};
   public page = 0;
-  public size = 5;
+  public size = 15;
 
   constructor(
     private gameService: GameControllerService,
@@ -39,4 +39,15 @@ export class StoreComponent implements OnInit{
     })
   }
 
+  goToGame(gameId:any) {
+    this.gameService.getGameById({gameId}).subscribe({
+      next: (game) => {
+        console.log(game);
+        this.router.navigate(['gamehub/game', gameId]);
+      },
+      error: (err) => {
+        console.error('Error with loading game:', err);
+      }
+    });
+  }
 }
