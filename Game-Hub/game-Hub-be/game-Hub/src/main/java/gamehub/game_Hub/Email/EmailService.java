@@ -6,6 +6,8 @@ import static org.springframework.mail.javamail.MimeMessageHelper.MULTIPART_MODE
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -56,6 +58,10 @@ public class EmailService {
 
     helper.setText(template, true);
 
+    Resource image = new ClassPathResource("images/joystick.png");
+    helper.addInline("joystickImage", image);
+
+
     mailSender.send(mimeMessage);
   }
 
@@ -88,6 +94,9 @@ public class EmailService {
     helper.setSubject(subject);
 
     String template = templateEngine.process(templateName, context);
+
+    Resource image = new ClassPathResource("images/joystick.png");
+    helper.addInline("joystickImage", image);
 
     helper.setText(template, true);
 
