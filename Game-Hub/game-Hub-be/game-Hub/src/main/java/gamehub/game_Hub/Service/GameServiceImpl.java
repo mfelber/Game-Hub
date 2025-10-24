@@ -44,8 +44,6 @@ public class GameServiceImpl implements GameService {
 
     Page<Game> games = gameRepository.findAll(pageable);
 
-    // System.out.println(games.getContent());
-
     List<GameResponse> gameResponse = games.stream().map(gameMapper::toGameResponse).toList();
 
     return new PageResponse<>(

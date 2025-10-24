@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {NgForOf, NgOptimizedImage} from '@angular/common';
 import {GameControllerService} from '../../../../services/services/game-controller.service';
-import {Router} from '@angular/router';
+import {Router, RouterOutlet} from '@angular/router';
 import {PageResponseGameResponse} from '../../../../services/models/page-response-game-response';
 
 @Component({

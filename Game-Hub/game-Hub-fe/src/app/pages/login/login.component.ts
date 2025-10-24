@@ -24,7 +24,7 @@ export class LoginComponent {
     email: '',
     password: ''
   }
-  errorMessage: Array<string>[] = []
+  errorMessage: string = '';
 
   constructor(
     private router: Router,
@@ -34,7 +34,15 @@ export class LoginComponent {
   }
 
   login() {
-    this.errorMessage = [];
+
+    if (this.errorMessage.length){
+      return;
+    }
+    if (!this.validateLogin()){
+      return;
+    }
+
+    this.errorMessage = '';
     this.authenticationService.authenticate( {
       body: this.authenticationRequest
     }).subscribe({
@@ -43,7 +51,11 @@ export class LoginComponent {
         this.router.navigate(['gamehub']);
       },
       error: (err) => {
-        console.log(err);
+        if (err.status === 403) {
+          this.errorMessage = 'Incorrect email or password';
+        } else {
+          this.errorMessage = 'An error occurred. Please try again later';
+        }
       }
     })
   }
@@ -54,5 +66,29 @@ export class LoginComponent {
 
   resetPassword() {
     this.router.navigate(['forgot-password']);
+  }
+
+  validateLogin(): boolean {
+    const { email, password } = this.authenticationRequest;
+
+    if (!email?.trim() && !password?.trim()) {
+      this.errorMessage = 'Please fill in all required fields';
+      return false;
+    }
+
+    // valid email regex
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) {
+      this.errorMessage = 'Please enter a valid email address';
+      return false;
+    }
+
+    if (!password) {
+      this.errorMessage = 'Please enter your password';
+      return false;
+    }
+
+    this.errorMessage = '';
+    return true;
   }
 }

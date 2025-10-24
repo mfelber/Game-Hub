@@ -37,7 +37,7 @@ application:
         expiration: 86400000
     mailing:
       frontend:
-        log-In-Url: http://localhost:4200/logIn
+        login-url: http://localhost:4200/login
 
 server:
   port: 8088

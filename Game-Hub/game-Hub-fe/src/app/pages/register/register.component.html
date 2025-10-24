@@ -7,12 +7,12 @@
       <h3 class="text-[3em] font-semibold text-white text-center mb-5">Welcome</h3>
       <h3 class="text-[1em] font-semibold text-[#76849D] text-center mb-5">Register to get access to hundreds of games </h3>
 
-      <div *ngIf="successMessage" class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 text-center">
-        {{ successMessage }}
+      <div *ngIf="errorMessage" class="text-sm text-center mb-5">
+        <p style="color:red">{{ errorMessage }}</p>
       </div>
 
-      <div *ngIf="errorMessage.length" class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 text-center">
-        <p *ngFor="let msg of errorMessage">{{ msg }}</p>
+      <div *ngIf="successMessage" class="text-sm text-red- text-center mb-5">
+        <p style="color:green">{{ successMessage }}</p>
       </div>
 
       <form class="space-y-5 w-[25em] mx-auto">
@@ -46,7 +46,7 @@
             Register
           </button>
           <h3 class="text-[1em] text-[#76849D] text-center">Already have an account?
-            <button (click)="login()" class="text-[#2749AB] hover:underline cursor-pointer bg-transparent border-none outline-none p-0">Sign in
+            <button (click)="login()" type="button" class="text-[#2749AB] hover:underline cursor-pointer bg-transparent border-none outline-none p-0">Sign in
             </button>
             </h3>
         </div>

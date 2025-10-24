@@ -14,6 +14,8 @@ import { StrictHttpResponse } from '../strict-http-response';
 import { authenticate } from '../fn/authentication/authenticate';
 import { Authenticate$Params } from '../fn/authentication/authenticate';
 import { AuthenticationResponse } from '../models/authentication-response';
+import { checkUserExists } from '../fn/authentication/check-user-exists';
+import { CheckUserExists$Params } from '../fn/authentication/check-user-exists';
 import { getResetTokenInfo } from '../fn/authentication/get-reset-token-info';
 import { GetResetTokenInfo$Params } from '../fn/authentication/get-reset-token-info';
 import { processForgotPasswordRequest } from '../fn/authentication/process-forgot-password-request';
@@ -156,6 +158,31 @@ export class AuthenticationService extends BaseService {
   getResetTokenInfo(params: GetResetTokenInfo$Params, context?: HttpContext): Observable<TokenExpiredResponse> {
     return this.getResetTokenInfo$Response(params, context).pipe(
       map((r: StrictHttpResponse<TokenExpiredResponse>): TokenExpiredResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `checkUserExists()` */
+  static readonly CheckUserExistsPath = '/auth/check/user';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `checkUserExists()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  checkUserExists$Response(params: CheckUserExists$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+    return checkUserExists(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `checkUserExists$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  checkUserExists(params: CheckUserExists$Params, context?: HttpContext): Observable<boolean> {
+    return this.checkUserExists$Response(params, context).pipe(
+      map((r: StrictHttpResponse<boolean>): boolean => r.body)
     );
   }
 

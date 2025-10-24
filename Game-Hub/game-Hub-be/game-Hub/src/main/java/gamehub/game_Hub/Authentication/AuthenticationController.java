@@ -49,6 +49,12 @@ public class AuthenticationController {
     return ResponseEntity.ok(authenticationService.authenticate(request));
   }
 
+  @GetMapping("/check/user")
+  public ResponseEntity<Boolean> checkUserExists(@RequestParam final String email) {
+    boolean userExists = userRepository.existsByEmail(email);
+    return ResponseEntity.ok(userExists);
+  }
+
   @PostMapping("/forgot-password")
   public ResponseEntity<String> processForgotPasswordRequest(
       @RequestBody @Valid final ForgotPasswordRequest forgotPasswordRequest)

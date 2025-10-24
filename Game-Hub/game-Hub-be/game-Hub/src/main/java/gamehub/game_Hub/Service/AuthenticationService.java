@@ -45,7 +45,7 @@ public class AuthenticationService {
 
   private final JwtService jwtService;
 
-  @Value("${application.mailing.frontend.log-In-Url}")
+  @Value("${application.mailing.frontend.login-url}")
   private String logInUrl;
 
   public void registerUser(final RegistrationRequest request) throws MessagingException {

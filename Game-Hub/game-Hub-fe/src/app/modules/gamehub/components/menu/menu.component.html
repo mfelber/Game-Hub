@@ -4,11 +4,11 @@
       Game-Hub
       <div class="border-b border-white w-60 mt-5 mx-auto"></div>
     </div>
-    <div class="menu-item text-[20px] mt-4 px-4 flex items-center gap-2" routerLink="/gamehub" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+    <div class="menu-item text-[20px] mt-4 px-4 flex items-center gap-2" routerLink="/gamehub"  [class.active]="isStoreActive">
       <mat-icon class="text-white">shopping_cart</mat-icon>
       <a aria-current="page">Store</a>
     </div>
-    <div class="menu-item text-[20px] mt-4 px-4 flex items-center gap-2" routerLink="/gamehub/library" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+    <div class="menu-item text-[20px] mt-4 px-4 flex items-center gap-2" routerLink="/gamehub/library"   [class.active]="isLibraryActive" >
       <mat-icon class="text-white">videogame_asset</mat-icon>
       <a aria-current="page">Library</a>
     </div>
