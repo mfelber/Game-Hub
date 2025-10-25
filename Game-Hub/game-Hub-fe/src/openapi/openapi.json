@@ -31,6 +31,38 @@
     }
   ],
   "paths": {
+    "/store/buy/{gameId}": {
+      "post": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "buyGame",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/store/add-game": {
       "post": {
         "tags": [
@@ -206,6 +238,37 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/GameResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/store/check/game/{gameId}/owned/": {
+      "get": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "checkGameOwned",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
                 }
               }
             }

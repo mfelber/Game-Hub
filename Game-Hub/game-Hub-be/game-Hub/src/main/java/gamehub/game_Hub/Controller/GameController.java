@@ -1,6 +1,7 @@
 package gamehub.game_Hub.Controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import gamehub.game_Hub.Common.PageResponse;
+import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Service.GameRequest;
 import gamehub.game_Hub.Service.GameResponse;
 import gamehub.game_Hub.Service.GameService;
@@ -22,7 +24,6 @@ import lombok.RequiredArgsConstructor;
 public class GameController {
 
   private final GameService gameService;
-
 
   @PostMapping("/add-game")
   public void addGame(@Valid @RequestBody GameRequest gameRequest) {
@@ -40,5 +41,16 @@ public class GameController {
       @RequestParam(name = "size", defaultValue = "10", required = false) int size) {
     return ResponseEntity.ok(gameService.findAllGames(page,size));
   }
+
+  @PostMapping("/buy/{gameId}")
+  public ResponseEntity<Long> buyGame(@PathVariable final Long gameId, final Authentication connectedUser) {
+    return ResponseEntity.ok(gameService.buyGame(gameId, connectedUser));
+  }
+
+  @GetMapping("/check/game/{gameId}/owned/")
+  public ResponseEntity<Boolean> checkGameOwned(@PathVariable final Long gameId, final Authentication connectedUser) {
+    return ResponseEntity.ok(gameService.checkGameOwned(gameId, connectedUser));
+  }
+
 
 }

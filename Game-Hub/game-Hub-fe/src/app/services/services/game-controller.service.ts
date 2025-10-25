@@ -13,6 +13,10 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { addGame } from '../fn/game-controller/add-game';
 import { AddGame$Params } from '../fn/game-controller/add-game';
+import { buyGame } from '../fn/game-controller/buy-game';
+import { BuyGame$Params } from '../fn/game-controller/buy-game';
+import { checkGameOwned } from '../fn/game-controller/check-game-owned';
+import { CheckGameOwned$Params } from '../fn/game-controller/check-game-owned';
 import { findAllGames } from '../fn/game-controller/find-all-games';
 import { FindAllGames$Params } from '../fn/game-controller/find-all-games';
 import { GameResponse } from '../models/game-response';
@@ -24,6 +28,31 @@ import { PageResponseGameResponse } from '../models/page-response-game-response'
 export class GameControllerService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
+  }
+
+  /** Path part for operation `buyGame()` */
+  static readonly BuyGamePath = '/store/buy/{gameId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `buyGame()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  buyGame$Response(params: BuyGame$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return buyGame(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `buyGame$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  buyGame(params: BuyGame$Params, context?: HttpContext): Observable<number> {
+    return this.buyGame$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
   }
 
   /** Path part for operation `addGame()` */
@@ -73,6 +102,31 @@ export class GameControllerService extends BaseService {
   getGameById(params: GetGameById$Params, context?: HttpContext): Observable<GameResponse> {
     return this.getGameById$Response(params, context).pipe(
       map((r: StrictHttpResponse<GameResponse>): GameResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `checkGameOwned()` */
+  static readonly CheckGameOwnedPath = '/store/check/game/{gameId}/owned/';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `checkGameOwned()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  checkGameOwned$Response(params: CheckGameOwned$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+    return checkGameOwned(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `checkGameOwned$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  checkGameOwned(params: CheckGameOwned$Params, context?: HttpContext): Observable<boolean> {
+    return this.checkGameOwned$Response(params, context).pipe(
+      map((r: StrictHttpResponse<boolean>): boolean => r.body)
     );
   }
 

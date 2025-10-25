@@ -11,7 +11,7 @@ import gamehub.game_Hub.Repository.role.RoleRepository;
 import gamehub.game_Hub.Role.Role;
 
 @SpringBootApplication
-@EnableJpaAuditing
+@EnableJpaAuditing(auditorAwareRef = "auditorAware")
 @EnableAsync
 public class GameHubApplication {
 

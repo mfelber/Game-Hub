@@ -6,12 +6,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import gamehub.game_Hub.Common.PageResponse;
 import gamehub.game_Hub.Mapper.GameMapper;
 import gamehub.game_Hub.Module.Game;
+import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Repository.GameRepository;
+import gamehub.game_Hub.Repository.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
@@ -20,6 +24,8 @@ import lombok.RequiredArgsConstructor;
 public class GameServiceImpl implements GameService {
 
   private final GameRepository gameRepository;
+
+  private final UserRepository userRepository;
 
   private final GameMapper gameMapper;
 
@@ -56,6 +62,31 @@ public class GameServiceImpl implements GameService {
         games.isLast()
     );
 
+  }
+
+  @Transactional
+  public Long buyGame(final Long gameId, final Authentication connectedUser) {
+    Game game = gameRepository.findById(gameId)
+        .orElseThrow(()-> new EntityNotFoundException("No game found with id: " + gameId));
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId()).orElseThrow(()-> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+    if (!user.getLibrary().contains(game)) {
+      user.getLibrary().add(game);
+      userRepository.save(user);
+    }
+
+    return game.getId();
+  }
+
+  @Transactional
+  public Boolean checkGameOwned(final Long gameId, final Authentication connectedUser) {
+    Game game = gameRepository.findById(gameId)
+        .orElseThrow(()-> new EntityNotFoundException("No game found with id: " + gameId));
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId()).orElseThrow(()-> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+    return user.getLibrary().contains(game);
   }
 
 }
