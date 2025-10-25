@@ -8,6 +8,7 @@ import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
 import { GameControllerService } from './services/game-controller.service';
 import { AuthenticationService } from './services/authentication.service';
+import { LibraryControllerService } from './services/library-controller.service';
 
 /**
  * Module that provides all services and configuration.
@@ -19,6 +20,7 @@ import { AuthenticationService } from './services/authentication.service';
   providers: [
     GameControllerService,
     AuthenticationService,
+    LibraryControllerService,
     ApiConfiguration
   ],
 })
