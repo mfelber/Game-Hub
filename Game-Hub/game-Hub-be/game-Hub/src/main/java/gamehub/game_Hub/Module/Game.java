@@ -73,6 +73,8 @@ public class Game {
 
   private boolean dlc;
 
-  private String imageCover;
+  private String gameCoverImage;
+
+//   TODO add game images for game detail in store
 
 }

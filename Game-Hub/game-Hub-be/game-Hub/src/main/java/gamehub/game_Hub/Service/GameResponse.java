@@ -24,7 +24,7 @@ public class GameResponse {
   private String publisher;
   private String releaseYear;
   private Double price;
-  private byte [] imageCover;
+  private byte [] gameCoverImage;
 
 
 }

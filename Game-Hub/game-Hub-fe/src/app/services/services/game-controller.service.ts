@@ -23,11 +23,42 @@ import { GameResponse } from '../models/game-response';
 import { getGameById } from '../fn/game-controller/get-game-by-id';
 import { GetGameById$Params } from '../fn/game-controller/get-game-by-id';
 import { PageResponseGameResponse } from '../models/page-response-game-response';
+import { uploadGameCoverImage } from '../fn/game-controller/upload-game-cover-image';
+import { UploadGameCoverImage$Params } from '../fn/game-controller/upload-game-cover-image';
 
 @Injectable({ providedIn: 'root' })
 export class GameControllerService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
+  }
+
+  /** Path part for operation `uploadGameCoverImage()` */
+  static readonly UploadGameCoverImagePath = '/store/cover/{gameId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `uploadGameCoverImage()` instead.
+   *
+   * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
+   */
+  uploadGameCoverImage$Response(params: UploadGameCoverImage$Params, context?: HttpContext): Observable<StrictHttpResponse<{
+}>> {
+    return uploadGameCoverImage(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `uploadGameCoverImage$Response()` instead.
+   *
+   * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
+   */
+  uploadGameCoverImage(params: UploadGameCoverImage$Params, context?: HttpContext): Observable<{
+}> {
+    return this.uploadGameCoverImage$Response(params, context).pipe(
+      map((r: StrictHttpResponse<{
+}>): {
+} => r.body)
+    );
   }
 
   /** Path part for operation `buyGame()` */
@@ -64,7 +95,7 @@ export class GameControllerService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  addGame$Response(params: AddGame$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  addGame$Response(params: AddGame$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
     return addGame(this.http, this.rootUrl, params, context);
   }
 
@@ -74,9 +105,9 @@ export class GameControllerService extends BaseService {
    *
    * This method sends `application/json` and handles request body of type `application/json`.
    */
-  addGame(params: AddGame$Params, context?: HttpContext): Observable<void> {
+  addGame(params: AddGame$Params, context?: HttpContext): Observable<number> {
     return this.addGame$Response(params, context).pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
+      map((r: StrictHttpResponse<number>): number => r.body)
     );
   }
 

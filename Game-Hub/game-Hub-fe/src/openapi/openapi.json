@@ -31,6 +31,55 @@
     }
   ],
   "paths": {
+    "/store/cover/{gameId}": {
+      "post": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "uploadGameCoverImage",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "required": [
+                  "file"
+                ],
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/store/buy/{gameId}": {
       "post": {
         "tags": [
@@ -81,7 +130,15 @@
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
           }
         }
       }
@@ -410,7 +467,7 @@
           "dlc": {
             "type": "boolean"
           },
-          "imageCover": {
+          "gameCoverImage": {
             "type": "string"
           }
         }
@@ -574,7 +631,7 @@
             "type": "number",
             "format": "double"
           },
-          "imageCover": {
+          "gameCoverImage": {
             "type": "array",
             "items": {
               "type": "string",

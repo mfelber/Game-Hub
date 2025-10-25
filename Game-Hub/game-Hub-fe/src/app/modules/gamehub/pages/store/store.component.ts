@@ -3,18 +3,20 @@ import {NgForOf, NgOptimizedImage} from '@angular/common';
 import {GameControllerService} from '../../../../services/services/game-controller.service';
 import {Router, RouterOutlet} from '@angular/router';
 import {PageResponseGameResponse} from '../../../../services/models/page-response-game-response';
+import {GameResponse} from '../../../../services/models/game-response';
 
 @Component({
   selector: 'app-store',
   imports: [
-    NgForOf,
-    NgOptimizedImage
+    NgForOf
   ],
   templateUrl: './store.component.html',
   styleUrl: './store.component.scss'
 })
 export class StoreComponent implements OnInit{
-  gameResponse: PageResponseGameResponse = {};
+  gamePageResponse: PageResponseGameResponse = {}
+  gameResponse: GameResponse = {}
+  private _gameImageCover: string | undefined
   public page = 0;
   public size = 15;
 
@@ -34,7 +36,7 @@ export class StoreComponent implements OnInit{
       size:this.size
     }).subscribe({
       next: (games) => {
-        this.gameResponse = games;
+        this.gamePageResponse = games;
       }
     })
   }
@@ -50,4 +52,13 @@ export class StoreComponent implements OnInit{
       }
     });
   }
+
+  getGameImageCover(game: GameResponse): string {
+    if (game.gameCoverImage) {
+      return 'data:image/jpeg;base64,' + game.gameCoverImage;
+    }
+    return 'https://images.pexels.com/photos/1054655/pexels-photo-1054655.jpeg';
+  }
+
+
 }

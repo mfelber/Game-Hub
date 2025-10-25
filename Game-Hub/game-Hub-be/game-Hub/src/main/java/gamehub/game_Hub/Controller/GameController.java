@@ -8,13 +8,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import gamehub.game_Hub.Common.PageResponse;
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Service.GameRequest;
 import gamehub.game_Hub.Service.GameResponse;
 import gamehub.game_Hub.Service.GameService;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -26,9 +29,21 @@ public class GameController {
   private final GameService gameService;
 
   @PostMapping("/add-game")
-  public void addGame(@Valid @RequestBody GameRequest gameRequest) {
-    gameService.save(gameRequest);
+  public ResponseEntity<Long> addGame(@Valid @RequestBody GameRequest gameRequest) {
+    return ResponseEntity.ok(gameService.save(gameRequest));
   }
+
+  @PostMapping(value = "/cover/{gameId}", consumes = "multipart/form-data")
+  public ResponseEntity<?> uploadGameCoverImage(
+      @PathVariable final Long gameId,
+      @Parameter()
+      @RequestPart("file") MultipartFile file,
+      final Authentication connectedUser
+      ){
+    gameService.uploadGameCoverImage(gameId,file);
+    return ResponseEntity.accepted().build();
+  }
+
 
   @GetMapping("/game/{gameId}")
   public ResponseEntity<GameResponse> getGameById(@PathVariable final Long gameId) {
