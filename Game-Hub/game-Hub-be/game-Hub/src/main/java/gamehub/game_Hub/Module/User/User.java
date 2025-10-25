@@ -83,7 +83,7 @@ public class User implements UserDetails, Principal {
   private LocalDateTime lastModifiedAt;
 
   @ManyToMany
-  @JoinTable(name = "user_library", schema = "game_hub", inverseJoinColumns = @JoinColumn(name = "user_id"), joinColumns = @JoinColumn(name = "game_id"))
+  @JoinTable(name = "user_library", schema = "game_hub", inverseJoinColumns = @JoinColumn(name = "game_id"), joinColumns = @JoinColumn(name = "user_id"))
   private Set<Game> library;
 
   @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

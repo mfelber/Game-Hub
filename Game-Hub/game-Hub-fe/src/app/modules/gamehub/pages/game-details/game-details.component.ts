@@ -24,6 +24,7 @@ export class GameDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getInfoGame();
+    this.checkIfGameIsOwned();
   }
 
   private getInfoGame() {
@@ -39,5 +40,29 @@ export class GameDetailsComponent implements OnInit {
 
   }
 
+  private checkIfGameIsOwned() {
+    const gameId: any = this.router.snapshot.paramMap.get('id')
+    this.gameService.checkGameOwned({gameId}).subscribe({
+      next: (owned) => {
+        if (owned) {
+          console.log('you owned this game')
+        } else {
+          console.log('you do not owned this game')
+        }
 
+      }
+    })
+  }
+
+
+  buyGame(gameId: any) {
+    this.gameService.buyGame({gameId}).subscribe({
+      next: () => {
+    },
+      error: (err) => {
+        console.log('Error with buying game:', err);
+      }
+    });
+
+  }
 }

@@ -3,4 +3,5 @@
   <h2>{{game.description}}</h2>
   <h2>{{game.price}}</h2>
   <div *ngFor="let genres of game.genres">{{genres.name}}</div>
+  <button (click)="buyGame(game.gameId)">BUY</button>
 </div>

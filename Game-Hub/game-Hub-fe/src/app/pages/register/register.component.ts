@@ -57,7 +57,6 @@ export class RegisterComponent implements OnInit {
       next: (exists) => {
         if (exists) {
           this.errorMessage = 'Account with this Email already exists';
-
         }
         this.registerUser();
       },
