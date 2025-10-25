@@ -6,8 +6,8 @@ export interface Game {
   description?: string;
   developer?: string;
   dlc?: boolean;
+  gameCoverImage?: string;
   id?: number;
-  imageCover?: string;
   price?: number;
   publisher?: string;
   releaseYear?: string;

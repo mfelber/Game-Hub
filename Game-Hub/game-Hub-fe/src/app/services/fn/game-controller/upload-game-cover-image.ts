@@ -8,16 +8,20 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { GameRequest } from '../../models/game-request';
 
-export interface AddGame$Params {
-      body: GameRequest
+export interface UploadGameCoverImage$Params {
+  gameId: number;
+      body?: {
+'file': Blob;
+}
 }
 
-export function addGame(http: HttpClient, rootUrl: string, params: AddGame$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
-  const rb = new RequestBuilder(rootUrl, addGame.PATH, 'post');
+export function uploadGameCoverImage(http: HttpClient, rootUrl: string, params: UploadGameCoverImage$Params, context?: HttpContext): Observable<StrictHttpResponse<{
+}>> {
+  const rb = new RequestBuilder(rootUrl, uploadGameCoverImage.PATH, 'post');
   if (params) {
-    rb.body(params.body, 'application/json');
+    rb.path('gameId', params.gameId, {});
+    rb.body(params.body, 'multipart/form-data');
   }
 
   return http.request(
@@ -25,9 +29,10 @@ export function addGame(http: HttpClient, rootUrl: string, params: AddGame$Param
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: parseFloat(String((r as HttpResponse<any>).body)) }) as StrictHttpResponse<number>;
+      return r as StrictHttpResponse<{
+      }>;
     })
   );
 }
 
-addGame.PATH = '/store/add-game';
+uploadGameCoverImage.PATH = '/store/cover/{gameId}';

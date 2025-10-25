@@ -5,10 +5,11 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import gamehub.game_Hub.Common.PageResponse;
 import gamehub.game_Hub.Mapper.GameMapper;
@@ -16,6 +17,7 @@ import gamehub.game_Hub.Module.Game;
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Repository.GameRepository;
 import gamehub.game_Hub.Repository.user.UserRepository;
+import gamehub.game_Hub.File.FileStorageService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
@@ -29,24 +31,33 @@ public class GameServiceImpl implements GameService {
 
   private final GameMapper gameMapper;
 
+  private final FileStorageService fileStorageService;
+
   @Override
-  public void save(final GameRequest gameRequest) {
+  public Long save(final GameRequest gameRequest) {
     Game game = gameMapper.toGame(gameRequest);
+    return gameRepository.save(game).getId();
+  }
+
+  @Override
+  public void uploadGameCoverImage(final Long gameId, final MultipartFile file) {
+    Game game = gameRepository.findById(gameId)
+        .orElseThrow(() -> new EntityNotFoundException("Game not found with id: " + gameId));
+    var gameCoverImage = fileStorageService.saveFile(file);
+    game.setGameCoverImage(gameCoverImage);
     gameRepository.save(game);
-
-
   }
 
   @Override
   public GameResponse findById(final Long gameId) {
     return gameRepository.findById(gameId)
         .map(gameMapper::toGameResponse)
-        .orElseThrow(()-> new EntityNotFoundException("No game found with id: " + gameId));
+        .orElseThrow(() -> new EntityNotFoundException("No game found with id: " + gameId));
   }
 
   @Override
   public PageResponse<GameResponse> findAllGames(final int page, final int size) {
-    Pageable pageable = PageRequest.of(page, size);
+    Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
 
     Page<Game> games = gameRepository.findAll(pageable);
 
@@ -67,9 +78,10 @@ public class GameServiceImpl implements GameService {
   @Transactional
   public Long buyGame(final Long gameId, final Authentication connectedUser) {
     Game game = gameRepository.findById(gameId)
-        .orElseThrow(()-> new EntityNotFoundException("No game found with id: " + gameId));
+        .orElseThrow(() -> new EntityNotFoundException("No game found with id: " + gameId));
     User authUser = (User) connectedUser.getPrincipal();
-    User user = userRepository.findById(authUser.getId()).orElseThrow(()-> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
 
     if (!user.getLibrary().contains(game)) {
       user.getLibrary().add(game);
@@ -82,9 +94,10 @@ public class GameServiceImpl implements GameService {
   @Transactional
   public Boolean checkGameOwned(final Long gameId, final Authentication connectedUser) {
     Game game = gameRepository.findById(gameId)
-        .orElseThrow(()-> new EntityNotFoundException("No game found with id: " + gameId));
+        .orElseThrow(() -> new EntityNotFoundException("No game found with id: " + gameId));
     User authUser = (User) connectedUser.getPrincipal();
-    User user = userRepository.findById(authUser.getId()).orElseThrow(()-> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
 
     return user.getLibrary().contains(game);
   }

@@ -6,9 +6,9 @@ import { GenreResponse } from '../models/genre-response';
 export interface GameResponse {
   description?: string;
   developer?: string;
+  gameCoverImage?: Array<string>;
   gameId?: number;
   genres?: Array<GenreResponse>;
-  imageCover?: Array<string>;
   price?: number;
   publisher?: string;
   releaseYear?: string;

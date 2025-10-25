@@ -1,10 +1,10 @@
 package gamehub.game_Hub.Mapper;
 
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import gamehub.game_Hub.File.FileUtils;
 import gamehub.game_Hub.Module.Game;
 import gamehub.game_Hub.Service.GameRequest;
 import gamehub.game_Hub.Service.GameResponse;
@@ -39,8 +39,7 @@ public class GameMapper {
         .developer(game.getDeveloper())
         .publisher(game.getPublisher())
         .price(game.getPrice())
-        // TODO
-        // .imageCover(game.getImageCover().getBytes())
+        .gameCoverImage(FileUtils.readCoverFromLocation(game.getGameCoverImage()))
         .build();
   }
 

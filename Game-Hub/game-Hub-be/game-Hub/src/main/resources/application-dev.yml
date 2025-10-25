@@ -38,6 +38,9 @@ application:
     mailing:
       frontend:
         login-url: http://localhost:4200/login
+    file:
+      upload:
+        image-cover-path: ./uploads
 
 server:
   port: 8088
