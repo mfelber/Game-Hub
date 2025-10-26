@@ -9,6 +9,7 @@ import {DiscountsComponent} from './pages/discounts/discounts.component';
 import {FriendRequestsComponent} from './pages/friend-requests/friend-requests.component';
 import {FriendsComponent} from './pages/friends/friends.component';
 import {GameDetailsComponent} from './pages/game-details/game-details.component';
+import {GameDetailsLibraryComponent} from './pages/game-details-library/game-details-library.component';
 
 const routes: Routes = [
   {
@@ -45,6 +46,9 @@ const routes: Routes = [
       },
       { path: 'game/:id',
         component: GameDetailsComponent
+      },
+      { path: 'library/game/:id',
+        component: GameDetailsLibraryComponent
       }
     ]
   }

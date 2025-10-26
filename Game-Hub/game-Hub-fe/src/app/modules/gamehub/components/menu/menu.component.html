@@ -52,7 +52,7 @@
   <div class="grow min-h-screen">
     <div class="fixed top-0 left-[18.2em] right-7 z-10 bg-transparent backdrop-blur-sm pt-3 pb-2">
       <form class="flex justify-end items-center gap-4">
-        <div class="relative w-1/4 me-4">
+        <div *ngIf="!_isGameDetailsActive" class="relative w-1/4 me-4">
           <input
             type="text"
             id="search"
