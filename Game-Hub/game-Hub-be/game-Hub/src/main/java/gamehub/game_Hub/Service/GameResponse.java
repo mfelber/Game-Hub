@@ -2,7 +2,6 @@ package gamehub.game_Hub.Service;
 
 import java.util.Set;
 
-import gamehub.game_Hub.Module.Genre;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
