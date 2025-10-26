@@ -1,11 +1,11 @@
-<img width="1899" height="953" alt="image" src="https://github.com/user-attachments/assets/3f75002f-1fc4-43aa-a8cf-c10820d9d989" /># Game-Hub 🎮
+# Game-Hub 🎮
 
 GameHub is a web application built that serves as a hub for managing games.  
 It allows users to register, log in, browse games, and "buy" games and much more.
 
 --- 
 ## 🎮 Game Hub in Action
-![Home Page]
+Home Page
 <img width="1899" height="953" alt="image" src="https://github.com/user-attachments/assets/4de215c4-0147-4674-924a-113c38db3ee0" />
 
 ### Game Detail Views
