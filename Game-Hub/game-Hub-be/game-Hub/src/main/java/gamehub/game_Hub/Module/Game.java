@@ -2,8 +2,6 @@ package gamehub.game_Hub.Module;
 
 import java.util.Set;
 
-import org.hibernate.annotations.Fetch;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import gamehub.game_Hub.Module.User.User;
@@ -53,7 +51,31 @@ public class Game {
       inverseJoinColumns = @JoinColumn(name = "genre_id"))
   private Set<Genre> genres;
 
-  @ManyToMany(mappedBy = "library",fetch = FetchType.LAZY)
+  @ManyToMany(fetch = FetchType.LAZY)
+  @ToString.Exclude
+  @JsonIgnore
+  @JoinTable(name = "game_platform", schema = "game_hub",
+      joinColumns = @JoinColumn(name = "game_id"),
+      inverseJoinColumns = @JoinColumn(name = "platform_id"))
+  private Set<Platform> platforms;
+
+  @ManyToMany(fetch = FetchType.LAZY)
+  @ToString.Exclude
+  @JsonIgnore
+  @JoinTable(name = "game_subtitles", schema = "game_hub",
+  joinColumns = @JoinColumn(name = "game_id"),
+  inverseJoinColumns = @JoinColumn(name = "subtitles_id"))
+  private Set<Subtitles> subtitles;
+
+  @ManyToMany(fetch = FetchType.LAZY)
+  @ToString.Exclude
+  @JsonIgnore
+  @JoinTable(name = "game_language", schema = "game_hub",
+      joinColumns = @JoinColumn(name = "game_id"),
+      inverseJoinColumns = @JoinColumn(name = "language_id"))
+  private Set<Language> languages;
+
+  @ManyToMany(mappedBy = "library", fetch = FetchType.LAZY)
   @Nullable
   @ToString.Exclude
   @JsonIgnore
@@ -63,7 +85,7 @@ public class Game {
   @JoinColumn(name = "system_req_id")
   private SystemRequirements systemRequirements;
 
-  @OneToMany(mappedBy = "baseGame",fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "baseGame", fetch = FetchType.LAZY)
   @Nullable
   @JsonIgnore
   @ToString.Exclude
@@ -81,6 +103,6 @@ public class Game {
 
   private String gameCoverImage;
 
-//   TODO add game images for game detail in store
+  //   TODO add game images for game detail in store
 
 }

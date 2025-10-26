@@ -14,5 +14,17 @@
 <!--  <h2>{{game.systemRequirements.storage}}</h2>-->
 
   <br>
+  <h2>Languages</h2>
+  <div *ngFor="let languages of game.languages">{{languages.languageName}}</div>
+
+  <br>
+  <h2>Subtitles</h2>
+  <div *ngFor="let subtitles of game.subtitles">{{subtitles.subtitleName}}</div>
+
+<br>
+  <h2>Platforms</h2>
+  <div *ngFor="let platform of game.platforms">{{platform.platformName}}</div>
+
+  <br>
   <button (click)="buyGame(game.gameId)">BUY</button>
 </div>

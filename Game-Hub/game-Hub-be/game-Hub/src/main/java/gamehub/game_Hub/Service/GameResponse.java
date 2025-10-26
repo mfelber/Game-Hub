@@ -26,5 +26,8 @@ public class GameResponse {
   private Double price;
   private byte [] gameCoverImage;
   private SystemRequirements systemRequirements;
+  private Set<PlatformResponse> platforms;
+  private Set<LanguageResponse> languages;
+  private Set<SubtitleResponse> subtitles;
 
 }
