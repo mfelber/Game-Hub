@@ -10,7 +10,6 @@ import {Router} from '@angular/router';
   selector: 'app-register',
   standalone: true,
   imports: [
-    NgForOf,
     NgIf,
     ReactiveFormsModule,
     FormsModule,

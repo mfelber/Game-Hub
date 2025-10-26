@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {GameControllerService} from '../../../../services/services/game-controller.service';
 import {NgForOf, NgIf} from '@angular/common';
+import {GameResponse} from '../../../../services/models/game-response';
 
 @Component({
   selector: 'app-game-details',
@@ -15,6 +16,7 @@ import {NgForOf, NgIf} from '@angular/common';
 export class GameDetailsComponent implements OnInit {
 
   game: any;
+  gameIsOwned = false;
 
   constructor(
     private router: ActivatedRoute,
@@ -51,8 +53,10 @@ export class GameDetailsComponent implements OnInit {
       next: (owned) => {
         if (owned) {
           console.log('you owned this game')
+          this.gameIsOwned = true;
         } else {
           console.log('you do not owned this game')
+          this.gameIsOwned = false;
         }
 
       }
@@ -63,11 +67,21 @@ export class GameDetailsComponent implements OnInit {
   buyGame(gameId: any) {
     this.gameService.buyGame({gameId}).subscribe({
       next: () => {
+        this.checkIfGameIsOwned();
+        this.gameIsOwned = true;
     },
       error: (err) => {
         console.log('Error with buying game:', err);
       }
     });
 
+  }
+
+
+  getGameImageCover(game: GameResponse): string {
+    if (game.gameCoverImage) {
+      return 'data:image/jpeg;base64,' + game.gameCoverImage;
+    }
+    return 'https://images.pexels.com/photos/1054655/pexels-photo-1054655.jpeg';
   }
 }

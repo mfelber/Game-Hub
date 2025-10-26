@@ -10,7 +10,6 @@ import {TokenService} from '../../services/token/token.service';
 @Component({
   selector: 'app-login',
     imports: [
-        NgForOf,
         NgIf,
         FormsModule,
         NgOptimizedImage
