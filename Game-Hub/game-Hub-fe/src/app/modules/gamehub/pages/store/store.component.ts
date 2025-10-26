@@ -18,7 +18,7 @@ export class StoreComponent implements OnInit{
   gameResponse: GameResponse = {}
   private _gameImageCover: string | undefined
   public page = 0;
-  public size = 15;
+  public size = 30;
 
   constructor(
     private gameService: GameControllerService,

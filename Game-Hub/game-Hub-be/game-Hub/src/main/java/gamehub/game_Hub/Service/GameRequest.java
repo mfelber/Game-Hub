@@ -3,6 +3,9 @@ package gamehub.game_Hub.Service;
 import java.util.Set;
 
 import gamehub.game_Hub.Module.Genre;
+import gamehub.game_Hub.Module.Language;
+import gamehub.game_Hub.Module.Platform;
+import gamehub.game_Hub.Module.Subtitles;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
@@ -36,7 +39,13 @@ public record GameRequest(
     @NotNull(message = "110")
     String storage,
     @NotNull(message = "111")
-    String os
+    String os,
+    @NotNull(message = "112")
+    Set<Platform> platforms,
+    @NotNull(message = "113")
+    Set<Language> languages,
+    @NotNull(message = "114")
+    Set<Subtitles> subtitles
 ) {
 
 }

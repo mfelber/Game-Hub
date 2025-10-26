@@ -10,6 +10,9 @@ import gamehub.game_Hub.Module.SystemRequirements;
 import gamehub.game_Hub.Service.GameRequest;
 import gamehub.game_Hub.Service.GameResponse;
 import gamehub.game_Hub.Service.GenreResponse;
+import gamehub.game_Hub.Service.LanguageResponse;
+import gamehub.game_Hub.Service.PlatformResponse;
+import gamehub.game_Hub.Service.SubtitleResponse;
 
 @Service
 public class GameMapper {
@@ -34,6 +37,9 @@ public class GameMapper {
         .releaseYear(gameRequest.releaseYear())
         .price(gameRequest.price())
         .systemRequirements(systemRequirements)
+        .platforms(gameRequest.platforms())
+        .languages(gameRequest.languages())
+        .subtitles(gameRequest.subtitles())
         .build();
   }
 
@@ -52,6 +58,15 @@ public class GameMapper {
         .price(game.getPrice())
         .gameCoverImage(FileUtils.readCoverFromLocation(game.getGameCoverImage()))
         .systemRequirements(game.getSystemRequirements())
+        .platforms(game.getPlatforms().stream()
+            .map(g -> new PlatformResponse(g.getId(), g.getName()))
+            .collect(Collectors.toSet()))
+        .languages(game.getLanguages().stream()
+            .map(g -> new LanguageResponse(g.getId(), g.getName()))
+            .collect(Collectors.toSet()))
+        .subtitles(game.getSubtitles().stream()
+            .map(g -> new SubtitleResponse(g.getId(), g.getName()))
+            .collect(Collectors.toSet()))
         .build();
   }
 

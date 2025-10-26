@@ -519,12 +519,20 @@
       },
       "GameRequest": {
         "required": [
+          "cpu",
           "description",
           "developer",
           "genres",
+          "gpu",
+          "languages",
+          "os",
+          "platforms",
           "price",
           "publisher",
+          "ram",
           "releaseYear",
+          "storage",
+          "subtitles",
           "title"
         ],
         "type": "object",
@@ -573,10 +581,88 @@
           },
           "os": {
             "type": "string"
+          },
+          "platforms": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Platform"
+            }
+          },
+          "languages": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Language"
+            }
+          },
+          "subtitles": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Subtitles"
+            }
           }
         }
       },
       "Genre": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "games": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Game"
+            }
+          }
+        }
+      },
+      "Language": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "games": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Game"
+            }
+          }
+        }
+      },
+      "Platform": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "games": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Game"
+            }
+          }
+        }
+      },
+      "Subtitles": {
         "type": "object",
         "properties": {
           "id": {
@@ -724,6 +810,27 @@
           },
           "systemRequirements": {
             "$ref": "#/components/schemas/SystemRequirements"
+          },
+          "platforms": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlatformResponse"
+            }
+          },
+          "languages": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LanguageResponse"
+            }
+          },
+          "subtitles": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SubtitleResponse"
+            }
           }
         }
       },
@@ -735,6 +842,42 @@
             "format": "int64"
           },
           "name": {
+            "type": "string"
+          }
+        }
+      },
+      "LanguageResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "languageName": {
+            "type": "string"
+          }
+        }
+      },
+      "PlatformResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "platformName": {
+            "type": "string"
+          }
+        }
+      },
+      "SubtitleResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "subtitleName": {
             "type": "string"
           }
         }
