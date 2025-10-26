@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import gamehub.game_Hub.File.FileUtils;
 import gamehub.game_Hub.Module.Game;
+import gamehub.game_Hub.Module.SystemRequirements;
 import gamehub.game_Hub.Service.GameRequest;
 import gamehub.game_Hub.Service.GameResponse;
 import gamehub.game_Hub.Service.GenreResponse;
@@ -14,6 +15,15 @@ import gamehub.game_Hub.Service.GenreResponse;
 public class GameMapper {
 
   public Game toGame(final GameRequest gameRequest) {
+
+    SystemRequirements systemRequirements = SystemRequirements.builder()
+        .cpu(gameRequest.cpu())
+        .gpu(gameRequest.gpu())
+        .ram(gameRequest.ram())
+        .os(gameRequest.os())
+        .storage(gameRequest.storage())
+        .build();
+
     return Game.builder()
         .id(gameRequest.gameId())
         .title(gameRequest.title())
@@ -23,6 +33,7 @@ public class GameMapper {
         .developer(gameRequest.developer())
         .releaseYear(gameRequest.releaseYear())
         .price(gameRequest.price())
+        .systemRequirements(systemRequirements)
         .build();
   }
 
@@ -40,6 +51,7 @@ public class GameMapper {
         .publisher(game.getPublisher())
         .price(game.getPrice())
         .gameCoverImage(FileUtils.readCoverFromLocation(game.getGameCoverImage()))
+        .systemRequirements(game.getSystemRequirements())
         .build();
   }
 

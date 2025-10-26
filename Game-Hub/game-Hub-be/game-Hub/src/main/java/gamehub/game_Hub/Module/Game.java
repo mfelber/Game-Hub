@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import gamehub.game_Hub.Module.User.User;
 import jakarta.annotation.Nullable;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -17,6 +18,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -56,6 +58,10 @@ public class Game {
   @ToString.Exclude
   @JsonIgnore
   private Set<User> owners;
+
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "system_req_id")
+  private SystemRequirements systemRequirements;
 
   @OneToMany(mappedBy = "baseGame",fetch = FetchType.LAZY)
   @Nullable

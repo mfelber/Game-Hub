@@ -2,6 +2,7 @@ package gamehub.game_Hub.Service;
 
 import java.util.Set;
 
+import gamehub.game_Hub.Module.SystemRequirements;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,6 +25,6 @@ public class GameResponse {
   private String releaseYear;
   private Double price;
   private byte [] gameCoverImage;
-
+  private SystemRequirements systemRequirements;
 
 }

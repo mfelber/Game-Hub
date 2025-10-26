@@ -26,7 +26,17 @@ public record GameRequest(
     @NotEmpty(message = "105")
     String releaseYear,
     @NotNull(message = "106")
-    Double price
+    Double price,
+    @NotNull(message = "107")
+    String cpu,
+    @NotNull(message = "108")
+    String gpu,
+    @NotNull(message = "109")
+    String ram,
+    @NotNull(message = "110")
+    String storage,
+    @NotNull(message = "111")
+    String os
 ) {
 
 }

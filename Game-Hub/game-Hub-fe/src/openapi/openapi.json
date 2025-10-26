@@ -493,6 +493,9 @@
           "description": {
             "type": "string"
           },
+          "systemRequirements": {
+            "$ref": "#/components/schemas/SystemRequirements"
+          },
           "publisher": {
             "type": "string"
           },
@@ -555,6 +558,21 @@
           "price": {
             "type": "number",
             "format": "double"
+          },
+          "cpu": {
+            "type": "string"
+          },
+          "gpu": {
+            "type": "string"
+          },
+          "ram": {
+            "type": "string"
+          },
+          "storage": {
+            "type": "string"
+          },
+          "os": {
+            "type": "string"
           }
         }
       },
@@ -574,6 +592,30 @@
             "items": {
               "$ref": "#/components/schemas/Game"
             }
+          }
+        }
+      },
+      "SystemRequirements": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "cpu": {
+            "type": "string"
+          },
+          "gpu": {
+            "type": "string"
+          },
+          "ram": {
+            "type": "string"
+          },
+          "storage": {
+            "type": "string"
+          },
+          "os": {
+            "type": "string"
           }
         }
       },
@@ -679,6 +721,9 @@
               "type": "string",
               "format": "byte"
             }
+          },
+          "systemRequirements": {
+            "$ref": "#/components/schemas/SystemRequirements"
           }
         }
       },
