@@ -5,9 +5,7 @@ import {LibraryControllerService} from '../../../../services/services/library-co
 
 @Component({
   selector: 'app-library',
-    imports: [
-        NgOptimizedImage
-    ],
+    imports: [],
   templateUrl: './library.component.html',
   styleUrl: './library.component.scss'
 })
