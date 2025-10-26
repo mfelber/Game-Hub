@@ -10,5 +10,4 @@ public interface LibraryService {
 
   PageResponse<GameResponse> FindAllOwnedGames(int page, int size, Authentication connectedUser)
       throws AccessDeniedException;
-
 }

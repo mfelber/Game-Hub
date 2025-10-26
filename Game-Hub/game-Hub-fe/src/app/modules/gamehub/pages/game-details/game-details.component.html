@@ -2,6 +2,17 @@
   <h2>{{game.title}}</h2>
   <h2>{{game.description}}</h2>
   <h2>{{game.price}}</h2>
+  <br>
+  <h2>Genres</h2>
   <div *ngFor="let genres of game.genres">{{genres.name}}</div>
+  <br>
+  <h2>System req:</h2>
+  <h2>{{game.systemRequirements.cpu}}</h2>
+  <h2>{{game.systemRequirements.gpu}}</h2>
+<!--  <h2>{{game.systemRequirements.os}}</h2>-->
+<!--  <h2>{{game.systemRequirements.ram}}</h2>-->
+<!--  <h2>{{game.systemRequirements.storage}}</h2>-->
+
+  <br>
   <button (click)="buyGame(game.gameId)">BUY</button>
 </div>

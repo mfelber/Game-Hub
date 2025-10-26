@@ -12,4 +12,5 @@ export type { Genre } from './models/genre';
 export type { GenreResponse } from './models/genre-response';
 export type { PageResponseGameResponse } from './models/page-response-game-response';
 export type { RegistrationRequest } from './models/registration-request';
+export type { SystemRequirements } from './models/system-requirements';
 export type { TokenExpiredResponse } from './models/token-expired-response';

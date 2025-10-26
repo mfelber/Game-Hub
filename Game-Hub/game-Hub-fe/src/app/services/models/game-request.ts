@@ -4,12 +4,17 @@
 
 import { Genre } from '../models/genre';
 export interface GameRequest {
+  cpu?: string;
   description: string;
   developer: string;
   gameId?: number;
   genres: Array<Genre>;
+  gpu?: string;
+  os?: string;
   price: number;
   publisher: string;
+  ram?: string;
   releaseYear: string;
+  storage?: string;
   title: string;
 }
