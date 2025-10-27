@@ -8,28 +8,28 @@
     <!-- Store -->
     <div class="menu-item text-[20px] mt-6 px-4 flex items-center gap-3"
          routerLink="/gamehub" [class.active]="isStoreActive">
-      <mat-icon class="text-white">shopping_cart</mat-icon>
+      <i class="fa-solid fa-shopping-cart"></i>
       <a>Store</a>
     </div>
 
     <!-- Library -->
     <div class="menu-item text-[20px] mt-4 px-4 flex items-center gap-3"
          routerLink="/gamehub/library" [class.active]="isLibraryActive">
-      <mat-icon class="text-white">videogame_asset</mat-icon>
+      <i class="fa-solid fa-gamepad"></i>
       <a>Library</a>
     </div>
 
     <!-- Wishlist -->
     <div class="menu-item text-[20px] mt-4 px-4 flex items-center gap-3"
          routerLink="/gamehub/wishlist" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-      <mat-icon class="text-white">bookmark</mat-icon>
+      <i class="fa-solid fa-heart"></i>
       <a>Wishlist</a>
     </div>
 
     <!-- Community -->
     <div class="menu-item text-[20px] mt-4 px-4 flex items-center gap-3"
          routerLink="/gamehub/community" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-      <mat-icon>language</mat-icon>
+      <i class="fa-solid fa-earth"></i>
       <a>Find User</a>
     </div>
 
@@ -38,14 +38,14 @@
     <!-- Discounts -->
     <div class="menu-item text-[20px] mt-4 px-4 flex items-center gap-3"
          routerLink="/gamehub/discounts" routerLinkActive="active">
-      <mat-icon class="text-white">percent_discount</mat-icon>
+      <i class="fa-solid fa-percent"></i>
       <a>Discounts</a>
     </div>
 
 <!--    TODO WALLET ADD FUNDS,..-->
     <div class="menu-item text-[20px] mt-4 px-4 flex items-center gap-3"
          routerLink="/gamehub/wallet" routerLinkActive="active">
-      <mat-icon class="text-white">wallet</mat-icon>
+      <i class="fa-solid fa-wallet"></i>
       <a>Wallet</a>
     </div>
 
@@ -89,10 +89,11 @@
         </div>
 
         <div class="flex items-center justify-center w-10 h-10">
-          <mat-icon class="text-white cursor-pointer" (click)="goToCart()" >shopping_cart</mat-icon>
+          <i class="fa-solid fa-shopping-cart text-2xl cursor-pointer" (click)="goToCart()"></i>
         </div>
         <div class="flex items-center justify-center w-10 h-10">
-          <mat-icon class="text-white cursor-pointer" (click)="showNotifications()" >notifications</mat-icon>
+          <i class="fa-solid fa-bell text-2xl cursor-pointer" (click)="showNotifications()"></i>
+
         </div>
         <!--      <div class="flex items-center justify-center cursor-pointer" (click)="showNotifications()">-->
         <!--        Username of user-->

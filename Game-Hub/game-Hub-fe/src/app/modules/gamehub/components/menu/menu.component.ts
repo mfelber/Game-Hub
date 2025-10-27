@@ -7,7 +7,6 @@ import {NgIf} from '@angular/common';
 @Component({
   selector: 'app-menu',
   imports: [
-    MatIcon,
     RouterLink,
     RouterLinkActive,
     NgIf
