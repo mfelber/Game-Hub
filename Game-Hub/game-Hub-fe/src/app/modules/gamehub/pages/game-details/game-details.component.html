@@ -46,9 +46,15 @@
           <h3>{{game.price}}</h3>
         </div>
 
-        <button *ngIf="!gameIsOwned" class="mt-auto mb-2 bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded cursor-pointer">
+        <button *ngIf="!gameIsOwned && !gameInWishList" (click)="addGameToWishList(game.gameId)" class="mt-auto mb-2 bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded cursor-pointer">
           Add to Wishlist
         </button>
+
+
+        <button *ngIf="gameInWishList && !gameIsOwned" (click)="removeGameFromWishList(game.gameId)" class="mt-auto mb-2 bg-pink-600/90 hover:bg-pink-700/90 text-white font-semibold py-2 px-4 rounded cursor-pointer">
+         In Wishlist <i class="fa-solid fa-heart mr-1"></i>
+        </button>
+
 
         <button *ngIf="!gameIsOwned" (click)="buyGame(game.gameId)" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded cursor-pointer">
           Buy

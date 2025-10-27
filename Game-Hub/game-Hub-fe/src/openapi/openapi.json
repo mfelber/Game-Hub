@@ -31,6 +31,38 @@
     }
   ],
   "paths": {
+    "/store/delete/wishlist/{gameId}": {
+      "post": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "removeGameFromWishlist",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/store/cover/{gameId}": {
       "post": {
         "tags": [
@@ -86,6 +118,38 @@
           "game-controller"
         ],
         "operationId": "buyGame",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/store/add/wishlist/{gameId}": {
+      "post": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "addGameToWishlist",
         "parameters": [
           {
             "name": "gameId",
@@ -271,6 +335,48 @@
         }
       }
     },
+    "/wishlist/wishlist": {
+      "get": {
+        "tags": [
+          "wishlist-controller"
+        ],
+        "operationId": "getWishlist",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseGameResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/store/game/{gameId}": {
       "get": {
         "tags": [
@@ -308,6 +414,37 @@
           "game-controller"
         ],
         "operationId": "checkGameOwned",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/store/check/game/wishlist/{gameId}": {
+      "get": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "checkGameInWishlist",
         "parameters": [
           {
             "name": "gameId",
@@ -858,30 +995,6 @@
           }
         }
       },
-      "PlatformResponse": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "platformName": {
-            "type": "string"
-          }
-        }
-      },
-      "SubtitleResponse": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "subtitleName": {
-            "type": "string"
-          }
-        }
-      },
       "PageResponseGameResponse": {
         "type": "object",
         "properties": {
@@ -912,6 +1025,30 @@
           },
           "last": {
             "type": "boolean"
+          }
+        }
+      },
+      "PlatformResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "platformName": {
+            "type": "string"
+          }
+        }
+      },
+      "SubtitleResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "subtitleName": {
+            "type": "string"
           }
         }
       },

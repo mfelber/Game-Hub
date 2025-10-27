@@ -62,9 +62,24 @@ public class GameController {
     return ResponseEntity.ok(gameService.buyGame(gameId, connectedUser));
   }
 
+  @PostMapping("/add/wishlist/{gameId}")
+  public ResponseEntity<Long> addGameToWishlist(@PathVariable final Long gameId, final Authentication connectedUser) {
+    return ResponseEntity.ok(gameService.addGameToWishList(gameId, connectedUser));
+  }
+
+  @PostMapping("/delete/wishlist/{gameId}")
+  public ResponseEntity<Long> removeGameFromWishlist(@PathVariable final Long gameId, final Authentication connectedUser) {
+    return ResponseEntity.ok(gameService.removeGameToWishList(gameId, connectedUser));
+  }
+
   @GetMapping("/check/game/{gameId}/owned/")
   public ResponseEntity<Boolean> checkGameOwned(@PathVariable final Long gameId, final Authentication connectedUser) {
     return ResponseEntity.ok(gameService.checkGameOwned(gameId, connectedUser));
+  }
+
+  @GetMapping("/check/game/wishlist/{gameId}")
+  public ResponseEntity<Boolean> checkGameInWishlist(@PathVariable final Long gameId, final Authentication connectedUser) {
+    return ResponseEntity.ok(gameService.checkGameInWishlist(gameId, connectedUser));
   }
 
 

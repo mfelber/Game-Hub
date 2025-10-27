@@ -81,6 +81,12 @@ public class Game {
   @JsonIgnore
   private Set<User> owners;
 
+  @ManyToMany(mappedBy = "wishlist", fetch = FetchType.LAZY)
+  @Nullable
+  @ToString.Exclude
+  @JsonIgnore
+  private Set<User> wishlists;
+
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "system_req_id")
   private SystemRequirements systemRequirements;

@@ -19,4 +19,10 @@ public interface GameService {
 
   void uploadGameCoverImage(Long gameId, MultipartFile file);
 
+  Long addGameToWishList(Long gameId, Authentication connectedUser);
+
+  Long removeGameToWishList(Long gameId, Authentication connectedUser);
+
+  Boolean checkGameInWishlist(Long gameId, Authentication connectedUser);
+
 }

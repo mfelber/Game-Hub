@@ -83,8 +83,49 @@ public class GameServiceImpl implements GameService {
     User user = userRepository.findById(authUser.getId())
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
 
+    if (user.getWishlist().contains(game)) {
+      user.getWishlist().remove(game);
+      userRepository.save(user);
+    }
+
     if (!user.getLibrary().contains(game)) {
       user.getLibrary().add(game);
+      userRepository.save(user);
+    }
+
+    // TODO: Subtract the game price from the user's balance upon purchase
+
+    return game.getId();
+  }
+
+  @Transactional
+  public Long addGameToWishList(final Long gameId, final Authentication connectedUser) {
+    Game game = gameRepository.findById(gameId)
+        .orElseThrow(() -> new EntityNotFoundException("No game found with id: " + gameId));
+
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+    if (!user.getWishlist().contains(game)) {
+      user.getWishlist().add(game);
+      userRepository.save(user);
+    }
+
+    return game.getId();
+  }
+
+  @Override
+  public Long removeGameToWishList(final Long gameId, final Authentication connectedUser) {
+    Game game = gameRepository.findById(gameId)
+        .orElseThrow(() -> new EntityNotFoundException("No game found with id: " + gameId));
+
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+    if (user.getWishlist().contains(game)) {
+      user.getWishlist().remove(game);
       userRepository.save(user);
     }
 
@@ -100,6 +141,18 @@ public class GameServiceImpl implements GameService {
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
 
     return user.getLibrary().contains(game);
+  }
+
+
+  @Override
+  public Boolean checkGameInWishlist(final Long gameId, final Authentication connectedUser) {
+    Game game = gameRepository.findById(gameId)
+        .orElseThrow(() -> new EntityNotFoundException("No game found with id: " + gameId));
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+    return user.getWishlist().contains(game);
   }
 
 }

@@ -8,6 +8,7 @@ import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
 import { GameControllerService } from './services/game-controller.service';
 import { AuthenticationService } from './services/authentication.service';
+import { WishlistControllerService } from './services/wishlist-controller.service';
 import { LibraryControllerService } from './services/library-controller.service';
 
 /**
@@ -20,6 +21,7 @@ import { LibraryControllerService } from './services/library-controller.service'
   providers: [
     GameControllerService,
     AuthenticationService,
+    WishlistControllerService,
     LibraryControllerService,
     ApiConfiguration
   ],
