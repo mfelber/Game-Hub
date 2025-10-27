@@ -7,29 +7,29 @@ It allows users to register, log in, browse games, and "buy" games and much more
 ## 🎮 Game Hub in Action
 
 **Home Page**
-<img width="1899" height="953" alt="image" src="https://github.com/user-attachments/assets/4de215c4-0147-4674-924a-113c38db3ee0" />
+<img width="1897" height="945" alt="image" src="https://github.com/user-attachments/assets/7ea2ec21-3552-4b26-8b4d-eee4f41e4a4d" />
 
 ### 🎮 Game Detail Views
 
 **Before purchase:**  
 Game Detail in store
-<img width="1896" height="943" alt="image" src="https://github.com/user-attachments/assets/a91ffafe-b770-4f16-a213-95d9c4ba4b2e" />
+<img width="1895" height="944" alt="image" src="https://github.com/user-attachments/assets/83241d2c-dab8-4b39-922a-c8c644195878" />
 
 **After purchase:**  
 Game Detail in store
-<img width="1885" height="939" alt="image" src="https://github.com/user-attachments/assets/c72964bf-ba9b-4d13-8833-af77d8df8861" />
+<img width="1897" height="943" alt="image" src="https://github.com/user-attachments/assets/1e7e285b-910d-408a-a851-8d111d25c6b7" />
 *View when the user already owns the game*
 
 **In Library:** 
-<img width="1900" height="942" alt="image" src="https://github.com/user-attachments/assets/8c679a19-ea17-411f-864c-5956e1f8baf2" />
+<img width="1894" height="947" alt="image" src="https://github.com/user-attachments/assets/fa25d2a6-a9a4-4845-80c5-1ef3a229b091" />
 
 ---
 
 ## 🚀 Features
 - 👤 User registration and login
-- 🎲 Game list browsing in store and library
+- 🎲 Game list browsing in store, library, wishlist
 - 🔍 Search by game title
-- 🛒 "Buying" games
+- 🛒 "Buying" games, adding games to the wishlist
 - 🗂️ Data storage in a database (PostgreSQL)
 - 🌐 REST API endpoints for data management
 
