@@ -1,53 +1,73 @@
 <div class="flex w-screen h-screen">
-  <div class="w-[18.2em] bg-[#0D1030]/20 px-3 pt-10 pb-5 flex flex-col">
-    <div class="text-[2.75rem] whitespace-nowrap text-center">
-      Game-Hub
-      <div class="border-b border-white w-60 mt-5 mx-auto"></div>
+  <div class="w-[18.2em] bg-[#1E2A4A]/60 backdrop-blur-md px-3 pt-10 pb-5 flex flex-col shadow-lg border-r border-white/10">
+    <div class="text-[2.75rem] whitespace-nowrap text-center font-bold text-white tracking-wide">
+      <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-purple-400">Game-Hub</span>
+      <div class="border-b border-white/30 w-60 mt-5 mx-auto"></div>
     </div>
-    <div class="menu-item text-[20px] mt-4 px-4 flex items-center gap-2" routerLink="/gamehub"  [class.active]="isStoreActive">
+
+    <!-- Store -->
+    <div class="menu-item text-[20px] mt-6 px-4 flex items-center gap-3"
+         routerLink="/gamehub" [class.active]="isStoreActive">
       <mat-icon class="text-white">shopping_cart</mat-icon>
-      <a aria-current="page">Store</a>
+      <a>Store</a>
     </div>
-    <div class="menu-item text-[20px] mt-4 px-4 flex items-center gap-2" routerLink="/gamehub/library"   [class.active]="isLibraryActive" >
+
+    <!-- Library -->
+    <div class="menu-item text-[20px] mt-4 px-4 flex items-center gap-3"
+         routerLink="/gamehub/library" [class.active]="isLibraryActive">
       <mat-icon class="text-white">videogame_asset</mat-icon>
-      <a aria-current="page">Library</a>
+      <a>Library</a>
     </div>
-    <div class="menu-item text-[20px] mt-4 px-4 flex items-center gap-2" routerLink="/gamehub/wishlist" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+
+    <!-- Wishlist -->
+    <div class="menu-item text-[20px] mt-4 px-4 flex items-center gap-3"
+         routerLink="/gamehub/wishlist" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
       <mat-icon class="text-white">bookmark</mat-icon>
-      <a aria-current="page">Wishlist</a>
+      <a>Wishlist</a>
     </div>
-    <div class="menu-item text-[20px] mt-4 px-4 flex items-center gap-2" routerLink="/gamehub/community" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+
+    <!-- Community -->
+    <div class="menu-item text-[20px] mt-4 px-4 flex items-center gap-3"
+         routerLink="/gamehub/community" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
       <mat-icon>language</mat-icon>
-      <a aria-current="page">Find User</a>
+      <a>Find User</a>
     </div>
 
-    <div class="border-b border-white w-60 mt-5 mx-auto"></div>
+    <div class="border-b border-white/20 w-60 mt-6 mx-auto"></div>
 
-    <div class="menu-item text-[20px] mt-4 px-4 flex items-center gap-2" routerLink="/gamehub/discounts" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+    <!-- Discounts -->
+    <div class="menu-item text-[20px] mt-4 px-4 flex items-center gap-3"
+         routerLink="/gamehub/discounts" routerLinkActive="active">
       <mat-icon class="text-white">percent_discount</mat-icon>
-      <a aria-current="page">Discounts</a>
-    </div>
-    <div class="menu-item text-[20px] mt-4 px-4 flex items-center gap-2" routerLink="/gamehub/friend-requests" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-      <i class="fa-solid fa-user-plus" style="font-size: 20px"></i>
-      <a aria-current="page">Friend Requests</a>
+      <a>Discounts</a>
     </div>
 
-<!--    TODO WALLET?-->
-<!--    <div class="text-2xl mt-4 px-4 flex items-center gap-2">-->
-<!--      <i class="fa-solid fa-user-plus" style="font-size: 20px"></i>-->
-<!--      <a href="#">Wallet | 34315 Eur</a>-->
-<!--    </div>-->
+<!--    TODO WALLET ADD FUNDS,..-->
+    <div class="menu-item text-[20px] mt-4 px-4 flex items-center gap-3"
+         routerLink="/gamehub/wallet" routerLinkActive="active">
+      <mat-icon class="text-white">wallet</mat-icon>
+      <a>Wallet</a>
+    </div>
 
-    <div class="border-b border-white w-60 mt-5 mx-auto"></div>
 
-    <div class="menu-item mt-auto text-[20px] px-4 flex items-center gap-2" routerLink="/gamehub/friends" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+
+    <!-- Friend Requests -->
+    <div class="menu-item text-[20px] mt-4 px-4 flex items-center gap-3"
+         routerLink="/gamehub/friend-requests" routerLinkActive="active">
+      <i class="fa-solid fa-user-plus"></i>
+      <a>Friend Requests</a>
+    </div>
+
+    <div class="border-b border-white/20 w-60 mt-6 mx-auto"></div>
+
+    <!-- Friends -->
+    <div class="menu-item mt-auto text-[20px] px-4 flex items-center gap-3"
+         routerLink="/gamehub/friends" routerLinkActive="active">
       <i class="fa-solid fa-users"></i>
-      <a aria-current="page">
-        Friends
-      </a>
+      <a>Friends</a>
     </div>
-
   </div>
+
 
   <div class="grow min-h-screen">
     <div class="fixed top-0 left-[18.2em] right-7 z-10 bg-transparent backdrop-blur-sm pt-3 pb-2">
