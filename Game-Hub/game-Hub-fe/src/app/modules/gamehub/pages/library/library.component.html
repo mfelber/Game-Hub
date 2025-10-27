@@ -1,4 +1,4 @@
-<div class="flex flex-wrap  overflow-y-auto gap-x-10 gap-y-5">
+<div class="flex flex-wrap gap-x-10 gap-y-5">
 
   <div *ngFor="let game of gamePageResponse.content"
        class="relative w-90 h-60 rounded-lg shadow-lg overflow-hidden mb-5 cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-2xl"
@@ -25,5 +25,11 @@
     <!--      <h5 class="text-xl font-semibold text-white">Elden Ring</h5>-->
     <!--    </div>-->
     <!--  </div>-->
+
   </div>
+</div>
+<div *ngIf="emptyLibrary" class="flex flex-col items-center justify-center h-60text-gray-400">
+  <i class="fa-solid fa-box-open text-4xl mb-4"></i>
+  <p class="text-lg font-semibold">Your library is empty</p>
+  <p class="text-sm text-gray-400 mt-1">Start adding some games to see them here!</p>
 </div>

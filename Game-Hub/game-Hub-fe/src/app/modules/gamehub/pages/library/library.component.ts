@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {NgForOf, NgOptimizedImage} from "@angular/common";
+import {NgForOf, NgIf, NgOptimizedImage} from "@angular/common";
 import {PageResponseGameResponse} from '../../../../services/models/page-response-game-response';
 import {LibraryControllerService} from '../../../../services/services/library-controller.service';
 import {GameResponse} from '../../../../services/models/game-response';
@@ -9,16 +9,18 @@ import {Router} from '@angular/router';
 @Component({
   selector: 'app-library',
   imports: [
-    NgForOf
+    NgForOf,
+    NgIf
   ],
   templateUrl: './library.component.html',
   styleUrl: './library.component.scss'
 })
 export class LibraryComponent implements OnInit{
 
-  gamePageResponse: PageResponseGameResponse = {}
+  gamePageResponse: PageResponseGameResponse = {};
   public page = 0;
   public size = 15;
+  emptyLibrary = false;
 
   ngOnInit() {
     this.findOwnedGame()
@@ -40,6 +42,11 @@ export class LibraryComponent implements OnInit{
         next: (games) => {
           this.gamePageResponse = games;
           console.log('PageResponse from backend:', this.gamePageResponse);
+          if (games.totalElements == 0) {
+            this.emptyLibrary = true
+          } else {
+            this.emptyLibrary = false
+          }
         },
         error: (err) => {
           console.error('Error loading library:', err);
