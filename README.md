@@ -35,6 +35,16 @@ Game Detail in store
 
 ---
 
+## Planned Features
+- User profile customization (status, custom text)
+- Adding/blocking people
+- Downloading games
+- Adding games as admin
+- Find other users
+- And much more
+
+---
+
 ## 🛠 Technologies Used
 - **Java 21**
 - **Spring Boot 3.5.5**
