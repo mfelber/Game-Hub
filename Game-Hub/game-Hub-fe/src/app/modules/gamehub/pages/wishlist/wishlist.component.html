@@ -1,1 +1,40 @@
-<p>wishlist works!</p>
+<div class="flex flex-wrap gap-x-10 gap-y-5">
+  <div
+    *ngFor="let game of gamePageResponse.content"
+    class="relative w-90 h-60 rounded-lg shadow-lg overflow-hidden mb-5 cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-2xl"
+    (click)="goToGame(game.gameId)"
+  >
+    <img
+      [src]="getGameImageCover(game)"
+      alt="not found"
+      class="w-full h-full object-cover"
+      width="1"
+      height="1"
+    />
+
+    <div class="absolute inset-0 bg-black/25"></div>
+
+    <div class="absolute bottom-0 left-0 right-0 p-3">
+      <h5 class="text-xl font-semibold text-white mb-1">{{ game.title }}</h5>
+
+      <div class="flex justify-between items-center gap-2">
+        <div class="flex gap-2">
+          <span
+            *ngFor="let genre of game.genres?.slice(0, 2)"
+            class="bg-[rgba(217,217,217,0.7)] rounded-[10px] px-2 py-1 w-fit text-sm"
+          >
+            {{ genre.name }}
+          </span>
+        </div>
+        <h5 class="text-xl font-semibold text-white text-sm">
+          {{ game.price }} €
+        </h5>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="emptyWishlist" class="flex flex-col items-center justify-center h-60text-gray-400">
+  <i class="fa-solid fa-box-open text-4xl mb-4"></i>
+  <p class="text-lg font-semibold">Your wishlist is empty</p>
+  <p class="text-sm text-gray-400 mt-1">Start adding some games to see them here!</p>
+</div>
