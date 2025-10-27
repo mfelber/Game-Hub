@@ -13,8 +13,12 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { addGame } from '../fn/game-controller/add-game';
 import { AddGame$Params } from '../fn/game-controller/add-game';
+import { addGameToWishlist } from '../fn/game-controller/add-game-to-wishlist';
+import { AddGameToWishlist$Params } from '../fn/game-controller/add-game-to-wishlist';
 import { buyGame } from '../fn/game-controller/buy-game';
 import { BuyGame$Params } from '../fn/game-controller/buy-game';
+import { checkGameInWishlist } from '../fn/game-controller/check-game-in-wishlist';
+import { CheckGameInWishlist$Params } from '../fn/game-controller/check-game-in-wishlist';
 import { checkGameOwned } from '../fn/game-controller/check-game-owned';
 import { CheckGameOwned$Params } from '../fn/game-controller/check-game-owned';
 import { findAllGames } from '../fn/game-controller/find-all-games';
@@ -23,6 +27,8 @@ import { GameResponse } from '../models/game-response';
 import { getGameById } from '../fn/game-controller/get-game-by-id';
 import { GetGameById$Params } from '../fn/game-controller/get-game-by-id';
 import { PageResponseGameResponse } from '../models/page-response-game-response';
+import { removeGameFromWishlist } from '../fn/game-controller/remove-game-from-wishlist';
+import { RemoveGameFromWishlist$Params } from '../fn/game-controller/remove-game-from-wishlist';
 import { uploadGameCoverImage } from '../fn/game-controller/upload-game-cover-image';
 import { UploadGameCoverImage$Params } from '../fn/game-controller/upload-game-cover-image';
 
@@ -30,6 +36,31 @@ import { UploadGameCoverImage$Params } from '../fn/game-controller/upload-game-c
 export class GameControllerService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
+  }
+
+  /** Path part for operation `removeGameFromWishlist()` */
+  static readonly RemoveGameFromWishlistPath = '/store/delete/wishlist/{gameId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `removeGameFromWishlist()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  removeGameFromWishlist$Response(params: RemoveGameFromWishlist$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return removeGameFromWishlist(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `removeGameFromWishlist$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  removeGameFromWishlist(params: RemoveGameFromWishlist$Params, context?: HttpContext): Observable<number> {
+    return this.removeGameFromWishlist$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
   }
 
   /** Path part for operation `uploadGameCoverImage()` */
@@ -82,6 +113,31 @@ export class GameControllerService extends BaseService {
    */
   buyGame(params: BuyGame$Params, context?: HttpContext): Observable<number> {
     return this.buyGame$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `addGameToWishlist()` */
+  static readonly AddGameToWishlistPath = '/store/add/wishlist/{gameId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `addGameToWishlist()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  addGameToWishlist$Response(params: AddGameToWishlist$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return addGameToWishlist(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `addGameToWishlist$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  addGameToWishlist(params: AddGameToWishlist$Params, context?: HttpContext): Observable<number> {
+    return this.addGameToWishlist$Response(params, context).pipe(
       map((r: StrictHttpResponse<number>): number => r.body)
     );
   }
@@ -157,6 +213,31 @@ export class GameControllerService extends BaseService {
    */
   checkGameOwned(params: CheckGameOwned$Params, context?: HttpContext): Observable<boolean> {
     return this.checkGameOwned$Response(params, context).pipe(
+      map((r: StrictHttpResponse<boolean>): boolean => r.body)
+    );
+  }
+
+  /** Path part for operation `checkGameInWishlist()` */
+  static readonly CheckGameInWishlistPath = '/store/check/game/wishlist/{gameId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `checkGameInWishlist()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  checkGameInWishlist$Response(params: CheckGameInWishlist$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+    return checkGameInWishlist(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `checkGameInWishlist$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  checkGameInWishlist(params: CheckGameInWishlist$Params, context?: HttpContext): Observable<boolean> {
+    return this.checkGameInWishlist$Response(params, context).pipe(
       map((r: StrictHttpResponse<boolean>): boolean => r.body)
     );
   }

@@ -4,4 +4,5 @@
 
 export { GameControllerService } from './services/game-controller.service';
 export { AuthenticationService } from './services/authentication.service';
+export { WishlistControllerService } from './services/wishlist-controller.service';
 export { LibraryControllerService } from './services/library-controller.service';
