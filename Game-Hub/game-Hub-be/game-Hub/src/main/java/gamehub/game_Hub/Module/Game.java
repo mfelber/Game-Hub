@@ -87,6 +87,24 @@ public class Game {
   @JsonIgnore
   private Set<User> wishlists;
 
+  @ManyToMany(mappedBy = "playRecently", fetch = FetchType.LAZY)
+  @ToString.Exclude
+  @Nullable
+  @JsonIgnore
+  private Set<User> playRecently;
+
+  @ManyToMany(mappedBy = "favoriteGames", fetch = FetchType.LAZY)
+  @ToString.Exclude
+  @Nullable
+  @JsonIgnore
+  private Set<User> favoriteGames;
+
+  @ManyToMany(mappedBy = "recommendationGames", fetch = FetchType.LAZY)
+  @ToString.Exclude
+  @Nullable
+  @JsonIgnore
+  private Set<User> recommendationGames;
+
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "system_req_id")
   private SystemRequirements systemRequirements;

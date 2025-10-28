@@ -16,12 +16,16 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import gamehub.game_Hub.Module.Badge;
 import gamehub.game_Hub.Module.Game;
+import gamehub.game_Hub.Module.Genre;
 import gamehub.game_Hub.Role.Role;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -61,7 +65,7 @@ public class User implements UserDetails, Principal {
   @Column(unique = true)
   private String email;
 
-  //TODO avatar field
+  private String userProfilePicture;
 
   private boolean isBanned;
 
@@ -93,6 +97,38 @@ public class User implements UserDetails, Principal {
   inverseJoinColumns = @JoinColumn(name = "game_id"),
   joinColumns = @JoinColumn(name = "user_id"))
   private Set<Game> wishlist;
+
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(name = "user_play_recently", schema = "game_hub",
+  joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "game_id"))
+  private Set<Game> playRecently;
+
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(name = "user_favorite_game", schema = "game_hub",
+      joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "game_id"))
+  private Set<Game> favoriteGames;
+
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(name = "user_favorite_genre", schema = "game_hub",
+      joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "genre_id"))
+  private Set<Genre> favoriteGenres;
+
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(name = "user_recommendation_game", schema = "game_hub",
+      joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "game_id"))
+  private Set<Game> recommendationGames;
+
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(name = "user_badges", schema = "game_hub",
+      joinColumns = @JoinColumn(name = "user_id"),
+      inverseJoinColumns = @JoinColumn(name = "badge_id"))
+  private Set<Badge> badges;
+
+  @Enumerated(EnumType.STRING)
+  private Location location;
+
+  @Column(name = "bio", length = 2000, nullable = true)
+  private String bio;
 
   @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   private List<PasswordResetToken> passwordResetTokens;
