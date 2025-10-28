@@ -20,6 +20,7 @@ import gamehub.game_Hub.Module.Game;
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Repository.GameRepository;
 import gamehub.game_Hub.Repository.user.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -57,6 +58,23 @@ public class LibraryServiceImpl implements LibraryService {
         library.isLast()
     );
 
+  }
+
+  @Override
+  public Long addGameToFavorites(final Long gameId, final Authentication connectedUser) {
+    Game game = gameRepository.findById(gameId)
+        .orElseThrow(() -> new EntityNotFoundException("No game found with id: " + gameId));
+
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+    if (!game.getFavoriteGames().contains(user)) {
+      game.getFavoriteGames().add(user);
+      userRepository.save(user);
+    }
+
+    return game.getId();
   }
 
 }
