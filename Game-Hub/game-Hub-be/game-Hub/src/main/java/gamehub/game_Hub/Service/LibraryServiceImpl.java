@@ -41,7 +41,6 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     User authUser = (User) connectedUser.getPrincipal();
-
     Pageable pageable = PageRequest.of(page, size, Sort.by("title").ascending());
     Page<Game> library = gameRepository.findByOwnersContaining(authUser,pageable);
     System.out.println(library.stream().map(game -> game.getTitle()).collect(Collectors.joining(",")));
