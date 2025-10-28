@@ -7,12 +7,12 @@ import org.springframework.stereotype.Service;
 import gamehub.game_Hub.File.FileUtils;
 import gamehub.game_Hub.Module.Game;
 import gamehub.game_Hub.Module.SystemRequirements;
-import gamehub.game_Hub.Service.GameRequest;
-import gamehub.game_Hub.Service.GameResponse;
-import gamehub.game_Hub.Service.GenreResponse;
-import gamehub.game_Hub.Service.LanguageResponse;
-import gamehub.game_Hub.Service.PlatformResponse;
-import gamehub.game_Hub.Service.SubtitleResponse;
+import gamehub.game_Hub.Request.GameRequest;
+import gamehub.game_Hub.Response.GameResponse;
+import gamehub.game_Hub.Response.GenreResponse;
+import gamehub.game_Hub.Response.LanguageResponse;
+import gamehub.game_Hub.Response.PlatformResponse;
+import gamehub.game_Hub.Response.SubtitleResponse;
 
 @Service
 public class GameMapper {

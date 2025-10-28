@@ -5,6 +5,7 @@ import java.nio.file.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 
 import gamehub.game_Hub.Common.PageResponse;
+import gamehub.game_Hub.Response.GameResponse;
 
 public interface LibraryService {
 

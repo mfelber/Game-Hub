@@ -1,7 +1,6 @@
-package gamehub.game_Hub.Service;
+package gamehub.game_Hub.ServiceImpl;
 
 import java.nio.file.AccessDeniedException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -9,8 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +15,10 @@ import gamehub.game_Hub.Common.PageResponse;
 import gamehub.game_Hub.Mapper.GameMapper;
 import gamehub.game_Hub.Module.Game;
 import gamehub.game_Hub.Module.User.User;
-import gamehub.game_Hub.Repository.GameRepository;
+import gamehub.game_Hub.Repository.game.GameRepository;
 import gamehub.game_Hub.Repository.user.UserRepository;
+import gamehub.game_Hub.Response.GameResponse;
+import gamehub.game_Hub.Service.LibraryService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
@@ -69,8 +68,8 @@ public class LibraryServiceImpl implements LibraryService {
     User user = userRepository.findById(authUser.getId())
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
 
-    if (!game.getFavoriteGames().contains(user)) {
-      game.getFavoriteGames().add(user);
+    if (!user.getFavoriteGames().contains(game)) {
+      user.getFavoriteGames().add(game);
       userRepository.save(user);
     }
 

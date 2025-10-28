@@ -1,4 +1,4 @@
-package gamehub.game_Hub.Repository;
+package gamehub.game_Hub.Repository.game;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

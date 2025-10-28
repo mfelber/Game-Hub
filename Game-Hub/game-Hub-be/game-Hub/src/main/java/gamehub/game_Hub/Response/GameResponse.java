@@ -1,4 +1,4 @@
-package gamehub.game_Hub.Service;
+package gamehub.game_Hub.Response;
 
 import java.util.Set;
 

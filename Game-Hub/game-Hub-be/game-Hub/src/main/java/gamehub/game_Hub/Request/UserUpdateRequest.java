@@ -1,4 +1,4 @@
-package gamehub.game_Hub.Service;
+package gamehub.game_Hub.Request;
 
 import gamehub.game_Hub.Module.User.Location;
 import lombok.AllArgsConstructor;

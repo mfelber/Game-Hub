@@ -1,4 +1,4 @@
-package gamehub.game_Hub.Service;
+package gamehub.game_Hub.Mapper;
 
 import java.util.stream.Collectors;
 
@@ -6,6 +6,11 @@ import org.springframework.stereotype.Service;
 
 import gamehub.game_Hub.File.FileUtils;
 import gamehub.game_Hub.Module.User.User;
+import gamehub.game_Hub.Request.UserUpdateRequest;
+import gamehub.game_Hub.Response.BadgeResponse;
+import gamehub.game_Hub.Response.GameResponseShort;
+import gamehub.game_Hub.Response.GenreResponse;
+import gamehub.game_Hub.Response.UserPublicResponse;
 
 @Service
 public class UserMapper {

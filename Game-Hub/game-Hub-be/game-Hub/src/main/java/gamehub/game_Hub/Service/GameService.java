@@ -4,6 +4,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
 
 import gamehub.game_Hub.Common.PageResponse;
+import gamehub.game_Hub.Request.GameRequest;
+import gamehub.game_Hub.Response.GameResponse;
 
 public interface GameService {
 

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import gamehub.game_Hub.Common.PageResponse;
 import gamehub.game_Hub.Repository.user.UserRepository;
-import gamehub.game_Hub.Service.GameResponse;
+import gamehub.game_Hub.Response.GameResponse;
 import gamehub.game_Hub.Service.LibraryService;
 import lombok.RequiredArgsConstructor;
 

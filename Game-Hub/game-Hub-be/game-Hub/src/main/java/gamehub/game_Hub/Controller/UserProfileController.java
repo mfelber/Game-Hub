@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import gamehub.game_Hub.Service.UserPublicResponse;
+import gamehub.game_Hub.Response.UserPublicResponse;
 import gamehub.game_Hub.Service.UserService;
-import gamehub.game_Hub.Service.UserUpdateRequest;
+import gamehub.game_Hub.Request.UserUpdateRequest;
 import lombok.RequiredArgsConstructor;
 
 @RestController

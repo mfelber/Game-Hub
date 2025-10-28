@@ -1,4 +1,4 @@
-package gamehub.game_Hub.Service;
+package gamehub.game_Hub.Response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,9 +13,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GenreResponse {
+public class SubtitleResponse {
 
   private Long id;
-  private String name;
+  private String subtitleName;
 
 }
