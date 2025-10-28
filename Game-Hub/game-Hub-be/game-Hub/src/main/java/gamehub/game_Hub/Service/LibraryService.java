@@ -14,4 +14,6 @@ public interface LibraryService {
 
   Long addGameToFavorites(Long gameId, Authentication connectedUser);
 
+  Long removeGameFromFavorites(Long gameId, Authentication connectedUser);
+
 }

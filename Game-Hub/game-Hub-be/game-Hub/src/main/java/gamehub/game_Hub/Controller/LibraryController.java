@@ -1,10 +1,12 @@
 package gamehub.game_Hub.Controller;
 
 import java.nio.file.AccessDeniedException;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,9 +35,16 @@ public class LibraryController {
     return ResponseEntity.ok(libraryService.FindAllOwnedGames(page, size, connectedUser));
   }
 
-  @PutMapping("/add/favorite/{gameId}")
-  public ResponseEntity<Long> addGameToFavorites(@PathVariable final Long gameId, final Authentication connectedUser) {
+  @PostMapping("/add/favorite/{gameId}")
+  public ResponseEntity<Long> addGameToFavorites(@PathVariable final Long gameId,
+      final Authentication connectedUser) {
     return ResponseEntity.ok(libraryService.addGameToFavorites(gameId, connectedUser));
+  }
+
+  @PostMapping("/add/remove/{gameId}")
+  public ResponseEntity<Long> removeGameFromFavorites(@PathVariable final Long gameId,
+      final Authentication connectedUser) {
+    return ResponseEntity.ok(libraryService.removeGameFromFavorites(gameId, connectedUser));
   }
 
 }

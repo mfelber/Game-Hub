@@ -26,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LibraryServiceImpl implements LibraryService {
 
-  private UserRepository userRepository;
+  private final UserRepository userRepository;
 
   private final GameMapper gameMapper;
 
@@ -70,6 +70,23 @@ public class LibraryServiceImpl implements LibraryService {
 
     if (!user.getFavoriteGames().contains(game)) {
       user.getFavoriteGames().add(game);
+      userRepository.save(user);
+    }
+
+    return game.getId();
+  }
+
+  @Override
+  public Long removeGameFromFavorites(final Long gameId, final Authentication connectedUser) {
+    Game game = gameRepository.findById(gameId)
+        .orElseThrow(() -> new EntityNotFoundException("No game found with id: " + gameId));
+
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+    if (user.getFavoriteGames().contains(game)) {
+      user.getFavoriteGames().remove(game);
       userRepository.save(user);
     }
 
