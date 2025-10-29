@@ -21,6 +21,7 @@ public class UserUpdateRequest {
   private String lastName;
   private String username;
   private String email;
+  private String bio;
   private Location location;
   private byte [] userProfilePicture;
 

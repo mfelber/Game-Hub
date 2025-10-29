@@ -15,4 +15,6 @@ public interface UserService {
 
   void updateFavoriteGenres(Set<Long> genreIds, Authentication connectedUser);
 
+  Long updateBio(Authentication connectedUser, UserUpdateRequest userUpdateRequest);
+
 }

@@ -68,4 +68,17 @@ public class UserServiceImpl implements UserService {
     userRepository.save(user);
   }
 
+  @Override
+  public Long updateBio(final Authentication connectedUser, final UserUpdateRequest userUpdateRequest) {
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+    user = user.toBuilder()
+        .bio(userUpdateRequest.getBio())
+        .build();
+
+    return userRepository.save(user).getId();
+  }
+
 }

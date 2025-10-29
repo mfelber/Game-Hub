@@ -25,11 +25,17 @@ public class UserProfileController {
   // location, bio, badge
   private final UserService userService;
 
-  @PostMapping("/update")
-  public ResponseEntity<Long> updateLocation(
+  @PostMapping("/update-profile")
+  public ResponseEntity<Long> updateUserProfile(
       final Authentication connectedUser,
       @RequestBody final UserUpdateRequest userUpdateRequest) {
     return ResponseEntity.ok(userService.updateUserProfile(connectedUser, userUpdateRequest));
+  }
+
+  @PostMapping("/update-bio")
+  public ResponseEntity<Long> updateBio(final Authentication connectedUser,
+      @RequestBody final UserUpdateRequest userUpdateRequest) {
+  return ResponseEntity.ok(userService.updateBio(connectedUser, userUpdateRequest));
   }
 
   @GetMapping("/user/{userId}")

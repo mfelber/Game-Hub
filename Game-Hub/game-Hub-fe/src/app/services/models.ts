@@ -4,10 +4,12 @@
 
 export type { AuthenticationRequest } from './models/authentication-request';
 export type { AuthenticationResponse } from './models/authentication-response';
+export type { BadgeResponse } from './models/badge-response';
 export type { ForgotPasswordRequest } from './models/forgot-password-request';
 export type { Game } from './models/game';
 export type { GameRequest } from './models/game-request';
 export type { GameResponse } from './models/game-response';
+export type { GameResponseShort } from './models/game-response-short';
 export type { Genre } from './models/genre';
 export type { GenreResponse } from './models/genre-response';
 export type { Language } from './models/language';
@@ -20,3 +22,5 @@ export type { SubtitleResponse } from './models/subtitle-response';
 export type { Subtitles } from './models/subtitles';
 export type { SystemRequirements } from './models/system-requirements';
 export type { TokenExpiredResponse } from './models/token-expired-response';
+export type { UserPublicResponse } from './models/user-public-response';
+export type { UserUpdateRequest } from './models/user-update-request';
