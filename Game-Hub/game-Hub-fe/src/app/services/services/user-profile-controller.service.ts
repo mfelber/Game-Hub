@@ -11,14 +11,19 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { getUser } from '../fn/user-profile-controller/get-user';
-import { GetUser$Params } from '../fn/user-profile-controller/get-user';
+import { getUserPrivate } from '../fn/user-profile-controller/get-user-private';
+import { GetUserPrivate$Params } from '../fn/user-profile-controller/get-user-private';
+import { getUserPublic } from '../fn/user-profile-controller/get-user-public';
+import { GetUserPublic$Params } from '../fn/user-profile-controller/get-user-public';
 import { updateBio } from '../fn/user-profile-controller/update-bio';
 import { UpdateBio$Params } from '../fn/user-profile-controller/update-bio';
 import { updateFavoriteGenres } from '../fn/user-profile-controller/update-favorite-genres';
 import { UpdateFavoriteGenres$Params } from '../fn/user-profile-controller/update-favorite-genres';
 import { updateUserProfile } from '../fn/user-profile-controller/update-user-profile';
 import { UpdateUserProfile$Params } from '../fn/user-profile-controller/update-user-profile';
+import { uploadProfileImage } from '../fn/user-profile-controller/upload-profile-image';
+import { UploadProfileImage$Params } from '../fn/user-profile-controller/upload-profile-image';
+import { UserPrivateResponse } from '../models/user-private-response';
 import { UserPublicResponse } from '../models/user-public-response';
 
 @Injectable({ providedIn: 'root' })
@@ -77,6 +82,35 @@ export class UserProfileControllerService extends BaseService {
     );
   }
 
+  /** Path part for operation `uploadProfileImage()` */
+  static readonly UploadProfileImagePath = '/profile/image';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `uploadProfileImage()` instead.
+   *
+   * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
+   */
+  uploadProfileImage$Response(params?: UploadProfileImage$Params, context?: HttpContext): Observable<StrictHttpResponse<{
+}>> {
+    return uploadProfileImage(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `uploadProfileImage$Response()` instead.
+   *
+   * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
+   */
+  uploadProfileImage(params?: UploadProfileImage$Params, context?: HttpContext): Observable<{
+}> {
+    return this.uploadProfileImage$Response(params, context).pipe(
+      map((r: StrictHttpResponse<{
+}>): {
+} => r.body)
+    );
+  }
+
   /** Path part for operation `updateFavoriteGenres()` */
   static readonly UpdateFavoriteGenresPath = '/profile/add/genres';
 
@@ -102,28 +136,53 @@ export class UserProfileControllerService extends BaseService {
     );
   }
 
-  /** Path part for operation `getUser()` */
-  static readonly GetUserPath = '/profile/user/{userId}';
+  /** Path part for operation `getUserPublic()` */
+  static readonly GetUserPublicPath = '/profile/user/{userId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getUser()` instead.
+   * To access only the response body, use `getUserPublic()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getUser$Response(params: GetUser$Params, context?: HttpContext): Observable<StrictHttpResponse<UserPublicResponse>> {
-    return getUser(this.http, this.rootUrl, params, context);
+  getUserPublic$Response(params: GetUserPublic$Params, context?: HttpContext): Observable<StrictHttpResponse<UserPublicResponse>> {
+    return getUserPublic(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getUser$Response()` instead.
+   * To access the full response (for headers, for example), `getUserPublic$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getUser(params: GetUser$Params, context?: HttpContext): Observable<UserPublicResponse> {
-    return this.getUser$Response(params, context).pipe(
+  getUserPublic(params: GetUserPublic$Params, context?: HttpContext): Observable<UserPublicResponse> {
+    return this.getUserPublic$Response(params, context).pipe(
       map((r: StrictHttpResponse<UserPublicResponse>): UserPublicResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `getUserPrivate()` */
+  static readonly GetUserPrivatePath = '/profile/user/me';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getUserPrivate()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getUserPrivate$Response(params?: GetUserPrivate$Params, context?: HttpContext): Observable<StrictHttpResponse<UserPrivateResponse>> {
+    return getUserPrivate(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getUserPrivate$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getUserPrivate(params?: GetUserPrivate$Params, context?: HttpContext): Observable<UserPrivateResponse> {
+    return this.getUserPrivate$Response(params, context).pipe(
+      map((r: StrictHttpResponse<UserPrivateResponse>): UserPrivateResponse => r.body)
     );
   }
 

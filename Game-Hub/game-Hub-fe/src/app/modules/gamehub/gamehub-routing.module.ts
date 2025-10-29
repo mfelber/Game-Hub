@@ -10,6 +10,7 @@ import {FriendRequestsComponent} from './pages/friend-requests/friend-requests.c
 import {FriendsComponent} from './pages/friends/friends.component';
 import {GameDetailsComponent} from './pages/game-details/game-details.component';
 import {GameDetailsLibraryComponent} from './pages/game-details-library/game-details-library.component';
+import {UserProfileComponent} from './pages/user-profile/user-profile.component';
 
 const routes: Routes = [
   {
@@ -49,6 +50,10 @@ const routes: Routes = [
       },
       { path: 'library/game/:id',
         component: GameDetailsLibraryComponent
+      },
+      {
+        path: 'user/me',
+        component: UserProfileComponent
       }
     ]
   }

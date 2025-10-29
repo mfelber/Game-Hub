@@ -269,6 +269,44 @@
         }
       }
     },
+    "/profile/image": {
+      "post": {
+        "tags": [
+          "user-profile-controller"
+        ],
+        "operationId": "uploadProfileImage",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "required": [
+                  "file"
+                ],
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/profile/add/genres": {
       "post": {
         "tags": [
@@ -671,7 +709,7 @@
         "tags": [
           "user-profile-controller"
         ],
-        "operationId": "getUser",
+        "operationId": "getUserPublic",
         "parameters": [
           {
             "name": "userId",
@@ -690,6 +728,26 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UserPublicResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/profile/user/me": {
+      "get": {
+        "tags": [
+          "user-profile-controller"
+        ],
+        "operationId": "getUserPrivate",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserPrivateResponse"
                 }
               }
             }
@@ -1054,13 +1112,6 @@
               "HUNGARY",
               "USA"
             ]
-          },
-          "userProfilePicture": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "byte"
-            }
           }
         }
       },
@@ -1317,6 +1368,83 @@
           "userId": {
             "type": "integer",
             "format": "int64"
+          },
+          "username": {
+            "type": "string"
+          },
+          "bio": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string",
+            "enum": [
+              "SLOVAKIA",
+              "CZECH_REPUBLIC",
+              "POLAND",
+              "HUNGARY",
+              "USA"
+            ]
+          },
+          "libraryCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "wishlistCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "badges": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BadgeResponse"
+            }
+          },
+          "playRecently": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GameResponseShort"
+            }
+          },
+          "favoriteGames": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GameResponseShort"
+            }
+          },
+          "favoriteGenres": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GenreResponse"
+            }
+          },
+          "userProfilePicture": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "byte"
+            }
+          }
+        }
+      },
+      "UserPrivateResponse": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
           },
           "username": {
             "type": "string"

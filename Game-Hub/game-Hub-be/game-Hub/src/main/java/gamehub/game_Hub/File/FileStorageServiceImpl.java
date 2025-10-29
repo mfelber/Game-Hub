@@ -67,4 +67,6 @@ public class FileStorageServiceImpl implements FileStorageService {
     return fileName.substring(lastIndex + 1).toLowerCase();
   }
 
+//   TODO create method for uploading userprofile picture with dedicated folder user/profilepicture...
+
 }

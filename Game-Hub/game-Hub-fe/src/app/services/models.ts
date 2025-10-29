@@ -22,5 +22,6 @@ export type { SubtitleResponse } from './models/subtitle-response';
 export type { Subtitles } from './models/subtitles';
 export type { SystemRequirements } from './models/system-requirements';
 export type { TokenExpiredResponse } from './models/token-expired-response';
+export type { UserPrivateResponse } from './models/user-private-response';
 export type { UserPublicResponse } from './models/user-public-response';
 export type { UserUpdateRequest } from './models/user-update-request';
