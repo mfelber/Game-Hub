@@ -11,14 +11,68 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { addGameToFavorites } from '../fn/library-controller/add-game-to-favorites';
+import { AddGameToFavorites$Params } from '../fn/library-controller/add-game-to-favorites';
 import { getLibrary } from '../fn/library-controller/get-library';
 import { GetLibrary$Params } from '../fn/library-controller/get-library';
 import { PageResponseGameResponse } from '../models/page-response-game-response';
+import { removeGameFromFavorites } from '../fn/library-controller/remove-game-from-favorites';
+import { RemoveGameFromFavorites$Params } from '../fn/library-controller/remove-game-from-favorites';
 
 @Injectable({ providedIn: 'root' })
 export class LibraryControllerService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
+  }
+
+  /** Path part for operation `removeGameFromFavorites()` */
+  static readonly RemoveGameFromFavoritesPath = '/library/add/remove/{gameId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `removeGameFromFavorites()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  removeGameFromFavorites$Response(params: RemoveGameFromFavorites$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return removeGameFromFavorites(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `removeGameFromFavorites$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  removeGameFromFavorites(params: RemoveGameFromFavorites$Params, context?: HttpContext): Observable<number> {
+    return this.removeGameFromFavorites$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `addGameToFavorites()` */
+  static readonly AddGameToFavoritesPath = '/library/add/favorite/{gameId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `addGameToFavorites()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  addGameToFavorites$Response(params: AddGameToFavorites$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return addGameToFavorites(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `addGameToFavorites$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  addGameToFavorites(params: AddGameToFavorites$Params, context?: HttpContext): Observable<number> {
+    return this.addGameToFavorites$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
   }
 
   /** Path part for operation `getLibrary()` */

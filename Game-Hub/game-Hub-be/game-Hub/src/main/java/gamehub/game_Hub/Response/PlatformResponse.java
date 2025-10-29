@@ -1,18 +1,21 @@
-package gamehub.game_Hub.Service;
+package gamehub.game_Hub.Response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Data
+@Builder
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class TokenExpiredResponse {
+@AllArgsConstructor
+public class PlatformResponse {
 
-  private boolean isExpired;
+  private Long id;
+  private String platformName;
 
 }

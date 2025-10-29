@@ -1,4 +1,4 @@
-package gamehub.game_Hub.Service;
+package gamehub.game_Hub.ServiceImpl;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,7 +14,9 @@ import gamehub.game_Hub.Common.PageResponse;
 import gamehub.game_Hub.Mapper.GameMapper;
 import gamehub.game_Hub.Module.Game;
 import gamehub.game_Hub.Module.User.User;
-import gamehub.game_Hub.Repository.GameRepository;
+import gamehub.game_Hub.Repository.game.GameRepository;
+import gamehub.game_Hub.Response.GameResponse;
+import gamehub.game_Hub.Service.WishlistService;
 import lombok.RequiredArgsConstructor;
 
 @Service

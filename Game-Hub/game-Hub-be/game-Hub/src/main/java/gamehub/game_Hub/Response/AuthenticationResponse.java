@@ -1,6 +1,4 @@
-package gamehub.game_Hub.Authentication;
-
-import java.security.SecureRandom;
+package gamehub.game_Hub.Response;
 
 import lombok.Builder;
 import lombok.Getter;

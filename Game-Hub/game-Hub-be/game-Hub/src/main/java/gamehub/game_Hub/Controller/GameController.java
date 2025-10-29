@@ -13,9 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import gamehub.game_Hub.Common.PageResponse;
-import gamehub.game_Hub.Module.User.User;
-import gamehub.game_Hub.Service.GameRequest;
-import gamehub.game_Hub.Service.GameResponse;
+import gamehub.game_Hub.Request.GameRequest;
+import gamehub.game_Hub.Response.GameResponse;
 import gamehub.game_Hub.Service.GameService;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;

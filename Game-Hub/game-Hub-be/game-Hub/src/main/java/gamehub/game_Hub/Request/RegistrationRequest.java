@@ -1,4 +1,4 @@
-package gamehub.game_Hub.Authentication;
+package gamehub.game_Hub.Request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

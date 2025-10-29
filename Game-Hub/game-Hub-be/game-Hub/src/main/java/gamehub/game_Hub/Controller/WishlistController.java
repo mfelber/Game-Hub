@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import gamehub.game_Hub.Common.PageResponse;
-import gamehub.game_Hub.Service.GameResponse;
+import gamehub.game_Hub.Response.GameResponse;
 import gamehub.game_Hub.Service.WishlistService;
 import lombok.RequiredArgsConstructor;
 

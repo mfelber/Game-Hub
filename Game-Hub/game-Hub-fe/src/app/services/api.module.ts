@@ -7,9 +7,10 @@ import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
 import { GameControllerService } from './services/game-controller.service';
+import { UserProfileControllerService } from './services/user-profile-controller.service';
+import { LibraryControllerService } from './services/library-controller.service';
 import { AuthenticationService } from './services/authentication.service';
 import { WishlistControllerService } from './services/wishlist-controller.service';
-import { LibraryControllerService } from './services/library-controller.service';
 
 /**
  * Module that provides all services and configuration.
@@ -20,9 +21,10 @@ import { LibraryControllerService } from './services/library-controller.service'
   declarations: [],
   providers: [
     GameControllerService,
+    UserProfileControllerService,
+    LibraryControllerService,
     AuthenticationService,
     WishlistControllerService,
-    LibraryControllerService,
     ApiConfiguration
   ],
 })

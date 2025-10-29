@@ -11,10 +11,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import gamehub.game_Hub.Authentication.AuthenticationRequest;
-import gamehub.game_Hub.Authentication.AuthenticationResponse;
-import gamehub.game_Hub.Authentication.ForgotPasswordRequest;
-import gamehub.game_Hub.Authentication.RegistrationRequest;
+import gamehub.game_Hub.Request.AuthenticationRequest;
+import gamehub.game_Hub.Response.AuthenticationResponse;
+import gamehub.game_Hub.Request.ForgotPasswordRequest;
+import gamehub.game_Hub.Request.RegistrationRequest;
 import gamehub.game_Hub.Email.EmailService;
 import gamehub.game_Hub.Email.EmailTemplate;
 import gamehub.game_Hub.Module.User.PasswordResetToken;
