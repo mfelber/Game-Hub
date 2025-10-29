@@ -1,8 +1,11 @@
 package gamehub.game_Hub.ServiceImpl;
 
+import java.net.URI;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,10 +58,9 @@ public class UserServiceImpl implements UserService {
   }
 
   @Transactional
-  public UserPublicResponse getPublicProfile(final Long userId) {
+  public UserPublicResponse getPublicProfile(final Long userId, final Authentication connectedUser) {
     User user = userRepository.findById(userId)
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + userId));
-
     return userMapper.toUserPublicResponse(user);
   }
 

@@ -13,7 +13,7 @@ public interface UserService {
 
   Long updateUserProfile(Authentication connectedUser, UserUpdateRequest userUpdateRequest);
 
-  UserPublicResponse getPublicProfile(Long userId);
+  UserPublicResponse getPublicProfile(Long userId, Authentication connectedUser);
 
   void updateFavoriteGenres(Set<Long> genreIds, Authentication connectedUser);
 

@@ -48,7 +48,7 @@ public class FileStorageServiceImpl implements FileStorageService {
       Files.write(targetPath, sourceFile.getBytes());
       log.info("Saved file: " + targetFilePath);
       return targetFilePath;
-    }catch (IOException e) {
+    } catch (IOException e) {
       log.error("File was not saved" , e);
     }
     return null;
