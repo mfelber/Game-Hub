@@ -3,6 +3,8 @@ import {NgForOf, NgIf} from '@angular/common';
 import {ActivatedRoute} from '@angular/router';
 import {GameControllerService} from '../../../../services/services/game-controller.service';
 import {GameResponse} from '../../../../services/models/game-response';
+import {LibraryControllerService} from '../../../../services/services/library-controller.service';
+import {UserPublicProfileComponent} from '../user-public-profile/user-public-profile.component';
 
 @Component({
   selector: 'app-game-details-library',
@@ -16,15 +18,18 @@ import {GameResponse} from '../../../../services/models/game-response';
 export class GameDetailsLibraryComponent implements OnInit {
 
   game:any
+  inFavorites = false
 
   constructor(
     private router: ActivatedRoute,
-    private gameService: GameControllerService
+    private gameService: GameControllerService,
+    private libraryService: LibraryControllerService,
   ) {
   }
 
   ngOnInit(): void {
     this.getInfoGame();
+    this.checkGameIsFavorite();
   }
 
   private getInfoGame() {
@@ -39,7 +44,6 @@ export class GameDetailsLibraryComponent implements OnInit {
 
           error: (err) => console.error('Error with loading details of this game', err)
         },
-
       )
     }
 
@@ -53,5 +57,36 @@ export class GameDetailsLibraryComponent implements OnInit {
   }
 
 
+  addGameToFavorite(gameId: any) {
+    this.libraryService.addGameToFavorites({gameId}).subscribe({
+      next: () => {
+        this.checkGameIsFavorite()
+        console.log('game with id ' + gameId + 'was added to user as favorite')
+      }
+    })
+  }
 
+  removeGameFromFavorite(gameId: any) {
+    this.libraryService.removeGameFromFavorites({gameId}).subscribe({
+      next: () => {
+        this.checkGameIsFavorite()
+        console.log('game with id ' + gameId + 'was added to user as favorite')
+      }
+    })
+  }
+
+  private checkGameIsFavorite() {
+    const gameId: any = this.router.snapshot.paramMap.get('id')
+    this.libraryService.checkGameFavorite({gameId}).subscribe({
+      next: (isFavorite) => {
+        if (isFavorite) {
+          this.inFavorites = true
+          console.log('in favorites')
+        } else {
+          this.inFavorites = false
+          console.log('not in favorites')
+        }
+      }
+    })
+  }
 }

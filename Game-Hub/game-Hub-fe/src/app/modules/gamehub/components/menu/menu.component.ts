@@ -45,7 +45,7 @@ export class MenuComponent implements OnInit {
       next:  (user) => {
         this.userResponse = user;
         console.log(user)
-        this.getProfilePicture(user)
+        // this.getProfilePicture(user)
       }
     });
 

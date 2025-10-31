@@ -47,4 +47,11 @@ public class LibraryController {
     return ResponseEntity.ok(libraryService.removeGameFromFavorites(gameId, connectedUser));
   }
 
+  // TODO fetch all favorite games
+
+  @GetMapping("/check/game/{gameId}/favorite/")
+  public ResponseEntity<Boolean> checkGameFavorite(@PathVariable final Long gameId, final Authentication connectedUser) {
+    return ResponseEntity.ok(libraryService.checkGameFavorite(gameId, connectedUser));
+  }
+
 }

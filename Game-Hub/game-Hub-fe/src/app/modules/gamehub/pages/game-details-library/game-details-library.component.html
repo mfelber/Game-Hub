@@ -41,9 +41,19 @@
           <h3>{{game.releaseYear}}</h3>
         </div>
 
+
+        <button *ngIf="inFavorites" (click)="removeGameFromFavorite(game.gameId)" class="bg-red-600 hover:bg-red-700  text-white font-semibold py-2 px-4 rounded cursor-pointer">
+          Remove from favorites <i class="fa-solid fa-heart"></i>
+        </button>
+
+        <button *ngIf="!inFavorites" (click)="addGameToFavorite(game.gameId)" class="bg-gray-500 hover:bg-gray-600  text-white font-semibold py-2 px-4 rounded cursor-pointer">
+          Add as favorite <i class="fa-solid fa-heart"></i>
+        </button>
+
         <button class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded mt-auto cursor-pointer">
           Download <i class="fa-solid fa-download"></i>
         </button>
+
 
       </div>
 

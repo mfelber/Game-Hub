@@ -13,6 +13,8 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { addGameToFavorites } from '../fn/library-controller/add-game-to-favorites';
 import { AddGameToFavorites$Params } from '../fn/library-controller/add-game-to-favorites';
+import { checkGameFavorite } from '../fn/library-controller/check-game-favorite';
+import { CheckGameFavorite$Params } from '../fn/library-controller/check-game-favorite';
 import { getLibrary } from '../fn/library-controller/get-library';
 import { GetLibrary$Params } from '../fn/library-controller/get-library';
 import { PageResponseGameResponse } from '../models/page-response-game-response';
@@ -97,6 +99,31 @@ export class LibraryControllerService extends BaseService {
   getLibrary(params?: GetLibrary$Params, context?: HttpContext): Observable<PageResponseGameResponse> {
     return this.getLibrary$Response(params, context).pipe(
       map((r: StrictHttpResponse<PageResponseGameResponse>): PageResponseGameResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `checkGameFavorite()` */
+  static readonly CheckGameFavoritePath = '/library/check/game/{gameId}/favorite/';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `checkGameFavorite()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  checkGameFavorite$Response(params: CheckGameFavorite$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+    return checkGameFavorite(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `checkGameFavorite$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  checkGameFavorite(params: CheckGameFavorite$Params, context?: HttpContext): Observable<boolean> {
+    return this.checkGameFavorite$Response(params, context).pipe(
+      map((r: StrictHttpResponse<boolean>): boolean => r.body)
     );
   }
 

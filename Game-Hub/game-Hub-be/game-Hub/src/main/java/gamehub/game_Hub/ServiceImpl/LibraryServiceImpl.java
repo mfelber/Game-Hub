@@ -93,4 +93,15 @@ public class LibraryServiceImpl implements LibraryService {
     return game.getId();
   }
 
+  @Override
+  public Boolean checkGameFavorite(final Long gameId, final Authentication connectedUser) {
+    Game game = gameRepository.findById(gameId)
+        .orElseThrow(() -> new EntityNotFoundException("No game found with id: " + gameId));
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+    return user.getFavoriteGames().contains(game);
+  }
+
 }

@@ -1,18 +1,14 @@
 package gamehub.game_Hub.ServiceImpl;
 
-import java.net.URI;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import gamehub.game_Hub.File.FileStorageService;
-import gamehub.game_Hub.File.FileUtils;
 import gamehub.game_Hub.Module.Genre;
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Repository.genre.GenreRepository;
@@ -69,7 +65,6 @@ public class UserServiceImpl implements UserService {
     User authUser = (User) connectedUser.getPrincipal();
     User user = userRepository.findById(authUser.getId())
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
-
     return userMapper.toUserPrivateResponse(user);
   }
 
@@ -80,7 +75,8 @@ public class UserServiceImpl implements UserService {
     User user = userRepository.findById(authUser.getId())
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
 
-    var profilePicture = fileStorageService.saveFile(file);
+
+    var profilePicture = fileStorageService.saveUserImages(file,user.getId());
     user.setUserProfilePicture(profilePicture);
     userRepository.save(user);
   }

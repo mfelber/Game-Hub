@@ -16,4 +16,6 @@ public interface LibraryService {
 
   Long removeGameFromFavorites(Long gameId, Authentication connectedUser);
 
+  Boolean checkGameFavorite(Long gameId, Authentication connectedUser);
+
 }
