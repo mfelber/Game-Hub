@@ -57,7 +57,7 @@ export class MenuComponent implements OnInit {
   }
 
   isGameDetailsActive(url: string){
-    this._isGameDetailsActive = url.startsWith("/gamehub/library/game/") || url.startsWith("/gamehub/game/");
+    this._isGameDetailsActive = url.startsWith("/gamehub/library/game/") || url.startsWith("/gamehub/game/") || url.startsWith("/gamehub/user/");
   }
 
   goToCart() {

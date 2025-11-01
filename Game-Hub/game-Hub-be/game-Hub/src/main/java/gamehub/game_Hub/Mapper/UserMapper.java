@@ -8,6 +8,7 @@ import gamehub.game_Hub.File.FileUtils;
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Request.UserUpdateRequest;
 import gamehub.game_Hub.Response.BadgeResponse;
+import gamehub.game_Hub.Response.GameResponse;
 import gamehub.game_Hub.Response.GameResponseShort;
 import gamehub.game_Hub.Response.GenreResponse;
 import gamehub.game_Hub.Response.UserPrivateResponse;
@@ -49,6 +50,8 @@ public class UserMapper {
         .favoriteGenres(user.getFavoriteGenres().stream()
             .map(g -> new GenreResponse(g.getId(), g.getName()))
             .collect(Collectors.toSet()))
+        .recommendedGames(user.getRecommendationGames().stream().map(g -> new GameResponseShort(g.getId(), g.getTitle(), FileUtils.readCoverFromLocation(g.getGameCoverImage())))
+            .collect(Collectors.toSet()))
         .userProfilePicture(FileUtils.readCoverFromLocation(user.getUserProfilePicture()))
         .build();
   }
@@ -78,6 +81,8 @@ public class UserMapper {
             .collect(Collectors.toSet()))
         .favoriteGenres(user.getFavoriteGenres().stream()
             .map(g -> new GenreResponse(g.getId(), g.getName()))
+            .collect(Collectors.toSet()))
+        .recommendedGames(user.getRecommendationGames().stream().map(g -> new GameResponseShort(g.getId(), g.getTitle(), FileUtils.readCoverFromLocation(g.getGameCoverImage())))
             .collect(Collectors.toSet()))
         .userProfilePicture(FileUtils.readCoverFromLocation(user.getUserProfilePicture()))
         .build();

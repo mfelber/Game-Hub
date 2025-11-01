@@ -8,15 +8,18 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { PageResponseGameResponse } from '../../models/page-response-game-response';
 
-export interface CheckGameFavorite$Params {
-  gameId: number;
+export interface GetFavorites$Params {
+  page?: number;
+  size?: number;
 }
 
-export function checkGameFavorite(http: HttpClient, rootUrl: string, params: CheckGameFavorite$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
-  const rb = new RequestBuilder(rootUrl, checkGameFavorite.PATH, 'get');
+export function getFavorites(http: HttpClient, rootUrl: string, params?: GetFavorites$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseGameResponse>> {
+  const rb = new RequestBuilder(rootUrl, getFavorites.PATH, 'get');
   if (params) {
-    rb.path('gameId', params.gameId, {});
+    rb.query('page', params.page, {});
+    rb.query('size', params.size, {});
   }
 
   return http.request(
@@ -24,9 +27,9 @@ export function checkGameFavorite(http: HttpClient, rootUrl: string, params: Che
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: String((r as HttpResponse<any>).body) === 'true' }) as StrictHttpResponse<boolean>;
+      return r as StrictHttpResponse<PageResponseGameResponse>;
     })
   );
 }
 
-checkGameFavorite.PATH = '/library/check/game/{gameId}/favorite';
+getFavorites.PATH = '/library/favorites';

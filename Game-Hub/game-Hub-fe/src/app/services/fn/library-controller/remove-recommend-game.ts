@@ -9,12 +9,12 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 
-export interface CheckGameFavorite$Params {
+export interface RemoveRecommendGame$Params {
   gameId: number;
 }
 
-export function checkGameFavorite(http: HttpClient, rootUrl: string, params: CheckGameFavorite$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
-  const rb = new RequestBuilder(rootUrl, checkGameFavorite.PATH, 'get');
+export function removeRecommendGame(http: HttpClient, rootUrl: string, params: RemoveRecommendGame$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+  const rb = new RequestBuilder(rootUrl, removeRecommendGame.PATH, 'post');
   if (params) {
     rb.path('gameId', params.gameId, {});
   }
@@ -24,9 +24,9 @@ export function checkGameFavorite(http: HttpClient, rootUrl: string, params: Che
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: String((r as HttpResponse<any>).body) === 'true' }) as StrictHttpResponse<boolean>;
+      return (r as HttpResponse<any>).clone({ body: parseFloat(String((r as HttpResponse<any>).body)) }) as StrictHttpResponse<number>;
     })
   );
 }
 
-checkGameFavorite.PATH = '/library/check/game/{gameId}/favorite';
+removeRecommendGame.PATH = '/library/remove/recommend/game/{gameId}';

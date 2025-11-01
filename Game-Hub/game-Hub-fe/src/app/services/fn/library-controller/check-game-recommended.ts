@@ -9,12 +9,12 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 
-export interface CheckGameFavorite$Params {
+export interface CheckGameRecommended$Params {
   gameId: number;
 }
 
-export function checkGameFavorite(http: HttpClient, rootUrl: string, params: CheckGameFavorite$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
-  const rb = new RequestBuilder(rootUrl, checkGameFavorite.PATH, 'get');
+export function checkGameRecommended(http: HttpClient, rootUrl: string, params: CheckGameRecommended$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+  const rb = new RequestBuilder(rootUrl, checkGameRecommended.PATH, 'get');
   if (params) {
     rb.path('gameId', params.gameId, {});
   }
@@ -29,4 +29,4 @@ export function checkGameFavorite(http: HttpClient, rootUrl: string, params: Che
   );
 }
 
-checkGameFavorite.PATH = '/library/check/game/{gameId}/favorite';
+checkGameRecommended.PATH = '/library/check/game/{gameId}/recommended';

@@ -18,4 +18,12 @@ public interface LibraryService {
 
   Boolean checkGameFavorite(Long gameId, Authentication connectedUser);
 
+  Long recommendGame(Long gameId, Authentication connectedUser);
+
+  Long removeRecommendGame(Long gameId, Authentication connectedUser);
+
+  PageResponse<GameResponse> findAllFavoriteGames(int page, int size, Authentication connectedUser);
+
+  Boolean checkGameRecommended(Long gameId, Authentication connectedUser);
+
 }

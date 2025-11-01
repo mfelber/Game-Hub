@@ -47,11 +47,32 @@ public class LibraryController {
     return ResponseEntity.ok(libraryService.removeGameFromFavorites(gameId, connectedUser));
   }
 
-  // TODO fetch all favorite games
+  @GetMapping("/favorites")
+  public ResponseEntity<PageResponse<GameResponse>> getFavorites(
+      @RequestParam(name = "page", defaultValue = "0", required = false) int page,
+      @RequestParam(name = "size", defaultValue = "10", required = false) int size,
+      final Authentication connectedUser) {
+    return ResponseEntity.ok(libraryService.findAllFavoriteGames(page, size, connectedUser));
+  }
 
-  @GetMapping("/check/game/{gameId}/favorite/")
+  @GetMapping("/check/game/{gameId}/favorite")
   public ResponseEntity<Boolean> checkGameFavorite(@PathVariable final Long gameId, final Authentication connectedUser) {
     return ResponseEntity.ok(libraryService.checkGameFavorite(gameId, connectedUser));
+  }
+
+  @PostMapping("/recommend/game/{gameId}")
+  public ResponseEntity<Long> recommendGame(@PathVariable final Long gameId, final Authentication connectedUser) {
+    return ResponseEntity.ok(libraryService.recommendGame(gameId, connectedUser));
+  }
+
+  @PostMapping("/remove/recommend/game/{gameId}")
+  public ResponseEntity<Long> removeRecommendGame(@PathVariable final Long gameId, final Authentication connectedUser) {
+    return ResponseEntity.ok(libraryService.removeRecommendGame(gameId, connectedUser));
+  }
+
+  @GetMapping("/check/game/{gameId}/recommended")
+  public ResponseEntity<Boolean> checkGameRecommended(@PathVariable final Long gameId, final Authentication connectedUser) {
+    return ResponseEntity.ok(libraryService.checkGameRecommended(gameId, connectedUser));
   }
 
 }

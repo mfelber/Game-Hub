@@ -19,6 +19,7 @@ export class GameDetailsLibraryComponent implements OnInit {
 
   game:any
   inFavorites = false
+  isRecommended = false
 
   constructor(
     private router: ActivatedRoute,
@@ -30,6 +31,7 @@ export class GameDetailsLibraryComponent implements OnInit {
   ngOnInit(): void {
     this.getInfoGame();
     this.checkGameIsFavorite();
+    this.isGameRecommended();
   }
 
   private getInfoGame() {
@@ -87,6 +89,37 @@ export class GameDetailsLibraryComponent implements OnInit {
           console.log('not in favorites')
         }
       }
+    })
+  }
+
+  recommendGame(gameId: any) {
+    if (!this.isRecommended) {
+      this.libraryService.recommendGame({gameId}).subscribe({
+        next: () => {
+          this.isRecommended = true
+          this.isGameRecommended();
+        },
+        error: (err) => console.error('Failed to recommend game', err),
+      })
+    } else {
+      this.libraryService.removeRecommendGame({gameId}).subscribe({
+        next: () => {
+          this.isRecommended = false
+          this.isGameRecommended();
+        },
+        error: (err) => console.error('Failed to remove game from recommended', err),
+      })
+    }
+
+  }
+
+  private isGameRecommended() {
+    const gameId: any = this.router.snapshot.paramMap.get('id')
+    this.libraryService.checkGameRecommended({gameId}).subscribe({
+      next: (recommended)=> {
+        this.isRecommended = recommended
+        console.log(this.isRecommended)
+    }
     })
   }
 }

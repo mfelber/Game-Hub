@@ -3,10 +3,13 @@ import {UserProfileControllerService} from '../../../../services/services/user-p
 import {UserPublicResponse} from '../../../../services/models/user-public-response';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UserPrivateResponse} from '../../../../services/models/user-private-response';
+import {NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-user-public-profile',
-  imports: [],
+  imports: [
+    NgIf
+  ],
   templateUrl: './user-public-profile.component.html',
   styleUrl: './user-public-profile.component.css'
 })

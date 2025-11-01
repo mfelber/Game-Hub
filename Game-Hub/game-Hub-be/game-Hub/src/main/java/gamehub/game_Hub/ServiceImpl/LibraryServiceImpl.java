@@ -104,4 +104,70 @@ public class LibraryServiceImpl implements LibraryService {
     return user.getFavoriteGames().contains(game);
   }
 
+  @Override
+  public PageResponse<GameResponse> findAllFavoriteGames(final int page, final int size,
+      final Authentication connectedUser) {
+    User authUser = (User) connectedUser.getPrincipal();
+    Pageable pageable = PageRequest.of(page, size, Sort.by("title").ascending());
+    Page<Game> favoriteGames = gameRepository.findByFavoriteGamesContaining(authUser,pageable);
+    System.out.println(favoriteGames.stream().map(game -> game.getTitle()).collect(Collectors.joining(",")));
+
+    List<GameResponse> gameResponse = favoriteGames.stream().map(gameMapper::toGameResponse).toList();
+
+    return new PageResponse<>(
+        gameResponse,
+        favoriteGames.getNumber(),
+        favoriteGames.getSize(),
+        favoriteGames.getTotalElements(),
+        favoriteGames.getTotalPages(),
+        favoriteGames.isFirst(),
+        favoriteGames.isLast()
+    );
+  }
+
+  @Override
+  public Long recommendGame(final Long gameId, final Authentication connectedUser) {
+    Game game = gameRepository.findById(gameId)
+        .orElseThrow(() -> new EntityNotFoundException("No game found with id: " + gameId));
+
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+    if (!user.getRecommendationGames().contains(game)) {
+      user.getRecommendationGames().add(game);
+      userRepository.save(user);
+    }
+
+    return game.getId();
+  }
+
+  @Override
+  public Long removeRecommendGame(final Long gameId, final Authentication connectedUser) {
+    Game game = gameRepository.findById(gameId)
+        .orElseThrow(() -> new EntityNotFoundException("No game found with id: " + gameId));
+
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+    if (user.getRecommendationGames().contains(game)) {
+      user.getRecommendationGames().remove(game);
+      userRepository.save(user);
+    }
+
+    return game.getId();
+  }
+
+  @Override
+  public Boolean checkGameRecommended(final Long gameId, final Authentication connectedUser) {
+    Game game = gameRepository.findById(gameId)
+        .orElseThrow(() -> new EntityNotFoundException("No game found with id: " + gameId));
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+    return user.getRecommendationGames().contains(game);
+  }
+
 }

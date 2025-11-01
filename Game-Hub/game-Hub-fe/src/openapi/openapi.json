@@ -335,6 +335,70 @@
         }
       }
     },
+    "/library/remove/recommend/game/{gameId}": {
+      "post": {
+        "tags": [
+          "library-controller"
+        ],
+        "operationId": "removeRecommendGame",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/library/recommend/game/{gameId}": {
+      "post": {
+        "tags": [
+          "library-controller"
+        ],
+        "operationId": "recommendGame",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/library/add/remove/{gameId}": {
       "post": {
         "tags": [
@@ -797,7 +861,80 @@
         }
       }
     },
-    "/library/check/game/{gameId}/favorite/": {
+    "/library/favorites": {
+      "get": {
+        "tags": [
+          "library-controller"
+        ],
+        "operationId": "getFavorites",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseGameResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/library/check/game/{gameId}/recommended": {
+      "get": {
+        "tags": [
+          "library-controller"
+        ],
+        "operationId": "checkGameRecommended",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/library/check/game/{gameId}/favorite": {
       "get": {
         "tags": [
           "library-controller"
@@ -1452,6 +1589,13 @@
               "$ref": "#/components/schemas/GenreResponse"
             }
           },
+          "recommendedGames": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GameResponseShort"
+            }
+          },
           "userProfilePicture": {
             "type": "array",
             "items": {
@@ -1527,6 +1671,13 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/GenreResponse"
+            }
+          },
+          "recommendedGames": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GameResponseShort"
             }
           },
           "userProfilePicture": {

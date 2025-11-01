@@ -16,6 +16,7 @@ export interface UserPrivateResponse {
   libraryCount?: number;
   location?: 'SLOVAKIA' | 'CZECH_REPUBLIC' | 'POLAND' | 'HUNGARY' | 'USA';
   playRecently?: Array<GameResponseShort>;
+  recommendedGames?: Array<GameResponseShort>;
   userId?: number;
   userProfilePicture?: Array<string>;
   username?: string;

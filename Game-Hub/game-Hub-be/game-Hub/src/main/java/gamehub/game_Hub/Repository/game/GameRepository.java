@@ -1,5 +1,7 @@
 package gamehub.game_Hub.Repository.game;
 
+import java.util.Set;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,5 +14,7 @@ public interface GameRepository extends JpaRepository<Game, Long> {
   Page<Game> findByOwnersContaining(User connectedUser, Pageable pageable);
 
   Page<Game> findByWishlistsContaining(User connectedUser, Pageable pageable);
+
+  Page<Game> findByFavoriteGamesContaining(User connectedUser, Pageable pageable);
 
 }

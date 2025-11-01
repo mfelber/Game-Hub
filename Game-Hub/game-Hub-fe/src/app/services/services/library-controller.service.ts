@@ -15,16 +15,74 @@ import { addGameToFavorites } from '../fn/library-controller/add-game-to-favorit
 import { AddGameToFavorites$Params } from '../fn/library-controller/add-game-to-favorites';
 import { checkGameFavorite } from '../fn/library-controller/check-game-favorite';
 import { CheckGameFavorite$Params } from '../fn/library-controller/check-game-favorite';
+import { checkGameRecommended } from '../fn/library-controller/check-game-recommended';
+import { CheckGameRecommended$Params } from '../fn/library-controller/check-game-recommended';
+import { getFavorites } from '../fn/library-controller/get-favorites';
+import { GetFavorites$Params } from '../fn/library-controller/get-favorites';
 import { getLibrary } from '../fn/library-controller/get-library';
 import { GetLibrary$Params } from '../fn/library-controller/get-library';
 import { PageResponseGameResponse } from '../models/page-response-game-response';
+import { recommendGame } from '../fn/library-controller/recommend-game';
+import { RecommendGame$Params } from '../fn/library-controller/recommend-game';
 import { removeGameFromFavorites } from '../fn/library-controller/remove-game-from-favorites';
 import { RemoveGameFromFavorites$Params } from '../fn/library-controller/remove-game-from-favorites';
+import { removeRecommendGame } from '../fn/library-controller/remove-recommend-game';
+import { RemoveRecommendGame$Params } from '../fn/library-controller/remove-recommend-game';
 
 @Injectable({ providedIn: 'root' })
 export class LibraryControllerService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
+  }
+
+  /** Path part for operation `removeRecommendGame()` */
+  static readonly RemoveRecommendGamePath = '/library/remove/recommend/game/{gameId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `removeRecommendGame()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  removeRecommendGame$Response(params: RemoveRecommendGame$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return removeRecommendGame(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `removeRecommendGame$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  removeRecommendGame(params: RemoveRecommendGame$Params, context?: HttpContext): Observable<number> {
+    return this.removeRecommendGame$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `recommendGame()` */
+  static readonly RecommendGamePath = '/library/recommend/game/{gameId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `recommendGame()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  recommendGame$Response(params: RecommendGame$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return recommendGame(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `recommendGame$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  recommendGame(params: RecommendGame$Params, context?: HttpContext): Observable<number> {
+    return this.recommendGame$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
   }
 
   /** Path part for operation `removeGameFromFavorites()` */
@@ -102,8 +160,58 @@ export class LibraryControllerService extends BaseService {
     );
   }
 
+  /** Path part for operation `getFavorites()` */
+  static readonly GetFavoritesPath = '/library/favorites';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getFavorites()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getFavorites$Response(params?: GetFavorites$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseGameResponse>> {
+    return getFavorites(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getFavorites$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getFavorites(params?: GetFavorites$Params, context?: HttpContext): Observable<PageResponseGameResponse> {
+    return this.getFavorites$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PageResponseGameResponse>): PageResponseGameResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `checkGameRecommended()` */
+  static readonly CheckGameRecommendedPath = '/library/check/game/{gameId}/recommended';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `checkGameRecommended()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  checkGameRecommended$Response(params: CheckGameRecommended$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+    return checkGameRecommended(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `checkGameRecommended$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  checkGameRecommended(params: CheckGameRecommended$Params, context?: HttpContext): Observable<boolean> {
+    return this.checkGameRecommended$Response(params, context).pipe(
+      map((r: StrictHttpResponse<boolean>): boolean => r.body)
+    );
+  }
+
   /** Path part for operation `checkGameFavorite()` */
-  static readonly CheckGameFavoritePath = '/library/check/game/{gameId}/favorite/';
+  static readonly CheckGameFavoritePath = '/library/check/game/{gameId}/favorite';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
