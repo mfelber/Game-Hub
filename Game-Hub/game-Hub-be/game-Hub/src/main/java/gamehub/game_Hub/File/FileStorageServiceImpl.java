@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.constraints.NotNull;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,11 +27,44 @@ public class FileStorageServiceImpl implements FileStorageService {
   private String fileUploadPath;
 
   @Override
-  public String saveFile(@NotNull final MultipartFile sourceFile) {
+  public String saveFile(@NonNull final MultipartFile sourceFile) {
     return uploadFile(sourceFile);
   }
 
-  private String uploadFile(final @NotNull MultipartFile sourceFile) {
+  @Override
+  public String saveUserImages(@NonNull final MultipartFile sourceFile, @NonNull final Long userId) {
+    final String fileUploadSubPath = "users" + separator + userId;
+    return uploadUserImages(sourceFile, fileUploadSubPath);
+  }
+
+  private String uploadUserImages(final @NonNull MultipartFile sourceFile, @NonNull final String fileUploadSubPath) {
+    String finalfileUploadPath = fileUploadPath + separator + fileUploadSubPath;
+
+    File targetFolder = new File(finalfileUploadPath);
+    if (!targetFolder.exists()) {
+      boolean folderCreated = targetFolder.mkdirs();
+      if (!folderCreated) {
+        log.warn("Could not create folder " + targetFolder.getAbsolutePath());
+        return null;
+      }
+    }
+
+    final String fileExtension = getFileExtension(sourceFile.getOriginalFilename());
+    String targetFilePath = finalfileUploadPath + separator + currentTimeMillis() + "." + fileExtension;
+    Path targetPath = Paths.get(targetFilePath);
+
+    try {
+      Files.write(targetPath, sourceFile.getBytes());
+      log.info("Saved file: " + targetFilePath);
+      return targetFilePath;
+    } catch (IOException e) {
+      log.error("File was not saved" , e);
+    }
+
+    return null;
+  }
+
+  private String uploadFile(final @NonNull MultipartFile sourceFile) {
     final String uploadPath = fileUploadPath;
     File targetFolder = new File(uploadPath);
     if (!targetFolder.exists()) {
@@ -48,7 +82,7 @@ public class FileStorageServiceImpl implements FileStorageService {
       Files.write(targetPath, sourceFile.getBytes());
       log.info("Saved file: " + targetFilePath);
       return targetFilePath;
-    }catch (IOException e) {
+    } catch (IOException e) {
       log.error("File was not saved" , e);
     }
     return null;

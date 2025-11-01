@@ -6,12 +6,15 @@ import java.util.stream.Collectors;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import gamehub.game_Hub.File.FileStorageService;
 import gamehub.game_Hub.Module.Genre;
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Repository.genre.GenreRepository;
 import gamehub.game_Hub.Repository.user.UserRepository;
 import gamehub.game_Hub.Mapper.UserMapper;
+import gamehub.game_Hub.Response.UserPrivateResponse;
 import gamehub.game_Hub.Response.UserPublicResponse;
 import gamehub.game_Hub.Service.UserService;
 import gamehub.game_Hub.Request.UserUpdateRequest;
@@ -27,20 +30,23 @@ public class UserServiceImpl implements UserService {
   private final UserRepository userRepository;
 
   private final GenreRepository genreRepository;
-  
+
+  private final FileStorageService fileStorageService;
+
   @Override
   public Long updateUserProfile(final Authentication connectedUser,
       final UserUpdateRequest userUpdateRequest) {
     User authUser = (User) connectedUser.getPrincipal();
     User user = userRepository.findById(authUser.getId())
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+    // TODO try this
+    // user = userMapper.toUser(userUpdateRequest);
 
     user = user.toBuilder()
         .firstName(userUpdateRequest.getFirstName())
         .lastName(userUpdateRequest.getLastName())
         .username(userUpdateRequest.getUsername())
         .email(userUpdateRequest.getEmail())
-        .userProfilePicture(user.getUserProfilePicture())
         .location(userUpdateRequest.getLocation())
         .build();
 
@@ -48,11 +54,31 @@ public class UserServiceImpl implements UserService {
   }
 
   @Transactional
-  public UserPublicResponse getPublicProfile(final Long userId) {
+  public UserPublicResponse getPublicProfile(final Long userId, final Authentication connectedUser) {
     User user = userRepository.findById(userId)
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + userId));
-
     return userMapper.toUserPublicResponse(user);
+  }
+
+  @Override
+  public UserPrivateResponse getPrivateProfile(final Authentication connectedUser) {
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+    return userMapper.toUserPrivateResponse(user);
+  }
+
+  @Override
+  public void uploadProfilePictureImage(final Authentication connectedUser,
+      final MultipartFile file) {
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+
+    var profilePicture = fileStorageService.saveUserImages(file,user.getId());
+    user.setUserProfilePicture(profilePicture);
+    userRepository.save(user);
   }
 
   @Transactional

@@ -1,9 +1,8 @@
 package gamehub.game_Hub.Request;
 
-import java.util.Set;
 
 import gamehub.game_Hub.Module.User.Location;
-import gamehub.game_Hub.Response.GenreResponse;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,7 +22,6 @@ public class UserUpdateRequest {
   private String email;
   private String bio;
   private Location location;
-  private byte [] userProfilePicture;
 
 
 }

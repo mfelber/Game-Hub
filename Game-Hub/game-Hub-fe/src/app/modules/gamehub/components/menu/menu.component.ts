@@ -2,7 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
 import {MatIcon} from '@angular/material/icon';
 import {initFlowbite} from 'flowbite';
-import {NgIf} from '@angular/common';
+import {NgForOf, NgIf} from '@angular/common';
+import {UserProfileControllerService} from '../../../../services/services';
+import {UserPrivateResponse} from '../../../../services/models/user-private-response';
 
 @Component({
   selector: 'app-menu',
@@ -17,13 +19,18 @@ import {NgIf} from '@angular/common';
 export class MenuComponent implements OnInit {
   ngOnInit(): void {
     initFlowbite();
+    this.loadUserName();
   }
 
   isStoreActive = false;
   isLibraryActive = false;
   _isGameDetailsActive = false;
+  userResponse: UserPrivateResponse = {};
 
-  constructor(private router: Router) {
+  constructor(
+    private router: Router,
+    private userService: UserProfileControllerService
+  ) {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         const url = this.router.url;
@@ -33,13 +40,24 @@ export class MenuComponent implements OnInit {
     });
   }
 
+  private loadUserName() {
+    this.userService.getUserPrivate().subscribe({
+      next:  (user) => {
+        this.userResponse = user;
+        console.log(user)
+        // this.getProfilePicture(user)
+      }
+    });
+
+  }
+
   updateActiveTabs(url: string) {
     this.isStoreActive = url === '/gamehub' || url.startsWith('/gamehub/game/');
     this.isLibraryActive = url === '/gamehub/library' || url.startsWith("/gamehub/library/game/");
   }
 
   isGameDetailsActive(url: string){
-    this._isGameDetailsActive = url.startsWith("/gamehub/library/game/") || url.startsWith("/gamehub/game/");
+    this._isGameDetailsActive = url.startsWith("/gamehub/library/game/") || url.startsWith("/gamehub/game/") || url.startsWith("/gamehub/user/");
   }
 
   goToCart() {
@@ -49,4 +67,12 @@ export class MenuComponent implements OnInit {
   showNotifications() {
     console.log("Notifications clicked!");
   }
+
+  getProfilePicture(user: UserPrivateResponse) {
+    if (user.userProfilePicture) {
+      return 'data:image/jpeg;base64,' + user.userProfilePicture;
+    }
+    return 'https://images.pexels.com/photos/1054655/pexels-photo-1054655.jpeg';
+  }
+
 }

@@ -5,11 +5,14 @@
 import { BadgeResponse } from '../models/badge-response';
 import { GameResponseShort } from '../models/game-response-short';
 import { GenreResponse } from '../models/genre-response';
-export interface UserPublicResponse {
+export interface UserPrivateResponse {
   badges?: Array<BadgeResponse>;
   bio?: string;
+  email?: string;
   favoriteGames?: Array<GameResponseShort>;
   favoriteGenres?: Array<GenreResponse>;
+  firstName?: string;
+  lastName?: string;
   libraryCount?: number;
   location?: 'SLOVAKIA' | 'CZECH_REPUBLIC' | 'POLAND' | 'HUNGARY' | 'USA';
   playRecently?: Array<GameResponseShort>;

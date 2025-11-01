@@ -8,6 +8,5 @@ export interface UserUpdateRequest {
   firstName?: string;
   lastName?: string;
   location?: 'SLOVAKIA' | 'CZECH_REPUBLIC' | 'POLAND' | 'HUNGARY' | 'USA';
-  userProfilePicture?: Array<string>;
   username?: string;
 }

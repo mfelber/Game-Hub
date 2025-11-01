@@ -6,4 +6,6 @@ public interface FileStorageService {
 
   String saveFile(MultipartFile file);
 
+  String saveUserImages(MultipartFile file, Long connectedUser);
+
 }

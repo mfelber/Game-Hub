@@ -8,16 +8,15 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { UserPublicResponse } from '../../models/user-public-response';
 
-export interface GetUser$Params {
-  userId: number;
+export interface CheckGameRecommended$Params {
+  gameId: number;
 }
 
-export function getUser(http: HttpClient, rootUrl: string, params: GetUser$Params, context?: HttpContext): Observable<StrictHttpResponse<UserPublicResponse>> {
-  const rb = new RequestBuilder(rootUrl, getUser.PATH, 'get');
+export function checkGameRecommended(http: HttpClient, rootUrl: string, params: CheckGameRecommended$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+  const rb = new RequestBuilder(rootUrl, checkGameRecommended.PATH, 'get');
   if (params) {
-    rb.path('userId', params.userId, {});
+    rb.path('gameId', params.gameId, {});
   }
 
   return http.request(
@@ -25,9 +24,9 @@ export function getUser(http: HttpClient, rootUrl: string, params: GetUser$Param
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<UserPublicResponse>;
+      return (r as HttpResponse<any>).clone({ body: String((r as HttpResponse<any>).body) === 'true' }) as StrictHttpResponse<boolean>;
     })
   );
 }
 
-getUser.PATH = '/profile/user/{userId}';
+checkGameRecommended.PATH = '/library/check/game/{gameId}/recommended';

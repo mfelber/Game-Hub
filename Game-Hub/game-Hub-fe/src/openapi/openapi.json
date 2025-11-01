@@ -269,6 +269,44 @@
         }
       }
     },
+    "/profile/image": {
+      "post": {
+        "tags": [
+          "user-profile-controller"
+        ],
+        "operationId": "uploadProfileImage",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "required": [
+                  "file"
+                ],
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/profile/add/genres": {
       "post": {
         "tags": [
@@ -293,6 +331,70 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/library/remove/recommend/game/{gameId}": {
+      "post": {
+        "tags": [
+          "library-controller"
+        ],
+        "operationId": "removeRecommendGame",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/library/recommend/game/{gameId}": {
+      "post": {
+        "tags": [
+          "library-controller"
+        ],
+        "operationId": "recommendGame",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
           }
         }
       }
@@ -671,7 +773,7 @@
         "tags": [
           "user-profile-controller"
         ],
-        "operationId": "getUser",
+        "operationId": "getUserPublic",
         "parameters": [
           {
             "name": "userId",
@@ -690,6 +792,26 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UserPublicResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/profile/user/me": {
+      "get": {
+        "tags": [
+          "user-profile-controller"
+        ],
+        "operationId": "getUserPrivate",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserPrivateResponse"
                 }
               }
             }
@@ -732,6 +854,110 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/PageResponseGameResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/library/favorites": {
+      "get": {
+        "tags": [
+          "library-controller"
+        ],
+        "operationId": "getFavorites",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseGameResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/library/check/game/{gameId}/recommended": {
+      "get": {
+        "tags": [
+          "library-controller"
+        ],
+        "operationId": "checkGameRecommended",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/library/check/game/{gameId}/favorite": {
+      "get": {
+        "tags": [
+          "library-controller"
+        ],
+        "operationId": "checkGameFavorite",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
                 }
               }
             }
@@ -1054,13 +1280,6 @@
               "HUNGARY",
               "USA"
             ]
-          },
-          "userProfilePicture": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "byte"
-            }
           }
         }
       },
@@ -1368,6 +1587,97 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/GenreResponse"
+            }
+          },
+          "recommendedGames": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GameResponseShort"
+            }
+          },
+          "userProfilePicture": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "byte"
+            }
+          }
+        }
+      },
+      "UserPrivateResponse": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "bio": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string",
+            "enum": [
+              "SLOVAKIA",
+              "CZECH_REPUBLIC",
+              "POLAND",
+              "HUNGARY",
+              "USA"
+            ]
+          },
+          "libraryCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "wishlistCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "badges": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BadgeResponse"
+            }
+          },
+          "playRecently": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GameResponseShort"
+            }
+          },
+          "favoriteGames": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GameResponseShort"
+            }
+          },
+          "favoriteGenres": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GenreResponse"
+            }
+          },
+          "recommendedGames": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GameResponseShort"
             }
           },
           "userProfilePicture": {

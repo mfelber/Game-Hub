@@ -12,9 +12,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserPublicResponse {
+public class UserPrivateResponse {
 
   private Long userId;
+  private String firstName;
+  private String lastName;
+  private String email;
   private String username;
   private String bio;
   private Location location;
@@ -27,4 +30,5 @@ public class UserPublicResponse {
   private Set<GenreResponse> favoriteGenres;
   private Set<GameResponseShort> recommendedGames;
   private byte [] userProfilePicture;
+
 }
