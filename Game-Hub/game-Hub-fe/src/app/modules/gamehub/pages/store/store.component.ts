@@ -5,12 +5,15 @@ import {Router, RouterOutlet} from '@angular/router';
 import {PageResponseGameResponse} from '../../../../services/models/page-response-game-response';
 import {GameResponse} from '../../../../services/models/game-response';
 import {checkGameInWishlist} from '../../../../services/fn/game-controller/check-game-in-wishlist';
+import {FormsModule} from '@angular/forms';
+import {Game} from '../../../../services/models/game';
 
 @Component({
   selector: 'app-store',
   imports: [
     NgForOf,
-    NgIf
+    NgIf,
+    FormsModule
   ],
   templateUrl: './store.component.html',
   styleUrl: './store.component.scss'
@@ -24,6 +27,15 @@ export class StoreComponent implements OnInit{
   gameWishListMap: { [key: number]: boolean } = {};
   gamesOwnedMap: { [key: number]: boolean } = {};
 
+  filteredGames: GameResponse[] = [];
+
+  filters = {
+    genre: '',
+    platform: '',
+    maxPrice: ''
+  };
+
+
   constructor(
     private gameService: GameControllerService,
     private router: Router
@@ -32,6 +44,15 @@ export class StoreComponent implements OnInit{
 
   ngOnInit() {
     this.findAllGames()
+  }
+
+  filterGames() {
+    const maxPrice = Number(this.filters.maxPrice);
+    this.filteredGames = (this.gamePageResponse.content || []).filter(game =>
+      !maxPrice
+      || (maxPrice === 101 && game.price! >= 100)
+      || (maxPrice !== 101 && game.price! <= maxPrice)
+    );
   }
 
   private findAllGames() {
@@ -43,6 +64,7 @@ export class StoreComponent implements OnInit{
         this.gamePageResponse = games;
         this.gamePageResponse.content?.forEach(game => {
           this.checkIfGameIsInWishlist(game.gameId);
+          this.filteredGames = [...(games.content || [])];
         });
         this.gamePageResponse.content?.forEach(game => {
           this.checkIfGameIsOwned(game.gameId);

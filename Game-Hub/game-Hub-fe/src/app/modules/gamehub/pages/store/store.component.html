@@ -1,6 +1,36 @@
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mt-12">
+<div class="flex gap-4 mb-2">
+
+<!--  <select [(ngModel)]="filters.genre" (change)="filterGames()" class="px-3 py-1 rounded border">-->
+<!--    <option value="">All Genres</option>-->
+<!--    <option *ngFor="let genre of allGenres" [value]="genre">{{ genre }}</option>-->
+<!--  </select>-->
+
+<!--  <select [(ngModel)]="filters.platform" (change)="filterGames()" class="px-3 py-1 rounded border">-->
+<!--    <option value="">All Platforms</option>-->
+<!--    <option *ngFor="let platform of allPlatforms" [value]="platform">{{ platform }}</option>-->
+<!--  </select>-->
+
+
+  <div class="relative inline-block">
+    <select [(ngModel)]="filters.maxPrice" (change)="filterGames()"
+      class="appearance-none border border-gray-500 text-gray-300 bg-transparent hover:bg-gray-700/40 hover:text-white
+           px-4 py-1.5 rounded-lg transition duration-300 mb-2 text-[13px] text-center cursor-pointer pr-8 w-[130px]"
+    >
+      <option value="" class="bg-gray-800 text-gray-300">Any Price</option>
+      <option [value]="20" class="bg-gray-800 text-gray-300">≤ 20 € </option>
+      <option [value]="50" class="bg-gray-800 text-gray-300">≤ $50 €</option>
+      <option [value]="100" class="bg-gray-800 text-gray-300">≤ $100 €</option>
+      <option [value]="101" class="bg-gray-800 text-gray-300">≥ 100 €</option>
+    </select>
+
+    <i class="fa-solid fa-chevron-down absolute right-3 top-1/2 -translate-y-[75%] text-gray-400 pointer-events-none"></i>
+  </div>
+
+</div>
+
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 ">
   <div
-    *ngFor="let game of gamePageResponse.content"
+    *ngFor="let game of filteredGames"
     (click)="goToGame(game.gameId)"
     class="group relative bg-[#0F172A] rounded-2xl overflow-hidden shadow-lg cursor-pointer transform transition duration-300 hover:scale-[1.04] hover:shadow-2xl"
   >
