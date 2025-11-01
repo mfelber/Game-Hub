@@ -4,7 +4,6 @@ px-4 py-1.5 rounded-lg transition duration-300 mb-2 text-[13px]">
   All Games
 </button>
 
-
 <button class="border border-gray-500 text-gray-300 hover:bg-gray-700/40 hover:text-white
 px-4 py-1.5 rounded-lg transition duration-300 mb-2 text-[13px]">
   Favorite games
@@ -17,36 +16,40 @@ px-4 py-1.5 rounded-lg transition duration-300 mb-2 text-[13px]">
 
 </div>
 
-<div class="flex flex-wrap gap-x-10 gap-y-5">
-
-  <div *ngFor="let game of gamePageResponse.content"
-       class="relative w-90 h-60 rounded-lg shadow-lg overflow-hidden mb-5 cursor-pointer transform transition duration-300 hover:scale-105 hover:shadow-2xl"
-       (click)="goToGame(game.gameId)">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+  <div
+    *ngFor="let game of gamePageResponse.content"
+    (click)="goToGame(game.gameId)"
+    class="group relative bg-[#0F172A] rounded-2xl overflow-hidden shadow-lg cursor-pointer transform transition duration-300 hover:scale-[1.04] hover:shadow-2xl"
+  >
     <img
       [src]="getGameImageCover(game)"
-      alt="not found"
-      class="w-full h-full object-cover"
-      width="1" height="1"
+      alt="Game cover"
+      class="w-full h-[230px] object-cover transition duration-300 group-hover:opacity-100"
     />
-    <div class="absolute inset-0 bg-black/25"></div>
-    <div class="absolute bottom-0 left-0 right-0 p-3 justify-between flex">
-      <div>
-        <h5 class="text-xl font-semibold text-white mb-1">{{ game.title }}</h5>
+
+    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
+
+    <div
+      class="absolute bottom-0 left-0 right-0 p-4 flex flex-col gap-2 bg-gradient-to-t from-black/85 via-black/40 to-transparent backdrop-blur-[1px]"
+    >
+      <h5
+        class="text-lg font-bold text-white truncate transition"
+      >
+        {{ game.title }}
+      </h5>
+
+      <div class="flex justify-between items-center">
+        <div class="flex gap-2">
+          <span
+            *ngFor="let genre of game.genres?.slice(0, 2)"
+            class="bg-white/20 text-gray-200 rounded-md px-2 py-[3px] text-xs"
+          >
+            {{ genre.name }}
+          </span>
+        </div>
       </div>
-
     </div>
-    <!--  <div class="relative w-90 h-60 rounded-lg shadow-lg overflow-hidden mb-5">-->
-    <!--    <img-->
-    <!--      ngSrc="assets/game_images/cyberpunk.jpg"-->
-    <!--      alt="Elden Ring"-->
-    <!--      class="w-full h-full object-cover"-->
-    <!--      width="400" height="256"-->
-    <!--    />-->
-    <!--    <div class="absolute bottom-0 left-0 right-0 p-3">-->
-    <!--      <h5 class="text-xl font-semibold text-white">Elden Ring</h5>-->
-    <!--    </div>-->
-    <!--  </div>-->
-
   </div>
 </div>
 <div *ngIf="emptyLibrary" class="flex flex-col items-center justify-center h-60text-gray-400">

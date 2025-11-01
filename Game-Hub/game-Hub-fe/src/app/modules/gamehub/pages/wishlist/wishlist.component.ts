@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {WishlistControllerService} from '../../../../services/services/wishlist-controller.service';
 import {GameControllerService} from '../../../../services/services/game-controller.service';
-import {subscribe} from 'node:diagnostics_channel';
 import {PageResponseGameResponse} from '../../../../services/models/page-response-game-response';
 import {NgForOf, NgIf} from '@angular/common';
 import {GameResponse} from '../../../../services/models/game-response';
@@ -10,8 +9,7 @@ import {Router} from '@angular/router';
 @Component({
   selector: 'app-wishlist',
   imports: [
-    NgForOf,
-    NgIf
+    NgForOf
   ],
   templateUrl: './wishlist.component.html',
   styleUrl: './wishlist.component.scss'
