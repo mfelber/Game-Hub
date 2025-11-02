@@ -20,7 +20,14 @@
 
         <div class="flex items-center gap-2">
           <p class="text-2xl font-semibold leading-tight ">{{ userResponse.username }}</p>
-          <span class="text-sm text-[#3B82F6] font-medium">• Online</span>
+          <span
+            class="text-sm font-medium"
+            [ngClass]="{
+            'text-green-500': userResponse.status === 'ONLINE',
+            'text-gray-400': userResponse.status === 'OFFLINE',
+            'text-yellow-400': userResponse.status === 'AWAY'
+            }">• {{ userResponse.status }}
+          </span>
         </div>
 
         <p class="text-sm text-gray-300 mx-0.5">Joined April 2024</p>
@@ -86,7 +93,7 @@
           </div>
         </div>
         <hr class="w-full border-t-[2px] border-[#515151]">
-        <div *ngIf="userResponse.bio?.length === 0"
+        <div *ngIf="userResponse.bio?.length == null"
              class="flex flex-col items-center justify-center text-center flex-1 p-4">
           <p class="text-lg font-semibold"> You haven't written anything about yourself yet ✍️</p>
         </div>
@@ -126,7 +133,7 @@
     </div>
 
     <div class=" h-1/2 flex gap-4">
-      <div class="w-3/2 bg-black/20 rounded-2xl  ">
+      <div class="w-3/2 bg-black/20 rounded-2xl flex flex-col">
         <div class="justify-between flex p-4 ">
           <div class="flex items-center gap-2">
             <i class="fa-solid fa-heart text-[#FF0000]"></i><span class="">Favorite Games</span>

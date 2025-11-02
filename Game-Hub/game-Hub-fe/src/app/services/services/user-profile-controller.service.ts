@@ -15,6 +15,12 @@ import { getUserPrivate } from '../fn/user-profile-controller/get-user-private';
 import { GetUserPrivate$Params } from '../fn/user-profile-controller/get-user-private';
 import { getUserPublic } from '../fn/user-profile-controller/get-user-public';
 import { GetUserPublic$Params } from '../fn/user-profile-controller/get-user-public';
+import { setStatusToAway } from '../fn/user-profile-controller/set-status-to-away';
+import { SetStatusToAway$Params } from '../fn/user-profile-controller/set-status-to-away';
+import { setStatusToOffline } from '../fn/user-profile-controller/set-status-to-offline';
+import { SetStatusToOffline$Params } from '../fn/user-profile-controller/set-status-to-offline';
+import { setStatusToOnline } from '../fn/user-profile-controller/set-status-to-online';
+import { SetStatusToOnline$Params } from '../fn/user-profile-controller/set-status-to-online';
 import { updateBio } from '../fn/user-profile-controller/update-bio';
 import { UpdateBio$Params } from '../fn/user-profile-controller/update-bio';
 import { updateFavoriteGenres } from '../fn/user-profile-controller/update-favorite-genres';
@@ -81,6 +87,81 @@ export class UserProfileControllerService extends BaseService {
   updateBio(params: UpdateBio$Params, context?: HttpContext): Observable<number> {
     return this.updateBio$Response(params, context).pipe(
       map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `setStatusToOnline()` */
+  static readonly SetStatusToOnlinePath = '/profile/status/online';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `setStatusToOnline()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  setStatusToOnline$Response(params?: SetStatusToOnline$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return setStatusToOnline(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `setStatusToOnline$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  setStatusToOnline(params?: SetStatusToOnline$Params, context?: HttpContext): Observable<void> {
+    return this.setStatusToOnline$Response(params, context).pipe(
+      map((r: StrictHttpResponse<void>): void => r.body)
+    );
+  }
+
+  /** Path part for operation `setStatusToOffline()` */
+  static readonly SetStatusToOfflinePath = '/profile/status/offline';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `setStatusToOffline()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  setStatusToOffline$Response(params?: SetStatusToOffline$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return setStatusToOffline(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `setStatusToOffline$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  setStatusToOffline(params?: SetStatusToOffline$Params, context?: HttpContext): Observable<void> {
+    return this.setStatusToOffline$Response(params, context).pipe(
+      map((r: StrictHttpResponse<void>): void => r.body)
+    );
+  }
+
+  /** Path part for operation `setStatusToAway()` */
+  static readonly SetStatusToAwayPath = '/profile/status/away';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `setStatusToAway()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  setStatusToAway$Response(params?: SetStatusToAway$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return setStatusToAway(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `setStatusToAway$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  setStatusToAway(params?: SetStatusToAway$Params, context?: HttpContext): Observable<void> {
+    return this.setStatusToAway$Response(params, context).pipe(
+      map((r: StrictHttpResponse<void>): void => r.body)
     );
   }
 

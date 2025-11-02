@@ -269,6 +269,45 @@
         }
       }
     },
+    "/profile/status/online": {
+      "post": {
+        "tags": [
+          "user-profile-controller"
+        ],
+        "operationId": "setStatusToOnline",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/profile/status/offline": {
+      "post": {
+        "tags": [
+          "user-profile-controller"
+        ],
+        "operationId": "setStatusToOffline",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/profile/status/away": {
+      "post": {
+        "tags": [
+          "user-profile-controller"
+        ],
+        "operationId": "setStatusToAway",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/profile/image": {
       "post": {
         "tags": [
@@ -1637,6 +1676,14 @@
               "USA"
             ]
           },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ONLINE",
+              "OFFLINE",
+              "AWAY"
+            ]
+          },
           "libraryCount": {
             "type": "integer",
             "format": "int32"
@@ -1726,6 +1773,14 @@
               "POLAND",
               "HUNGARY",
               "USA"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ONLINE",
+              "OFFLINE",
+              "AWAY"
             ]
           },
           "libraryCount": {

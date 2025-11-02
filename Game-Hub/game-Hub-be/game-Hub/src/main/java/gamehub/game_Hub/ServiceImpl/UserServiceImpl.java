@@ -1,5 +1,7 @@
 package gamehub.game_Hub.ServiceImpl;
 
+import static gamehub.game_Hub.Module.User.Status.*;
+
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -10,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import gamehub.game_Hub.File.FileStorageService;
 import gamehub.game_Hub.Module.Genre;
+import gamehub.game_Hub.Module.User.Status;
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Repository.genre.GenreRepository;
 import gamehub.game_Hub.Repository.user.UserRepository;
@@ -88,6 +91,36 @@ public class UserServiceImpl implements UserService {
 
     var bannerImage = fileStorageService.saveUserImages(file, user.getId());
     user.setBanner(bannerImage);
+    userRepository.save(user);
+  }
+
+  @Override
+  public void setStatusToOnline(final Authentication connectedUser) {
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+    user.setStatus(ONLINE);
+    userRepository.save(user);
+  }
+
+  @Override
+  public void setStatusToOffline(final Authentication connectedUser) {
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+    user.setStatus(OFFLINE);
+    userRepository.save(user);
+  }
+
+  @Override
+  public void setStatusToAway(final Authentication connectedUser) {
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+    user.setStatus(AWAY);
     userRepository.save(user);
   }
 

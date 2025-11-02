@@ -97,5 +97,23 @@ public class UserProfileController {
     return ResponseEntity.accepted().build();
   }
 
+  @PostMapping("/status/online")
+  public ResponseEntity<Void> setStatusToOnline(final Authentication connectedUser) {
+    userService.setStatusToOnline(connectedUser);
+    return ResponseEntity.accepted().build();
+  }
+
+  @PostMapping("/status/offline")
+  public ResponseEntity<Void> setStatusToOffline(final Authentication connectedUser) {
+    userService.setStatusToOffline(connectedUser);
+    return ResponseEntity.accepted().build();
+  }
+
+  @PostMapping("/status/away")
+  public ResponseEntity<Void> setStatusToAway(final Authentication connectedUser) {
+    userService.setStatusToAway(connectedUser);
+    return ResponseEntity.accepted().build();
+  }
+
 
 }

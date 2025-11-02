@@ -11,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import gamehub.game_Hub.Module.User.Status;
 import gamehub.game_Hub.Request.AuthenticationRequest;
 import gamehub.game_Hub.Response.AuthenticationResponse;
 import gamehub.game_Hub.Request.ForgotPasswordRequest;
@@ -58,6 +59,7 @@ public class AuthenticationService {
         .email(request.getEmail())
         .password(passwordEncoder.encode(request.getPassword()))
         .roles(List.of(userRole))
+        .status(Status.OFFLINE)
         .build();
 
     userRepository.save(user);
