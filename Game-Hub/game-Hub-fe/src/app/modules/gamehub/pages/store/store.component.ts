@@ -7,6 +7,7 @@ import {GameResponse} from '../../../../services/models/game-response';
 import {checkGameInWishlist} from '../../../../services/fn/game-controller/check-game-in-wishlist';
 import {FormsModule} from '@angular/forms';
 import {Game} from '../../../../services/models/game';
+import {PlatformResponse} from '../../../../services/models/platform-response';
 
 @Component({
   selector: 'app-store',
@@ -21,6 +22,9 @@ import {Game} from '../../../../services/models/game';
 export class StoreComponent implements OnInit{
   gamePageResponse: PageResponseGameResponse = {}
   gameResponse: GameResponse = {}
+  platformResponse: {} = {}
+  allPlatforms: string[] = [] ;
+  allGenres: string[] = [] ;
   private _gameImageCover: string | undefined
   public page = 0;
   public size = 30;
@@ -43,19 +47,34 @@ export class StoreComponent implements OnInit{
   }
 
   ngOnInit() {
-    this.findAllGames()
+    this.getAllGames()
+    this.getPlatforms();
+    this.getGenres();
   }
 
   filterGames() {
     const maxPrice = Number(this.filters.maxPrice);
-    this.filteredGames = (this.gamePageResponse.content || []).filter(game =>
-      !maxPrice
-      || (maxPrice === 101 && game.price! >= 100)
-      || (maxPrice !== 101 && game.price! <= maxPrice)
+    const selectedPlatform = this.filters.platform
+    const selectedGenre = this.filters.genre
+    this.filteredGames = (this.gamePageResponse.content || []).filter(game  => {
+      const priceMatch = !maxPrice
+        || (maxPrice === 101 && game.price! >= 100)
+        || (maxPrice !== 101 && game.price! <= maxPrice);
+
+        const platformMatch =
+          !selectedPlatform ||
+          game.platforms!.some(platform => platform.platformName === selectedPlatform);
+
+        const genreMatch = !selectedGenre || game.genres!.some(genre => genre.name === selectedGenre)
+
+        return priceMatch && platformMatch && genreMatch;
+    }
+
+
     );
   }
 
-  private findAllGames() {
+  private getAllGames() {
     this.gameService.findAllGames({
       page:this.page,
       size:this.size
@@ -65,6 +84,7 @@ export class StoreComponent implements OnInit{
         this.gamePageResponse.content?.forEach(game => {
           this.checkIfGameIsInWishlist(game.gameId);
           this.filteredGames = [...(games.content || [])];
+
         });
         this.gamePageResponse.content?.forEach(game => {
           this.checkIfGameIsOwned(game.gameId);
@@ -108,5 +128,30 @@ export class StoreComponent implements OnInit{
       return 'data:image/jpeg;base64,' + game.gameCoverImage;
     }
     return 'https://images.pexels.com/photos/1054655/pexels-photo-1054655.jpeg';
+  }
+
+  private getPlatforms() {
+    this.gameService.getAllPlatforms().subscribe({
+      next: (platforms) => {
+        this.allPlatforms = platforms.map(p => p.platformName!);
+      }
+    })
+  }
+
+  private getGenres() {
+    this.gameService.getAllGenres().subscribe({
+      next: (genres) => {
+        this.allGenres = genres.map(g => g.name!);
+      }
+    })
+  }
+
+  resetFilters() {
+    this.filters = {
+      genre: '',
+      platform: '',
+      maxPrice: ''
+    };
+    this.filteredGames = [...(this.gamePageResponse.content || [])]
   }
 }

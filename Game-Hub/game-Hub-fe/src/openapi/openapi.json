@@ -633,6 +633,52 @@
         }
       }
     },
+    "/store/platforms": {
+      "get": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "getAllPlatforms",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PlatformResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/store/genres": {
+      "get": {
+        "tags": [
+          "game-controller"
+        ],
+        "operationId": "getAllGenres",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GenreResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/store/game/{gameId}": {
       "get": {
         "tags": [
