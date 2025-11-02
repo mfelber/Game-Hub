@@ -75,9 +75,19 @@ public class UserServiceImpl implements UserService {
     User user = userRepository.findById(authUser.getId())
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
 
-
-    var profilePicture = fileStorageService.saveUserImages(file,user.getId());
+    var profilePicture = fileStorageService.saveUserImages(file, user.getId());
     user.setUserProfilePicture(profilePicture);
+    userRepository.save(user);
+  }
+
+  @Override
+  public void uploadBannerImage(final Authentication connectedUser, final MultipartFile file) {
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+    var bannerImage = fileStorageService.saveUserImages(file, user.getId());
+    user.setBanner(bannerImage);
     userRepository.save(user);
   }
 
@@ -87,8 +97,11 @@ public class UserServiceImpl implements UserService {
     User user = userRepository.findById(authUser.getId())
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
 
-    Set<Genre> genres = genresIds.stream().map(id -> genreRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("No genre found with id: " + id))).collect(
-        Collectors.toSet());
+    Set<Genre> genres = genresIds.stream()
+        .map(id -> genreRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("No genre found with id: " + id)))
+        .collect(
+            Collectors.toSet());
 
     user.setFavoriteGenres(genres);
     userRepository.save(user);

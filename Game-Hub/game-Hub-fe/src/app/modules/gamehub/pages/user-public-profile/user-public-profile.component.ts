@@ -45,4 +45,11 @@ export class UserPublicProfileComponent implements OnInit{
     }
     return 'https://images.pexels.com/photos/1054655/pexels-photo-1054655.jpeg';
   }
+
+  getBanner(user: UserPrivateResponse) {
+    if (user.bannerImage) {
+      return 'data:image/jpeg;base64,' + user.bannerImage;
+    }
+    return 'https://images.pexels.com/photos/1054655/pexels-photo-1054655.jpeg';
+  }
 }

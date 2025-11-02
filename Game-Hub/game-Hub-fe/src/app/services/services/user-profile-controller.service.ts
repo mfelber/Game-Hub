@@ -21,6 +21,8 @@ import { updateFavoriteGenres } from '../fn/user-profile-controller/update-favor
 import { UpdateFavoriteGenres$Params } from '../fn/user-profile-controller/update-favorite-genres';
 import { updateUserProfile } from '../fn/user-profile-controller/update-user-profile';
 import { UpdateUserProfile$Params } from '../fn/user-profile-controller/update-user-profile';
+import { uploadBannerImage } from '../fn/user-profile-controller/upload-banner-image';
+import { UploadBannerImage$Params } from '../fn/user-profile-controller/upload-banner-image';
 import { uploadProfileImage } from '../fn/user-profile-controller/upload-profile-image';
 import { UploadProfileImage$Params } from '../fn/user-profile-controller/upload-profile-image';
 import { UserPrivateResponse } from '../models/user-private-response';
@@ -105,6 +107,35 @@ export class UserProfileControllerService extends BaseService {
   uploadProfileImage(params?: UploadProfileImage$Params, context?: HttpContext): Observable<{
 }> {
     return this.uploadProfileImage$Response(params, context).pipe(
+      map((r: StrictHttpResponse<{
+}>): {
+} => r.body)
+    );
+  }
+
+  /** Path part for operation `uploadBannerImage()` */
+  static readonly UploadBannerImagePath = '/profile/banner';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `uploadBannerImage()` instead.
+   *
+   * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
+   */
+  uploadBannerImage$Response(params?: UploadBannerImage$Params, context?: HttpContext): Observable<StrictHttpResponse<{
+}>> {
+    return uploadBannerImage(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `uploadBannerImage$Response()` instead.
+   *
+   * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
+   */
+  uploadBannerImage(params?: UploadBannerImage$Params, context?: HttpContext): Observable<{
+}> {
+    return this.uploadBannerImage$Response(params, context).pipe(
       map((r: StrictHttpResponse<{
 }>): {
 } => r.body)

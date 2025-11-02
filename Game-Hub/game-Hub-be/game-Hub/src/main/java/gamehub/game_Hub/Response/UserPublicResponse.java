@@ -27,4 +27,5 @@ public class UserPublicResponse {
   private Set<GenreResponse> favoriteGenres;
   private Set<GameResponseShort> recommendedGames;
   private byte [] userProfilePicture;
+  private byte [] bannerImage;
 }

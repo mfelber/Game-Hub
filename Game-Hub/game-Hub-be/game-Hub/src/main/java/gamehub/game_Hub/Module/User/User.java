@@ -67,6 +67,8 @@ public class User implements UserDetails, Principal {
 
   private String userProfilePicture;
 
+  private String banner;
+
   private boolean isBanned;
 
   @ManyToMany(fetch = FetchType.EAGER)
