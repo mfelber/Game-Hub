@@ -21,19 +21,36 @@ export class LibraryComponent implements OnInit{
   public page = 0;
   public size = 15;
   emptyLibrary = false;
+  loadFavoriteGames = false;
+  loadDownloadedGames = false;
+  loadAllGames = false;
 
   ngOnInit() {
-    this.findOwnedGame()
+    this.getOwnedGame()
   }
 
   constructor(
     private libraryService: LibraryControllerService,
-    private gameService: GameControllerService,
+    private storeService: GameControllerService,
     private router: Router
   ) {
   }
 
-  private findOwnedGame() {
+  getFavoriteGames() {
+    this.libraryService.getFavorites({
+      page: this.page,
+      size: this.size
+    }).subscribe({
+      next: (games) => {
+        this.gamePageResponse = games;
+        this.loadAllGames = false;
+        this.loadDownloadedGames = false;
+        this.loadFavoriteGames = true;
+      }
+    })
+  }
+
+  getOwnedGame() {
     this.libraryService.getLibrary({
       page: this.page,
       size: this.size
@@ -41,7 +58,9 @@ export class LibraryComponent implements OnInit{
       {
         next: (games) => {
           this.gamePageResponse = games;
-          console.log('PageResponse from backend:', this.gamePageResponse);
+          this.loadAllGames = true
+          this.loadDownloadedGames = false;
+          this.loadFavoriteGames = false;
           if (games.totalElements == 0) {
             this.emptyLibrary = true
           } else {
@@ -54,8 +73,9 @@ export class LibraryComponent implements OnInit{
       }
     )
   }
+
   goToGame(gameId:any) {
-    this.gameService.getGameById({gameId}).subscribe({
+    this.storeService.getGameById({gameId}).subscribe({
       next: (game) => {
         console.log(game);
         this.router.navigate(['gamehub/library/game', gameId]);
@@ -72,5 +92,7 @@ export class LibraryComponent implements OnInit{
     }
     return 'https://images.pexels.com/photos/1054655/pexels-photo-1054655.jpeg';
   }
-  
+
+
+
 }

@@ -24,9 +24,15 @@ import { CheckGameOwned$Params } from '../fn/game-controller/check-game-owned';
 import { findAllGames } from '../fn/game-controller/find-all-games';
 import { FindAllGames$Params } from '../fn/game-controller/find-all-games';
 import { GameResponse } from '../models/game-response';
+import { GenreResponse } from '../models/genre-response';
+import { getAllGenres } from '../fn/game-controller/get-all-genres';
+import { GetAllGenres$Params } from '../fn/game-controller/get-all-genres';
+import { getAllPlatforms } from '../fn/game-controller/get-all-platforms';
+import { GetAllPlatforms$Params } from '../fn/game-controller/get-all-platforms';
 import { getGameById } from '../fn/game-controller/get-game-by-id';
 import { GetGameById$Params } from '../fn/game-controller/get-game-by-id';
 import { PageResponseGameResponse } from '../models/page-response-game-response';
+import { PlatformResponse } from '../models/platform-response';
 import { removeGameFromWishlist } from '../fn/game-controller/remove-game-from-wishlist';
 import { RemoveGameFromWishlist$Params } from '../fn/game-controller/remove-game-from-wishlist';
 import { uploadGameCoverImage } from '../fn/game-controller/upload-game-cover-image';
@@ -164,6 +170,56 @@ export class GameControllerService extends BaseService {
   addGame(params: AddGame$Params, context?: HttpContext): Observable<number> {
     return this.addGame$Response(params, context).pipe(
       map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `getAllPlatforms()` */
+  static readonly GetAllPlatformsPath = '/store/platforms';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAllPlatforms()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllPlatforms$Response(params?: GetAllPlatforms$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<PlatformResponse>>> {
+    return getAllPlatforms(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getAllPlatforms$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllPlatforms(params?: GetAllPlatforms$Params, context?: HttpContext): Observable<Array<PlatformResponse>> {
+    return this.getAllPlatforms$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<PlatformResponse>>): Array<PlatformResponse> => r.body)
+    );
+  }
+
+  /** Path part for operation `getAllGenres()` */
+  static readonly GetAllGenresPath = '/store/genres';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAllGenres()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllGenres$Response(params?: GetAllGenres$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<GenreResponse>>> {
+    return getAllGenres(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getAllGenres$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllGenres(params?: GetAllGenres$Params, context?: HttpContext): Observable<Array<GenreResponse>> {
+    return this.getAllGenres$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<GenreResponse>>): Array<GenreResponse> => r.body)
     );
   }
 

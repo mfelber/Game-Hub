@@ -1,5 +1,7 @@
 package gamehub.game_Hub.Controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +17,11 @@ import org.springframework.web.multipart.MultipartFile;
 import gamehub.game_Hub.Common.PageResponse;
 import gamehub.game_Hub.Request.GameRequest;
 import gamehub.game_Hub.Response.GameResponse;
+import gamehub.game_Hub.Response.GenreResponse;
+import gamehub.game_Hub.Response.PlatformResponse;
 import gamehub.game_Hub.Service.GameService;
+import gamehub.game_Hub.Service.GenreService;
+import gamehub.game_Hub.Service.PlatformService;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +32,10 @@ import lombok.RequiredArgsConstructor;
 public class GameController {
 
   private final GameService gameService;
+
+  private final PlatformService platformService;
+
+  private final GenreService genreService;
 
   @PostMapping("/add-game")
   public ResponseEntity<Long> addGame(@Valid @RequestBody GameRequest gameRequest) {
@@ -47,6 +57,16 @@ public class GameController {
   @GetMapping("/game/{gameId}")
   public ResponseEntity<GameResponse> getGameById(@PathVariable final Long gameId) {
     return ResponseEntity.ok(gameService.findById(gameId));
+  }
+
+  @GetMapping("/platforms")
+  public ResponseEntity<List<PlatformResponse>> getAllPlatforms() {
+    return ResponseEntity.ok(platformService.findAllPlatforms());
+  }
+
+  @GetMapping("/genres")
+  public ResponseEntity<List<GenreResponse>> getAllGenres() {
+    return ResponseEntity.ok(genreService.findAllGenres());
   }
 
   @GetMapping("/all-games")
@@ -80,6 +100,8 @@ public class GameController {
   public ResponseEntity<Boolean> checkGameInWishlist(@PathVariable final Long gameId, final Authentication connectedUser) {
     return ResponseEntity.ok(gameService.checkGameInWishlist(gameId, connectedUser));
   }
+
+
 
 
 }
