@@ -15,6 +15,7 @@ export interface UserPublicResponse {
   location?: 'SLOVAKIA' | 'CZECH_REPUBLIC' | 'POLAND' | 'HUNGARY' | 'USA';
   playRecently?: Array<GameResponseShort>;
   recommendedGames?: Array<GameResponseShort>;
+  status?: 'ONLINE' | 'OFFLINE' | 'AWAY';
   userId?: number;
   userProfilePicture?: Array<string>;
   username?: string;

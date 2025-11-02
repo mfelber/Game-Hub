@@ -129,6 +129,9 @@ public class User implements UserDetails, Principal {
   @Enumerated(EnumType.STRING)
   private Location location;
 
+  @Enumerated(EnumType.STRING)
+  private Status status = Status.OFFLINE;
+
   @Column(name = "bio", length = 2000, nullable = true)
   private String bio;
 

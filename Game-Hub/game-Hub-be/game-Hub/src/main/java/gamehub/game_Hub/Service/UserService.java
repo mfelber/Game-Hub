@@ -25,4 +25,10 @@ public interface UserService {
 
   void uploadBannerImage(Authentication connectedUser, MultipartFile file);
 
+  void setStatusToOnline(Authentication connectedUser);
+
+  void setStatusToOffline(Authentication connectedUser);
+
+  void setStatusToAway(Authentication connectedUser);
+
 }

@@ -75,4 +75,12 @@ export class MenuComponent implements OnInit {
     return 'https://images.pexels.com/photos/1054655/pexels-photo-1054655.jpeg';
   }
 
+  setUserToOffline() {
+    this.userService.setStatusToOffline().subscribe({
+      next: () => {
+        window.location.href = '/logout';
+      },
+      error: (err) => console.error(err)
+    })
+  }
 }

@@ -3,13 +3,14 @@ import {UserPrivateResponse} from '../../../../services/models/user-private-resp
 import {initFlowbite} from 'flowbite';
 import {Router} from '@angular/router';
 import {UserProfileControllerService} from '../../../../services/services/user-profile-controller.service';
-import {NgForOf, NgIf} from '@angular/common';
+import {NgClass, NgForOf, NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-user-profile',
   imports: [
     NgIf,
-    NgForOf
+    NgForOf,
+    NgClass
   ],
   templateUrl: './user-private-profile.component.html',
   styleUrl: './user-private-profile.component.css'

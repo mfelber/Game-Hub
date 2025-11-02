@@ -3,6 +3,7 @@ package gamehub.game_Hub.Response;
 import java.util.Set;
 
 import gamehub.game_Hub.Module.User.Location;
+import gamehub.game_Hub.Module.User.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,6 +22,7 @@ public class UserPrivateResponse {
   private String username;
   private String bio;
   private Location location;
+  private Status status;
   //   TODO add count of friends
   private int libraryCount;
   private int wishlistCount;

@@ -106,7 +106,7 @@
         <img
           [src]="getProfilePicture(userResponse)"
           alt="not found"
-          class="w-13 h-13 object-cover rounded-4xl"
+          class="w-13 h-13 object-cover rounded-xl"
           width="1"
           height="1"
         />
@@ -134,8 +134,8 @@
               <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>
             </li>
           </ul>
-          <div class="py-2">
-            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign out</a>
+          <div  class="py-2">
+            <a (click)="setUserToOffline()" href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign out</a>
           </div>
         </div>
 
