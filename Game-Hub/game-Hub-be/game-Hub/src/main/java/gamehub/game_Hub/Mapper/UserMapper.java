@@ -53,6 +53,7 @@ public class UserMapper {
         .recommendedGames(user.getRecommendationGames().stream().map(g -> new GameResponseShort(g.getId(), g.getTitle(), FileUtils.readCoverFromLocation(g.getGameCoverImage())))
             .collect(Collectors.toSet()))
         .userProfilePicture(FileUtils.readCoverFromLocation(user.getUserProfilePicture()))
+        .bannerImage(FileUtils.readCoverFromLocation(user.getBanner()))
         .build();
   }
 
@@ -85,6 +86,7 @@ public class UserMapper {
         .recommendedGames(user.getRecommendationGames().stream().map(g -> new GameResponseShort(g.getId(), g.getTitle(), FileUtils.readCoverFromLocation(g.getGameCoverImage())))
             .collect(Collectors.toSet()))
         .userProfilePicture(FileUtils.readCoverFromLocation(user.getUserProfilePicture()))
+        .bannerImage(FileUtils.readCoverFromLocation(user.getBanner()))
         .build();
 
   }

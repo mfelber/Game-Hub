@@ -23,4 +23,6 @@ public interface UserService {
 
   void uploadProfilePictureImage(Authentication connectedUser, MultipartFile file);
 
+  void uploadBannerImage(Authentication connectedUser, MultipartFile file);
+
 }

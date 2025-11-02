@@ -7,6 +7,7 @@ import { GameResponseShort } from '../models/game-response-short';
 import { GenreResponse } from '../models/genre-response';
 export interface UserPrivateResponse {
   badges?: Array<BadgeResponse>;
+  bannerImage?: Array<string>;
   bio?: string;
   email?: string;
   favoriteGames?: Array<GameResponseShort>;

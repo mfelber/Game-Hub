@@ -307,6 +307,44 @@
         }
       }
     },
+    "/profile/banner": {
+      "post": {
+        "tags": [
+          "user-profile-controller"
+        ],
+        "operationId": "uploadBannerImage",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "required": [
+                  "file"
+                ],
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/profile/add/genres": {
       "post": {
         "tags": [
@@ -1648,6 +1686,13 @@
               "type": "string",
               "format": "byte"
             }
+          },
+          "bannerImage": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "byte"
+            }
           }
         }
       },
@@ -1727,6 +1772,13 @@
             }
           },
           "userProfilePicture": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "byte"
+            }
+          },
+          "bannerImage": {
             "type": "array",
             "items": {
               "type": "string",

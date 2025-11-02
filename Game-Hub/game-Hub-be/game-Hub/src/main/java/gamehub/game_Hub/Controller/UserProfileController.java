@@ -86,9 +86,16 @@ public class UserProfileController {
     userService.uploadProfilePictureImage(connectedUser,file);
     return ResponseEntity.accepted().build();
   }
-
-
-//   TODO upload banner image,
+  
+  @PostMapping(value = "/banner", consumes = "multipart/form-data")
+  public ResponseEntity<?> uploadBannerImage(
+      @Parameter()
+      @RequestPart("file") MultipartFile file,
+      final Authentication connectedUser
+  ) {
+    userService.uploadBannerImage(connectedUser,file);
+    return ResponseEntity.accepted().build();
+  }
 
 
 }
