@@ -1397,11 +1397,11 @@
           "location": {
             "type": "string",
             "enum": [
-              "SLOVAKIA",
-              "CZECH_REPUBLIC",
-              "POLAND",
-              "HUNGARY",
-              "USA"
+              "SK",
+              "CZ",
+              "PL",
+              "HU",
+              "US"
             ]
           }
         }
@@ -1669,11 +1669,11 @@
           "location": {
             "type": "string",
             "enum": [
-              "SLOVAKIA",
-              "CZECH_REPUBLIC",
-              "POLAND",
-              "HUNGARY",
-              "USA"
+              "SK",
+              "CZ",
+              "PL",
+              "HU",
+              "US"
             ]
           },
           "status": {
@@ -1743,6 +1743,17 @@
           }
         }
       },
+      "LocationResponse": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "iconPath": {
+            "type": "string"
+          }
+        }
+      },
       "UserPrivateResponse": {
         "type": "object",
         "properties": {
@@ -1766,14 +1777,7 @@
             "type": "string"
           },
           "location": {
-            "type": "string",
-            "enum": [
-              "SLOVAKIA",
-              "CZECH_REPUBLIC",
-              "POLAND",
-              "HUNGARY",
-              "USA"
-            ]
+            "$ref": "#/components/schemas/LocationResponse"
           },
           "status": {
             "type": "string",

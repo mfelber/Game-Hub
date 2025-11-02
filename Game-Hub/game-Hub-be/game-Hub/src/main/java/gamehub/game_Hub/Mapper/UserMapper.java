@@ -11,6 +11,7 @@ import gamehub.game_Hub.Response.BadgeResponse;
 import gamehub.game_Hub.Response.GameResponse;
 import gamehub.game_Hub.Response.GameResponseShort;
 import gamehub.game_Hub.Response.GenreResponse;
+import gamehub.game_Hub.Response.LocationResponse;
 import gamehub.game_Hub.Response.UserPrivateResponse;
 import gamehub.game_Hub.Response.UserPublicResponse;
 
@@ -66,7 +67,12 @@ public class UserMapper {
         .email(user.getEmail())
         .username(user.getName())
         .bio(user.getBio())
-        .location(user.getLocation())
+        .location(
+            new LocationResponse(
+                user.getLocation() != null ? user.getLocation().name() : null,
+                user.getLocation() != null ? "/assets/flags/" + user.getLocation().name().toLowerCase() + ".svg" : null
+            )
+        )
         .status(user.getStatus())
         .libraryCount(user.getLibrary().size())
         .wishlistCount(user.getWishlist().size())

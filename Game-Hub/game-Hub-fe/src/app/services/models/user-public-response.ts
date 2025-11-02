@@ -12,7 +12,7 @@ export interface UserPublicResponse {
   favoriteGames?: Array<GameResponseShort>;
   favoriteGenres?: Array<GenreResponse>;
   libraryCount?: number;
-  location?: 'SLOVAKIA' | 'CZECH_REPUBLIC' | 'POLAND' | 'HUNGARY' | 'USA';
+  location?: 'SK' | 'CZ' | 'PL' | 'HU' | 'US';
   playRecently?: Array<GameResponseShort>;
   recommendedGames?: Array<GameResponseShort>;
   status?: 'ONLINE' | 'OFFLINE' | 'AWAY';
