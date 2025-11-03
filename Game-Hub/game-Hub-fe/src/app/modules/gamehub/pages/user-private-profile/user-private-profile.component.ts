@@ -32,7 +32,6 @@ export class UserPrivateProfileComponent implements OnInit{
     this.userService.getUserPrivate().subscribe({
       next:  (user) => {
         this.userResponse = user;
-        console.log(user)
         this.getProfilePicture(user)
       }
     });

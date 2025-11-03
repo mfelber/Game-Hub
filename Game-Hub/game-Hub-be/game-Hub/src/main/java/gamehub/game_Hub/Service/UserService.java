@@ -2,10 +2,12 @@ package gamehub.game_Hub.Service;
 
 import java.util.Set;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
 
 import gamehub.game_Hub.Request.UserUpdateRequest;
+import gamehub.game_Hub.Response.StatusResponse;
 import gamehub.game_Hub.Response.UserPrivateResponse;
 import gamehub.game_Hub.Response.UserPublicResponse;
 
@@ -30,5 +32,7 @@ public interface UserService {
   void setStatusToOffline(Authentication connectedUser);
 
   void setStatusToAway(Authentication connectedUser);
+
+  StatusResponse getUserStatus(Authentication connectedUser);
 
 }

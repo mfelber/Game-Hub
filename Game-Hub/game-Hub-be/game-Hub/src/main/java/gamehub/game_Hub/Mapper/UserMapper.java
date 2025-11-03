@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import gamehub.game_Hub.File.FileUtils;
+import gamehub.game_Hub.Module.User.Status;
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Request.UserUpdateRequest;
 import gamehub.game_Hub.Response.BadgeResponse;
@@ -12,6 +13,7 @@ import gamehub.game_Hub.Response.GameResponse;
 import gamehub.game_Hub.Response.GameResponseShort;
 import gamehub.game_Hub.Response.GenreResponse;
 import gamehub.game_Hub.Response.LocationResponse;
+import gamehub.game_Hub.Response.StatusResponse;
 import gamehub.game_Hub.Response.UserPrivateResponse;
 import gamehub.game_Hub.Response.UserPublicResponse;
 
@@ -102,6 +104,12 @@ public class UserMapper {
         .bannerImage(FileUtils.readCoverFromLocation(user.getBanner()))
         .build();
 
+  }
+
+  public StatusResponse toUserStatusResponse(final User user) {
+    return StatusResponse.builder()
+        .status(user.getStatus())
+        .build();
   }
 
 }

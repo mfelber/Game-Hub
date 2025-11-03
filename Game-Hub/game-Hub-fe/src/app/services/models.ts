@@ -19,6 +19,7 @@ export type { PageResponseGameResponse } from './models/page-response-game-respo
 export type { Platform } from './models/platform';
 export type { PlatformResponse } from './models/platform-response';
 export type { RegistrationRequest } from './models/registration-request';
+export type { StatusResponse } from './models/status-response';
 export type { SubtitleResponse } from './models/subtitle-response';
 export type { Subtitles } from './models/subtitles';
 export type { SystemRequirements } from './models/system-requirements';

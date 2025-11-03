@@ -942,6 +942,26 @@
         }
       }
     },
+    "/profile/status": {
+      "get": {
+        "tags": [
+          "user-profile-controller"
+        ],
+        "operationId": "getUserStatus",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/library/library": {
       "get": {
         "tags": [
@@ -1837,6 +1857,19 @@
               "type": "string",
               "format": "byte"
             }
+          }
+        }
+      },
+      "StatusResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ONLINE",
+              "OFFLINE",
+              "AWAY"
+            ]
           }
         }
       },

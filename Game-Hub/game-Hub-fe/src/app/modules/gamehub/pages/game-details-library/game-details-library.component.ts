@@ -36,12 +36,10 @@ export class GameDetailsLibraryComponent implements OnInit {
 
   private getInfoGame() {
     const gameId: any = this.router.snapshot.paramMap.get('id')
-    console.log(gameId);
     if (gameId) {
       this.gameService.getGameById({gameId}).subscribe({
           next: (data) => {
             this.game = data;
-            console.log(data)
           },
 
           error: (err) => console.error('Error with loading details of this game', err)
@@ -63,7 +61,6 @@ export class GameDetailsLibraryComponent implements OnInit {
     this.libraryService.addGameToFavorites({gameId}).subscribe({
       next: () => {
         this.checkGameIsFavorite()
-        console.log('game with id ' + gameId + 'was added to user as favorite')
       }
     })
   }
@@ -72,7 +69,6 @@ export class GameDetailsLibraryComponent implements OnInit {
     this.libraryService.removeGameFromFavorites({gameId}).subscribe({
       next: () => {
         this.checkGameIsFavorite()
-        console.log('game with id ' + gameId + 'was added to user as favorite')
       }
     })
   }
@@ -83,10 +79,8 @@ export class GameDetailsLibraryComponent implements OnInit {
       next: (isFavorite) => {
         if (isFavorite) {
           this.inFavorites = true
-          console.log('in favorites')
         } else {
           this.inFavorites = false
-          console.log('not in favorites')
         }
       }
     })
@@ -118,7 +112,6 @@ export class GameDetailsLibraryComponent implements OnInit {
     this.libraryService.checkGameRecommended({gameId}).subscribe({
       next: (recommended)=> {
         this.isRecommended = recommended
-        console.log(this.isRecommended)
     }
     })
   }

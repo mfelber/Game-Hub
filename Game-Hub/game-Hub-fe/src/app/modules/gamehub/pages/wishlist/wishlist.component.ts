@@ -41,7 +41,6 @@ export class WishlistComponent implements OnInit{
       {
         next: (games) => {
           this.gamePageResponse = games;
-          console.log('PageResponse from backend:', this.gamePageResponse);
           if (games.totalElements == 0) {
             this.emptyWishlist = true
           } else {
@@ -58,7 +57,6 @@ export class WishlistComponent implements OnInit{
   goToGame(gameId: any) {
     this.gameService.getGameById({gameId}).subscribe({
       next: (game) => {
-        console.log(game);
         this.router.navigate(['gamehub/game', gameId]);
       },
       error: (err) => {

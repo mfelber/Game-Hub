@@ -2,16 +2,21 @@ import {Component, OnInit} from '@angular/core';
 import {NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
 import {MatIcon} from '@angular/material/icon';
 import {initFlowbite} from 'flowbite';
-import {NgForOf, NgIf} from '@angular/common';
+import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {UserProfileControllerService} from '../../../../services/services';
 import {UserPrivateResponse} from '../../../../services/models/user-private-response';
+import {FormsModule} from '@angular/forms';
+import {StatusResponse} from '../../../../services/models/status-response';
 
 @Component({
   selector: 'app-menu',
   imports: [
     RouterLink,
     RouterLinkActive,
-    NgIf
+    NgIf,
+    FormsModule,
+    NgForOf,
+    NgClass
   ],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.scss'
@@ -20,16 +25,19 @@ export class MenuComponent implements OnInit {
   ngOnInit(): void {
     initFlowbite();
     this.loadUserName();
+    this.getStatus();
   }
 
   isStoreActive = false;
   isLibraryActive = false;
   _isGameDetailsActive = false;
   userResponse: UserPrivateResponse = {};
+  statusResponse: StatusResponse = {};
+  statuses = ['ONLINE', 'OFFLINE', 'AWAY'];
 
   constructor(
     private router: Router,
-    private userService: UserProfileControllerService
+    protected userService: UserProfileControllerService
   ) {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
@@ -44,11 +52,20 @@ export class MenuComponent implements OnInit {
     this.userService.getUserPrivate().subscribe({
       next:  (user) => {
         this.userResponse = user;
-        console.log(user)
-        // this.getProfilePicture(user)
       }
     });
 
+  }
+
+  getStatus() {
+    this.userService.getStatus().subscribe({
+      next: (response) => {
+        this.statusResponse = response
+      },
+      error: (err) => {
+        console.error('error getting status:', err);
+      }
+    });
   }
 
   updateActiveTabs(url: string) {
@@ -75,7 +92,7 @@ export class MenuComponent implements OnInit {
     return 'https://images.pexels.com/photos/1054655/pexels-photo-1054655.jpeg';
   }
 
-  setUserToOffline() {
+  logoutUser() {
     this.userService.setStatusToOffline().subscribe({
       next: () => {
         window.location.href = '/logout';
@@ -83,4 +100,54 @@ export class MenuComponent implements OnInit {
       error: (err) => console.error(err)
     })
   }
+
+  setUserToOnline() {
+    this.userService.setStatusToOnline().subscribe({
+      next: () => {
+        this.getStatus();
+
+      }
+    })
+  }
+
+  setUserToOffline() {
+    this.userService.setStatusToOffline().subscribe({
+      next: () => {
+        this.getStatus();
+
+      }
+    })
+  }
+
+  setUserToAway() {
+    this.userService.setStatusToAway().subscribe({
+      next: () => {
+        this.getStatus();
+      }
+    })
+  }
+
+  onStatusChange($event: Event) {
+    const newStatus = (event?.target as HTMLSelectElement).value;
+
+    switch (newStatus) {
+      case 'ONLINE':
+        this.setUserToOnline()
+        break
+      case 'OFFLINE':
+        this.setUserToOffline()
+        break
+      case 'AWAY':
+        this.setUserToAway()
+        break
+    }
+
+
+  }
+
+  getAvailableStatuses(): string[] {
+    return this.statuses.filter(s => s !== this.userResponse.status);
+  }
+
+
 }

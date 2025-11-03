@@ -114,7 +114,6 @@ export class StoreComponent implements OnInit{
   goToGame(gameId:any) {
     this.gameService.getGameById({gameId}).subscribe({
       next: (game) => {
-        console.log(game);
         this.router.navigate(['gamehub/game', gameId]);
       },
       error: (err) => {

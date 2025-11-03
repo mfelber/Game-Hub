@@ -17,6 +17,7 @@ import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Repository.genre.GenreRepository;
 import gamehub.game_Hub.Repository.user.UserRepository;
 import gamehub.game_Hub.Mapper.UserMapper;
+import gamehub.game_Hub.Response.StatusResponse;
 import gamehub.game_Hub.Response.UserPrivateResponse;
 import gamehub.game_Hub.Response.UserPublicResponse;
 import gamehub.game_Hub.Service.UserService;
@@ -71,6 +72,15 @@ public class UserServiceImpl implements UserService {
     return userMapper.toUserPrivateResponse(user);
   }
 
+
+  @Override
+  public StatusResponse getUserStatus(final Authentication connectedUser) {
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+    return userMapper.toUserStatusResponse(user);
+  }
+
   @Override
   public void uploadProfilePictureImage(final Authentication connectedUser,
       final MultipartFile file) {
@@ -123,6 +133,7 @@ public class UserServiceImpl implements UserService {
     user.setStatus(AWAY);
     userRepository.save(user);
   }
+
 
   @Transactional
   public void updateFavoriteGenres(final Set<Long> genresIds, final Authentication connectedUser) {

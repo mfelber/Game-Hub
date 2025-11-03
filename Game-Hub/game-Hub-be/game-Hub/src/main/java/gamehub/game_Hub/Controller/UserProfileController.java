@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Repository.user.UserRepository;
+import gamehub.game_Hub.Response.StatusResponse;
 import gamehub.game_Hub.Response.UserPrivateResponse;
 import gamehub.game_Hub.Response.UserPublicResponse;
 import gamehub.game_Hub.Service.UserService;
@@ -70,6 +72,12 @@ public class UserProfileController {
     return ResponseEntity.ok(userPrivateResponse);
   }
 
+  @GetMapping("/status")
+  public ResponseEntity<StatusResponse> getUserStatus(final Authentication connectedUser) {
+    StatusResponse statusResponse = userService.getUserStatus(connectedUser);
+    return ResponseEntity.ok(statusResponse);
+  }
+
   @PostMapping("/add/genres")
   public ResponseEntity<Void> updateFavoriteGenres(@RequestBody Set<Long> genreIds,
       final Authentication connectedUser) {
@@ -114,6 +122,7 @@ public class UserProfileController {
     userService.setStatusToAway(connectedUser);
     return ResponseEntity.accepted().build();
   }
+
 
 
 }

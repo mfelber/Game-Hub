@@ -34,12 +34,10 @@ export class GameDetailsComponent implements OnInit {
 
   private getInfoGame() {
     const gameId: any = this.router.snapshot.paramMap.get('id')
-    console.log(gameId);
     if (gameId) {
       this.gameService.getGameById({gameId}).subscribe({
           next: (data) => {
             this.game = data;
-            console.log(data)
           },
 
           error: (err) => console.error('Error with loading details of this game', err)
@@ -55,10 +53,8 @@ export class GameDetailsComponent implements OnInit {
       .subscribe({
         next: (owned) => {
           if (owned) {
-            console.log('you owned this game')
             this.gameIsOwned = true;
           } else {
-            console.log('you do not owned this game')
             this.gameIsOwned = false;
           }
 
@@ -73,10 +69,8 @@ export class GameDetailsComponent implements OnInit {
         next: (inWishList) => {
           if (inWishList){
             this.gameInWishList = true
-            console.log('you have this game in wishlist')
           } else {
             this.gameInWishList = false
-            console.log('you dont have this game in wishlist')
           }
         }
       })
@@ -90,7 +84,7 @@ export class GameDetailsComponent implements OnInit {
           this.checkIfGameIsOwned();
         },
         error: (err) => {
-          console.log('Error with buying game:', err);
+          console.error('Error with buying game:', err);
         }
       });
 
@@ -110,7 +104,7 @@ export class GameDetailsComponent implements OnInit {
           this.checkIfGameIsInWishlist();
         },
         error: (err) => {
-          console.log('Error with buying game:', err);
+          console.error('Error with buying game:', err);
         }
       })
   }
@@ -122,7 +116,7 @@ export class GameDetailsComponent implements OnInit {
           this.gameInWishList = false;
         },
         error: (err) => {
-          console.log('Error with buying game:', err);
+          console.error('Error with buying game:', err);
         }
       })
   }
