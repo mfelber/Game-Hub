@@ -18,7 +18,7 @@ public class UserPublicResponse {
   private Long userId;
   private String username;
   private String bio;
-  private Location location;
+  private LocationResponse location;
   private Status status;
   //   TODO add count of friends
   private int libraryCount;

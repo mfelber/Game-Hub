@@ -7,6 +7,6 @@ export interface UserUpdateRequest {
   email?: string;
   firstName?: string;
   lastName?: string;
-  location?: 'SLOVAKIA' | 'CZECH_REPUBLIC' | 'POLAND' | 'HUNGARY' | 'USA';
+  location?: 'SK' | 'CZ' | 'PL' | 'HU' | 'US' | 'UNKNOWN';
   username?: string;
 }

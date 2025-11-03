@@ -14,6 +14,7 @@ export type { Genre } from './models/genre';
 export type { GenreResponse } from './models/genre-response';
 export type { Language } from './models/language';
 export type { LanguageResponse } from './models/language-response';
+export type { LocationResponse } from './models/location-response';
 export type { PageResponseGameResponse } from './models/page-response-game-response';
 export type { Platform } from './models/platform';
 export type { PlatformResponse } from './models/platform-response';

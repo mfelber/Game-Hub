@@ -5,6 +5,7 @@
 import { BadgeResponse } from '../models/badge-response';
 import { GameResponseShort } from '../models/game-response-short';
 import { GenreResponse } from '../models/genre-response';
+import { LocationResponse } from '../models/location-response';
 export interface UserPublicResponse {
   badges?: Array<BadgeResponse>;
   bannerImage?: Array<string>;
@@ -12,7 +13,7 @@ export interface UserPublicResponse {
   favoriteGames?: Array<GameResponseShort>;
   favoriteGenres?: Array<GenreResponse>;
   libraryCount?: number;
-  location?: 'SLOVAKIA' | 'CZECH_REPUBLIC' | 'POLAND' | 'HUNGARY' | 'USA';
+  location?: LocationResponse;
   playRecently?: Array<GameResponseShort>;
   recommendedGames?: Array<GameResponseShort>;
   status?: 'ONLINE' | 'OFFLINE' | 'AWAY';
