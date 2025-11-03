@@ -35,7 +35,6 @@ export class UserPublicProfileComponent implements OnInit{
     this.userService.getUserPublic({userId}).subscribe({
       next:  (user) => {
         this.userResponse = user;
-        console.log(user)
         this.getProfilePicture(userId)
       }
     });

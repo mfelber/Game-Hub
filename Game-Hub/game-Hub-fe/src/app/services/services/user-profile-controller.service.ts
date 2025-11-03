@@ -11,6 +11,8 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { getStatus } from '../fn/user-profile-controller/get-status';
+import { GetStatus$Params } from '../fn/user-profile-controller/get-status';
 import { getUserPrivate } from '../fn/user-profile-controller/get-user-private';
 import { GetUserPrivate$Params } from '../fn/user-profile-controller/get-user-private';
 import { getUserPublic } from '../fn/user-profile-controller/get-user-public';
@@ -21,6 +23,7 @@ import { setStatusToOffline } from '../fn/user-profile-controller/set-status-to-
 import { SetStatusToOffline$Params } from '../fn/user-profile-controller/set-status-to-offline';
 import { setStatusToOnline } from '../fn/user-profile-controller/set-status-to-online';
 import { SetStatusToOnline$Params } from '../fn/user-profile-controller/set-status-to-online';
+import { StatusResponse } from '../models/status-response';
 import { updateBio } from '../fn/user-profile-controller/update-bio';
 import { UpdateBio$Params } from '../fn/user-profile-controller/update-bio';
 import { updateFavoriteGenres } from '../fn/user-profile-controller/update-favorite-genres';
@@ -295,6 +298,31 @@ export class UserProfileControllerService extends BaseService {
   getUserPrivate(params?: GetUserPrivate$Params, context?: HttpContext): Observable<UserPrivateResponse> {
     return this.getUserPrivate$Response(params, context).pipe(
       map((r: StrictHttpResponse<UserPrivateResponse>): UserPrivateResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `getStatus()` */
+  static readonly GetStatusPath = '/profile/status';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getStatus()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getStatus$Response(params?: GetStatus$Params, context?: HttpContext): Observable<StrictHttpResponse<StatusResponse>> {
+    return getStatus(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getStatus$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getStatus(params?: GetStatus$Params, context?: HttpContext): Observable<StatusResponse> {
+    return this.getStatus$Response(params, context).pipe(
+      map((r: StrictHttpResponse<StatusResponse>): StatusResponse => r.body)
     );
   }
 

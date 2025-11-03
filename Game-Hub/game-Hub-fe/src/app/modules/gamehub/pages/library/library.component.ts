@@ -77,7 +77,6 @@ export class LibraryComponent implements OnInit{
   goToGame(gameId:any) {
     this.storeService.getGameById({gameId}).subscribe({
       next: (game) => {
-        console.log(game);
         this.router.navigate(['gamehub/library/game', gameId]);
       },
       error: (err) => {

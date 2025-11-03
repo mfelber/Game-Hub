@@ -65,7 +65,6 @@ export class LoginComponent {
   setUserToOnline(){
     this.userService.setStatusToOnline().subscribe({
       next: () => {
-        console.log("nastaveny online")
       }
     });
   }
