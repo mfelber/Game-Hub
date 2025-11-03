@@ -33,7 +33,12 @@ public class UserMapper {
         .userId(user.getId())
         .username(user.getName())
         .bio(user.getBio())
-        .location(user.getLocation())
+        .location(
+            new LocationResponse(
+                user.getLocation() != null ? user.getLocation().name() : null,
+                user.getLocation() != null ? "/assets/flags/" + user.getLocation().name().toLowerCase() + ".svg" : null
+            )
+        )
         .status(user.getStatus())
         .libraryCount(user.getLibrary().size())
         .wishlistCount(user.getWishlist().size())

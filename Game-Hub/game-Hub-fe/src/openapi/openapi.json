@@ -1401,7 +1401,8 @@
               "CZ",
               "PL",
               "HU",
-              "US"
+              "US",
+              "UNKNOWN"
             ]
           }
         }
@@ -1653,6 +1654,17 @@
           }
         }
       },
+      "LocationResponse": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "iconPath": {
+            "type": "string"
+          }
+        }
+      },
       "UserPublicResponse": {
         "type": "object",
         "properties": {
@@ -1667,14 +1679,7 @@
             "type": "string"
           },
           "location": {
-            "type": "string",
-            "enum": [
-              "SK",
-              "CZ",
-              "PL",
-              "HU",
-              "US"
-            ]
+            "$ref": "#/components/schemas/LocationResponse"
           },
           "status": {
             "type": "string",
@@ -1740,17 +1745,6 @@
               "type": "string",
               "format": "byte"
             }
-          }
-        }
-      },
-      "LocationResponse": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "iconPath": {
-            "type": "string"
           }
         }
       },
