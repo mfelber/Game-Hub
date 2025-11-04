@@ -2,14 +2,13 @@ package gamehub.game_Hub.Mapper;
 
 import java.util.stream.Collectors;
 
+
 import org.springframework.stereotype.Service;
 
 import gamehub.game_Hub.File.FileUtils;
-import gamehub.game_Hub.Module.User.Status;
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Request.UserUpdateRequest;
 import gamehub.game_Hub.Response.BadgeResponse;
-import gamehub.game_Hub.Response.GameResponse;
 import gamehub.game_Hub.Response.GameResponseShort;
 import gamehub.game_Hub.Response.GenreResponse;
 import gamehub.game_Hub.Response.LocationResponse;
@@ -44,10 +43,10 @@ public class UserMapper {
         .status(user.getStatus())
         .libraryCount(user.getLibrary().size())
         .wishlistCount(user.getWishlist().size())
-        .badges(user.getBadges().stream()
-            .map(b -> new BadgeResponse(
-                b.getId(), b.getName(), b.getDescription(), b.getBadgeImage())).collect(
-            Collectors.toSet()))
+        // .badges(user.getBadges().stream()
+        //     .map(b -> new BadgeResponse(
+        //         b.getId(), b.getName(), b.getDescription(), b.getBadgeImage())).collect(
+        //     Collectors.toSet()))
         .playRecently(user.getPlayRecently().stream().limit(5)
             .map(g -> new GameResponseShort(
                 g.getId(), g.getTitle(), FileUtils.readCoverFromLocation(g.getGameCoverImage())))
@@ -66,7 +65,20 @@ public class UserMapper {
         .build();
   }
 
+  public UserPrivateResponse toUserPrivateResponseShort(User user) {
+    return UserPrivateResponse.builder()
+        .userId(user.getId())
+        .firstName(user.getFirstName())
+        .lastName(user.getLastName())
+        .email(user.getEmail())
+        .username(user.getName())
+        .status(user.getStatus())
+        .userProfilePicture(FileUtils.readCoverFromLocation(user.getUserProfilePicture()))
+        .build();
+  }
+
   public UserPrivateResponse toUserPrivateResponse(User user) {
+
     return UserPrivateResponse.builder()
         .userId(user.getId())
         .firstName(user.getFirstName())
@@ -83,10 +95,10 @@ public class UserMapper {
         .status(user.getStatus())
         .libraryCount(user.getLibrary().size())
         .wishlistCount(user.getWishlist().size())
-        .badges(user.getBadges().stream()
-            .map(b -> new BadgeResponse(
-                b.getId(), b.getName(), b.getDescription(), b.getBadgeImage())).collect(
-                Collectors.toSet()))
+        // .badges(user.getBadges().stream().map(badge -> new BadgeResponse(badge.getId(), badge.getName(),
+        //     badge.getIconPath(), badge.getDescription())).toList())
+        .badges(user.getBadges().stream().map(badge -> new BadgeResponse(badge.getId(), badge.getName(),
+            badge.getIconPath(), badge.getDescription())).collect(Collectors.toSet()))
         .playRecently(user.getPlayRecently().stream().limit(5)
             .map(g -> new GameResponseShort(
                 g.getId(), g.getTitle(), FileUtils.readCoverFromLocation(g.getGameCoverImage())))

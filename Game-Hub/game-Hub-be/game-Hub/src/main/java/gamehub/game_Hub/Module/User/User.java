@@ -122,8 +122,7 @@ public class User implements UserDetails, Principal {
 
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(name = "user_badges", schema = "game_hub",
-      joinColumns = @JoinColumn(name = "user_id"),
-      inverseJoinColumns = @JoinColumn(name = "badge_id"))
+      joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "badge_id"))
   private Set<Badge> badges;
 
   @Enumerated(EnumType.STRING)

@@ -1,8 +1,8 @@
 package gamehub.game_Hub.Response;
 
+import java.util.List;
 import java.util.Set;
 
-import gamehub.game_Hub.Module.User.Location;
 import gamehub.game_Hub.Module.User.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -10,11 +10,11 @@ import { RequestBuilder } from '../../request-builder';
 
 import { StatusResponse } from '../../models/status-response';
 
-export interface GetStatus$Params {
+export interface GetUserStatus$Params {
 }
 
-export function getStatus(http: HttpClient, rootUrl: string, params?: GetStatus$Params, context?: HttpContext): Observable<StrictHttpResponse<StatusResponse>> {
-  const rb = new RequestBuilder(rootUrl, getStatus.PATH, 'get');
+export function getUserStatus(http: HttpClient, rootUrl: string, params?: GetUserStatus$Params, context?: HttpContext): Observable<StrictHttpResponse<StatusResponse>> {
+  const rb = new RequestBuilder(rootUrl, getUserStatus.PATH, 'get');
   if (params) {
   }
 
@@ -28,4 +28,4 @@ export function getStatus(http: HttpClient, rootUrl: string, params?: GetStatus$
   );
 }
 
-getStatus.PATH = '/profile/status';
+getUserStatus.PATH = '/profile/status';
