@@ -4,6 +4,8 @@ import {UserPublicResponse} from '../../../../services/models/user-public-respon
 import {ActivatedRoute, Router} from '@angular/router';
 import {UserPrivateResponse} from '../../../../services/models/user-private-response';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
+import {GameControllerService} from '../../../../services/services/game-controller.service';
+import {GameResponse} from '../../../../services/models/game-response';
 
 @Component({
   selector: 'app-user-public-profile',
@@ -23,7 +25,9 @@ export class UserPublicProfileComponent implements OnInit{
 
   constructor(
     private userService: UserProfileControllerService,
+    private gameService: GameControllerService,
     private router: ActivatedRoute,
+    private route: Router
   ) {
   }
 
@@ -50,6 +54,24 @@ export class UserPublicProfileComponent implements OnInit{
   getBanner(user: UserPrivateResponse) {
     if (user.bannerImage) {
       return 'data:image/jpeg;base64,' + user.bannerImage;
+    }
+    return 'https://images.pexels.com/photos/1054655/pexels-photo-1054655.jpeg';
+  }
+
+  goToGame(gameId:any) {
+    this.gameService.getGameById({gameId}).subscribe({
+      next: (game) => {
+        this.route.navigate(['gamehub/game', gameId]);
+      },
+      error: (err) => {
+        console.error('Error with loading game:', err);
+      }
+    });
+  }
+
+  getGameImageCover(game: GameResponse): string {
+    if (game.gameCoverImage) {
+      return 'data:image/jpeg;base64,' + game.gameCoverImage;
     }
     return 'https://images.pexels.com/photos/1054655/pexels-photo-1054655.jpeg';
   }

@@ -4,6 +4,8 @@ import {initFlowbite} from 'flowbite';
 import {Router} from '@angular/router';
 import {UserProfileControllerService} from '../../../../services/services/user-profile-controller.service';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
+import {GameResponse} from '../../../../services/models/game-response';
+import {GameControllerService} from '../../../../services/services/game-controller.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -22,7 +24,8 @@ export class UserPrivateProfileComponent implements OnInit{
   }
   constructor(
     private router: Router,
-    private userService: UserProfileControllerService
+    private userService: UserProfileControllerService,
+    private gameService: GameControllerService
   ){}
 
   userResponse: UserPrivateResponse = {};
@@ -38,6 +41,13 @@ export class UserPrivateProfileComponent implements OnInit{
 
   }
 
+  getGameImageCover(game: GameResponse): string {
+    if (game.gameCoverImage) {
+      return 'data:image/jpeg;base64,' + game.gameCoverImage;
+    }
+    return 'https://images.pexels.com/photos/1054655/pexels-photo-1054655.jpeg';
+  }
+
   getProfilePicture(user: UserPrivateResponse) {
     if (user.userProfilePicture) {
       return 'data:image/jpeg;base64,' + user.userProfilePicture;
@@ -50,5 +60,16 @@ export class UserPrivateProfileComponent implements OnInit{
       return 'data:image/jpeg;base64,' + user.bannerImage;
     }
     return 'https://images.pexels.com/photos/1054655/pexels-photo-1054655.jpeg';
+  }
+
+  goToGame(gameId:any) {
+    this.gameService.getGameById({gameId}).subscribe({
+      next: (game) => {
+        this.router.navigate(['gamehub/game', gameId]);
+      },
+      error: (err) => {
+        console.error('Error with loading game:', err);
+      }
+    });
   }
 }
