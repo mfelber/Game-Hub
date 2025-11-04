@@ -4,10 +4,7 @@
 
 export type { AuthenticationRequest } from './models/authentication-request';
 export type { AuthenticationResponse } from './models/authentication-response';
-export type { BadgeCategory } from './models/badge-category';
-export type { BadgeCategoryRequest } from './models/badge-category-request';
-export type { BadgeRequest } from './models/badge-request';
-export type { BadgeResponse } from './models/badge-response';
+export type { Badge } from './models/badge';
 export type { ForgotPasswordRequest } from './models/forgot-password-request';
 export type { Game } from './models/game';
 export type { GameRequest } from './models/game-request';

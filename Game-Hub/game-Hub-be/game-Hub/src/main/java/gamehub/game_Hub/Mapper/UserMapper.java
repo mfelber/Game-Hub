@@ -8,7 +8,7 @@ import gamehub.game_Hub.File.FileUtils;
 import gamehub.game_Hub.Module.User.Status;
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Request.UserUpdateRequest;
-import gamehub.game_Hub.Response.BadgeResponse;
+// import gamehub.game_Hub.Response.BadgeResponse;
 import gamehub.game_Hub.Response.GameResponse;
 import gamehub.game_Hub.Response.GameResponseShort;
 import gamehub.game_Hub.Response.GenreResponse;
@@ -44,10 +44,10 @@ public class UserMapper {
         .status(user.getStatus())
         .libraryCount(user.getLibrary().size())
         .wishlistCount(user.getWishlist().size())
-        .badges(user.getBadges().stream()
-            .map(b -> new BadgeResponse(
-                b.getId(), b.getName(), b.getDescription(), b.getBadgeImage())).collect(
-            Collectors.toSet()))
+        // .badges(user.getBadges().stream()
+        //     .map(b -> new BadgeResponse(
+        //         b.getId(), b.getName(), b.getDescription(), b.getBadgeImage())).collect(
+        //     Collectors.toSet()))
         .playRecently(user.getPlayRecently().stream().limit(5)
             .map(g -> new GameResponseShort(
                 g.getId(), g.getTitle(), FileUtils.readCoverFromLocation(g.getGameCoverImage())))
@@ -83,10 +83,10 @@ public class UserMapper {
         .status(user.getStatus())
         .libraryCount(user.getLibrary().size())
         .wishlistCount(user.getWishlist().size())
-        .badges(user.getBadges().stream()
-            .map(b -> new BadgeResponse(
-                b.getId(), b.getName(), b.getDescription(), b.getBadgeImage())).collect(
-                Collectors.toSet()))
+        // .badges(user.getBadges().stream()
+        //     .map(b -> new BadgeResponse(
+        //         b.getId(), b.getName(), b.getDescription(), b.getBadgeImage())).collect(
+        //         Collectors.toSet()))
         .playRecently(user.getPlayRecently().stream().limit(5)
             .map(g -> new GameResponseShort(
                 g.getId(), g.getTitle(), FileUtils.readCoverFromLocation(g.getGameCoverImage())))

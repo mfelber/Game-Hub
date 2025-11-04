@@ -49,7 +49,7 @@ export class MenuComponent implements OnInit {
   }
 
   private loadUserName() {
-    this.userService.getUserPrivateShort().subscribe({
+    this.userService.getUserPrivate().subscribe({
       next:  (user) => {
         this.userResponse = user;
       }

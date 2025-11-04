@@ -5,6 +5,5 @@
 export { GameControllerService } from './services/game-controller.service';
 export { UserProfileControllerService } from './services/user-profile-controller.service';
 export { LibraryControllerService } from './services/library-controller.service';
-export { BadgeControllerService } from './services/badge-controller.service';
 export { AuthenticationService } from './services/authentication.service';
 export { WishlistControllerService } from './services/wishlist-controller.service';

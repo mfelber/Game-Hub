@@ -540,68 +540,6 @@
         }
       }
     },
-    "/badge/add-category": {
-      "post": {
-        "tags": [
-          "badge-controller"
-        ],
-        "operationId": "addCategory",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/BadgeCategoryRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "integer",
-                  "format": "int64"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/badge/add-badge": {
-      "post": {
-        "tags": [
-          "badge-controller"
-        ],
-        "operationId": "addBadge",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/BadgeRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "integer",
-                  "format": "int64"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/auth/reset-password": {
       "post": {
         "tags": [
@@ -1190,29 +1128,6 @@
         }
       }
     },
-    "/badge/all-badges": {
-      "get": {
-        "tags": [
-          "badge-controller"
-        ],
-        "operationId": "getAllUserBadges",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/BadgeResponse"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/auth/reset-token-info": {
       "get": {
         "tags": [
@@ -1532,49 +1447,6 @@
           }
         }
       },
-      "BadgeCategoryRequest": {
-        "type": "object",
-        "properties": {
-          "categoryName": {
-            "type": "string"
-          },
-          "categoryNameCode": {
-            "type": "string"
-          }
-        }
-      },
-      "BadgeCategory": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "categoryName": {
-            "type": "string"
-          },
-          "categoryNameCode": {
-            "type": "string"
-          }
-        }
-      },
-      "BadgeRequest": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "iconPath": {
-            "type": "string"
-          },
-          "badgeCategory": {
-            "$ref": "#/components/schemas/BadgeCategory"
-          }
-        }
-      },
       "RegistrationRequest": {
         "required": [
           "email",
@@ -1785,6 +1657,24 @@
           }
         }
       },
+      "Badge": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "badgeImage": {
+            "type": "string"
+          }
+        }
+      },
       "GameResponseShort": {
         "type": "object",
         "properties": {
@@ -1847,6 +1737,13 @@
             "type": "integer",
             "format": "int32"
           },
+          "badges": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Badge"
+            }
+          },
           "playRecently": {
             "uniqueItems": true,
             "type": "array",
@@ -1888,24 +1785,6 @@
               "type": "string",
               "format": "byte"
             }
-          }
-        }
-      },
-      "BadgeResponse": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "title": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "iconPath": {
-            "type": "string"
           }
         }
       },
@@ -1951,9 +1830,10 @@
             "format": "int32"
           },
           "badges": {
+            "uniqueItems": true,
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/BadgeResponse"
+              "$ref": "#/components/schemas/Badge"
             }
           },
           "playRecently": {

@@ -77,7 +77,8 @@ public class UserServiceImpl implements UserService {
     User authUser = (User) connectedUser.getPrincipal();
     User user = userRepository.findById(authUser.getId())
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
-    return userMapper.toUserPrivateResponseShort(user);
+    // return userMapper.toUserPrivateResponseShort(user);
+    return null;
   }
 
 
