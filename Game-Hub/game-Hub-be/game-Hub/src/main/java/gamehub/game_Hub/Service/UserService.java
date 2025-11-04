@@ -35,4 +35,6 @@ public interface UserService {
 
   StatusResponse getUserStatus(Authentication connectedUser);
 
+  UserPrivateResponse getPrivateProfileShort(Authentication connectedUser);
+
 }

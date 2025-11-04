@@ -64,12 +64,20 @@ public class UserServiceImpl implements UserService {
     return userMapper.toUserPublicResponse(user);
   }
 
-  @Override
+  @Transactional
   public UserPrivateResponse getPrivateProfile(final Authentication connectedUser) {
     User authUser = (User) connectedUser.getPrincipal();
     User user = userRepository.findById(authUser.getId())
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
     return userMapper.toUserPrivateResponse(user);
+  }
+
+  @Override
+  public UserPrivateResponse getPrivateProfileShort(final Authentication connectedUser) {
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+    return userMapper.toUserPrivateResponseShort(user);
   }
 
 

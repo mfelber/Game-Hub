@@ -72,6 +72,12 @@ public class UserProfileController {
     return ResponseEntity.ok(userPrivateResponse);
   }
 
+  @GetMapping("/user/me-short")
+  public ResponseEntity<UserPrivateResponse> getUserPrivateShort(final Authentication connectedUser) {
+    UserPrivateResponse userPrivateResponse = userService.getPrivateProfileShort(connectedUser);
+    return ResponseEntity.ok(userPrivateResponse);
+  }
+
   @GetMapping("/status")
   public ResponseEntity<StatusResponse> getUserStatus(final Authentication connectedUser) {
     StatusResponse statusResponse = userService.getUserStatus(connectedUser);

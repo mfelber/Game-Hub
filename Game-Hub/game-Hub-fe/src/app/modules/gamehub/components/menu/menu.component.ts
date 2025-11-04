@@ -49,7 +49,7 @@ export class MenuComponent implements OnInit {
   }
 
   private loadUserName() {
-    this.userService.getUserPrivate().subscribe({
+    this.userService.getUserPrivateShort().subscribe({
       next:  (user) => {
         this.userResponse = user;
       }
@@ -58,7 +58,7 @@ export class MenuComponent implements OnInit {
   }
 
   getStatus() {
-    this.userService.getStatus().subscribe({
+    this.userService.getUserStatus().subscribe({
       next: (response) => {
         this.statusResponse = response
       },
