@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import gamehub.game_Hub.Module.User.User;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -15,12 +16,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -109,22 +108,24 @@ public class Game {
   @JoinColumn(name = "system_req_id")
   private SystemRequirements systemRequirements;
 
-  @OneToMany(mappedBy = "baseGame", fetch = FetchType.LAZY)
-  @Nullable
-  @JsonIgnore
-  @ToString.Exclude
-  private Set<DLC> dlcs;
+  // @OneToMany(mappedBy = "baseGame", fetch = FetchType.LAZY)
+  // @Nullable
+  // @JsonIgnore
+  // @ToString.Exclude
+  // private Set<DLC> dlcs;
 
   private String publisher;
 
   private String developer;
 
+  @Column(name = "release_year")
   private String releaseYear;
 
   private double price;
 
   private boolean dlc;
 
+  @Column(name = "game_cover_image")
   private String gameCoverImage;
 
   //   TODO add game images for game detail in store

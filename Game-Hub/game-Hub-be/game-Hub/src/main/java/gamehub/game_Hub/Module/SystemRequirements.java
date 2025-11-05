@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "system_req", schema = "game_hub")
+@Table(name = "system_requirements", schema = "game_hub")
 public class SystemRequirements {
 
   @Id

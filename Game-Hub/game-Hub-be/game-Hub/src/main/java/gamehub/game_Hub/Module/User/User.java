@@ -14,8 +14,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import gamehub.game_Hub.Module.Badge;
 import gamehub.game_Hub.Module.Game;
 import gamehub.game_Hub.Module.Genre;
@@ -34,7 +32,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -54,8 +51,10 @@ public class User implements UserDetails, Principal {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @Column(name = "first_name")
   private String firstName;
 
+  @Column(name = "last_name")
   private String lastName;
 
   private String username;
@@ -65,10 +64,12 @@ public class User implements UserDetails, Principal {
   @Column(unique = true)
   private String email;
 
+  @Column(name = "user_profile_picture")
   private String userProfilePicture;
 
   private String banner;
 
+  @Column(name = "is_banned")
   private boolean isBanned;
 
   @ManyToMany(fetch = FetchType.EAGER)
@@ -81,11 +82,11 @@ public class User implements UserDetails, Principal {
   private List<Role> roles;
 
   @CreatedDate
-  @Column(nullable = false, updatable = false)
+  @Column(nullable = false, updatable = false,name = "created_at")
   private LocalDateTime createdAt;
 
   @LastModifiedDate
-  @Column(insertable = false)
+  @Column(insertable = false, name = "last_modified_at")
   private LocalDateTime lastModifiedAt;
 
   @ManyToMany

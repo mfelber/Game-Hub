@@ -3,6 +3,7 @@ package gamehub.game_Hub.Module.User;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -31,6 +32,7 @@ public class PasswordResetToken {
 
   private String token;
 
+  @Column(name = "expiration_date_time")
   private LocalDateTime expirationDateTime;
 
   @ManyToOne(fetch = FetchType.EAGER)
