@@ -4,10 +4,19 @@ spring:
     username: game_hub_user
     password: game_hub_password
     driver-class-name: org.postgresql.Driver
+  flyway:
+    enabled: true
+    schemas: game_hub
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    default-schema: game_hub
+    baseline-description: << Flyway Baseline >>
+    baseline-version: 1
   jpa:
     hibernate:
-      ddl-auto: update
-    show-sql: false
+      ddl-auto: validate
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
       hibernate:
         format_sql: true

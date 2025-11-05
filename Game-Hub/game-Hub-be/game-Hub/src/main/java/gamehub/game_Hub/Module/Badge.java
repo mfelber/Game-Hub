@@ -3,6 +3,7 @@ package gamehub.game_Hub.Module;
 import java.util.Set;
 
 import gamehub.game_Hub.Module.User.User;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -30,6 +31,7 @@ public class Badge {
 
   private String description;
 
-  private String badgeImage;
+  @Column(name = "icon_path")
+  private String iconPath;
 
 }

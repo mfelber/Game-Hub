@@ -44,11 +44,11 @@ public class Role {
   private List<User> users;
 
   @CreatedDate
-  @Column(nullable = false, updatable = false)
+  @Column(nullable = false, updatable = false, name = "created_at")
   private LocalDateTime createdAt;
 
   @LastModifiedDate
-  @Column(insertable = false)
+  @Column(insertable = false, name = "last_modified_at")
   private LocalDateTime lastModifiedAt;
 
 }
