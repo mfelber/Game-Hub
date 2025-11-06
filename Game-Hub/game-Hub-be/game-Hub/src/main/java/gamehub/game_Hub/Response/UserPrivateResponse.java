@@ -25,7 +25,7 @@ public class UserPrivateResponse {
   //   TODO add count of friends
   private int libraryCount;
   private int wishlistCount;
-  // private Set<Badge> badges;
+  private Set<BadgeResponse> badges;
   private Set<GameResponseShort> playRecently;
   private Set<GameResponseShort> favoriteGames;
   private Set<GenreResponse> favoriteGenres;

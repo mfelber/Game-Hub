@@ -95,7 +95,7 @@
           <i class="fa-solid fa-bell text-2xl cursor-pointer" (click)="showNotifications()"></i>
 
         </div>
-        
+
         <img
           [src]="getProfilePicture(userResponse)"
           alt="not found"
@@ -126,7 +126,7 @@
         </button>
 
         <!-- Dropdown menu -->
-        <div id="dropdownAvatarName"
+        <div id="dropdownAvatarName" #dropdownAvatarName
              class="z-10 hidden bg-white divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700 dark:divide-gray-600">
           <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
             <div class="truncate">{{ userResponse.firstName + " " + userResponse.lastName }}</div>
@@ -135,7 +135,7 @@
           <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
               aria-labelledby="dropdownInformdropdownAvatarNameButtonationButton">
             <li>
-              <a aria-current="page" routerLink="/gamehub/user/me" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Profile</a>
+              <a aria-current="page" (click)="closeDropdown()" routerLink="/gamehub/user/me"  class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Profile</a>
               <div class="hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white flex gap-1 px-4 py-3">
                 Status:
                 <select

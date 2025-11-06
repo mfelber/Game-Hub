@@ -20,6 +20,7 @@ import {GameControllerService} from '../../../../services/services/game-controll
 export class UserPrivateProfileComponent implements OnInit{
 
   ngOnInit(): void {
+    initFlowbite();
     this.loadUserPrivateProfile();
   }
   constructor(
@@ -35,10 +36,10 @@ export class UserPrivateProfileComponent implements OnInit{
     this.userService.getUserPrivate().subscribe({
       next:  (user) => {
         this.userResponse = user;
+        console.log(user)
         this.getProfilePicture(user)
       }
     });
-
   }
 
   getGameImageCover(game: GameResponse): string {
