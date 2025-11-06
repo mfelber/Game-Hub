@@ -55,7 +55,7 @@ export class MenuComponent implements OnInit {
   }
 
   private loadUserName() {
-    this.userService.getUserPrivate().subscribe({
+    this.userService.getUserPrivateShort().subscribe({
       next:  (user) => {
         this.userResponse = user;
       }

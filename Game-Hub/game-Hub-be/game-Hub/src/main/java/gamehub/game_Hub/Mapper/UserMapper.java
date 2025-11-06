@@ -106,4 +106,16 @@ public class UserMapper {
         .build();
   }
 
+  public UserPrivateResponse toUserPrivateResponseShort(User user) {
+    return UserPrivateResponse.builder()
+        .userId(user.getId())
+        .firstName(user.getFirstName())
+        .lastName(user.getLastName())
+        .email(user.getEmail())
+        .username(user.getName())
+        .status(user.getStatus())
+        .userProfilePicture(FileUtils.readCoverFromLocation(user.getUserProfilePicture()))
+        .build();
+  }
+
 }
