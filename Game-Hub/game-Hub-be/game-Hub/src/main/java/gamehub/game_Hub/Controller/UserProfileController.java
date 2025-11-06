@@ -50,6 +50,13 @@ public class UserProfileController {
   return ResponseEntity.ok(userService.updateBio(connectedUser, userUpdateRequest));
   }
 
+  @GetMapping("/bio")
+  public ResponseEntity<UserPrivateResponse> getBio(final Authentication connectedUser) {
+    UserPrivateResponse userPrivateResponse = userService.getBio(connectedUser);
+    return ResponseEntity.ok(userPrivateResponse);
+  }
+
+
   @GetMapping("/user/{userId}")
   public ResponseEntity<UserPublicResponse> getUserPublic(@PathVariable final Long userId, final Authentication connectedUser) {
     User authUser = (User) connectedUser.getPrincipal();

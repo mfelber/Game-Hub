@@ -11,6 +11,8 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { getBio } from '../fn/user-profile-controller/get-bio';
+import { GetBio$Params } from '../fn/user-profile-controller/get-bio';
 import { getUserPrivate } from '../fn/user-profile-controller/get-user-private';
 import { GetUserPrivate$Params } from '../fn/user-profile-controller/get-user-private';
 import { getUserPrivateShort } from '../fn/user-profile-controller/get-user-private-short';
@@ -350,6 +352,31 @@ export class UserProfileControllerService extends BaseService {
   getUserStatus(params?: GetUserStatus$Params, context?: HttpContext): Observable<StatusResponse> {
     return this.getUserStatus$Response(params, context).pipe(
       map((r: StrictHttpResponse<StatusResponse>): StatusResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `getBio()` */
+  static readonly GetBioPath = '/profile/bio';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getBio()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getBio$Response(params?: GetBio$Params, context?: HttpContext): Observable<StrictHttpResponse<UserPrivateResponse>> {
+    return getBio(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getBio$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getBio(params?: GetBio$Params, context?: HttpContext): Observable<UserPrivateResponse> {
+    return this.getBio$Response(params, context).pipe(
+      map((r: StrictHttpResponse<UserPrivateResponse>): UserPrivateResponse => r.body)
     );
   }
 

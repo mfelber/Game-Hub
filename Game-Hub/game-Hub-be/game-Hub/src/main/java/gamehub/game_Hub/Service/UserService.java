@@ -37,4 +37,6 @@ public interface UserService {
 
   UserPrivateResponse getPrivateProfileShort(Authentication connectedUser);
 
+  UserPrivateResponse getBio(Authentication connectedUser);
+
 }
