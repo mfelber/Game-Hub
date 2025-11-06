@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
 import {MatIcon} from '@angular/material/icon';
 import {initFlowbite} from 'flowbite';
@@ -22,6 +22,12 @@ import {StatusResponse} from '../../../../services/models/status-response';
   styleUrl: './menu.component.scss'
 })
 export class MenuComponent implements OnInit {
+  @ViewChild('dropdownAvatarName') dropdown!: ElementRef<HTMLDivElement>;
+
+  closeDropdown() {
+    this.dropdown.nativeElement.classList.add('hidden');
+  }
+
   ngOnInit(): void {
     initFlowbite();
     this.loadUserName();

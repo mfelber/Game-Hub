@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS game_hub.user
   created_at           TIMESTAMP           NOT NULL DEFAULT NOW(),
   last_modified_at     TIMESTAMP,
   location             VARCHAR(50),
-  status               VARCHAR(50)                  DEFAULT 'OFFLINE',
+  status               VARCHAR(50),
   bio                  VARCHAR(2000)
 );
 
@@ -89,12 +89,25 @@ CREATE TABLE game_hub.subtitles
   name VARCHAR(255)
 );
 
+
+CREATE TABLE game_hub.badge_category
+(
+  id                 BIGSERIAL PRIMARY KEY,
+  category_name      VARCHAR(255) NOT NULL,
+  category_name_code VARCHAR(255) NOT NULL
+);
+
 CREATE TABLE game_hub.badge
 (
-  id          BIGSERIAL PRIMARY KEY,
-  name        VARCHAR(255) NOT NULL,
-  description TEXT,
-  icon_path   VARCHAR(255)
+  id                BIGSERIAL PRIMARY KEY,
+  name              VARCHAR(255) NOT NULL,
+  description       TEXT,
+  icon_path         VARCHAR(255),
+  badge_category_id BIGINT,
+  CONSTRAINT fk_badge_category
+    FOREIGN KEY (badge_category_id)
+      REFERENCES game_hub.badge_category (id)
+      ON DELETE SET NULL
 );
 
 CREATE TABLE game_hub.password_reset_token

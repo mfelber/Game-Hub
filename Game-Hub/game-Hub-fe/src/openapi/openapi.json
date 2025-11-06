@@ -1657,7 +1657,7 @@
           }
         }
       },
-      "Badge": {
+      "BadgeResponse": {
         "type": "object",
         "properties": {
           "id": {
@@ -1670,7 +1670,7 @@
           "description": {
             "type": "string"
           },
-          "badgeImage": {
+          "iconPath": {
             "type": "string"
           }
         }
@@ -1741,7 +1741,7 @@
             "uniqueItems": true,
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Badge"
+              "$ref": "#/components/schemas/BadgeResponse"
             }
           },
           "playRecently": {
@@ -1833,7 +1833,7 @@
             "uniqueItems": true,
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Badge"
+              "$ref": "#/components/schemas/BadgeResponse"
             }
           },
           "playRecently": {
