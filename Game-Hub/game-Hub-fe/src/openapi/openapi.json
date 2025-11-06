@@ -982,6 +982,26 @@
         }
       }
     },
+    "/profile/bio": {
+      "get": {
+        "tags": [
+          "user-profile-controller"
+        ],
+        "operationId": "getBio",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserPrivateResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/library/library": {
       "get": {
         "tags": [

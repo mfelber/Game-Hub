@@ -80,6 +80,13 @@ public class UserServiceImpl implements UserService {
     return userMapper.toUserPrivateResponseShort(user);
   }
 
+  @Override
+  public UserPrivateResponse getBio(final Authentication connectedUser) {
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+    return userMapper.toUserBioResponse(user);
+  }
 
   @Override
   public StatusResponse getUserStatus(final Authentication connectedUser) {

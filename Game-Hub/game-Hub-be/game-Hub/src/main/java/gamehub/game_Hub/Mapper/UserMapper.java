@@ -118,4 +118,8 @@ public class UserMapper {
         .build();
   }
 
+  public UserPrivateResponse toUserBioResponse(final User user) {
+    return UserPrivateResponse.builder().bio(user.getBio()).build();
+  }
+
 }

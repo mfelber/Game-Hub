@@ -31,7 +31,18 @@ export class UserPublicProfileComponent implements OnInit{
   ) {
   }
 
-  userResponse: UserPublicResponse = {}
+  userResponse: UserPublicResponse = {
+    bio: '',
+    badges: [],
+    favoriteGenres: [],
+    userProfilePicture: [],
+    playRecently: [],
+    recommendedGames: [],
+    favoriteGames: [],
+    bannerImage: [],
+    wishlistCount: 0,
+    libraryCount: 0
+  }
 
 
   private loadUserPublicProfile() {

@@ -1,4 +1,12 @@
 <div class="relative w-full items-center">
+  <div class="fixed top-4 right-4 flex flex-col gap-2 z-50">
+    <div *ngIf="successMessage"
+         class="bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg min-w-[250px]
+              transform transition-transform duration-500 ease-in-out opacity-0"
+         [ngClass]="{'translate-x-0 opacity-100': toastVisible, 'translate-x-24 opacity-0': !toastVisible}">
+      {{ successMessage }}
+    </div>
+  </div>
   <div class="h-48 w-full overflow-hidden">
     <img
       [src]=getBanner(userResponse)
@@ -10,7 +18,6 @@
     <div>
       <img
         [src]="getProfilePicture(userResponse)"
-        alt="Profile picture"
         class="w-40 h-40 rounded-2xl border-2 border-black object-cover"
       />
     </div>
@@ -106,8 +113,23 @@
           <div class="flex items-center gap-2">
             <i class="fa-solid fa-user text-[#EE5C6B]"></i><span class="">About</span>
           </div>
-          <div>
-            <i class="fa-solid fa-ellipsis-vertical "></i>
+          <div class="relative group inline-block cursor-pointer" (click)="isEditBioModalOpen = true">
+            <i class="fa-solid fa-ellipsis-vertical text-white text-xl"></i>
+            <span
+              class="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 px-3 py-1 text-xs text-white bg-gray-900 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50">
+              Edit bio
+            </span>
+          </div>
+          <div *ngIf="isEditBioModalOpen" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div class="bg-gray-800 p-6 rounded-2xl w-96 relative">
+              <h2 class="text-white text-lg font-bold mb-4">Edit bio</h2>
+              <textarea [(ngModel)]="bioUpdateRequest.bio" class="w-full h-32 p-2 rounded-lg mb-4 border border-gray-700">{{userResponse.bio}}</textarea>
+              <div class="flex justify-end gap-2">
+                <button (click)="isEditBioModalOpen = false" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-500 cursor-pointer">Cancel</button>
+                <button (click)="saveBio()" class="px-4 py-2 bg-[#1947C0] text-white rounded-lg hover:bg-blue-700 cursor-pointer">Save</button>
+              </div>
+              <button (click)="isEditBioModalOpen = false" class="absolute top-2 right-2 text-white text-xl cursor-pointer">&times;</button>
+            </div>
           </div>
         </div>
         <hr class="w-full border-t-[2px] border-[#515151]">
