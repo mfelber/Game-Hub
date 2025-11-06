@@ -8,6 +8,7 @@ import {GameResponse} from '../../../../services/models/game-response';
 import {GameControllerService} from '../../../../services/services/game-controller.service';
 import {FormsModule} from '@angular/forms';
 import {UserUpdateRequest} from '../../../../services/models/user-update-request';
+import {GenreResponse} from '../../../../services/models/genre-response';
 
 @Component({
   selector: 'app-user-profile',
@@ -25,6 +26,7 @@ export class UserPrivateProfileComponent implements OnInit {
   ngOnInit(): void {
     initFlowbite();
     this.loadUserPrivateProfile();
+    this.getGenres();
   }
 
   constructor(
@@ -34,8 +36,10 @@ export class UserPrivateProfileComponent implements OnInit {
   ) {
   }
 
+  allGenres: string[] = [] ;
   successMessage: string | null = null;
   toastVisible = false;
+  genreResponse: any[] = [];
   userResponse: UserPrivateResponse = {
     bio: '',
     badges: [],
@@ -49,6 +53,7 @@ export class UserPrivateProfileComponent implements OnInit {
     libraryCount: 0
   };
   isEditBioModalOpen = false;
+  isEditGenresModalOpen = false;
   bioUpdateRequest: UserUpdateRequest = {
     bio: ''
   };
@@ -138,5 +143,21 @@ export class UserPrivateProfileComponent implements OnInit {
         this.userResponse.bio = response.bio
       }
     })
+  }
+
+  saveFavoriteGenres() {
+
+  }
+
+  private getGenres() {
+    this.gameService.getAllGenres().subscribe({
+      next: (genres) => {
+        this.genreResponse = genres;
+      }
+    })
+  }
+
+  selectedGenre(id: any) {
+    console.log({id})
   }
 }
