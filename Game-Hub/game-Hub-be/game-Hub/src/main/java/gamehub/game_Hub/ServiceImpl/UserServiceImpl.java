@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService {
     return userMapper.toUserPublicResponse(user);
   }
 
-  @Transactional
+  @Override
   public UserPrivateResponse getPrivateProfile(final Authentication connectedUser) {
     User authUser = (User) connectedUser.getPrincipal();
     User user = userRepository.findById(authUser.getId())

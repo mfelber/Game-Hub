@@ -89,9 +89,7 @@ public class UserMapper {
             .map(g -> new GameResponseShort(
                 g.getId(), g.getTitle(), FileUtils.readCoverFromLocation(g.getGameCoverImage())))
             .collect(Collectors.toSet()))
-        .favoriteGenres(user.getFavoriteGenres().stream()
-            .map(g -> new GenreResponse(g.getId(), g.getName()))
-            .collect(Collectors.toSet()))
+        .favoriteGenres(user.getFavoriteGenres().stream().map(genre -> new GenreResponse(genre.getId(), genre.getName())).collect(Collectors.toSet()))
         .recommendedGames(user.getRecommendationGames().stream().map(g -> new GameResponseShort(g.getId(), g.getTitle(), FileUtils.readCoverFromLocation(g.getGameCoverImage())))
             .collect(Collectors.toSet()))
         .userProfilePicture(FileUtils.readCoverFromLocation(user.getUserProfilePicture()))
