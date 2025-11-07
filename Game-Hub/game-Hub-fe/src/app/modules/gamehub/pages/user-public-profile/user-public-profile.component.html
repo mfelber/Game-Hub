@@ -166,6 +166,14 @@
              class="flex flex-col items-center justify-center text-center flex-1 p-4">
           <p class="text-lg font-semibold">No favorite genres set 🎭</p>
         </div>
+        <div class="flex flex-wrap gap-2 mt-3 ml-3">
+          <div
+            *ngFor="let genre of userResponse.favoriteGenres"
+            class="flex items-center gap-2 bg-gray-800 text-gray-100 text-sm px-3 py-1 rounded-xl border border-gray-700 cursor-default"
+          >
+            {{ genre.name }}
+          </div>
+        </div>
       </div>
     </div>
 

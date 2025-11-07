@@ -123,12 +123,19 @@
           <div *ngIf="isEditBioModalOpen" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
             <div class="bg-gray-800 p-6 rounded-2xl w-96 relative">
               <h2 class="text-white text-lg font-bold mb-4">Edit bio</h2>
-              <textarea [(ngModel)]="bioUpdateRequest.bio" class="w-full h-32 p-2 rounded-lg mb-4 border border-gray-700">{{userResponse.bio}}</textarea>
+              <textarea [(ngModel)]="bioUpdateRequest.bio"
+                        class="w-full h-32 p-2 rounded-lg mb-4 border border-gray-700">{{ userResponse.bio }}</textarea>
               <div class="flex justify-end gap-2">
-                <button (click)="isEditBioModalOpen = false" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-500 cursor-pointer">Cancel</button>
-                <button (click)="saveBio()" class="px-4 py-2 bg-[#1947C0] text-white rounded-lg hover:bg-blue-700 cursor-pointer">Save</button>
+                <button (click)="isEditBioModalOpen = false"
+                        class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-500 cursor-pointer">Cancel
+                </button>
+                <button (click)="saveBio()"
+                        class="px-4 py-2 bg-[#1947C0] text-white rounded-lg hover:bg-blue-700 cursor-pointer">Save
+                </button>
               </div>
-              <button (click)="isEditBioModalOpen = false" class="absolute top-2 right-2 text-white text-xl cursor-pointer">&times;</button>
+              <button (click)="isEditBioModalOpen = false"
+                      class="absolute top-2 right-2 text-white text-xl cursor-pointer">&times;
+              </button>
             </div>
           </div>
         </div>
@@ -154,7 +161,7 @@
              class="flex flex-col items-center justify-center text-center flex-1 p-4">
           <p class="text-lg font-semibold">You haven't earned any badges yet 🏅</p>
         </div>
-        <div *ngIf="userResponse.badges?.length! > 0" class="flex flex-wrap gap-4 p-4">
+        <div *ngIf="userResponse.badges?.length! > 0" class="flex flex-wrap gap-4">
           <div *ngFor="let badge of userResponse.badges" class="relative group flex flex-col items-center">
             <img
               [src]="badge.iconPath"
@@ -180,26 +187,76 @@
               Edit favorite genres
             </span>
           </div>
-          <div *ngIf="isEditGenresModalOpen" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div class="bg-gray-800 p-6 rounded-2xl w-96 relative">
-              <h2 class="text-white text-lg font-bold mb-4">Edit favorite genres</h2>
-              <div class="flex flex-wrap gap-2 mb-5">
-                <div *ngFor="let genre of genreResponse" (click)="selectedGenre(genre.id)" class="bg-gray-700 text-white px-3 py-1 rounded-lg">
+          <div *ngIf="isEditGenresModalOpen" class="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+            <div class="bg-[#1f1f2e] p-6 rounded-2xl w-[30rem] relative shadow-2xl border border-[#2e2e40]">
+              <h2 class="text-white text-xl font-semibold mb-5 text-center">
+                Edit Your Favorite Genres
+              </h2>
+
+
+              <div class="flex flex-wrap gap-3 mb-6 justify-center">
+                <div
+                  *ngFor="let genre of genreResponse"
+                  (click)="!favoriteGenreIds.includes(genre.id) && selectedGenre(genre.id)"
+                  class="cursor-pointer px-4 py-2 rounded-full transition-all duration-200 relative font-medium"
+                  [ngClass]="{
+                    'bg-gradient-to-r from-blue-300 to-purple-400 text-white shadow-md scale-105': selectedGenres.has(genre.id),
+                    'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-md scale-105': favoriteGenreIds.includes(genre.id),
+                    'bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-white':
+                      !selectedGenres.has(genre.id) && !favoriteGenreIds.includes(genre.id)
+                  }"
+                >
                   {{ genre.name }}
+                  <button
+                    *ngIf="favoriteGenreIds.includes(genre.id)"
+                    (click)="removeFavoriteGenre(genre.id); $event.stopPropagation()"
+                    class="absolute -top-1 -right-2 text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 w-5 h-5 rounded-full flex items-center justify-center text-xs shadow-md"
+                    title="Remove from favorites"
+                  >
+                    <i class="fa-solid fa-xmark cursor-pointer"></i>
+                  </button>
                 </div>
               </div>
-              <div class="flex justify-end gap-2">
-                <button (click)="isEditGenresModalOpen = false" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-500 cursor-pointer">Cancel</button>
-                <button (click)="saveFavoriteGenres()" class="px-4 py-2 bg-[#1947C0] text-white rounded-lg hover:bg-blue-700 cursor-pointer">Save</button>
+
+              <div class="flex justify-end gap-3">
+                <button
+                  (click)="cancelFavoriteGenres()"
+                  class="px-4 py-2 bg-gray-700 text-gray-200 rounded-lg hover:bg-gray-600 hover:text-white transition cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  (click)="saveFavoriteGenres()"
+                  class="px-4 py-2 bg-gradient-to-r from-indigo-500 to-violet-500 text-white rounded-lg hover:from-indigo-600 hover:to-violet-600 transition shadow-md shadow-indigo-900/40 cursor-pointer"
+                >
+                  Save
+                </button>
               </div>
-              <button (click)="isEditGenresModalOpen = false" class="absolute top-2 right-2 text-white text-xl cursor-pointer">&times;</button>
+
+              <button
+                (click)="isEditGenresModalOpen = false"
+                class="absolute top-3 right-3 text-gray-400 hover:text-white text-2xl cursor-pointer transition"
+                title="Close"
+              >
+                &times;
+              </button>
             </div>
           </div>
+
+
         </div>
         <hr class="w-full border-t-[2px] border-[#515151]">
         <div *ngIf="userResponse.favoriteGenres?.length === 0"
              class="flex flex-col items-center justify-center text-center flex-1 p-4">
           <p class="text-lg font-semibold">No favorite genres set 🎭</p>
+        </div>
+        <div class="flex flex-wrap gap-2 mt-3 ml-3">
+          <div
+            *ngFor="let genre of userResponse.favoriteGenres"
+            class="flex items-center gap-2 bg-gray-800 text-gray-100 text-sm px-3 py-1 rounded-xl border border-gray-700 cursor-default"
+          >
+            {{ genre.name }}
+          </div>
         </div>
       </div>
     </div>

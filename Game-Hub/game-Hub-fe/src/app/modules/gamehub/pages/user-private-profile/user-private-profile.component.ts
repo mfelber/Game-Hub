@@ -36,7 +36,9 @@ export class UserPrivateProfileComponent implements OnInit {
   ) {
   }
 
+  selectedGenres: Set<number> = new Set<number>()
   allGenres: string[] = [] ;
+  favoriteGenreIds: number[] = [];
   successMessage: string | null = null;
   toastVisible = false;
   genreResponse: any[] = [];
@@ -66,6 +68,10 @@ export class UserPrivateProfileComponent implements OnInit {
         console.log(user)
         this.bioUpdateRequest.bio = user.bio || '';
         this.getProfilePicture(user)
+        this.favoriteGenreIds = user.favoriteGenres?.map(g => g.id!) || [];
+        this.userResponse.favoriteGenres = user.favoriteGenres?.sort((a, b) =>
+          a.name!.localeCompare(b.name!)
+        );
       }
     });
   }
@@ -146,7 +152,18 @@ export class UserPrivateProfileComponent implements OnInit {
   }
 
   saveFavoriteGenres() {
+    const allGenres = [...new Set([...this.favoriteGenreIds, ...this.selectedGenres])];
 
+    this.userService.updateFavoriteGenres({
+      body: allGenres
+    }).subscribe({
+      next: () => {
+        this.showSuccess('Genres saved successfully!');
+        this.isEditGenresModalOpen = false
+        this.loadUserPrivateProfile()
+      },
+      error: (err) => console.error(err)
+    });
   }
 
   private getGenres() {
@@ -157,7 +174,24 @@ export class UserPrivateProfileComponent implements OnInit {
     })
   }
 
-  selectedGenre(id: any) {
-    console.log({id})
+  selectedGenre(id: number) {
+    if (this.selectedGenres.has(id)) {
+      this.selectedGenres.delete(id)
+    } else {
+      this.selectedGenres.add(id)
+    }
+    console.log(this.selectedGenres)
+  }
+
+  cancelFavoriteGenres() {
+    this.selectedGenres.clear()
+    this.favoriteGenreIds = this.userResponse.favoriteGenres?.map(g => g.id!) || [];
+    this.isEditGenresModalOpen = false
+  }
+
+  removeFavoriteGenre(id:any) {
+    this.favoriteGenreIds = this.favoriteGenreIds.filter(g => g !== id);
+    this.selectedGenres.delete(id);
+
   }
 }
