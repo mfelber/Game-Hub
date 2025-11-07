@@ -11,6 +11,7 @@ import { UserProfileControllerService } from './services/user-profile-controller
 import { LibraryControllerService } from './services/library-controller.service';
 import { AuthenticationService } from './services/authentication.service';
 import { WishlistControllerService } from './services/wishlist-controller.service';
+import { LocationControllerService } from './services/location-controller.service';
 
 /**
  * Module that provides all services and configuration.
@@ -25,6 +26,7 @@ import { WishlistControllerService } from './services/wishlist-controller.servic
     LibraryControllerService,
     AuthenticationService,
     WishlistControllerService,
+    LocationControllerService,
     ApiConfiguration
   ],
 })

@@ -7,3 +7,4 @@ export { UserProfileControllerService } from './services/user-profile-controller
 export { LibraryControllerService } from './services/library-controller.service';
 export { AuthenticationService } from './services/authentication.service';
 export { WishlistControllerService } from './services/wishlist-controller.service';
+export { LocationControllerService } from './services/location-controller.service';

@@ -41,17 +41,231 @@
       </div>
       <div class="mt-auto flex flex-col mx-2">
         <div class="flex gap-2">
-          <button
+          <button (click)="isProfileModalOpen = true"
             class="bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 cursor-pointer text-center w-30 py-1.5 px-2 rounded-lg text-sm flex items-center justify-center gap-1 transition-colors duration-200">
-            Edit <i class="fa-solid fa-pencil"></i>
+            Edit profile<i class="fa-solid fa-pencil"></i>
           </button>
         </div>
+
       </div>
     </div>
 
   </div>
 
+  <div *ngIf="isProfileModalOpen" class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 animate-fade-in">
+    <div class="bg-gray-800 p-6 rounded-2xl w-150 max-w-full relative shadow-2xl border border-white/20">
+      <h2 class="text-white text-xl font-bold mb-6 text-center">Edit Profile</h2>
+
+      <div class="flex flex-col gap-2">
+        <div class="relative w-full h-40 rounded-xl overflow-hidden mb-5">
+          <img [src]="getBanner(userResponse)" class="w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-black/30"></div>
+
+          <img
+            [src]="getProfilePicture(userResponse)"
+            class="absolute left-6 top-1/2 -translate-y-1/2 w-32 h-32 rounded-2xl object-cover border-4 border-gray-800"
+          />
+        </div>
+
+        <div class="flex gap-5">
+          <div class="flex flex-col gap-4 w-full">
+            <div class="flex flex-col">
+              <label class="text-gray-300 text-sm mb-1">First Name</label>
+              <input
+                readonly
+                type="text"
+                placeholder="{{userResponse.firstName}}"
+                class="mt-1 w-full p-3 rounded-lg border border-gray-700 bg-gray-900 text-white focus:outline-none focus:ring-0 cursor-default"
+              />
+            </div>
+
+            <div class="flex flex-col">
+              <label class="text-gray-300 text-sm mb-1">Last Name</label>
+              <input
+                readonly
+                type="text"
+                placeholder="{{userResponse.lastName}}"
+                class="mt-1 w-full p-3 rounded-lg border border-gray-700 bg-gray-900 text-white focus:outline-none focus:ring-0 cursor-default"
+              />
+            </div>
+
+            <div class="flex flex-col">
+              <label class="text-gray-300 text-sm mb-1">Username</label>
+              <input
+                readonly
+                type="text"
+                placeholder="{{userResponse.username}}"
+                class="mt-1 w-full p-3 rounded-lg border border-gray-700 bg-gray-900 text-white focus:outline-none focus:ring-0 cursor-default"
+              />
+            </div>
+
+            <div class="flex flex-col">
+              <label class="text-gray-300 text-sm mb-1">Email</label>
+              <input
+                readonly
+                type="email"
+                placeholder="{{userResponse.email}}"
+                class="mt-1 w-full p-3 rounded-lg border border-gray-700 bg-gray-900 text-white focus:outline-none focus:ring-0 cursor-default"
+              />
+            </div>
+
+            <div class="justify-between flex">
+              <div class="flex flex-col">
+                <label class="text-gray-300 text-sm mb-1">Nationality</label>
+                <img [src]="userResponse.location?.iconPath" class="w-15 h-10" />
+              </div>
+              <div class="text-wrap w-50 text-xs">
+<!--                TODO users selected colors for profile-->
+                Selected Color for profile cards
+                <div class="bg-red-100 w-5 h-5 border-1 border-black mt-1">
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="flex justify-end gap-3 mt-6">
+        <button (click)="closeProfileModal()"
+                class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-500 transition-colors cursor-pointer">
+          Cancel
+        </button>
+        <button (click)="editProfile()"
+                class="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-500 text-white rounded-lg hover:from-blue-500 hover:to-indigo-400 transition-colors cursor-pointer">
+          Edit profile
+        </button>
+      </div>
+
+      <button (click)="closeProfileModal()"
+              class="absolute top-3 right-3 text-white text-2xl hover:text-gray-300 transition-colors cursor-pointer">
+        &times;
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="isEditProfileModalOpen" class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 animate-fade-in">
+    <div class="bg-gray-800 p-6 rounded-2xl w-96 max-w-full relative shadow-2xl border border-white/20">
+      <!-- Header -->
+      <h2 class="text-white text-xl font-bold mb-6 text-center">Edit Personal Information</h2>
+
+      <div class="flex gap-5">
+        <div class="flex flex-col gap-4 w-full">
+          <div class="flex flex-col">
+            <label class="text-gray-300 text-sm mb-1">First Name</label>
+            <input
+              type="text"
+              placeholder="{{userResponse.firstName}}" [(ngModel)]="userRequest.firstName"
+              class="mt-1 w-full p-3 rounded-lg border border-gray-700 bg-gray-900 text-white focus:outline-none focus:ring-0"
+            />
+          </div>
+
+          <div class="flex flex-col">
+            <label class="text-gray-300 text-sm mb-1">Last Name</label>
+            <input
+              type="text"
+              placeholder="{{userResponse.lastName}}" [(ngModel)]="userRequest.lastName"
+              class="mt-1 w-full p-3 rounded-lg border border-gray-700 bg-gray-900 text-white focus:outline-none focus:ring-0"
+            />
+          </div>
+
+          <div class="flex flex-col">
+            <label class="text-gray-300 text-sm mb-1">Username</label>
+            <input
+              type="text"
+              [value]="userResponse.username"
+              placeholder="{{userResponse.username}}" [(ngModel)]="userRequest.username"
+              class="mt-1 w-full p-3 rounded-lg border border-gray-700 bg-gray-900 text-white focus:outline-none focus:ring-0"
+            />
+          </div>
+
+          <div class="flex flex-col">
+            <label class="text-gray-300 text-sm mb-1">Email</label>
+            <input
+              type="email"
+              [value]="userResponse.email"
+              [(ngModel)]="userRequest.email"
+              class="mt-1 w-full p-3 rounded-lg border border-gray-700 bg-gray-900 text-white focus:outline-none focus:ring-0"
+            />
+          </div>
+
+          <div class="flex flex-col">
+
+<!--            <select class="appearance-none border border-gray-500 text-gray-300 bg-transparent hover:bg-gray-700/40 hover:text-white-->
+<!--           px-4 py-1.5 rounded-lg transition duration-300 mb-2 text-[13px] text-center cursor-pointer pr-8 w-[130px]">-->
+<!--              <option value="" class="bg-gray-800 text-gray-300">All Locations</option>-->
+<!--&lt;!&ndash;              <option *ngFor="let location of allLocations" [value]="location" class="bg-gray-800 text-gray-300">{{ location }}&ndash;&gt;-->
+<!--&lt;!&ndash;              <img [src]="location.iconPath">&ndash;&gt;-->
+<!--&lt;!&ndash;              </option>&ndash;&gt;-->
+<!--              <option *ngFor="let loc of allLocations" [value]="loc.name" class="bg-gray-800 text-gray-300">-->
+<!--                <img [src]="loc.iconPath" alt="{{loc.name}}" > {{ loc.name }}-->
+<!--              </option>-->
+<!--              <img [src]="userResponse.location?.iconPath">&ndash;&gt;-->
+<!--            </select>-->
+
+            <select
+              [(ngModel)]="userRequest.location"
+              class="border border-gray-500 text-gray-300 bg-gray-900 px-4 py-2 rounded-lg w-[150px]"
+            >
+              <option
+                *ngFor="let loc of allLocations"
+                [ngValue]="loc.name"
+                [selected]="userRequest.location === loc.name"
+                [ngStyle]="{
+                backgroundColor: userRequest.location === loc.name ? '#374155' : '#1f2937',
+                color: 'white'
+              }"
+              >
+                {{ loc.name }}
+
+                <img [src]="loc.iconPath" class="w-10">
+            </select>
+<!--            <img [src]="userResponse.location?.iconPath">-->
+          </div>
+
+<!--          <div class="justify-between flex">-->
+<!--            <div class="flex flex-col">-->
+<!--              <label class="text-gray-300 text-sm mb-1">Nationality</label>-->
+<!--              <img [src]="userResponse.location?.iconPath" class="w-15 h-10" />-->
+<!--            </div>-->
+<!--            <div class="text-wrap w-50 text-xs">-->
+<!--              &lt;!&ndash;                TODO users selected colors for profile&ndash;&gt;-->
+<!--              Selected Color for profile cards-->
+<!--              <div class="bg-red-100 w-5 h-5 border-1 border-black mt-1">-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+
+
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex justify-end gap-3 mt-6">
+        <button (click)="closeEditProfileModal()"
+                class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-500 transition-colors cursor-pointer">
+          Cancel
+        </button>
+        <button (click)="saveProfile()"
+                class="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-500 text-white rounded-lg hover:from-blue-500 hover:to-indigo-400 transition-colors cursor-pointer">
+          Save
+        </button>
+      </div>
+
+      <!-- Close Button -->
+      <button (click)="closeEditProfileModal()"
+              class="absolute top-3 right-3 text-white text-2xl hover:text-gray-300 transition-colors cursor-pointer">
+        &times;
+      </button>
+    </div>
+  </div>
+
 </div>
+
+
 
 <div
   class="w-full h-[75px] bg-black/30 rounded-b-2xl flex items-center gap-4 border-b border-r border-l border-white/20">
@@ -140,7 +354,7 @@
           <h2 class="text-white text-xl font-bold mb-4">Edit Bio</h2>
 
           <textarea [(ngModel)]="bioUpdateRequest.bio"
-                    class="w-full h-32 p-3 rounded-lg border border-gray-700 bg-[#1f1f2c] text-white focus:outline-none focus:ring-2 focus:ring-blue-600 resize-none"
+                    class="w-full h-32 p-3 rounded-lg border border-gray-700 bg-[#1f1f2c] text-white focus:outline-none focus:ring-2 focus:ring-gray-800 resize-none"
                     placeholder="Write something about yourself..."></textarea>
 
           <div class="flex justify-end gap-3 mt-4">
