@@ -10,6 +10,7 @@ import {FormsModule} from '@angular/forms';
 import {UserUpdateRequest} from '../../../../services/models/user-update-request';
 import {GenreResponse} from '../../../../services/models/genre-response';
 import {LocationControllerService} from '../../../../services/services/location-controller.service';
+import {HttpClient} from '@angular/common/http';
 
 @Component({
   selector: 'app-user-profile',
@@ -24,6 +25,7 @@ import {LocationControllerService} from '../../../../services/services/location-
   styleUrl: './user-private-profile.component.css'
 })
 export class UserPrivateProfileComponent implements OnInit {
+  isDropdownOpen = false;
 
   ngOnInit(): void {
     initFlowbite();
@@ -35,7 +37,8 @@ export class UserPrivateProfileComponent implements OnInit {
     private router: Router,
     private userService: UserProfileControllerService,
     private gameService: GameControllerService,
-    private locationService: LocationControllerService
+    private locationService: LocationControllerService,
+    private http: HttpClient
   ) {
   }
 
@@ -67,7 +70,26 @@ export class UserPrivateProfileComponent implements OnInit {
   bioUpdateRequest: UserUpdateRequest = {
     bio: ''
   };
+  activeTab: 'basic' | 'profile' = 'basic';
   allLocations: { name: string; iconPath: string }[] = [];
+
+  profilePicture: File | null = null;
+  previewImage: string | undefined;
+  selectedProfileBanner: string | undefined;
+
+
+  onFileSelected(event: any) {
+    const input = event.target as HTMLInputElement;
+    this.profilePicture = input.files![0];
+    console.log(this.profilePicture);
+    if (this.profilePicture) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.previewImage = reader.result as string;
+      }
+      reader.readAsDataURL(this.profilePicture);
+    }
+  }
 
 
 
@@ -87,7 +109,7 @@ export class UserPrivateProfileComponent implements OnInit {
           firstName : user.firstName,
           lastName : user.lastName,
           username : user.username,
-          location: "UNKNOWN"
+          location: this.userResponse.location?.name as undefined
         }
       }
     });
@@ -224,11 +246,22 @@ export class UserPrivateProfileComponent implements OnInit {
         console.log('updatol')
       }
     })
+    if (this.profilePicture) {
+      const formData = new FormData();
+      formData.append('file', this.profilePicture);
 
+      this.http.post('http://localhost:8088/api/v1/profile/image', formData
+      ).subscribe({
+        next: () => {
+          console.log('update pf')
+        }
+      });
+    }
   }
 
   closeProfileModal() {
     this.isProfileModalOpen = false;
+  //   TODO if user close modal or pressed cancel set active
   }
 
   editProfile() {
@@ -246,5 +279,16 @@ export class UserPrivateProfileComponent implements OnInit {
         }));
       }
     })
+  }
+
+
+  getIconPath(locationName: string): string | undefined {
+    const loc = this.allLocations.find(l => l.name === locationName);
+    return loc?.iconPath;
+  }
+
+
+  onBannerSelected($event: Event) {
+
   }
 }

@@ -42,8 +42,8 @@
       <div class="mt-auto flex flex-col mx-2">
         <div class="flex gap-2">
           <button (click)="isProfileModalOpen = true"
-            class="bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 cursor-pointer text-center w-30 py-1.5 px-2 rounded-lg text-sm flex items-center justify-center gap-1 transition-colors duration-200">
-            Edit profile<i class="fa-solid fa-pencil"></i>
+                  class="bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 cursor-pointer text-center w-30 py-1.5 px-2 rounded-lg text-sm flex items-center justify-center gap-1 transition-colors duration-200">
+            Edit profile
           </button>
         </div>
 
@@ -52,13 +52,14 @@
 
   </div>
 
-  <div *ngIf="isProfileModalOpen" class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 animate-fade-in">
+  <div *ngIf="isProfileModalOpen"
+       class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 animate-fade-in">
     <div class="bg-gray-800 p-6 rounded-2xl w-150 max-w-full relative shadow-2xl border border-white/20">
-      <h2 class="text-white text-xl font-bold mb-6 text-center">Edit Profile</h2>
+      <h2 class="text-white text-xl font-bold mb-6 text-center">Profile Information</h2>
 
       <div class="flex flex-col gap-2">
         <div class="relative w-full h-40 rounded-xl overflow-hidden mb-5">
-          <img [src]="getBanner(userResponse)" class="w-full h-full object-cover" />
+          <img [src]="getBanner(userResponse)" class="w-full h-full object-cover"/>
           <div class="absolute inset-0 bg-black/30"></div>
 
           <img
@@ -112,10 +113,10 @@
             <div class="justify-between flex">
               <div class="flex flex-col">
                 <label class="text-gray-300 text-sm mb-1">Nationality</label>
-                <img [src]="userResponse.location?.iconPath" class="w-15 h-10" />
+                <img [src]="userResponse.location?.iconPath" class="w-15 h-10"/>
               </div>
               <div class="text-wrap w-50 text-xs">
-<!--                TODO users selected colors for profile-->
+                <!--                TODO users selected colors for profile-->
                 Selected Color for profile cards
                 <div class="bg-red-100 w-5 h-5 border-1 border-black mt-1">
                 </div>
@@ -126,7 +127,6 @@
           </div>
         </div>
       </div>
-
 
 
       <div class="flex justify-end gap-3 mt-6">
@@ -147,13 +147,48 @@
     </div>
   </div>
 
-  <div *ngIf="isEditProfileModalOpen" class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 animate-fade-in">
-    <div class="bg-gray-800 p-6 rounded-2xl w-96 max-w-full relative shadow-2xl border border-white/20">
-      <!-- Header -->
-      <h2 class="text-white text-xl font-bold mb-6 text-center">Edit Personal Information</h2>
+  <div *ngIf="isEditProfileModalOpen"
+       class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 animate-fade-in">
+    <div class="relative bg-gray-800 p-6 rounded-2xl w-170 max-w-full shadow-2xl border border-white/20">
 
-      <div class="flex gap-5">
-        <div class="flex flex-col gap-4 w-full">
+      <h2 class="text-white text-xl font-bold mb-6 text-center">Edit Profile</h2>
+
+      <!--TABS-->
+      <div class="flex border-b border-gray-700 mb-6">
+        <button
+          (click)="activeTab = 'basic'"
+          [ngClass]="activeTab === 'basic' ? 'border-b-2 border-blue-500 text-white': 'text-gray-400'"
+          class="px-4 py-2 font-medium focus:outline-none cursor-pointer"
+        >
+          Basic Info
+        </button>
+
+        <button
+          (click)="activeTab = 'profile'"
+          [ngClass]="activeTab === 'profile' ? 'border-b-2 border-blue-500 text-white': 'text-gray-400'"
+          class="px-4 py-2 font-medium focus:outline-none cursor-pointer"
+        >
+          Profile & Banner
+        </button>
+      </div>
+
+      <!--      TABS CONTENT-->
+
+      <div>
+        <!-- Basic Info Tab -->
+
+        <div *ngIf="activeTab === 'basic'" class="flex flex-col gap-4">
+
+          <div class="flex flex-col">
+            <label class="text-gray-300 text-sm mb-1">Username</label>
+            <input
+              type="text"
+              [value]="userResponse.username"
+              placeholder="{{userResponse.username}}" [(ngModel)]="userRequest.username"
+              class="mt-1 w-full p-3 rounded-lg border border-gray-700 bg-gray-900 text-white focus:outline-none focus:ring-0"
+            />
+          </div>
+
           <div class="flex flex-col">
             <label class="text-gray-300 text-sm mb-1">First Name</label>
             <input
@@ -173,16 +208,6 @@
           </div>
 
           <div class="flex flex-col">
-            <label class="text-gray-300 text-sm mb-1">Username</label>
-            <input
-              type="text"
-              [value]="userResponse.username"
-              placeholder="{{userResponse.username}}" [(ngModel)]="userRequest.username"
-              class="mt-1 w-full p-3 rounded-lg border border-gray-700 bg-gray-900 text-white focus:outline-none focus:ring-0"
-            />
-          </div>
-
-          <div class="flex flex-col">
             <label class="text-gray-300 text-sm mb-1">Email</label>
             <input
               type="email"
@@ -192,58 +217,97 @@
             />
           </div>
 
-          <div class="flex flex-col">
-
-<!--            <select class="appearance-none border border-gray-500 text-gray-300 bg-transparent hover:bg-gray-700/40 hover:text-white-->
-<!--           px-4 py-1.5 rounded-lg transition duration-300 mb-2 text-[13px] text-center cursor-pointer pr-8 w-[130px]">-->
-<!--              <option value="" class="bg-gray-800 text-gray-300">All Locations</option>-->
-<!--&lt;!&ndash;              <option *ngFor="let location of allLocations" [value]="location" class="bg-gray-800 text-gray-300">{{ location }}&ndash;&gt;-->
-<!--&lt;!&ndash;              <img [src]="location.iconPath">&ndash;&gt;-->
-<!--&lt;!&ndash;              </option>&ndash;&gt;-->
-<!--              <option *ngFor="let loc of allLocations" [value]="loc.name" class="bg-gray-800 text-gray-300">-->
-<!--                <img [src]="loc.iconPath" alt="{{loc.name}}" > {{ loc.name }}-->
-<!--              </option>-->
-<!--              <img [src]="userResponse.location?.iconPath">&ndash;&gt;-->
-<!--            </select>-->
-
+          <label class="text-gray-300 text-sm mb-1">Nationality</label>
+          <div class="flex items-center gap-2 overflow-y-visible">
             <select
               [(ngModel)]="userRequest.location"
-              class="border border-gray-500 text-gray-300 bg-gray-900 px-4 py-2 rounded-lg w-[150px]"
+              class="border border-gray-500 text-gray-300 bg-gray-900 px-4 py-2 rounded-lg w-[150px] mt-1 h-10"
+              [ngStyle]="{ color: 'white' }"
             >
               <option
                 *ngFor="let loc of allLocations"
                 [ngValue]="loc.name"
-                [selected]="userRequest.location === loc.name"
                 [ngStyle]="{
                 backgroundColor: userRequest.location === loc.name ? '#374155' : '#1f2937',
                 color: 'white'
               }"
               >
                 {{ loc.name }}
-
-                <img [src]="loc.iconPath" class="w-10">
+              </option>
             </select>
-<!--            <img [src]="userResponse.location?.iconPath">-->
+            <img
+              *ngIf="userRequest.location"
+              [src]="getIconPath(userRequest.location)"
+              alt="{{ userRequest.location }}"
+              class="w-13 h-8 rounded"
+            />
           </div>
 
-<!--          <div class="justify-between flex">-->
-<!--            <div class="flex flex-col">-->
-<!--              <label class="text-gray-300 text-sm mb-1">Nationality</label>-->
-<!--              <img [src]="userResponse.location?.iconPath" class="w-15 h-10" />-->
-<!--            </div>-->
-<!--            <div class="text-wrap w-50 text-xs">-->
-<!--              &lt;!&ndash;                TODO users selected colors for profile&ndash;&gt;-->
-<!--              Selected Color for profile cards-->
-<!--              <div class="bg-red-100 w-5 h-5 border-1 border-black mt-1">-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
+        </div>
+
+        <!-- Profile & Banner Tab -->
+
+        <div *ngIf="activeTab === 'profile'" class="flex flex-col gap-6">
+          <!-- Banner -->
+          <div class="relative w-full h-48 rounded-xl mb-5">
+            <img
+              [src]="getBanner(userResponse) || selectedProfileBanner"
+              class="w-full h-full object-cover rounded-2xl object-cover"
+              alt="Profile Banner"
+            />
+
+            <label
+              for="bannerFile"
+              class="absolute bg-black -top-2 -right-2 text-white flex items-center justify-center w-8 h-8 rounded-full cursor-pointer hover:bg-gray-700 transition-colors duration-200"
+            >
+              <i class="fa-solid fa-pen"></i>
+            </label>
+
+            <input
+              (change)="onBannerSelected($event)"
+              type="file"
+              id="bannerFile"
+              accept="image/*"
+              class="hidden"
+            />
 
 
+             <div class="absolute left-6 top-1/2 -translate-y-1/2">
+              <div class="relative w-32 h-32">
+                <img
+                  [src]=" previewImage || getProfilePicture(userResponse)"
+                  class="w-32 h-32 rounded-2xl object-cover border-4 border-gray-800"
+                  alt="Profile Picture"
+                />
+
+
+                <label
+                  for="formFile"
+                  class="absolute bg-black -top-2 -right-2 text-white flex items-center justify-center w-8 h-8 rounded-full cursor-pointer hover:bg-gray-700 transition-colors duration-200"
+                >
+                  <i class="fa-solid fa-pen"></i>
+                </label>
+
+                <input
+                  (change)="onFileSelected($event)"
+                  type="file"
+                  id="formFile"
+                  accept="image/*"
+                  class="hidden"
+                />
+              </div>
+            </div>
+          </div>
+
+          Colors for cards
+          TODO add colors
         </div>
       </div>
 
+
+
       <!-- Action Buttons -->
+
       <div class="flex justify-end gap-3 mt-6">
         <button (click)="closeEditProfileModal()"
                 class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-500 transition-colors cursor-pointer">
@@ -254,17 +318,14 @@
           Save
         </button>
       </div>
-
-      <!-- Close Button -->
       <button (click)="closeEditProfileModal()"
-              class="absolute top-3 right-3 text-white text-2xl hover:text-gray-300 transition-colors cursor-pointer">
+              class=" absolute top-3 right-3 text-2xl hover:text-gray-300 transition-colors cursor-pointer">
         &times;
       </button>
     </div>
   </div>
 
 </div>
-
 
 
 <div
