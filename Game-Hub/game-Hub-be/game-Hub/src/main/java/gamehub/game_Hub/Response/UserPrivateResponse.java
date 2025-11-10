@@ -22,6 +22,7 @@ public class UserPrivateResponse {
   private String bio;
   private LocationResponse location;
   private Status status;
+  private String joinedDate;
   //   TODO add count of friends
   private int libraryCount;
   private int wishlistCount;

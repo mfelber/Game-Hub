@@ -29,10 +29,18 @@ public class UserMapper {
   }
 
   public UserPublicResponse toUserPublicResponse(User user) {
+
+    String joinedDate = user.getCreatedAt().getMonth().name().charAt(0) + user.getCreatedAt()
+        .getMonth()
+        .name()
+        .substring(1)
+        .toLowerCase() + " " + user.getCreatedAt().getYear();
+
     return UserPublicResponse.builder()
         .userId(user.getId())
         .username(user.getName())
         .bio(user.getBio())
+        .joinedDate(joinedDate)
         .location(
             new LocationResponse(
                 user.getLocation() != null ? user.getLocation().name() : null,
@@ -55,7 +63,10 @@ public class UserMapper {
         .favoriteGenres(user.getFavoriteGenres().stream()
             .map(g -> new GenreResponse(g.getId(), g.getName()))
             .collect(Collectors.toSet()))
-        .recommendedGames(user.getRecommendationGames().stream().map(g -> new GameResponseShort(g.getId(), g.getTitle(), FileUtils.readCoverFromLocation(g.getGameCoverImage())))
+        .recommendedGames(user.getRecommendationGames()
+            .stream()
+            .map(g -> new GameResponseShort(g.getId(), g.getTitle(),
+                FileUtils.readCoverFromLocation(g.getGameCoverImage())))
             .collect(Collectors.toSet()))
         .userProfilePicture(FileUtils.readCoverFromLocation(user.getUserProfilePicture()))
         .bannerImage(FileUtils.readCoverFromLocation(user.getBanner()))
@@ -63,6 +74,13 @@ public class UserMapper {
   }
 
   public UserPrivateResponse toUserPrivateResponse(User user) {
+
+    String joinedDate = user.getCreatedAt().getMonth().name().charAt(0) + user.getCreatedAt()
+        .getMonth()
+        .name()
+        .substring(1)
+        .toLowerCase() + " " + user.getCreatedAt().getYear();
+
     return UserPrivateResponse.builder()
         .userId(user.getId())
         .firstName(user.getFirstName())
@@ -70,6 +88,7 @@ public class UserMapper {
         .email(user.getEmail())
         .username(user.getName())
         .bio(user.getBio())
+        .joinedDate(joinedDate)
         .location(
             new LocationResponse(
                 user.getLocation() != null ? user.getLocation().name() : null,
@@ -89,8 +108,14 @@ public class UserMapper {
             .map(g -> new GameResponseShort(
                 g.getId(), g.getTitle(), FileUtils.readCoverFromLocation(g.getGameCoverImage())))
             .collect(Collectors.toSet()))
-        .favoriteGenres(user.getFavoriteGenres().stream().map(genre -> new GenreResponse(genre.getId(), genre.getName())).collect(Collectors.toSet()))
-        .recommendedGames(user.getRecommendationGames().stream().map(g -> new GameResponseShort(g.getId(), g.getTitle(), FileUtils.readCoverFromLocation(g.getGameCoverImage())))
+        .favoriteGenres(user.getFavoriteGenres()
+            .stream()
+            .map(genre -> new GenreResponse(genre.getId(), genre.getName()))
+            .collect(Collectors.toSet()))
+        .recommendedGames(user.getRecommendationGames()
+            .stream()
+            .map(g -> new GameResponseShort(g.getId(), g.getTitle(),
+                FileUtils.readCoverFromLocation(g.getGameCoverImage())))
             .collect(Collectors.toSet()))
         .userProfilePicture(FileUtils.readCoverFromLocation(user.getUserProfilePicture()))
         .bannerImage(FileUtils.readCoverFromLocation(user.getBanner()))

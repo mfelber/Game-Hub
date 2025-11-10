@@ -12,6 +12,7 @@ export interface UserPublicResponse {
   bio?: string;
   favoriteGames?: Array<GameResponseShort>;
   favoriteGenres?: Array<GenreResponse>;
+  joinedDate?: string;
   libraryCount?: number;
   location?: LocationResponse;
   playRecently?: Array<GameResponseShort>;

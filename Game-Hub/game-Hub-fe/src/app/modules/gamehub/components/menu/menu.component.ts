@@ -1,6 +1,5 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
-import {MatIcon} from '@angular/material/icon';
+import {NavigationEnd, Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {initFlowbite} from 'flowbite';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {UserProfileControllerService} from '../../../../services/services';

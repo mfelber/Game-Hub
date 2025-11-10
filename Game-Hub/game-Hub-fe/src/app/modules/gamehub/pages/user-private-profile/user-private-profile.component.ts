@@ -8,7 +8,6 @@ import {GameResponse} from '../../../../services/models/game-response';
 import {GameControllerService} from '../../../../services/services/game-controller.service';
 import {FormsModule} from '@angular/forms';
 import {UserUpdateRequest} from '../../../../services/models/user-update-request';
-import {GenreResponse} from '../../../../services/models/genre-response';
 import {LocationControllerService} from '../../../../services/services/location-controller.service';
 import {HttpClient} from '@angular/common/http';
 
@@ -25,7 +24,6 @@ import {HttpClient} from '@angular/common/http';
   styleUrl: './user-private-profile.component.css'
 })
 export class UserPrivateProfileComponent implements OnInit {
-  isDropdownOpen = false;
 
   ngOnInit(): void {
     initFlowbite();
@@ -43,7 +41,6 @@ export class UserPrivateProfileComponent implements OnInit {
   }
 
   selectedGenres: Set<number> = new Set<number>()
-  allGenres: string[] = [] ;
   favoriteGenreIds: number[] = [];
   successMessage: string | null = null;
   toastVisible = false;
@@ -75,23 +72,8 @@ export class UserPrivateProfileComponent implements OnInit {
 
   profilePicture: File | null = null;
   previewImage: string | undefined;
-  selectedProfileBanner: string | undefined;
-
-
-  onFileSelected(event: any) {
-    const input = event.target as HTMLInputElement;
-    this.profilePicture = input.files![0];
-    console.log(this.profilePicture);
-    if (this.profilePicture) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.previewImage = reader.result as string;
-      }
-      reader.readAsDataURL(this.profilePicture);
-    }
-  }
-
-
+  previewBanner: string | undefined;
+  profileBanner: File | null = null;
 
   private loadUserPrivateProfile() {
     this.userService.getUserPrivate().subscribe({
@@ -234,16 +216,22 @@ export class UserPrivateProfileComponent implements OnInit {
 
   }
 
-  closeEditProfileModal() {
-    this.isEditProfileModalOpen = false;
-  }
-
   saveProfile() {
+    // if (this.bioUpdateRequest.bio === this.userResponse.bio) {
+    if (this.userRequest.username === this.userResponse.username &&
+      this.userRequest.firstName === this.userResponse.firstName &&
+      this.userRequest.lastName === this.userResponse.lastName &&
+      this.userRequest.email === this.userResponse.email &&
+      this.userRequest.location === this.userResponse.location?.name as undefined ) {
+
+    }
     this.userService.updateUserProfile({
       body: this.userRequest
     }).subscribe({
       next: () => {
-        console.log('updatol')
+        this.isEditProfileModalOpen = false;
+        this.showSuccess('Profile was successfully updated')
+        this.loadUserPrivateProfile()
       }
     })
     if (this.profilePicture) {
@@ -253,19 +241,41 @@ export class UserPrivateProfileComponent implements OnInit {
       this.http.post('http://localhost:8088/api/v1/profile/image', formData
       ).subscribe({
         next: () => {
-          console.log('update pf')
+          this.loadUserPrivateProfile()
         }
       });
     }
+
+    if (this.profileBanner) {
+      const formData = new FormData();
+      formData.append('file', this.profileBanner);
+
+      this.http.post('http://localhost:8088/api/v1/profile/banner', formData
+      ).subscribe(({
+        next: () => {
+          this.loadUserPrivateProfile()
+        }
+      }))
+    }
   }
 
-  closeProfileModal() {
+  closeModal() {
     this.isProfileModalOpen = false;
-  //   TODO if user close modal or pressed cancel set active
+    this.isEditProfileModalOpen = false;
+    this.isEditBioModalOpen = false;
+    this.bioUpdateRequest.bio = this.userResponse.bio
+    this.userRequest.location = this.userResponse.location?.name as undefined
+    this.userRequest.username = this.userResponse.username
+    this.userRequest.firstName = this.userResponse.firstName
+    this.userRequest.lastName = this.userResponse.lastName
+    this.userRequest.email = this.userResponse.email
+    this.previewImage = 'data:image/jpeg;base64,' + this.userResponse.userProfilePicture;
+    this.previewBanner = 'data:image/jpeg;base64,' + this.userResponse.bannerImage;
+    this.activeTab = 'basic'
   }
 
   editProfile() {
-    this.closeProfileModal();
+    this.closeModal();
     this.isEditProfileModalOpen = true;
     this.getLocations();
   }
@@ -287,8 +297,27 @@ export class UserPrivateProfileComponent implements OnInit {
     return loc?.iconPath;
   }
 
+  onFileSelected(event: any) {
+    const input = event.target as HTMLInputElement;
+    this.profilePicture = input.files![0];
+    if (this.profilePicture) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.previewImage = reader.result as string;
+      }
+      reader.readAsDataURL(this.profilePicture);
+    }
+  }
 
-  onBannerSelected($event: Event) {
-
+  onBannerSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.profileBanner = input.files![0];
+    if (this.profileBanner) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.previewBanner = reader.result as string;
+      }
+      reader.readAsDataURL(this.profileBanner);
+    }
   }
 }

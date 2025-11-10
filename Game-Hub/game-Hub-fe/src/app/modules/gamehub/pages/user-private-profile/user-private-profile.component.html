@@ -37,14 +37,16 @@
           </span>
         </div>
 
-        <p class="text-sm text-gray-300 mx-0.5">Joined April 2024</p>
+        <p class="text-sm text-gray-300 mx-0.5">Joined {{userResponse.joinedDate}}</p>
       </div>
       <div class="mt-auto flex flex-col mx-2">
         <div class="flex gap-2">
           <button (click)="isProfileModalOpen = true"
                   class="bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 cursor-pointer text-center w-30 py-1.5 px-2 rounded-lg text-sm flex items-center justify-center gap-1 transition-colors duration-200">
             Edit profile
+            <i class="fa-solid fa-pencil"></i>
           </button>
+
         </div>
 
       </div>
@@ -68,6 +70,16 @@
           />
         </div>
 
+        <div class="flex flex-col">
+          <label class="text-gray-300 text-sm mb-1">Username</label>
+          <input
+            readonly
+            type="text"
+            placeholder="{{userResponse.username}}"
+            class="mt-1 w-full p-3 rounded-lg border border-gray-700 bg-gray-900 text-white focus:outline-none focus:ring-0 cursor-default"
+          />
+        </div>
+
         <div class="flex gap-5">
           <div class="flex flex-col gap-4 w-full">
             <div class="flex flex-col">
@@ -86,16 +98,6 @@
                 readonly
                 type="text"
                 placeholder="{{userResponse.lastName}}"
-                class="mt-1 w-full p-3 rounded-lg border border-gray-700 bg-gray-900 text-white focus:outline-none focus:ring-0 cursor-default"
-              />
-            </div>
-
-            <div class="flex flex-col">
-              <label class="text-gray-300 text-sm mb-1">Username</label>
-              <input
-                readonly
-                type="text"
-                placeholder="{{userResponse.username}}"
                 class="mt-1 w-full p-3 rounded-lg border border-gray-700 bg-gray-900 text-white focus:outline-none focus:ring-0 cursor-default"
               />
             </div>
@@ -130,7 +132,7 @@
 
 
       <div class="flex justify-end gap-3 mt-6">
-        <button (click)="closeProfileModal()"
+        <button (click)="closeModal()"
                 class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-500 transition-colors cursor-pointer">
           Cancel
         </button>
@@ -140,7 +142,7 @@
         </button>
       </div>
 
-      <button (click)="closeProfileModal()"
+      <button (click)="closeModal()"
               class="absolute top-3 right-3 text-white text-2xl hover:text-gray-300 transition-colors cursor-pointer">
         &times;
       </button>
@@ -251,8 +253,8 @@
           <!-- Banner -->
           <div class="relative w-full h-48 rounded-xl mb-5">
             <img
-              [src]="getBanner(userResponse) || selectedProfileBanner"
-              class="w-full h-full object-cover rounded-2xl object-cover"
+              [src]="previewBanner || getBanner(userResponse)"
+              class="w-full h-full rounded-2xl object-cover"
               alt="Profile Banner"
             />
 
@@ -309,7 +311,7 @@
       <!-- Action Buttons -->
 
       <div class="flex justify-end gap-3 mt-6">
-        <button (click)="closeEditProfileModal()"
+        <button (click)="closeModal()"
                 class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-500 transition-colors cursor-pointer">
           Cancel
         </button>
@@ -318,7 +320,7 @@
           Save
         </button>
       </div>
-      <button (click)="closeEditProfileModal()"
+      <button (click)="closeModal()"
               class=" absolute top-3 right-3 text-2xl hover:text-gray-300 transition-colors cursor-pointer">
         &times;
       </button>
@@ -419,18 +421,18 @@
                     placeholder="Write something about yourself..."></textarea>
 
           <div class="flex justify-end gap-3 mt-4">
-            <button (click)="isEditBioModalOpen = false"
-                    class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-500 transition-colors">
+            <button (click)="closeModal()"
+                    class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-500 transition-colors cursor-pointer">
               Cancel
             </button>
             <button (click)="saveBio()"
-                    class="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-500 text-white rounded-lg hover:from-blue-500 hover:to-indigo-400 transition-colors">
+                    class="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-500 text-white rounded-lg hover:from-blue-500 hover:to-indigo-400 transition-colors cursor-pointer">
               Save
             </button>
           </div>
 
-          <button (click)="isEditBioModalOpen = false"
-                  class="absolute top-3 right-3 text-white text-2xl hover:text-gray-300 transition-colors">
+          <button (click)="closeModal()"
+                  class="absolute top-3 right-3 text-white text-2xl hover:text-gray-300 transition-colors cursor-pointer">
             &times;
           </button>
         </div>

@@ -1772,6 +1772,9 @@
               "AWAY"
             ]
           },
+          "joinedDate": {
+            "type": "string"
+          },
           "libraryCount": {
             "type": "integer",
             "format": "int32"
@@ -1863,6 +1866,9 @@
               "OFFLINE",
               "AWAY"
             ]
+          },
+          "joinedDate": {
+            "type": "string"
           },
           "libraryCount": {
             "type": "integer",
