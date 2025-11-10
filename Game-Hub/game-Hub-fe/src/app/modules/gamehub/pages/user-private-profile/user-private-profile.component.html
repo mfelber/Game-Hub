@@ -172,6 +172,14 @@
         >
           Profile & Banner
         </button>
+
+        <button
+          (click)="activeTab = 'security'"
+          [ngClass]="activeTab === 'security' ? 'border-b-2 border-blue-500 text-white': 'text-gray-400'"
+          class="px-4 py-2 font-medium focus:outline-none cursor-pointer"
+        >
+          Privacy & Security
+        </button>
       </div>
 
       <!--      TABS CONTENT-->
@@ -304,6 +312,76 @@
           Colors for cards
           TODO add colors
         </div>
+
+<!--        Privacy & Security-->
+
+        <div *ngIf="activeTab === 'security'" class="flex flex-col gap-4">
+
+
+          <div>
+            send friend req
+            <div>
+              everyone
+            </div>
+            <div>
+              noone
+            </div>
+          </div>
+
+          <div>
+            send messages / invites
+            <div>
+              everyone
+            </div>
+            <div>
+              friends
+            </div>
+            <div>
+              noone
+            </div>
+          </div>
+
+          <div>
+            profile visibility
+            <div>
+              everyone
+            </div>
+            <div>
+              friends
+            </div>
+            <div>
+              noone
+            </div>
+          </div>
+
+
+
+          <div>
+            <h3 class="text-base font-semibold">Change password</h3>
+            <p class="text-sm text-gray-500">
+              We'll send you a secure link to your email to reset your password.
+            </p>
+          </div>
+          <button
+            class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+            Send Reset Link
+          </button>
+
+          <div>
+            <h3 class="text-base font-semibold">Delete Account</h3>
+            <p class="text-sm text-gray-500">
+              We'll send you a secure link to your email to reset your password.
+            </p>
+          </div>
+          <button
+            class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition">
+            Delete account
+            <i class="fa-solid fa-trash-can"></i>
+          </button>
+
+        </div>
+
+
       </div>
 
 

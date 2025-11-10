@@ -67,7 +67,7 @@ export class UserPrivateProfileComponent implements OnInit {
   bioUpdateRequest: UserUpdateRequest = {
     bio: ''
   };
-  activeTab: 'basic' | 'profile' = 'basic';
+  activeTab: 'basic' | 'profile' | 'security' = 'basic';
   allLocations: { name: string; iconPath: string }[] = [];
 
   profilePicture: File | null = null;
@@ -217,23 +217,24 @@ export class UserPrivateProfileComponent implements OnInit {
   }
 
   saveProfile() {
-    // if (this.bioUpdateRequest.bio === this.userResponse.bio) {
     if (this.userRequest.username === this.userResponse.username &&
       this.userRequest.firstName === this.userResponse.firstName &&
       this.userRequest.lastName === this.userResponse.lastName &&
       this.userRequest.email === this.userResponse.email &&
       this.userRequest.location === this.userResponse.location?.name as undefined ) {
-
+        this.closeModal()
+    } else {
+      this.userService.updateUserProfile({
+        body: this.userRequest
+      }).subscribe({
+        next: () => {
+          this.isEditProfileModalOpen = false;
+          this.showSuccess('Profile was successfully updated')
+          this.loadUserPrivateProfile()
+        }
+      })
     }
-    this.userService.updateUserProfile({
-      body: this.userRequest
-    }).subscribe({
-      next: () => {
-        this.isEditProfileModalOpen = false;
-        this.showSuccess('Profile was successfully updated')
-        this.loadUserPrivateProfile()
-      }
-    })
+
     if (this.profilePicture) {
       const formData = new FormData();
       formData.append('file', this.profilePicture);
@@ -242,8 +243,11 @@ export class UserPrivateProfileComponent implements OnInit {
       ).subscribe({
         next: () => {
           this.loadUserPrivateProfile()
+          this.showSuccess('Profile was successfully updated')
         }
       });
+    } else {
+      this.closeModal()
     }
 
     if (this.profileBanner) {
@@ -254,8 +258,11 @@ export class UserPrivateProfileComponent implements OnInit {
       ).subscribe(({
         next: () => {
           this.loadUserPrivateProfile()
+          this.showSuccess('Profile was successfully updated')
         }
       }))
+    } else {
+      this.closeModal()
     }
   }
 
