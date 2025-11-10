@@ -3,12 +3,14 @@ import {UserPrivateResponse} from '../../../../services/models/user-private-resp
 import {initFlowbite} from 'flowbite';
 import {Router} from '@angular/router';
 import {UserProfileControllerService} from '../../../../services/services/user-profile-controller.service';
-import {NgClass, NgForOf, NgIf} from '@angular/common';
+import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {GameResponse} from '../../../../services/models/game-response';
 import {GameControllerService} from '../../../../services/services/game-controller.service';
 import {FormsModule} from '@angular/forms';
 import {UserUpdateRequest} from '../../../../services/models/user-update-request';
 import {GenreResponse} from '../../../../services/models/genre-response';
+import {LocationControllerService} from '../../../../services/services/location-controller.service';
+import {HttpClient} from '@angular/common/http';
 
 @Component({
   selector: 'app-user-profile',
@@ -16,12 +18,14 @@ import {GenreResponse} from '../../../../services/models/genre-response';
     NgIf,
     NgForOf,
     NgClass,
-    FormsModule
+    FormsModule,
+    NgStyle
   ],
   templateUrl: './user-private-profile.component.html',
   styleUrl: './user-private-profile.component.css'
 })
 export class UserPrivateProfileComponent implements OnInit {
+  isDropdownOpen = false;
 
   ngOnInit(): void {
     initFlowbite();
@@ -32,7 +36,9 @@ export class UserPrivateProfileComponent implements OnInit {
   constructor(
     private router: Router,
     private userService: UserProfileControllerService,
-    private gameService: GameControllerService
+    private gameService: GameControllerService,
+    private locationService: LocationControllerService,
+    private http: HttpClient
   ) {
   }
 
@@ -54,11 +60,37 @@ export class UserPrivateProfileComponent implements OnInit {
     wishlistCount: 0,
     libraryCount: 0
   };
+  userRequest: UserUpdateRequest = {
+    email: this.userResponse.email
+  };
   isEditBioModalOpen = false;
   isEditGenresModalOpen = false;
+  isEditProfileModalOpen= false;
+  isProfileModalOpen = false;
   bioUpdateRequest: UserUpdateRequest = {
     bio: ''
   };
+  activeTab: 'basic' | 'profile' = 'basic';
+  allLocations: { name: string; iconPath: string }[] = [];
+
+  profilePicture: File | null = null;
+  previewImage: string | undefined;
+  selectedProfileBanner: string | undefined;
+
+
+  onFileSelected(event: any) {
+    const input = event.target as HTMLInputElement;
+    this.profilePicture = input.files![0];
+    console.log(this.profilePicture);
+    if (this.profilePicture) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.previewImage = reader.result as string;
+      }
+      reader.readAsDataURL(this.profilePicture);
+    }
+  }
+
 
 
   private loadUserPrivateProfile() {
@@ -72,6 +104,13 @@ export class UserPrivateProfileComponent implements OnInit {
         this.userResponse.favoriteGenres = user.favoriteGenres?.sort((a, b) =>
           a.name!.localeCompare(b.name!)
         );
+        this.userRequest = {
+          email : user.email,
+          firstName : user.firstName,
+          lastName : user.lastName,
+          username : user.username,
+          location: this.userResponse.location?.name as undefined
+        }
       }
     });
   }
@@ -192,6 +231,64 @@ export class UserPrivateProfileComponent implements OnInit {
   removeFavoriteGenre(id:any) {
     this.favoriteGenreIds = this.favoriteGenreIds.filter(g => g !== id);
     this.selectedGenres.delete(id);
+
+  }
+
+  closeEditProfileModal() {
+    this.isEditProfileModalOpen = false;
+  }
+
+  saveProfile() {
+    this.userService.updateUserProfile({
+      body: this.userRequest
+    }).subscribe({
+      next: () => {
+        console.log('updatol')
+      }
+    })
+    if (this.profilePicture) {
+      const formData = new FormData();
+      formData.append('file', this.profilePicture);
+
+      this.http.post('http://localhost:8088/api/v1/profile/image', formData
+      ).subscribe({
+        next: () => {
+          console.log('update pf')
+        }
+      });
+    }
+  }
+
+  closeProfileModal() {
+    this.isProfileModalOpen = false;
+  //   TODO if user close modal or pressed cancel set active
+  }
+
+  editProfile() {
+    this.closeProfileModal();
+    this.isEditProfileModalOpen = true;
+    this.getLocations();
+  }
+
+  getLocations() {
+    this.locationService.getLocations().subscribe({
+      next: (location) => {
+        this.allLocations = location.map(location => ({
+          name: location.name!,
+          iconPath: location.iconPath!
+        }));
+      }
+    })
+  }
+
+
+  getIconPath(locationName: string): string | undefined {
+    const loc = this.allLocations.find(l => l.name === locationName);
+    return loc?.iconPath;
+  }
+
+
+  onBannerSelected($event: Event) {
 
   }
 }

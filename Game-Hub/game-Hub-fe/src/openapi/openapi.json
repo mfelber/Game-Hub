@@ -1002,6 +1002,29 @@
         }
       }
     },
+    "/location/locations": {
+      "get": {
+        "tags": [
+          "location-controller"
+        ],
+        "operationId": "getLocations",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LocationResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/library/library": {
       "get": {
         "tags": [

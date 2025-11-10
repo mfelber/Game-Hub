@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { GamehubRoutingModule } from './gamehub-routing.module';
 
 
@@ -8,7 +7,7 @@ import { GamehubRoutingModule } from './gamehub-routing.module';
   declarations: [],
   imports: [
     CommonModule,
-    GamehubRoutingModule
+    GamehubRoutingModule,
   ]
 })
 export class GamehubModule { }
