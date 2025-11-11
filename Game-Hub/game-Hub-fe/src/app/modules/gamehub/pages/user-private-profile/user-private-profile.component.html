@@ -363,14 +363,17 @@
             </p>
           </div>
           <button
-            class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+            (click)="senResetLink()"
+            class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition cursor-pointer">
             Send Reset Link
           </button>
 
           <div>
             <h3 class="text-base font-semibold">Delete Account</h3>
             <p class="text-sm text-gray-500">
-              We'll send you a secure link to your email to reset your password.
+              After deleting your account, you’ll be signed out and won’t be able to log in anymore.
+<!--              TODO send email and logout user-->
+
             </p>
           </div>
           <button
