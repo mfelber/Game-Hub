@@ -8,17 +8,31 @@
     </div>
   </div>
   <div class="h-48 w-full overflow-hidden ">
-    <img
+
+
+    <img *ngIf="!isBannerPredefined"
       [src]=getBanner(userResponse)
-      alt="Game cover"
+      alt="Banner cover"
+      class="w-full h-full object-cover rounded-t-2xl border-t border-r border-l border-white/20"
+    />
+
+    <img *ngIf="isBannerPredefined"
+      [src]="'assets/banners/banner_'+userResponse.predefinedBanner+'.jpg'"
+      alt="Banner cover"
       class="w-full h-full object-cover rounded-t-2xl border-t border-r border-l border-white/20"
     />
   </div>
   <div class="absolute left-6 top-1/2 transform -translate-y-1/2 flex ">
     <div>
-      <img
+      <img *ngIf="userHasProfilePicture"
         [src]="getProfilePicture(userResponse)"
         class="w-40 h-40 rounded-2xl border-2 border-black object-cover"
+      />
+
+      <img *ngIf="!userHasProfilePicture"
+           src="../../../../../assets/profilePicture/default_profile_picture.svg"
+           class="w-40 h-40 rounded-2xl border-2 border-black object-cover"
+           [ngStyle]="{'background-color': userResponse.profileColor}"
       />
     </div>
 
@@ -61,12 +75,19 @@
 
       <div class="flex flex-col gap-2">
         <div class="relative w-full h-40 rounded-xl overflow-hidden mb-5">
-          <img [src]="getBanner(userResponse)" class="w-full h-full object-cover"/>
+          <img *ngIf="!isBannerPredefined" [src]="getBanner(userResponse)" class="w-full h-full object-cover"/>
+          <img *ngIf="isBannerPredefined" [src]="'assets/banners/banner_'+userResponse.predefinedBanner+'.jpg'" class="w-full h-full object-cover"/>
           <div class="absolute inset-0 bg-black/30"></div>
 
-          <img
+          <img *ngIf="userHasProfilePicture"
             [src]="getProfilePicture(userResponse)"
             class="absolute left-6 top-1/2 -translate-y-1/2 w-32 h-32 rounded-2xl object-cover border-4 border-gray-800"
+          />
+
+          <img *ngIf="!userHasProfilePicture"
+               src="../../../../../assets/profilePicture/default_profile_picture.svg"
+               class="absolute left-6 top-1/2 -translate-y-1/2 w-32 h-32 rounded-2xl object-cover border-4 border-gray-800"
+               [ngStyle]="{'background-color': userResponse.profileColor}"
           />
         </div>
 
@@ -260,10 +281,19 @@
         <div *ngIf="activeTab === 'profile'" class="flex flex-col gap-6">
           <!-- Banner -->
           <div class="relative w-full h-48 rounded-xl mb-5">
-            <img
-              [src]="previewBanner || getBanner(userResponse)"
+
+
+
+            <img *ngIf="isBannerPredefined && !isPreviewBannerInserted"
+              [src]="'assets/banners/banner_' +userResponse.predefinedBanner"
               class="w-full h-full rounded-2xl object-cover"
               alt="Profile Banner"
+            />
+
+            <img *ngIf="(!isBannerPredefined && isPreviewBannerInserted) || !isBannerPredefined"
+                 [src]="previewBanner || getBanner(userResponse)"
+                 class="w-full h-full rounded-2xl object-cover"
+                 alt="Profile Banner"
             />
 
             <label
@@ -284,12 +314,19 @@
 
              <div class="absolute left-6 top-1/2 -translate-y-1/2">
               <div class="relative w-32 h-32">
-                <img
+
+                <img *ngIf="!userHasProfilePicture && !isPreviewImageInserted"
+                     src="assets/profilePicture/default_profile_picture.svg"
+                     class="w-32 h-32 rounded-2xl object-cover border-4 border-gray-800"
+                     [ngStyle]="{'background-color': userResponse.profileColor}"
+                     alt="Profile Picture"
+                />
+
+                <img *ngIf="(!userHasProfilePicture && isPreviewImageInserted) || userHasProfilePicture"
                   [src]=" previewImage || getProfilePicture(userResponse)"
                   class="w-32 h-32 rounded-2xl object-cover border-4 border-gray-800"
                   alt="Profile Picture"
                 />
-
 
                 <label
                   for="formFile"

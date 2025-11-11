@@ -1831,6 +1831,13 @@
               "type": "string",
               "format": "byte"
             }
+          },
+          "profileColor": {
+            "type": "string"
+          },
+          "predefinedBanner": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       },
@@ -1926,6 +1933,13 @@
               "type": "string",
               "format": "byte"
             }
+          },
+          "profileColor": {
+            "type": "string"
+          },
+          "predefinedBanner": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       },

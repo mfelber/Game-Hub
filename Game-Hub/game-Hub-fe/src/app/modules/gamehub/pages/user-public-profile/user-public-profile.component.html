@@ -1,6 +1,13 @@
 <div class="relative w-full items-center">
   <div class="h-48 w-full overflow-hidden">
-    <img
+
+    <img *ngIf="isBannerPredefined"
+         [src]="'assets/banners/banner_'+userResponse.predefinedBanner+'.jpg'"
+         alt="Game cover"
+         class="w-full h-full object-cover rounded-t-2xl border-t border-r border-l border-white/20"
+    />
+
+    <img *ngIf="!isBannerPredefined"
       [src]="getBanner(userResponse)"
       alt="Game cover"
       class="w-full h-full object-cover rounded-t-2xl border-t border-r border-l border-white/20"
@@ -8,10 +15,17 @@
   </div>
   <div class="absolute left-6 top-1/2 transform -translate-y-1/2 flex">
     <div>
-      <img
-        [src]="getProfilePicture(userResponse)"
+      <img *ngIf="!userHasProfilePicture"
+           src="assets/profilePicture/default_profile_picture.svg"
         alt="Profile picture"
         class="w-40 h-40 rounded-2xl border-2 border-black object-cover"
+           [ngStyle]="{'background-color': userResponse.profileColor}"
+      />
+
+      <img *ngIf="userHasProfilePicture"
+           [src]="getProfilePicture(userResponse)"
+           alt="Profile picture"
+           class="w-40 h-40 rounded-2xl border-2 border-black object-cover"
       />
     </div>
 

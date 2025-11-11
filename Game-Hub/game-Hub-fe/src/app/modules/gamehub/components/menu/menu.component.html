@@ -96,7 +96,13 @@
 
         </div>
 
-        <img
+        <img *ngIf="!userHasProfilePicture"
+             src="../../../../../assets/profilePicture/default_profile_picture.svg"
+             class="w-13 h-13 rounded-xl border-1 border-black object-cover"
+             [ngStyle]="{'background-color': userResponse.profileColor}"
+        />
+
+        <img *ngIf="userHasProfilePicture"
           [src]="getProfilePicture(userResponse)"
           alt="not found"
           class="w-13 h-13 object-cover rounded-xl"

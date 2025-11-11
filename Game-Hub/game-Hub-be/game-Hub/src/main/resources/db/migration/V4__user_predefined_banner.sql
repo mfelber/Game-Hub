@@ -1,0 +1,1 @@
+ALTER TABLE game_hub."user" ADD predefined_banner BIGSERIAL;
