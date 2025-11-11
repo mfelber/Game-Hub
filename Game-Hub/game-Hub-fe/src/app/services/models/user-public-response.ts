@@ -16,6 +16,7 @@ export interface UserPublicResponse {
   libraryCount?: number;
   location?: LocationResponse;
   playRecently?: Array<GameResponseShort>;
+  profileColor?: string;
   recommendedGames?: Array<GameResponseShort>;
   status?: 'ONLINE' | 'OFFLINE' | 'AWAY';
   userId?: number;

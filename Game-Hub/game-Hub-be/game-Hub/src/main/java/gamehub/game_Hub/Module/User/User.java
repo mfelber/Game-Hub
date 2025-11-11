@@ -69,6 +69,9 @@ public class User implements UserDetails, Principal {
 
   private String banner;
 
+  @Column(name = "profile_color")
+  private String profileColor;
+
   @Column(name = "is_banned")
   private boolean isBanned;
 

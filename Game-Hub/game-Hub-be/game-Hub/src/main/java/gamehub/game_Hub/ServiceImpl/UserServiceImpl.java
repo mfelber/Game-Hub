@@ -12,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import gamehub.game_Hub.File.FileStorageService;
 import gamehub.game_Hub.Module.Genre;
-import gamehub.game_Hub.Module.User.Status;
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Repository.genre.GenreRepository;
 import gamehub.game_Hub.Repository.user.UserRepository;

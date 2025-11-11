@@ -3,6 +3,7 @@ package gamehub.game_Hub.Service;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -62,10 +63,22 @@ public class AuthenticationService {
         .roles(List.of(userRole))
         .status(Status.OFFLINE)
         .location(Location.UNKNOWN)
+        .profileColor(getRandomColor())
         .build();
 
     userRepository.save(user);
     sendWelcomeEmail(user);
+  }
+
+  public String getRandomColor() {
+
+    final Random random = new Random();
+    final String [] letters = "0123456789ABCDEF".split("");
+    String color = "#";
+    for (int i = 0; i < 6; i++) {
+      color += letters[Math.round(random.nextFloat() * 15)];
+    }
+    return color;
   }
 
   public AuthenticationResponse authenticate(final @Valid AuthenticationRequest request) {

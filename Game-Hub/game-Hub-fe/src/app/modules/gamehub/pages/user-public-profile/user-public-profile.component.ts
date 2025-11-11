@@ -3,7 +3,7 @@ import {UserProfileControllerService} from '../../../../services/services/user-p
 import {UserPublicResponse} from '../../../../services/models/user-public-response';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UserPrivateResponse} from '../../../../services/models/user-private-response';
-import {NgClass, NgForOf, NgIf} from '@angular/common';
+import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {GameControllerService} from '../../../../services/services/game-controller.service';
 import {GameResponse} from '../../../../services/models/game-response';
 
@@ -12,7 +12,8 @@ import {GameResponse} from '../../../../services/models/game-response';
   imports: [
     NgIf,
     NgClass,
-    NgForOf
+    NgForOf,
+    NgStyle
   ],
   templateUrl: './user-public-profile.component.html',
   styleUrl: './user-public-profile.component.css'
@@ -44,6 +45,8 @@ export class UserPublicProfileComponent implements OnInit{
     libraryCount: 0
   }
 
+  userHasProfilePicture = true
+
 
   private loadUserPublicProfile() {
     const userId: any = this.router.snapshot.paramMap.get('id')
@@ -51,18 +54,26 @@ export class UserPublicProfileComponent implements OnInit{
       next:  (user) => {
         this.userResponse = user;
         this.getProfilePicture(userId)
+        if (user.userProfilePicture){
+          this.userHasProfilePicture = true
+        } else {
+          this.userHasProfilePicture = false
+        }
       }
     });
   }
 
-  getProfilePicture(user: UserPrivateResponse) {
+  getProfilePicture(user: UserPublicResponse) {
     if (user.userProfilePicture) {
+      this.userHasProfilePicture = true;
       return 'data:image/jpeg;base64,' + user.userProfilePicture;
+    } else {
+      this.userHasProfilePicture = false;
     }
-    return 'https://images.pexels.com/photos/1054655/pexels-photo-1054655.jpeg';
+    return;
   }
 
-  getBanner(user: UserPrivateResponse) {
+  getBanner(user: UserPublicResponse) {
     if (user.bannerImage) {
       return 'data:image/jpeg;base64,' + user.bannerImage;
     }

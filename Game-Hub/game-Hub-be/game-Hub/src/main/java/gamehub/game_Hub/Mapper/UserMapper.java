@@ -70,6 +70,7 @@ public class UserMapper {
             .collect(Collectors.toSet()))
         .userProfilePicture(FileUtils.readCoverFromLocation(user.getUserProfilePicture()))
         .bannerImage(FileUtils.readCoverFromLocation(user.getBanner()))
+        .profileColor(user.getProfileColor())
         .build();
   }
 
@@ -119,6 +120,7 @@ public class UserMapper {
             .collect(Collectors.toSet()))
         .userProfilePicture(FileUtils.readCoverFromLocation(user.getUserProfilePicture()))
         .bannerImage(FileUtils.readCoverFromLocation(user.getBanner()))
+        .profileColor(user.getProfileColor())
         .build();
 
   }

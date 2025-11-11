@@ -1,0 +1,1 @@
+ALTER TABLE game_hub."user" ADD profile_color VARCHAR(255);

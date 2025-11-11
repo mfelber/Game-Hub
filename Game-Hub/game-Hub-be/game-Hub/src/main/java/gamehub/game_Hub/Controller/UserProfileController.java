@@ -136,6 +136,4 @@ public class UserProfileController {
     return ResponseEntity.accepted().build();
   }
 
-
-
 }
