@@ -1,7 +1,7 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {NavigationEnd, Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {initFlowbite} from 'flowbite';
-import {NgClass, NgForOf, NgIf} from '@angular/common';
+import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {UserProfileControllerService} from '../../../../services/services';
 import {UserPrivateResponse} from '../../../../services/models/user-private-response';
 import {FormsModule} from '@angular/forms';
@@ -15,7 +15,8 @@ import {StatusResponse} from '../../../../services/models/status-response';
     NgIf,
     FormsModule,
     NgForOf,
-    NgClass
+    NgClass,
+    NgStyle
   ],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.scss'
@@ -39,6 +40,7 @@ export class MenuComponent implements OnInit {
   userResponse: UserPrivateResponse = {};
   statusResponse: StatusResponse = {};
   statuses = ['ONLINE', 'OFFLINE', 'AWAY'];
+  userHasProfilePicture = true;
 
   constructor(
     private router: Router,
@@ -57,6 +59,12 @@ export class MenuComponent implements OnInit {
     this.userService.getUserPrivateShort().subscribe({
       next:  (user) => {
         this.userResponse = user;
+        console.log(user)
+        if (user.userProfilePicture) {
+          this.userHasProfilePicture = true;
+        } else {
+          this.userHasProfilePicture = false;
+        }
       }
     });
 
@@ -94,7 +102,7 @@ export class MenuComponent implements OnInit {
     if (user.userProfilePicture) {
       return 'data:image/jpeg;base64,' + user.userProfilePicture;
     }
-    return 'https://images.pexels.com/photos/1054655/pexels-photo-1054655.jpeg';
+    return this.userHasProfilePicture;
   }
 
   logoutUser() {

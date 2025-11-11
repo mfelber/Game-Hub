@@ -142,6 +142,7 @@ public class UserMapper {
         .username(user.getName())
         .status(user.getStatus())
         .userProfilePicture(FileUtils.readCoverFromLocation(user.getUserProfilePicture()))
+        .profileColor(user.getProfileColor())
         .build();
   }
 
