@@ -10,6 +10,8 @@ import {FormsModule} from '@angular/forms';
 import {UserUpdateRequest} from '../../../../services/models/user-update-request';
 import {LocationControllerService} from '../../../../services/services/location-controller.service';
 import {HttpClient} from '@angular/common/http';
+import {AuthenticationService} from '../../../../services/services/authentication.service';
+import {AuthenticationRequest} from '../../../../services/models/authentication-request';
 
 @Component({
   selector: 'app-user-profile',
@@ -36,7 +38,8 @@ export class UserPrivateProfileComponent implements OnInit {
     private userService: UserProfileControllerService,
     private gameService: GameControllerService,
     private locationService: LocationControllerService,
-    private http: HttpClient
+    private http: HttpClient,
+    private authenticationService: AuthenticationService,
   ) {
   }
 
@@ -66,8 +69,13 @@ export class UserPrivateProfileComponent implements OnInit {
   isProfileModalOpen = false;
   bioUpdateRequest: UserUpdateRequest = {
     bio: ''
-  };
-  activeTab: 'basic' | 'profile' = 'basic';
+  }
+
+  authenticationRequest: AuthenticationRequest = {
+    email: '',
+    password: ''
+  }
+  activeTab: 'basic' | 'profile' | 'security' = 'basic';
   allLocations: { name: string; iconPath: string }[] = [];
 
   profilePicture: File | null = null;
@@ -92,6 +100,10 @@ export class UserPrivateProfileComponent implements OnInit {
           lastName : user.lastName,
           username : user.username,
           location: this.userResponse.location?.name as undefined
+        }
+        this.authenticationRequest = {
+          email: user.email!,
+          password: ''
         }
       }
     });
@@ -217,23 +229,24 @@ export class UserPrivateProfileComponent implements OnInit {
   }
 
   saveProfile() {
-    // if (this.bioUpdateRequest.bio === this.userResponse.bio) {
     if (this.userRequest.username === this.userResponse.username &&
       this.userRequest.firstName === this.userResponse.firstName &&
       this.userRequest.lastName === this.userResponse.lastName &&
       this.userRequest.email === this.userResponse.email &&
       this.userRequest.location === this.userResponse.location?.name as undefined ) {
-
+        this.closeModal()
+    } else {
+      this.userService.updateUserProfile({
+        body: this.userRequest
+      }).subscribe({
+        next: () => {
+          this.isEditProfileModalOpen = false;
+          this.showSuccess('Profile was successfully updated')
+          this.loadUserPrivateProfile()
+        }
+      })
     }
-    this.userService.updateUserProfile({
-      body: this.userRequest
-    }).subscribe({
-      next: () => {
-        this.isEditProfileModalOpen = false;
-        this.showSuccess('Profile was successfully updated')
-        this.loadUserPrivateProfile()
-      }
-    })
+
     if (this.profilePicture) {
       const formData = new FormData();
       formData.append('file', this.profilePicture);
@@ -242,8 +255,11 @@ export class UserPrivateProfileComponent implements OnInit {
       ).subscribe({
         next: () => {
           this.loadUserPrivateProfile()
+          this.showSuccess('Profile was successfully updated')
         }
       });
+    } else {
+      this.closeModal()
     }
 
     if (this.profileBanner) {
@@ -254,8 +270,11 @@ export class UserPrivateProfileComponent implements OnInit {
       ).subscribe(({
         next: () => {
           this.loadUserPrivateProfile()
+          this.showSuccess('Profile was successfully updated')
         }
       }))
+    } else {
+      this.closeModal()
     }
   }
 
@@ -319,5 +338,15 @@ export class UserPrivateProfileComponent implements OnInit {
       }
       reader.readAsDataURL(this.profileBanner);
     }
+  }
+
+  senResetLink() {
+    this.authenticationService.processForgotPasswordRequest({
+      body: this.authenticationRequest
+    }).subscribe({
+      next: () => {
+        this.showSuccess('reset link was send to you email')
+    }
+    })
   }
 }

@@ -35,7 +35,7 @@ export class LoginComponent {
   }
 
   login() {
-
+    this.errorMessage = '';
     if (this.errorMessage.length) {
       return;
     }
