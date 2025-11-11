@@ -34,5 +34,6 @@ public class UserPrivateResponse {
   private byte [] userProfilePicture;
   private byte [] bannerImage;
   private String profileColor;
+  private Long predefinedBanner;
 
 }

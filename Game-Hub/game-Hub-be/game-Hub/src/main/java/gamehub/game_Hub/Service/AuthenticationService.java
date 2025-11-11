@@ -64,6 +64,7 @@ public class AuthenticationService {
         .status(Status.OFFLINE)
         .location(Location.UNKNOWN)
         .profileColor(getRandomColor())
+        .predefinedBanner(1L)
         .build();
 
     userRepository.save(user);

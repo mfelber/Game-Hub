@@ -48,6 +48,7 @@ export class UserPrivateProfileComponent implements OnInit {
   successMessage: string | null = null;
   toastVisible = false;
   genreResponse: any[] = [];
+  isBannerPredefined = true;
   userResponse: UserPrivateResponse = {
     bio: '',
     badges: [],
@@ -59,7 +60,8 @@ export class UserPrivateProfileComponent implements OnInit {
     bannerImage: [],
     wishlistCount: 0,
     libraryCount: 0,
-    profileColor: ''
+    profileColor: '',
+
   };
   userRequest: UserUpdateRequest = {
     email: this.userResponse.email
@@ -82,6 +84,7 @@ export class UserPrivateProfileComponent implements OnInit {
   profilePicture: File | null = null;
   previewImage: string | undefined;
   isPreviewImageInserted = false;
+  isPreviewBannerInserted = false;
   previewBanner: string | undefined;
   profileBanner: File | null = null;
 
@@ -106,6 +109,11 @@ export class UserPrivateProfileComponent implements OnInit {
         this.authenticationRequest = {
           email: user.email!,
           password: ''
+        }
+        if (user.bannerImage) {
+          this.isBannerPredefined = false
+        } else {
+          this.isBannerPredefined = true
         }
 
       }
@@ -147,7 +155,7 @@ export class UserPrivateProfileComponent implements OnInit {
     if (user.bannerImage) {
       return 'data:image/jpeg;base64,' + user.bannerImage;
     }
-    return 'https://images.pexels.com/photos/1054655/pexels-photo-1054655.jpeg';
+    return;
   }
 
   goToGame(gameId: any) {
@@ -276,6 +284,7 @@ export class UserPrivateProfileComponent implements OnInit {
       this.http.post('http://localhost:8088/api/v1/profile/banner', formData
       ).subscribe(({
         next: () => {
+          this.isBannerPredefined = false;
           this.loadUserPrivateProfile()
           this.showSuccess('Profile was successfully updated')
         }
@@ -289,15 +298,17 @@ export class UserPrivateProfileComponent implements OnInit {
     this.isProfileModalOpen = false;
     this.isEditProfileModalOpen = false;
     this.isEditBioModalOpen = false;
-    this.bioUpdateRequest.bio = this.userResponse.bio
-    this.userRequest.location = this.userResponse.location?.name as undefined
-    this.userRequest.username = this.userResponse.username
-    this.userRequest.firstName = this.userResponse.firstName
-    this.userRequest.lastName = this.userResponse.lastName
-    this.userRequest.email = this.userResponse.email
+    this.bioUpdateRequest.bio = this.userResponse.bio;
+    this.userRequest.location = this.userResponse.location?.name as undefined;
+    this.userRequest.username = this.userResponse.username;
+    this.userRequest.firstName = this.userResponse.firstName;
+    this.userRequest.lastName = this.userResponse.lastName;
+    this.userRequest.email = this.userResponse.email;
     this.previewImage = 'data:image/jpeg;base64,' + this.userResponse.userProfilePicture;
     this.previewBanner = 'data:image/jpeg;base64,' + this.userResponse.bannerImage;
-    this.activeTab = 'basic'
+    this.activeTab = 'basic';
+    this.isPreviewBannerInserted = false;
+    this.isPreviewImageInserted = false;
   }
 
   editProfile() {
@@ -343,6 +354,7 @@ export class UserPrivateProfileComponent implements OnInit {
       const reader = new FileReader();
       reader.onload = () => {
         this.previewBanner = reader.result as string;
+        this.isPreviewBannerInserted = true;
       }
       reader.readAsDataURL(this.profileBanner);
     }

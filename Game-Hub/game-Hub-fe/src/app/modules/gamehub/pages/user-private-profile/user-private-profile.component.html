@@ -8,9 +8,17 @@
     </div>
   </div>
   <div class="h-48 w-full overflow-hidden ">
-    <img
+
+
+    <img *ngIf="!isBannerPredefined"
       [src]=getBanner(userResponse)
-      alt="Game cover"
+      alt="Banner cover"
+      class="w-full h-full object-cover rounded-t-2xl border-t border-r border-l border-white/20"
+    />
+
+    <img *ngIf="isBannerPredefined"
+      [src]="'assets/banners/banner_'+userResponse.predefinedBanner+'.jpg'"
+      alt="Banner cover"
       class="w-full h-full object-cover rounded-t-2xl border-t border-r border-l border-white/20"
     />
   </div>
@@ -67,7 +75,8 @@
 
       <div class="flex flex-col gap-2">
         <div class="relative w-full h-40 rounded-xl overflow-hidden mb-5">
-          <img [src]="getBanner(userResponse)" class="w-full h-full object-cover"/>
+          <img *ngIf="!isBannerPredefined" [src]="getBanner(userResponse)" class="w-full h-full object-cover"/>
+          <img *ngIf="isBannerPredefined" [src]="'assets/banners/banner_'+userResponse.predefinedBanner+'.jpg'" class="w-full h-full object-cover"/>
           <div class="absolute inset-0 bg-black/30"></div>
 
           <img *ngIf="userHasProfilePicture"
@@ -272,10 +281,19 @@
         <div *ngIf="activeTab === 'profile'" class="flex flex-col gap-6">
           <!-- Banner -->
           <div class="relative w-full h-48 rounded-xl mb-5">
-            <img
-              [src]="previewBanner || getBanner(userResponse)"
+
+
+
+            <img *ngIf="isBannerPredefined && !isPreviewBannerInserted"
+              [src]="'assets/banners/banner_' +userResponse.predefinedBanner"
               class="w-full h-full rounded-2xl object-cover"
               alt="Profile Banner"
+            />
+
+            <img *ngIf="(!isBannerPredefined && isPreviewBannerInserted) || !isBannerPredefined"
+                 [src]="previewBanner || getBanner(userResponse)"
+                 class="w-full h-full rounded-2xl object-cover"
+                 alt="Profile Banner"
             />
 
             <label

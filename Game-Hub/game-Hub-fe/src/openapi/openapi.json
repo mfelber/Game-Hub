@@ -1834,6 +1834,10 @@
           },
           "profileColor": {
             "type": "string"
+          },
+          "predefinedBanner": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       },
@@ -1932,6 +1936,10 @@
           },
           "profileColor": {
             "type": "string"
+          },
+          "predefinedBanner": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       },

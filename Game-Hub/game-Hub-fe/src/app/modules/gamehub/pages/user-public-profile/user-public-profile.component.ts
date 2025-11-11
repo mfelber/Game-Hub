@@ -46,6 +46,7 @@ export class UserPublicProfileComponent implements OnInit{
   }
 
   userHasProfilePicture = true
+  isBannerPredefined = true;
 
 
   private loadUserPublicProfile() {
@@ -58,6 +59,11 @@ export class UserPublicProfileComponent implements OnInit{
           this.userHasProfilePicture = true
         } else {
           this.userHasProfilePicture = false
+        }
+        if (user.bannerImage){
+          this.isBannerPredefined = false;
+        } else {
+          this.isBannerPredefined = true
         }
       }
     });

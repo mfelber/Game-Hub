@@ -1,1 +1,1 @@
-ALTER TABLE game_hub."user" ADD profile_color VARCHAR(255);
+ALTER TABLE IF EXISTS game_hub."user" ADD profile_color VARCHAR(255);

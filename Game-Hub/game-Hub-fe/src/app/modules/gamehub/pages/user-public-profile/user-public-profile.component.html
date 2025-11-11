@@ -1,6 +1,13 @@
 <div class="relative w-full items-center">
   <div class="h-48 w-full overflow-hidden">
-    <img
+
+    <img *ngIf="isBannerPredefined"
+         [src]="'assets/banners/banner_'+userResponse.predefinedBanner+'.jpg'"
+         alt="Game cover"
+         class="w-full h-full object-cover rounded-t-2xl border-t border-r border-l border-white/20"
+    />
+
+    <img *ngIf="!isBannerPredefined"
       [src]="getBanner(userResponse)"
       alt="Game cover"
       class="w-full h-full object-cover rounded-t-2xl border-t border-r border-l border-white/20"
