@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import gamehub.game_Hub.File.FileStorageService;
@@ -16,6 +17,7 @@ import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Repository.genre.GenreRepository;
 import gamehub.game_Hub.Repository.user.UserRepository;
 import gamehub.game_Hub.Mapper.UserMapper;
+import gamehub.game_Hub.Request.BannerRequest;
 import gamehub.game_Hub.Response.StatusResponse;
 import gamehub.game_Hub.Response.UserPrivateResponse;
 import gamehub.game_Hub.Response.UserPublicResponse;
@@ -88,6 +90,17 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  public Long setPredefinedBanner(BannerRequest bannerRequest, final Authentication connectedUser) {
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+    // user = user.toBuilder().predefinedBanner(bannerId).banner(null).build();
+    user = user.toBuilder().banner(bannerRequest.getBannerPath()).bannerType("PREDEFINED").build();
+    return userRepository.save(user).getId();
+  }
+
+  @Override
   public StatusResponse getUserStatus(final Authentication connectedUser) {
     User authUser = (User) connectedUser.getPrincipal();
     User user = userRepository.findById(authUser.getId())
@@ -114,7 +127,9 @@ public class UserServiceImpl implements UserService {
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
 
     var bannerImage = fileStorageService.saveUserImages(file, user.getId());
+    // user.setPredefinedBanner(null);
     user.setBanner(bannerImage);
+    user.setBannerType("CUSTOM");
     userRepository.save(user);
   }
 

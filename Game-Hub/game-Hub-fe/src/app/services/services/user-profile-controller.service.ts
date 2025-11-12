@@ -21,6 +21,8 @@ import { getUserPublic } from '../fn/user-profile-controller/get-user-public';
 import { GetUserPublic$Params } from '../fn/user-profile-controller/get-user-public';
 import { getUserStatus } from '../fn/user-profile-controller/get-user-status';
 import { GetUserStatus$Params } from '../fn/user-profile-controller/get-user-status';
+import { setPredefinedBanner } from '../fn/user-profile-controller/set-predefined-banner';
+import { SetPredefinedBanner$Params } from '../fn/user-profile-controller/set-predefined-banner';
 import { setStatusToAway } from '../fn/user-profile-controller/set-status-to-away';
 import { SetStatusToAway$Params } from '../fn/user-profile-controller/set-status-to-away';
 import { setStatusToOffline } from '../fn/user-profile-controller/set-status-to-offline';
@@ -172,6 +174,35 @@ export class UserProfileControllerService extends BaseService {
     );
   }
 
+  /** Path part for operation `setPredefinedBanner()` */
+  static readonly SetPredefinedBannerPath = '/profile/predefined/banner';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `setPredefinedBanner()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  setPredefinedBanner$Response(params: SetPredefinedBanner$Params, context?: HttpContext): Observable<StrictHttpResponse<{
+}>> {
+    return setPredefinedBanner(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `setPredefinedBanner$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  setPredefinedBanner(params: SetPredefinedBanner$Params, context?: HttpContext): Observable<{
+}> {
+    return this.setPredefinedBanner$Response(params, context).pipe(
+      map((r: StrictHttpResponse<{
+}>): {
+} => r.body)
+    );
+  }
+
   /** Path part for operation `uploadProfileImage()` */
   static readonly UploadProfileImagePath = '/profile/image';
 
@@ -202,7 +233,7 @@ export class UserProfileControllerService extends BaseService {
   }
 
   /** Path part for operation `uploadBannerImage()` */
-  static readonly UploadBannerImagePath = '/profile/banner';
+  static readonly UploadBannerImagePath = '/profile/custom/banner';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.

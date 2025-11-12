@@ -308,6 +308,36 @@
         }
       }
     },
+    "/profile/predefined/banner": {
+      "post": {
+        "tags": [
+          "user-profile-controller"
+        ],
+        "operationId": "setPredefinedBanner",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BannerRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/profile/image": {
       "post": {
         "tags": [
@@ -346,7 +376,7 @@
         }
       }
     },
-    "/profile/banner": {
+    "/profile/custom/banner": {
       "post": {
         "tags": [
           "user-profile-controller"
@@ -1490,6 +1520,17 @@
           }
         }
       },
+      "BannerRequest": {
+        "type": "object",
+        "properties": {
+          "bannerPath": {
+            "type": "string"
+          },
+          "bannerType": {
+            "type": "string"
+          }
+        }
+      },
       "RegistrationRequest": {
         "required": [
           "email",
@@ -1934,12 +1975,14 @@
               "format": "byte"
             }
           },
-          "profileColor": {
+          "bannerType": {
             "type": "string"
           },
-          "predefinedBanner": {
-            "type": "integer",
-            "format": "int64"
+          "predefinedBannerPath": {
+            "type": "string"
+          },
+          "profileColor": {
+            "type": "string"
           }
         }
       },

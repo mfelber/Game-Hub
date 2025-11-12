@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Repository.user.UserRepository;
+import gamehub.game_Hub.Request.BannerRequest;
 import gamehub.game_Hub.Response.StatusResponse;
 import gamehub.game_Hub.Response.UserPrivateResponse;
 import gamehub.game_Hub.Response.UserPublicResponse;
@@ -108,7 +109,7 @@ public class UserProfileController {
     return ResponseEntity.accepted().build();
   }
   
-  @PostMapping(value = "/banner", consumes = "multipart/form-data")
+  @PostMapping(value = "/custom/banner", consumes = "multipart/form-data")
   public ResponseEntity<?> uploadBannerImage(
       @Parameter()
       @RequestPart("file") MultipartFile file,
@@ -117,6 +118,14 @@ public class UserProfileController {
     userService.uploadBannerImage(connectedUser,file);
     return ResponseEntity.accepted().build();
   }
+
+  @PostMapping("/predefined/banner")
+    public ResponseEntity<?> setPredefinedBanner(@RequestBody BannerRequest bannerRequest, final Authentication connectedUser) {
+
+    userService.setPredefinedBanner(bannerRequest, connectedUser);
+    return ResponseEntity.accepted().build();
+  }
+
 
   @PostMapping("/status/online")
   public ResponseEntity<Void> setStatusToOnline(final Authentication connectedUser) {

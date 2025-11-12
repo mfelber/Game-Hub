@@ -5,6 +5,7 @@
 export type { AuthenticationRequest } from './models/authentication-request';
 export type { AuthenticationResponse } from './models/authentication-response';
 export type { BadgeResponse } from './models/badge-response';
+export type { BannerRequest } from './models/banner-request';
 export type { ForgotPasswordRequest } from './models/forgot-password-request';
 export type { Game } from './models/game';
 export type { GameRequest } from './models/game-request';

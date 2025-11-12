@@ -71,7 +71,6 @@ public class UserMapper {
         .userProfilePicture(FileUtils.readCoverFromLocation(user.getUserProfilePicture()))
         .bannerImage(FileUtils.readCoverFromLocation(user.getBanner()))
         .profileColor(user.getProfileColor())
-        .predefinedBanner(user.getPredefinedBanner())
         .build();
   }
 
@@ -82,6 +81,7 @@ public class UserMapper {
         .name()
         .substring(1)
         .toLowerCase() + " " + user.getCreatedAt().getYear();
+
 
     return UserPrivateResponse.builder()
         .userId(user.getId())
@@ -122,9 +122,9 @@ public class UserMapper {
         .userProfilePicture(FileUtils.readCoverFromLocation(user.getUserProfilePicture()))
         .bannerImage(FileUtils.readCoverFromLocation(user.getBanner()))
         .profileColor(user.getProfileColor())
-        .predefinedBanner(user.getPredefinedBanner())
+        .bannerType(user.getBannerType())
+        .predefinedBannerPath(user.getBanner())
         .build();
-
   }
 
   public StatusResponse toUserStatusResponse(final User user) {
