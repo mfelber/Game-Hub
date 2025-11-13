@@ -15,6 +15,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import gamehub.game_Hub.Module.Badge;
+import gamehub.game_Hub.Module.CardColor;
 import gamehub.game_Hub.Module.Game;
 import gamehub.game_Hub.Module.Genre;
 import gamehub.game_Hub.Role.Role;
@@ -31,7 +32,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -68,6 +71,10 @@ public class User implements UserDetails, Principal {
   private String userProfilePicture;
 
   private String banner;
+
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "card_color_id")
+  private CardColor cardColor;
 
   @Column(name = "banner_type")
   private String bannerType;

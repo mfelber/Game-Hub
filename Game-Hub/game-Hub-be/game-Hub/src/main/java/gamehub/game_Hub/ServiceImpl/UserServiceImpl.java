@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import gamehub.game_Hub.File.FileStorageService;
+import gamehub.game_Hub.Module.CardColor;
 import gamehub.game_Hub.Module.Genre;
 import gamehub.game_Hub.Module.User.User;
+import gamehub.game_Hub.Repository.CardColorRepository;
 import gamehub.game_Hub.Repository.genre.GenreRepository;
 import gamehub.game_Hub.Repository.user.UserRepository;
 import gamehub.game_Hub.Mapper.UserMapper;
@@ -38,6 +40,8 @@ public class UserServiceImpl implements UserService {
 
   private final FileStorageService fileStorageService;
 
+  private final CardColorRepository cardColorRepository;
+
   @Override
   public Long updateUserProfile(final Authentication connectedUser,
       final UserUpdateRequest userUpdateRequest) {
@@ -47,12 +51,17 @@ public class UserServiceImpl implements UserService {
     // TODO try this
     // user = userMapper.toUser(userUpdateRequest);
 
+    CardColor cardColor = cardColorRepository.findById(userUpdateRequest.getCardColorId())
+        .orElseThrow(
+            () -> new EntityNotFoundException("No card color found with id: " + userUpdateRequest.getCardColorId()));
+
     user = user.toBuilder()
         .firstName(userUpdateRequest.getFirstName())
         .lastName(userUpdateRequest.getLastName())
         .username(userUpdateRequest.getUsername())
         .email(userUpdateRequest.getEmail())
         .location(userUpdateRequest.getLocation())
+        .cardColor(cardColor)
         .build();
 
     return userRepository.save(user).getId();
@@ -162,7 +171,6 @@ public class UserServiceImpl implements UserService {
     user.setStatus(AWAY);
     userRepository.save(user);
   }
-
 
   @Transactional
   public void updateFavoriteGenres(final Set<Long> genresIds, final Authentication connectedUser) {

@@ -143,9 +143,9 @@
                 <img [src]="userResponse.location?.iconPath" class="w-15 h-10"/>
               </div>
               <div class="text-wrap w-50 text-xs">
-                <!--                TODO users selected colors for profile-->
-                Selected Color for profile cards
-                <div class="bg-red-100 w-5 h-5 border-1 border-black mt-1">
+                Selected Color
+                <div class="w-12 h-12 border-2 border-black rounded-xl mt-1"
+                     [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
                 </div>
               </div>
             </div>
@@ -375,16 +375,31 @@
             </button>
 
           </div>
-          <div *ngIf="showPredefinedBanners" class="grid grid-cols-2 gap-4">
-            <img *ngFor="let bannerId of predefinedBanners"
-                 (click)="selectedBanner(bannerId)"
-                 [src]="'assets/banners/banner_' + bannerId + '.jpg'"
-                 class="w-75 h-20 rounded-xl object-cover cursor-pointer border-2"
-                 [ngClass]="{'border-gray-500': selectedBannerId === bannerId, 'border-transparent': selectedBannerId !== bannerId}">
-          </div>
+          <div class="flex flex-col gap-6">
+            <div>
+              <label *ngIf="showPredefinedBanners" class="text-gray-300 text-sm mb-2 block">Select a banner</label>
+              <div *ngIf="showPredefinedBanners" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <img *ngFor="let bannerId of predefinedBanners"
+                     (click)="selectedBanner(bannerId)"
+                     [src]="'assets/banners/banner_' + bannerId + '.jpg'"
+                     class="w-full h-20 rounded-xl object-cover cursor-pointer border-2"
+                     [ngClass]="{'border-gray-500': selectedBannerId === bannerId, 'border-transparent': selectedBannerId !== bannerId}">
+              </div>
+            </div>
 
-          Colors for cards
-          TODO add colors
+            <div>
+              <label class="text-gray-300 text-sm mb-2 block">Colors for cards</label>
+              <div class="flex flex-wrap gap-4">
+                <div *ngFor="let cardColor of cardColorsResponse" class="flex flex-col items-center">
+                  <div (click)="selectColor(cardColor.id)"
+                       class="w-12 h-12 border-2 border-black rounded-xl cursor-pointer hover:scale-110 transition-transform"
+                       [ngStyle]="{'background-color': cardColor.colorCode}">
+                  </div>
+                  <p class="text-xs text-center mt-1">{{ cardColor.colorName }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!--        Privacy & Security-->

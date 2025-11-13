@@ -12,6 +12,8 @@ import {LocationControllerService} from '../../../../services/services/location-
 import {HttpClient} from '@angular/common/http';
 import {AuthenticationService} from '../../../../services/services/authentication.service';
 import {AuthenticationRequest} from '../../../../services/models/authentication-request';
+import {CardColorControllerService} from '../../../../services/services/card-color-controller.service';
+import {CardColorResponse} from '../../../../services/models/card-color-response';
 
 @Component({
   selector: 'app-user-profile',
@@ -40,6 +42,7 @@ export class UserPrivateProfileComponent implements OnInit {
     private locationService: LocationControllerService,
     private http: HttpClient,
     private authenticationService: AuthenticationService,
+    private cardColorService: CardColorControllerService
   ) {
   }
 
@@ -48,6 +51,7 @@ export class UserPrivateProfileComponent implements OnInit {
   successMessage: string | null = null;
   toastVisible = false;
   genreResponse: any[] = [];
+  cardColorsResponse: any [] = [];
   userResponse: UserPrivateResponse = {
     bio: '',
     badges: [],
@@ -217,6 +221,15 @@ export class UserPrivateProfileComponent implements OnInit {
     })
   }
 
+  private getColorsForcard() {
+    this.cardColorService.getColors().subscribe({
+      next: (colors) => {
+        this.cardColorsResponse = colors;
+        console.log(colors)
+    }
+    })
+  }
+
   selectedGenre(id: number) {
     if (this.selectedGenres.has(id)) {
       this.selectedGenres.delete(id)
@@ -313,6 +326,7 @@ export class UserPrivateProfileComponent implements OnInit {
     this.closeModal();
     this.isEditProfileModalOpen = true;
     this.getLocations();
+    this.getColorsForcard();
   }
 
   getLocations() {
@@ -406,5 +420,9 @@ export class UserPrivateProfileComponent implements OnInit {
   removeProfileImage() {
     this.isPreviewImageInserted = false;
     this.previewImage = undefined;
+  }
+
+  selectColor(id: number) {
+    console.log('you have selected', id)
   }
 }

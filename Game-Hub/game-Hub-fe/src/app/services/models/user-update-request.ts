@@ -4,6 +4,7 @@
 
 export interface UserUpdateRequest {
   bio?: string;
+  cardColorId?: number;
   email?: string;
   firstName?: string;
   lastName?: string;

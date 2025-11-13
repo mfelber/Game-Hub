@@ -1201,6 +1201,29 @@
         }
       }
     },
+    "/color/all-colors": {
+      "get": {
+        "tags": [
+          "card-color-controller"
+        ],
+        "operationId": "getColors",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CardColorResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/auth/reset-token-info": {
       "get": {
         "tags": [
@@ -1517,6 +1540,10 @@
               "US",
               "UNKNOWN"
             ]
+          },
+          "cardColorId": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       },
@@ -1884,6 +1911,21 @@
           }
         }
       },
+      "CardColorResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "colorName": {
+            "type": "string"
+          },
+          "colorCode": {
+            "type": "string"
+          }
+        }
+      },
       "UserPrivateResponse": {
         "type": "object",
         "properties": {
@@ -1985,6 +2027,9 @@
           },
           "profileColor": {
             "type": "string"
+          },
+          "cardColor": {
+            "$ref": "#/components/schemas/CardColorResponse"
           }
         }
       },
