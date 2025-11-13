@@ -92,7 +92,7 @@ export class UserPrivateProfileComponent implements OnInit {
   private loadUserPrivateProfile() {
     this.userService.getUserPrivate().subscribe({
       next: (user) => {
-
+        console.log(this.previewImage)
         this.userResponse = user;
         console.log(user)
         this.bioUpdateRequest.bio = user.bio || '';
@@ -353,6 +353,7 @@ export class UserPrivateProfileComponent implements OnInit {
       reader.onload = () => {
         this.previewBanner = reader.result as string;
         this.isPreviewBannerInserted = true;
+        this.selectedBannerId = null;
       }
       reader.readAsDataURL(this.profileBanner);
     }
@@ -399,5 +400,11 @@ export class UserPrivateProfileComponent implements OnInit {
   removeSelectedPredefinedBanner() {
     this.selectedBannerId = null;
     this.previewBanner = undefined;
+    this.isPreviewBannerInserted = false;
+  }
+
+  removeProfileImage() {
+    this.isPreviewImageInserted = false;
+    this.previewImage = undefined;
   }
 }

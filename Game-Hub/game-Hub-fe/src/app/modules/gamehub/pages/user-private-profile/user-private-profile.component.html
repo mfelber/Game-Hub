@@ -283,11 +283,7 @@
         <!-- Profile & Banner Tab -->
 
         <div *ngIf="activeTab === 'profile'" class="flex flex-col gap-6">
-                      <pre>
-{{ userResponse.bannerType }}
-                        {{ previewBanner }}
-                        {{ userResponse.predefinedBannerPath }}
-</pre>
+
           <!-- Banner -->
           <div class="relative w-full h-48 rounded-xl mb-5">
 
@@ -310,6 +306,13 @@
                  class="w-full h-full rounded-2xl object-cover"
                  alt="Profile Banner"
             />
+
+            <label *ngIf="(isPreviewBannerInserted) || (selectedBannerId)"
+                   (click)="removeSelectedPredefinedBanner()"
+                   class="absolute bg-red-500 -top-2 -left-2 text-white flex items-center justify-center w-8 h-8 rounded-full cursor-pointer hover:bg-red-600 transition-colors duration-200"
+            >
+              <i class="fa-solid fa-trash-can"></i>
+            </label>
 
             <label
               for="bannerFile"
@@ -342,6 +345,13 @@
                      alt="Profile Picture"
                 />
 
+                <label *ngIf="isPreviewImageInserted"
+                  (click)="removeProfileImage()"
+                  class="absolute bg-red-500 -top-2 -left-2 text-white flex items-center justify-center w-8 h-8 rounded-full cursor-pointer hover:bg-red-600 transition-colors duration-200"
+                >
+                  <i class="fa-solid fa-trash-can"></i>
+                </label>
+
                 <label
                   for="formFile"
                   class="absolute bg-black -top-2 -right-2 text-white flex items-center justify-center w-8 h-8 rounded-full cursor-pointer hover:bg-gray-700 transition-colors duration-200"
@@ -362,12 +372,6 @@
           <div class="flex justify-between">
             <button (click)="showBanners()" class="text-sm w-52 cursor-pointer flex items-center">
               Show predefined banners <i class="fa-solid fa-angle-down ml-1"></i>
-            </button>
-
-
-            <button *ngIf="selectedBannerId" (click)="removeSelectedPredefinedBanner()"
-                    class="text-xs cursor-pointer text-red-500 flex items-center">
-              <i class="fa-solid fa-xmark mr-1"></i> Remove selected banner
             </button>
 
           </div>
