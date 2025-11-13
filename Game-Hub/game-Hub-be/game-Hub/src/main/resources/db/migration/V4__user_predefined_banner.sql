@@ -1,1 +1,1 @@
-ALTER TABLE game_hub."user" ADD predefined_banner BIGSERIAL;
+ALTER TABLE game_hub."user" ADD banner_type VARCHAR(255)

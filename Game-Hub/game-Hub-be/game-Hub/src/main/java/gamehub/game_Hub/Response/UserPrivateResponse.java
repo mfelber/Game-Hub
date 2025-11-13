@@ -33,7 +33,8 @@ public class UserPrivateResponse {
   private Set<GameResponseShort> recommendedGames;
   private byte [] userProfilePicture;
   private byte [] bannerImage;
+  private String bannerType;
+  private String predefinedBannerPath;
   private String profileColor;
-  private Long predefinedBanner;
 
 }

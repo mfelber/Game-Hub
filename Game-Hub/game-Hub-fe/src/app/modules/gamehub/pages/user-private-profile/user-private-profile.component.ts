@@ -48,7 +48,6 @@ export class UserPrivateProfileComponent implements OnInit {
   successMessage: string | null = null;
   toastVisible = false;
   genreResponse: any[] = [];
-  isBannerPredefined = true;
   userResponse: UserPrivateResponse = {
     bio: '',
     badges: [],
@@ -68,7 +67,7 @@ export class UserPrivateProfileComponent implements OnInit {
   };
   isEditBioModalOpen = false;
   isEditGenresModalOpen = false;
-  isEditProfileModalOpen= false;
+  isEditProfileModalOpen = false;
   isProfileModalOpen = false;
   bioUpdateRequest: UserUpdateRequest = {
     bio: ''
@@ -87,10 +86,13 @@ export class UserPrivateProfileComponent implements OnInit {
   isPreviewBannerInserted = false;
   previewBanner: string | undefined;
   profileBanner: File | null = null;
+  showPredefinedBanners = false;
+  selectedBannerId: number | null = null;
 
   private loadUserPrivateProfile() {
     this.userService.getUserPrivate().subscribe({
       next: (user) => {
+
         this.userResponse = user;
         console.log(user)
         this.bioUpdateRequest.bio = user.bio || '';
@@ -100,22 +102,16 @@ export class UserPrivateProfileComponent implements OnInit {
           a.name!.localeCompare(b.name!)
         );
         this.userRequest = {
-          email : user.email,
-          firstName : user.firstName,
-          lastName : user.lastName,
-          username : user.username,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          username: user.username,
           location: this.userResponse.location?.name as undefined
         }
         this.authenticationRequest = {
           email: user.email!,
           password: ''
         }
-        if (user.bannerImage) {
-          this.isBannerPredefined = false
-        } else {
-          this.isBannerPredefined = true
-        }
-
       }
     });
   }
@@ -155,7 +151,7 @@ export class UserPrivateProfileComponent implements OnInit {
     if (user.bannerImage) {
       return 'data:image/jpeg;base64,' + user.bannerImage;
     }
-    return;
+    return user.predefinedBannerPath;
   }
 
   goToGame(gameId: any) {
@@ -236,62 +232,57 @@ export class UserPrivateProfileComponent implements OnInit {
     this.isEditGenresModalOpen = false
   }
 
-  removeFavoriteGenre(id:any) {
+  removeFavoriteGenre(id: any) {
     this.favoriteGenreIds = this.favoriteGenreIds.filter(g => g !== id);
     this.selectedGenres.delete(id);
 
   }
 
-  saveProfile() {
-    if (this.userRequest.username === this.userResponse.username &&
-      this.userRequest.firstName === this.userResponse.firstName &&
-      this.userRequest.lastName === this.userResponse.lastName &&
-      this.userRequest.email === this.userResponse.email &&
-      this.userRequest.location === this.userResponse.location?.name as undefined ) {
-        this.closeModal()
-    } else {
-      this.userService.updateUserProfile({
-        body: this.userRequest
-      }).subscribe({
-        next: () => {
-          this.isEditProfileModalOpen = false;
-          this.showSuccess('Profile was successfully updated')
-          this.loadUserPrivateProfile()
-        }
-      })
-    }
+  async saveProfile() {
+    try {
+      if (this.selectedBannerId !== null) {
+        const bannerPath = "/assets/banners/banner_" + this.selectedBannerId + ".jpg";
+        await this.userService.setPredefinedBanner({body: {bannerPath}}).toPromise();
+        this.profileBanner = null;
 
-    if (this.profilePicture) {
-      const formData = new FormData();
-      formData.append('file', this.profilePicture);
+      } else if (this.profileBanner) {
+        const formData = new FormData();
+        formData.append('file', this.profileBanner);
+        await this.http.post('http://localhost:8088/api/v1/profile/custom/banner', formData).toPromise();
+      }
 
-      this.http.post('http://localhost:8088/api/v1/profile/image', formData
-      ).subscribe({
-        next: () => {
+      if (this.profilePicture) {
+        const formData = new FormData();
+        formData.append('file', this.profilePicture);
+
+
+        try {
+          await this.http.post('http://localhost:8088/api/v1/profile/image', formData).toPromise()
           this.userHasProfilePicture = true;
-          this.loadUserPrivateProfile()
-          this.showSuccess('Profile was successfully updated')
+        } catch (err) {
+          console.error(err)
         }
-      });
-    } else {
-      this.closeModal()
+
+      }
+
+      const changesExist = this.userRequest.username !== this.userResponse.username ||
+        this.userRequest.firstName !== this.userResponse.firstName ||
+        this.userRequest.lastName !== this.userResponse.lastName ||
+        this.userRequest.email !== this.userResponse.email ||
+        this.userRequest.location !== this.userResponse.location?.name;
+
+      if (changesExist) {
+        await this.userService.updateUserProfile({
+          body: this.userRequest
+        }).toPromise();
+      }
+      this.loadUserPrivateProfile();
+      this.closeModal();
+      this.showSuccess('You have successfully updated profile')
+    } catch (err) {
+      console.error(err)
     }
 
-    if (this.profileBanner) {
-      const formData = new FormData();
-      formData.append('file', this.profileBanner);
-
-      this.http.post('http://localhost:8088/api/v1/profile/banner', formData
-      ).subscribe(({
-        next: () => {
-          this.isBannerPredefined = false;
-          this.loadUserPrivateProfile()
-          this.showSuccess('Profile was successfully updated')
-        }
-      }))
-    } else {
-      this.closeModal()
-    }
   }
 
   closeModal() {
@@ -304,11 +295,18 @@ export class UserPrivateProfileComponent implements OnInit {
     this.userRequest.firstName = this.userResponse.firstName;
     this.userRequest.lastName = this.userResponse.lastName;
     this.userRequest.email = this.userResponse.email;
-    this.previewImage = 'data:image/jpeg;base64,' + this.userResponse.userProfilePicture;
-    this.previewBanner = 'data:image/jpeg;base64,' + this.userResponse.bannerImage;
+    this.previewImage = this.userResponse.userProfilePicture
+      ? 'data:image/jpeg;base64,' + this.userResponse.userProfilePicture
+      : undefined;
+
+    this.previewBanner = this.userResponse.bannerImage
+      ? 'data:image/jpeg;base64,' + this.userResponse.bannerImage
+      : undefined;
     this.activeTab = 'basic';
     this.isPreviewBannerInserted = false;
     this.isPreviewImageInserted = false;
+    this.showPredefinedBanners = false;
+    this.selectedBannerId = null;
   }
 
   editProfile() {
@@ -360,13 +358,46 @@ export class UserPrivateProfileComponent implements OnInit {
     }
   }
 
-  senResetLink() {
+  sendResetLink() {
     this.authenticationService.processForgotPasswordRequest({
       body: this.authenticationRequest
     }).subscribe({
       next: () => {
         this.showSuccess('reset link was send to you email')
-    }
+      }
     })
+  }
+
+  showBanners() {
+    this.showPredefinedBanners = !this.showPredefinedBanners;
+  }
+
+  predefinedBanners = [1, 2, 3, 4];
+
+  selectedBanner(bannerId: number) {
+    if (this.selectedBannerId === bannerId) {
+      this.selectedBannerId = null;
+      this.previewBanner = undefined;
+    } else {
+      this.selectedBannerId = bannerId;
+      this.previewBanner = `assets/banners/banner_${bannerId}.jpg`;
+    }
+    console.log(bannerId);
+
+  }
+
+  get currentBanner(): string {
+    if (this.userResponse.bannerType === 'PREDEFINED') {
+      return this.previewBanner || this.userResponse.predefinedBannerPath!;
+    }
+    if (this.userResponse.bannerType === 'CUSTOM') {
+      return this.previewBanner || this.getBanner(this.userResponse)!;
+    }
+    return 'assets/default-banner.jpg'; // fallback
+  }
+
+  removeSelectedPredefinedBanner() {
+    this.selectedBannerId = null;
+    this.previewBanner = undefined;
   }
 }

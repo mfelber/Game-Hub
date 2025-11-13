@@ -9,6 +9,7 @@ import { LocationResponse } from '../models/location-response';
 export interface UserPrivateResponse {
   badges?: Array<BadgeResponse>;
   bannerImage?: Array<string>;
+  bannerType?: string;
   bio?: string;
   email?: string;
   favoriteGames?: Array<GameResponseShort>;
@@ -19,7 +20,7 @@ export interface UserPrivateResponse {
   libraryCount?: number;
   location?: LocationResponse;
   playRecently?: Array<GameResponseShort>;
-  predefinedBanner?: number;
+  predefinedBannerPath?: string;
   profileColor?: string;
   recommendedGames?: Array<GameResponseShort>;
   status?: 'ONLINE' | 'OFFLINE' | 'AWAY';

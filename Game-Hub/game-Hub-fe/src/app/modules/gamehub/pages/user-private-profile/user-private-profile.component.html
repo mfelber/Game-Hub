@@ -10,23 +10,24 @@
   <div class="h-48 w-full overflow-hidden ">
 
 
-    <img *ngIf="!isBannerPredefined"
-      [src]=getBanner(userResponse)
+    <img *ngIf="userResponse.bannerType === 'PREDEFINED'"
+      [src]="userResponse.predefinedBannerPath"
       alt="Banner cover"
       class="w-full h-full object-cover rounded-t-2xl border-t border-r border-l border-white/20"
     />
 
-    <img *ngIf="isBannerPredefined"
-      [src]="'assets/banners/banner_'+userResponse.predefinedBanner+'.jpg'"
-      alt="Banner cover"
-      class="w-full h-full object-cover rounded-t-2xl border-t border-r border-l border-white/20"
+    <img *ngIf="userResponse.bannerType === 'CUSTOM'"
+         [src]=getBanner(userResponse)
+         alt="Banner cover"
+         class="w-full h-full object-cover rounded-t-2xl border-t border-r border-l border-white/20"
     />
+
   </div>
   <div class="absolute left-6 top-1/2 transform -translate-y-1/2 flex ">
     <div>
       <img *ngIf="userHasProfilePicture"
-        [src]="getProfilePicture(userResponse)"
-        class="w-40 h-40 rounded-2xl border-2 border-black object-cover"
+           [src]="getProfilePicture(userResponse)"
+           class="w-40 h-40 rounded-2xl border-2 border-black object-cover"
       />
 
       <img *ngIf="!userHasProfilePicture"
@@ -51,7 +52,7 @@
           </span>
         </div>
 
-        <p class="text-sm text-gray-300 mx-0.5">Joined {{userResponse.joinedDate}}</p>
+        <p class="text-sm text-gray-300 mx-0.5">Joined {{ userResponse.joinedDate }}</p>
       </div>
       <div class="mt-auto flex flex-col mx-2">
         <div class="flex gap-2">
@@ -75,13 +76,16 @@
 
       <div class="flex flex-col gap-2">
         <div class="relative w-full h-40 rounded-xl overflow-hidden mb-5">
-          <img *ngIf="!isBannerPredefined" [src]="getBanner(userResponse)" class="w-full h-full object-cover"/>
-          <img *ngIf="isBannerPredefined" [src]="'assets/banners/banner_'+userResponse.predefinedBanner+'.jpg'" class="w-full h-full object-cover"/>
+
+
+          <img *ngIf="userResponse.bannerType === 'PREDEFINED'" [src]="userResponse.predefinedBannerPath" class="w-full h-full object-cover"/>
+
+          <img [src]="getBanner(userResponse)" class="w-full h-full object-cover"/>
           <div class="absolute inset-0 bg-black/30"></div>
 
           <img *ngIf="userHasProfilePicture"
-            [src]="getProfilePicture(userResponse)"
-            class="absolute left-6 top-1/2 -translate-y-1/2 w-32 h-32 rounded-2xl object-cover border-4 border-gray-800"
+               [src]="getProfilePicture(userResponse)"
+               class="absolute left-6 top-1/2 -translate-y-1/2 w-32 h-32 rounded-2xl object-cover border-4 border-gray-800"
           />
 
           <img *ngIf="!userHasProfilePicture"
@@ -279,18 +283,29 @@
         <!-- Profile & Banner Tab -->
 
         <div *ngIf="activeTab === 'profile'" class="flex flex-col gap-6">
+                      <pre>
+{{ userResponse.bannerType }}
+                        {{ previewBanner }}
+                        {{ userResponse.predefinedBannerPath }}
+</pre>
           <!-- Banner -->
           <div class="relative w-full h-48 rounded-xl mb-5">
 
 
+<!--            <img *ngIf="isPreviewBannerInserted"-->
+<!--                 [src]="'assets/banners/banner_' +userResponse.predefinedBanner+'.jpg'"-->
+<!--                 class="w-full h-full rounded-2xl object-cover"-->
+<!--                 alt="Profile Banner"-->
 
-            <img *ngIf="isBannerPredefined && !isPreviewBannerInserted"
-              [src]="'assets/banners/banner_' +userResponse.predefinedBanner"
-              class="w-full h-full rounded-2xl object-cover"
-              alt="Profile Banner"
-            />
 
-            <img *ngIf="(!isBannerPredefined && isPreviewBannerInserted) || !isBannerPredefined"
+
+            <img *ngIf="userResponse.bannerType === 'PREDEFINED'"
+                 [src]="previewBanner || getBanner(userResponse)"
+                 class="w-full h-full rounded-2xl object-cover"
+                 alt="Profile Banner" />
+
+
+            <img *ngIf="userResponse.bannerType === 'CUSTOM'"
                  [src]="previewBanner || getBanner(userResponse)"
                  class="w-full h-full rounded-2xl object-cover"
                  alt="Profile Banner"
@@ -311,8 +326,7 @@
               class="hidden"
             />
 
-
-             <div class="absolute left-6 top-1/2 -translate-y-1/2">
+            <div class="absolute left-6 top-1/2 -translate-y-1/2">
               <div class="relative w-32 h-32">
 
                 <img *ngIf="!userHasProfilePicture && !isPreviewImageInserted"
@@ -323,9 +337,9 @@
                 />
 
                 <img *ngIf="(!userHasProfilePicture && isPreviewImageInserted) || userHasProfilePicture"
-                  [src]=" previewImage || getProfilePicture(userResponse)"
-                  class="w-32 h-32 rounded-2xl object-cover border-4 border-gray-800"
-                  alt="Profile Picture"
+                     [src]=" previewImage || getProfilePicture(userResponse)"
+                     class="w-32 h-32 rounded-2xl object-cover border-4 border-gray-800"
+                     alt="Profile Picture"
                 />
 
                 <label
@@ -345,12 +359,31 @@
               </div>
             </div>
           </div>
+          <div class="flex justify-between">
+            <button (click)="showBanners()" class="text-sm w-52 cursor-pointer flex items-center">
+              Show predefined banners <i class="fa-solid fa-angle-down ml-1"></i>
+            </button>
+
+
+            <button *ngIf="selectedBannerId" (click)="removeSelectedPredefinedBanner()"
+                    class="text-xs cursor-pointer text-red-500 flex items-center">
+              <i class="fa-solid fa-xmark mr-1"></i> Remove selected banner
+            </button>
+
+          </div>
+          <div *ngIf="showPredefinedBanners" class="grid grid-cols-2 gap-4">
+            <img *ngFor="let bannerId of predefinedBanners"
+                 (click)="selectedBanner(bannerId)"
+                 [src]="'assets/banners/banner_' + bannerId + '.jpg'"
+                 class="w-75 h-20 rounded-xl object-cover cursor-pointer border-2"
+                 [ngClass]="{'border-gray-500': selectedBannerId === bannerId, 'border-transparent': selectedBannerId !== bannerId}">
+          </div>
 
           Colors for cards
           TODO add colors
         </div>
 
-<!--        Privacy & Security-->
+        <!--        Privacy & Security-->
 
         <div *ngIf="activeTab === 'security'" class="flex flex-col gap-4">
 
@@ -392,7 +425,6 @@
           </div>
 
 
-
           <div>
             <h3 class="text-base font-semibold">Change password</h3>
             <p class="text-sm text-gray-500">
@@ -400,7 +432,7 @@
             </p>
           </div>
           <button
-            (click)="senResetLink()"
+            (click)="sendResetLink()"
             class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition cursor-pointer">
             Send Reset Link
           </button>
@@ -409,7 +441,7 @@
             <h3 class="text-base font-semibold">Delete Account</h3>
             <p class="text-sm text-gray-500">
               After deleting your account, you’ll be signed out and won’t be able to log in anymore.
-<!--              TODO send email and logout user-->
+              <!--              TODO send email and logout user-->
 
             </p>
           </div>
@@ -423,7 +455,6 @@
 
 
       </div>
-
 
 
       <!-- Action Buttons -->

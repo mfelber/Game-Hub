@@ -22,6 +22,4 @@ public class UserUpdateRequest {
   private String email;
   private String bio;
   private Location location;
-
-
 }

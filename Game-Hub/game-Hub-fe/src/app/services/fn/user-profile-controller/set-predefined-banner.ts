@@ -8,18 +8,17 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { BannerRequest } from '../../models/banner-request';
 
-export interface UploadBannerImage$Params {
-      body?: {
-'file': Blob;
-}
+export interface SetPredefinedBanner$Params {
+      body: BannerRequest
 }
 
-export function uploadBannerImage(http: HttpClient, rootUrl: string, params?: UploadBannerImage$Params, context?: HttpContext): Observable<StrictHttpResponse<{
+export function setPredefinedBanner(http: HttpClient, rootUrl: string, params: SetPredefinedBanner$Params, context?: HttpContext): Observable<StrictHttpResponse<{
 }>> {
-  const rb = new RequestBuilder(rootUrl, uploadBannerImage.PATH, 'post');
+  const rb = new RequestBuilder(rootUrl, setPredefinedBanner.PATH, 'post');
   if (params) {
-    rb.body(params.body, 'multipart/form-data');
+    rb.body(params.body, 'application/json');
   }
 
   return http.request(
@@ -33,4 +32,4 @@ export function uploadBannerImage(http: HttpClient, rootUrl: string, params?: Up
   );
 }
 
-uploadBannerImage.PATH = '/profile/custom/banner';
+setPredefinedBanner.PATH = '/profile/predefined/banner';
