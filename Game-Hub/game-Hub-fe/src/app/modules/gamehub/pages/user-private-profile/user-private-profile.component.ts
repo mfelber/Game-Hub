@@ -278,6 +278,7 @@ export class UserPrivateProfileComponent implements OnInit {
       }
       this.loadUserPrivateProfile();
       this.closeModal();
+      this.showSuccess('You have successfully updated profile')
     } catch (err) {
       console.error(err)
     }
@@ -298,7 +299,6 @@ export class UserPrivateProfileComponent implements OnInit {
       ? 'data:image/jpeg;base64,' + this.userResponse.userProfilePicture
       : undefined;
 
-    // 🟢 OPRAVA TU:
     this.previewBanner = this.userResponse.bannerImage
       ? 'data:image/jpeg;base64,' + this.userResponse.bannerImage
       : undefined;

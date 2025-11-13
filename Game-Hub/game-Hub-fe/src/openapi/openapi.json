@@ -1873,12 +1873,14 @@
               "format": "byte"
             }
           },
-          "profileColor": {
+          "bannerType": {
             "type": "string"
           },
-          "predefinedBanner": {
-            "type": "integer",
-            "format": "int64"
+          "predefinedBannerPath": {
+            "type": "string"
+          },
+          "profileColor": {
+            "type": "string"
           }
         }
       },

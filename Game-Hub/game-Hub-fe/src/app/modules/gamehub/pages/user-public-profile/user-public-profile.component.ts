@@ -42,11 +42,12 @@ export class UserPublicProfileComponent implements OnInit{
     favoriteGames: [],
     bannerImage: [],
     wishlistCount: 0,
-    libraryCount: 0
+    libraryCount: 0,
+    bannerType: ''
   }
 
   userHasProfilePicture = true
-  isBannerPredefined = true;
+  isLoaded = false;
 
 
   private loadUserPublicProfile() {
@@ -54,16 +55,14 @@ export class UserPublicProfileComponent implements OnInit{
     this.userService.getUserPublic({userId}).subscribe({
       next:  (user) => {
         this.userResponse = user;
-        this.getProfilePicture(userId)
+        this.isLoaded = true;
+        this.userResponse.badges = user.badges?.sort((a, b) =>
+          a.name!.localeCompare(b.name!)
+        );
         if (user.userProfilePicture){
           this.userHasProfilePicture = true
         } else {
           this.userHasProfilePicture = false
-        }
-        if (user.bannerImage){
-          this.isBannerPredefined = false;
-        } else {
-          this.isBannerPredefined = true
         }
       }
     });
@@ -83,7 +82,7 @@ export class UserPublicProfileComponent implements OnInit{
     if (user.bannerImage) {
       return 'data:image/jpeg;base64,' + user.bannerImage;
     }
-    return 'https://images.pexels.com/photos/1054655/pexels-photo-1054655.jpeg';
+    return user.predefinedBannerPath;
   }
 
   goToGame(gameId:any) {

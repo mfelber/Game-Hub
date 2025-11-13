@@ -71,6 +71,8 @@ public class UserMapper {
         .userProfilePicture(FileUtils.readCoverFromLocation(user.getUserProfilePicture()))
         .bannerImage(FileUtils.readCoverFromLocation(user.getBanner()))
         .profileColor(user.getProfileColor())
+        .bannerType(user.getBannerType())
+        .predefinedBannerPath(user.getBanner())
         .build();
   }
 
