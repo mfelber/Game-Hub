@@ -1,0 +1,40 @@
+import {Component, Input} from '@angular/core';
+import {UserPrivateResponse} from '../../../../services/models/user-private-response';
+import {FormsModule} from '@angular/forms';
+import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
+
+@Component({
+  selector: 'app-card-preview',
+  imports: [
+    FormsModule,
+    NgForOf,
+    NgIf,
+    NgClass,
+    NgStyle
+  ],
+  templateUrl: './card-preview.component.html',
+  styleUrl: './card-preview.component.css'
+})
+export class CardPreviewComponent {
+  @Input() userResponse!: UserPrivateResponse;
+  @Input() cardColorsResponse!: any[];
+  userHasProfilePicture = true;
+
+  getBanner(user: UserPrivateResponse) {
+    if (user.bannerImage) {
+      return 'data:image/jpeg;base64,' + user.bannerImage;
+    }
+    return user.predefinedBannerPath;
+  }
+
+  getProfilePicture(user: UserPrivateResponse) {
+    if (user.userProfilePicture) {
+      this.userHasProfilePicture = true;
+      return 'data:image/jpeg;base64,' + user.userProfilePicture;
+    } else {
+      this.userHasProfilePicture = false;
+    }
+    return this.userHasProfilePicture;
+  }
+
+}

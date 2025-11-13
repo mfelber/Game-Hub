@@ -1,0 +1,178 @@
+<div class="relative w-full items-center">
+  <div class="h-48 w-full overflow-hidden ">
+
+
+    <img *ngIf="userResponse.bannerType === 'PREDEFINED'"
+         [src]="userResponse.predefinedBannerPath"
+         alt="Banner cover"
+         class="w-full h-full object-cover rounded-t-2xl border-t border-r border-l border-white/20"
+    />
+
+    <img *ngIf="userResponse.bannerType === 'CUSTOM'"
+         [src]=getBanner(userResponse)
+         alt="Banner cover"
+         class="w-full h-full object-cover rounded-t-2xl border-t border-r border-l border-white/20"
+    />
+
+  </div>
+  <div class="absolute left-6 top-1/2 transform -translate-y-1/2 flex ">
+    <div>
+      <img *ngIf="userHasProfilePicture"
+           [src]="getProfilePicture(userResponse)"
+           class="w-40 h-40 rounded-2xl border-2 border-black object-cover"
+      />
+
+      <img *ngIf="!userHasProfilePicture"
+           src="../../../../../assets/profilePicture/default_profile_picture.svg"
+           class="w-40 h-40 rounded-2xl border-2 border-black object-cover"
+           [ngStyle]="{'background-color': userResponse.profileColor}"
+      />
+    </div>
+
+    <div class="flex flex-col ">
+      <div class="p-2">
+
+        <div class="flex items-center gap-2">
+          <p class="text-2xl font-semibold leading-tight ">{{ userResponse.username }}</p>
+          <span
+            class="text-sm font-medium"
+            [ngClass]="{
+            'text-green-500': userResponse.status === 'ONLINE',
+            'text-gray-400': userResponse.status === 'OFFLINE',
+            'text-yellow-400': userResponse.status === 'AWAY'
+            }">• {{ userResponse.status }}
+          </span>
+        </div>
+
+        <p class="text-sm text-gray-300 mx-0.5">Joined {{ userResponse.joinedDate }}</p>
+      </div>
+    </div>
+
+  </div>
+
+
+
+</div>
+
+
+<div
+  class="w-full h-[75px] bg-black/30 rounded-b-2xl flex items-center gap-4 border-b border-r border-l border-white/20">
+
+  <div class="w-35 text-center text-10px">
+    <p class="text-sm font-semibold"> {{ userResponse.libraryCount }}</p>
+    <p class="text-sm text-gray-300">Games owned</p>
+  </div>
+  <div class="w-[2px] h-10 bg-white/20  rounded">
+
+  </div>
+
+
+  <div class="w-35 text-center text-10px">
+    <p class="text-sm font-semibold"> {{ userResponse.wishlistCount }}</p>
+    <p class="text-sm text-gray-300">Games in wishlist</p></div>
+  <div class="w-[2px] h-10 bg-white/20 rounded">
+
+  </div>
+
+  <!--  TODO fetch from db count of friends-->
+  <div class="w-20 text-center text-10px">
+    <p class="text-sm font-semibold"> 350</p>
+    <p class="text-sm text-gray-300">Friends</p>
+  </div>
+
+  <div class="flex-1 flex items-center justify-end text-10px mr-5">
+    <div class="text-center flex flex-col items-center">
+      <img
+        [src]="userResponse.location?.iconPath"
+        [alt]="userResponse.location?.name"
+        class="w-10 h-6 mb-1"
+      />
+      <p class="text-sm text-gray-300">Nationality</p>
+    </div>
+  </div>
+</div>
+
+
+<div class="w-full h-[69%] mt-5 flex flex-1 gap-5">
+
+  <div class="w-1/5 h-full bg-black/30 backdrop-blur-md rounded-2xl flex flex-col shadow-lg border border-white/20">
+    <div class="justify-between flex p-4 border-b border-white/20">
+      <div class="flex items-center gap-2">
+        <i class="fa-solid fa-gamepad text-[#3B82F6] text-xl"></i><span class="font-semibold">Recentyly played</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex-1 flex flex-col gap-4">
+
+    <div class="h-1/2 flex gap-4">
+      <div
+        class="flex-none w-100 break-words bg-black/30 backdrop-blur-md rounded-2xl flex flex-col shadow-lg border border-white/20 overflow-hidden">
+        <div class="flex justify-between items-center p-4 border-b border-white/20">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-user text-[#EE5C6B] text-xl"></i>
+            <span class="text-white font-semibold">About</span>
+          </div>
+          <div class="relative group inline-block">
+            <i class="fa-solid fa-ellipsis-vertical text-white text-xl"></i>
+            <span
+              class="pointer-events-none fixed bottom-auto left-[83%] -translate-x-1/2 px-3 py-1 text-xs text-white bg-gray-900 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50">
+          Edit bio
+        </span>
+          </div>
+        </div>
+
+        <div class="flex flex-col p-4">
+
+        </div>
+      </div>
+
+      <div class="w-full rounded-2xl flex flex-col bg-black/30 backdrop-blur-md shadow-lg border border-white/20 ">
+
+        <div class="flex-none justify-between flex p-4 border-b border-white/20">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-medal text-[#FACC15] text-xl"></i>
+            <span class="text-white font-semibold">Badges</span>
+          </div>
+        </div>
+
+      </div>
+
+
+      <div class="w-150 bg-black/30 rounded-2xl flex flex-col shadow-lg border border-white/20">
+        <div class="justify-between flex p-4 border-b border-white/20">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-masks-theater text-[#FFA500] text-xl"></i>
+            <span class="font-semibold">Favorite Genres</span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class=" h-1/2 flex gap-4">
+      <div class="w-3/2 bg-black/30 backdrop-blur-md rounded-2xl flex flex-col shadow-lg border border-white/20">
+        <div class="justify-between flex p-4 border-b border-white/20">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-heart text-[#FF0000] text-xl"></i>
+            <span class="font-semibold">Favorite Games</span>
+          </div>
+        </div>
+
+      </div>
+      <div class="w-full bg-black/30 backdrop-blur-md rounded-2xl flex flex-col shadow-lg border border-white/20">
+        <div class="justify-between flex p-4 border-b border-white/20">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-fire text-[#FB923C] text-xl"></i>
+            <span class="font-semibold">Latest recommended Games</span>
+          </div>
+        </div>
+        <div
+             class="flex flex-col items-center justify-center text-center flex-1 p-4">
+          <p class="text-lg font-semibold"> </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

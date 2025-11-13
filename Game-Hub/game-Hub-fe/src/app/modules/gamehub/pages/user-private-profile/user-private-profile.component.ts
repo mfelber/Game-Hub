@@ -14,6 +14,7 @@ import {AuthenticationService} from '../../../../services/services/authenticatio
 import {AuthenticationRequest} from '../../../../services/models/authentication-request';
 import {CardColorControllerService} from '../../../../services/services/card-color-controller.service';
 import {CardColorResponse} from '../../../../services/models/card-color-response';
+import {CardPreviewComponent} from '../../components/card-preview/card-preview.component';
 
 @Component({
   selector: 'app-user-profile',
@@ -22,7 +23,8 @@ import {CardColorResponse} from '../../../../services/models/card-color-response
     NgForOf,
     NgClass,
     FormsModule,
-    NgStyle
+    NgStyle,
+    CardPreviewComponent
   ],
   templateUrl: './user-private-profile.component.html',
   styleUrl: './user-private-profile.component.css'
@@ -424,5 +426,14 @@ export class UserPrivateProfileComponent implements OnInit {
 
   selectColor(id: number) {
     console.log('you have selected', id)
+  }
+
+  showPreviewColors = true
+  showPreview() {
+    this.showPreviewColors = true;
+  }
+
+  hidePreview() {
+    this.showPreviewColors = false;
   }
 }
