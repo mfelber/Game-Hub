@@ -1,14 +1,12 @@
 package gamehub.game_Hub.ServiceImpl;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import gamehub.game_Hub.Repository.genre.GenreRepository;
 import gamehub.game_Hub.Response.GenreResponse;
 import gamehub.game_Hub.Service.GenreService;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @Service

@@ -3,7 +3,6 @@ package gamehub.game_Hub.Request;
 
 import gamehub.game_Hub.Module.User.Location;
 
-import gamehub.game_Hub.Response.CardColorResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

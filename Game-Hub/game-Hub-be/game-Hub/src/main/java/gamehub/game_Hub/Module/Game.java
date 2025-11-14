@@ -42,6 +42,20 @@ public class Game {
 
   private String description;
 
+  private String publisher;
+
+  private String developer;
+
+  @Column(name = "release_year")
+  private String releaseYear;
+
+  private double price;
+
+  private boolean dlc;
+
+  @Column(name = "game_cover_image")
+  private String gameCoverImage;
+
   @ManyToMany(fetch = FetchType.LAZY)
   @ToString.Exclude
   @JsonIgnore
@@ -107,26 +121,6 @@ public class Game {
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "system_req_id")
   private SystemRequirements systemRequirements;
-
-  // @OneToMany(mappedBy = "baseGame", fetch = FetchType.LAZY)
-  // @Nullable
-  // @JsonIgnore
-  // @ToString.Exclude
-  // private Set<DLC> dlcs;
-
-  private String publisher;
-
-  private String developer;
-
-  @Column(name = "release_year")
-  private String releaseYear;
-
-  private double price;
-
-  private boolean dlc;
-
-  @Column(name = "game_cover_image")
-  private String gameCoverImage;
 
   //   TODO add game images for game detail in store
 

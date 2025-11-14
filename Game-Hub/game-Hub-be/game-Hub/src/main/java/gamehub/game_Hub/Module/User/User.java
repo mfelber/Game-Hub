@@ -34,7 +34,6 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -67,23 +66,44 @@ public class User implements UserDetails, Principal {
   @Column(unique = true)
   private String email;
 
+  @Column(name = "bio", length = 2000, nullable = true)
+  private String bio;
+
+  @Enumerated(EnumType.STRING)
+  private Location location;
+
+  @Enumerated(EnumType.STRING)
+  private Status status;
+
   @Column(name = "user_profile_picture")
   private String userProfilePicture;
 
   private String banner;
 
+  @Column(name = "banner_type")
+  private String bannerType;
+
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "card_color_id")
   private CardColor cardColor;
-
-  @Column(name = "banner_type")
-  private String bannerType;
 
   @Column(name = "profile_color")
   private String profileColor;
 
   @Column(name = "is_banned")
   private boolean isBanned;
+
+
+  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  private List<PasswordResetToken> passwordResetTokens;
+
+  @CreatedDate
+  @Column(nullable = false, updatable = false,name = "created_at")
+  private LocalDateTime createdAt;
+
+  @LastModifiedDate
+  @Column(insertable = false, name = "last_modified_at")
+  private LocalDateTime lastModifiedAt;
 
   @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(
@@ -93,14 +113,6 @@ public class User implements UserDetails, Principal {
       inverseJoinColumns = @JoinColumn(name = "role_id")
   )
   private List<Role> roles;
-
-  @CreatedDate
-  @Column(nullable = false, updatable = false,name = "created_at")
-  private LocalDateTime createdAt;
-
-  @LastModifiedDate
-  @Column(insertable = false, name = "last_modified_at")
-  private LocalDateTime lastModifiedAt;
 
   @ManyToMany
   @JoinTable(name = "user_library", schema = "game_hub",
@@ -139,18 +151,6 @@ public class User implements UserDetails, Principal {
       joinColumns = @JoinColumn(name = "user_id"),
       inverseJoinColumns = @JoinColumn(name = "badge_id"))
   private Set<Badge> badges;
-
-  @Enumerated(EnumType.STRING)
-  private Location location;
-
-  @Enumerated(EnumType.STRING)
-  private Status status;
-
-  @Column(name = "bio", length = 2000, nullable = true)
-  private String bio;
-
-  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  private List<PasswordResetToken> passwordResetTokens;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {

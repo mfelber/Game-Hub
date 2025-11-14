@@ -217,5 +217,4 @@ public class GameServiceImpl implements GameService {
     return user.getWishlist().contains(game);
   }
 
-
 }
