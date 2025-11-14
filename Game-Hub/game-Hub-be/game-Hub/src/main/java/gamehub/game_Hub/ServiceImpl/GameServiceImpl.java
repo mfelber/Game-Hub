@@ -13,7 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import gamehub.game_Hub.Common.PageResponse;
 import gamehub.game_Hub.Mapper.GameMapper;
-import gamehub.game_Hub.Module.Badge;
 import gamehub.game_Hub.Module.Game;
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Repository.BadgeRepository;
@@ -50,7 +49,7 @@ public class GameServiceImpl implements GameService {
   public void uploadGameCoverImage(final Long gameId, final MultipartFile file) {
     Game game = gameRepository.findById(gameId)
         .orElseThrow(() -> new EntityNotFoundException("Game not found with id: " + gameId));
-    var gameCoverImage = fileStorageService.saveFile(file);
+    var gameCoverImage = fileStorageService.saveGameCoverImage(file, game.getId());
     game.setGameCoverImage(gameCoverImage);
     gameRepository.save(game);
   }

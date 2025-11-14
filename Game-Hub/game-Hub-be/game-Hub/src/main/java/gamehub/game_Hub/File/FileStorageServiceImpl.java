@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import gamehub.game_Hub.Module.Game;
 import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +28,9 @@ public class FileStorageServiceImpl implements FileStorageService {
   private String fileUploadPath;
 
   @Override
-  public String saveFile(@NonNull final MultipartFile sourceFile) {
-    return uploadFile(sourceFile);
+  public String saveGameCoverImage(@NonNull final MultipartFile sourceFile, Long gameId) {
+    final String fileUploadSubPath = "games" + separator + gameId;
+    return uploadFile(sourceFile, fileUploadSubPath);
   }
 
   @Override
@@ -64,9 +66,9 @@ public class FileStorageServiceImpl implements FileStorageService {
     return null;
   }
 
-  private String uploadFile(final @NonNull MultipartFile sourceFile) {
-    final String uploadPath = fileUploadPath;
-    File targetFolder = new File(uploadPath);
+  private String uploadFile(final @NonNull MultipartFile sourceFile, final String fileUploadSubPath) {
+    final String finalUploadPath = fileUploadPath + separator + fileUploadSubPath;
+    File targetFolder = new File(finalUploadPath);
     if (!targetFolder.exists()) {
       boolean folderCreated = targetFolder.mkdirs();
       if (!folderCreated) {
@@ -76,7 +78,7 @@ public class FileStorageServiceImpl implements FileStorageService {
     }
 
     final String fileExtension = getFileExtension(sourceFile.getOriginalFilename());
-    String targetFilePath = uploadPath + separator + currentTimeMillis() + "." + fileExtension;
+    String targetFilePath = finalUploadPath + separator + sourceFile.getOriginalFilename();
     Path targetPath = Paths.get(targetFilePath);
     try {
       Files.write(targetPath, sourceFile.getBytes());
