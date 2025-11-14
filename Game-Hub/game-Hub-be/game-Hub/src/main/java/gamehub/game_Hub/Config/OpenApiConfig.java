@@ -1,7 +1,5 @@
 package gamehub.game_Hub.Config;
 
-import org.springframework.stereotype.Service;
-
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
