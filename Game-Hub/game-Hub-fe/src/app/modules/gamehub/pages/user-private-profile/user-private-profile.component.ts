@@ -13,7 +13,6 @@ import {HttpClient} from '@angular/common/http';
 import {AuthenticationService} from '../../../../services/services/authentication.service';
 import {AuthenticationRequest} from '../../../../services/models/authentication-request';
 import {CardColorControllerService} from '../../../../services/services/card-color-controller.service';
-import {CardColorResponse} from '../../../../services/models/card-color-response';
 import {CardPreviewComponent} from '../../components/card-preview/card-preview.component';
 
 @Component({
@@ -48,15 +47,33 @@ export class UserPrivateProfileComponent implements OnInit {
   ) {
   }
 
+  activeTab: 'basic' | 'profile' | 'security' = 'basic';
+
+  profilePicture: File | null = null;
+  previewImage: string | undefined;
+  previewBanner: string | undefined;
+  profileBanner: File | null = null;
+  selectedBannerId: number | null = null;
+
+  isEditBioModalOpen = false;
+  isEditGenresModalOpen = false;
+  isEditProfileModalOpen = false;
+  isProfileModalOpen = false;
+  toastVisible = false;
+  showPredefinedBanners = false;
+  isPreviewImageInserted = false;
+  isPreviewBannerInserted = false;
+  userHasProfilePicture = true
+
+  allLocations: { name: string; iconPath: string }[] = [];
   selectedGenres: Set<number> = new Set<number>()
   favoriteGenreIds: number[] = [];
   successMessage: string | null = null;
-  toastVisible = false;
   genreResponse: any[] = [];
   cardColorsResponse: any [] = [];
-
   selectedColorCode: string = '';
   selectedColorId: number | null = null;
+
   userResponse: UserPrivateResponse = {
     bio: '',
     badges: [],
@@ -75,10 +92,7 @@ export class UserPrivateProfileComponent implements OnInit {
     email: this.userResponse.email,
     cardColorId : this.selectedColorId!
   };
-  isEditBioModalOpen = false;
-  isEditGenresModalOpen = false;
-  isEditProfileModalOpen = false;
-  isProfileModalOpen = false;
+
   bioUpdateRequest: UserUpdateRequest = {
     bio: ''
   }
@@ -87,17 +101,6 @@ export class UserPrivateProfileComponent implements OnInit {
     email: '',
     password: ''
   }
-  activeTab: 'basic' | 'profile' | 'security' = 'basic';
-  allLocations: { name: string; iconPath: string }[] = [];
-  userHasProfilePicture = true
-  profilePicture: File | null = null;
-  previewImage: string | undefined;
-  isPreviewImageInserted = false;
-  isPreviewBannerInserted = false;
-  previewBanner: string | undefined;
-  profileBanner: File | null = null;
-  showPredefinedBanners = false;
-  selectedBannerId: number | null = null;
 
   private loadUserPrivateProfile() {
     this.userService.getUserPrivate().subscribe({
@@ -415,16 +418,6 @@ export class UserPrivateProfileComponent implements OnInit {
 
   }
 
-  get currentBanner(): string {
-    if (this.userResponse.bannerType === 'PREDEFINED') {
-      return this.previewBanner || this.userResponse.predefinedBannerPath!;
-    }
-    if (this.userResponse.bannerType === 'CUSTOM') {
-      return this.previewBanner || this.getBanner(this.userResponse)!;
-    }
-    return 'assets/default-banner.jpg'; // fallback
-  }
-
   removeSelectedPredefinedBanner() {
     this.selectedBannerId = null;
     this.previewBanner = undefined;
@@ -461,7 +454,6 @@ export class UserPrivateProfileComponent implements OnInit {
   removeSelectedCardColor() {
     this.selectedColorCode = '';
     this.selectedColorId = null;
-
 
   }
 }

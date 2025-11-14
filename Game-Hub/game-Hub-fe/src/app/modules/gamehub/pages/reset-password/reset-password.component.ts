@@ -1,10 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {NgForOf, NgIf, NgOptimizedImage} from '@angular/common';
+import {NgIf} from '@angular/common';
 import {AuthenticationService} from '../../../../services/services/authentication.service';
-import {GetResetTokenInfo$Params} from '../../../../services/fn/authentication/get-reset-token-info';
-
 @Component({
   selector: 'app-reset-password',
   imports: [
@@ -38,7 +36,6 @@ export class ResetPasswordComponent implements OnInit{
     }
 
   }
-
 
   resetPassword() {
 

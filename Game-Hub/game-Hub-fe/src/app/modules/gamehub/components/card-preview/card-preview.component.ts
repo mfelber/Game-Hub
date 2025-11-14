@@ -1,13 +1,12 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {UserPrivateResponse} from '../../../../services/models/user-private-response';
 import {FormsModule} from '@angular/forms';
-import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
+import {NgClass, NgIf, NgStyle} from '@angular/common';
 
 @Component({
   selector: 'app-card-preview',
   imports: [
     FormsModule,
-    NgForOf,
     NgIf,
     NgClass,
     NgStyle
@@ -30,8 +29,6 @@ export class CardPreviewComponent{
     }
     return user.predefinedBannerPath;
   }
-
-
 
   getProfilePicture(user: UserPrivateResponse) {
     if (user.userProfilePicture) {

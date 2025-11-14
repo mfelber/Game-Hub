@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {UserProfileControllerService} from '../../../../services/services/user-profile-controller.service';
 import {UserPublicResponse} from '../../../../services/models/user-public-response';
 import {ActivatedRoute, Router} from '@angular/router';
-import {UserPrivateResponse} from '../../../../services/models/user-private-response';
 import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {GameControllerService} from '../../../../services/services/game-controller.service';
 import {GameResponse} from '../../../../services/models/game-response';

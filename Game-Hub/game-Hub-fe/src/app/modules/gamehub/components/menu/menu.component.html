@@ -103,11 +103,11 @@
         />
 
         <img *ngIf="userHasProfilePicture"
-          [src]="getProfilePicture(userResponse)"
-          alt="not found"
-          class="w-13 h-13 object-cover rounded-xl"
-          width="1"
-          height="1"
+             [src]="getProfilePicture(userResponse)"
+             alt="not found"
+             class="w-13 h-13 object-cover rounded-xl"
+             width="1"
+             height="1"
         />
 
         <span
@@ -141,7 +141,8 @@
           <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
               aria-labelledby="dropdownInformdropdownAvatarNameButtonationButton">
             <li>
-              <a aria-current="page" (click)="closeDropdown()" routerLink="/gamehub/user/me"  class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Profile</a>
+              <a aria-current="page" (click)="closeDropdown()" routerLink="/gamehub/user/me"
+                 class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Profile</a>
               <div class="hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white flex gap-1 px-4 py-3">
                 Status:
                 <select

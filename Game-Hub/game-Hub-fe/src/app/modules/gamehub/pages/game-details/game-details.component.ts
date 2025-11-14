@@ -3,7 +3,6 @@ import {ActivatedRoute} from '@angular/router';
 import {GameControllerService} from '../../../../services/services/game-controller.service';
 import {NgForOf, NgIf} from '@angular/common';
 import {GameResponse} from '../../../../services/models/game-response';
-import {checkGameInWishlist} from '../../../../services/fn/game-controller/check-game-in-wishlist';
 
 @Component({
   selector: 'app-game-details',

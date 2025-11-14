@@ -16,7 +16,8 @@
 
   <div class="absolute inset-0 bg-opacity-40 pointer-events-auto"></div>
 
-  <div class="relative z-50 mt-4 w-auto max-w-lg px-6 py-3 bg-gray-800 bg-opacity-90 text-white rounded-lg shadow-lg flex items-center justify-between space-x-4 pointer-events-auto">
+  <div
+    class="relative z-50 mt-4 w-auto max-w-lg px-6 py-3 bg-gray-800 bg-opacity-90 text-white rounded-lg shadow-lg flex items-center justify-between space-x-4 pointer-events-auto">
     <span class="text-sm font-medium">Previewing your changes</span>
     <button
       (click)="hidePreview()"
@@ -319,13 +320,6 @@
           <!-- Banner -->
           <div class="relative w-full h-48 rounded-xl mb-5">
 
-
-            <!--            <img *ngIf="isPreviewBannerInserted"-->
-            <!--                 [src]="'assets/banners/banner_' +userResponse.predefinedBanner+'.jpg'"-->
-            <!--                 class="w-full h-full rounded-2xl object-cover"-->
-            <!--                 alt="Profile Banner"-->
-
-
             <img *ngIf="userResponse.bannerType === 'PREDEFINED'"
                  [src]="previewBanner || getBanner(userResponse)"
                  class="w-full h-full rounded-2xl object-cover"
@@ -422,10 +416,6 @@
               <div class="flex justify-between items-center mb-2">
                 <label class="text-gray-300 text-sm">Colors for cards</label>
               </div>
-              <!--              <label class="text-gray-300 text-sm mb-2 block">Colors for cards</label>-->
-              <!--              <button *ngIf="selectedColorCode != '' " (click)="showPreview()" class="text-sm w-52 cursor-pointer flex items-center">-->
-              <!--                Preview-->
-              <!--              </button>-->
               <div class="flex flex-wrap gap-4">
                 <div *ngFor="let cardColor of cardColorsResponse" class="flex flex-col items-center">
 
@@ -517,19 +507,10 @@
             Delete account
             <i class="fa-solid fa-trash-can"></i>
           </button>
-
         </div>
-
 
       </div>
 
-      <!--      <button [disabled]="!changesExist"-->
-      <!--              [title]="changesExist ? 'See how your profile will look' : 'Make at least one change to preview your profile'"-->
-      <!--              (click)="showPreview()"-->
-      <!--              [ngClass]="{'px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition': changesExist,-->
-      <!--              'px-4 py-2 bg-gray-600 text-gray-400 rounded-lg hover:bg-gray-700 transition': !changesExist}">-->
-      <!--        Preview-->
-      <!--      </button>-->
 
       <!-- Action Buttons -->
 
