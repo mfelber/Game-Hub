@@ -28,23 +28,30 @@ Game Detail in store
 
 ---
 
-## 🚀 Features
+## 🔧 Application Features
 - 👤 User registration and login
 - 🎲 Game list browsing in store, library, wishlist
-- 🔍 Search by game title
+- 🎮 Detailed game pages
 - 🛒 "Buying" games, adding games to the wishlist
+- 🖼️ Profile customization (banners, profile pictures, card colors)
+- 🔑 Password reset functionality
+- 📧 Email notifications upon registration
+
+
+## 🧩 Planned Features
+- 💬 Chat or friends system
+- 🧑‍🤝‍🧑 Find other users
+- 👥 Creating groups
+- 🛠️ Admin tools
+- 📱 Mobile responsive design – currently being worked on
+- 👥 Adding/blocking people
+- 🔔 In-app notifications
+- 📧💸 Email notification when a game is on sale
+- And much more 🚀
+
+## 🚀 Project Features
 - 🗂️ Data storage in a database (PostgreSQL)
 - 🌐 REST API endpoints for data management
-
----
-
-## Planned Features
-- User profile customization (status, custom text)
-- Adding/blocking people
-- Downloading games
-- Adding games as admin
-- Find other users
-- And much more
 
 ---
 
