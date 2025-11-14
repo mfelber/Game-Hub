@@ -1786,6 +1786,21 @@
           }
         }
       },
+      "CardColorResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "colorName": {
+            "type": "string"
+          },
+          "colorCode": {
+            "type": "string"
+          }
+        }
+      },
       "GameResponseShort": {
         "type": "object",
         "properties": {
@@ -1908,21 +1923,9 @@
           },
           "profileColor": {
             "type": "string"
-          }
-        }
-      },
-      "CardColorResponse": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
           },
-          "colorName": {
-            "type": "string"
-          },
-          "colorCode": {
-            "type": "string"
+          "cardColor": {
+            "$ref": "#/components/schemas/CardColorResponse"
           }
         }
       },

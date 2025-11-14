@@ -31,12 +31,12 @@ export class CardPreviewComponent{
     return user.predefinedBannerPath;
   }
 
+
+
   getProfilePicture(user: UserPrivateResponse) {
     if (user.userProfilePicture) {
       this.userHasProfilePicture = true;
       return 'data:image/jpeg;base64,' + user.userProfilePicture;
-    } else {
-      this.userHasProfilePicture = false;
     }
     return this.userHasProfilePicture;
   }

@@ -74,6 +74,9 @@ public class UserMapper {
         .profileColor(user.getProfileColor())
         .bannerType(user.getBannerType())
         .predefinedBannerPath(user.getBanner())
+        .cardColor(new CardColorResponse(user.getCardColor().getId(),
+            user.getCardColor().getColorName(),
+            user.getCardColor().getColorCode()))
         .build();
   }
 

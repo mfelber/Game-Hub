@@ -54,6 +54,9 @@ export class UserPrivateProfileComponent implements OnInit {
   toastVisible = false;
   genreResponse: any[] = [];
   cardColorsResponse: any [] = [];
+
+  selectedColorCode: string = '';
+  selectedColorId: number | null = null;
   userResponse: UserPrivateResponse = {
     bio: '',
     badges: [],
@@ -69,7 +72,8 @@ export class UserPrivateProfileComponent implements OnInit {
 
   };
   userRequest: UserUpdateRequest = {
-    email: this.userResponse.email
+    email: this.userResponse.email,
+    cardColorId : this.selectedColorId!
   };
   isEditBioModalOpen = false;
   isEditGenresModalOpen = false;
@@ -284,9 +288,12 @@ export class UserPrivateProfileComponent implements OnInit {
         this.userRequest.firstName !== this.userResponse.firstName ||
         this.userRequest.lastName !== this.userResponse.lastName ||
         this.userRequest.email !== this.userResponse.email ||
-        this.userRequest.location !== this.userResponse.location?.name;
+        this.userRequest.location !== this.userResponse.location?.name || this.userRequest.cardColorId !== this.userResponse.cardColor?.id;
 
       if (changesExist) {
+
+
+        console.log(this.userRequest)
         await this.userService.updateUserProfile({
           body: this.userRequest
         }).toPromise();
@@ -303,6 +310,7 @@ export class UserPrivateProfileComponent implements OnInit {
   closeModal() {
     this.selectedColorCode = '';
     this.selectedColorId = null;
+    this.userRequest.cardColorId = this.userResponse.cardColor?.id;
     this.isProfileModalOpen = false;
     this.isEditProfileModalOpen = false;
     this.isEditBioModalOpen = false;
@@ -428,13 +436,12 @@ export class UserPrivateProfileComponent implements OnInit {
     this.previewImage = undefined;
   }
 
-  selectedColorCode: string = '';
-  selectedColorId: number | null = null;
 
   selectColor(id: number, colorCode: string) {
     console.log('you have selected', id, colorCode)
     this.selectedColorCode = colorCode;
     this.selectedColorId = id;
+    this.userRequest.cardColorId = id;
   }
 
   get changesExist(): boolean {
@@ -454,6 +461,7 @@ export class UserPrivateProfileComponent implements OnInit {
   removeSelectedCardColor() {
     this.selectedColorCode = '';
     this.selectedColorId = null;
+
 
   }
 }

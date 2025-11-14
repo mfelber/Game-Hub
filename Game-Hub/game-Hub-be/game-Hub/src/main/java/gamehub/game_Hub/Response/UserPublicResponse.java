@@ -33,4 +33,5 @@ public class UserPublicResponse {
   private String bannerType;
   private String predefinedBannerPath;
   private String profileColor;
+  private CardColorResponse cardColor;
 }

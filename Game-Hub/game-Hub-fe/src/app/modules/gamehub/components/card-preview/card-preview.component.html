@@ -17,14 +17,13 @@
   <div class="absolute left-6 top-1/2 transform -translate-y-1/2 flex ">
     <div>
 
-      <img *ngIf="!userHasProfilePicture && !isPreviewImageInserted"
-           src="assets/profilePicture/default_profile_picture.svg"
+      <img *ngIf="!userResponse.userProfilePicture && !isPreviewImageInserted"
+           src="../../../../../assets/profilePicture/default_profile_picture.svg"
            class="w-40 h-40 rounded-2xl border-2 border-black object-cover"
            [ngStyle]="{'background-color': userResponse.profileColor}"
-           alt="Profile Picture"
       />
 
-      <img *ngIf="(!userHasProfilePicture && isPreviewImageInserted) || userHasProfilePicture"
+      <img *ngIf="(userResponse.userProfilePicture) || (!userResponse.userProfilePicture && isPreviewImageInserted)"
            [src]=" previewImage || getProfilePicture(userResponse)"
            class="w-40 h-40 rounded-2xl border-2 border-black object-cover"
            alt="Profile Picture"
