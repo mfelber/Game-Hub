@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {NgForOf, NgIf, NgOptimizedImage} from "@angular/common";
+import {NgForOf, NgIf} from "@angular/common";
 import {PageResponseGameResponse} from '../../../../services/models/page-response-game-response';
 import {LibraryControllerService} from '../../../../services/services/library-controller.service';
 import {GameResponse} from '../../../../services/models/game-response';
@@ -91,7 +91,5 @@ export class LibraryComponent implements OnInit{
     }
     return 'https://images.pexels.com/photos/1054655/pexels-photo-1054655.jpeg';
   }
-
-
 
 }

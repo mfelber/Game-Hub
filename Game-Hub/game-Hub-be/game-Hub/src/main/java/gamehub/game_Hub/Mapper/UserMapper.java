@@ -88,7 +88,6 @@ public class UserMapper {
         .substring(1)
         .toLowerCase() + " " + user.getCreatedAt().getYear();
 
-
     return UserPrivateResponse.builder()
         .userId(user.getId())
         .firstName(user.getFirstName())

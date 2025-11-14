@@ -47,17 +47,19 @@ public class AuthenticationController {
     return ResponseEntity.accepted().build();
   }
 
-  @PostMapping("/authenticate")
-  public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody @Valid final AuthenticationRequest request) {
-    return ResponseEntity.ok(authenticationService.authenticate(request));
-  }
-
+  // Check if user exists in DB during registration
   @GetMapping("/check/user")
   public ResponseEntity<Boolean> checkUserExists(@RequestParam final String email) {
     boolean userExists = userRepository.existsByEmail(email);
     return ResponseEntity.ok(userExists);
   }
 
+  @PostMapping("/authenticate")
+  public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody @Valid final AuthenticationRequest request) {
+    return ResponseEntity.ok(authenticationService.authenticate(request));
+  }
+
+  // Handle password change requests
   @PostMapping("/forgot-password")
   public ResponseEntity<String> processForgotPasswordRequest(
       @RequestBody @Valid final ForgotPasswordRequest forgotPasswordRequest)
@@ -69,6 +71,7 @@ public class AuthenticationController {
     return ResponseEntity.ok().build();
   }
 
+  // Change password
   @PostMapping("/reset-password")
   public ResponseEntity<String> resetPassword(@RequestParam String token, @RequestParam @Valid String newPassword) {
     PasswordResetToken resetToken = passwordResetTokenRepository.findByToken(token);
@@ -85,6 +88,7 @@ public class AuthenticationController {
 
   }
 
+  // Verify token validity for password change
   @GetMapping("/reset-token-info")
   public ResponseEntity<TokenExpiredResponse> getResetTokenInfo(@RequestParam String token) {
     PasswordResetToken resetToken = passwordResetTokenRepository.findByToken(token);

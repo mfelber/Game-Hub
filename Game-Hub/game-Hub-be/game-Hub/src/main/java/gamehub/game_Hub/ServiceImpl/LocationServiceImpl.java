@@ -15,8 +15,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LocationServiceImpl implements LocationService {
 
-
-
   @Override
   public List<LocationResponse> findAllLocations() {
     return Arrays.stream(Location.values()).map(location -> new LocationResponse(location.name(), location.getLocationIcon())).collect(

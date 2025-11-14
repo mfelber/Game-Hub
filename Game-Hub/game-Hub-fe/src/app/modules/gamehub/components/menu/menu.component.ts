@@ -155,12 +155,10 @@ export class MenuComponent implements OnInit {
         break
     }
 
-
   }
 
   getAvailableStatuses(): string[] {
     return this.statuses.filter(s => s !== this.userResponse.status);
   }
-
 
 }

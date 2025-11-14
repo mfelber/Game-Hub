@@ -1,24 +1,24 @@
 <div class="flex gap-3 mb-2">
 
-  <button *ngIf="!loadAllGames" (click)="getOwnedGame()"  class="border border-gray-500 text-gray-300 hover:bg-gray-700/40 hover:text-white
+  <button *ngIf="!loadAllGames" (click)="getOwnedGame()" class="border border-gray-500 text-gray-300 hover:bg-gray-700/40 hover:text-white
 px-4 py-1.5 rounded-lg transition duration-300 mb-2 text-[13px]">
     All Games
   </button>
 
-<button *ngIf="loadAllGames" class="border border-emerald-500 text-emerald-400 bg-emerald-500/10
+  <button *ngIf="loadAllGames" class="border border-emerald-500 text-emerald-400 bg-emerald-500/10
 px-4 py-1.5 rounded-lg transition duration-300 mb-2 text-[13px]">
-  All Games
-</button>
+    All Games
+  </button>
 
   <button *ngIf="loadFavoriteGames" (click)="getFavoriteGames()" class="border border-emerald-500 text-emerald-400 bg-emerald-500/10
 px-4 py-1.5 rounded-lg transition duration-300 mb-2 text-[13px]">
     Favorite games
   </button>
 
-<button *ngIf="!loadFavoriteGames" (click)="getFavoriteGames()" class="border border-gray-500 text-gray-300 hover:bg-gray-700/40 hover:text-white
+  <button *ngIf="!loadFavoriteGames" (click)="getFavoriteGames()" class="border border-gray-500 text-gray-300 hover:bg-gray-700/40 hover:text-white
 px-4 py-1.5 rounded-lg transition duration-300 mb-2 text-[13px]">
-  Favorite games
-</button>
+    Favorite games
+  </button>
 
   <button class="border border-gray-500 text-gray-300 hover:bg-gray-700/40 hover:text-white
 px-4 py-1.5 rounded-lg transition duration-300 mb-2 text-[13px]">

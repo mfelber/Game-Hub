@@ -19,6 +19,7 @@ public class WishlistController {
 
   private final WishlistService wishlistService;
 
+  // Retrieve the wishlist of a user
   @GetMapping("/wishlist")
   public ResponseEntity<PageResponse<GameResponse>> getWishlist(
       @RequestParam(name = "page", defaultValue = "0", required = false) int page,

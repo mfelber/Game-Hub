@@ -18,21 +18,17 @@
       </div>
     </div>
 
-
-
-    <button *ngIf="!isRecommended" (click)="recommendGame(game.gameId)" class="absolute bottom-4 right-4 bg-gray-500 hover:bg-gray-600 text-white font-semibold px-3 py-1.5 rounded flex items-center gap-1 cursor-pointer">
+    <button *ngIf="!isRecommended" (click)="recommendGame(game.gameId)"
+            class="absolute bottom-4 right-4 bg-gray-500 hover:bg-gray-600 text-white font-semibold px-3 py-1.5 rounded flex items-center gap-1 cursor-pointer">
       Recommend <i class="fa-solid fa-thumbs-up"></i>
     </button>
 
-    <button *ngIf="isRecommended" (click)="recommendGame(game.gameId)" class="absolute bottom-4 right-4 bg-green-600 hover:bg-green-700 text-white font-semibold px-3 py-1.5 rounded flex items-center gap-1 cursor-pointer">
+    <button *ngIf="isRecommended" (click)="recommendGame(game.gameId)"
+            class="absolute bottom-4 right-4 bg-green-600 hover:bg-green-700 text-white font-semibold px-3 py-1.5 rounded flex items-center gap-1 cursor-pointer">
       Already recommended <i class="fa-solid fa-thumbs-up"></i>
     </button>
 
-
-
   </div>
-
-
 
   <div class="flex flex-col gap-4 flex-[1] lg:w-1/4">
     <div class="flex flex-col h-full">
@@ -41,29 +37,32 @@
 
         <div class="flex justify-between mb-1">
           <h2 class="font-semibold">Developer:</h2>
-          <h3>{{game.developer}}</h3>
+          <h3>{{ game.developer }}</h3>
         </div>
 
         <div class="flex justify-between mb-1">
           <h2 class="font-semibold">Publisher:</h2>
-          <h3>{{game.publisher}}</h3>
+          <h3>{{ game.publisher }}</h3>
         </div>
 
         <div class="flex justify-between mb-1">
           <h2 class="font-semibold">Release Date:</h2>
-          <h3>{{game.releaseYear}}</h3>
+          <h3>{{ game.releaseYear }}</h3>
         </div>
 
 
-        <button *ngIf="inFavorites" (click)="removeGameFromFavorite(game.gameId)" class="bg-red-600 hover:bg-red-700  text-white font-semibold py-2 px-4 rounded cursor-pointer">
+        <button *ngIf="inFavorites" (click)="removeGameFromFavorite(game.gameId)"
+                class="bg-red-600 hover:bg-red-700  text-white font-semibold py-2 px-4 rounded cursor-pointer">
           Remove from favorites <i class="fa-solid fa-heart"></i>
         </button>
 
-        <button *ngIf="!inFavorites" (click)="addGameToFavorite(game.gameId)" class="bg-gray-500 hover:bg-gray-600  text-white font-semibold py-2 px-4 rounded cursor-pointer">
+        <button *ngIf="!inFavorites" (click)="addGameToFavorite(game.gameId)"
+                class="bg-gray-500 hover:bg-gray-600  text-white font-semibold py-2 px-4 rounded cursor-pointer">
           Add as favorite <i class="fa-solid fa-heart"></i>
         </button>
 
-        <button class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded mt-auto cursor-pointer">
+        <button
+          class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded mt-auto cursor-pointer">
           Download <i class="fa-solid fa-download"></i>
         </button>
 
@@ -75,27 +74,27 @@
 
         <div class="flex justify-between mb-3 mt-auto">
           <h2 class="font-semibold">Processor:</h2>
-          <h3>{{game.systemRequirements.cpu}}</h3>
+          <h3>{{ game.systemRequirements.cpu }}</h3>
         </div>
 
         <div class="flex justify-between mb-3">
           <h2 class="font-semibold">GPu:</h2>
-          <h3>{{game.systemRequirements.gpu}}</h3>
+          <h3>{{ game.systemRequirements.gpu }}</h3>
         </div>
 
         <div class="flex justify-between mb-3">
           <h2 class="font-semibold">Memory:</h2>
-          <h3>{{game.systemRequirements.ram}}</h3>
+          <h3>{{ game.systemRequirements.ram }}</h3>
         </div>
 
         <div class="flex justify-between mb-3">
           <h2 class="font-semibold">Storage:</h2>
-          <h3>{{game.systemRequirements.storage}}</h3>
+          <h3>{{ game.systemRequirements.storage }}</h3>
         </div>
 
         <div class="flex justify-between mb-3">
           <h2 class="font-semibold">Operating System:</h2>
-          <h3>{{game.systemRequirements.os}}</h3>
+          <h3>{{ game.systemRequirements.os }}</h3>
         </div>
 
 
@@ -114,14 +113,16 @@
 <div class="bg-[#1E2A4A] rounded-xl p-4 shadow-md mb-4">
   <h3 class="text-lg font-semibold mb-3">Platforms</h3>
   <div class="flex gap-3">
-    <span *ngFor="let platform of game.platforms" class="bg-[#2B3A66] px-3 py-1 rounded-lg text-sm">{{ platform.platformName }}</span>
+    <span *ngFor="let platform of game.platforms"
+          class="bg-[#2B3A66] px-3 py-1 rounded-lg text-sm">{{ platform.platformName }}</span>
   </div>
 </div>
 
 <div class="bg-[#1E2A4A] rounded-xl p-4 shadow-md mb-4">
   <h3 class="text-lg font-semibold mb-3">Languages</h3>
   <div class="flex gap-3">
-    <span *ngFor="let language of game.languages" class="bg-[#2B3A66] px-3 py-1 rounded-lg text-sm">{{ language.languageName }}</span>
+    <span *ngFor="let language of game.languages"
+          class="bg-[#2B3A66] px-3 py-1 rounded-lg text-sm">{{ language.languageName }}</span>
   </div>
 </div>
 
@@ -129,6 +130,7 @@
 <div class="bg-[#1E2A4A] rounded-xl p-4 shadow-md">
   <h3 class="text-lg font-semibold mb-3">Subtitles</h3>
   <div class="flex gap-3">
-    <span *ngFor="let subtitles of game.subtitles" class="bg-[#2B3A66] px-3 py-1 rounded-lg text-sm">{{ subtitles.subtitleName }}</span>
+    <span *ngFor="let subtitles of game.subtitles"
+          class="bg-[#2B3A66] px-3 py-1 rounded-lg text-sm">{{ subtitles.subtitleName }}</span>
   </div>
 </div>
