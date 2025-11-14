@@ -20,7 +20,7 @@ Game Detail in store
 <img width="1907" height="947" alt="image" src="https://github.com/user-attachments/assets/05446a5c-fd20-490e-bd82-4d8aa5c6023f" />
 *View when the user already owns the game*
 
-**Library
+**Library**
 <img width="1913" height="951" alt="image" src="https://github.com/user-attachments/assets/12444ebf-a980-4d39-9f76-31f6049451dd" />
 
 **In Library:** 
