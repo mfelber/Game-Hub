@@ -39,7 +39,7 @@ Game Detail in store
 
 
 ## 🧩 Planned Features
-- 💬 Chat or friends system
+- 💬 Chat and friends system
 - 🧑‍🤝‍🧑 Find other users
 - 👥 Creating groups
 - 🛠️ Admin tools
