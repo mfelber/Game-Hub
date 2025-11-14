@@ -12,6 +12,9 @@ import {LocationControllerService} from '../../../../services/services/location-
 import {HttpClient} from '@angular/common/http';
 import {AuthenticationService} from '../../../../services/services/authentication.service';
 import {AuthenticationRequest} from '../../../../services/models/authentication-request';
+import {CardColorControllerService} from '../../../../services/services/card-color-controller.service';
+import {CardColorResponse} from '../../../../services/models/card-color-response';
+import {CardPreviewComponent} from '../../components/card-preview/card-preview.component';
 
 @Component({
   selector: 'app-user-profile',
@@ -20,7 +23,8 @@ import {AuthenticationRequest} from '../../../../services/models/authentication-
     NgForOf,
     NgClass,
     FormsModule,
-    NgStyle
+    NgStyle,
+    CardPreviewComponent
   ],
   templateUrl: './user-private-profile.component.html',
   styleUrl: './user-private-profile.component.css'
@@ -40,6 +44,7 @@ export class UserPrivateProfileComponent implements OnInit {
     private locationService: LocationControllerService,
     private http: HttpClient,
     private authenticationService: AuthenticationService,
+    private cardColorService: CardColorControllerService
   ) {
   }
 
@@ -48,6 +53,10 @@ export class UserPrivateProfileComponent implements OnInit {
   successMessage: string | null = null;
   toastVisible = false;
   genreResponse: any[] = [];
+  cardColorsResponse: any [] = [];
+
+  selectedColorCode: string = '';
+  selectedColorId: number | null = null;
   userResponse: UserPrivateResponse = {
     bio: '',
     badges: [],
@@ -63,7 +72,8 @@ export class UserPrivateProfileComponent implements OnInit {
 
   };
   userRequest: UserUpdateRequest = {
-    email: this.userResponse.email
+    email: this.userResponse.email,
+    cardColorId : this.selectedColorId!
   };
   isEditBioModalOpen = false;
   isEditGenresModalOpen = false;
@@ -217,6 +227,15 @@ export class UserPrivateProfileComponent implements OnInit {
     })
   }
 
+  private getColorsForcard() {
+    this.cardColorService.getColors().subscribe({
+      next: (colors) => {
+        this.cardColorsResponse = colors;
+        console.log(colors)
+    }
+    })
+  }
+
   selectedGenre(id: number) {
     if (this.selectedGenres.has(id)) {
       this.selectedGenres.delete(id)
@@ -269,9 +288,12 @@ export class UserPrivateProfileComponent implements OnInit {
         this.userRequest.firstName !== this.userResponse.firstName ||
         this.userRequest.lastName !== this.userResponse.lastName ||
         this.userRequest.email !== this.userResponse.email ||
-        this.userRequest.location !== this.userResponse.location?.name;
+        this.userRequest.location !== this.userResponse.location?.name || this.userRequest.cardColorId !== this.userResponse.cardColor?.id;
 
       if (changesExist) {
+
+
+        console.log(this.userRequest)
         await this.userService.updateUserProfile({
           body: this.userRequest
         }).toPromise();
@@ -286,6 +308,9 @@ export class UserPrivateProfileComponent implements OnInit {
   }
 
   closeModal() {
+    this.selectedColorCode = '';
+    this.selectedColorId = null;
+    this.userRequest.cardColorId = this.userResponse.cardColor?.id;
     this.isProfileModalOpen = false;
     this.isEditProfileModalOpen = false;
     this.isEditBioModalOpen = false;
@@ -307,12 +332,15 @@ export class UserPrivateProfileComponent implements OnInit {
     this.isPreviewImageInserted = false;
     this.showPredefinedBanners = false;
     this.selectedBannerId = null;
+    this.profilePicture = null;
+    this.profileBanner = null;
   }
 
   editProfile() {
     this.closeModal();
     this.isEditProfileModalOpen = true;
     this.getLocations();
+    this.getColorsForcard();
   }
 
   getLocations() {
@@ -406,5 +434,34 @@ export class UserPrivateProfileComponent implements OnInit {
   removeProfileImage() {
     this.isPreviewImageInserted = false;
     this.previewImage = undefined;
+  }
+
+
+  selectColor(id: number, colorCode: string) {
+    console.log('you have selected', id, colorCode)
+    this.selectedColorCode = colorCode;
+    this.selectedColorId = id;
+    this.userRequest.cardColorId = id;
+  }
+
+  get changesExist(): boolean {
+    return this.selectedColorId !== null || this.isPreviewBannerInserted || this.isPreviewImageInserted || this.selectedBannerId !== null;
+  }
+
+  showPreviewColors = false
+  showPreview() {
+    this.showPreviewColors = true;
+  }
+
+  hidePreview() {
+    this.showPreviewColors = false;
+    // this.selectedColorCode = '';
+  }
+
+  removeSelectedCardColor() {
+    this.selectedColorCode = '';
+    this.selectedColorId = null;
+
+
   }
 }

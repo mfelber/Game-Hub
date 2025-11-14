@@ -12,6 +12,7 @@ import { LibraryControllerService } from './services/library-controller.service'
 import { AuthenticationService } from './services/authentication.service';
 import { WishlistControllerService } from './services/wishlist-controller.service';
 import { LocationControllerService } from './services/location-controller.service';
+import { CardColorControllerService } from './services/card-color-controller.service';
 
 /**
  * Module that provides all services and configuration.
@@ -27,6 +28,7 @@ import { LocationControllerService } from './services/location-controller.servic
     AuthenticationService,
     WishlistControllerService,
     LocationControllerService,
+    CardColorControllerService,
     ApiConfiguration
   ],
 })

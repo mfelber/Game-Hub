@@ -12,8 +12,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import gamehub.game_Hub.Module.CardColor;
 import gamehub.game_Hub.Module.User.Location;
 import gamehub.game_Hub.Module.User.Status;
+import gamehub.game_Hub.Repository.CardColorRepository;
 import gamehub.game_Hub.Request.AuthenticationRequest;
 import gamehub.game_Hub.Response.AuthenticationResponse;
 import gamehub.game_Hub.Request.ForgotPasswordRequest;
@@ -27,6 +29,7 @@ import gamehub.game_Hub.Repository.user.PasswordResetTokenRepository;
 import gamehub.game_Hub.Repository.user.UserRepository;
 import gamehub.game_Hub.Security.JwtService;
 import jakarta.mail.MessagingException;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -48,12 +51,17 @@ public class AuthenticationService {
 
   private final JwtService jwtService;
 
+  private final CardColorRepository cardColorRepository;
+
   @Value("${application.mailing.frontend.login-url}")
   private String logInUrl;
 
   public void registerUser(final RegistrationRequest request) throws MessagingException {
     var userRole = roleRepository.findByName("USER")
         .orElseThrow(() -> new IllegalStateException("Role USER was not initialized"));
+
+    CardColor defaultColor = cardColorRepository.findById(1L).orElseThrow(() -> new EntityNotFoundException("Card Color was not initialized"));
+
     var user = User.builder()
         .firstName(request.getFirstName())
         .lastName(request.getLastName())
@@ -66,6 +74,7 @@ public class AuthenticationService {
         .profileColor(getRandomColor())
         .bannerType("PREDEFINED")
         .banner("/assets/banners/banner_1.jpg")
+        .cardColor(defaultColor)
         .build();
 
     userRepository.save(user);
