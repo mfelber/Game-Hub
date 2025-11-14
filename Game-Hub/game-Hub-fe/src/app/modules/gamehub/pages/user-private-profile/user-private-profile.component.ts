@@ -301,6 +301,8 @@ export class UserPrivateProfileComponent implements OnInit {
   }
 
   closeModal() {
+    this.selectedColorCode = '';
+    this.selectedColorId = null;
     this.isProfileModalOpen = false;
     this.isEditProfileModalOpen = false;
     this.isEditBioModalOpen = false;
@@ -322,6 +324,8 @@ export class UserPrivateProfileComponent implements OnInit {
     this.isPreviewImageInserted = false;
     this.showPredefinedBanners = false;
     this.selectedBannerId = null;
+    this.profilePicture = null;
+    this.profileBanner = null;
   }
 
   editProfile() {
@@ -424,16 +428,32 @@ export class UserPrivateProfileComponent implements OnInit {
     this.previewImage = undefined;
   }
 
-  selectColor(id: number) {
-    console.log('you have selected', id)
+  selectedColorCode: string = '';
+  selectedColorId: number | null = null;
+
+  selectColor(id: number, colorCode: string) {
+    console.log('you have selected', id, colorCode)
+    this.selectedColorCode = colorCode;
+    this.selectedColorId = id;
   }
 
-  showPreviewColors = true
+  get changesExist(): boolean {
+    return this.selectedColorId !== null || this.isPreviewBannerInserted || this.isPreviewImageInserted || this.selectedBannerId !== null;
+  }
+
+  showPreviewColors = false
   showPreview() {
     this.showPreviewColors = true;
   }
 
   hidePreview() {
     this.showPreviewColors = false;
+    // this.selectedColorCode = '';
+  }
+
+  removeSelectedCardColor() {
+    this.selectedColorCode = '';
+    this.selectedColorId = null;
+
   }
 }

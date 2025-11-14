@@ -2,18 +2,31 @@
      class="top-0 left-0 w-full h-full z-50">
   <app-card-preview
     [userResponse]="userResponse"
-    [cardColorsResponse]="cardColorsResponse">
+    [cardColorsResponse]="cardColorsResponse"
+    [selectedColor]="selectedColorCode"
+    [previewBanner]="previewBanner"
+    [isPreviewImageInserted]="isPreviewImageInserted"
+    [previewImage]="previewImage"
+  >
+
   </app-card-preview>
 </div>
 
-<div *ngIf="showPreviewColors"
-     class="fixed inset-0 z-50 flex justify-center items-start">
-  <div class="bg-red-500  w-full h-16 flex justify-center items-center">
-    <button (click)="hidePreview()" class="cursor-pointer">Close preview &times;</button>
+<div *ngIf="showPreviewColors" class="fixed inset-0 z-50 flex flex-col items-center pointer-events-none">
+
+  <div class="absolute inset-0 bg-opacity-40 pointer-events-auto"></div>
+
+  <div class="relative z-50 mt-4 w-auto max-w-lg px-6 py-3 bg-gray-800 bg-opacity-90 text-white rounded-lg shadow-lg flex items-center justify-between space-x-4 pointer-events-auto">
+    <span class="text-sm font-medium">Previewing your changes</span>
+    <button
+      (click)="hidePreview()"
+      class="text-gray-300 hover:text-white transition-colors duration-200 text-lg font-bold">
+      &times;
+    </button>
   </div>
 </div>
 
-<div >
+<div>
 
 </div>
 <div *ngIf="!showPreviewColors" class="relative w-full items-center">
@@ -29,9 +42,9 @@
 
 
     <img *ngIf="userResponse.bannerType === 'PREDEFINED'"
-      [src]="userResponse.predefinedBannerPath"
-      alt="Banner cover"
-      class="w-full h-full object-cover rounded-t-2xl border-t border-r border-l border-white/20"
+         [src]="userResponse.predefinedBannerPath"
+         alt="Banner cover"
+         class="w-full h-full object-cover rounded-t-2xl border-t border-r border-l border-white/20"
     />
 
     <img *ngIf="userResponse.bannerType === 'CUSTOM'"
@@ -70,7 +83,7 @@
           </span>
         </div>
 
-        <p class="text-sm text-gray-300 mx-0.5">Joined {{ userResponse.joinedDate }}</p>
+        <p class="text-sm font-semibold text-gray-700 mx-0.5">Joined {{ userResponse.joinedDate }}</p>
       </div>
       <div class="mt-auto flex flex-col mx-2">
         <div class="flex gap-2">
@@ -96,7 +109,8 @@
         <div class="relative w-full h-40 rounded-xl overflow-hidden mb-5">
 
 
-          <img *ngIf="userResponse.bannerType === 'PREDEFINED'" [src]="userResponse.predefinedBannerPath" class="w-full h-full object-cover"/>
+          <img *ngIf="userResponse.bannerType === 'PREDEFINED'" [src]="userResponse.predefinedBannerPath"
+               class="w-full h-full object-cover"/>
 
           <img [src]="getBanner(userResponse)" class="w-full h-full object-cover"/>
           <div class="absolute inset-0 bg-black/30"></div>
@@ -306,17 +320,16 @@
           <div class="relative w-full h-48 rounded-xl mb-5">
 
 
-<!--            <img *ngIf="isPreviewBannerInserted"-->
-<!--                 [src]="'assets/banners/banner_' +userResponse.predefinedBanner+'.jpg'"-->
-<!--                 class="w-full h-full rounded-2xl object-cover"-->
-<!--                 alt="Profile Banner"-->
-
+            <!--            <img *ngIf="isPreviewBannerInserted"-->
+            <!--                 [src]="'assets/banners/banner_' +userResponse.predefinedBanner+'.jpg'"-->
+            <!--                 class="w-full h-full rounded-2xl object-cover"-->
+            <!--                 alt="Profile Banner"-->
 
 
             <img *ngIf="userResponse.bannerType === 'PREDEFINED'"
                  [src]="previewBanner || getBanner(userResponse)"
                  class="w-full h-full rounded-2xl object-cover"
-                 alt="Profile Banner" />
+                 alt="Profile Banner"/>
 
 
             <img *ngIf="userResponse.bannerType === 'CUSTOM'"
@@ -364,8 +377,8 @@
                 />
 
                 <label *ngIf="isPreviewImageInserted"
-                  (click)="removeProfileImage()"
-                  class="absolute bg-red-500 -top-2 -left-2 text-white flex items-center justify-center w-8 h-8 rounded-full cursor-pointer hover:bg-red-600 transition-colors duration-200"
+                       (click)="removeProfileImage()"
+                       class="absolute bg-red-500 -top-2 -left-2 text-white flex items-center justify-center w-8 h-8 rounded-full cursor-pointer hover:bg-red-600 transition-colors duration-200"
                 >
                   <i class="fa-solid fa-trash-can"></i>
                 </label>
@@ -406,19 +419,33 @@
             </div>
 
             <div>
-              <label class="text-gray-300 text-sm mb-2 block">Colors for cards</label>
+              <div class="flex justify-between items-center mb-2">
+                <label class="text-gray-300 text-sm">Colors for cards</label>
+              </div>
+              <!--              <label class="text-gray-300 text-sm mb-2 block">Colors for cards</label>-->
+              <!--              <button *ngIf="selectedColorCode != '' " (click)="showPreview()" class="text-sm w-52 cursor-pointer flex items-center">-->
+              <!--                Preview-->
+              <!--              </button>-->
               <div class="flex flex-wrap gap-4">
                 <div *ngFor="let cardColor of cardColorsResponse" class="flex flex-col items-center">
-                  <div (click)="selectColor(cardColor.id)"
-                       class="w-12 h-12 border-2 border-black rounded-xl cursor-pointer hover:scale-110 transition-transform"
-                       [ngStyle]="{'background-color': cardColor.colorCode}">
+
+                  <div
+                    (click)="selectColor(cardColor.id, cardColor.colorCode)"
+                    class="relative w-12 h-12 border-2 border-black rounded-xl cursor-pointer hover:scale-110 transition-transform"
+                    [ngStyle]="{'background-color': cardColor.colorCode}"
+                  >
+
+                    <label *ngIf="selectedColorId === cardColor.id"
+                           (click)="removeSelectedCardColor() ; $event.stopPropagation()"
+                           class="absolute bg-red-500 -top-2 -left-2 text-white flex items-center justify-center w-7 h-7 rounded-full cursor-pointer hover:bg-red-600 transition-colors duration-200"
+                    >
+                      <i class="fa-solid fa-trash-can"></i>
+                    </label>
                   </div>
+
                   <p class="text-xs text-center mt-1">{{ cardColor.colorName }}</p>
                 </div>
               </div>
-              <button (click)="showPreview()" class="text-sm w-52 cursor-pointer flex items-center">
-                Preview
-              </button>
             </div>
           </div>
         </div>
@@ -496,10 +523,29 @@
 
       </div>
 
+      <!--      <button [disabled]="!changesExist"-->
+      <!--              [title]="changesExist ? 'See how your profile will look' : 'Make at least one change to preview your profile'"-->
+      <!--              (click)="showPreview()"-->
+      <!--              [ngClass]="{'px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition': changesExist,-->
+      <!--              'px-4 py-2 bg-gray-600 text-gray-400 rounded-lg hover:bg-gray-700 transition': !changesExist}">-->
+      <!--        Preview-->
+      <!--      </button>-->
 
       <!-- Action Buttons -->
 
       <div class="flex justify-end gap-3 mt-6">
+        <div *ngIf="activeTab === 'profile'" class="w-full flex">
+          <button
+            [disabled]="!changesExist"
+            [title]="changesExist ? 'See how your profile will look' : 'Make at least one change to preview your profile'"
+            (click)="showPreview()"
+            class="px-4 py-2 rounded-lg transition-colors duration-150"
+            [ngClass]="changesExist ? 'bg-gray-600 text-white hover:bg-gray-700 cursor-pointer' : 'bg-gray-600 text-gray-400'"
+          >
+            Try changes
+          </button>
+        </div>
+
         <button (click)="closeModal()"
                 class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-500 transition-colors cursor-pointer">
           Cancel
@@ -520,7 +566,7 @@
 
 
 <div *ngIf="!showPreviewColors"
-  class="w-full h-[75px] bg-black/30 rounded-b-2xl flex items-center gap-4 border-b border-r border-l border-white/20">
+     class="w-full h-[75px] bg-black/30 rounded-b-2xl flex items-center gap-4 border-b border-r border-l border-white/20">
 
   <div class="w-35 text-center text-10px">
     <p class="text-sm font-semibold"> {{ userResponse.libraryCount }}</p>

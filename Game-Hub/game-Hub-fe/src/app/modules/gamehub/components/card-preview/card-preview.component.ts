@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {UserPrivateResponse} from '../../../../services/models/user-private-response';
 import {FormsModule} from '@angular/forms';
 import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
@@ -15,10 +15,14 @@ import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
   templateUrl: './card-preview.component.html',
   styleUrl: './card-preview.component.css'
 })
-export class CardPreviewComponent {
+export class CardPreviewComponent{
   @Input() userResponse!: UserPrivateResponse;
   @Input() cardColorsResponse!: any[];
   userHasProfilePicture = true;
+  @Input() selectedColor!: string;
+  @Input() previewBanner!: string | undefined;
+  @Input() isPreviewImageInserted!: boolean;
+  @Input() previewImage!: string | undefined;
 
   getBanner(user: UserPrivateResponse) {
     if (user.bannerImage) {
