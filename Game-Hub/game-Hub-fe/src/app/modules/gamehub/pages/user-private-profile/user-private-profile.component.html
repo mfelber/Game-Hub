@@ -12,6 +12,7 @@
   </app-card-preview>
 </div>
 
+
 <div *ngIf="showPreviewColors" class="fixed inset-0 z-50 flex flex-col items-center pointer-events-none">
 
   <div class="absolute inset-0 bg-opacity-40 pointer-events-auto"></div>
@@ -287,22 +288,25 @@
 
           <label class="text-gray-300 text-sm mb-1">Nationality</label>
           <div class="flex items-center gap-2 overflow-y-visible">
-            <select
-              [(ngModel)]="userRequest.location"
-              class="border border-gray-500 text-gray-300 bg-gray-900 px-4 py-2 rounded-lg w-[150px] mt-1 h-10"
-              [ngStyle]="{ color: 'white' }"
-            >
-              <option
-                *ngFor="let loc of allLocations"
-                [ngValue]="loc.name"
-                [ngStyle]="{
-                backgroundColor: userRequest.location === loc.name ? '#374155' : '#1f2937',
-                color: 'white'
-              }"
-              >
-                {{ loc.name }}
-              </option>
-            </select>
+
+            <div class="relative w-[150px]">
+              <button (click)="toggleLocationDropdown()"
+                      class="w-full border border-gray-500 bg-gray-900 text-white px-4 py-2 rounded-lg flex justify-between items-center">
+                {{ userRequest.location || 'Select location' }}
+                <i class="fa-solid fa-chevron-down"></i>
+              </button>
+
+              <div *ngIf="isLocationDropdownOpen"
+                   class="absolute z-50 w-full max-h-40 overflow-y-auto bg-gray-800 border border-gray-600 rounded-lg mt-1">
+                <div *ngFor="let loc of allLocations"
+                     (click)="selectLocation(loc.name)"
+                     class="px-4 py-2 cursor-pointer hover:bg-gray-700 flex items-center gap-2"
+                     [ngClass]="{'bg-gray-700': userRequest.location === loc.name}">
+                  <img *ngIf="loc.iconPath" [src]="loc.iconPath" class="w-4 h-4"/>
+                  <span>{{ loc.name }}</span>
+                </div>
+              </div>
+            </div>
             <img
               *ngIf="userRequest.location"
               [src]="getIconPath(userRequest.location)"
@@ -312,6 +316,7 @@
           </div>
 
         </div>
+
 
         <!-- Profile & Banner Tab -->
 

@@ -59,7 +59,9 @@ export class UserPrivateProfileComponent implements OnInit {
   isEditGenresModalOpen = false;
   isEditProfileModalOpen = false;
   isProfileModalOpen = false;
+  isLocationDropdownOpen = false;
   toastVisible = false;
+  
   showPredefinedBanners = false;
   isPreviewImageInserted = false;
   isPreviewBannerInserted = false;
@@ -311,6 +313,7 @@ export class UserPrivateProfileComponent implements OnInit {
   }
 
   closeModal() {
+    this.isLocationDropdownOpen = false;
     this.selectedColorCode = '';
     this.selectedColorId = null;
     this.userRequest.cardColorId = this.userResponse.cardColor?.id;
@@ -455,5 +458,13 @@ export class UserPrivateProfileComponent implements OnInit {
     this.selectedColorCode = '';
     this.selectedColorId = null;
 
+  }
+
+  toggleLocationDropdown() {
+    this.isLocationDropdownOpen = !this.isLocationDropdownOpen;
+  }
+
+  selectLocation(name: any) {
+    this.userRequest.location = name;
   }
 }
