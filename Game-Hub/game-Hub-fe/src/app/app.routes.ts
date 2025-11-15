@@ -3,6 +3,7 @@ import {LoginComponent} from './pages/login/login.component';
 import {RegisterComponent} from './pages/register/register.component';
 import {ForgotPasswordComponent} from './modules/gamehub/pages/forgot-password/forgot-password.component';
 import {ResetPasswordComponent} from './modules/gamehub/pages/reset-password/reset-password.component';
+import {authGuard} from './services/guard/auth.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' }, // default page
@@ -24,6 +25,7 @@ export const routes: Routes = [
   },
   {
     path: 'gamehub',
-    loadChildren: () => import('./modules/gamehub/gamehub.module').then(m => m.GamehubModule)
+    loadChildren: () => import('./modules/gamehub/gamehub.module').then(m => m.GamehubModule),
+    canActivate: [authGuard]
   }
 ];

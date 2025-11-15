@@ -12,6 +12,7 @@ import {GameDetailsComponent} from './pages/game-details/game-details.component'
 import {GameDetailsLibraryComponent} from './pages/game-details-library/game-details-library.component';
 import {UserPrivateProfileComponent} from './pages/user-private-profile/user-private-profile.component';
 import {UserPublicProfileComponent} from './pages/user-public-profile/user-public-profile.component';
+import {authGuard} from '../../services/guard/auth.guard';
 
 const routes: Routes = [
   {
@@ -20,45 +21,56 @@ const routes: Routes = [
     children: [
       {
         path:'',
-        component: StoreComponent
+        component: StoreComponent,
+        canActivate: [authGuard]
       },
       {
         path: 'library',
-        component: LibraryComponent
+        component: LibraryComponent,
+        canActivate: [authGuard]
       },
       {
         path: 'wishlist',
-        component: WishlistComponent
+        component: WishlistComponent,
+        canActivate: [authGuard]
       },
       {
         path: 'community',
-        component: CommunityComponent
+        component: CommunityComponent,
+        canActivate: [authGuard]
       },
       {
         path: 'discounts',
-        component: DiscountsComponent
+        component: DiscountsComponent,
+        canActivate: [authGuard]
       },
       {
         path: 'friend-requests',
-        component: FriendRequestsComponent
+        component: FriendRequestsComponent,
+        canActivate: [authGuard]
       },
       {
         path: 'friends',
-        component: FriendsComponent
+        component: FriendsComponent,
+        canActivate: [authGuard]
       },
       { path: 'game/:id',
-        component: GameDetailsComponent
+        component: GameDetailsComponent,
+        canActivate: [authGuard]
       },
       { path: 'library/game/:id',
-        component: GameDetailsLibraryComponent
+        component: GameDetailsLibraryComponent,
+        canActivate: [authGuard]
       },
       {
         path: 'user/me',
-        component: UserPrivateProfileComponent
+        component: UserPrivateProfileComponent,
+        canActivate: [authGuard]
       },
       {
         path: 'user/:id',
-        component: UserPublicProfileComponent
+        component: UserPublicProfileComponent,
+        canActivate: [authGuard]
       }
     ]
   }

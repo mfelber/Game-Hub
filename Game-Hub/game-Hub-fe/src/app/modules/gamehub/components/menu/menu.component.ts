@@ -106,6 +106,7 @@ export class MenuComponent implements OnInit {
   }
 
   logoutUser() {
+    localStorage.removeItem('token')
     this.userService.setStatusToOffline().subscribe({
       next: () => {
         window.location.href = '/logout';
