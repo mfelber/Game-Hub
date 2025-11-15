@@ -108,7 +108,6 @@ export class UserPrivateProfileComponent implements OnInit {
   private loadUserPrivateProfile() {
     this.userService.getUserPrivate().subscribe({
       next: (user) => {
-        console.log(this.previewImage)
         this.userResponse = user;
         this.isLoaded = true;
         this.bioUpdateRequest.bio = user.bio || '';
@@ -233,7 +232,7 @@ export class UserPrivateProfileComponent implements OnInit {
     })
   }
 
-  private getColorsForcard() {
+  private getColorsForCard() {
     this.cardColorService.getColors().subscribe({
       next: (colors) => {
         this.cardColorsResponse = colors;
@@ -265,48 +264,53 @@ export class UserPrivateProfileComponent implements OnInit {
 
   async saveProfile() {
     try {
+
       if (this.selectedBannerId !== null) {
         const bannerPath = "/assets/banners/banner_" + this.selectedBannerId + ".jpg";
         await this.userService.setPredefinedBanner({body: {bannerPath}}).toPromise();
         this.profileBanner = null;
+        this.showSuccess('You have successfully updated profile')
 
       } else if (this.profileBanner) {
         const formData = new FormData();
         formData.append('file', this.profileBanner);
         await this.http.post('http://localhost:8088/api/v1/profile/custom/banner', formData).toPromise();
+        this.showSuccess('You have successfully updated profile')
       }
 
       if (this.profilePicture) {
         const formData = new FormData();
         formData.append('file', this.profilePicture);
 
-
         try {
           await this.http.post('http://localhost:8088/api/v1/profile/image', formData).toPromise()
           this.userHasProfilePicture = true;
+          console.log("nastala zmena v obrazku?")
+          this.showSuccess('You have successfully updated profile')
         } catch (err) {
           console.error(err)
         }
 
       }
 
-      const changesExist = this.userRequest.username !== this.userResponse.username ||
+      const changesExistProfileInfo = this.userRequest.username !== this.userResponse.username ||
         this.userRequest.firstName !== this.userResponse.firstName ||
         this.userRequest.lastName !== this.userResponse.lastName ||
         this.userRequest.email !== this.userResponse.email ||
-        this.userRequest.location !== this.userResponse.location?.name || this.userRequest.cardColorId !== this.userResponse.cardColor?.id;
+        this.userRequest.location !== this.userResponse.location?.name || this.userRequest.cardColorId !== this.userResponse.cardColor?.id
 
-      if (changesExist) {
-
+      if (changesExistProfileInfo) {
 
         console.log(this.userRequest)
         await this.userService.updateUserProfile({
           body: this.userRequest
         }).toPromise();
+
       }
+
       this.loadUserPrivateProfile();
       this.closeModal();
-      this.showSuccess('You have successfully updated profile')
+
     } catch (err) {
       console.error(err)
     }
@@ -347,7 +351,7 @@ export class UserPrivateProfileComponent implements OnInit {
     this.closeModal();
     this.isEditProfileModalOpen = true;
     this.getLocations();
-    this.getColorsForcard();
+    this.getColorsForCard();
   }
 
   getLocations() {
