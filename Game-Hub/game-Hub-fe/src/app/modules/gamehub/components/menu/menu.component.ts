@@ -36,6 +36,7 @@ export class MenuComponent implements OnInit {
 
   isStoreActive = false;
   isLibraryActive = false;
+  isCommunityActive = false;
   _isGameDetailsActive = false;
   userResponse: UserPrivateResponse = {};
   statusResponse: StatusResponse = {};
@@ -57,7 +58,7 @@ export class MenuComponent implements OnInit {
 
   private loadUserName() {
     this.userService.getUserPrivateShort().subscribe({
-      next:  (user) => {
+      next: (user) => {
         this.userResponse = user;
         console.log(user)
         if (user.userProfilePicture) {
@@ -84,10 +85,15 @@ export class MenuComponent implements OnInit {
   updateActiveTabs(url: string) {
     this.isStoreActive = url === '/gamehub' || url.startsWith('/gamehub/game/');
     this.isLibraryActive = url === '/gamehub/library' || url.startsWith("/gamehub/library/game/");
+    this.isCommunityActive = url === '/gamehub/community';
   }
 
-  isGameDetailsActive(url: string){
-    this._isGameDetailsActive = url.startsWith("/gamehub/library/game/") || url.startsWith("/gamehub/game/") || url.startsWith("/gamehub/user/");
+  isGameDetailsActive(url: string) {
+    this._isGameDetailsActive =
+      url.startsWith("/gamehub/library/game/")
+      || url.startsWith("/gamehub/game/")
+      || url.startsWith("/gamehub/user/")
+      || url.startsWith("/gamehub/community");
   }
 
   goToCart() {
@@ -106,9 +112,10 @@ export class MenuComponent implements OnInit {
   }
 
   logoutUser() {
-    localStorage.removeItem('token')
+
     this.userService.setStatusToOffline().subscribe({
       next: () => {
+        localStorage.removeItem('token')
         window.location.href = '/logout';
       },
       error: (err) => console.error(err)
