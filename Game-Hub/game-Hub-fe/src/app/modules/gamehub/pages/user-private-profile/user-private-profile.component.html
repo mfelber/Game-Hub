@@ -597,10 +597,11 @@
 </div>
 
 
-<div *ngIf="!showPreviewColors" class="w-full h-[60vh] mt-5 flex flex-1 gap-5">
+  <div class="w-full h-[60vh] mt-5 flex flex-col lg:flex-row gap-5">
 
-  <div *ngIf="isLoaded" class="w-1/5 h-full backdrop-blur-md rounded-2xl flex flex-col shadow-lg border border-white/20"
-       [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
+    <div *ngIf="isLoaded"
+      class="lg:w-1/5 w-full h-full backdrop-blur-md rounded-2xl flex flex-col shadow-lg border border-white/20"
+      [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
     <div class="justify-between flex p-4 border-b border-white/20">
       <div class="flex items-center gap-2">
         <i class="fa-solid fa-gamepad text-[#3B82F6] text-xl"></i><span class="font-semibold">Recentyly played</span>
@@ -612,11 +613,11 @@
     </div>
   </div>
 
-  <div class="flex-1 flex flex-col gap-4">
+  <div class="flex-1 flex flex-col gap-5">
 
-    <div class="h-1/2 flex gap-4">
+    <div class="flex flex-col lg:flex-row h-auto lg:h-1/2 gap-4">
       <div *ngIf="isLoaded"
-        class="flex-none w-100 break-words  backdrop-blur-md rounded-2xl flex flex-col shadow-lg border border-white/20 overflow-hidden"
+        class="w-full lg:w-100 break-words backdrop-blur-md rounded-2xl flex flex-col shadow-lg border border-white/20 overflow-hidden"
         [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
         <div class="flex justify-between items-center p-4 border-b border-white/20">
           <div class="flex items-center gap-2">
@@ -670,7 +671,7 @@
       </div>
 
 
-      <div *ngIf="isLoaded" class="w-full rounded-2xl flex flex-col  backdrop-blur-md shadow-lg border border-white/20"
+      <div *ngIf="isLoaded" class="w-full lg:w-130 rounded-2xl flex flex-col  backdrop-blur-md shadow-lg border border-white/20"
            [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
 
         <div class="flex-none justify-between flex p-4 border-b border-white/20">
@@ -699,7 +700,7 @@
       </div>
 
 
-      <div *ngIf="isLoaded" class="w-150 rounded-2xl flex flex-col shadow-lg border border-white/20"
+      <div *ngIf="isLoaded" class="w-full lg:w-75 rounded-2xl flex flex-col shadow-lg border border-white/20"
            [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
         <div class="justify-between flex p-4 border-b border-white/20">
           <div class="flex items-center gap-2">
@@ -784,8 +785,8 @@
       </div>
     </div>
 
-    <div *ngIf="isLoaded" class=" h-1/2 flex gap-4">
-      <div class="w-3/2  backdrop-blur-md rounded-2xl flex flex-col shadow-lg border border-white/20"
+    <div *ngIf="isLoaded" class="flex flex-col 2xl:flex-row h-1/2 gap-5">
+      <div class="w-full lg:w-3/2 backdrop-blur-md rounded-2xl flex flex-col shadow-lg border border-white/20"
            [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
         <div class="justify-between flex p-4 border-b border-white/20">
           <div class="flex items-center gap-2">
@@ -821,7 +822,7 @@
         </div>
 
       </div>
-      <div *ngIf="isLoaded" class="w-full  backdrop-blur-md rounded-2xl flex flex-col shadow-lg border border-white/20"
+      <div *ngIf="isLoaded" class="w-full backdrop-blur-md rounded-2xl flex flex-col shadow-lg border border-white/20"
            [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
         <div class="justify-between flex p-4 border-b border-white/20">
           <div class="flex items-center gap-2">
