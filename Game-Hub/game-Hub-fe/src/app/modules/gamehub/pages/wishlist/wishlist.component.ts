@@ -8,16 +8,19 @@ import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-wishlist',
-  imports: [
-    NgForOf
-  ],
+    imports: [
+        NgForOf,
+        NgIf
+    ],
   templateUrl: './wishlist.component.html',
   styleUrl: './wishlist.component.scss'
 })
 export class WishlistComponent implements OnInit{
 
   gamePageResponse: PageResponseGameResponse = {};
+
   emptyWishlist = false;
+  isLoaded = false;
 
   constructor(
     private wishListService: WishlistControllerService,
@@ -41,6 +44,7 @@ export class WishlistComponent implements OnInit{
       {
         next: (games) => {
           this.gamePageResponse = games;
+          this.isLoaded = true;
           if (games.totalElements == 0) {
             this.emptyWishlist = true
           } else {

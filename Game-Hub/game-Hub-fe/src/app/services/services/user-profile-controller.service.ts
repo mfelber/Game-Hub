@@ -262,7 +262,7 @@ export class UserProfileControllerService extends BaseService {
   }
 
   /** Path part for operation `updateFavoriteGenres()` */
-  static readonly UpdateFavoriteGenresPath = '/profile/add/genres';
+  static readonly UpdateFavoriteGenresPath = '/profile/add/favorite/genres';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.

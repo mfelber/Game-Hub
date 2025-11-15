@@ -40,7 +40,14 @@
       {{ successMessage }}
     </div>
   </div>
-  <div class="h-48 w-full overflow-hidden ">
+
+
+  <div *ngIf="!isLoaded" class="text-center justify-center text-gray-400">
+    Loading...
+  </div>
+  <div [class.hidden]="!isLoaded" class="relative w-full">
+
+  <div *ngIf="isLoaded"  class="h-48 w-full overflow-hidden ">
 
 
     <img *ngIf="userResponse.bannerType === 'PREDEFINED'"
@@ -56,7 +63,7 @@
     />
 
   </div>
-  <div class="absolute left-6 top-1/2 transform -translate-y-1/2 flex ">
+  <div *ngIf="isLoaded" class="absolute left-6 top-1/2 transform -translate-y-1/2 flex">
     <div>
       <img *ngIf="userHasProfilePicture"
            [src]="getProfilePicture(userResponse)"
@@ -551,7 +558,7 @@
 </div>
 
 
-<div *ngIf="!showPreviewColors"
+<div *ngIf="!showPreviewColors && isLoaded"
      class="w-full h-[75px]  rounded-b-2xl flex items-center gap-4 border-b border-r border-l border-white/20"
      [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
 
@@ -590,9 +597,9 @@
 </div>
 
 
-<div *ngIf="!showPreviewColors" class="w-full h-[69%] mt-5 flex flex-1 gap-5">
+<div *ngIf="!showPreviewColors" class="w-full h-[60vh] mt-5 flex flex-1 gap-5">
 
-  <div class="w-1/5 h-full backdrop-blur-md rounded-2xl flex flex-col shadow-lg border border-white/20"
+  <div *ngIf="isLoaded" class="w-1/5 h-full backdrop-blur-md rounded-2xl flex flex-col shadow-lg border border-white/20"
        [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
     <div class="justify-between flex p-4 border-b border-white/20">
       <div class="flex items-center gap-2">
@@ -608,7 +615,7 @@
   <div class="flex-1 flex flex-col gap-4">
 
     <div class="h-1/2 flex gap-4">
-      <div
+      <div *ngIf="isLoaded"
         class="flex-none w-100 break-words  backdrop-blur-md rounded-2xl flex flex-col shadow-lg border border-white/20 overflow-hidden"
         [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
         <div class="flex justify-between items-center p-4 border-b border-white/20">
@@ -663,7 +670,7 @@
       </div>
 
 
-      <div class="w-full rounded-2xl flex flex-col  backdrop-blur-md shadow-lg border border-white/20"
+      <div *ngIf="isLoaded" class="w-full rounded-2xl flex flex-col  backdrop-blur-md shadow-lg border border-white/20"
            [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
 
         <div class="flex-none justify-between flex p-4 border-b border-white/20">
@@ -692,7 +699,7 @@
       </div>
 
 
-      <div class="w-150 rounded-2xl flex flex-col shadow-lg border border-white/20"
+      <div *ngIf="isLoaded" class="w-150 rounded-2xl flex flex-col shadow-lg border border-white/20"
            [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
         <div class="justify-between flex p-4 border-b border-white/20">
           <div class="flex items-center gap-2">
@@ -713,7 +720,7 @@
               </h2>
 
 
-              <div class="flex flex-wrap gap-3 mb-6 justify-center">
+              <div *ngIf="isLoaded" class="flex flex-wrap gap-3 mb-6 justify-center">
                 <div
                   *ngFor="let genre of genreResponse"
                   (click)="!favoriteGenreIds.includes(genre.id) && selectedGenre(genre.id)"
@@ -777,7 +784,7 @@
       </div>
     </div>
 
-    <div class=" h-1/2 flex gap-4">
+    <div *ngIf="isLoaded" class=" h-1/2 flex gap-4">
       <div class="w-3/2  backdrop-blur-md rounded-2xl flex flex-col shadow-lg border border-white/20"
            [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
         <div class="justify-between flex p-4 border-b border-white/20">
@@ -814,7 +821,7 @@
         </div>
 
       </div>
-      <div class="w-full  backdrop-blur-md rounded-2xl flex flex-col shadow-lg border border-white/20"
+      <div *ngIf="isLoaded" class="w-full  backdrop-blur-md rounded-2xl flex flex-col shadow-lg border border-white/20"
            [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
         <div class="justify-between flex p-4 border-b border-white/20">
           <div class="flex items-center gap-2">
@@ -846,4 +853,5 @@
       </div>
     </div>
   </div>
+</div>
 </div>

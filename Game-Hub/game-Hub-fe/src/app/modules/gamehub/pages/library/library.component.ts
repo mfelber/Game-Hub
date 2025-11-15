@@ -24,6 +24,7 @@ export class LibraryComponent implements OnInit{
   loadFavoriteGames = false;
   loadDownloadedGames = false;
   loadAllGames = false;
+  isLoaded = false;
 
   ngOnInit() {
     this.getOwnedGame()
@@ -58,6 +59,7 @@ export class LibraryComponent implements OnInit{
       {
         next: (games) => {
           this.gamePageResponse = games;
+          this.isLoaded = true;
           this.loadAllGames = true
           this.loadDownloadedGames = false;
           this.loadFavoriteGames = false;

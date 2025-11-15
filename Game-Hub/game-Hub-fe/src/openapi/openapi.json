@@ -414,7 +414,7 @@
         }
       }
     },
-    "/profile/add/genres": {
+    "/profile/add/favorite/genres": {
       "post": {
         "tags": [
           "user-profile-controller"
@@ -1300,9 +1300,6 @@
           "description": {
             "type": "string"
           },
-          "systemRequirements": {
-            "$ref": "#/components/schemas/SystemRequirements"
-          },
           "publisher": {
             "type": "string"
           },
@@ -1321,6 +1318,9 @@
           },
           "gameCoverImage": {
             "type": "string"
+          },
+          "systemRequirements": {
+            "$ref": "#/components/schemas/SystemRequirements"
           }
         }
       },

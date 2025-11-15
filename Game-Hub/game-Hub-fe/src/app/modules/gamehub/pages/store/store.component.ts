@@ -38,6 +38,7 @@ export class StoreComponent implements OnInit{
     platform: '',
     maxPrice: ''
   };
+  isLoaded = false
 
 
   constructor(
@@ -81,6 +82,7 @@ export class StoreComponent implements OnInit{
     }).subscribe({
       next: (games) => {
         this.gamePageResponse = games;
+        this.isLoaded = true;
         this.gamePageResponse.content?.forEach(game => {
           this.checkIfGameIsInWishlist(game.gameId);
           this.filteredGames = [...(games.content || [])];

@@ -59,9 +59,10 @@ export class UserPrivateProfileComponent implements OnInit {
   isEditGenresModalOpen = false;
   isEditProfileModalOpen = false;
   isProfileModalOpen = false;
+  isLoaded = false;
   isLocationDropdownOpen = false;
   toastVisible = false;
-  
+
   showPredefinedBanners = false;
   isPreviewImageInserted = false;
   isPreviewBannerInserted = false;
@@ -109,7 +110,7 @@ export class UserPrivateProfileComponent implements OnInit {
       next: (user) => {
         console.log(this.previewImage)
         this.userResponse = user;
-        console.log(user)
+        this.isLoaded = true;
         this.bioUpdateRequest.bio = user.bio || '';
         this.getProfilePicture(user)
         this.favoriteGenreIds = user.favoriteGenres?.map(g => g.id!) || [];

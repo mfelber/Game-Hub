@@ -29,4 +29,4 @@ export function updateFavoriteGenres(http: HttpClient, rootUrl: string, params: 
   );
 }
 
-updateFavoriteGenres.PATH = '/profile/add/genres';
+updateFavoriteGenres.PATH = '/profile/add/favorite/genres';

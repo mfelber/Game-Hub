@@ -1,3 +1,8 @@
+<div *ngIf="!isLoaded" class="text-center justify-center text-gray-400">
+  Loading...
+</div>
+
+<div [class.hidden]="!isLoaded" class="relative w-full">
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mt-12">
   <div
     *ngFor="let game of gamePageResponse.content"
@@ -36,5 +41,11 @@
         </span>
       </div>
     </div>
+  </div>
+</div>
+  <div *ngIf="emptyWishlist" class="flex flex-col items-center justify-center h-60text-gray-400">
+    <i class="fa-solid fa-box-open text-4xl mb-4"></i>
+    <p class="text-lg font-semibold">Your wishlist is empty</p>
+    <p class="text-sm text-gray-400 mt-1">Start adding some games to see them here!</p>
   </div>
 </div>

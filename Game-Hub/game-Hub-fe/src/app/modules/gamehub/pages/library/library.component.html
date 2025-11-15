@@ -1,3 +1,8 @@
+<div *ngIf="!isLoaded" class="text-center justify-center text-gray-400">
+  Loading...
+</div>
+
+<div [class.hidden]="!isLoaded" class="relative w-full">
 <div class="flex gap-3 mb-2">
 
   <button *ngIf="!loadAllGames" (click)="getOwnedGame()" class="border border-gray-500 text-gray-300 hover:bg-gray-700/40 hover:text-white
@@ -20,10 +25,21 @@ px-4 py-1.5 rounded-lg transition duration-300 mb-2 text-[13px]">
     Favorite games
   </button>
 
-  <button class="border border-gray-500 text-gray-300 hover:bg-gray-700/40 hover:text-white
-px-4 py-1.5 rounded-lg transition duration-300 mb-2 text-[13px]">
+<!--  <button class="border border-gray-500 text-gray-300 hover:bg-gray-700/40 hover:text-white-->
+<!--px-4 py-1.5 rounded-lg transition duration-300 mb-2 text-[13px]">-->
+<!--    Downloaded games-->
+<!--  </button>-->
+
+  <button
+    class="border border-gray-500 text-gray-500 px-4 py-1.5 rounded-lg
+         transition duration-300 mb-2 text-[13px]
+         opacity-60 flex items-center gap-2"
+
+  >
     Downloaded games
+    <span class="text-[10px] bg-gray-700/60 px-2 py-0.5 rounded-md">Coming soon</span>
   </button>
+
 
 </div>
 
@@ -141,4 +157,5 @@ px-4 py-1.5 rounded-lg transition duration-300 mb-2 text-[13px]">
   <i class="fa-solid fa-box-open text-4xl mb-4"></i>
   <p class="text-lg font-semibold">Your library is empty</p>
   <p class="text-sm text-gray-400 mt-1">Start adding some games to see them here!</p>
+</div>
 </div>
