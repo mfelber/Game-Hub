@@ -3,273 +3,279 @@
 </div>
 
 <div [class.hidden]="!isLoaded" class="relative w-full">
-<div class="relative w-full items-center">
-  <div class="h-48 w-full overflow-hidden">
+  <div class="relative w-full items-center">
+    <div class="h-48 w-full overflow-hidden">
 
-    <img *ngIf="userResponse.bannerType === 'PREDEFINED'"
-         [src]="getBanner(userResponse)"
-         alt="Banner cover"
-         class="w-full h-full object-cover rounded-t-2xl border-t border-r border-l border-white/20"
-    />
-
-    <img *ngIf="userResponse.bannerType === 'CUSTOM'"
-         [src]=getBanner(userResponse)
-         alt="Banner cover"
-         class="w-full h-full object-cover rounded-t-2xl border-t border-r border-l border-white/20"
-    />
-  </div>
-  <div class="absolute left-6 top-1/2 transform -translate-y-1/2 flex">
-    <div>
-      <img *ngIf="!userHasProfilePicture"
-           src="assets/profilePicture/default_profile_picture.svg"
-        alt="Profile picture"
-        class="w-40 h-40 rounded-2xl border-2 border-black object-cover"
-           [ngStyle]="{'background-color': userResponse.profileColor}"
+      <img *ngIf="userResponse.bannerType === 'PREDEFINED'"
+           [src]="getBanner(userResponse)"
+           alt="Banner cover"
+           class="w-full h-full object-cover rounded-t-2xl border-t border-r border-l border-white/20"
       />
 
-      <img *ngIf="userHasProfilePicture"
-           [src]="getProfilePicture(userResponse)"
-           alt="Profile picture"
-           class="w-40 h-40 rounded-2xl border-2 border-black object-cover"
+      <img *ngIf="userResponse.bannerType === 'CUSTOM'"
+           [src]=getBanner(userResponse)
+           alt="Banner cover"
+           class="w-full h-full object-cover rounded-t-2xl border-t border-r border-l border-white/20"
       />
     </div>
+    <div class="absolute left-6 top-1/2 transform -translate-y-1/2 flex">
+      <div>
+        <img *ngIf="!userHasProfilePicture"
+             src="assets/profilePicture/default_profile_picture.svg"
+             alt="Profile picture"
+             class="w-40 h-40 rounded-2xl border-2 border-black object-cover"
+             [ngStyle]="{'background-color': userResponse.profileColor}"
+        />
 
-    <div class="flex flex-col ">
-      <div class="p-2">
+        <img *ngIf="userHasProfilePicture"
+             [src]="getProfilePicture(userResponse)"
+             alt="Profile picture"
+             class="w-40 h-40 rounded-2xl border-2 border-black object-cover"
+        />
+      </div>
 
-        <div class="flex items-center gap-2">
-          <p class="text-2xl font-semibold leading-tight ">{{ userResponse.username }}</p>
-          <span
-            class="text-sm font-medium"
-            [ngClass]="{
+      <div class="flex flex-col ">
+        <div class="p-2">
+
+          <div class="flex items-center gap-2">
+            <p class="text-2xl font-semibold leading-tight ">{{ userResponse.username }}</p>
+            <span
+              class="text-sm font-medium"
+              [ngClass]="{
             'text-green-500': userResponse.status === 'ONLINE',
             'text-gray-400': userResponse.status === 'OFFLINE',
             'text-yellow-400': userResponse.status === 'AWAY'
             }">• {{ userResponse.status }}
           </span>
-        </div>
-
-        <p class="text-sm text-gray-300 mx-0.5">Joined {{userResponse.joinedDate}}</p>
-      </div>
-      <div class="mt-auto flex flex-col mx-2">
-        <div class="flex gap-2">
-
-          <button
-            class="bg-gradient-to-r from-[#10B981] to-[#059669] hover:from-[#059669] hover:to-[#047857] cursor-pointer text-center w-30 py-1.5 px-2 rounded-lg text-sm flex items-center justify-center gap-1 transition-colors duration-200">
-            Add friend <i class="fa-solid fa-user-plus"></i>
-          </button>
-
-          <button
-            class="bg-gradient-to-r from-[#EF4444] to-[#B91C1C] hover:from-[#DC2626] hover:to-[#991B1B] cursor-pointer text-center w-30 py-1.5 px-2 rounded-lg text-sm flex items-center justify-center gap-1 transition-colors duration-200">
-            Block <i class="fa-solid fa-ban"></i>
-          </button>
-
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-</div>
-
-<div
-  class="w-full h-[75px] rounded-b-2xl flex items-center gap-4 border-b border-r border-l border-white/20"
-  [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
-  <div class="w-35 text-center text-10px">
-    <p class="text-sm font-semibold"> {{ userResponse.libraryCount }}</p>
-    <p class="text-sm text-gray-300">Games owned</p>
-  </div>
-  <div class="w-[2px] h-10 bg-white/20 rounded"></div>
-
-
-  <div class="w-35 text-center text-10px">
-    <p class="text-sm font-semibold"> {{ userResponse.wishlistCount }}</p>
-    <p class="text-sm text-gray-300">Games in wishlist</p>
-  </div>
-  <div class="w-[2px] h-10 bg-white/20 rounded">
-
-  </div>
-
-  <!--  TODO fetch from db count of friends-->
-  <div class="w-20 text-center text-10px">
-    <p class="text-sm font-semibold"> 350</p>
-    <p class="text-sm text-gray-300">Friends</p>
-  </div>
-
-  <div class="flex-1 flex items-center justify-end text-10px mr-5">
-    <div class="text-center flex flex-col items-center">
-      <img [src]="userResponse.location?.iconPath"
-           [alt]="userResponse.location?.name"
-           class="w-10 h-6 mb-1"
-      >
-      <p class="text-sm text-gray-300">Nationality</p>
-    </div>
-
-  </div>
-
-</div>
-
-
-<div class="w-full h-[60vh] mt-5 flex flex-1 gap-5">
-
-  <div class="w-1/5 h-full backdrop-blur-md rounded-2xl flex flex-col shadow-lg border border-white/20"
-       [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
-    <div class="justify-between flex p-4 border-b border-white/20">
-      <div class="flex items-center gap-2">
-        <i class="fa-solid fa-gamepad text-[#3B82F6]"></i><span class="">Recentyly played</span>
-      </div>
-    </div>
-    <div *ngIf="userResponse.playRecently?.length === 0"
-         class="flex flex-col items-center justify-center text-center flex-1 p-4">
-      <p class="text-lg font-semibold">Nothing played recently 🎮 </p>
-    </div>
-  </div>
-
-  <div class="flex-1 flex flex-col gap-4">
-
-    <div class="h-1/2 flex gap-4">
-      <div
-        class=" flex-none w-100 break-words backdrop-blur-md rounded-2xl flex flex-col shadow-lg border border-white/20 overflow-hidden"
-        [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
-        <div class=" justify-between flex p-4 border-b border-white/20">
-          <div class="flex items-center gap-2">
-            <i class="fa-solid fa-user text-[#EE5C6B] text-xl"></i>
-            <span class="text-white font-semibold">About</span>
           </div>
-          <div>
+
+          <p class="text-sm text-gray-300 mx-0.5">Joined {{ userResponse.joinedDate }}</p>
+        </div>
+        <div class="mt-auto flex flex-col mx-2">
+          <div class="flex gap-2">
+
+            <button
+              class="bg-gradient-to-r from-[#10B981] to-[#059669] hover:from-[#059669] hover:to-[#047857] cursor-pointer text-center w-30 py-1.5 px-2 rounded-lg text-sm flex items-center justify-center gap-1 transition-colors duration-200">
+              Add friend <i class="fa-solid fa-user-plus"></i>
+            </button>
+
+            <button
+              class="bg-gradient-to-r from-[#EF4444] to-[#B91C1C] hover:from-[#DC2626] hover:to-[#991B1B] cursor-pointer text-center w-30 py-1.5 px-2 rounded-lg text-sm flex items-center justify-center gap-1 transition-colors duration-200">
+              Block <i class="fa-solid fa-ban"></i>
+            </button>
+
           </div>
         </div>
-        <div *ngIf="userResponse.bio?.length == null"
-             class="flex flex-col items-center justify-center text-center flex-1 p-4">
-          <p class="text-lg font-semibold"> {{ userResponse.username }} hasn't written anything about themselves yet
-            ✍️</p>
-        </div>
-        <div>
-          <p class="p-4">
-            {{ userResponse.bio }}
-          </p>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div
+    class="w-full h-[75px] rounded-b-2xl flex items-center gap-4 border-b border-r border-l border-white/20"
+    [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
+    <div class="w-35 text-center text-10px">
+      <p class="text-sm font-semibold"> {{ userResponse.libraryCount }}</p>
+      <p class="text-sm text-gray-300">Games owned</p>
+    </div>
+    <div class="w-[2px] h-10 bg-white/20 rounded"></div>
+
+
+    <div class="w-35 text-center text-10px">
+      <p class="text-sm font-semibold"> {{ userResponse.wishlistCount }}</p>
+      <p class="text-sm text-gray-300">Games in wishlist</p>
+    </div>
+    <div class="w-[2px] h-10 bg-white/20 rounded">
+
+    </div>
+
+    <!--  TODO fetch from db count of friends-->
+    <div class="w-20 text-center text-10px">
+      <p class="text-sm font-semibold"> 350</p>
+      <p class="text-sm text-gray-300">Friends</p>
+    </div>
+
+    <div class="flex-1 flex items-center justify-end text-10px mr-5">
+      <div class="text-center flex flex-col items-center">
+        <img [src]="userResponse.location?.iconPath"
+             [alt]="userResponse.location?.name"
+             class="w-10 h-6 mb-1"
+        >
+        <p class="text-sm text-gray-300">Nationality</p>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="w-full h-[60vh] mt-5 flex flex-col lg:flex-row gap-5">
+
+    <div
+      class="lg:w-1/5 w-full h-full backdrop-blur-md rounded-2xl flex flex-col shadow-lg border border-white/20"
+      [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
+      <div class="justify-between flex p-4 border-b border-white/20">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-gamepad text-[#3B82F6]"></i><span class="">Recentyly played</span>
         </div>
       </div>
-      <div class="w-full rounded-2xl flex flex-col  backdrop-blur-md shadow-lg border border-white/20"
-           [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
+      <div *ngIf="userResponse.playRecently?.length === 0"
+           class="flex flex-col items-center justify-center text-center flex-1 p-4">
+        <p class="text-lg font-semibold">Nothing played recently 🎮 </p>
+      </div>
+    </div>
+
+    <div class="flex-1 flex flex-col gap-4">
+
+      <div class="flex flex-col lg:flex-row h-auto lg:h-1/2 gap-4">
+        <div
+          class="w-full lg:w-100 break-words backdrop-blur-md rounded-2xl flex flex-col shadow-lg border border-white/20 overflow-hidden"
+          [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
+          <div class=" justify-between flex p-4 border-b border-white/20">
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-user text-[#EE5C6B] text-xl"></i>
+              <span class="text-white font-semibold">About</span>
+            </div>
+            <div>
+            </div>
+          </div>
+          <div *ngIf="userResponse.bio?.length == null"
+               class="flex flex-col items-center justify-center text-center flex-1 p-4">
+            <p class="text-lg font-semibold"> {{ userResponse.username }} hasn't written anything about themselves yet
+              ✍️</p>
+          </div>
+          <div *ngIf="userResponse.bio?.length != null">
+            <p class="p-4">
+              {{ userResponse.bio }}
+            </p>
+          </div>
+        </div>
+        <div
+          class="w-full lg:w-130 rounded-2xl flex flex-col backdrop-blur-md shadow-lg border border-white/20"
+          [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
+
         <div class="justify-between flex p-4 border-b border-white/20">
-          <div class="flex items-center gap-2">
-            <i class="fa-solid fa-medal text-[#FACC15] text-xl"></i>
-            <span class="text-white font-semibold">Badges</span>
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-medal text-[#FACC15] text-xl"></i>
+              <span class="text-white font-semibold">Badges</span>
+            </div>
           </div>
-        </div>
 
-        <div *ngIf="userResponse.badges?.length === 0"
-             class="flex flex-col items-center justify-center text-center flex-1 p-4">
-          <p class="text-lg font-semibold">No badges earned 🏅</p>
-        </div>
-        <div *ngIf="userResponse.badges?.length! > 0" class="flex flex-wrap gap-4 p-4">
-          <div *ngFor="let badge of userResponse.badges" class="relative group flex flex-col items-center">
-            <img
-              [src]="badge.iconPath"
-              alt="{{badge.name}}"
-              class="w-20 h-20"
-            >
-            <span
-              class="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 px-3 py-1 text-xs text-white bg-gray-900 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50">
+          <div *ngIf="userResponse.badges?.length === 0"
+               class="flex flex-col items-center justify-center text-center flex-1 p-4">
+            <p class="text-lg font-semibold">No badges earned 🏅</p>
+          </div>
+          <div *ngIf="userResponse.badges?.length! > 0" class="flex flex-wrap gap-4 p-4">
+            <div *ngFor="let badge of userResponse.badges" class="relative group flex flex-col items-center">
+              <img
+                [src]="badge.iconPath"
+                alt="{{badge.name}}"
+                class="w-20 h-20"
+              >
+              <span
+                class="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 px-3 py-1 text-xs text-white bg-gray-900 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50">
               {{ badge.description }}
             </span>
+            </div>
+          </div>
+        </div>
+        <div class="w-full lg:w-75 rounded-2xl flex flex-col shadow-lg border border-white/20"
+             [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
+          <div class="justify-between flex p-4 border-b border-white/20">
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-masks-theater text-[#FFA500] text-xl"></i>
+              <span class="font-semibold">Favorite Genres</span>
+            </div>
+            <div>
+            </div>
+          </div>
+          <div *ngIf="userResponse.favoriteGenres?.length === 0"
+               class="flex flex-col items-center justify-center text-center flex-1 p-4">
+            <p class="text-lg font-semibold">No favorite genres set 🎭</p>
+          </div>
+          <div *ngIf="userResponse.favoriteGenres?.length !== 0" class="flex flex-wrap gap-2 mt-3 ml-3">
+            <div
+              *ngFor="let genre of userResponse.favoriteGenres"
+              class="flex items-center gap-2 bg-gray-800 text-gray-100 text-sm px-3 py-1 rounded-xl border border-gray-700 cursor-default"
+            >
+              {{ genre.name }}
+            </div>
           </div>
         </div>
       </div>
-      <div class="w-150 rounded-2xl flex flex-col shadow-lg border border-white/20"
-           [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
-        <div class="justify-between flex p-4 border-b border-white/20">
-          <div class="flex items-center gap-2">
-            <i class="fa-solid fa-masks-theater text-[#FFA500] text-xl"></i>
-            <span class="font-semibold">Favorite Genres</span>
+
+      <div class="flex flex-col lg:flex-row h-1/2 gap-4">
+        <div class="w-full lg:w-3/2 backdrop-blur-md rounded-2xl flex flex-col shadow-lg border border-white/20"
+             [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
+          <div class="justify-between flex p-4 border-b border-white/20">
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-heart text-[#FF0000] text-xl"></i>
+              <span class="font-semibold">Favorite Games</span>
+            </div>
           </div>
-          <div>
+
+          <div *ngIf="userResponse.favoriteGames?.length === 0"
+               class="flex flex-col items-center justify-center text-center flex-1 p-4">
+            <p class="text-lg font-semibold">No favorite games ❤️</p>
+          </div>
+
+          <div *ngIf="userResponse.favoriteGames?.length! > 0" class="max-h-96 overflow-y-auto">
+            <table class="w-full text-left border-collapse">
+              <thead class="dark:bg-gray-800 sticky top-0">
+              <tr>
+                <th class="px-4 py-2 text-[#3B82F6]"><i class="fa-solid fa-gamepad  ml-4"></i></th>
+                <th class="px-4 py-2">Title</th>
+                <th class="px-4 py-2">Last Played</th>
+                <th class="px-4 py-2">Total playtime</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr (click)="goToGame(game.gameId)" *ngFor="let game of userResponse.favoriteGames"
+                  class="border-t border-[#515151] dark:hover:bg-gray-800 cursor-pointer">
+                <td class="px-4 py-2"><img [src]="getGameImageCover(game)" class="w-13 h-13 rounded-xl object-cover">
+                </td>
+                <td class="px-4 py-2">{{ game.title }}</td>
+              </tr>
+              </tbody>
+            </table>
           </div>
         </div>
-        <div *ngIf="userResponse.favoriteGenres?.length === 0"
-             class="flex flex-col items-center justify-center text-center flex-1 p-4">
-          <p class="text-lg font-semibold">No favorite genres set 🎭</p>
-        </div>
-        <div class="flex flex-wrap gap-2 mt-3 ml-3">
-          <div
-            *ngFor="let genre of userResponse.favoriteGenres"
-            class="flex items-center gap-2 bg-gray-800 text-gray-100 text-sm px-3 py-1 rounded-xl border border-gray-700 cursor-default"
-          >
-            {{ genre.name }}
+
+        <div class="w-full backdrop-blur-md rounded-2xl flex flex-col shadow-lg border border-white/20"
+             [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
+          <div class="justify-between flex p-4 border-b border-white/20">
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-fire text-[#FB923C] text-xl"></i>
+              <span class="font-semibold">Latest recommended Games</span>
+            </div>
+          </div>
+
+          <div *ngIf="userResponse.recommendedGames?.length === 0"
+               class="flex flex-col items-center justify-center text-center flex-1 p-4">
+            <p class="text-lg font-semibold"> {{ userResponse.username }} hasn't recommended any games 🔥</p>
+          </div>
+          <div *ngIf="userResponse.recommendedGames?.length! > 0" class="max-h-96 overflow-y-auto">
+            <table class="w-full text-left border-collapse">
+              <thead class="dark:bg-gray-800 sticky top-0">
+              <tr>
+                <th class="px-4 py-2 text-[#3B82F6]"><i class="fa-solid fa-gamepad  ml-4"></i></th>
+                <th class="px-4 py-2 text-center">Title</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr (click)="goToGame(game.gameId)" *ngFor="let game of userResponse.recommendedGames"
+                  class="border-b border-[#515151] dark:hover:bg-gray-800 cursor-pointer">
+                <td class="px-4 py-2"><img [src]="getGameImageCover(game)" class="w-13 h-13 rounded-xl object-cover">
+                </td>
+                <td class="px-4 py-2 text-center">{{ game.title }}</td>
+              </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
     </div>
 
-    <div class=" h-1/2 flex gap-4">
-      <div class="w-3/2 backdrop-blur-md rounded-2xl flex flex-col shadow-lg border border-white/20"
-           [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
-        <div class="justify-between flex p-4 border-b border-white/20">
-          <div class="flex items-center gap-2">
-            <i class="fa-solid fa-heart text-[#FF0000] text-xl"></i>
-            <span class="font-semibold">Favorite Games</span>
-          </div>
-        </div>
-
-        <div *ngIf="userResponse.favoriteGames?.length === 0"
-             class="flex flex-col items-center justify-center text-center flex-1 p-4">
-          <p class="text-lg font-semibold">No favorite games ❤️</p>
-        </div>
-
-        <div *ngIf="userResponse.favoriteGames?.length! > 0" class="max-h-96 overflow-y-auto">
-          <table class="w-full text-left border-collapse">
-            <thead class="dark:bg-gray-800 sticky top-0">
-            <tr>
-              <th class="px-4 py-2 text-[#3B82F6]"><i class="fa-solid fa-gamepad  ml-4"></i></th>
-              <th class="px-4 py-2">Title</th>
-              <th class="px-4 py-2">Last Played</th>
-              <th class="px-4 py-2">Total playtime</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr (click)="goToGame(game.gameId)" *ngFor="let game of userResponse.favoriteGames"
-                class="border-t border-[#515151] dark:hover:bg-gray-800 cursor-pointer">
-              <td class="px-4 py-2"><img [src]="getGameImageCover(game)" class="w-13 h-13 rounded-xl object-cover"></td>
-              <td class="px-4 py-2">{{ game.title }}</td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="w-full backdrop-blur-md rounded-2xl flex flex-col shadow-lg border border-white/20"
-           [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
-        <div class="justify-between flex p-4 border-b border-white/20">
-          <div class="flex items-center gap-2">
-            <i class="fa-solid fa-fire text-[#FB923C] text-xl"></i>
-            <span class="font-semibold">Latest recommended Games</span>
-          </div>
-        </div>
-
-        <div *ngIf="userResponse.recommendedGames?.length === 0"
-             class="flex flex-col items-center justify-center text-center flex-1 p-4">
-          <p class="text-lg font-semibold"> {{ userResponse.username }} hasn't recommended any games 🔥</p>
-        </div>
-        <div *ngIf="userResponse.recommendedGames?.length! > 0" class="max-h-96 overflow-y-auto">
-          <table class="w-full text-left border-collapse">
-            <thead class="dark:bg-gray-800 sticky top-0">
-            <tr>
-              <th class="px-4 py-2 text-[#3B82F6]"><i class="fa-solid fa-gamepad  ml-4"></i></th>
-              <th class="px-4 py-2 text-center">Title</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr (click)="goToGame(game.gameId)" *ngFor="let game of userResponse.recommendedGames"
-                class="border-b border-[#515151] dark:hover:bg-gray-800 cursor-pointer">
-              <td class="px-4 py-2"><img [src]="getGameImageCover(game)" class="w-13 h-13 rounded-xl object-cover"></td>
-              <td class="px-4 py-2 text-center">{{ game.title }}</td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
   </div>
-
-</div>
 </div>
