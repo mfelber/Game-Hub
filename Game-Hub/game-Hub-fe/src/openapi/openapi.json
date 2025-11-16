@@ -570,6 +570,38 @@
         }
       }
     },
+    "/community/send/friend/request/{userId}": {
+      "post": {
+        "tags": [
+          "community-controller"
+        ],
+        "operationId": "sendFriendRequest",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/auth/reset-password": {
       "post": {
         "tags": [

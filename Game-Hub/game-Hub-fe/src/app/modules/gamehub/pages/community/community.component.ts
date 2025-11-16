@@ -66,7 +66,12 @@ export class CommunityComponent implements OnInit {
     return this.userHasProfilePicture;
   }
 
-  addFriend(userId: number | undefined) {
+  sendFriendRequest(userId: number) {
+    this.communityService.sendFriendRequest({userId}).subscribe({
+      next: () => {
+        console.log('friend request send')
+      }
+    })
     console.log(userId)
   }
 

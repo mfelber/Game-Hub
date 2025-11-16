@@ -82,7 +82,7 @@ px-4 py-1.5 rounded-lg transition duration-300 text-[13px]">
 
       <!-- Buttons -->
       <div class="flex gap-3">
-        <button (click)="addFriend(user.userId) ; $event.stopPropagation()"
+        <button (click)="sendFriendRequest(user.userId!) ; $event.stopPropagation()"
           class="flex items-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700
                text-white font-semibold rounded-lg shadow-md transition cursor-pointer">
           <i class="fa-solid fa-user-plus"></i> Add

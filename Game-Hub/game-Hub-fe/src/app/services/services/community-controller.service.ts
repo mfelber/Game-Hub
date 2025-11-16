@@ -14,11 +14,38 @@ import { StrictHttpResponse } from '../strict-http-response';
 import { findAllUsers } from '../fn/community-controller/find-all-users';
 import { FindAllUsers$Params } from '../fn/community-controller/find-all-users';
 import { PageResponseUserCommunityResponse } from '../models/page-response-user-community-response';
+import { sendFriendRequest } from '../fn/community-controller/send-friend-request';
+import { SendFriendRequest$Params } from '../fn/community-controller/send-friend-request';
 
 @Injectable({ providedIn: 'root' })
 export class CommunityControllerService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
+  }
+
+  /** Path part for operation `sendFriendRequest()` */
+  static readonly SendFriendRequestPath = '/community/send/friend/request/{userId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `sendFriendRequest()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  sendFriendRequest$Response(params: SendFriendRequest$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return sendFriendRequest(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `sendFriendRequest$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  sendFriendRequest(params: SendFriendRequest$Params, context?: HttpContext): Observable<number> {
+    return this.sendFriendRequest$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
   }
 
   /** Path part for operation `findAllUsers()` */
