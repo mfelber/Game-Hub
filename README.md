@@ -68,4 +68,20 @@ Game Detail in store
 
 ## ▶️ Running the Application
 
-TODO
+# Prerequisites
+- Docker installed on your machine
+- (Optional) Docker Compose if you plan to use multiple containers
+
+## 🐳 Running with Docker Compose
+
+1. Go to the Docker folder:
+
+```bash```
+cd Game-Hub/game-Hub-be/docker 
+
+2. Start the backend, database and mail sender using Docker Compose:
+   
+```bash```
+docker-compose up
+
+> The backend will be available at `http://localhost:8088`
