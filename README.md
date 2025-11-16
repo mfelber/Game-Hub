@@ -84,4 +84,4 @@ cd Game-Hub/game-Hub-be/docker
 ```bash```
 docker-compose up
 
-> The backend will be available at `http://localhost:8088`
+> The backend will be available at `http://localhost:8088` and frontend will be available at `http://localhost:4200/login`
