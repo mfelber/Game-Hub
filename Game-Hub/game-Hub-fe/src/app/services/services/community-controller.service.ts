@@ -22,7 +22,7 @@ export class CommunityControllerService extends BaseService {
   }
 
   /** Path part for operation `findAllUsers()` */
-  static readonly FindAllUsersPath = '/community/find/all/users';
+  static readonly FindAllUsersPath = '/community/get/all/users';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.

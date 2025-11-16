@@ -27,6 +27,9 @@ export class CommunityComponent implements OnInit {
     this.loadAllUsers();
   }
 
+  public page = 0;
+  public size = 10;
+
   userHasProfilePicture = true;
   loadUsers = false;
 
@@ -37,16 +40,23 @@ export class CommunityComponent implements OnInit {
   }
 
   userCommunityResponse: PageResponseUserCommunityResponse = {}
+  noUsersFound = false;
 
 
-  private loadAllUsers() {
-    this.communityService.findAllUsers().subscribe({
+  private loadAllUsers(query: string = "") {
+    this.communityService.findAllUsers({query:query}).subscribe({
       next: (users) => {
+        if (users.content?.length! === 0) {
+          this.noUsersFound = true;
+          return
+        }
+        this.noUsersFound = false;
         this.userCommunityResponse = users;
         this.loadUsers = true;
         console.log(this.userCommunityResponse)
       }
     })
+
   }
 
   getProfilePicture(user: UserCommunityResponse) {
@@ -62,5 +72,16 @@ export class CommunityComponent implements OnInit {
 
   navigateToUser(userId: number | undefined) {
     this.router.navigate(['gamehub/user', userId]);
+  }
+
+  reportUser(userId: number | undefined) {
+
+  }
+
+  searchByUsername(value: string) {
+    console.log(value);
+    this.page = 0;
+    this.userCommunityResponse = {}
+    this.loadAllUsers(value);
   }
 }

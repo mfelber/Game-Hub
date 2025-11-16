@@ -11,6 +11,7 @@ import { RequestBuilder } from '../../request-builder';
 import { PageResponseUserCommunityResponse } from '../../models/page-response-user-community-response';
 
 export interface FindAllUsers$Params {
+  query?: string;
   page?: number;
   size?: number;
 }
@@ -18,6 +19,7 @@ export interface FindAllUsers$Params {
 export function findAllUsers(http: HttpClient, rootUrl: string, params?: FindAllUsers$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseUserCommunityResponse>> {
   const rb = new RequestBuilder(rootUrl, findAllUsers.PATH, 'get');
   if (params) {
+    rb.query('query', params.query, {});
     rb.query('page', params.page, {});
     rb.query('size', params.size, {});
   }
@@ -32,4 +34,4 @@ export function findAllUsers(http: HttpClient, rootUrl: string, params?: FindAll
   );
 }
 
-findAllUsers.PATH = '/community/find/all/users';
+findAllUsers.PATH = '/community/get/all/users';

@@ -7,6 +7,6 @@ import gamehub.game_Hub.Response.UserCommunityResponse;
 
 public interface CommunityService {
 
-  PageResponse<UserCommunityResponse> findAllUsers(Authentication connectedUser, int page, int size);
+  PageResponse<UserCommunityResponse> findAllUsers(Authentication connectedUser,String query, int page, int size);
 
 }

@@ -27,7 +27,7 @@ public class CommunityServiceImpl implements CommunityService {
   private final CommunityMapper communityMapper;
 
   @Override
-  public PageResponse<UserCommunityResponse> findAllUsers(final Authentication connectedUser, final int page,
+  public PageResponse<UserCommunityResponse> findAllUsers(final Authentication connectedUser,String query, final int page,
       final int size) {
 
     User authUser = (User) connectedUser.getPrincipal();
@@ -35,20 +35,41 @@ public class CommunityServiceImpl implements CommunityService {
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
 
     Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
-    Page<User> users = userRepository.findAllByEmailIsNot(user.getEmail(), pageable);
 
-    List<UserCommunityResponse> communityResponse = users.stream().map(communityMapper::toUserCommunityResponse).toList();
+    if (query.isEmpty()) {
+      Page<User> users = userRepository.findAllByEmailIsNot(user.getEmail(), pageable);
 
-    return new PageResponse<>(
-        communityResponse,
-        users.getNumber(),
-        users.getSize(),
-        users.getTotalElements(),
-        users.getTotalPages(),
-        users.isFirst(),
-        users.isLast()
-    );
+      List<UserCommunityResponse> communityResponse = users.stream()
+          .map(communityMapper::toUserCommunityResponse)
+          .toList();
 
+      return new PageResponse<>(
+          communityResponse,
+          users.getNumber(),
+          users.getSize(),
+          users.getTotalElements(),
+          users.getTotalPages(),
+          users.isFirst(),
+          users.isLast()
+      );
+    } else {
+      Page<User> users = userRepository.findAllByEmailIsNotAndUsername(user.getEmail(),query ,pageable);
+
+      List<UserCommunityResponse> communityResponse = users.stream()
+          .map(communityMapper::toUserCommunityResponse)
+          .toList();
+
+      return new PageResponse<>(
+          communityResponse,
+          users.getNumber(),
+          users.getSize(),
+          users.getTotalElements(),
+          users.getTotalPages(),
+          users.isFirst(),
+          users.isLast()
+      );
+    }
   }
+
 
 }

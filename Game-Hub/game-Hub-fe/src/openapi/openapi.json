@@ -1201,13 +1201,22 @@
         }
       }
     },
-    "/community/find/all/users": {
+    "/community/get/all/users": {
       "get": {
         "tags": [
           "community-controller"
         ],
         "operationId": "findAllUsers",
         "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": ""
+            }
+          },
           {
             "name": "page",
             "in": "query",

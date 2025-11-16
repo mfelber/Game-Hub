@@ -26,8 +26,10 @@ px-4 py-1.5 rounded-lg transition duration-300 text-[13px]">
 
   <div class="relative w-1/3">
     <input
+      #searchquery
+      (keyup)="searchByUsername(searchquery.value)"
       type="text"
-      id="search"
+      id="query"
       class="block w-full pl-12 p-2.5 text-sm text-white bg-transparent rounded-lg placeholder-white border border-[#76849D]"
       placeholder="Search..."
       required
@@ -82,13 +84,13 @@ px-4 py-1.5 rounded-lg transition duration-300 text-[13px]">
       <div class="flex gap-3">
         <button (click)="addFriend(user.userId) ; $event.stopPropagation()"
           class="flex items-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700
-               text-white font-semibold rounded-lg shadow-md transition">
+               text-white font-semibold rounded-lg shadow-md transition cursor-pointer">
           <i class="fa-solid fa-user-plus"></i> Add
         </button>
 
-        <button
+        <button (click)="reportUser(user.userId) ; $event.stopPropagation()"
           class="flex items-center gap-2 px-3 py-2 bg-red-600 hover:bg-red-700
-               text-white font-semibold rounded-lg shadow-md transition">
+               text-white font-semibold rounded-lg shadow-md transition cursor-pointer">
           <i class="fa-solid fa-exclamation"></i> Report
         </button>
 
@@ -96,6 +98,11 @@ px-4 py-1.5 rounded-lg transition duration-300 text-[13px]">
 
     </div>
 
+  </div>
+
+  <div *ngIf="noUsersFound" class="flex flex-col items-center justify-center h-60text-gray-400">
+    <i class="fa-solid fa-sad-tear text-4xl mb-4"></i>
+    <p class="text-lg font-semibold">No users were founded</p>
   </div>
 
 </div>

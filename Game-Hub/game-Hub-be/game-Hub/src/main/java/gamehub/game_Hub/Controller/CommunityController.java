@@ -19,12 +19,11 @@ public class CommunityController {
 
   private final CommunityService communityService;
 
-  @GetMapping("/find/all/users")
+  @GetMapping("/get/all/users")
   public ResponseEntity<PageResponse<UserCommunityResponse>> findAllUsers(Authentication connectedUser,
+      @RequestParam(defaultValue = "") String query,
       @RequestParam(name = "page", defaultValue = "0", required = false) int page,
       @RequestParam(name = "size", defaultValue = "10", required = false) int size) {
-    return ResponseEntity.ok(communityService.findAllUsers(connectedUser,page,size));
-
+    return ResponseEntity.ok(communityService.findAllUsers(connectedUser,query, page, size));
   }
-
 }
