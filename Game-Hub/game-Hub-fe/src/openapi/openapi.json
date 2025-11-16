@@ -1201,6 +1201,57 @@
         }
       }
     },
+    "/community/get/all/users": {
+      "get": {
+        "tags": [
+          "community-controller"
+        ],
+        "operationId": "findAllUsers",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseUserCommunityResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/color/all-colors": {
       "get": {
         "tags": [
@@ -2046,6 +2097,72 @@
               "OFFLINE",
               "AWAY"
             ]
+          }
+        }
+      },
+      "PageResponseUserCommunityResponse": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserCommunityResponse"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          }
+        }
+      },
+      "UserCommunityResponse": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "username": {
+            "type": "string"
+          },
+          "location": {
+            "$ref": "#/components/schemas/LocationResponse"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ONLINE",
+              "OFFLINE",
+              "AWAY"
+            ]
+          },
+          "userProfilePicture": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "byte"
+            }
+          },
+          "profileColor": {
+            "type": "string"
           }
         }
       },
