@@ -7,6 +7,7 @@ import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {UserPrivateResponse} from '../../../../services/models/user-private-response';
 import {UserPublicResponse} from '../../../../services/models/user-public-response';
 import {Router} from '@angular/router';
+import {exists} from 'node:fs';
 
 @Component({
   selector: 'app-community',
@@ -40,22 +41,42 @@ export class CommunityComponent implements OnInit {
   }
 
   userCommunityResponse: PageResponseUserCommunityResponse = {}
+  friendRequestMap: {[key: number]: boolean } = {}
   noUsersFound = false;
+  friendRequestSent = false;
+  isLoaded = false;
 
 
   private loadAllUsers(query: string = "") {
+
     this.communityService.findAllUsers({query:query}).subscribe({
       next: (users) => {
         if (users.content?.length! === 0) {
           this.noUsersFound = true;
           return
         }
+
+        console.log(this.friendRequestMap)
         this.noUsersFound = false;
         this.userCommunityResponse = users;
         this.loadUsers = true;
-        console.log(this.userCommunityResponse)
+        this.userCommunityResponse.content?.forEach(user => {
+          this.friendRequestExists(user.userId)
+        })
       }
     })
+
+  }
+
+  private friendRequestExists(userId: any) {
+  this.communityService.friendRequestExists({userId}).subscribe({
+    next: (exists: boolean) => {
+      console.log("som tu")
+      this.friendRequestMap[userId] = exists;
+      console.log(this.friendRequestMap)
+      this.isLoaded = true;
+    }
+  })
 
   }
 
@@ -70,9 +91,20 @@ export class CommunityComponent implements OnInit {
     this.communityService.sendFriendRequest({userId}).subscribe({
       next: () => {
         console.log('friend request send')
+        this.friendRequestMap[userId] = true;
       }
     })
     console.log(userId)
+  }
+
+  cancelFriendRequest(userId: number) {
+    this.communityService.cancelFriendRequest({userId}).subscribe({
+      next: () => {
+        this.friendRequestMap[userId] = false;
+      }
+    })
+
+
   }
 
   navigateToUser(userId: number | undefined) {
@@ -89,4 +121,6 @@ export class CommunityComponent implements OnInit {
     this.userCommunityResponse = {}
     this.loadAllUsers(value);
   }
+
+
 }

@@ -11,4 +11,6 @@ public interface CommunityService {
 
   Long sendFriendRequest(Authentication connectedUser, Long userId);
 
+  void cancelFriendRequest(Authentication connectedUser, Long userId);
+
 }

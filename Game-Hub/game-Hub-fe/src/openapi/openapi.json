@@ -1284,6 +1284,37 @@
         }
       }
     },
+    "/community/friend-request/status/{userId}": {
+      "get": {
+        "tags": [
+          "community-controller"
+        ],
+        "operationId": "friendRequestExists",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/color/all-colors": {
       "get": {
         "tags": [
@@ -1363,6 +1394,30 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/community/cancel/friend/request/{userId}": {
+      "delete": {
+        "tags": [
+          "community-controller"
+        ],
+        "operationId": "cancelFriendRequest",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }

@@ -111,12 +111,12 @@ export class MenuComponent implements OnInit {
     return this.userHasProfilePicture;
   }
 
-  logoutUser() {
+  async logoutUser() {
 
     this.userService.setStatusToOffline().subscribe({
       next: () => {
         window.location.href = '/logout';
-        localStorage.removeItem("token")
+        localStorage.clear();
       },
       error: (err) => console.error(err)
     })

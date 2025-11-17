@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import gamehub.game_Hub.Common.PageResponse;
 import gamehub.game_Hub.Mapper.CommunityMapper;
@@ -101,6 +102,25 @@ public class CommunityServiceImpl implements CommunityService {
 
     friendRequestRepository.save(friendRequest);
     return friendRequest.getId();
+  }
+
+  @Override
+  @Transactional
+  public void cancelFriendRequest(final Authentication connectedUser, final Long userId) {
+    User authUser = (User) connectedUser.getPrincipal();
+    User sender = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+    User receiver = userRepository.findById(userId)
+        .orElseThrow(() -> new EntityNotFoundException("Receiver not found with id: " + userId));
+
+    boolean exists = friendRequestRepository.existsBySender_IdAndReceiver_Id(sender.getId(), userId);
+
+    if (!exists) {
+      throw new IllegalStateException("No friend request to cancel");
+    }
+
+    friendRequestRepository.deleteBySender_IdAndReceiver_Id(sender.getId(), receiver.getId());
   }
 
 }
