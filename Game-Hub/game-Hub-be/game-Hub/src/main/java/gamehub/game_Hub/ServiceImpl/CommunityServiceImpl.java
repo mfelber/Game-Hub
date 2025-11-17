@@ -8,10 +8,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import gamehub.game_Hub.Common.PageResponse;
 import gamehub.game_Hub.Mapper.CommunityMapper;
+import gamehub.game_Hub.Module.FriendRequest;
 import gamehub.game_Hub.Module.User.User;
+import gamehub.game_Hub.Repository.FriendRequestRepository;
 import gamehub.game_Hub.Repository.user.UserRepository;
 import gamehub.game_Hub.Response.UserCommunityResponse;
 import gamehub.game_Hub.Service.CommunityService;
@@ -26,8 +29,11 @@ public class CommunityServiceImpl implements CommunityService {
 
   private final CommunityMapper communityMapper;
 
+  private final FriendRequestRepository friendRequestRepository;
+
   @Override
-  public PageResponse<UserCommunityResponse> findAllUsers(final Authentication connectedUser,String query, final int page,
+  public PageResponse<UserCommunityResponse> findAllUsers(final Authentication connectedUser, String query,
+      final int page,
       final int size) {
 
     User authUser = (User) connectedUser.getPrincipal();
@@ -53,7 +59,7 @@ public class CommunityServiceImpl implements CommunityService {
           users.isLast()
       );
     } else {
-      Page<User> users = userRepository.findAllByEmailIsNotAndUsername(user.getEmail(),query ,pageable);
+      Page<User> users = userRepository.findAllByEmailIsNotAndUsername(user.getEmail(), query, pageable);
 
       List<UserCommunityResponse> communityResponse = users.stream()
           .map(communityMapper::toUserCommunityResponse)
@@ -71,5 +77,50 @@ public class CommunityServiceImpl implements CommunityService {
     }
   }
 
+  @Override
+  public Long sendFriendRequest(final Authentication connectedUser, final Long userId) {
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+    if (userId.equals(user.getId())) {
+      throw new IllegalArgumentException("Cannot send friend request to yourself");
+    }
+
+    boolean exists = friendRequestRepository.existsBySender_IdAndReceiver_Id(user.getId(), userId);
+
+    if (exists) {
+      throw new IllegalStateException("Friend request already send");
+    }
+
+    User receiver = userRepository.findById(userId)
+        .orElseThrow(() -> new EntityNotFoundException("Receiver not found with id: " + userId));
+
+    FriendRequest friendRequest = new FriendRequest();
+    friendRequest.setSender(user);
+    friendRequest.setReceiver(receiver);
+
+    friendRequestRepository.save(friendRequest);
+    return friendRequest.getId();
+  }
+
+  @Override
+  @Transactional
+  public void cancelFriendRequest(final Authentication connectedUser, final Long userId) {
+    User authUser = (User) connectedUser.getPrincipal();
+    User sender = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+    User receiver = userRepository.findById(userId)
+        .orElseThrow(() -> new EntityNotFoundException("Receiver not found with id: " + userId));
+
+    boolean exists = friendRequestRepository.existsBySender_IdAndReceiver_Id(sender.getId(), userId);
+
+    if (!exists) {
+      throw new IllegalStateException("No friend request to cancel");
+    }
+
+    friendRequestRepository.deleteBySender_IdAndReceiver_Id(sender.getId(), receiver.getId());
+  }
 
 }

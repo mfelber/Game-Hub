@@ -11,14 +11,45 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { cancelFriendRequest } from '../fn/community-controller/cancel-friend-request';
+import { CancelFriendRequest$Params } from '../fn/community-controller/cancel-friend-request';
 import { findAllUsers } from '../fn/community-controller/find-all-users';
 import { FindAllUsers$Params } from '../fn/community-controller/find-all-users';
+import { friendRequestExists } from '../fn/community-controller/friend-request-exists';
+import { FriendRequestExists$Params } from '../fn/community-controller/friend-request-exists';
 import { PageResponseUserCommunityResponse } from '../models/page-response-user-community-response';
+import { sendFriendRequest } from '../fn/community-controller/send-friend-request';
+import { SendFriendRequest$Params } from '../fn/community-controller/send-friend-request';
 
 @Injectable({ providedIn: 'root' })
 export class CommunityControllerService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
+  }
+
+  /** Path part for operation `sendFriendRequest()` */
+  static readonly SendFriendRequestPath = '/community/send/friend/request/{userId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `sendFriendRequest()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  sendFriendRequest$Response(params: SendFriendRequest$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return sendFriendRequest(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `sendFriendRequest$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  sendFriendRequest(params: SendFriendRequest$Params, context?: HttpContext): Observable<number> {
+    return this.sendFriendRequest$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
   }
 
   /** Path part for operation `findAllUsers()` */
@@ -43,6 +74,56 @@ export class CommunityControllerService extends BaseService {
   findAllUsers(params?: FindAllUsers$Params, context?: HttpContext): Observable<PageResponseUserCommunityResponse> {
     return this.findAllUsers$Response(params, context).pipe(
       map((r: StrictHttpResponse<PageResponseUserCommunityResponse>): PageResponseUserCommunityResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `friendRequestExists()` */
+  static readonly FriendRequestExistsPath = '/community/friend-request/status/{userId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `friendRequestExists()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  friendRequestExists$Response(params: FriendRequestExists$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+    return friendRequestExists(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `friendRequestExists$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  friendRequestExists(params: FriendRequestExists$Params, context?: HttpContext): Observable<boolean> {
+    return this.friendRequestExists$Response(params, context).pipe(
+      map((r: StrictHttpResponse<boolean>): boolean => r.body)
+    );
+  }
+
+  /** Path part for operation `cancelFriendRequest()` */
+  static readonly CancelFriendRequestPath = '/community/cancel/friend/request/{userId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `cancelFriendRequest()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  cancelFriendRequest$Response(params: CancelFriendRequest$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return cancelFriendRequest(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `cancelFriendRequest$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  cancelFriendRequest(params: CancelFriendRequest$Params, context?: HttpContext): Observable<void> {
+    return this.cancelFriendRequest$Response(params, context).pipe(
+      map((r: StrictHttpResponse<void>): void => r.body)
     );
   }
 

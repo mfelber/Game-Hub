@@ -5,8 +5,8 @@
 export { GameControllerService } from './services/game-controller.service';
 export { UserProfileControllerService } from './services/user-profile-controller.service';
 export { LibraryControllerService } from './services/library-controller.service';
+export { CommunityControllerService } from './services/community-controller.service';
 export { AuthenticationService } from './services/authentication.service';
 export { WishlistControllerService } from './services/wishlist-controller.service';
 export { LocationControllerService } from './services/location-controller.service';
-export { CommunityControllerService } from './services/community-controller.service';
 export { CardColorControllerService } from './services/card-color-controller.service';

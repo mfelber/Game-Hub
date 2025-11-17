@@ -5,6 +5,8 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {GameControllerService} from '../../../../services/services/game-controller.service';
 import {GameResponse} from '../../../../services/models/game-response';
+import {CommunityControllerService} from '../../../../services/services/community-controller.service';
+import {cancelFriendRequest} from '../../../../services/fn/community-controller/cancel-friend-request';
 
 @Component({
   selector: 'app-user-public-profile',
@@ -17,7 +19,7 @@ import {GameResponse} from '../../../../services/models/game-response';
   templateUrl: './user-public-profile.component.html',
   styleUrl: './user-public-profile.component.css'
 })
-export class UserPublicProfileComponent implements OnInit{
+export class UserPublicProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadUserPublicProfile();
@@ -26,6 +28,7 @@ export class UserPublicProfileComponent implements OnInit{
   constructor(
     private userService: UserProfileControllerService,
     private gameService: GameControllerService,
+    private communityService: CommunityControllerService,
     private router: ActivatedRoute,
     private route: Router
   ) {
@@ -48,22 +51,30 @@ export class UserPublicProfileComponent implements OnInit{
   userHasProfilePicture = true
   isLoaded = false;
 
+  friendRequestExists = false;
 
   private loadUserPublicProfile() {
     const userId: any = this.router.snapshot.paramMap.get('id')
     this.userService.getUserPublic({userId}).subscribe({
-      next:  (user) => {
+      next: (user) => {
         this.userResponse = user;
         console.log(user)
-        this.isLoaded = true;
         this.userResponse.badges = user.badges?.sort((a, b) =>
           a.name!.localeCompare(b.name!)
         );
-        if (user.userProfilePicture){
+        if (user.userProfilePicture) {
           this.userHasProfilePicture = true
         } else {
           this.userHasProfilePicture = false
         }
+        this.communityService.friendRequestExists({userId}).subscribe({
+          next: (res) => {
+            this.friendRequestExists = res;
+            console.log(this.friendRequestExists)
+            this.isLoaded = true;
+          }
+        })
+
       }
     });
   }
@@ -85,7 +96,7 @@ export class UserPublicProfileComponent implements OnInit{
     return user.predefinedBannerPath;
   }
 
-  goToGame(gameId:any) {
+  goToGame(gameId: any) {
     this.gameService.getGameById({gameId}).subscribe({
       next: (game) => {
         this.route.navigate(['gamehub/game', gameId]);
@@ -102,4 +113,24 @@ export class UserPublicProfileComponent implements OnInit{
     }
     return 'https://images.pexels.com/photos/1054655/pexels-photo-1054655.jpeg';
   }
+
+  sendFriendRequest(userId: number) {
+    this.communityService.sendFriendRequest({userId}).subscribe({
+      next: () => {
+        this.friendRequestExists = true;
+        this.loadUserPublicProfile();
+    }
+    })
+  }
+
+  cancelFriendRequest(userId: number) {
+    this.communityService.cancelFriendRequest({userId}).subscribe({
+      next: () => {
+        this.friendRequestExists = false;
+        this.loadUserPublicProfile();
+      }
+    })
+
+  }
+
 }

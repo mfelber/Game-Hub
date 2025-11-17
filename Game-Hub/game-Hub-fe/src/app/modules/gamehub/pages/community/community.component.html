@@ -1,53 +1,57 @@
-<div>
-<div class="flex items-center justify-between mb-3">
-
-  <!-- Left buttons -->
-  <div class="flex gap-3">
-    <button *ngIf="!loadUsers" class="border border-gray-500 text-gray-300 hover:bg-gray-700/40 hover:text-white
-px-4 py-1.5 rounded-lg transition duration-300 text-[13px]">
-      Users
-    </button>
-
-    <button *ngIf="loadUsers" class="border border-emerald-500 text-emerald-400 bg-emerald-500/10
-px-4 py-1.5 rounded-lg transition duration-300 text-[13px]">
-      Users
-    </button>
-
-    <button
-      class="border border-gray-500 text-gray-500 px-4 py-1.5 rounded-lg
-         transition duration-300 text-[13px]
-         opacity-60 flex items-center gap-2"
-    >
-      Groups
-      <span class="text-[10px] bg-gray-700/60 px-2 py-0.5 rounded-md">Coming soon</span>
-    </button>
-  </div>
-
-
-  <div class="relative w-1/3">
-    <input
-      #searchquery
-      (keyup)="searchByUsername(searchquery.value)"
-      type="text"
-      id="query"
-      class="block w-full pl-12 p-2.5 text-sm text-white bg-transparent rounded-lg placeholder-white border border-[#76849D]"
-      placeholder="Search..."
-      required
-    />
-
-    <div class="absolute left-0 top-0 h-full px-3 text-white flex items-center justify-center">
-      <i class="fas fa-search"></i>
-      <span class="sr-only">Search</span>
-    </div>
-  </div>
-
+<div *ngIf="!isLoaded" class="text-center justify-center text-gray-400">
+  Loading...
 </div>
 
-<!-- User list -->
+<div [class.hidden]="!isLoaded" class="relative w-full">
+  <div class="flex items-center justify-between mb-3">
+
+    <!-- Left buttons -->
+    <div class="flex gap-3">
+      <button *ngIf="!loadUsers" class="border border-gray-500 text-gray-300 hover:bg-gray-700/40 hover:text-white
+px-4 py-1.5 rounded-lg transition duration-300 text-[13px]">
+        Users
+      </button>
+
+      <button *ngIf="loadUsers" class="border border-emerald-500 text-emerald-400 bg-emerald-500/10
+px-4 py-1.5 rounded-lg transition duration-300 text-[13px]">
+        Users
+      </button>
+
+      <button
+        class="border border-gray-500 text-gray-500 px-4 py-1.5 rounded-lg
+         transition duration-300 text-[13px]
+         opacity-60 flex items-center gap-2"
+      >
+        Groups
+        <span class="text-[10px] bg-gray-700/60 px-2 py-0.5 rounded-md">Coming soon</span>
+      </button>
+    </div>
+
+
+    <div class="relative w-1/3">
+      <input
+        #searchquery
+        (keyup)="searchByUsername(searchquery.value)"
+        type="text"
+        id="query"
+        class="block w-full pl-12 p-2.5 text-sm text-white bg-transparent rounded-lg placeholder-white border border-[#76849D]"
+        placeholder="Search..."
+        required
+      />
+
+      <div class="absolute left-0 top-0 h-full px-3 text-white flex items-center justify-center">
+        <i class="fas fa-search"></i>
+        <span class="sr-only">Search</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- User list -->
   <div *ngFor="let user of userCommunityResponse.content"
        class="w-full mb-3 p-4 bg-black/30 rounded-2xl cursor-pointer hover:scale-101 transform-gpu transition duration-300">
 
-    <div class="flex items-center justify-between w-full gap-4 " (click)="navigateToUser(user.userId)">
+    <div class="flex items-center justify-between w-full gap-4" (click)="navigateToUser(user.userId)">
 
       <!-- Avatar -->
       <div class="w-[60px] flex justify-center">
@@ -82,16 +86,27 @@ px-4 py-1.5 rounded-lg transition duration-300 text-[13px]">
 
       <!-- Buttons -->
       <div class="flex gap-3">
-        <button (click)="addFriend(user.userId) ; $event.stopPropagation()"
-          class="flex items-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700
+
+
+
+        <button *ngIf="!friendRequestMap[user.userId!] && isLoaded"
+                (click)="sendFriendRequest(user.userId!) ; $event.stopPropagation()"
+                class="flex items-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700
+               text-white font-semibold rounded-lg shadow-md transition cursor-pointer lg:min-w-39.5 justify-center">
+          Add Friend<i class="fa-solid fa-user-plus"></i>
+        </button>
+
+        <button *ngIf="friendRequestMap[user.userId!] && isLoaded"
+                (click)="cancelFriendRequest(user.userId!) ; $event.stopPropagation()"
+                class="flex items-center gap-2 px-3 py-2 bg-gray-500 hover:bg-gray-600
                text-white font-semibold rounded-lg shadow-md transition cursor-pointer">
-          <i class="fa-solid fa-user-plus"></i> Add
+          Cancel invite <i class="fa-solid fa-user-minus"></i>
         </button>
 
         <button (click)="reportUser(user.userId) ; $event.stopPropagation()"
-          class="flex items-center gap-2 px-3 py-2 bg-red-600 hover:bg-red-700
+                class="flex items-center gap-2 px-3 py-2 bg-red-600 hover:bg-red-700
                text-white font-semibold rounded-lg shadow-md transition cursor-pointer">
-          <i class="fa-solid fa-exclamation"></i> Report
+          <i class="fa-solid fa-exclamation"></i>
         </button>
 
       </div>
