@@ -31,7 +31,7 @@ public class CommunityController {
   private final UserRepository userRepository;
 
   private final FriendRequestRepository friendRequestRepository;
-  
+
   @GetMapping("/get/all/users")
   public ResponseEntity<PageResponse<UserCommunityResponse>> findAllUsers(Authentication connectedUser,
       @RequestParam(defaultValue = "") String query,

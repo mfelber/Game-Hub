@@ -1,1 +1,51 @@
-<p>friend-requests works!</p>
+<div *ngIf="!isLoaded" class="text-center justify-center text-gray-400">
+  Loading...
+</div>
+
+<div [class.hidden]="!isLoaded" class="relative w-full">
+
+  <div class="flex gap-3">
+
+
+    <button class="border border-emerald-500 text-emerald-400 bg-emerald-500/10
+px-4 py-1.5 rounded-lg transition duration-300 mb-2 text-[13px]">
+      Friend requests
+    </button>
+
+    <button class="border border-gray-500 text-gray-300 hover:bg-gray-700/40 hover:text-white
+px-4 py-1.5 rounded-lg transition duration-300 mb-2 text-[13px]">
+      Friend requests
+    </button>
+
+
+
+    <!--  <button class="border border-gray-500 text-gray-300 hover:bg-gray-700/40 hover:text-white-->
+    <!--px-4 py-1.5 rounded-lg transition duration-300 mb-2 text-[13px]">-->
+    <!--    Downloaded games-->
+    <!--  </button>-->
+
+    <button
+      class="border border-gray-500 text-gray-500 px-4 py-1.5 rounded-lg
+         transition duration-300 mb-2 text-[13px]
+         opacity-60 flex items-center gap-2"
+
+    >
+      Pending requests
+      <span class="text-[10px] bg-gray-700/60 px-2 py-0.5 rounded-md">Coming soon</span>
+    </button>
+
+
+  </div>
+
+  <div *ngFor="let friendRequest of friendRequestsResponse.content">
+
+    <h2>{{friendRequest.username}}</h2>
+  </div>
+
+  <div *ngIf="zeroFriendRequests" class="flex flex-col items-center justify-center h-60text-gray-400">
+    <i class="fa-solid fa-envelope text-4xl mb-4"></i>
+    <p class="text-lg font-semibold">You dont have any friend requests</p>
+  </div>
+</div>
+
+
