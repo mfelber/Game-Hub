@@ -1,5 +1,6 @@
 package gamehub.game_Hub.ServiceImpl;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -16,6 +17,7 @@ import gamehub.game_Hub.Module.FriendRequest;
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Repository.FriendRequestRepository;
 import gamehub.game_Hub.Repository.user.UserRepository;
+import gamehub.game_Hub.Response.FriendRequestResponse;
 import gamehub.game_Hub.Response.UserCommunityResponse;
 import gamehub.game_Hub.Service.CommunityService;
 import jakarta.persistence.EntityNotFoundException;
@@ -99,6 +101,7 @@ public class CommunityServiceImpl implements CommunityService {
     FriendRequest friendRequest = new FriendRequest();
     friendRequest.setSender(user);
     friendRequest.setReceiver(receiver);
+    friendRequest.setCreatedAt(LocalDateTime.now());
 
     friendRequestRepository.save(friendRequest);
     return friendRequest.getId();
@@ -155,6 +158,31 @@ public class CommunityServiceImpl implements CommunityService {
     friendRequestRepository.deleteBySender_IdAndReceiver_Id(sender.getId(), receiver.getId());
 
     return receiver.getId();
+  }
+
+  @Override
+  public PageResponse<FriendRequestResponse> getAllMyFriendRequests(final Authentication connectedUser,
+      final int page,
+      final int size) {
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+    Pageable pageable = PageRequest.of(page, size,Sort.by("createdAt").descending());
+
+    Page<FriendRequest> requests = friendRequestRepository.findAllByReceiver_Id(user.getId(),pageable);
+
+    List<FriendRequestResponse> friendRequests = requests.stream().map(communityMapper::toFriendRequestResponse).toList();
+
+    return new PageResponse<>(
+        friendRequests,
+        requests.getNumber(),
+        requests.getSize(),
+        requests.getTotalElements(),
+        requests.getTotalPages(),
+        requests.isFirst(),
+        requests.isLast()
+    );
   }
 
 

@@ -1,5 +1,6 @@
 package gamehub.game_Hub.Controller;
 
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +15,7 @@ import gamehub.game_Hub.Common.PageResponse;
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Repository.FriendRequestRepository;
 import gamehub.game_Hub.Repository.user.UserRepository;
+import gamehub.game_Hub.Response.FriendRequestResponse;
 import gamehub.game_Hub.Response.UserCommunityResponse;
 import gamehub.game_Hub.Service.CommunityService;
 import jakarta.persistence.EntityNotFoundException;
@@ -29,7 +31,7 @@ public class CommunityController {
   private final UserRepository userRepository;
 
   private final FriendRequestRepository friendRequestRepository;
-
+  
   @GetMapping("/get/all/users")
   public ResponseEntity<PageResponse<UserCommunityResponse>> findAllUsers(Authentication connectedUser,
       @RequestParam(defaultValue = "") String query,
@@ -91,6 +93,22 @@ public class CommunityController {
 
     return ResponseEntity.ok(areFriends);
 
+  }
+
+  @GetMapping("/friend-requests")
+  public ResponseEntity<PageResponse<FriendRequestResponse>> getFriendRequests(Authentication connectedUser,
+      @RequestParam(name = "page", defaultValue = "0", required = false) int page,
+      @RequestParam(name = "size", defaultValue = "10", required = false) int size) {
+    return ResponseEntity.ok(communityService.getAllMyFriendRequests(connectedUser, page, size));
+  }
+
+  @GetMapping("/friend-requests/count")
+  public int friendRequestsCount(Authentication connectedUser) {
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + authUser.getId()));
+
+    return friendRequestRepository.countByReceiver_Id(user.getId());
   }
 
 }

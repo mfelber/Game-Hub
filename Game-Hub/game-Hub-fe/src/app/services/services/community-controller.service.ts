@@ -23,6 +23,11 @@ import { friendRequestExistsForReceiver } from '../fn/community-controller/frien
 import { FriendRequestExistsForReceiver$Params } from '../fn/community-controller/friend-request-exists-for-receiver';
 import { friendRequestExistsFromSender } from '../fn/community-controller/friend-request-exists-from-sender';
 import { FriendRequestExistsFromSender$Params } from '../fn/community-controller/friend-request-exists-from-sender';
+import { friendRequestsCount } from '../fn/community-controller/friend-requests-count';
+import { FriendRequestsCount$Params } from '../fn/community-controller/friend-requests-count';
+import { getFriendRequests } from '../fn/community-controller/get-friend-requests';
+import { GetFriendRequests$Params } from '../fn/community-controller/get-friend-requests';
+import { PageResponseFriendRequestResponse } from '../models/page-response-friend-request-response';
 import { PageResponseUserCommunityResponse } from '../models/page-response-user-community-response';
 import { rejectFriendRequest } from '../fn/community-controller/reject-friend-request';
 import { RejectFriendRequest$Params } from '../fn/community-controller/reject-friend-request';
@@ -132,6 +137,56 @@ export class CommunityControllerService extends BaseService {
   friendExistsForUser(params: FriendExistsForUser$Params, context?: HttpContext): Observable<boolean> {
     return this.friendExistsForUser$Response(params, context).pipe(
       map((r: StrictHttpResponse<boolean>): boolean => r.body)
+    );
+  }
+
+  /** Path part for operation `getFriendRequests()` */
+  static readonly GetFriendRequestsPath = '/community/friend-requests';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getFriendRequests()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getFriendRequests$Response(params?: GetFriendRequests$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseFriendRequestResponse>> {
+    return getFriendRequests(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getFriendRequests$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getFriendRequests(params?: GetFriendRequests$Params, context?: HttpContext): Observable<PageResponseFriendRequestResponse> {
+    return this.getFriendRequests$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PageResponseFriendRequestResponse>): PageResponseFriendRequestResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `friendRequestsCount()` */
+  static readonly FriendRequestsCountPath = '/community/friend-requests/count';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `friendRequestsCount()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  friendRequestsCount$Response(params?: FriendRequestsCount$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return friendRequestsCount(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `friendRequestsCount$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  friendRequestsCount(params?: FriendRequestsCount$Params, context?: HttpContext): Observable<number> {
+    return this.friendRequestsCount$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
     );
   }
 
