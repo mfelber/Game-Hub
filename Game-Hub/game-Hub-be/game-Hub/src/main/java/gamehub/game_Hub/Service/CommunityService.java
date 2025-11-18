@@ -13,4 +13,8 @@ public interface CommunityService {
 
   void cancelFriendRequest(Authentication connectedUser, Long userId);
 
+  void rejectFriendRequest(Authentication connectedUser, Long userId);
+
+  Long acceptFriendRequest(Authentication connectedUser, Long userId);
+
 }

@@ -23,6 +23,7 @@ export class UserPublicProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadUserPublicProfile();
+    // this.checkIfUserIsFriend();
   }
 
   constructor(
@@ -50,8 +51,10 @@ export class UserPublicProfileComponent implements OnInit {
 
   userHasProfilePicture = true
   isLoaded = false;
+  friendRequestFromThisUser: boolean | null = null;
+  friendRequestExistsFromSender: boolean | null = null;
+  userIsMyFriend: boolean | null = null;
 
-  friendRequestExists = false;
 
   private loadUserPublicProfile() {
     const userId: any = this.router.snapshot.paramMap.get('id')
@@ -67,14 +70,27 @@ export class UserPublicProfileComponent implements OnInit {
         } else {
           this.userHasProfilePicture = false
         }
-        this.communityService.friendRequestExists({userId}).subscribe({
+        this.communityService.friendRequestExistsFromSender({userId}).subscribe({
           next: (res) => {
-            this.friendRequestExists = res;
-            console.log(this.friendRequestExists)
+            this.friendRequestExistsFromSender = res;
+            console.log(this.friendRequestExistsFromSender)
+            // this.isLoaded = true;
+          }
+        })
+        this.communityService.friendRequestExistsForReceiver({userId}).subscribe({
+          next: (res) => {
+            this.friendRequestFromThisUser = res;
+            console.log(this.friendRequestFromThisUser)
+
+          }
+        })
+        this.communityService.friendExistsForUser({userId}).subscribe({
+          next: (res) => {
+            this.userIsMyFriend = res
+            console.log(this.userIsMyFriend)
             this.isLoaded = true;
           }
         })
-
       }
     });
   }
@@ -117,7 +133,7 @@ export class UserPublicProfileComponent implements OnInit {
   sendFriendRequest(userId: number) {
     this.communityService.sendFriendRequest({userId}).subscribe({
       next: () => {
-        this.friendRequestExists = true;
+        this.friendRequestExistsFromSender = true;
         this.loadUserPublicProfile();
     }
     })
@@ -126,10 +142,33 @@ export class UserPublicProfileComponent implements OnInit {
   cancelFriendRequest(userId: number) {
     this.communityService.cancelFriendRequest({userId}).subscribe({
       next: () => {
-        this.friendRequestExists = false;
+        this.friendRequestExistsFromSender = false;
         this.loadUserPublicProfile();
       }
     })
+
+  }
+
+  rejectFriendRequest(userId: number) {
+    this.communityService.rejectFriendRequest({userId}).subscribe({
+      next: () => {
+        this.friendRequestExistsFromSender = false;
+        this.loadUserPublicProfile();
+      }
+    })
+  }
+
+  acceptFriendRequest(userId: number) {
+    this.communityService.acceptFriendRequest({userId}).subscribe({
+      next: () => {
+        this.friendRequestExistsFromSender = false;
+        this.loadUserPublicProfile();
+      }
+    })
+
+  }
+
+  message(number: number) {
 
   }
 

@@ -9,12 +9,12 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 
-export interface FriendRequestExists$Params {
+export interface FriendRequestExistsForReceiver$Params {
   userId: number;
 }
 
-export function friendRequestExists(http: HttpClient, rootUrl: string, params: FriendRequestExists$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
-  const rb = new RequestBuilder(rootUrl, friendRequestExists.PATH, 'get');
+export function friendRequestExistsForReceiver(http: HttpClient, rootUrl: string, params: FriendRequestExistsForReceiver$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+  const rb = new RequestBuilder(rootUrl, friendRequestExistsForReceiver.PATH, 'get');
   if (params) {
     rb.path('userId', params.userId, {});
   }
@@ -29,4 +29,4 @@ export function friendRequestExists(http: HttpClient, rootUrl: string, params: F
   );
 }
 
-friendRequestExists.PATH = '/community/friend-request/status/{userId}';
+friendRequestExistsForReceiver.PATH = '/community/friend-request/status/receiver/{userId}';

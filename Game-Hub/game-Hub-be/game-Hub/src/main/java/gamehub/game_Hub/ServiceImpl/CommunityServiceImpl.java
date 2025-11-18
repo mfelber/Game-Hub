@@ -123,4 +123,40 @@ public class CommunityServiceImpl implements CommunityService {
     friendRequestRepository.deleteBySender_IdAndReceiver_Id(sender.getId(), receiver.getId());
   }
 
+  @Override
+  @Transactional
+  public void rejectFriendRequest(final Authentication connectedUser, final Long userId) {
+    User authUser = (User) connectedUser.getPrincipal();
+    User receiver = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+    User sender = userRepository.findById(userId)
+        .orElseThrow(() -> new EntityNotFoundException("Receiver not found with id: " + userId));
+
+    friendRequestRepository.deleteBySender_IdAndReceiver_Id(sender.getId(), receiver.getId());
+  }
+
+  @Transactional
+  public Long acceptFriendRequest(final Authentication connectedUser, final Long userId) {
+    User authUser = (User) connectedUser.getPrincipal();
+    User receiver = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+    User sender = userRepository.findById(userId)
+        .orElseThrow(() -> new EntityNotFoundException("Receiver not found with id: " + userId));
+
+    System.out.println("receiver" + receiver.getId());
+    System.out.println("sender" + sender.getId());
+
+    receiver.addFriend(sender);
+
+    userRepository.save(receiver);
+
+    friendRequestRepository.deleteBySender_IdAndReceiver_Id(sender.getId(), receiver.getId());
+
+    return receiver.getId();
+  }
+
+
+
 }

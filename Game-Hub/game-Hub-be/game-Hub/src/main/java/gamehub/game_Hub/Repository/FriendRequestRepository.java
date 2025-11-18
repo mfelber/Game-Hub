@@ -1,5 +1,7 @@
 package gamehub.game_Hub.Repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import gamehub.game_Hub.Module.FriendRequest;
@@ -12,5 +14,8 @@ public interface FriendRequestRepository extends JpaRepository<FriendRequest, Lo
   boolean existsBySender_IdAndReceiver_Id(Long senderId, Long receiverId);
 
   void deleteBySender_IdAndReceiver_Id(Long senderId, Long receiverId);
+
+  boolean existsByReceiver_IdAndSender_Id(Long receiverId, Long senderId);
+
 
 }

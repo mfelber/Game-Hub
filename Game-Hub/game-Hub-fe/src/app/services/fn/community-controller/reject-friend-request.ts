@@ -9,12 +9,12 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 
-export interface CancelFriendRequest$Params {
+export interface RejectFriendRequest$Params {
   userId: number;
 }
 
-export function cancelFriendRequest(http: HttpClient, rootUrl: string, params: CancelFriendRequest$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, cancelFriendRequest.PATH, 'delete');
+export function rejectFriendRequest(http: HttpClient, rootUrl: string, params: RejectFriendRequest$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  const rb = new RequestBuilder(rootUrl, rejectFriendRequest.PATH, 'delete');
   if (params) {
     rb.path('userId', params.userId, {});
   }
@@ -29,4 +29,4 @@ export function cancelFriendRequest(http: HttpClient, rootUrl: string, params: C
   );
 }
 
-cancelFriendRequest.PATH = '/community/cancel/friend-request/{userId}';
+rejectFriendRequest.PATH = '/community/delete/friend-request/{userId}';

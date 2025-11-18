@@ -1,13 +1,15 @@
 package gamehub.game_Hub.Module;
 
+import java.time.LocalDateTime;
+
 import gamehub.game_Hub.Module.User.User;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
@@ -37,6 +39,9 @@ public class FriendRequest {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "receiver_id",nullable = false)
   private User receiver;
+
+  @Column(name = "created_at")
+  private LocalDateTime createdAt;
 
 
 
