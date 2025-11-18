@@ -49,6 +49,7 @@ public class UserMapper {
             )
         )
         .status(user.getStatus())
+        .friendsCount(user.getFriends().size())
         .libraryCount(user.getLibrary().size())
         .wishlistCount(user.getWishlist().size())
         .badges(user.getBadges().stream().map(badge -> new BadgeResponse(badge.getId(), badge.getName(),
@@ -103,6 +104,7 @@ public class UserMapper {
             )
         )
         .status(user.getStatus())
+        .friendsCount(user.getFriends().size())
         .libraryCount(user.getLibrary().size())
         .wishlistCount(user.getWishlist().size())
         .badges(user.getBadges().stream().map(badge -> new BadgeResponse(badge.getId(), badge.getName(),

@@ -38,23 +38,59 @@ public class CommunityController {
     return ResponseEntity.ok(communityService.findAllUsers(connectedUser, query, page, size));
   }
 
-  @PostMapping("/send/friend/request/{userId}")
+  @PostMapping("/send/friend-request/{userId}")
   public ResponseEntity<Long> sendFriendRequest(Authentication connectedUser, @PathVariable Long userId) {
     return ResponseEntity.ok(communityService.sendFriendRequest(connectedUser, userId));
   }
 
-  @DeleteMapping("/cancel/friend/request/{userId}")
+  @PostMapping("/accept/friend-request/{userId}")
+  public ResponseEntity<Long> acceptFriendRequest(Authentication connectedUser, @PathVariable Long userId) {
+    return ResponseEntity.ok(communityService.acceptFriendRequest(connectedUser, userId));
+  }
+
+  @DeleteMapping("/cancel/friend-request/{userId}")
   public void cancelFriendRequest(Authentication connectedUser, @PathVariable Long userId) {
     communityService.cancelFriendRequest(connectedUser, userId);
   }
 
-  @GetMapping("/friend-request/status/{userId}")
-  public ResponseEntity<Boolean> friendRequestExists(Authentication connectedUser, @PathVariable Long userId) {
+  @DeleteMapping("/delete/friend-request/{userId}")
+  public void rejectFriendRequest(Authentication connectedUser, @PathVariable Long userId) {
+    communityService.rejectFriendRequest(connectedUser, userId);
+  }
+
+  @GetMapping("/friend-request/status/sender/{userId}")
+  public ResponseEntity<Boolean> friendRequestExistsFromSender(Authentication connectedUser,
+      @PathVariable Long userId) {
+    User authUser = (User) connectedUser.getPrincipal();
+    User sender = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + authUser.getId()));
+    boolean exists = friendRequestRepository.existsBySender_IdAndReceiver_Id(sender.getId(), userId);
+    return ResponseEntity.ok(exists);
+  }
+
+  @GetMapping("/friend-request/status/receiver/{userId}")
+  public ResponseEntity<Boolean> friendRequestExistsForReceiver(Authentication connectedUser,
+      @PathVariable Long userId) {
+    User authUser = (User) connectedUser.getPrincipal();
+    User receiver = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + authUser.getId()));
+    boolean exists = friendRequestRepository.existsByReceiver_IdAndSender_Id(receiver.getId(), userId);
+    return ResponseEntity.ok(exists);
+  }
+
+  @GetMapping("/friends/{userId}/check")
+  public ResponseEntity<Boolean> friendExistsForUser(Authentication connectedUser, @PathVariable Long userId) {
     User authUser = (User) connectedUser.getPrincipal();
     User user = userRepository.findById(authUser.getId())
         .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + authUser.getId()));
-    boolean exists = friendRequestRepository.existsBySender_IdAndReceiver_Id(user.getId(), userId);
-    return ResponseEntity.ok(exists);
+
+    User friend = userRepository.findById(userId)
+        .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+
+    boolean areFriends = userRepository.existsByIdAndFriends_Id(user.getId(), friend.getId());
+
+    return ResponseEntity.ok(areFriends);
+
   }
 
 }

@@ -40,8 +40,9 @@ export class CommunityComponent implements OnInit {
     ) {
   }
 
-  userCommunityResponse: PageResponseUserCommunityResponse = {}
-  friendRequestMap: {[key: number]: boolean } = {}
+  userCommunityResponse: PageResponseUserCommunityResponse = {};
+  friendRequestMap: {[key: number]: boolean } = {};
+  friendsMap: {[key: number]: boolean} = {};
   noUsersFound = false;
   friendRequestSent = false;
   isLoaded = false;
@@ -61,23 +62,33 @@ export class CommunityComponent implements OnInit {
         this.userCommunityResponse = users;
         this.loadUsers = true;
         this.userCommunityResponse.content?.forEach(user => {
-          this.friendRequestExists(user.userId)
+          this.friendRequestExistsFromSender(user.userId)
+        })
+        this.userCommunityResponse.content?.forEach(user => {
+          this.areFriends(user.userId!)
         })
       }
     })
 
   }
 
-  private friendRequestExists(userId: any) {
-  this.communityService.friendRequestExists({userId}).subscribe({
+  private areFriends(userId: number){
+    this.communityService.friendExistsForUser({userId}).subscribe({
+      next: (exists: boolean)=> {
+        this.friendsMap[userId] = exists;
+        console.log(this.friendsMap);
+        this.isLoaded = true;
+      }
+    })
+  }
+
+  private friendRequestExistsFromSender(userId: any) {
+  this.communityService.friendRequestExistsFromSender({userId}).subscribe({
     next: (exists: boolean) => {
-      console.log("som tu")
       this.friendRequestMap[userId] = exists;
       console.log(this.friendRequestMap)
-      this.isLoaded = true;
     }
   })
-
   }
 
   getProfilePicture(user: UserCommunityResponse) {

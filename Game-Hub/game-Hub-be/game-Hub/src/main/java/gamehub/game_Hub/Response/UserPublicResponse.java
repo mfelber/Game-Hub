@@ -20,7 +20,7 @@ public class UserPublicResponse {
   private LocationResponse location;
   private Status status;
   private String joinedDate;
-  //   TODO add count of friends
+  private int friendsCount;
   private int libraryCount;
   private int wishlistCount;
   private Set<BadgeResponse> badges;

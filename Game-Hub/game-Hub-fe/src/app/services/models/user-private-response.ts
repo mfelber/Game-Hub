@@ -17,6 +17,7 @@ export interface UserPrivateResponse {
   favoriteGames?: Array<GameResponseShort>;
   favoriteGenres?: Array<GenreResponse>;
   firstName?: string;
+  friendsCount?: number;
   joinedDate?: string;
   lastName?: string;
   libraryCount?: number;

@@ -9,24 +9,24 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 
-export interface CancelFriendRequest$Params {
+export interface FriendExistsForUser$Params {
   userId: number;
 }
 
-export function cancelFriendRequest(http: HttpClient, rootUrl: string, params: CancelFriendRequest$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, cancelFriendRequest.PATH, 'delete');
+export function friendExistsForUser(http: HttpClient, rootUrl: string, params: FriendExistsForUser$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+  const rb = new RequestBuilder(rootUrl, friendExistsForUser.PATH, 'get');
   if (params) {
     rb.path('userId', params.userId, {});
   }
 
   return http.request(
-    rb.build({ responseType: 'text', accept: '*/*', context })
+    rb.build({ responseType: 'json', accept: 'application/json', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      return (r as HttpResponse<any>).clone({ body: String((r as HttpResponse<any>).body) === 'true' }) as StrictHttpResponse<boolean>;
     })
   );
 }
 
-cancelFriendRequest.PATH = '/community/cancel/friend-request/{userId}';
+friendExistsForUser.PATH = '/community/friends/{userId}/check';

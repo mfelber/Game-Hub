@@ -19,4 +19,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
   Page<User> findAllByEmailIsNotAndUsername(String email, String username, Pageable pageable);
 
+  boolean existsByIdAndFriends_Id(Long id, Long friendsId);
+
 }

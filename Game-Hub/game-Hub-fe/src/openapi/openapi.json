@@ -570,12 +570,44 @@
         }
       }
     },
-    "/community/send/friend/request/{userId}": {
+    "/community/send/friend-request/{userId}": {
       "post": {
         "tags": [
           "community-controller"
         ],
         "operationId": "sendFriendRequest",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/community/accept/friend-request/{userId}": {
+      "post": {
+        "tags": [
+          "community-controller"
+        ],
+        "operationId": "acceptFriendRequest",
         "parameters": [
           {
             "name": "userId",
@@ -1284,12 +1316,74 @@
         }
       }
     },
-    "/community/friend-request/status/{userId}": {
+    "/community/friends/{userId}/check": {
       "get": {
         "tags": [
           "community-controller"
         ],
-        "operationId": "friendRequestExists",
+        "operationId": "friendExistsForUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/community/friend-request/status/sender/{userId}": {
+      "get": {
+        "tags": [
+          "community-controller"
+        ],
+        "operationId": "friendRequestExistsFromSender",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/community/friend-request/status/receiver/{userId}": {
+      "get": {
+        "tags": [
+          "community-controller"
+        ],
+        "operationId": "friendRequestExistsForReceiver",
         "parameters": [
           {
             "name": "userId",
@@ -1398,7 +1492,31 @@
         }
       }
     },
-    "/community/cancel/friend/request/{userId}": {
+    "/community/delete/friend-request/{userId}": {
+      "delete": {
+        "tags": [
+          "community-controller"
+        ],
+        "operationId": "rejectFriendRequest",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/community/cancel/friend-request/{userId}": {
       "delete": {
         "tags": [
           "community-controller"
@@ -1996,6 +2114,10 @@
           "joinedDate": {
             "type": "string"
           },
+          "friendsCount": {
+            "type": "integer",
+            "format": "int32"
+          },
           "libraryCount": {
             "type": "integer",
             "format": "int32"
@@ -2102,6 +2224,10 @@
           },
           "joinedDate": {
             "type": "string"
+          },
+          "friendsCount": {
+            "type": "integer",
+            "format": "int32"
           },
           "libraryCount": {
             "type": "integer",

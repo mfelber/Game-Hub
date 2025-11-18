@@ -3,6 +3,7 @@ package gamehub.game_Hub.Module.User;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -37,10 +38,12 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
@@ -123,10 +126,7 @@ public class User implements UserDetails, Principal {
   @JoinTable(name = "user_friends", schema = "game_hub",
       inverseJoinColumns = @JoinColumn(name = "user_id"),
       joinColumns = @JoinColumn(name = "friend_id"))
-  private Set<User> friends;
-
-  @ManyToMany(mappedBy = "friends")
-  private Set<User> friendOf;
+  private Set<User> friends = new HashSet<>();
 
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(name = "user_wishlist", schema = "game_hub",
@@ -185,6 +185,11 @@ public class User implements UserDetails, Principal {
 
   public String getFullName() {
     return firstName + " " + lastName;
+  }
+
+  public void addFriend(User user) {
+    this.friends.add(user);
+    user.getFriends().add(this);
   }
 
 }

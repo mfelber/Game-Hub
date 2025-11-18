@@ -9,12 +9,12 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 
-export interface SendFriendRequest$Params {
+export interface FriendRequestExistsFromSender$Params {
   userId: number;
 }
 
-export function sendFriendRequest(http: HttpClient, rootUrl: string, params: SendFriendRequest$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
-  const rb = new RequestBuilder(rootUrl, sendFriendRequest.PATH, 'post');
+export function friendRequestExistsFromSender(http: HttpClient, rootUrl: string, params: FriendRequestExistsFromSender$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+  const rb = new RequestBuilder(rootUrl, friendRequestExistsFromSender.PATH, 'get');
   if (params) {
     rb.path('userId', params.userId, {});
   }
@@ -24,9 +24,9 @@ export function sendFriendRequest(http: HttpClient, rootUrl: string, params: Sen
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: parseFloat(String((r as HttpResponse<any>).body)) }) as StrictHttpResponse<number>;
+      return (r as HttpResponse<any>).clone({ body: String((r as HttpResponse<any>).body) === 'true' }) as StrictHttpResponse<boolean>;
     })
   );
 }
 
-sendFriendRequest.PATH = '/community/send/friend-request/{userId}';
+friendRequestExistsFromSender.PATH = '/community/friend-request/status/sender/{userId}';

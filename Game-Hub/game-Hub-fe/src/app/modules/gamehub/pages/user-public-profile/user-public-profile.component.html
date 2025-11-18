@@ -54,14 +54,29 @@
         <div class="mt-auto flex flex-col mx-2">
           <div class="flex gap-2">
 
-            <button *ngIf="friendRequestExists" (click)="cancelFriendRequest(userResponse.userId!)"
+            <button *ngIf="userIsMyFriend" (click)="message(userResponse.userId!)"
+                    class="bg-[#FF7F50] hover:bg-[#E67348]  cursor-pointer text-center w-35 py-1.5 px-2 rounded-lg text-sm flex items-center justify-center gap-1 transition-colors duration-200">
+              Message <i class="fa-solid fa-message"></i>
+            </button>
+
+            <button *ngIf="friendRequestFromThisUser" (click)="acceptFriendRequest(userResponse.userId!)"
+                    class="bg-green-600 hover:bg-green-700 cursor-pointer text-center w-35 py-1.5 px-2 rounded-lg text-sm flex items-center justify-center gap-1 transition-colors duration-200">
+              Accept <i class="fa-solid fa-check"></i>
+            </button>
+
+            <button *ngIf="friendRequestFromThisUser" (click)="rejectFriendRequest(userResponse.userId!)"
+                    class="bg-red-600 hover:bg-red-700 cursor-pointer text-center w-35 py-1.5 px-2 rounded-lg text-sm flex items-center justify-center gap-1 transition-colors duration-200">
+              Reject <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <button *ngIf="friendRequestExistsFromSender" (click)="cancelFriendRequest(userResponse.userId!)"
                     class="bg-gray-500 hover:bg-gray-600 cursor-pointer text-center w-35 py-1.5 px-2 rounded-lg text-sm flex items-center justify-center gap-1 transition-colors duration-200">
               Cancel invite <i class="fa-solid fa-user-minus"></i>
             </button>
 
 
-            <button *ngIf="!friendRequestExists" (click)="sendFriendRequest(userResponse.userId!)"
-              class="bg-green-600 hover:bg-green-700 cursor-pointer text-center w-30 py-1.5 px-2 rounded-lg text-sm flex items-center justify-center gap-1 transition-colors duration-200">
+            <button *ngIf="!friendRequestExistsFromSender && !friendRequestFromThisUser && !userIsMyFriend" (click)="sendFriendRequest(userResponse.userId!)"
+                    class="bg-green-600 hover:bg-green-700 cursor-pointer text-center w-30 py-1.5 px-2 rounded-lg text-sm flex items-center justify-center gap-1 transition-colors duration-200">
               Add friend <i class="fa-solid fa-user-plus"></i>
             </button>
 
@@ -96,9 +111,8 @@
 
     </div>
 
-    <!--  TODO fetch from db count of friends-->
     <div class="w-20 text-center text-10px">
-      <p class="text-sm font-semibold"> 350</p>
+      <p class="text-sm font-semibold"> {{userResponse.friendsCount}} </p>
       <p class="text-sm text-gray-300">Friends</p>
     </div>
 

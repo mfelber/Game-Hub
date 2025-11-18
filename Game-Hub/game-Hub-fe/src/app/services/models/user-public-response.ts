@@ -15,6 +15,7 @@ export interface UserPublicResponse {
   cardColor?: CardColorResponse;
   favoriteGames?: Array<GameResponseShort>;
   favoriteGenres?: Array<GenreResponse>;
+  friendsCount?: number;
   joinedDate?: string;
   libraryCount?: number;
   location?: LocationResponse;
