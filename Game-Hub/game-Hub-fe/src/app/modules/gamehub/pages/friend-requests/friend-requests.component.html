@@ -8,12 +8,12 @@
 
 
     <button class="border border-emerald-500 text-emerald-400 bg-emerald-500/10
-px-4 py-1.5 rounded-lg transition duration-300 mb-2 text-[13px]">
+px-4 py-1.5 rounded-lg transition duration-300 mb-3 text-[13px]">
       Friend requests
     </button>
 
     <button class="border border-gray-500 text-gray-300 hover:bg-gray-700/40 hover:text-white
-px-4 py-1.5 rounded-lg transition duration-300 mb-2 text-[13px]">
+px-4 py-1.5 rounded-lg transition duration-300 mb-3 text-[13px]">
       Friend requests
     </button>
 
@@ -37,9 +37,39 @@ px-4 py-1.5 rounded-lg transition duration-300 mb-2 text-[13px]">
 
   </div>
 
-  <div *ngFor="let friendRequest of friendRequestsResponse.content">
+  <div  *ngFor="let friendRequest of friendRequestsResponse.content" class="mt-1">
+  <div class="flex items-center gap-4 p-4 bg-black/30 rounded-2xl shadow ">
 
-    <h2>{{friendRequest.username}}</h2>
+
+    <img *ngIf="friendRequest.userProfilePicture"
+         [src]="getProfilePicture(friendRequest)"
+         class="w-14 h-14 rounded-lg border-2 border-black object-cover"/>
+
+    <img *ngIf="!friendRequest.userProfilePicture"
+         src="../../../../../assets/profilePicture/default_profile_picture.svg"
+         class="w-14 h-14 rounded-lg border-2 border-black object-cover"
+         [ngStyle]="{'background-color': friendRequest.profileColor}"/>
+
+    <div class="flex-1">
+      <p class="text-lg font-semibold">{{friendRequest.username}}</p>
+      <p class="text-xs text-gray-400 mb-1">
+        Sent {{ friendRequest.createdAt}}
+      </p>
+      <div class="flex">
+        <p class="text-sm font-medium"
+           [ngClass]="{
+        'text-green-500': friendRequest.status === 'ONLINE',
+        'text-gray-400': friendRequest.status === 'OFFLINE',
+        'text-yellow-400': friendRequest.status === 'AWAY'
+        }">• {{ friendRequest.status }} </p>
+        <p class="text-sm text-gray-400 ml-1">  • {{ friendRequest.location?.name}} • Lv.27</p>
+      </div>
+
+
+    </div>
+    <button (click)=" acceptFriendRequest(friendRequest.userId!)" class="px-3 py-1 bg-green-600 hover:bg-green-700 rounded-md transition-colors duration-200 cursor-pointer">Accept</button>
+    <button (click)=" rejectFriendRequest(friendRequest.userId!)" class="px-3 py-1 bg-red-600 hover:bg-red-700 rounded-md transition-colors duration-200 cursor-pointer">Decline</button>
+  </div>
   </div>
 
   <div *ngIf="zeroFriendRequests" class="flex flex-col items-center justify-center h-60text-gray-400">

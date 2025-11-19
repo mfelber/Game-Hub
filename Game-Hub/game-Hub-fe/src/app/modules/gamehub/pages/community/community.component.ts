@@ -149,8 +149,6 @@ export class CommunityComponent implements OnInit {
       next: () => {
         this.friendsMap[userId!] = true;
         this.friendRequestMapForReceiver[userId!] = false;
-        // this.friendRequestExistsFromSender = false;
-        // this.loadUserPublicProfile();
       }
     });
   }

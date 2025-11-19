@@ -59,6 +59,7 @@ px-4 py-1.5 rounded-lg transition duration-300 text-[13px]">
         <img *ngIf="user.userProfilePicture"
              [src]="getProfilePicture(user)"
              class="w-14 h-14 rounded-lg border-2 border-black object-cover"/>
+
         <img *ngIf="!user.userProfilePicture"
              src="../../../../../assets/profilePicture/default_profile_picture.svg"
              class="w-14 h-14 rounded-lg border-2 border-black object-cover"
