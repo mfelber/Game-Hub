@@ -5,6 +5,7 @@ import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {FriendRequestResponse} from '../../../../services/models/friend-request-response';
 import {PageResponseFriendRequestResponse} from '../../../../services/models/page-response-friend-request-response';
 import {RefreshService} from '../../../../services/fn/refresh-service/refresh-service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-friend-requests',
@@ -29,7 +30,11 @@ export class FriendRequestsComponent implements OnInit {
   zeroFriendRequests = false;
 
 
-  constructor(private communityService: CommunityControllerService, private refreshService: RefreshService) {
+  constructor(
+    private communityService: CommunityControllerService,
+    private refreshService: RefreshService,
+    private router: Router
+  ) {
   }
 
   private getAllMyFriendRequests() {
@@ -70,5 +75,9 @@ export class FriendRequestsComponent implements OnInit {
         this.getAllMyFriendRequests()
       }
     })
+  }
+
+  navigateToUser(userId: number) {
+    this.router.navigate(['gamehub/user', userId]);
   }
 }

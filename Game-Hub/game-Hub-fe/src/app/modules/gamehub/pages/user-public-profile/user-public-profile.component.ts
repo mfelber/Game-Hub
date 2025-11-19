@@ -7,6 +7,7 @@ import {GameControllerService} from '../../../../services/services/game-controll
 import {GameResponse} from '../../../../services/models/game-response';
 import {CommunityControllerService} from '../../../../services/services/community-controller.service';
 import {cancelFriendRequest} from '../../../../services/fn/community-controller/cancel-friend-request';
+import {RefreshService} from '../../../../services/fn/refresh-service/refresh-service';
 
 @Component({
   selector: 'app-user-public-profile',
@@ -31,7 +32,8 @@ export class UserPublicProfileComponent implements OnInit {
     private gameService: GameControllerService,
     private communityService: CommunityControllerService,
     private router: ActivatedRoute,
-    private route: Router
+    private route: Router,
+    private refreshService: RefreshService
   ) {
   }
 
@@ -154,6 +156,7 @@ export class UserPublicProfileComponent implements OnInit {
       next: () => {
         this.friendRequestExistsFromSender = false;
         this.loadUserPublicProfile();
+        this.refreshService.triggerRefresh();
       }
     })
   }
@@ -163,6 +166,7 @@ export class UserPublicProfileComponent implements OnInit {
       next: () => {
         this.friendRequestExistsFromSender = false;
         this.loadUserPublicProfile();
+        this.refreshService.triggerRefresh();
       }
     })
 
