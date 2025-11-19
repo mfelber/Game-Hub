@@ -4,6 +4,7 @@ import {PageResponseUserCommunityResponse} from '../../../../services/models/pag
 import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {FriendRequestResponse} from '../../../../services/models/friend-request-response';
 import {PageResponseFriendRequestResponse} from '../../../../services/models/page-response-friend-request-response';
+import {RefreshService} from '../../../../services/fn/refresh-service/refresh-service';
 
 @Component({
   selector: 'app-friend-requests',
@@ -16,20 +17,20 @@ import {PageResponseFriendRequestResponse} from '../../../../services/models/pag
   templateUrl: './friend-requests.component.html',
   styleUrl: './friend-requests.component.scss'
 })
-export class FriendRequestsComponent implements OnInit{
+export class FriendRequestsComponent implements OnInit {
 
-    ngOnInit(): void {
-        this.getAllMyFriendRequests();
-    }
+  ngOnInit(): void {
+    this.getAllMyFriendRequests();
+  }
 
   friendRequestsResponse: PageResponseFriendRequestResponse = {};
 
-    isLoaded = false;
-    zeroFriendRequests = false;
+  isLoaded = false;
+  zeroFriendRequests = false;
 
 
-  constructor(private communityService: CommunityControllerService) {
-    }
+  constructor(private communityService: CommunityControllerService, private refreshService: RefreshService) {
+  }
 
   private getAllMyFriendRequests() {
     this.communityService.getFriendRequests().subscribe({
@@ -50,12 +51,13 @@ export class FriendRequestsComponent implements OnInit{
     if (user.userProfilePicture) {
       return 'data:image/jpeg;base64,' + user.userProfilePicture;
     }
-    return ;
+    return;
   }
 
   acceptFriendRequest(userId: number) {
     this.communityService.acceptFriendRequest({userId}).subscribe({
       next: () => {
+        this.refreshService.triggerRefresh();
         this.getAllMyFriendRequests();
       }
     });
@@ -64,6 +66,7 @@ export class FriendRequestsComponent implements OnInit{
   rejectFriendRequest(userId: number) {
     this.communityService.rejectFriendRequest({userId}).subscribe({
       next: () => {
+        this.refreshService.triggerRefresh();
         this.getAllMyFriendRequests()
       }
     })
