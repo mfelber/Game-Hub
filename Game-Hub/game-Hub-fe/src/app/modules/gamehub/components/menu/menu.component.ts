@@ -2,7 +2,7 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {NavigationEnd, Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {initFlowbite} from 'flowbite';
 import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
-import {UserProfileControllerService} from '../../../../services/services';
+import {CommunityControllerService, UserProfileControllerService} from '../../../../services/services';
 import {UserPrivateResponse} from '../../../../services/models/user-private-response';
 import {FormsModule} from '@angular/forms';
 import {StatusResponse} from '../../../../services/models/status-response';
@@ -32,7 +32,9 @@ export class MenuComponent implements OnInit {
     initFlowbite();
     this.loadUserName();
     this.getStatus();
+    this.getNumberOfFriendRequests();
   }
+
 
   isStoreActive = false;
   isLibraryActive = false;
@@ -42,10 +44,12 @@ export class MenuComponent implements OnInit {
   statusResponse: StatusResponse = {};
   statuses = ['ONLINE', 'OFFLINE', 'AWAY'];
   userHasProfilePicture = true;
+  friendRequestCount: number = 0;
 
   constructor(
     private router: Router,
-    protected userService: UserProfileControllerService
+    protected userService: UserProfileControllerService,
+    private communityService: CommunityControllerService
   ) {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
@@ -54,6 +58,16 @@ export class MenuComponent implements OnInit {
         this.isGameDetailsActive(url)
       }
     });
+  }
+
+
+  getNumberOfFriendRequests() {
+    this.communityService.friendRequestsCount().subscribe({
+      next: (count) => {
+        this.friendRequestCount = count;
+        console.log(this.friendRequestCount)
+      }
+    })
   }
 
   private loadUserName() {

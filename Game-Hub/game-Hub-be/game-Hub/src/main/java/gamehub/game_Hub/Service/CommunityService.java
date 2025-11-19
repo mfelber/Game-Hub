@@ -3,6 +3,7 @@ package gamehub.game_Hub.Service;
 import org.springframework.security.core.Authentication;
 
 import gamehub.game_Hub.Common.PageResponse;
+import gamehub.game_Hub.Response.FriendRequestResponse;
 import gamehub.game_Hub.Response.UserCommunityResponse;
 
 public interface CommunityService {
@@ -16,5 +17,7 @@ public interface CommunityService {
   void rejectFriendRequest(Authentication connectedUser, Long userId);
 
   Long acceptFriendRequest(Authentication connectedUser, Long userId);
+
+  PageResponse<FriendRequestResponse> getAllMyFriendRequests(Authentication connectedUser, int page, int size);
 
 }

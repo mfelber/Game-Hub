@@ -17,5 +17,10 @@ public interface FriendRequestRepository extends JpaRepository<FriendRequest, Lo
 
   boolean existsByReceiver_IdAndSender_Id(Long receiverId, Long senderId);
 
+  Page<FriendRequest> findAllByReceiver_Id(Long receiverId, Pageable pageable);
+
+  int findAllByReceiver_Id(Long receiverId);
+
+  int countByReceiver_Id(Long receiverId);
 
 }

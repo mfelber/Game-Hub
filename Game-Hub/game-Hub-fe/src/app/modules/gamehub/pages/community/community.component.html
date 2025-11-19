@@ -59,6 +59,7 @@ px-4 py-1.5 rounded-lg transition duration-300 text-[13px]">
         <img *ngIf="user.userProfilePicture"
              [src]="getProfilePicture(user)"
              class="w-14 h-14 rounded-lg border-2 border-black object-cover"/>
+
         <img *ngIf="!user.userProfilePicture"
              src="../../../../../assets/profilePicture/default_profile_picture.svg"
              class="w-14 h-14 rounded-lg border-2 border-black object-cover"
@@ -91,14 +92,27 @@ px-4 py-1.5 rounded-lg transition duration-300 text-[13px]">
           <i class="fa-solid fa-user-check"></i>
         </button>
 
-        <button *ngIf="!friendRequestMap[user.userId!] && isLoaded && !friendsMap[user.userId!]"
+
+        <button *ngIf="friendRequestMapForReceiver[user.userId!] && isLoaded" (click)=" acceptFriendRequest(user.userId!) ; $event.stopPropagation()"
+                class="flex items-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700
+             text-white font-semibold rounded-lg shadow-md transition w-11 h-11 cursor-pointer">
+          <i class="fa-solid fa-check"></i>
+        </button>
+
+        <button *ngIf="friendRequestMapForReceiver[user.userId!] && isLoaded" (click)=" rejectFriendRequest(user.userId!) ; $event.stopPropagation()"
+                class="flex items-center gap-2 px-3 py-2 bg-red-600 hover:bg-red-700
+             text-white font-semibold rounded-lg shadow-md transition w-11 h-11 cursor-pointer">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <button *ngIf="!friendRequestMapFromSender[user.userId!] && !friendsMap[user.userId!] && !friendRequestMapForReceiver[user.userId!] && isLoaded "
                 (click)="sendFriendRequest(user.userId!) ; $event.stopPropagation()"
                 class="flex items-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700
              text-white font-semibold rounded-lg shadow-md transition min-w-[160px] justify-center cursor-pointer">
           Add Friend<i class="fa-solid fa-user-plus"></i>
         </button>
 
-        <button *ngIf="friendRequestMap[user.userId!] && isLoaded"
+        <button *ngIf="friendRequestMapFromSender[user.userId!] && isLoaded"
                 (click)="cancelFriendRequest(user.userId!) ; $event.stopPropagation()"
                 class="flex items-center gap-2 px-3 py-2 bg-gray-500 hover:bg-gray-600
              text-white font-semibold rounded-lg shadow-md transition min-w-[160px] justify-center cursor-pointer">

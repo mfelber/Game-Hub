@@ -8,6 +8,7 @@ import {UserPrivateResponse} from '../../../../services/models/user-private-resp
 import {UserPublicResponse} from '../../../../services/models/user-public-response';
 import {Router} from '@angular/router';
 import {exists} from 'node:fs';
+import {firstValueFrom} from 'rxjs';
 
 @Component({
   selector: 'app-community',
@@ -37,12 +38,14 @@ export class CommunityComponent implements OnInit {
   constructor(
     private communityService: CommunityControllerService,
     private router: Router
-    ) {
+  ) {
   }
 
   userCommunityResponse: PageResponseUserCommunityResponse = {};
-  friendRequestMap: {[key: number]: boolean } = {};
-  friendsMap: {[key: number]: boolean} = {};
+  friendRequestMapFromSender: { [key: number]: boolean } = {};
+  friendRequestMapForReceiver: { [key: number]: boolean } = {};
+  friendRequestFromThisUser: boolean | null = null;
+  friendsMap: { [key: number]: boolean } = {};
   noUsersFound = false;
   friendRequestSent = false;
   isLoaded = false;
@@ -50,45 +53,52 @@ export class CommunityComponent implements OnInit {
 
   private loadAllUsers(query: string = "") {
 
-    this.communityService.findAllUsers({query:query}).subscribe({
+    this.communityService.findAllUsers({query: query}).subscribe({
       next: (users) => {
         if (users.content?.length! === 0) {
           this.noUsersFound = true;
           return
         }
-
-        console.log(this.friendRequestMap)
+        console.log(this.friendRequestMapFromSender)
         this.noUsersFound = false;
         this.userCommunityResponse = users;
-        this.loadUsers = true;
+
         this.userCommunityResponse.content?.forEach(user => {
-          this.friendRequestExistsFromSender(user.userId)
+          this.friendRequestExistsForSender(user.userId)
         })
+
+        this.userCommunityResponse.content?.forEach(user => {
+          this.friendRequestExistsForReceiver(user.userId!)
+        })
+
         this.userCommunityResponse.content?.forEach(user => {
           this.areFriends(user.userId!)
         })
+
+        this.loadUsers = true;
       }
     })
 
   }
 
-  private areFriends(userId: number){
-    this.communityService.friendExistsForUser({userId}).subscribe({
-      next: (exists: boolean)=> {
-        this.friendsMap[userId] = exists;
-        console.log(this.friendsMap);
-        this.isLoaded = true;
-      }
-    })
+  private async areFriends(userId: number) {
+    const exists = await firstValueFrom(this.communityService.friendExistsForUser({userId}))
+    this.friendsMap[userId] = exists;
+    this.isLoaded = true;
+    return exists;
   }
 
-  private friendRequestExistsFromSender(userId: any) {
-  this.communityService.friendRequestExistsFromSender({userId}).subscribe({
-    next: (exists: boolean) => {
-      this.friendRequestMap[userId] = exists;
-      console.log(this.friendRequestMap)
-    }
-  })
+  private async friendRequestExistsForSender(userId: any) {
+    const exists = await firstValueFrom(this.communityService.friendRequestExistsFromSender({userId}));
+    this.friendRequestMapFromSender[userId] = exists;
+    console.log(this.friendRequestMapFromSender);
+    return exists;
+  }
+
+  private async friendRequestExistsForReceiver(userId: number) {
+    const exists = await firstValueFrom(this.communityService.friendRequestExistsForReceiver({userId}))
+    this.friendRequestMapForReceiver[userId] = exists;
+    return exists;
   }
 
   getProfilePicture(user: UserCommunityResponse) {
@@ -102,7 +112,7 @@ export class CommunityComponent implements OnInit {
     this.communityService.sendFriendRequest({userId}).subscribe({
       next: () => {
         console.log('friend request send')
-        this.friendRequestMap[userId] = true;
+        this.friendRequestMapFromSender[userId] = true;
       }
     })
     console.log(userId)
@@ -111,7 +121,7 @@ export class CommunityComponent implements OnInit {
   cancelFriendRequest(userId: number) {
     this.communityService.cancelFriendRequest({userId}).subscribe({
       next: () => {
-        this.friendRequestMap[userId] = false;
+        this.friendRequestMapFromSender[userId] = false;
       }
     })
 
@@ -134,4 +144,23 @@ export class CommunityComponent implements OnInit {
   }
 
 
+  acceptFriendRequest(userId: number) {
+    this.communityService.acceptFriendRequest({userId}).subscribe({
+      next: () => {
+        this.friendsMap[userId!] = true;
+        this.friendRequestMapForReceiver[userId!] = false;
+      }
+    });
+  }
+
+
+  rejectFriendRequest(userId: number) {
+    this.communityService.rejectFriendRequest({userId}).subscribe({
+      next: () => {
+        this.friendsMap[userId!] = false;
+        this.friendRequestMapForReceiver[userId!] = false;
+      }
+    })
+
+  }
 }
