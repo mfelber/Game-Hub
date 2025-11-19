@@ -6,6 +6,7 @@ import {CommunityControllerService, UserProfileControllerService} from '../../..
 import {UserPrivateResponse} from '../../../../services/models/user-private-response';
 import {FormsModule} from '@angular/forms';
 import {StatusResponse} from '../../../../services/models/status-response';
+import {RefreshService} from '../../../../services/fn/refresh-service/refresh-service';
 
 @Component({
   selector: 'app-menu',
@@ -33,6 +34,12 @@ export class MenuComponent implements OnInit {
     this.loadUserName();
     this.getStatus();
     this.getNumberOfFriendRequests();
+    this.refreshService.refresh$.subscribe(() => {
+      this.getNumberOfFriendRequests();
+    });
+    this.refreshService.refresh$.subscribe(() => {
+      this.loadUserName();
+    });
   }
 
 
@@ -49,7 +56,8 @@ export class MenuComponent implements OnInit {
   constructor(
     private router: Router,
     protected userService: UserProfileControllerService,
-    private communityService: CommunityControllerService
+    private communityService: CommunityControllerService,
+    private refreshService: RefreshService
   ) {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {

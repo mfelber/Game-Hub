@@ -9,6 +9,7 @@ import {UserPublicResponse} from '../../../../services/models/user-public-respon
 import {Router} from '@angular/router';
 import {exists} from 'node:fs';
 import {firstValueFrom} from 'rxjs';
+import {RefreshService} from '../../../../services/fn/refresh-service/refresh-service';
 
 @Component({
   selector: 'app-community',
@@ -37,7 +38,8 @@ export class CommunityComponent implements OnInit {
 
   constructor(
     private communityService: CommunityControllerService,
-    private router: Router
+    private router: Router,
+    private refreshService: RefreshService
   ) {
   }
 
@@ -149,6 +151,7 @@ export class CommunityComponent implements OnInit {
       next: () => {
         this.friendsMap[userId!] = true;
         this.friendRequestMapForReceiver[userId!] = false;
+        this.refreshService.triggerRefresh();
       }
     });
   }
@@ -159,6 +162,7 @@ export class CommunityComponent implements OnInit {
       next: () => {
         this.friendsMap[userId!] = false;
         this.friendRequestMapForReceiver[userId!] = false;
+        this.refreshService.triggerRefresh();
       }
     })
 

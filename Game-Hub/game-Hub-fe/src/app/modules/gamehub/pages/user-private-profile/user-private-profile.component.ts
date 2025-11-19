@@ -14,6 +14,7 @@ import {AuthenticationService} from '../../../../services/services/authenticatio
 import {AuthenticationRequest} from '../../../../services/models/authentication-request';
 import {CardColorControllerService} from '../../../../services/services/card-color-controller.service';
 import {CardPreviewComponent} from '../../components/card-preview/card-preview.component';
+import {RefreshService} from '../../../../services/fn/refresh-service/refresh-service';
 
 @Component({
   selector: 'app-user-profile',
@@ -43,7 +44,8 @@ export class UserPrivateProfileComponent implements OnInit {
     private locationService: LocationControllerService,
     private http: HttpClient,
     private authenticationService: AuthenticationService,
-    private cardColorService: CardColorControllerService
+    private cardColorService: CardColorControllerService,
+    private refreshService: RefreshService
   ) {
   }
 
@@ -285,7 +287,6 @@ export class UserPrivateProfileComponent implements OnInit {
         try {
           await this.http.post('http://localhost:8088/api/v1/profile/image', formData).toPromise()
           this.userHasProfilePicture = true;
-          console.log("nastala zmena v obrazku?")
           this.showSuccess('You have successfully updated profile')
         } catch (err) {
           console.error(err)
@@ -300,7 +301,7 @@ export class UserPrivateProfileComponent implements OnInit {
         this.userRequest.location !== this.userResponse.location?.name || this.userRequest.cardColorId !== this.userResponse.cardColor?.id
 
       if (changesExistProfileInfo) {
-
+        this.showSuccess('You have successfully updated profile')
         console.log(this.userRequest)
         await this.userService.updateUserProfile({
           body: this.userRequest
@@ -308,6 +309,7 @@ export class UserPrivateProfileComponent implements OnInit {
 
       }
 
+      this.refreshService.triggerRefresh();
       this.loadUserPrivateProfile();
       this.closeModal();
 
