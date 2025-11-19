@@ -8,5 +8,6 @@ export { LibraryControllerService } from './services/library-controller.service'
 export { CommunityControllerService } from './services/community-controller.service';
 export { AuthenticationService } from './services/authentication.service';
 export { WishlistControllerService } from './services/wishlist-controller.service';
+export { ReportControllerService } from './services/report-controller.service';
 export { LocationControllerService } from './services/location-controller.service';
 export { CardColorControllerService } from './services/card-color-controller.service';

@@ -119,7 +119,7 @@ px-4 py-1.5 rounded-lg transition duration-300 text-[13px]">
           Cancel invite <i class="fa-solid fa-user-minus"></i>
         </button>
 
-        <button (click)="reportUser(user.userId) ; $event.stopPropagation()"
+        <button (click)="openReportUserModal(user) ; $event.stopPropagation()"
                 class="flex items-center gap-2 px-3 py-2 bg-red-600 hover:bg-red-700
              text-white font-semibold rounded-lg shadow-md transition w-11 h-11 justify-center cursor-pointer">
           <i class="fa-solid fa-exclamation"></i>
@@ -133,5 +133,63 @@ px-4 py-1.5 rounded-lg transition duration-300 text-[13px]">
     <i class="fa-solid fa-sad-tear text-4xl mb-4"></i>
     <p class="text-lg font-semibold">No users were founded</p>
   </div>
+
+  <div *ngIf="isReportUserModalOpen"
+       class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 animate-fade-in">
+
+    <div class="bg-gray-800 p-6 rounded-2xl w-[32rem] max-w-full relative shadow-2xl border border-white/20">
+
+      <!-- Title -->
+      <h2 class="text-white text-2xl font-bold mb-6">Reporting user: {{ selectedUserToReport?.username }} </h2>
+<!--      <p class="text-gray-300 mb-6">{{ selectedUserToReport?.username }}</p>-->
+
+      <!-- Reason Title -->
+      <h3 class="text-white text-lg font-semibold mb-3">Reason:</h3>
+
+      <!-- Reason List -->
+      <div class="space-y-3 mb-6">
+        <label *ngFor="let reason of allReportReasons"
+               class="flex items-center gap-3 p-3 rounded-xl bg-gray-700 cursor-pointer hover:bg-gray-600 transition">
+
+          <input type="radio"
+                 name="reportReason"
+                 [value]="reason.id"
+                 class="w-4 h-4 cursor-pointer">
+
+          <span class="text-white">{{ reason.reason }}</span>
+        </label>
+      </div>
+
+      <!-- Message Field -->
+      <h3 class="text-white text-lg font-semibold mb-3">Additional comments:</h3>
+
+      <textarea
+        class="w-full h-32 p-3 rounded-lg bg-[#1f1f2c] text-white border border-white/10
+             focus:outline-none focus:ring-2 focus:ring-gray-700 resize-none"
+        ></textarea>
+
+      <!-- Buttons -->
+      <div class="flex justify-end gap-3 mt-6">
+
+        <button (click)="closeReportModal()"
+                class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition cursor-pointer">
+          Cancel
+        </button>
+
+        <button
+          class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition cursor-pointer">
+          Submit Report
+        </button>
+      </div>
+
+      <!-- Close Icon -->
+      <button (click)="closeReportModal()"
+              class="absolute top-3 right-3 text-white text-2xl hover:text-gray-300 transition cursor-pointer">
+        &times;
+      </button>
+
+    </div>
+  </div>
+
 
 </div>

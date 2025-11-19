@@ -12,6 +12,7 @@ import { LibraryControllerService } from './services/library-controller.service'
 import { CommunityControllerService } from './services/community-controller.service';
 import { AuthenticationService } from './services/authentication.service';
 import { WishlistControllerService } from './services/wishlist-controller.service';
+import { ReportControllerService } from './services/report-controller.service';
 import { LocationControllerService } from './services/location-controller.service';
 import { CardColorControllerService } from './services/card-color-controller.service';
 
@@ -29,6 +30,7 @@ import { CardColorControllerService } from './services/card-color-controller.ser
     CommunityControllerService,
     AuthenticationService,
     WishlistControllerService,
+    ReportControllerService,
     LocationControllerService,
     CardColorControllerService,
     ApiConfiguration

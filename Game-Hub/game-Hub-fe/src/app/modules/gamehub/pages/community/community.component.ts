@@ -10,6 +10,9 @@ import {Router} from '@angular/router';
 import {exists} from 'node:fs';
 import {firstValueFrom} from 'rxjs';
 import {RefreshService} from '../../../../services/fn/refresh-service/refresh-service';
+import {ReportControllerService} from '../../../../services/services/report-controller.service';
+import {MatRadioButton} from '@angular/material/radio';
+import {ReactiveFormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-community',
@@ -17,7 +20,8 @@ import {RefreshService} from '../../../../services/fn/refresh-service/refresh-se
     NgForOf,
     NgIf,
     NgStyle,
-    NgClass
+    NgClass,
+    ReactiveFormsModule
   ],
   templateUrl: './community.component.html',
   styleUrl: './community.component.scss'
@@ -35,22 +39,26 @@ export class CommunityComponent implements OnInit {
 
   userHasProfilePicture = true;
   loadUsers = false;
+  allReportReasons: { id: number; reason: string }[] = [];
 
   constructor(
     private communityService: CommunityControllerService,
+    private reportService: ReportControllerService,
     private router: Router,
     private refreshService: RefreshService
   ) {
   }
 
+  selectedUserToReport: UserCommunityResponse | null = null;
   userCommunityResponse: PageResponseUserCommunityResponse = {};
+
   friendRequestMapFromSender: { [key: number]: boolean } = {};
   friendRequestMapForReceiver: { [key: number]: boolean } = {};
-  friendRequestFromThisUser: boolean | null = null;
   friendsMap: { [key: number]: boolean } = {};
+
   noUsersFound = false;
-  friendRequestSent = false;
   isLoaded = false;
+  isReportUserModalOpen = false;
 
 
   private loadAllUsers(query: string = "") {
@@ -166,5 +174,27 @@ export class CommunityComponent implements OnInit {
       }
     })
 
+  }
+
+  openReportUserModal(user: UserCommunityResponse) {
+    this.selectedUserToReport = user;
+    this.isReportUserModalOpen = true;
+    this.loadReportReasons();
+  }
+
+  closeReportModal() {
+    this.selectedUserToReport = null;
+    this.isReportUserModalOpen = false;
+  }
+
+  private loadReportReasons() {
+    this.reportService.getAllReportReasons().subscribe({
+      next: (reasons) => {
+        this.allReportReasons = reasons.map(r => ({
+          id: r.id!,
+          reason: r.reason!
+        }));
+      }
+    })
   }
 }
