@@ -5,20 +5,30 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import gamehub.game_Hub.File.FileUtils;
+import gamehub.game_Hub.Module.Level;
 import gamehub.game_Hub.Module.User.User;
+import gamehub.game_Hub.Repository.LevelRepository;
 import gamehub.game_Hub.Request.UserUpdateRequest;
 import gamehub.game_Hub.Response.BadgeResponse;
 import gamehub.game_Hub.Response.CardColorResponse;
 import gamehub.game_Hub.Response.GameResponseShort;
 import gamehub.game_Hub.Response.GenreResponse;
+import gamehub.game_Hub.Response.LevelProgressResponse;
 import gamehub.game_Hub.Response.LevelResponse;
 import gamehub.game_Hub.Response.LocationResponse;
 import gamehub.game_Hub.Response.StatusResponse;
 import gamehub.game_Hub.Response.UserPrivateResponse;
 import gamehub.game_Hub.Response.UserPublicResponse;
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class UserMapper {
+
+  private final LevelRepository levelRepository;
+
+  public UserMapper(final LevelRepository levelRepository) {
+    this.levelRepository = levelRepository;
+  }
 
   public User toUser(UserUpdateRequest userUpdateRequest) {
     return User.builder()
@@ -161,6 +171,22 @@ public class UserMapper {
 
   public UserPrivateResponse toUserBioResponse(final User user) {
     return UserPrivateResponse.builder().bio(user.getBio()).build();
+  }
+
+  public LevelProgressResponse toUserLevelProgress(final User user) {
+
+    Level nextLevel = levelRepository.findById(user.getLevel().getId() + 1).orElseThrow(() -> new EntityNotFoundException("No user found with id: "));
+
+    Long requiredXP = nextLevel.getRequiredXp();
+    Long userXP = user.getXp();
+    System.out.println("User has " + userXP + "and needs for level" + nextLevel.getLevelNumber() + " " + requiredXP + "xp.");
+
+    return LevelProgressResponse.builder()
+        .level(new LevelResponse(user.getLevel().getId(), user.getLevel().getLevelNumber()))
+        .currentXp(user.getXp())
+        .requiredXp(requiredXP)
+        .nextLevel(nextLevel.getLevelNumber())
+        .build();
   }
 
 }

@@ -14,8 +14,10 @@ import org.springframework.web.multipart.MultipartFile;
 import gamehub.game_Hub.Common.PageResponse;
 import gamehub.game_Hub.Mapper.GameMapper;
 import gamehub.game_Hub.Module.Game;
+import gamehub.game_Hub.Module.Level;
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Repository.BadgeRepository;
+import gamehub.game_Hub.Repository.LevelRepository;
 import gamehub.game_Hub.Repository.game.GameRepository;
 import gamehub.game_Hub.Repository.user.UserRepository;
 import gamehub.game_Hub.File.FileStorageService;
@@ -38,6 +40,8 @@ public class GameServiceImpl implements GameService {
   private final FileStorageService fileStorageService;
 
   private final BadgeRepository badgeRepository;
+
+  private final LevelRepository levelRepository;
 
   @Override
   public Long save(final GameRequest gameRequest) {
@@ -113,11 +117,15 @@ public class GameServiceImpl implements GameService {
     System.out.println(gameLibrarySize);
 
     if (gameLibrarySize >= 4) {
+
       if (!hasBadge(user,"GAME_COLLECTOR_LEVEL_1")) {
         user.getBadges().add(badgeRepository.findByName("GAME_COLLECTOR_LEVEL_1"));
         Long xpReward = badgeRepository.findByName("GAME_COLLECTOR_LEVEL_1").getXpReward();
         Long userxp = user.getXp() + xpReward;
         user.setXp(userxp);
+        if (user.getXp() > 0) {
+          user.setLevel(levelRepository.findById(user.getLevel().getId() + 1).orElseThrow(() -> new EntityNotFoundException("No user found with id: ")));
+        }
       }
     }
     if (gameLibrarySize >= 16) {
@@ -133,7 +141,8 @@ public class GameServiceImpl implements GameService {
       }
     }
 
-    if (gameLibrarySize >= 31) {
+    if (gameLibrarySize >= 9) {
+
       if (hasBadge(user,"GAME_COLLECTOR_LEVEL_2")) {
         user.getBadges().remove(badgeRepository.findByName("GAME_COLLECTOR_LEVEL_2"));
       }
