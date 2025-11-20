@@ -6,6 +6,7 @@ import { BadgeResponse } from '../models/badge-response';
 import { CardColorResponse } from '../models/card-color-response';
 import { GameResponseShort } from '../models/game-response-short';
 import { GenreResponse } from '../models/genre-response';
+import { LevelResponse } from '../models/level-response';
 import { LocationResponse } from '../models/location-response';
 export interface UserPublicResponse {
   badges?: Array<BadgeResponse>;
@@ -17,6 +18,7 @@ export interface UserPublicResponse {
   favoriteGenres?: Array<GenreResponse>;
   friendsCount?: number;
   joinedDate?: string;
+  level?: LevelResponse;
   libraryCount?: number;
   location?: LocationResponse;
   playRecently?: Array<GameResponseShort>;

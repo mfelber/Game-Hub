@@ -13,9 +13,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import gamehub.game_Hub.Module.CardColor;
+import gamehub.game_Hub.Module.Level;
 import gamehub.game_Hub.Module.User.Location;
 import gamehub.game_Hub.Module.User.Status;
 import gamehub.game_Hub.Repository.CardColorRepository;
+import gamehub.game_Hub.Repository.LevelRepository;
 import gamehub.game_Hub.Request.AuthenticationRequest;
 import gamehub.game_Hub.Response.AuthenticationResponse;
 import gamehub.game_Hub.Request.ForgotPasswordRequest;
@@ -53,6 +55,8 @@ public class AuthenticationService {
 
   private final CardColorRepository cardColorRepository;
 
+  private final LevelRepository levelRepository;
+
   @Value("${application.mailing.frontend.login-url}")
   private String logInUrl;
 
@@ -61,6 +65,9 @@ public class AuthenticationService {
         .orElseThrow(() -> new IllegalStateException("Role USER was not initialized"));
 
     CardColor defaultColor = cardColorRepository.findById(1L).orElseThrow(() -> new EntityNotFoundException("Card Color was not initialized"));
+
+    Level defaultLevel = levelRepository.findById(1L).orElseThrow(() -> new EntityNotFoundException("Level was not initialized"));
+
 
     var user = User.builder()
         .firstName(request.getFirstName())
@@ -75,6 +82,8 @@ public class AuthenticationService {
         .bannerType("PREDEFINED")
         .banner("/assets/banners/banner_1.jpg")
         .cardColor(defaultColor)
+        .xp(0L)
+        .level(defaultLevel)
         .build();
 
     userRepository.save(user);

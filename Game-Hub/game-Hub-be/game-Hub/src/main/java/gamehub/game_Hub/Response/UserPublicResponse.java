@@ -23,6 +23,7 @@ public class UserPublicResponse {
   private int friendsCount;
   private int libraryCount;
   private int wishlistCount;
+  private LevelResponse level;
   private Set<BadgeResponse> badges;
   private Set<GameResponseShort> playRecently;
   private Set<GameResponseShort> favoriteGames;

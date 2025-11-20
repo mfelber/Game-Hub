@@ -115,6 +115,9 @@ public class GameServiceImpl implements GameService {
     if (gameLibrarySize >= 4) {
       if (!hasBadge(user,"GAME_COLLECTOR_LEVEL_1")) {
         user.getBadges().add(badgeRepository.findByName("GAME_COLLECTOR_LEVEL_1"));
+        Long xpReward = badgeRepository.findByName("GAME_COLLECTOR_LEVEL_1").getXpReward();
+        Long userxp = user.getXp() + xpReward;
+        user.setXp(userxp);
       }
     }
     if (gameLibrarySize >= 16) {
@@ -124,6 +127,9 @@ public class GameServiceImpl implements GameService {
       }
       if (!hasBadge(user,"GAME_COLLECTOR_LEVEL_2")) {
         user.getBadges().add(badgeRepository.findByName("GAME_COLLECTOR_LEVEL_2"));
+        Long xpReward = badgeRepository.findByName("GAME_COLLECTOR_LEVEL_2").getXpReward();
+        Long userxp = user.getXp() + xpReward;
+        user.setXp(userxp);
       }
     }
 
@@ -133,6 +139,9 @@ public class GameServiceImpl implements GameService {
       }
       if (!hasBadge(user,"GAME_COLLECTOR_LEVEL_3")) {
         user.getBadges().add(badgeRepository.findByName("GAME_COLLECTOR_LEVEL_3"));
+        Long xpReward = badgeRepository.findByName("GAME_COLLECTOR_LEVEL_3").getXpReward();
+        Long userxp = user.getXp() + xpReward;
+        user.setXp(userxp);
       }
     }
 
@@ -142,6 +151,9 @@ public class GameServiceImpl implements GameService {
       }
       if (!hasBadge(user,"GAME_COLLECTOR_LEVEL_4")) {
         user.getBadges().add(badgeRepository.findByName("GAME_COLLECTOR_LEVEL_4"));
+        Long xpReward = badgeRepository.findByName("GAME_COLLECTOR_LEVEL_4").getXpReward();
+        Long userxp = user.getXp() + xpReward;
+        user.setXp(userxp);
       }
     }
 
@@ -151,6 +163,9 @@ public class GameServiceImpl implements GameService {
       }
       if (!hasBadge(user,"GAME_COLLECTOR_LEVEL_5")) {
         user.getBadges().add(badgeRepository.findByName("GAME_COLLECTOR_LEVEL_5"));
+        Long xpReward = badgeRepository.findByName("GAME_COLLECTOR_LEVEL_5").getXpReward();
+        Long userxp = user.getXp() + xpReward;
+        user.setXp(userxp);
       }
     }
     

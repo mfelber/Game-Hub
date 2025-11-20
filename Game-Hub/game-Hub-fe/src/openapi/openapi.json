@@ -2231,6 +2231,19 @@
           }
         }
       },
+      "LevelResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "level": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
       "LocationResponse": {
         "type": "object",
         "properties": {
@@ -2280,6 +2293,9 @@
           "wishlistCount": {
             "type": "integer",
             "format": "int32"
+          },
+          "level": {
+            "$ref": "#/components/schemas/LevelResponse"
           },
           "badges": {
             "uniqueItems": true,
@@ -2391,6 +2407,9 @@
           "wishlistCount": {
             "type": "integer",
             "format": "int32"
+          },
+          "level": {
+            "$ref": "#/components/schemas/LevelResponse"
           },
           "badges": {
             "uniqueItems": true,
@@ -2567,6 +2586,9 @@
           },
           "createdAt": {
             "type": "string"
+          },
+          "level": {
+            "$ref": "#/components/schemas/LevelResponse"
           }
         }
       },

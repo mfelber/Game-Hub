@@ -17,6 +17,7 @@ export type { Genre } from './models/genre';
 export type { GenreResponse } from './models/genre-response';
 export type { Language } from './models/language';
 export type { LanguageResponse } from './models/language-response';
+export type { LevelResponse } from './models/level-response';
 export type { LocationResponse } from './models/location-response';
 export type { PageResponseFriendRequestResponse } from './models/page-response-friend-request-response';
 export type { PageResponseGameResponse } from './models/page-response-game-response';
