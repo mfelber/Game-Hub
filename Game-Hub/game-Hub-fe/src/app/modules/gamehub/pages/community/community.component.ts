@@ -10,6 +10,7 @@ import {RefreshService} from '../../../../services/fn/refresh-service/refresh-se
 import {ReportControllerService} from '../../../../services/services/report-controller.service';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ReportRequest} from '../../../../services/models/report-request';
+import {ReportUserModalComponent} from '../../components/report-user-modal/report-user-modal.component';
 
 @Component({
   selector: 'app-community',
@@ -19,7 +20,8 @@ import {ReportRequest} from '../../../../services/models/report-request';
     NgStyle,
     NgClass,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    ReportUserModalComponent
   ],
   templateUrl: './community.component.html',
   styleUrl: './community.component.scss'
@@ -231,5 +233,9 @@ export class CommunityComponent implements OnInit {
     this.toastVisible = false;
 
     setTimeout(() => this.successMessage = null, 500);
+  }
+
+  handleReport(request: ReportRequest) {
+    this.showSuccess('User has been reported successfully');
   }
 }
