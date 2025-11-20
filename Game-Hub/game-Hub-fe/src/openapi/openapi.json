@@ -207,6 +207,48 @@
         }
       }
     },
+    "/report/user/{userId}": {
+      "post": {
+        "tags": [
+          "report-controller"
+        ],
+        "operationId": "reportUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReportRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/profile/update-profile": {
       "post": {
         "tags": [
@@ -978,6 +1020,29 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/PageResponseGameResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/report/get/reasons": {
+      "get": {
+        "tags": [
+          "report-controller"
+        ],
+        "operationId": "getAllReportReasons",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReportReasonResponse"
+                  }
                 }
               }
             }
@@ -1831,6 +1896,18 @@
           }
         }
       },
+      "ReportRequest": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
       "UserUpdateRequest": {
         "type": "object",
         "properties": {
@@ -2083,6 +2160,21 @@
             "format": "int64"
           },
           "subtitleName": {
+            "type": "string"
+          }
+        }
+      },
+      "ReportReasonResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "description": {
             "type": "string"
           }
         }

@@ -2,6 +2,15 @@
   Loading...
 </div>
 
+<div class="fixed top-4 right-4 flex flex-col gap-2 z-50">
+  <div *ngIf="successMessage"
+       class="bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg min-w-[250px]
+              transform transition-transform duration-500 ease-in-out opacity-0"
+       [ngClass]="{'translate-x-0 opacity-100': toastVisible, 'translate-x-24 opacity-0': !toastVisible}">
+    {{ successMessage }}
+  </div>
+</div>
+
 <div [class.hidden]="!isLoaded" class="relative w-full">
   <div class="flex items-center justify-between mb-3">
 
@@ -93,21 +102,24 @@ px-4 py-1.5 rounded-lg transition duration-300 text-[13px]">
         </button>
 
 
-        <button *ngIf="friendRequestMapForReceiver[user.userId!] && isLoaded" (click)=" acceptFriendRequest(user.userId!) ; $event.stopPropagation()"
+        <button *ngIf="friendRequestMapForReceiver[user.userId!] && isLoaded"
+                (click)=" acceptFriendRequest(user.userId!) ; $event.stopPropagation()"
                 class="flex items-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700
              text-white font-semibold rounded-lg shadow-md transition w-11 h-11 cursor-pointer">
           <i class="fa-solid fa-check"></i>
         </button>
 
-        <button *ngIf="friendRequestMapForReceiver[user.userId!] && isLoaded" (click)=" rejectFriendRequest(user.userId!) ; $event.stopPropagation()"
+        <button *ngIf="friendRequestMapForReceiver[user.userId!] && isLoaded"
+                (click)=" rejectFriendRequest(user.userId!) ; $event.stopPropagation()"
                 class="flex items-center gap-2 px-3 py-2 bg-red-600 hover:bg-red-700
              text-white font-semibold rounded-lg shadow-md transition w-11 h-11 cursor-pointer">
           <i class="fa-solid fa-xmark"></i>
         </button>
 
-        <button *ngIf="!friendRequestMapFromSender[user.userId!] && !friendsMap[user.userId!] && !friendRequestMapForReceiver[user.userId!] && isLoaded "
-                (click)="sendFriendRequest(user.userId!) ; $event.stopPropagation()"
-                class="flex items-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700
+        <button
+          *ngIf="!friendRequestMapFromSender[user.userId!] && !friendsMap[user.userId!] && !friendRequestMapForReceiver[user.userId!] && isLoaded "
+          (click)="sendFriendRequest(user.userId!) ; $event.stopPropagation()"
+          class="flex items-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700
              text-white font-semibold rounded-lg shadow-md transition min-w-[160px] justify-center cursor-pointer">
           Add Friend<i class="fa-solid fa-user-plus"></i>
         </button>
@@ -119,7 +131,7 @@ px-4 py-1.5 rounded-lg transition duration-300 text-[13px]">
           Cancel invite <i class="fa-solid fa-user-minus"></i>
         </button>
 
-        <button (click)="reportUser(user.userId) ; $event.stopPropagation()"
+        <button (click)="openReportUserModal(user) ; $event.stopPropagation()"
                 class="flex items-center gap-2 px-3 py-2 bg-red-600 hover:bg-red-700
              text-white font-semibold rounded-lg shadow-md transition w-11 h-11 justify-center cursor-pointer">
           <i class="fa-solid fa-exclamation"></i>
@@ -133,5 +145,13 @@ px-4 py-1.5 rounded-lg transition duration-300 text-[13px]">
     <i class="fa-solid fa-sad-tear text-4xl mb-4"></i>
     <p class="text-lg font-semibold">No users were founded</p>
   </div>
+
+  <app-report-user-modal
+    [isOpen]="isReportUserModalOpen"
+    [selectedUser]="selectedUserToReport"
+    (close)="isReportUserModalOpen = false"
+    (submit)="handleReport($event)">
+  </app-report-user-modal>
+
 
 </div>

@@ -7,6 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
 import { GameControllerService } from './services/game-controller.service';
+import { ReportControllerService } from './services/report-controller.service';
 import { UserProfileControllerService } from './services/user-profile-controller.service';
 import { LibraryControllerService } from './services/library-controller.service';
 import { CommunityControllerService } from './services/community-controller.service';
@@ -24,6 +25,7 @@ import { CardColorControllerService } from './services/card-color-controller.ser
   declarations: [],
   providers: [
     GameControllerService,
+    ReportControllerService,
     UserProfileControllerService,
     LibraryControllerService,
     CommunityControllerService,

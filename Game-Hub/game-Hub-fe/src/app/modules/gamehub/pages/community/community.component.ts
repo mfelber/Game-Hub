@@ -4,12 +4,13 @@ import {CommunityControllerService} from '../../../../services/services/communit
 import {UserCommunityResponse} from '../../../../services/models/user-community-response';
 import {PageResponseUserCommunityResponse} from '../../../../services/models/page-response-user-community-response';
 import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
-import {UserPrivateResponse} from '../../../../services/models/user-private-response';
-import {UserPublicResponse} from '../../../../services/models/user-public-response';
 import {Router} from '@angular/router';
-import {exists} from 'node:fs';
 import {firstValueFrom} from 'rxjs';
 import {RefreshService} from '../../../../services/fn/refresh-service/refresh-service';
+import {ReportControllerService} from '../../../../services/services/report-controller.service';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {ReportRequest} from '../../../../services/models/report-request';
+import {ReportUserModalComponent} from '../../components/report-user-modal/report-user-modal.component';
 
 @Component({
   selector: 'app-community',
@@ -17,7 +18,10 @@ import {RefreshService} from '../../../../services/fn/refresh-service/refresh-se
     NgForOf,
     NgIf,
     NgStyle,
-    NgClass
+    NgClass,
+    ReactiveFormsModule,
+    FormsModule,
+    ReportUserModalComponent
   ],
   templateUrl: './community.component.html',
   styleUrl: './community.component.scss'
@@ -35,23 +39,30 @@ export class CommunityComponent implements OnInit {
 
   userHasProfilePicture = true;
   loadUsers = false;
+  noUsersFound = false;
+  isLoaded = false;
+  isReportUserModalOpen = false;
 
   constructor(
     private communityService: CommunityControllerService,
+    private reportService: ReportControllerService,
     private router: Router,
     private refreshService: RefreshService
   ) {
   }
 
+  errorMessage: string = '';
+  successMessage: string | null = null;
+  toastVisible = false;
+
+  selectedUserToReport: UserCommunityResponse | null = null;
   userCommunityResponse: PageResponseUserCommunityResponse = {};
+  reportRequest: ReportRequest = {reason: null!, message: ''};
+
+  allReportReasons: { id: number; reason: string }[] = [];
   friendRequestMapFromSender: { [key: number]: boolean } = {};
   friendRequestMapForReceiver: { [key: number]: boolean } = {};
-  friendRequestFromThisUser: boolean | null = null;
   friendsMap: { [key: number]: boolean } = {};
-  noUsersFound = false;
-  friendRequestSent = false;
-  isLoaded = false;
-
 
   private loadAllUsers(query: string = "") {
 
@@ -117,7 +128,6 @@ export class CommunityComponent implements OnInit {
         this.friendRequestMapFromSender[userId] = true;
       }
     })
-    console.log(userId)
   }
 
   cancelFriendRequest(userId: number) {
@@ -126,15 +136,33 @@ export class CommunityComponent implements OnInit {
         this.friendRequestMapFromSender[userId] = false;
       }
     })
-
-
   }
 
   navigateToUser(userId: number | undefined) {
     this.router.navigate(['gamehub/user', userId]);
   }
 
-  reportUser(userId: number | undefined) {
+  reportUser(userId: number) {
+    this.errorMessage = '';
+    if (this.reportRequest.reason === 6 && this.reportRequest.message === '') {
+      this.errorMessage = 'Please write a reason for reporting';
+      return;
+    }
+    if (this.reportRequest.reason !== null) {
+      this.reportService.reportUser({userId, body: this.reportRequest}).subscribe({
+        next: () => {
+          this.isReportUserModalOpen = false;
+          this.reportRequest = {
+            reason: undefined,
+            message: ''
+          };
+          this.showSuccess('User has been reported successfully');
+        }
+      })
+    }
+    else {
+      this.errorMessage = 'Please select a reason before submitting';
+    }
 
   }
 
@@ -144,7 +172,6 @@ export class CommunityComponent implements OnInit {
     this.userCommunityResponse = {}
     this.loadAllUsers(value);
   }
-
 
   acceptFriendRequest(userId: number) {
     this.communityService.acceptFriendRequest({userId}).subscribe({
@@ -156,7 +183,6 @@ export class CommunityComponent implements OnInit {
     });
   }
 
-
   rejectFriendRequest(userId: number) {
     this.communityService.rejectFriendRequest({userId}).subscribe({
       next: () => {
@@ -166,5 +192,50 @@ export class CommunityComponent implements OnInit {
       }
     })
 
+  }
+
+  openReportUserModal(user: UserCommunityResponse) {
+    this.selectedUserToReport = user;
+    this.isReportUserModalOpen = true;
+    this.loadReportReasons();
+  }
+
+  closeReportModal() {
+    this.selectedUserToReport = null;
+    this.isReportUserModalOpen = false;
+    this.errorMessage = '';
+    this.reportRequest = {
+      reason: undefined,
+      message: ''
+    };
+  }
+
+  private loadReportReasons() {
+    this.reportService.getAllReportReasons().subscribe({
+      next: (reasons) => {
+        this.allReportReasons = reasons.map(r => ({
+          id: r.id!,
+          reason: r.reason!
+        }));
+      }
+    })
+  }
+
+  showSuccess(message: string) {
+    this.successMessage = message;
+
+    setTimeout(() => this.toastVisible = true, 10);
+
+    setTimeout(() => this.hideToast(), 3000);
+  }
+
+  hideToast() {
+    this.toastVisible = false;
+
+    setTimeout(() => this.successMessage = null, 500);
+  }
+
+  handleReport(request: ReportRequest) {
+    this.showSuccess('User has been reported successfully');
   }
 }
