@@ -14,6 +14,8 @@ import { StrictHttpResponse } from '../strict-http-response';
 import { getAllReportReasons } from '../fn/report-controller/get-all-report-reasons';
 import { GetAllReportReasons$Params } from '../fn/report-controller/get-all-report-reasons';
 import { ReportReasonResponse } from '../models/report-reason-response';
+import { reportUser } from '../fn/report-controller/report-user';
+import { ReportUser$Params } from '../fn/report-controller/report-user';
 
 @Injectable({ providedIn: 'root' })
 export class ReportControllerService extends BaseService {
@@ -21,8 +23,33 @@ export class ReportControllerService extends BaseService {
     super(config, http);
   }
 
+  /** Path part for operation `reportUser()` */
+  static readonly ReportUserPath = '/report/user/{userId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `reportUser()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  reportUser$Response(params: ReportUser$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return reportUser(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `reportUser$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  reportUser(params: ReportUser$Params, context?: HttpContext): Observable<number> {
+    return this.reportUser$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
   /** Path part for operation `getAllReportReasons()` */
-  static readonly GetAllReportReasonsPath = '/report/reasons';
+  static readonly GetAllReportReasonsPath = '/report/get/reasons';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.

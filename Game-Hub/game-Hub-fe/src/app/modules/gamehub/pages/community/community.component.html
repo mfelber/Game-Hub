@@ -2,6 +2,15 @@
   Loading...
 </div>
 
+<div class="fixed top-4 right-4 flex flex-col gap-2 z-50">
+  <div *ngIf="successMessage"
+       class="bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg min-w-[250px]
+              transform transition-transform duration-500 ease-in-out opacity-0"
+       [ngClass]="{'translate-x-0 opacity-100': toastVisible, 'translate-x-24 opacity-0': !toastVisible}">
+    {{ successMessage }}
+  </div>
+</div>
+
 <div [class.hidden]="!isLoaded" class="relative w-full">
   <div class="flex items-center justify-between mb-3">
 
@@ -93,21 +102,24 @@ px-4 py-1.5 rounded-lg transition duration-300 text-[13px]">
         </button>
 
 
-        <button *ngIf="friendRequestMapForReceiver[user.userId!] && isLoaded" (click)=" acceptFriendRequest(user.userId!) ; $event.stopPropagation()"
+        <button *ngIf="friendRequestMapForReceiver[user.userId!] && isLoaded"
+                (click)=" acceptFriendRequest(user.userId!) ; $event.stopPropagation()"
                 class="flex items-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700
              text-white font-semibold rounded-lg shadow-md transition w-11 h-11 cursor-pointer">
           <i class="fa-solid fa-check"></i>
         </button>
 
-        <button *ngIf="friendRequestMapForReceiver[user.userId!] && isLoaded" (click)=" rejectFriendRequest(user.userId!) ; $event.stopPropagation()"
+        <button *ngIf="friendRequestMapForReceiver[user.userId!] && isLoaded"
+                (click)=" rejectFriendRequest(user.userId!) ; $event.stopPropagation()"
                 class="flex items-center gap-2 px-3 py-2 bg-red-600 hover:bg-red-700
              text-white font-semibold rounded-lg shadow-md transition w-11 h-11 cursor-pointer">
           <i class="fa-solid fa-xmark"></i>
         </button>
 
-        <button *ngIf="!friendRequestMapFromSender[user.userId!] && !friendsMap[user.userId!] && !friendRequestMapForReceiver[user.userId!] && isLoaded "
-                (click)="sendFriendRequest(user.userId!) ; $event.stopPropagation()"
-                class="flex items-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700
+        <button
+          *ngIf="!friendRequestMapFromSender[user.userId!] && !friendsMap[user.userId!] && !friendRequestMapForReceiver[user.userId!] && isLoaded "
+          (click)="sendFriendRequest(user.userId!) ; $event.stopPropagation()"
+          class="flex items-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700
              text-white font-semibold rounded-lg shadow-md transition min-w-[160px] justify-center cursor-pointer">
           Add Friend<i class="fa-solid fa-user-plus"></i>
         </button>
@@ -141,19 +153,23 @@ px-4 py-1.5 rounded-lg transition duration-300 text-[13px]">
 
       <!-- Title -->
       <h2 class="text-white text-2xl font-bold mb-6">Reporting user: {{ selectedUserToReport?.username }} </h2>
-<!--      <p class="text-gray-300 mb-6">{{ selectedUserToReport?.username }}</p>-->
 
       <!-- Reason Title -->
       <h3 class="text-white text-lg font-semibold mb-3">Reason:</h3>
 
+      <div *ngIf="errorMessage" class="text-sm text-center mb-5">
+        <p style="color:red">{{ errorMessage }}</p>
+      </div>
+
       <!-- Reason List -->
-      <div class="space-y-3 mb-6">
+      <div [attr.key]="reportRequest.reason" class="space-y-3 mb-6">
         <label *ngFor="let reason of allReportReasons"
                class="flex items-center gap-3 p-3 rounded-xl bg-gray-700 cursor-pointer hover:bg-gray-600 transition">
 
           <input type="radio"
                  name="reportReason"
                  [value]="reason.id"
+                 [(ngModel)]="reportRequest.reason"
                  class="w-4 h-4 cursor-pointer">
 
           <span class="text-white">{{ reason.reason }}</span>
@@ -163,10 +179,10 @@ px-4 py-1.5 rounded-lg transition duration-300 text-[13px]">
       <!-- Message Field -->
       <h3 class="text-white text-lg font-semibold mb-3">Additional comments:</h3>
 
-      <textarea
-        class="w-full h-32 p-3 rounded-lg bg-[#1f1f2c] text-white border border-white/10
+      <textarea [(ngModel)]="reportRequest.message"
+                class="w-full h-32 p-3 rounded-lg bg-[#1f1f2c] text-white border border-white/10
              focus:outline-none focus:ring-2 focus:ring-gray-700 resize-none"
-        ></textarea>
+      ></textarea>
 
       <!-- Buttons -->
       <div class="flex justify-end gap-3 mt-6">
@@ -176,8 +192,8 @@ px-4 py-1.5 rounded-lg transition duration-300 text-[13px]">
           Cancel
         </button>
 
-        <button
-          class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition cursor-pointer">
+        <button (click)="reportUser(selectedUserToReport?.userId!)"
+                class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition cursor-pointer">
           Submit Report
         </button>
       </div>

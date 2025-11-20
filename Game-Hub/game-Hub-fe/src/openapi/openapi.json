@@ -207,6 +207,48 @@
         }
       }
     },
+    "/report/user/{userId}": {
+      "post": {
+        "tags": [
+          "report-controller"
+        ],
+        "operationId": "reportUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReportRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/profile/update-profile": {
       "post": {
         "tags": [
@@ -985,7 +1027,7 @@
         }
       }
     },
-    "/report/reasons": {
+    "/report/get/reasons": {
       "get": {
         "tags": [
           "report-controller"
@@ -1850,6 +1892,18 @@
             "type": "string"
           },
           "os": {
+            "type": "string"
+          }
+        }
+      },
+      "ReportRequest": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "message": {
             "type": "string"
           }
         }

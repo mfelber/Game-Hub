@@ -25,6 +25,7 @@ export type { Platform } from './models/platform';
 export type { PlatformResponse } from './models/platform-response';
 export type { RegistrationRequest } from './models/registration-request';
 export type { ReportReasonResponse } from './models/report-reason-response';
+export type { ReportRequest } from './models/report-request';
 export type { StatusResponse } from './models/status-response';
 export type { SubtitleResponse } from './models/subtitle-response';
 export type { Subtitles } from './models/subtitles';
