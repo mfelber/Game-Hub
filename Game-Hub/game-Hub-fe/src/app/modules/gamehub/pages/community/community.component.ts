@@ -39,7 +39,6 @@ export class CommunityComponent implements OnInit {
 
   userHasProfilePicture = true;
   loadUsers = false;
-  noUsersFound = false;
   isLoaded = false;
   isReportUserModalOpen = false;
 
@@ -68,14 +67,10 @@ export class CommunityComponent implements OnInit {
 
     this.communityService.findAllUsers({query: query}).subscribe({
       next: (users) => {
-        if (users.content?.length! === 0) {
-          this.noUsersFound = true;
-          return
-        }
-        console.log(this.friendRequestMapFromSender)
-        this.noUsersFound = false;
-        this.userCommunityResponse = users;
+        console.log(users.content?.length!)
 
+        console.log(this.friendRequestMapFromSender)
+        this.userCommunityResponse = users;
         this.userCommunityResponse.content?.forEach(user => {
           this.friendRequestExistsForSender(user.userId)
         })
@@ -87,6 +82,8 @@ export class CommunityComponent implements OnInit {
         this.userCommunityResponse.content?.forEach(user => {
           this.areFriends(user.userId!)
         })
+
+        this.isLoaded = true;
 
         this.loadUsers = true;
       }

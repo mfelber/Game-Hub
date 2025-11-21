@@ -846,6 +846,26 @@
         }
       }
     },
+    "/user-level/user/level-progress": {
+      "get": {
+        "tags": [
+          "user-level-controller"
+        ],
+        "operationId": "getUserLevelProgress",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LevelProgressResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/store/platforms": {
       "get": {
         "tags": [
@@ -2164,6 +2184,42 @@
           }
         }
       },
+      "LevelProgressResponse": {
+        "type": "object",
+        "properties": {
+          "level": {
+            "$ref": "#/components/schemas/LevelResponse"
+          },
+          "currentXp": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "requiredXp": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "nextLevel": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "LevelResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "level": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "levelColor": {
+            "type": "string"
+          }
+        }
+      },
       "ReportReasonResponse": {
         "type": "object",
         "properties": {
@@ -2281,6 +2337,9 @@
             "type": "integer",
             "format": "int32"
           },
+          "level": {
+            "$ref": "#/components/schemas/LevelResponse"
+          },
           "badges": {
             "uniqueItems": true,
             "type": "array",
@@ -2391,6 +2450,9 @@
           "wishlistCount": {
             "type": "integer",
             "format": "int32"
+          },
+          "level": {
+            "$ref": "#/components/schemas/LevelResponse"
           },
           "badges": {
             "uniqueItems": true,
@@ -2567,6 +2629,9 @@
           },
           "createdAt": {
             "type": "string"
+          },
+          "level": {
+            "$ref": "#/components/schemas/LevelResponse"
           }
         }
       },

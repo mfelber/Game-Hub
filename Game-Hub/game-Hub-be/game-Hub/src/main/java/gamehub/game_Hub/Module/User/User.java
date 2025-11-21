@@ -19,6 +19,7 @@ import gamehub.game_Hub.Module.Badge;
 import gamehub.game_Hub.Module.CardColor;
 import gamehub.game_Hub.Module.Game;
 import gamehub.game_Hub.Module.Genre;
+import gamehub.game_Hub.Module.Level;
 import gamehub.game_Hub.Role.Role;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -93,6 +94,8 @@ public class User implements UserDetails, Principal {
   @Column(name = "profile_color")
   private String profileColor;
 
+  private Long xp;
+
   @Column(name = "is_banned")
   private boolean isBanned;
 
@@ -106,6 +109,10 @@ public class User implements UserDetails, Principal {
   @LastModifiedDate
   @Column(insertable = false, name = "last_modified_at")
   private LocalDateTime lastModifiedAt;
+
+  @ManyToOne
+  @JoinColumn(name = "level_id")
+  private Level level;
 
   @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(

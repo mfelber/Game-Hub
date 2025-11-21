@@ -37,7 +37,7 @@ px-4 py-1.5 rounded-lg transition duration-300 mb-3 text-[13px]">
 
   </div>
 
-  <div  *ngFor="let friendRequest of friendRequestsResponse.content" class="mt-1">
+  <div  *ngFor="let friendRequest of friendRequestsResponse.content" class="mt-1 mb-3">
   <div class="flex items-center gap-4 p-4 bg-black/30 rounded-2xl shadow cursor-pointer" (click)="navigateToUser(friendRequest.userId!)">
 
 
@@ -62,13 +62,14 @@ px-4 py-1.5 rounded-lg transition duration-300 mb-3 text-[13px]">
         'text-gray-400': friendRequest.status === 'OFFLINE',
         'text-yellow-400': friendRequest.status === 'AWAY'
         }">• {{ friendRequest.status }} </p>
-        <p class="text-sm text-gray-400 ml-1">  • {{ friendRequest.location?.name}} • Lv.27</p>
+        <p class="text-sm text-gray-400 ml-1">  • {{ friendRequest.location?.name}}</p>
+        <p class="text-sm text-gray-400 ml-1" [ngStyle]="{'color': friendRequest.level?.levelColor}"> • Lvl.{{friendRequest.level?.level}}</p>
       </div>
 
 
     </div>
-    <button (click)=" acceptFriendRequest(friendRequest.userId!)" class="px-3 py-1 bg-green-600 hover:bg-green-700 rounded-md transition-colors duration-200 cursor-pointer">Accept</button>
-    <button (click)=" rejectFriendRequest(friendRequest.userId!)" class="px-3 py-1 bg-red-600 hover:bg-red-700 rounded-md transition-colors duration-200 cursor-pointer">Decline</button>
+    <button (click)=" acceptFriendRequest(friendRequest.userId!) ; $event.stopPropagation()" class="px-3 py-1 bg-green-600 hover:bg-green-700 rounded-md transition-colors duration-200 cursor-pointer">Accept</button>
+    <button (click)=" rejectFriendRequest(friendRequest.userId!) ; $event.stopPropagation()" class="px-3 py-1 bg-red-600 hover:bg-red-700 rounded-md transition-colors duration-200 cursor-pointer">Decline</button>
   </div>
   </div>
 

@@ -5,39 +5,32 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
-@Builder
+@Getter
+@Setter
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "badge", schema = "game_hub")
-public class Badge {
+@Table(name = "level", schema = "game_hub")
+public class Level {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private String name;
+  private Long levelNumber;
 
-  private String description;
+  @Column(name = "xp_required")
+  private Long requiredXp;
 
-  @Column(name = "icon_path")
-  private String iconPath;
-
-  @ManyToOne
-  @JoinColumn(name = "badge_category_id")
-  private BadgeCategory badgeCategory;
-
-
-  @Column(name = "xp_reward")
-  private Long xpReward;
+  @Column(name = "level_color")
+  private String levelColor;
 
 }

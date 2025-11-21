@@ -22,5 +22,6 @@ public class FriendRequestResponse {
   private byte [] userProfilePicture;
   private String profileColor;
   private String createdAt;
+  private LevelResponse level;
 
 }
