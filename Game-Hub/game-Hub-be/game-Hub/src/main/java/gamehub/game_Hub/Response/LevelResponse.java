@@ -15,5 +15,6 @@ public class LevelResponse {
 
   private Long id;
   private Long level;
+  private String levelColor;
 
 }

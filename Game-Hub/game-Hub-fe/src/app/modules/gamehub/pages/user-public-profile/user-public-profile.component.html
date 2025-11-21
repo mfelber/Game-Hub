@@ -119,9 +119,9 @@
     <div class="w-[2px] h-10 bg-white/20 rounded">
 
     </div>
-    <div class="w-20 text-center text-10px">
+    <div class="w-20 text-center text-10px" [ngStyle]="{'color': userResponse.level?.levelColor}">
       <p class="text-sm font-semibold"> {{userResponse.level?.level}} </p>
-      <p class="text-sm text-gray-300">Level</p>
+      <p class="text-sm">Level</p>
     </div>
 
 

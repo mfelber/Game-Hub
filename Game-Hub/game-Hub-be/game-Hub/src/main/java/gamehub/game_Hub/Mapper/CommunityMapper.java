@@ -29,7 +29,6 @@ public class CommunityMapper {
     String requestSentAt =
         friendRequest.getCreatedAt().getDayOfMonth() + " " +
             friendRequest.getCreatedAt().getMonth().name() + " " + friendRequest.getCreatedAt().getYear();
-    System.out.println(requestSentAt);
 
     User sender = friendRequest.getSender();
 
@@ -37,7 +36,7 @@ public class CommunityMapper {
         .userId(sender.getId())
         .username(sender.getName())
         .status(sender.getStatus())
-        .level(new LevelResponse(sender.getLevel().getId(), sender.getLevel().getLevelNumber()))
+        .level(new LevelResponse(sender.getLevel().getId(), sender.getLevel().getLevelNumber(),sender.getLevel().getLevelColor()))
         .location(new LocationResponse(sender.getLocation().name(), sender.getLocation().getLocationIcon()))
         .userProfilePicture(FileUtils.readCoverFromLocation(sender.getUserProfilePicture()))
         .profileColor(sender.getProfileColor())

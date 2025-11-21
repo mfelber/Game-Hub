@@ -35,7 +35,6 @@ public class WishlistServiceImpl implements WishlistService {
 
     Pageable pageable = PageRequest.of(page, size);
     Page<Game> wishlist = gameRepository.findByWishlistsContaining(authUser, pageable);
-    System.out.println(wishlist.stream().map(Game::getTitle).collect(Collectors.joining(",")));
 
     List<GameResponse> gameResponse = wishlist.stream().map(gameMapper::toGameResponse).toList();
 

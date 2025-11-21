@@ -63,7 +63,7 @@ public class UserMapper {
         .friendsCount(user.getFriends().size())
         .libraryCount(user.getLibrary().size())
         .wishlistCount(user.getWishlist().size())
-        .level(new LevelResponse(user.getLevel().getId(), user.getLevel().getLevelNumber()))
+        .level(new LevelResponse(user.getLevel().getId(), user.getLevel().getLevelNumber(), user.getLevel().getLevelColor()))
         .badges(user.getBadges().stream().map(badge -> new BadgeResponse(badge.getId(), badge.getName(),
             badge.getDescription(), badge.getIconPath())).collect(Collectors.toSet()))
         .playRecently(user.getPlayRecently().stream().limit(5)
@@ -119,7 +119,7 @@ public class UserMapper {
         .friendsCount(user.getFriends().size())
         .libraryCount(user.getLibrary().size())
         .wishlistCount(user.getWishlist().size())
-        .level(new LevelResponse(user.getLevel().getId(), user.getLevel().getLevelNumber()))
+        .level(new LevelResponse(user.getLevel().getId(), user.getLevel().getLevelNumber(),user.getLevel().getLevelColor()))
         .badges(user.getBadges().stream().map(badge -> new BadgeResponse(badge.getId(), badge.getName(),
             badge.getDescription(), badge.getIconPath())).collect(Collectors.toSet()))
         .playRecently(user.getPlayRecently().stream().limit(5)
@@ -179,10 +179,9 @@ public class UserMapper {
 
     Long requiredXP = nextLevel.getRequiredXp();
     Long userXP = user.getXp();
-    System.out.println("User has " + userXP + "and needs for level" + nextLevel.getLevelNumber() + " " + requiredXP + "xp.");
 
     return LevelProgressResponse.builder()
-        .level(new LevelResponse(user.getLevel().getId(), user.getLevel().getLevelNumber()))
+        .level(new LevelResponse(user.getLevel().getId(), user.getLevel().getLevelNumber(),user.getLevel().getLevelColor()))
         .currentXp(user.getXp())
         .requiredXp(requiredXP)
         .nextLevel(nextLevel.getLevelNumber())

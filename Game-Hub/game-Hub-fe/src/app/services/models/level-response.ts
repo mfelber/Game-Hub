@@ -5,4 +5,5 @@
 export interface LevelResponse {
   id?: number;
   level?: number;
+  levelColor?: string;
 }

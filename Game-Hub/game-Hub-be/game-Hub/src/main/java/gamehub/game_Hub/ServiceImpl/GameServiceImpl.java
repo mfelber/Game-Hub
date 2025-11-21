@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import gamehub.game_Hub.Common.PageResponse;
 import gamehub.game_Hub.Mapper.GameMapper;
+import gamehub.game_Hub.Module.Badge;
 import gamehub.game_Hub.Module.Game;
 import gamehub.game_Hub.Module.Level;
 import gamehub.game_Hub.Module.User.User;
@@ -42,6 +43,8 @@ public class GameServiceImpl implements GameService {
   private final BadgeRepository badgeRepository;
 
   private final LevelRepository levelRepository;
+
+  private final UserProgressService userProgressService;
 
   @Override
   public Long save(final GameRequest gameRequest) {
@@ -114,74 +117,25 @@ public class GameServiceImpl implements GameService {
   public void addGameCollectorBadge(User user) {
 
     int gameLibrarySize = user.getLibrary().size();
-    System.out.println(gameLibrarySize);
-
-    if (gameLibrarySize >= 4) {
-
-      if (!hasBadge(user,"GAME_COLLECTOR_LEVEL_1")) {
-        user.getBadges().add(badgeRepository.findByName("GAME_COLLECTOR_LEVEL_1"));
-        Long xpReward = badgeRepository.findByName("GAME_COLLECTOR_LEVEL_1").getXpReward();
-        Long userxp = user.getXp() + xpReward;
-        user.setXp(userxp);
-        if (user.getXp() > 0) {
-          user.setLevel(levelRepository.findById(user.getLevel().getId() + 1).orElseThrow(() -> new EntityNotFoundException("No user found with id: ")));
-        }
-      }
-    }
-    if (gameLibrarySize >= 16) {
-
-      if (hasBadge(user,"GAME_COLLECTOR_LEVEL_1")) {
-        user.getBadges().remove(badgeRepository.findByName("GAME_COLLECTOR_LEVEL_1"));
-      }
-      if (!hasBadge(user,"GAME_COLLECTOR_LEVEL_2")) {
-        user.getBadges().add(badgeRepository.findByName("GAME_COLLECTOR_LEVEL_2"));
-        Long xpReward = badgeRepository.findByName("GAME_COLLECTOR_LEVEL_2").getXpReward();
-        Long userxp = user.getXp() + xpReward;
-        user.setXp(userxp);
-      }
-    }
-
-    if (gameLibrarySize >= 9) {
-
-      if (hasBadge(user,"GAME_COLLECTOR_LEVEL_2")) {
-        user.getBadges().remove(badgeRepository.findByName("GAME_COLLECTOR_LEVEL_2"));
-      }
-      if (!hasBadge(user,"GAME_COLLECTOR_LEVEL_3")) {
-        user.getBadges().add(badgeRepository.findByName("GAME_COLLECTOR_LEVEL_3"));
-        Long xpReward = badgeRepository.findByName("GAME_COLLECTOR_LEVEL_3").getXpReward();
-        Long userxp = user.getXp() + xpReward;
-        user.setXp(userxp);
-      }
-    }
-
-    if (gameLibrarySize >= 51) {
-      if (hasBadge(user,"GAME_COLLECTOR_LEVEL_3")) {
-        user.getBadges().remove(badgeRepository.findByName("GAME_COLLECTOR_LEVEL_3"));
-      }
-      if (!hasBadge(user,"GAME_COLLECTOR_LEVEL_4")) {
-        user.getBadges().add(badgeRepository.findByName("GAME_COLLECTOR_LEVEL_4"));
-        Long xpReward = badgeRepository.findByName("GAME_COLLECTOR_LEVEL_4").getXpReward();
-        Long userxp = user.getXp() + xpReward;
-        user.setXp(userxp);
-      }
-    }
+    Badge badgeToAdd = null;
 
     if (gameLibrarySize >= 101) {
-      if (hasBadge(user,"GAME_COLLECTOR_LEVEL_4")) {
-        user.getBadges().remove(badgeRepository.findByName("GAME_COLLECTOR_LEVEL_4"));
-      }
-      if (!hasBadge(user,"GAME_COLLECTOR_LEVEL_5")) {
-        user.getBadges().add(badgeRepository.findByName("GAME_COLLECTOR_LEVEL_5"));
-        Long xpReward = badgeRepository.findByName("GAME_COLLECTOR_LEVEL_5").getXpReward();
-        Long userxp = user.getXp() + xpReward;
-        user.setXp(userxp);
-      }
+      badgeToAdd = badgeRepository.findByName("GAME_COLLECTOR_LEVEL_5");
+    } else if (gameLibrarySize >= 51){
+      badgeToAdd = badgeRepository.findByName("GAME_COLLECTOR_LEVEL_4");
+    } else if (gameLibrarySize >= 31){
+      badgeToAdd = badgeRepository.findByName("GAME_COLLECTOR_LEVEL_3");
+    } else if (gameLibrarySize >= 16){
+      badgeToAdd = badgeRepository.findByName("GAME_COLLECTOR_LEVEL_2");
+    } else if (gameLibrarySize >= 4){
+      badgeToAdd = badgeRepository.findByName("GAME_COLLECTOR_LEVEL_1");
     }
-    
-  }
 
-  private boolean hasBadge(final User user, String badgeName) {
-    return user.getBadges().contains(badgeRepository.findByName(badgeName));
+    if (badgeToAdd != null && !user.getBadges().contains(badgeToAdd)) {
+      user.getBadges().removeIf(badge -> badge.getName().startsWith("GAME_COLLECTOR"));
+
+      userProgressService.awardBadgeAndXp(user, badgeToAdd);
+    }
 
   }
 

@@ -30,4 +30,7 @@ public class Level {
   @Column(name = "xp_required")
   private Long requiredXp;
 
+  @Column(name = "level_color")
+  private String levelColor;
+
 }

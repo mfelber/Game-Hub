@@ -148,9 +148,6 @@ public class CommunityServiceImpl implements CommunityService {
     User sender = userRepository.findById(userId)
         .orElseThrow(() -> new EntityNotFoundException("Receiver not found with id: " + userId));
 
-    System.out.println("receiver" + receiver.getId());
-    System.out.println("sender" + sender.getId());
-
     receiver.addFriend(sender);
 
     userRepository.save(receiver);

@@ -9,4 +9,8 @@ public interface LevelRepository extends JpaRepository<Level, Long> {
 
   void findLevelById(Long id);
 
+  Level findTopByOrderByLevelNumberDesc();
+
+  Level findByLevelNumber(Long levelNumber);
+
 }
