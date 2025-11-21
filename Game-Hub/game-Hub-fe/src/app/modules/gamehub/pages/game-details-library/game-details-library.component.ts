@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {NgForOf, NgIf} from '@angular/common';
+import {NgForOf, NgIf, NgStyle} from '@angular/common';
 import {ActivatedRoute} from '@angular/router';
 import {GameControllerService} from '../../../../services/services/game-controller.service';
 import {GameResponse} from '../../../../services/models/game-response';
@@ -10,7 +10,8 @@ import {UserPublicProfileComponent} from '../user-public-profile/user-public-pro
   selector: 'app-game-details-library',
   imports: [
     NgForOf,
-    NgIf
+    NgIf,
+    NgStyle
   ],
   templateUrl: './game-details-library.component.html',
   styleUrl: './game-details-library.component.css'

@@ -24,6 +24,7 @@ public class GameResponse {
   private String publisher;
   private String releaseYear;
   private Double price;
+  private AgeratingResponse ageRating;
   private byte [] gameCoverImage;
   private SystemRequirements systemRequirements;
   private Set<PlatformResponse> platforms;

@@ -1691,6 +1691,21 @@
   },
   "components": {
     "schemas": {
+      "AgeRating": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "ageRating": {
+            "type": "string"
+          },
+          "ageRatingColor": {
+            "type": "string"
+          }
+        }
+      },
       "Game": {
         "type": "object",
         "properties": {
@@ -1716,6 +1731,9 @@
           "price": {
             "type": "number",
             "format": "double"
+          },
+          "ageRating": {
+            "$ref": "#/components/schemas/AgeRating"
           },
           "dlc": {
             "type": "boolean"
@@ -2037,6 +2055,21 @@
           }
         }
       },
+      "AgeratingResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "ageRating": {
+            "type": "string"
+          },
+          "ageRatingColor": {
+            "type": "string"
+          }
+        }
+      },
       "GameResponse": {
         "type": "object",
         "properties": {
@@ -2069,6 +2102,9 @@
           "price": {
             "type": "number",
             "format": "double"
+          },
+          "ageRating": {
+            "$ref": "#/components/schemas/AgeratingResponse"
           },
           "gameCoverImage": {
             "type": "array",

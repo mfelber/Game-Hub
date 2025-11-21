@@ -1,14 +1,15 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {GameControllerService} from '../../../../services/services/game-controller.service';
-import {NgForOf, NgIf} from '@angular/common';
+import {NgForOf, NgIf, NgStyle} from '@angular/common';
 import {GameResponse} from '../../../../services/models/game-response';
 
 @Component({
   selector: 'app-game-details',
   imports: [
     NgIf,
-    NgForOf
+    NgForOf,
+    NgStyle
   ],
   templateUrl: './game-details.component.html',
   styleUrl: './game-details.component.scss'

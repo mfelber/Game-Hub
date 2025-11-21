@@ -16,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -50,6 +51,10 @@ public class Game {
   private String releaseYear;
 
   private double price;
+
+  @ManyToOne
+  @JoinColumn(name = "age_rating")
+  private AgeRating ageRating;
 
   private boolean dlc;
 

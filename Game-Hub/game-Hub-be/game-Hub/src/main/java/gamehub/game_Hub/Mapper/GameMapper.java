@@ -8,6 +8,7 @@ import gamehub.game_Hub.File.FileUtils;
 import gamehub.game_Hub.Module.Game;
 import gamehub.game_Hub.Module.SystemRequirements;
 import gamehub.game_Hub.Request.GameRequest;
+import gamehub.game_Hub.Response.AgeratingResponse;
 import gamehub.game_Hub.Response.GameResponse;
 import gamehub.game_Hub.Response.GenreResponse;
 import gamehub.game_Hub.Response.LanguageResponse;
@@ -56,6 +57,7 @@ public class GameMapper {
         .developer(game.getDeveloper())
         .publisher(game.getPublisher())
         .price(game.getPrice())
+        .ageRating(new AgeratingResponse(game.getId(), game.getAgeRating().getAgeRating(), game.getAgeRating().getAgeRatingColor()))
         .gameCoverImage(FileUtils.readCoverFromLocation(game.getGameCoverImage()))
         .systemRequirements(game.getSystemRequirements())
         .platforms(game.getPlatforms().stream()

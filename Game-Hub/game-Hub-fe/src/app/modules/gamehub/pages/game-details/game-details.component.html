@@ -15,6 +15,9 @@
     <span *ngFor="let genre of game.genres" class="bg-white/20 text-gray-200 rounded-md px-2 py-1 w-fit text-sm">
       {{ genre.name }}
     </span>
+        <span class="text-gray-200 rounded-md px-2 py-1 w-fit text-sm" [ngStyle]="{'background-color': game.ageRating.ageRatingColor}">
+      {{ game.ageRating.ageRating }}
+    </span>
       </div>
     </div>
 
