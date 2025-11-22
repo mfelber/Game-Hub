@@ -13,11 +13,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import gamehub.game_Hub.Module.CardColor;
+import gamehub.game_Hub.Module.Flags.StoreFlagType;
+import gamehub.game_Hub.Module.Flags.UserStoreFlag;
 import gamehub.game_Hub.Module.Level;
 import gamehub.game_Hub.Module.User.Location;
 import gamehub.game_Hub.Module.User.Status;
 import gamehub.game_Hub.Repository.CardColorRepository;
 import gamehub.game_Hub.Repository.LevelRepository;
+import gamehub.game_Hub.Repository.StoreFlagTypeRepository;
+import gamehub.game_Hub.Repository.UserStoreFlagRepository;
 import gamehub.game_Hub.Request.AuthenticationRequest;
 import gamehub.game_Hub.Response.AuthenticationResponse;
 import gamehub.game_Hub.Request.ForgotPasswordRequest;
@@ -57,6 +61,10 @@ public class AuthenticationService {
 
   private final LevelRepository levelRepository;
 
+  private final StoreFlagTypeRepository storeFlagTypeRepository;
+
+  private final UserStoreFlagRepository userStoreFlagRepository;
+
   @Value("${application.mailing.frontend.login-url}")
   private String logInUrl;
 
@@ -87,7 +95,19 @@ public class AuthenticationService {
         .build();
 
     userRepository.save(user);
+    setUserDefaultFlags(user);
     sendWelcomeEmail(user);
+  }
+
+  private void setUserDefaultFlags(final User user) {
+    for (StoreFlagType flagType: storeFlagTypeRepository.findAll()) {
+      UserStoreFlag flag = new UserStoreFlag();
+      flag.setUser(user);
+      flag.setUserFlagType(flagType);
+      flag.setValue(false);
+      userStoreFlagRepository.save(flag);
+    }
+
   }
 
   public String getRandomColor() {
