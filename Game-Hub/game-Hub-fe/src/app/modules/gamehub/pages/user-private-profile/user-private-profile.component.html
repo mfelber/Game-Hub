@@ -459,15 +459,15 @@
             <div class=" flex border-b border-gray-500">
               <button (click)="activeSubTabs='community'"
                       [ngClass]="activeSubTabs === 'community' ? 'border-b-2 border-blue-500 text-white': 'text-gray-400'"
-                      class="px-3 py-1 font-semibold text-sm">Community
+                      class="px-3 py-1 font-semibold text-sm cursor-pointer">Community
               </button>
               <button (click)="activeSubTabs='store'"
                       [ngClass]="activeSubTabs === 'store' ? 'border-b-2 border-blue-500 text-white': 'text-gray-400'"
-                      class="px-3 py-1 font-semibold text-sm">Store
+                      class="px-3 py-1 font-semibold text-sm cursor-pointer">Store
               </button>
               <button (click)="activeSubTabs='account'"
                       [ngClass]="activeSubTabs === 'account' ? 'border-b-2 border-blue-500 text-white': 'text-gray-400'"
-                      class="px-3 py-1 font-semibold text-sm">Account
+                      class="px-3 py-1 font-semibold text-sm cursor-pointer">Account
               </button>
             </div>
 
@@ -478,15 +478,11 @@
               <div class="flex-1 flex flex-col gap-6">
 
                 <fieldset class="border-l-4 border-blue-500 pl-4">
-                  <legend class="font-semibold mb-2">Send Friend Requests</legend>
+                  <legend class="font-semibold mb-2">Friend Request</legend>
                   <div class="flex gap-4">
-                    <label class="flex items-center gap-2">
+                    <label class="flex items-center gap-1.5 cursor-pointer" *ngFor="let option of friendRequestOptions">
                       <input type="radio" name="friendRequests" value="everyone"/>
-                      Everyone
-                    </label>
-                    <label class="flex items-center gap-2">
-                      <input type="radio" name="friendRequests" value="noone"/>
-                      No one
+                      {{option}}
                     </label>
                   </div>
                 </fieldset>
@@ -494,13 +490,9 @@
                 <fieldset class="border-l-4 border-blue-500 pl-4">
                   <legend class="font-semibold mb-2">Send Messages</legend>
                   <div class="flex gap-4">
-                    <label class="flex items-center gap-2">
-                      <input type="radio" name="sendMessages" value="friends"/>
-                      Friends
-                    </label>
-                    <label class="flex items-center gap-2">
-                      <input type="radio" name="sendMessages" value="noone"/>
-                      No one
+                    <label class="flex items-center gap-1.5  cursor-pointer" *ngFor="let option of sendMessageOptions">
+                      <input type="radio" name="sendMessages" value="everyone"/>
+                      {{option}}
                     </label>
                   </div>
                 </fieldset>
@@ -508,17 +500,9 @@
                 <fieldset class="border-l-4 border-blue-500 pl-4">
                   <legend class="font-semibold mb-2">Profile Visibility</legend>
                   <div class="flex gap-4">
-                    <label class="flex items-center gap-2">
+                    <label class="flex items-center gap-1.5 cursor-pointer" *ngFor="let option of profileVisibilityOptions">
                       <input type="radio" name="profileVisibility" value="everyone"/>
-                      Everyone
-                    </label>
-                    <label class="flex items-center gap-2">
-                      <input type="radio" name="profileVisibility" value="friends"/>
-                      Friends
-                    </label>
-                    <label class="flex items-center gap-2">
-                      <input type="radio" name="profileVisibility" value="noone"/>
-                      No one
+                      {{option}}
                     </label>
                   </div>
                 </fieldset>
@@ -530,13 +514,9 @@
                 <fieldset class="border-l-4 border-green-500 pl-4">
                   <legend class="font-semibold mb-2">Group Invites</legend>
                   <div class="flex gap-4">
-                    <label class="flex items-center gap-2">
-                      <input type="radio" name="groupInvites" value="friends"/>
-                      Friends
-                    </label>
-                    <label class="flex items-center gap-2">
-                      <input type="radio" name="groupInvites" value="noone"/>
-                      No one
+                    <label class="flex items-center gap-1.5 cursor-pointer" *ngFor="let option of groupInvitesOptions">
+                      <input type="radio" name="groupInvites" value="everyone"/>
+                      {{option}}
                     </label>
                   </div>
                 </fieldset>
@@ -544,13 +524,9 @@
                 <fieldset class="border-l-4 border-green-500 pl-4">
                   <legend class="font-semibold mb-2">Play Together Invites</legend>
                   <div class="flex gap-4">
-                    <label class="flex items-center gap-2">
-                      <input type="radio" name="playTogetherInvites" value="friends"/>
-                      Friends
-                    </label>
-                    <label class="flex items-center gap-2">
-                      <input type="radio" name="playTogetherInvites" value="noone"/>
-                      No one
+                    <label class="flex items-center gap-2 cursor-pointer" *ngFor="let option of playTogetherInvitesOptions">
+                      <input type="radio" name="playTogetherInvites" value="everyone"/>
+                      {{option}}
                     </label>
                   </div>
                 </fieldset>

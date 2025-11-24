@@ -17,6 +17,7 @@ import {CardPreviewComponent} from '../../components/card-preview/card-preview.c
 import {RefreshService} from '../../../../services/fn/refresh-service/refresh-service';
 import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {FlagsControllerService} from '../../../../services/services/flags-controller.service';
+import {CommunityFlagsResponse} from '../../../../services/models/community-flags-response';
 
 @Component({
   selector: 'app-user-profile',
@@ -101,7 +102,7 @@ export class UserPrivateProfileComponent implements OnInit {
   };
   userRequest: UserUpdateRequest = {
     email: this.userResponse.email,
-    cardColorId : this.selectedColorId!
+    cardColorId: this.selectedColorId!
   };
 
   bioUpdateRequest: UserUpdateRequest = {
@@ -245,7 +246,7 @@ export class UserPrivateProfileComponent implements OnInit {
       next: (colors) => {
         this.cardColorsResponse = colors;
         console.log(colors)
-    }
+      }
     })
   }
 
@@ -361,6 +362,7 @@ export class UserPrivateProfileComponent implements OnInit {
     this.getLocations();
     this.getColorsForCard();
     this.getStoreFlags();
+    this.getCommunityFlags()
   }
 
   getLocations() {
@@ -459,6 +461,7 @@ export class UserPrivateProfileComponent implements OnInit {
   }
 
   showPreviewColors = false
+
   showPreview() {
     this.showPreviewColors = true;
   }
@@ -482,7 +485,7 @@ export class UserPrivateProfileComponent implements OnInit {
     this.userRequest.location = name;
   }
 
-  getStoreFlags(){
+  getStoreFlags() {
     this.storeFlagsService.getAllStoreFlags().subscribe({
       next: (res) => {
         console.log(res)
@@ -492,5 +495,34 @@ export class UserPrivateProfileComponent implements OnInit {
         }))
       }
     })
+  }
+
+  friendRequestOptions: string[] = [];
+  sendMessageOptions: string[] = [];
+  profileVisibilityOptions: string[] = [];
+  groupInvitesOptions: string[] = [];
+  playTogetherInvitesOptions: string[] = [];
+
+  getCommunityFlags() {
+    this.storeFlagsService.getAllCommunityFlags().subscribe(res => {
+      res.forEach(flag => {
+        if (flag.flagKey === 'FRIEND_REQUEST') {
+          this.friendRequestOptions = flag.options!
+        }
+        if (flag.flagKey === 'SEND_MESSAGES') {
+          this.sendMessageOptions = flag.options!
+        }
+        if (flag.flagKey === 'PROFILE_VISIBILITY') {
+          this.profileVisibilityOptions = flag.options!
+        }
+        if (flag.flagKey === 'GROUP_INVITES') {
+          this.groupInvitesOptions = flag.options!
+        }
+        if (flag.flagKey === 'PLAY_TOGETHER') {
+          this.playTogetherInvitesOptions = flag.options!
+        }
+      })
+      }
+    )
   }
 }

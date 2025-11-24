@@ -1387,7 +1387,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/FlagsResponse"
+                    "$ref": "#/components/schemas/CommunityFlagsResponse"
                   }
                 }
               }
@@ -2623,11 +2623,17 @@
           }
         }
       },
-      "FlagsResponse": {
+      "CommunityFlagsResponse": {
         "type": "object",
         "properties": {
-          "name": {
+          "flagKey": {
             "type": "string"
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },

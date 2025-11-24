@@ -19,7 +19,11 @@ CREATE TABLE IF NOT EXISTS game_hub.community_flag_type
 );
 
 INSERT INTO game_hub.community_flag_type (flag_code, flag_name, description)
-VALUES ('FRIEND_REQUEST', 'Friend Request', 'Who can send you friend request');
+VALUES ('FRIEND_REQUEST', 'Friend Request', 'Who can send you friend request'),
+       ('GROUP_INVITES', 'Group Invites', 'Who can invite you to groups'),
+       ('PLAY_TOGETHER_INVITES', 'Play Together Invites', 'Who can invite you to game session'),
+       ('PROFILE_VISIBILITY', 'Profile Visibility', 'Who can see informations about your profile'),
+       ('SEND_MESSAGES', 'Send Messages', 'Who can see informations about your profile');
 
 CREATE TABLE IF NOT EXISTS game_hub.user_store_flag
 (

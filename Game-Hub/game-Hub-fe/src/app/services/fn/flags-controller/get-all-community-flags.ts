@@ -8,12 +8,12 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { FlagsResponse } from '../../models/flags-response';
+import { CommunityFlagsResponse } from '../../models/community-flags-response';
 
 export interface GetAllCommunityFlags$Params {
 }
 
-export function getAllCommunityFlags(http: HttpClient, rootUrl: string, params?: GetAllCommunityFlags$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<FlagsResponse>>> {
+export function getAllCommunityFlags(http: HttpClient, rootUrl: string, params?: GetAllCommunityFlags$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CommunityFlagsResponse>>> {
   const rb = new RequestBuilder(rootUrl, getAllCommunityFlags.PATH, 'get');
   if (params) {
   }
@@ -23,7 +23,7 @@ export function getAllCommunityFlags(http: HttpClient, rootUrl: string, params?:
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<FlagsResponse>>;
+      return r as StrictHttpResponse<Array<CommunityFlagsResponse>>;
     })
   );
 }

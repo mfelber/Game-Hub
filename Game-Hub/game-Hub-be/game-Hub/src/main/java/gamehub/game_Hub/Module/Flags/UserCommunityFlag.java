@@ -33,7 +33,7 @@ public class UserCommunityFlag {
 
   @ManyToOne
   @JoinColumn(name = "flag_type_id")
-  private StoreFlagType userFlagType;
+  private CommunityFlagType userFlagType;
 
   private String value;
 

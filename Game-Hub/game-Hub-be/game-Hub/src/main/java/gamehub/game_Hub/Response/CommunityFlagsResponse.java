@@ -1,5 +1,7 @@
 package gamehub.game_Hub.Response;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,6 +13,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class FlagsResponse {
-  private String name;
+public class CommunityFlagsResponse {
+
+  private String flagKey;
+  private List<String> options;
 }

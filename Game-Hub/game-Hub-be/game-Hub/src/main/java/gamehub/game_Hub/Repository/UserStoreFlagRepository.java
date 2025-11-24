@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import gamehub.game_Hub.Module.Flags.UserStoreFlag;
 
-public interface UserStoreFlagRepository extends JpaRepository<UserStoreFlag, Integer> {
+public interface UserStoreFlagRepository extends JpaRepository<UserStoreFlag, Long> {
 
 }

@@ -9,7 +9,7 @@ export type { AuthenticationResponse } from './models/authentication-response';
 export type { BadgeResponse } from './models/badge-response';
 export type { BannerRequest } from './models/banner-request';
 export type { CardColorResponse } from './models/card-color-response';
-export type { FlagsResponse } from './models/flags-response';
+export type { CommunityFlagsResponse } from './models/community-flags-response';
 export type { ForgotPasswordRequest } from './models/forgot-password-request';
 export type { FriendRequestResponse } from './models/friend-request-response';
 export type { Game } from './models/game';

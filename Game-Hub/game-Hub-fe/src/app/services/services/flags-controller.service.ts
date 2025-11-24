@@ -11,7 +11,7 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { FlagsResponse } from '../models/flags-response';
+import { CommunityFlagsResponse } from '../models/community-flags-response';
 import { getAllCommunityFlags } from '../fn/flags-controller/get-all-community-flags';
 import { GetAllCommunityFlags$Params } from '../fn/flags-controller/get-all-community-flags';
 import { getAllStoreFlags } from '../fn/flags-controller/get-all-store-flags';
@@ -58,7 +58,7 @@ export class FlagsControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getAllCommunityFlags$Response(params?: GetAllCommunityFlags$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<FlagsResponse>>> {
+  getAllCommunityFlags$Response(params?: GetAllCommunityFlags$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CommunityFlagsResponse>>> {
     return getAllCommunityFlags(this.http, this.rootUrl, params, context);
   }
 
@@ -68,9 +68,9 @@ export class FlagsControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getAllCommunityFlags(params?: GetAllCommunityFlags$Params, context?: HttpContext): Observable<Array<FlagsResponse>> {
+  getAllCommunityFlags(params?: GetAllCommunityFlags$Params, context?: HttpContext): Observable<Array<CommunityFlagsResponse>> {
     return this.getAllCommunityFlags$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<FlagsResponse>>): Array<FlagsResponse> => r.body)
+      map((r: StrictHttpResponse<Array<CommunityFlagsResponse>>): Array<CommunityFlagsResponse> => r.body)
     );
   }
 

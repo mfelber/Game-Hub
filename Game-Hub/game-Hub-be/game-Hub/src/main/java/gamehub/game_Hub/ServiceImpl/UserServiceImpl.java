@@ -12,10 +12,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import gamehub.game_Hub.File.FileStorageService;
 import gamehub.game_Hub.Module.CardColor;
+import gamehub.game_Hub.Module.Flags.CommunityFlagType;
 import gamehub.game_Hub.Module.Genre;
 import gamehub.game_Hub.Module.Level;
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Repository.CardColorRepository;
+import gamehub.game_Hub.Repository.CommunityFlagTypeRepository;
 import gamehub.game_Hub.Repository.LevelRepository;
 import gamehub.game_Hub.Repository.genre.GenreRepository;
 import gamehub.game_Hub.Repository.user.UserRepository;
@@ -42,8 +44,6 @@ public class UserServiceImpl implements UserService {
   private final FileStorageService fileStorageService;
 
   private final CardColorRepository cardColorRepository;
-
-  private final LevelRepository levelRepository;
 
   @Override
   public Long updateUserProfile(final Authentication connectedUser,
