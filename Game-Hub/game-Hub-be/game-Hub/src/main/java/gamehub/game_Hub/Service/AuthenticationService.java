@@ -13,11 +13,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import gamehub.game_Hub.Module.CardColor;
+import gamehub.game_Hub.Module.Flags.CommunityFlagType;
+import gamehub.game_Hub.Module.Flags.StoreFlagType;
+import gamehub.game_Hub.Module.Flags.UserCommunityFlag;
+import gamehub.game_Hub.Module.Flags.UserStoreFlag;
 import gamehub.game_Hub.Module.Level;
 import gamehub.game_Hub.Module.User.Location;
 import gamehub.game_Hub.Module.User.Status;
 import gamehub.game_Hub.Repository.CardColorRepository;
+import gamehub.game_Hub.Repository.CommunityFlagTypeRepository;
 import gamehub.game_Hub.Repository.LevelRepository;
+import gamehub.game_Hub.Repository.StoreFlagTypeRepository;
+import gamehub.game_Hub.Repository.UserCommunityFlagRepository;
+import gamehub.game_Hub.Repository.UserStoreFlagRepository;
 import gamehub.game_Hub.Request.AuthenticationRequest;
 import gamehub.game_Hub.Response.AuthenticationResponse;
 import gamehub.game_Hub.Request.ForgotPasswordRequest;
@@ -57,6 +65,14 @@ public class AuthenticationService {
 
   private final LevelRepository levelRepository;
 
+  private final StoreFlagTypeRepository storeFlagTypeRepository;
+
+  private final UserStoreFlagRepository userStoreFlagRepository;
+
+  private final CommunityFlagTypeRepository communityFlagTypeRepository;
+
+  private final UserCommunityFlagRepository userCommunityFlagRepository;
+
   @Value("${application.mailing.frontend.login-url}")
   private String logInUrl;
 
@@ -64,10 +80,11 @@ public class AuthenticationService {
     var userRole = roleRepository.findByName("USER")
         .orElseThrow(() -> new IllegalStateException("Role USER was not initialized"));
 
-    CardColor defaultColor = cardColorRepository.findById(1L).orElseThrow(() -> new EntityNotFoundException("Card Color was not initialized"));
+    CardColor defaultColor = cardColorRepository.findById(1L)
+        .orElseThrow(() -> new EntityNotFoundException("Card Color was not initialized"));
 
-    Level defaultLevel = levelRepository.findById(1L).orElseThrow(() -> new EntityNotFoundException("Level was not initialized"));
-
+    Level defaultLevel = levelRepository.findById(1L)
+        .orElseThrow(() -> new EntityNotFoundException("Level was not initialized"));
 
     var user = User.builder()
         .firstName(request.getFirstName())
@@ -87,13 +104,41 @@ public class AuthenticationService {
         .build();
 
     userRepository.save(user);
+    setUserDefaultFlags(user);
     sendWelcomeEmail(user);
+  }
+
+  private void setUserDefaultFlags(final User user) {
+    for (StoreFlagType flagType : storeFlagTypeRepository.findAll()) {
+      UserStoreFlag flag = new UserStoreFlag();
+      flag.setUser(user);
+      flag.setUserFlagType(flagType);
+      flag.setValue(false);
+      userStoreFlagRepository.save(flag);
+    }
+
+    for (CommunityFlagType flagType : communityFlagTypeRepository.findAll()) {
+      UserCommunityFlag comflag = new UserCommunityFlag();
+      comflag.setUser(user);
+      comflag.setUserFlagType(flagType);
+      switch (flagType.getFlagCode()) {
+        case "FRIEND_REQUEST":
+          comflag.setValue("Every one");
+          break;
+        case "GROUP_INVITES", "PLAY_TOGETHER_INVITES", "PROFILE_VISIBILITY", "SEND_MESSAGES":
+          comflag.setValue("Friends");
+          break;
+        default: throw new IllegalArgumentException("Unknown flag code: " + flagType.getFlagCode());
+      }
+      userCommunityFlagRepository.save(comflag);
+    }
+
   }
 
   public String getRandomColor() {
 
     final Random random = new Random();
-    final String [] letters = "0123456789ABCDEF".split("");
+    final String[] letters = "0123456789ABCDEF".split("");
     String color = "#";
     for (int i = 0; i < 6; i++) {
       color += letters[Math.round(random.nextFloat() * 15)];

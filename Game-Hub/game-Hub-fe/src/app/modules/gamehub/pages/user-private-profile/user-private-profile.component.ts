@@ -15,6 +15,9 @@ import {AuthenticationRequest} from '../../../../services/models/authentication-
 import {CardColorControllerService} from '../../../../services/services/card-color-controller.service';
 import {CardPreviewComponent} from '../../components/card-preview/card-preview.component';
 import {RefreshService} from '../../../../services/fn/refresh-service/refresh-service';
+import {MatSlideToggle} from '@angular/material/slide-toggle';
+import {FlagsControllerService} from '../../../../services/services/flags-controller.service';
+import {CommunityFlagsResponse} from '../../../../services/models/community-flags-response';
 
 @Component({
   selector: 'app-user-profile',
@@ -24,7 +27,8 @@ import {RefreshService} from '../../../../services/fn/refresh-service/refresh-se
     NgClass,
     FormsModule,
     NgStyle,
-    CardPreviewComponent
+    CardPreviewComponent,
+    MatSlideToggle
   ],
   templateUrl: './user-private-profile.component.html',
   styleUrl: './user-private-profile.component.css'
@@ -45,11 +49,13 @@ export class UserPrivateProfileComponent implements OnInit {
     private http: HttpClient,
     private authenticationService: AuthenticationService,
     private cardColorService: CardColorControllerService,
-    private refreshService: RefreshService
+    private refreshService: RefreshService,
+    private storeFlagsService: FlagsControllerService
   ) {
   }
 
   activeTab: 'basic' | 'profile' | 'security' = 'basic';
+  activeSubTabs: 'account' | 'community' | 'store' = 'community';
 
   profilePicture: File | null = null;
   previewImage: string | undefined;
@@ -73,6 +79,7 @@ export class UserPrivateProfileComponent implements OnInit {
   allLocations: { name: string; iconPath: string }[] = [];
   selectedGenres: Set<number> = new Set<number>()
   favoriteGenreIds: number[] = [];
+  allStoreFlags: { flagName: string; description: string }[] = [];
   successMessage: string | null = null;
   genreResponse: any[] = [];
   cardColorsResponse: any [] = [];
@@ -95,7 +102,7 @@ export class UserPrivateProfileComponent implements OnInit {
   };
   userRequest: UserUpdateRequest = {
     email: this.userResponse.email,
-    cardColorId : this.selectedColorId!
+    cardColorId: this.selectedColorId!
   };
 
   bioUpdateRequest: UserUpdateRequest = {
@@ -239,7 +246,7 @@ export class UserPrivateProfileComponent implements OnInit {
       next: (colors) => {
         this.cardColorsResponse = colors;
         console.log(colors)
-    }
+      }
     })
   }
 
@@ -354,6 +361,8 @@ export class UserPrivateProfileComponent implements OnInit {
     this.isEditProfileModalOpen = true;
     this.getLocations();
     this.getColorsForCard();
+    this.getStoreFlags();
+    this.getCommunityFlags()
   }
 
   getLocations() {
@@ -452,6 +461,7 @@ export class UserPrivateProfileComponent implements OnInit {
   }
 
   showPreviewColors = false
+
   showPreview() {
     this.showPreviewColors = true;
   }
@@ -473,5 +483,46 @@ export class UserPrivateProfileComponent implements OnInit {
 
   selectLocation(name: any) {
     this.userRequest.location = name;
+  }
+
+  getStoreFlags() {
+    this.storeFlagsService.getAllStoreFlags().subscribe({
+      next: (res) => {
+        console.log(res)
+        this.allStoreFlags = res.map(flag => ({
+          flagName: flag.name!,
+          description: flag.description!
+        }))
+      }
+    })
+  }
+
+  friendRequestOptions: string[] = [];
+  sendMessageOptions: string[] = [];
+  profileVisibilityOptions: string[] = [];
+  groupInvitesOptions: string[] = [];
+  playTogetherInvitesOptions: string[] = [];
+
+  getCommunityFlags() {
+    this.storeFlagsService.getAllCommunityFlags().subscribe(res => {
+      res.forEach(flag => {
+        if (flag.flagKey === 'FRIEND_REQUEST') {
+          this.friendRequestOptions = flag.options!
+        }
+        if (flag.flagKey === 'SEND_MESSAGES') {
+          this.sendMessageOptions = flag.options!
+        }
+        if (flag.flagKey === 'PROFILE_VISIBILITY') {
+          this.profileVisibilityOptions = flag.options!
+        }
+        if (flag.flagKey === 'GROUP_INVITES') {
+          this.groupInvitesOptions = flag.options!
+        }
+        if (flag.flagKey === 'PLAY_TOGETHER') {
+          this.playTogetherInvitesOptions = flag.options!
+        }
+      })
+      }
+    )
   }
 }

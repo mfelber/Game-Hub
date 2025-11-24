@@ -1350,6 +1350,52 @@
         }
       }
     },
+    "/flags/get/store/flags": {
+      "get": {
+        "tags": [
+          "flags-controller"
+        ],
+        "operationId": "getAllStoreFlags",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StoreFlagsResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/flags/get/community/flags": {
+      "get": {
+        "tags": [
+          "flags-controller"
+        ],
+        "operationId": "getAllCommunityFlags",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CommunityFlagsResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/community/get/all/users": {
       "get": {
         "tags": [
@@ -2563,6 +2609,31 @@
               "OFFLINE",
               "AWAY"
             ]
+          }
+        }
+      },
+      "StoreFlagsResponse": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "CommunityFlagsResponse": {
+        "type": "object",
+        "properties": {
+          "flagKey": {
+            "type": "string"
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       },
