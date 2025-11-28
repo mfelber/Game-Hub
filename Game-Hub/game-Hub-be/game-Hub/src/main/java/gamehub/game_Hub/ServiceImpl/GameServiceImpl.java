@@ -1,6 +1,10 @@
 package gamehub.game_Hub.ServiceImpl;
 
+import static gamehub.game_Hub.Module.User.AccountType.CHILD;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,9 +20,11 @@ import gamehub.game_Hub.Mapper.GameMapper;
 import gamehub.game_Hub.Module.Badge;
 import gamehub.game_Hub.Module.Game;
 import gamehub.game_Hub.Module.Level;
+import gamehub.game_Hub.Module.User.AccountType;
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Repository.BadgeRepository;
 import gamehub.game_Hub.Repository.LevelRepository;
+import gamehub.game_Hub.Repository.UserStoreFlagRepository;
 import gamehub.game_Hub.Repository.game.GameRepository;
 import gamehub.game_Hub.Repository.user.UserRepository;
 import gamehub.game_Hub.File.FileStorageService;
@@ -42,9 +48,9 @@ public class GameServiceImpl implements GameService {
 
   private final BadgeRepository badgeRepository;
 
-  private final LevelRepository levelRepository;
-
   private final UserProgressService userProgressService;
+
+  private final UserStoreFlagRepository userStoreFlagRepository;
 
   @Override
   public Long save(final GameRequest gameRequest) {
@@ -69,23 +75,45 @@ public class GameServiceImpl implements GameService {
   }
 
   @Override
-  public PageResponse<GameResponse> findAllGames(final int page, final int size) {
+  public PageResponse<GameResponse> findAllGames(Authentication connectedUser, final int page, final int size) {
     Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
 
-    Page<Game> games = gameRepository.findAll(pageable);
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+    List<String> excludeRatings = new ArrayList<>();
+    if (user.getAccountType() == CHILD) {
+      excludeRatings.add("PEGI 16");
+      excludeRatings.add("PEGI 18");
+    } else {
+      if (userStoreFlagRepository.existsByUser_IdAndUserFlagType_FlagCodeAndValueTrue(user.getId(), "PEGI_16")) {
+        excludeRatings.add("PEGI 16");
+      }
+
+      if (userStoreFlagRepository.existsByUser_IdAndUserFlagType_FlagCodeAndValueTrue(user.getId(), "PEGI_18")) {
+        excludeRatings.add("PEGI 18");
+      }
+    }
+
+    Page<Game> games;
+    if (excludeRatings.isEmpty()) {
+      games = gameRepository.findAll(pageable);
+    } else {
+      games = gameRepository.findAllByAgeRating_AgeRatingNotIn(excludeRatings, pageable);
+    }
 
     List<GameResponse> gameResponse = games.stream().map(gameMapper::toGameResponse).toList();
 
-    return new PageResponse<>(
-        gameResponse,
-        games.getNumber(),
-        games.getSize(),
-        games.getTotalElements(),
-        games.getTotalPages(),
-        games.isFirst(),
-        games.isLast()
-    );
-
+      return new PageResponse<>(
+          gameResponse,
+          games.getNumber(),
+          games.getSize(),
+          games.getTotalElements(),
+          games.getTotalPages(),
+          games.isFirst(),
+          games.isLast()
+      );
   }
 
   @Transactional
@@ -113,7 +141,6 @@ public class GameServiceImpl implements GameService {
     return game.getId();
   }
 
-
   public void addGameCollectorBadge(User user) {
 
     int gameLibrarySize = user.getLibrary().size();
@@ -121,13 +148,13 @@ public class GameServiceImpl implements GameService {
 
     if (gameLibrarySize >= 101) {
       badgeToAdd = badgeRepository.findByName("GAME_COLLECTOR_LEVEL_5");
-    } else if (gameLibrarySize >= 51){
+    } else if (gameLibrarySize >= 51) {
       badgeToAdd = badgeRepository.findByName("GAME_COLLECTOR_LEVEL_4");
-    } else if (gameLibrarySize >= 31){
+    } else if (gameLibrarySize >= 31) {
       badgeToAdd = badgeRepository.findByName("GAME_COLLECTOR_LEVEL_3");
-    } else if (gameLibrarySize >= 16){
+    } else if (gameLibrarySize >= 16) {
       badgeToAdd = badgeRepository.findByName("GAME_COLLECTOR_LEVEL_2");
-    } else if (gameLibrarySize >= 4){
+    } else if (gameLibrarySize >= 4) {
       badgeToAdd = badgeRepository.findByName("GAME_COLLECTOR_LEVEL_1");
     }
 

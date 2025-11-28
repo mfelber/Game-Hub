@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Game-Hub Child Account</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background-color: #f7f8fa;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      background-color: #ffffff;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    }
+
+    .header {
+      text-align: center;
+      border-bottom: 2px solid #007bff;
+      padding-bottom: 15px;
+      margin-bottom: 25px;
+    }
+
+    .header h1 {
+      color: #007bff;
+      margin: 0;
+      font-size: 26px;
+      letter-spacing: 0.5px;
+    }
+
+    .content {
+      color: #444444;
+      line-height: 1.6;
+      font-size: 15px;
+    }
+
+    .content p {
+      margin: 0 0 15px;
+    }
+
+    .button {
+      display: inline-block;
+      margin-top: 25px;
+      padding: 14px 24px;
+      color: #ffffff !important;
+      background-color: #007bff;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .button:hover {
+      background-color: #0056b3;
+    }
+
+    .footer {
+      margin-top: 35px;
+      font-size: 12px;
+      text-align: center;
+      color: #aaaaaa;
+      border-top: 1px solid #eeeeee;
+      padding-top: 15px;
+    }
+
+    .logo {
+      display: block;
+      margin: 0 auto 20px;
+      width: 70px;
+    }
+
+    .section-title {
+      font-size: 16px;
+      margin: 20px 0 10px;
+      font-weight: 600;
+      color: #007bff;
+    }
+
+    ul {
+      margin-top: 5px;
+      padding-left: 20px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <img src="cid:joystickImage" alt="Game Hub" class="logo">
+    <h1>Your Child Account is Ready!</h1>
+  </div>
+
+  <div class="content">
+    <p>Hello <strong th:text="${username}">User</strong>,</p>
+
+    <p>Your account on <strong>Game-Hub</strong> has been successfully registered as a <strong>Child Account</strong>. Below you’ll find important information about what this means and how your account works.</p>
+
+    <p class="section-title">What is a Child Account?</p>
+    <p>A Child Account is designed to provide a safe and controlled environment for younger users. You can enjoy playing games, discovering new titles, and connecting with friends — all with additional safety measures enabled.</p>
+
+    <p class="section-title">Parental Verification Required</p>
+    <p>Certain sensitive actions require the approval of your parent or guardian. Whenever you try to change specific settings, your parent will receive a <strong>verification code</strong>, which must be entered to confirm the change.</p>
+
+    <p>The verification code is required when attempting to:</p>
+    <ul>
+      <li>Enable 16+ or 18+ content</li>
+      <li>Modify privacy or interaction settings:
+        <ul>
+          <li>Friend requests</li>
+          <li>Messages</li>
+          <li>Group invites</li>
+          <li>Play Together invites</li>
+        </ul>
+      </li>
+      <li>Make any purchase or transaction</li>
+    </ul>
+
+    <p>You are still free to change these settings at any time — but a parent must approve them first.</p>
+
+    <p class="section-title">Switching to an Adult Account</p>
+    <p>Your account can be upgraded to an <strong>Adult Account</strong> in the future. After switching:</p>
+
+    <ul>
+      <li>No parental verification will be needed</li>
+      <li>No approval emails will be sent to your parent</li>
+      <li>You will have full control over your account, settings, and purchases</li>
+    </ul>
+
+    <p>This upgrade can be done at any time once eligibility requirements are met.</p>
+
+    <div style="text-align:center;">
+      <a th:href="${loginUrl}" href="#" class="button">Go to Your Account</a>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <p>&copy; 2025 Game-Hub. All rights reserved.</p>
+    <p>This is an automated message, please do not reply.</p>
+  </div>
+</div>
+</body>
+</html>
