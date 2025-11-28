@@ -2060,10 +2060,16 @@
           "email": {
             "type": "string"
           },
+          "parentEmail": {
+            "type": "string"
+          },
           "password": {
             "maxLength": 2147483647,
             "minLength": 6,
             "type": "string"
+          },
+          "childAccount": {
+            "type": "boolean"
           }
         }
       },

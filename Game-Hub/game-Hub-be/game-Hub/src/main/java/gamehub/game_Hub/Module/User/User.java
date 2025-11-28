@@ -96,6 +96,13 @@ public class User implements UserDetails, Principal {
 
   private Long xp;
 
+  @Enumerated(EnumType.STRING)
+  @Column(name = "account_type")
+  private AccountType accountType;
+
+  @Column(name = "parent_email")
+  private String parentEmail;
+
   @Column(name = "is_banned")
   private boolean isBanned;
 

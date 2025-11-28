@@ -1,10 +1,11 @@
 import {Component, OnInit, Inject, PLATFORM_ID} from '@angular/core';
 import {isPlatformBrowser, CommonModule} from '@angular/common';
-import {RegistrationRequest} from '../../services/models/registration-request';
 import {NgForOf, NgIf, NgOptimizedImage} from '@angular/common';
 import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AuthenticationService} from '../../services/services/authentication.service';
 import {Router} from '@angular/router';
+import {RegistrationRequest} from '../../services/models/registration-request';
+
 
 @Component({
   selector: 'app-register',
@@ -36,10 +37,12 @@ export class RegisterComponent implements OnInit {
   }
 
   registerRequest: RegistrationRequest = {
-    email: '', firstName: '', lastName: '', password: '', username: ''
+    email: '', firstName: '', lastName: '', password: '', username: '', childAccount: null!, parentEmail: ''
   };
+
   errorMessage: string = '';
   successMessage = '';
+  childAccount = false;
 
   register() {
     this.errorMessage = '';
@@ -68,6 +71,7 @@ export class RegisterComponent implements OnInit {
   }
 
   private registerUser() {
+
     this.authenticationService.register({
       body: this.registerRequest
     }).subscribe({
@@ -78,6 +82,8 @@ export class RegisterComponent implements OnInit {
         this.registerRequest.username = ''
         this.registerRequest.email = ''
         this.registerRequest.password = ''
+        this.registerRequest.parentEmail = ''
+        this.registerRequest.childAccount = null!
 
         setTimeout(() => {
           this.router.navigate(['login']);
@@ -94,7 +100,12 @@ export class RegisterComponent implements OnInit {
   }
 
   validateRegister(): boolean {
-    const {email, firstName, lastName, username, password} = this.registerRequest;
+    const {email, firstName, lastName, username, password, parentEmail} = this.registerRequest;
+
+    if (this.childAccount && !parentEmail?.trim()) {
+      this.errorMessage = 'Please enter parent email'
+      return false;
+    }
 
     if (!firstName?.trim() && !lastName?.trim() && !email?.trim() && !password?.trim() && !username?.trim()) {
       this.errorMessage = 'Please fill in all required fields';
@@ -135,5 +146,13 @@ export class RegisterComponent implements OnInit {
 
     this.errorMessage = '';
     return true;
+  }
+
+  createChildAccount() {
+    if (this.childAccount) {
+      this.childAccount = false
+    } else {
+      this.childAccount = true;
+    }
   }
 }

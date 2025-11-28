@@ -1,5 +1,8 @@
 package gamehub.game_Hub.Service;
 
+import static gamehub.game_Hub.Module.User.AccountType.ADULT;
+import static gamehub.game_Hub.Module.User.AccountType.CHILD;
+
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -86,13 +89,51 @@ public class AuthenticationService {
     Level defaultLevel = levelRepository.findById(1L)
         .orElseThrow(() -> new EntityNotFoundException("Level was not initialized"));
 
+    if (request.isChildAccount()){
+      registerChildUser(request);
+    } else {
+      var user = User.builder()
+          .firstName(request.getFirstName())
+          .lastName(request.getLastName())
+          .username(request.getUsername())
+          .email(request.getEmail())
+          .password(passwordEncoder.encode(request.getPassword()))
+          .roles(List.of(userRole))
+          .status(Status.OFFLINE)
+          .location(Location.UNKNOWN)
+          .profileColor(getRandomColor())
+          .bannerType("PREDEFINED")
+          .banner("/assets/banners/banner_1.jpg")
+          .cardColor(defaultColor)
+          .xp(0L)
+          .level(defaultLevel)
+          .accountType(ADULT)
+          .build();
+
+      userRepository.save(user);
+      setAdultAccountFlags(user);
+      sendWelcomeEmail(user);
+    }
+  }
+
+  public void registerChildUser(final @Valid RegistrationRequest request) throws MessagingException {
+    var UserRole = roleRepository.findByName("USER")
+        .orElseThrow(() -> new IllegalStateException("Role USER was not initialized"));
+
+    CardColor defaultColor = cardColorRepository.findById(1l)
+        .orElseThrow(() -> new EntityNotFoundException("Card Color was not initialized"));
+
+    Level defaultLevel = levelRepository.findById(1L)
+        .orElseThrow(() -> new EntityNotFoundException("Level was not initialized"));
+
     var user = User.builder()
         .firstName(request.getFirstName())
         .lastName(request.getLastName())
         .username(request.getUsername())
         .email(request.getEmail())
+        .parentEmail(request.getParentEmail())
         .password(passwordEncoder.encode(request.getPassword()))
-        .roles(List.of(userRole))
+        .roles(List.of(UserRole))
         .status(Status.OFFLINE)
         .location(Location.UNKNOWN)
         .profileColor(getRandomColor())
@@ -101,14 +142,38 @@ public class AuthenticationService {
         .cardColor(defaultColor)
         .xp(0L)
         .level(defaultLevel)
+        .accountType(CHILD)
         .build();
 
     userRepository.save(user);
-    setUserDefaultFlags(user);
+    setChildAccountFlags(user);
     sendWelcomeEmail(user);
   }
 
-  private void setUserDefaultFlags(final User user) {
+  private void setChildAccountFlags(final User user) {
+    for (StoreFlagType flagType : storeFlagTypeRepository.findAll()) {
+      UserStoreFlag storeFlag = new UserStoreFlag();
+      storeFlag.setUser(user);
+      storeFlag.setUserFlagType(flagType);
+      storeFlag.setValue(true);
+      userStoreFlagRepository.save(storeFlag);
+    }
+
+    for (CommunityFlagType flagType : communityFlagTypeRepository.findAll()) {
+      UserCommunityFlag communityFlag = new UserCommunityFlag();
+      communityFlag.setUser(user);
+      communityFlag.setUserFlagType(flagType);
+      switch (flagType.getFlagCode()){
+        case "FRIEND_REQUEST", "GROUP_INVITES", "PLAY_TOGETHER_INVITES", "PROFILE_VISIBILITY", "SEND_MESSAGES":
+          communityFlag.setValue("No one");
+          break;
+        default: throw new IllegalArgumentException("Unknown flag code: " + flagType.getFlagCode());
+      }
+      userCommunityFlagRepository.save(communityFlag);
+    }
+  }
+
+  private void setAdultAccountFlags(final User user) {
     for (StoreFlagType flagType : storeFlagTypeRepository.findAll()) {
       UserStoreFlag flag = new UserStoreFlag();
       flag.setUser(user);
@@ -128,7 +193,8 @@ public class AuthenticationService {
         case "GROUP_INVITES", "PLAY_TOGETHER_INVITES", "PROFILE_VISIBILITY", "SEND_MESSAGES":
           comflag.setValue("Friends");
           break;
-        default: throw new IllegalArgumentException("Unknown flag code: " + flagType.getFlagCode());
+        default:
+          throw new IllegalArgumentException("Unknown flag code: " + flagType.getFlagCode());
       }
       userCommunityFlagRepository.save(comflag);
     }
@@ -189,9 +255,17 @@ public class AuthenticationService {
   }
 
   private void sendWelcomeEmail(final User user) throws MessagingException {
+
+    if (user.getAccountType() == CHILD){
+      emailService.sendWelcomeEmail(user.getParentEmail(),
+          user.getName(),
+          EmailTemplate.WELCOME_EMAIL_CHILD,
+          logInUrl, "Welcome to GameHub!");
+    }
+
     emailService.sendWelcomeEmail(user.getEmail(),
         user.getName(),
-        EmailTemplate.WELCOME_EMAIL,
+        EmailTemplate.WELCOME_EMAIL_ADULT,
         logInUrl, "Welcome to GameHub!");
   }
 

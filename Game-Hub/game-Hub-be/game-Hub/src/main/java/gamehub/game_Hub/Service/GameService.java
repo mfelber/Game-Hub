@@ -14,7 +14,7 @@ public interface GameService {
 
   GameResponse findById(Long gameId);
 
-  PageResponse<GameResponse> findAllGames(int page, int size);
+  PageResponse<GameResponse> findAllGames(Authentication connectedUser, int page, int size);
 
   Long buyGame(Long gameId, Authentication connectedUser);
 
