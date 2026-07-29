@@ -135,7 +135,7 @@
         ></span>
 
         <button id="dropdownAvatarNameButton" data-dropdown-toggle="dropdownAvatarName"
-                class="flex items-center text-sm pe-1 font-medium text-gray-900 rounded-full hover:text-blue-600 dark:hover:text-blue-500 md:me-0 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-white"
+                class="flex items-center text-sm pe-1 font-medium text-white rounded-full md:me-0 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-white"
                 type="button">
           <span class="sr-only">Open user menu</span>
           {{ userResponse.username }}
@@ -160,23 +160,26 @@
                  class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Profile</a>
               <div class="hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white flex gap-1 px-4 py-3">
                 Status:
-                <select
-                  class="appearance-none text-white bg-transparent hover:bg-gray-700/40 hover:text-white
-                  transition duration-300 text-[13px] cursor-pointer w-full"
-                  (change)="onStatusChange($event)"
-                >
-                  <option [value]="userResponse.status" selected class="bg-gray-800 text-white">
-                    {{ userResponse.status }}
-                  </option>
-                  <option
-                    *ngFor="let status of getAvailableStatuses()"
-                    [value]="status"
-                    class="bg-gray-800 text-white"
+                <div class="relative inline-block">
+                  <select
+                    class="appearance-none bg-transparent pr-6 text-[13px] cursor-pointer"
+                    (change)="onStatusChange($event)"
                   >
-                    {{ status }}
-                  </option>
-                </select>
+                    <option [value]="userResponse.status" selected>
+                      {{ userResponse.status }}
+                    </option>
 
+                    <option
+                      *ngFor="let status of getAvailableStatuses()"
+                      [value]="status"
+                    >
+                      {{ status }}
+                    </option>
+                  </select>
+                  <i
+                    class="fa-solid fa-angle-down absolute right-1 top-1/2 -translate-y-1/2 pointer-events-none text-gray-900"
+                  ></i>
+                </div>
               </div>
             </li>
           </ul>

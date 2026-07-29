@@ -19,6 +19,7 @@ export class GameDetailsComponent implements OnInit {
   game: any;
   gameIsOwned = false;
   gameInWishList = false;
+  activeTab: 'details' | 'system' | 'dlc'| 'friends' = 'details';
 
   constructor(
     private router: ActivatedRoute,
