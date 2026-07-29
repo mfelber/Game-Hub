@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="game_hub_db@localhost" uuid="16909127-3ff2-4a5d-9d80-6668aceaa0bd">
+    <data-source source="LOCAL" name="game_hub_db@localhost" uuid="4ba65a63-f1bc-48d3-94ef-d58b1126de4f">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <imported>true</imported>
