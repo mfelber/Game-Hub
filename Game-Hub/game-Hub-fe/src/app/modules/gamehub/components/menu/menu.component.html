@@ -1,116 +1,54 @@
 <div class="flex w-screen h-screen">
-  <div
-    class="w-[18.2em] bg-[#1E2A4A]/60 backdrop-blur-md px-3 pt-10 pb-5 flex flex-col shadow-lg border-r border-white/10">
-    <div class="text-[2.75rem] whitespace-nowrap text-center font-bold text-white tracking-wide">
+  <!--  <div>-->
+  <!--    class="w-[18.2em] bg-[#151923] px-3 pt-10 pb-5 flex flex-col">-->
+  <!--    <div class="text-[2.75rem] whitespace-nowrap text-center font-bold text-white tracking-wide">-->
+  <!--      <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-purple-400">Game-Hub</span>-->
+  <!--      <div class="border-b border-white/30 w-60 mt-5 mx-auto"></div>-->
+  <!--    </div>-->
+
+  <aside class="sidebar">
+    <div class="logo">
       <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-purple-400">Game-Hub</span>
-      <div class="border-b border-white/30 w-60 mt-5 mx-auto"></div>
     </div>
 
-    <!-- Store -->
-    <div class="menu-item text-[20px] mt-6 px-4 flex items-center gap-3"
-         routerLink="/gamehub" [class.active]="isStoreActive">
-      <i class="fa-solid fa-shopping-cart"></i>
-      <a>Store</a>
-    </div>
+    <nav>
 
-    <!-- Library -->
-    <div class="menu-item text-[20px] mt-4 px-4 flex items-center gap-3"
-         routerLink="/gamehub/library" [class.active]="isLibraryActive">
-      <i class="fa-solid fa-gamepad"></i>
-      <a>Library</a>
-    </div>
+      <p>STORE</p>
+      <a routerLink="/gamehub" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"> 🏪 Store </a>
+      <a routerLink="/gamehub/library" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"> 🎮
+        Library </a>
+      <a routerLink="/gamehub/wishlist" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"> ❤️
+        Wishlist </a>
+      <!--        🌐-->
+      <p>COMMUNITY</p>
+      <a routerLink="/gamehub/community" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">🌐
+        Community </a>
+      <a routerLink="/gamehub/friends" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">👥
+        Friends </a>
+      <a *ngIf="friendRequestCount === 0" routerLink="/gamehub/friend-requests" routerLinkActive="active"
+         [routerLinkActiveOptions]="{ exact: true }"> 📩 Friend Requests </a>
 
-    <!-- Wishlist -->
-    <div class="menu-item text-[20px] mt-4 px-4 flex items-center gap-3"
-         routerLink="/gamehub/wishlist" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-      <i class="fa-solid fa-heart"></i>
-      <a>Wishlist</a>
-    </div>
+      <a *ngIf="friendRequestCount > 0"
+         class="menu-item mt-4 px-4 flex items-center gap-3
+                     cursor-pointer transition"
+         routerLink="/gamehub/friend-requests" routerLinkActive="active"> 📩 Friend Requests
 
-    <!-- Community -->
-    <div class="menu-item text-[20px] mt-4 px-4 flex items-center gap-3"
-         routerLink="/gamehub/community" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-      <i class="fa-solid fa-earth"></i>
-      <a>Community</a>
-    </div>
-
-    <div class="border-b border-white/20 w-60 mt-6 mx-auto"></div>
-
-    <!-- Discounts -->
-    <div class="menu-item text-[20px] mt-4 px-4 flex items-center gap-3"
-         routerLink="/gamehub/discounts" routerLinkActive="active">
-      <i class="fa-solid fa-percent"></i>
-      <a>Discounts</a>
-    </div>
-
-    <!--    TODO WALLET ADD FUNDS,..-->
-    <div class="menu-item text-[20px] mt-4 px-4 flex items-center gap-3"
-         routerLink="/gamehub/wallet" routerLinkActive="active">
-      <i class="fa-solid fa-wallet"></i>
-      <a>Wallet</a>
-    </div>
-
-
-    <div *ngIf="friendRequestCount > 0"
-         class="menu-item text-[20px] mt-4 px-4 flex items-center gap-3
-           cursor-pointer transition"
-         routerLink="/gamehub/friend-requests" routerLinkActive="active">
-      <i class="fa-solid fa-user-plus"></i>
-      <a>Friend Requests
-
+        <span class="absolute top-0 right-7 -mt-1 -mr-1 bg-red-600 text-white text-xs font-bold
+                         rounded-full w-5 h-5 flex items-center justify-center">
+              {{ friendRequestCount }}
+            </span>
       </a>
 
-      <span class="absolute top-0 right-7 -mt-1 -mr-1 bg-red-600 text-white text-xs font-bold
-               rounded-full w-5 h-5 flex items-center justify-center">
-    {{ friendRequestCount }}
-  </span>
-    </div>
+      <p>Account</p>
+      <a routerLink="/gamehub/wallet" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">💰
+        Wallet </a>
+      <a routerLink="/gamehub/user/me" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">⚙
+        Settings </a>
 
-    <!-- Friend Requests -->
-    <div *ngIf="friendRequestCount === 0" class="menu-item text-[20px] mt-4 px-4 flex items-center gap-3"
-         routerLink="/gamehub/friend-requests" routerLinkActive="active">
-      <i class="fa-solid fa-user-plus"></i>
-      <a>Friend Requests</a>
-    </div>
+    </nav>
 
-    <div class="border-b border-white/20 w-60 mt-6 mx-auto"></div>
-
-    <!-- Friends -->
-    <div class="menu-item mt-auto text-[20px] px-4 flex items-center gap-3"
-         routerLink="/gamehub/friends" routerLinkActive="active">
-      <i class="fa-solid fa-users"></i>
-      <a>Friends</a>
-    </div>
-  </div>
-
-
-  <div class="grow min-h-screen">
-    <div class="fixed top-0 left-[18.2em] right-2 z-10 bg-transparent backdrop-blur-sm pt-3 pb-2">
-      <form class="flex justify-end items-center gap-4">
-        <div *ngIf="!_isGameDetailsActive" class="relative w-1/4 me-4">
-          <input
-            type="text"
-            id="search"
-            class="block w-full pl-12 p-2.5 text-sm text-white bg-transparent rounded-lg placeholder-white border border-[#76849D]"
-            placeholder="Search..."
-            required
-          />
-
-          <div class="absolute left-0 top-0 h-full px-3 text-white flex items-center justify-center">
-            <i class="fas fa-search"></i>
-            <span class="sr-only">Search</span>
-          </div>
-
-        </div>
-
-        <div class="flex items-center justify-center w-10 h-10">
-          <i class="fa-solid fa-shopping-cart text-2xl cursor-pointer" (click)="goToCart()"></i>
-        </div>
-        <div class="flex items-center justify-center w-10 h-10">
-          <i class="fa-solid fa-bell text-2xl cursor-pointer" (click)="showNotifications()"></i>
-
-        </div>
-
+    <div class="profile cursor-pointer" routerLink="/gamehub/user/me">
+      <div class="avatar">
         <img *ngIf="!userHasProfilePicture"
              src="../../../../../assets/profilePicture/default_profile_picture.svg"
              class="w-13 h-13 rounded-xl border-1 border-black object-cover"
@@ -124,73 +62,265 @@
              width="1"
              height="1"
         />
+      </div>
+      <div>
+        <h4>{{ userResponse.username }}</h4>
 
-        <span
-          class="inline-block w-3 h-3 rounded-full"
-          [ngClass]="{
+
+        <div class="relative">
+          <button class="flex items-center gap-2 text-sm cursor-pointer" (click)="toggleStatusMenu($event)">
+<span
+  class="w-3 h-3 rounded-full"
+  [ngClass]="{
             'bg-green-500': statusResponse.status === 'ONLINE',
             'bg-gray-400': statusResponse.status === 'OFFLINE',
             'bg-yellow-400': statusResponse.status === 'AWAY'
-          }"
-        ></span>
+        }">
+    </span>
+            <span
+              [ngClass]="{
+                'text-green-500': statusResponse.status === 'ONLINE',
+                'text-yellow-400': statusResponse.status === 'AWAY',
+                'text-gray-400': statusResponse.status === 'OFFLINE'
+            }">
 
-        <button id="dropdownAvatarNameButton" data-dropdown-toggle="dropdownAvatarName"
-                class="flex items-center text-sm pe-1 font-medium text-white rounded-full md:me-0 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-white"
-                type="button">
-          <span class="sr-only">Open user menu</span>
-          {{ userResponse.username }}
-          <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-               viewBox="0 0 10 6">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="m1 1 4 4 4-4"/>
-          </svg>
-        </button>
+            {{statusResponse.status}}
 
-        <!-- Dropdown menu -->
-        <div id="dropdownAvatarName" #dropdownAvatarName
-             class="z-10 hidden bg-white divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700 dark:divide-gray-600">
-          <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
-            <div class="truncate">{{ userResponse.firstName + " " + userResponse.lastName }}</div>
-            <div class="font-medium ">{{ userResponse.email }}</div>
+        </span>
+            <i class="fa-solid fa-chevron-down text-xs text-gray-400"></i>
+          </button>
+
+          <div
+            *ngIf="statusMenuOpen"
+            class="absolute left-0 bottom-full mt-2 w-32 bg-[#1b2230] rounded-lg shadow-lg p-2 z-50">
+
+
+            <button
+              *ngFor="let status of statuses"
+              class="flex items-center gap-2 w-full px-3 py-2 rounded hover:bg-[#26334a]"
+              (click)="changeStatus(status); $event.stopPropagation()">
+
+
+            <span
+              class="w-2.5 h-2.5 rounded-full"
+              [ngClass]="{
+                    'bg-green-500': status === 'ONLINE',
+                    'bg-yellow-400': status === 'AWAY',
+                    'bg-gray-400': status === 'OFFLINE'
+                }">
+            </span>
+
+
+              <span>
+                {{status}}
+            </span>
+
+            </button>
+
+
           </div>
-          <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
-              aria-labelledby="dropdownInformdropdownAvatarNameButtonationButton">
-            <li>
-              <a aria-current="page" (click)="closeDropdown()" routerLink="/gamehub/user/me"
-                 class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Profile</a>
-              <div class="hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white flex gap-1 px-4 py-3">
-                Status:
-                <div class="relative inline-block">
-                  <select
-                    class="appearance-none bg-transparent pr-6 text-[13px] cursor-pointer"
-                    (change)="onStatusChange($event)"
-                  >
-                    <option [value]="userResponse.status" selected>
-                      {{ userResponse.status }}
-                    </option>
 
-                    <option
-                      *ngFor="let status of getAvailableStatuses()"
-                      [value]="status"
-                    >
-                      {{ status }}
-                    </option>
-                  </select>
-                  <i
-                    class="fa-solid fa-angle-down absolute right-1 top-1/2 -translate-y-1/2 pointer-events-none text-gray-900"
-                  ></i>
-                </div>
-              </div>
-            </li>
-          </ul>
-          <div class="py-2">
-            <a (click)="logoutUser()" href="#"
-               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign
-              out</a>
-          </div>
         </div>
 
-      </form>
+      </div>
+
     </div>
+
+  </aside>
+
+  <div>
+    <h1 style="color: #3B82F6">haha</h1>
+    <h1>haha</h1>
+    <h1>haha</h1>
+    <h1>haha</h1>
+    <h1>haha</h1>
   </div>
+
+  <!--    &lt;!&ndash; Store &ndash;&gt;-->
+  <!--    <div class="menu-item text-[20px] mt-6 px-4 flex items-center gap-3"-->
+  <!--         routerLink="/gamehub" [class.active]="isStoreActive">-->
+  <!--      <i class="fa-solid fa-store"></i>-->
+  <!--      <a>Store</a>-->
+  <!--    </div>-->
+
+  <!--    &lt;!&ndash; Library &ndash;&gt;-->
+  <!--    <div class="menu-item text-[20px] mt-4 px-4 flex items-center gap-3"-->
+  <!--         routerLink="/gamehub/library" [class.active]="isLibraryActive">-->
+  <!--      <i class="fa-solid fa-gamepad"></i>-->
+  <!--      <a>Library</a>-->
+  <!--    </div>-->
+
+  <!--    &lt;!&ndash; Wishlist &ndash;&gt;-->
+  <!--    <div class="menu-item text-[20px] mt-4 px-4 flex items-center gap-3"-->
+  <!--         routerLink="/gamehub/wishlist" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">-->
+  <!--      <i class="fa-solid fa-heart"></i>-->
+  <!--      <a>Wishlist</a>-->
+  <!--    </div>-->
+
+  <!--    &lt;!&ndash; Community &ndash;&gt;-->
+  <!--    <div class="menu-item text-[20px] mt-4 px-4 flex items-center gap-3"-->
+  <!--         routerLink="/gamehub/community" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">-->
+  <!--      <i class="fa-solid fa-earth"></i>-->
+  <!--      <a>Community</a>-->
+  <!--    </div>-->
+
+  <!--    <div class="border-b border-white/20 w-60 mt-6 mx-auto"></div>-->
+
+  <!--    &lt;!&ndash; Discounts &ndash;&gt;-->
+  <!--    <div class="menu-item text-[20px] mt-4 px-4 flex items-center gap-3"-->
+  <!--         routerLink="/gamehub/discounts" routerLinkActive="active">-->
+  <!--      <i class="fa-solid fa-percent"></i>-->
+  <!--      <a>Discounts</a>-->
+  <!--    </div>-->
+
+  <!--    &lt;!&ndash;    TODO WALLET ADD FUNDS,..&ndash;&gt;-->
+  <!--    <div class="menu-item text-[20px] mt-4 px-4 flex items-center gap-3"-->
+  <!--         routerLink="/gamehub/wallet" routerLinkActive="active">-->
+  <!--      <i class="fa-solid fa-wallet"></i>-->
+  <!--      <a>Wallet</a>-->
+  <!--    </div>-->
+
+
+  <!--    <div *ngIf="friendRequestCount > 0"-->
+  <!--         class="menu-item text-[20px] mt-4 px-4 flex items-center gap-3-->
+  <!--           cursor-pointer transition"-->
+  <!--         routerLink="/gamehub/friend-requests" routerLinkActive="active">-->
+  <!--      <i class="fa-solid fa-user-plus"></i>-->
+  <!--      <a>Friend Requests-->
+
+  <!--      </a>-->
+
+  <!--      <span class="absolute top-0 right-7 -mt-1 -mr-1 bg-red-600 text-white text-xs font-bold-->
+  <!--               rounded-full w-5 h-5 flex items-center justify-center">-->
+  <!--    {{ friendRequestCount }}-->
+  <!--  </span>-->
+  <!--    </div>-->
+
+  <!--    &lt;!&ndash; Friend Requests &ndash;&gt;-->
+  <!--    <div *ngIf="friendRequestCount === 0" class="menu-item text-[20px] mt-4 px-4 flex items-center gap-3"-->
+  <!--         routerLink="/gamehub/friend-requests" routerLinkActive="active">-->
+  <!--      <i class="fa-solid fa-user-plus"></i>-->
+  <!--      <a>Friend Requests</a>-->
+  <!--    </div>-->
+
+  <!--    <div class="border-b border-white/20 w-60 mt-6 mx-auto"></div>-->
+
+  <!--    &lt;!&ndash; Friends &ndash;&gt;-->
+  <!--    <div class="menu-item mt-auto text-[20px] px-4 flex items-center gap-3"-->
+  <!--         routerLink="/gamehub/friends" routerLinkActive="active">-->
+  <!--      <i class="fa-solid fa-users"></i>-->
+  <!--      <a>Friends</a>-->
+  <!--    </div>-->
+  <!--  </div>-->
+
+
+  <!--  <div class="grow min-h-screen">-->
+  <!--    <div class="fixed top-0 left-[18.2em] right-2 z-10 bg-transparent backdrop-blur-sm pt-3 pb-2">-->
+  <!--      <form class="flex justify-end items-center gap-4">-->
+  <!--        <div *ngIf="!_isGameDetailsActive" class="relative w-1/4 me-4">-->
+  <!--          <input-->
+  <!--            type="text"-->
+  <!--            id="search"-->
+  <!--            class="block w-full pl-12 p-2.5 text-sm text-white bg-transparent rounded-lg placeholder-white border border-[#76849D]"-->
+  <!--            placeholder="Search..."-->
+  <!--            required-->
+  <!--          />-->
+
+  <!--          <div class="absolute left-0 top-0 h-full px-3 text-white flex items-center justify-center">-->
+  <!--            <i class="fas fa-search"></i>-->
+  <!--            <span class="sr-only">Search</span>-->
+  <!--          </div>-->
+
+  <!--        </div>-->
+
+  <!--        <div class="flex items-center justify-center w-10 h-10">-->
+  <!--          <i class="fa-solid fa-shopping-cart text-2xl cursor-pointer" (click)="goToCart()"></i>-->
+  <!--        </div>-->
+  <!--        <div class="flex items-center justify-center w-10 h-10">-->
+  <!--          <i class="fa-solid fa-bell text-2xl cursor-pointer" (click)="showNotifications()"></i>-->
+
+  <!--        </div>-->
+
+  <!--        <img *ngIf="!userHasProfilePicture"-->
+  <!--             src="../../../../../assets/profilePicture/default_profile_picture.svg"-->
+  <!--             class="w-13 h-13 rounded-xl border-1 border-black object-cover"-->
+  <!--             [ngStyle]="{'background-color': userResponse.profileColor}"-->
+  <!--        />-->
+
+  <!--        <img *ngIf="userHasProfilePicture"-->
+  <!--             [src]="getProfilePicture(userResponse)"-->
+  <!--             alt="not found"-->
+  <!--             class="w-13 h-13 object-cover rounded-xl"-->
+  <!--             width="1"-->
+  <!--             height="1"-->
+  <!--        />-->
+
+  <!--        <span-->
+  <!--          class="inline-block w-3 h-3 rounded-full"-->
+  <!--          [ngClass]="{-->
+  <!--            'bg-green-500': statusResponse.status === 'ONLINE',-->
+  <!--            'bg-gray-400': statusResponse.status === 'OFFLINE',-->
+  <!--            'bg-yellow-400': statusResponse.status === 'AWAY'-->
+  <!--          }"-->
+  <!--        ></span>-->
+
+  <!--        <button id="dropdownAvatarNameButton" data-dropdown-toggle="dropdownAvatarName"-->
+  <!--                class="flex items-center text-sm pe-1 font-medium text-white rounded-full md:me-0 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-white"-->
+  <!--                type="button">-->
+  <!--          <span class="sr-only">Open user menu</span>-->
+  <!--          {{ userResponse.username }}-->
+  <!--          <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"-->
+  <!--               viewBox="0 0 10 6">-->
+  <!--            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"-->
+  <!--                  d="m1 1 4 4 4-4"/>-->
+  <!--          </svg>-->
+  <!--        </button>-->
+
+  <!--        &lt;!&ndash; Dropdown menu &ndash;&gt;-->
+  <!--        <div id="dropdownAvatarName" #dropdownAvatarName-->
+  <!--             class="z-10 hidden bg-white divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700 dark:divide-gray-600">-->
+  <!--          <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">-->
+  <!--            <div class="truncate">{{ userResponse.firstName + " " + userResponse.lastName }}</div>-->
+  <!--            <div class="font-medium ">{{ userResponse.email }}</div>-->
+  <!--          </div>-->
+  <!--          <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"-->
+  <!--              aria-labelledby="dropdownInformdropdownAvatarNameButtonationButton">-->
+  <!--            <li>-->
+  <!--              <a aria-current="page" (click)="closeDropdown()" routerLink="/gamehub/user/me"-->
+  <!--                 class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Profile</a>-->
+  <!--              <div class="hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white flex gap-1 px-4 py-3">-->
+  <!--                Status:-->
+  <!--                <div class="relative inline-block">-->
+  <!--                  <select-->
+  <!--                    class="appearance-none bg-transparent pr-6 text-[13px] cursor-pointer"-->
+  <!--                    (change)="onStatusChange($event)"-->
+  <!--                  >-->
+  <!--                    <option [value]="userResponse.status" selected>-->
+  <!--                      {{ userResponse.status }}-->
+  <!--                    </option>-->
+
+  <!--                    <option-->
+  <!--                      *ngFor="let status of getAvailableStatuses()"-->
+  <!--                      [value]="status"-->
+  <!--                    >-->
+  <!--                      {{ status }}-->
+  <!--                    </option>-->
+  <!--                  </select>-->
+  <!--                  <i-->
+  <!--                    class="fa-solid fa-angle-down absolute right-1 top-1/2 -translate-y-1/2 pointer-events-none text-gray-900"-->
+  <!--                  ></i>-->
+  <!--                </div>-->
+  <!--              </div>-->
+  <!--            </li>-->
+  <!--          </ul>-->
+  <!--          <div class="py-2">-->
+  <!--            <a (click)="logoutUser()" href="#"-->
+  <!--               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign-->
+  <!--              out</a>-->
+  <!--          </div>-->
+  <!--        </div>-->
+
+  <!--      </form>-->
+  <!--    </div>-->
+  <!--  </div>-->
 </div>

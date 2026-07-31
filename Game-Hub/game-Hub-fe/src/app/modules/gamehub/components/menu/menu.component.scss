@@ -49,3 +49,69 @@ input:-webkit-autofill {
   transition: background-color 5000s ease-in-out 0s;
 }
 
+.sidebar{
+  width: 260px;
+  background: #151923;
+  padding: 25px;
+  position: fixed;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.logo{
+  font-size: 2.3rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+nav{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+nav p{
+  color: #666;
+  font-size: 14px;
+  margin-top: 20px;
+}
+
+nav a{
+  text-decoration: none;
+  color: #aaa;
+  padding: 13px;
+  border-radius: 10px;
+}
+
+nav a:hover,
+nav a.active{
+  background:#26334a;
+  color:#4da3ff;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing: border-box;
+
+}
+
+.profile{
+  margin-top: auto;
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  background: #1b2230;
+  padding: 15px;
+  border-radius: 12px;
+}
+
+.profile span{
+  font-size: 13px;
+}
+
+select option{
+  color: white;
+  background: #1b2230;
+}
