@@ -1,11 +1,4 @@
 <div class="flex w-screen h-screen">
-  <!--  <div>-->
-  <!--    class="w-[18.2em] bg-[#151923] px-3 pt-10 pb-5 flex flex-col">-->
-  <!--    <div class="text-[2.75rem] whitespace-nowrap text-center font-bold text-white tracking-wide">-->
-  <!--      <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-purple-400">Game-Hub</span>-->
-  <!--      <div class="border-b border-white/30 w-60 mt-5 mx-auto"></div>-->
-  <!--    </div>-->
-
   <aside class="sidebar">
     <div class="logo">
       <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-purple-400">Game-Hub</span>
@@ -94,12 +87,10 @@
             *ngIf="statusMenuOpen"
             class="absolute left-0 bottom-full mt-2 w-32 bg-[#1b2230] rounded-lg shadow-lg p-2 z-50">
 
-
             <button
               *ngFor="let status of statuses"
               class="flex items-center gap-2 w-full px-3 py-2 rounded hover:bg-[#26334a]"
               (click)="changeStatus(status); $event.stopPropagation()">
-
 
             <span
               class="w-2.5 h-2.5 rounded-full"
@@ -110,13 +101,11 @@
                 }">
             </span>
 
-
               <span>
                 {{status}}
             </span>
 
             </button>
-
 
           </div>
 
