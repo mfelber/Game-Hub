@@ -11,6 +11,7 @@ export class SearchBar {
   @Input() placeholder = 'Search...';
   @Output() search = new EventEmitter<string>();
   onSearch(value: string) {
+    console.log(value);
     this.search.emit(value);
   }
 

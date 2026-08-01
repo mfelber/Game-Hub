@@ -12,10 +12,9 @@
         Library </a>
       <a routerLink="/gamehub/wishlist" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"> ❤️
         Wishlist </a>
-      <!--        🌐-->
       <p>COMMUNITY</p>
-      <a routerLink="/gamehub/community" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">🌐
-        Community </a>
+      <a routerLink="/gamehub/community" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">🔎
+        Find Players </a>
       <a routerLink="/gamehub/friends" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">👥
         Friends </a>
       <a *ngIf="friendRequestCount === 0" routerLink="/gamehub/friend-requests" routerLinkActive="active"
@@ -31,6 +30,12 @@
               {{ friendRequestCount }}
             </span>
       </a>
+
+      <a routerLink="/gamehub/groups" routerLinkActive="active"
+         [routerLinkActiveOptions]="{ exact: true }"> 🌐 Groups </a>
+      <!--    TODO groups page filters  -->
+      <!--    Country, created by me, free to join, request join   -->
+
 
       <p>Account</p>
       <a routerLink="/gamehub/wallet" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">💰

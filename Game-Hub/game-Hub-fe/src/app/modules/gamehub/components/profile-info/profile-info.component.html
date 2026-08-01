@@ -1,0 +1,75 @@
+<div class="modal-backdrop">
+<div class="profile-modal">
+  <button (click)="close.emit()" class="close-btn">
+    &times;
+  </button>
+
+  <h2>Profile Information</h2>
+  <div class="banner">
+    <img [src]="getBanner(user)" class="w-full h-full object-cover"/>
+    <div class="overlay"></div>
+
+    <img *ngIf="hasProfilePicture"
+         [src]="getProfilePicture(user)"
+         class="avatar"/>
+
+    <img *ngIf="!hasProfilePicture"
+         src="../../../../../assets/profilePicture/default_profile_picture.svg"
+         class="avatar"
+         [ngStyle]="{'background-color': user.profileColor}"/>
+  </div>
+  <div class="profile-header">
+    <div>
+      <h3>{{user.username}}</h3>
+    </div>
+  </div>
+  <div class="section">
+    <h4>
+      <i class="fa-solid fa-user"></i>
+      Personal Information
+    </h4>
+
+    <div class="row">
+      <span>Username</span>
+      <strong>{{ user.username }}</strong>
+    </div>
+
+    <div class="row">
+      <span>First name</span>
+      <strong>{{user.firstName}}</strong>
+    </div>
+
+    <div class="row">
+      <span>Last name</span>
+      <strong>{{ user.lastName }}</strong>
+    </div>
+
+    <div class="row">
+      <span>Email</span>
+      <strong>{{user.email}}</strong>
+    </div>
+  </div>
+
+  <div class="section">
+    <h4>
+      Profile
+    </h4>
+    <div class="row">
+      <span>Nationality</span>
+      <img [src]="user.location?.iconPath" class="flag"/>
+    </div>
+
+    <div class="row">
+      <span>Cards Color</span>
+      <div class="color" [ngStyle]="{'background-color': user.cardColor?.colorCode}"></div>
+    </div>
+
+  </div>
+
+  <div class="buttons">
+    <button class="cancel" (click)="close.emit()">Cancel</button>
+    <button class="edit" (click)="edit.emit()">Edit profile</button>
+  </div>
+
+</div>
+</div>

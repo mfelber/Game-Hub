@@ -28,6 +28,11 @@
   border-radius: 10px;
   border: solid 1px #1b2230;
   cursor: pointer;
+  transition:.2s;
+}
+
+.tabs button:hover{
+  color: white;
 }
 
 .tabs .selected{
@@ -36,11 +41,19 @@
   border: #00bc7d 1px solid;
 }
 
+.tabs .selected:hover{
+  color: #00d492;
+}
+
 .tabs .commingsoon{
   background: rgba(106, 114, 130, 0.25);
   color: #6a7282;
   border: 1px solid rgba(106, 114, 130, 0.35);
   cursor: default;
+}
+
+.tabs .commingsoon:hover{
+  color: #6a7282;
 }
 
 .search{

@@ -2,144 +2,144 @@
   Loading...
 </div>
 
-<div class="fixed top-4 right-4 flex flex-col gap-2 z-50">
-  <div *ngIf="successMessage"
-       class="bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg min-w-[250px]
-              transform transition-transform duration-500 ease-in-out opacity-0"
-       [ngClass]="{'translate-x-0 opacity-100': toastVisible, 'translate-x-24 opacity-0': !toastVisible}">
-    {{ successMessage }}
-  </div>
-</div>
+<main [class.hidden]="!isLoaded">
 
-<div [class.hidden]="!isLoaded" class="relative w-full">
-  <div class="flex items-center justify-between mb-3">
+<!-- HEADER -->
+  <section>
+    <div class="header">
+      <div class="header-content">
+        <h1>Find Players</h1>
+        <button class="relative cursor-pointer">
+          🔔
+          <span class="absolute -top-1 -right-2 bg-red-600 text-white text-xs font-bold
+        rounded-full w-5 h-5 flex items-center justify-center"> 1 </span>
+        </button>
+      </div>
+      <p>Search for players and add new friends</p>
+    </div>
+  </section>
 
-    <!-- Left buttons -->
-    <div class="flex gap-3">
-      <button *ngIf="!loadUsers" class="border border-gray-500 text-gray-300 hover:bg-gray-700/40 hover:text-white
-px-4 py-1.5 rounded-lg transition duration-300 text-[13px]">
-        Users
-      </button>
+<!-- SEARCH -->
+  <section>
+    <div class="search">
+      <app-search-bar
+      placeholder="Search users..."
+      (search)="searchByUsername($event)">
+      </app-search-bar>
+    </div>
+  </section>
 
-      <button *ngIf="loadUsers" class="border border-emerald-500 text-emerald-400 bg-emerald-500/10
-px-4 py-1.5 rounded-lg transition duration-300 text-[13px]">
-        Users
-      </button>
-
-      <button
-        class="border border-gray-500 text-gray-500 px-4 py-1.5 rounded-lg
-         transition duration-300 text-[13px]
-         opacity-60 flex items-center gap-2"
-      >
-        Groups
-        <span class="text-[10px] bg-gray-700/60 px-2 py-0.5 rounded-md">Coming soon</span>
-      </button>
+<!-- FILTERS -->
+  <section class="filter-bar">
+    <div class="filter-header">
+      <span>Filters</span>
+      <button (click)="resetFilters()"> Reset <i class="fa-solid fa-rotate-right text-sm"></i></button>
     </div>
 
+    <div class="filter-options">
+      <div class="dropdown">
+        <label>Country</label>
+        <select>
+          <option value="">All Countries</option>
+          <option value="SK">Slovakia</option>
+          <option value="CZ">Czechia</option>
+          <option value="GE">Germany</option>
+        </select>
+      </div>
 
-    <div class="relative w-1/3">
-      <input
-        #searchquery
-        (keyup)="searchByUsername(searchquery.value)"
-        type="text"
-        id="query"
-        class="block w-full pl-12 p-2.5 text-sm text-white bg-transparent rounded-lg placeholder-white border border-[#76849D]"
-        placeholder="Search..."
-        required
-      />
+<!--   TODO retrieve all platforms   -->
 
-      <div class="absolute left-0 top-0 h-full px-3 text-white flex items-center justify-center">
-        <i class="fas fa-search"></i>
-        <span class="sr-only">Search</span>
+      <div class="dropdown">
+        <label>Platform</label>
+        <select>
+          <option value="">All Platforms</option>
+          <option value="pc">PC</option>
+          <option value="xbox">Xbox</option>
+          <option value="ps5">PS</option>
+        </select>
+      </div>
+
+<!--   TODO   -->
+      <div class="checkbox">
+        <label>
+          <input type="checkbox"> Looking for teammates
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <label>
+          <input type="checkbox"> Voice chat
+        </label>
       </div>
     </div>
+  </section>
 
-  </div>
-
-  <!-- User list -->
-  <div *ngFor="let user of userCommunityResponse.content"
-       class="w-full mb-3 p-4 bg-black/30 rounded-2xl cursor-pointer hover:scale-101 transform-gpu transition duration-300">
-
-    <div class="grid grid-cols-[250px_400px_400px_80px_auto] items-center gap-5"
-         (click)="navigateToUser(user.userId)">
-
-      <!-- Avatar -->
-      <div class="w-[60px] flex justify-center">
+  <section class="users" *ngFor="let user of userCommunityResponse.content">
+    <div class="user-card" (click)="navigateToUser(user.userId)">
+      <div class="left">
         <img *ngIf="user.userProfilePicture"
              [src]="getProfilePicture(user)"
-             class="w-14 h-14 rounded-lg border-2 border-black object-cover"/>
+             class="left-img"/>
 
         <img *ngIf="!user.userProfilePicture"
              src="../../../../../assets/profilePicture/default_profile_picture.svg"
-             class="w-14 h-14 rounded-lg border-2 border-black object-cover"
+             class="left-img"
              [ngStyle]="{'background-color': user.profileColor}"/>
+        <div>
+        <div class="username">
+          <h3>{{user.username}}</h3>
+          <img class="flag" [src]="user.location?.iconPath" alt="">
+        </div>
+        <span class="text-gray-400 text-sm truncate" [ngClass]="{
+          'text-green-500': user.status === 'ONLINE',
+          'text-gray-400': user.status === 'OFFLINE',
+          'text-yellow-400': user.status === 'AWAY'
+          }">• {{ user.status }} </span>
+        <div class="stats">
+          <span> 🎮 125 games</span>
+          <span> 👥 34 friends</span>
+          <span> ⭐ 55 reviews</span>
+          <span> 📅 joined july 2026</span>
+        </div>
+        </div>
       </div>
+      <div class="right">
 
-      <!-- Username -->
-      <p class="text-white font-semibold truncate max-w-[150px]">
-        {{ user.username }}
-      </p>
-
-      <!-- Status -->
-      <p class="text-gray-400 text-sm truncate" [ngClass]="{
-      'text-green-500': user.status === 'ONLINE',
-      'text-gray-400': user.status === 'OFFLINE',
-      'text-yellow-400': user.status === 'AWAY'
-      }">• {{ user.status }}
-      </p>
-
-      <!-- Location -->
-      <div class="w-[80px] flex justify-center">
-        <img [src]="user.location?.iconPath" class="w-12 h-8 rounded-lg"/>
-      </div>
-
-      <!-- Buttons -->
-      <div class="flex gap-3 justify-end">
         <button *ngIf="friendsMap[user.userId!] && isLoaded" (click)="$event.stopPropagation()"
-                class="flex items-center gap-2 px-3 py-2 bg-green-600
-             text-white font-semibold rounded-lg shadow-md transition w-11 h-11">
+                class="action-btn friend">
           <i class="fa-solid fa-user-check"></i>
         </button>
 
-
         <button *ngIf="friendRequestMapForReceiver[user.userId!] && isLoaded"
                 (click)=" acceptFriendRequest(user.userId!) ; $event.stopPropagation()"
-                class="flex items-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700
-             text-white font-semibold rounded-lg shadow-md transition w-11 h-11 cursor-pointer">
-          <i class="fa-solid fa-check"></i>
-        </button>
+                class="action-btn accept">
+          <i class="fa-solid fa-check"></i></button>
 
         <button *ngIf="friendRequestMapForReceiver[user.userId!] && isLoaded"
                 (click)=" rejectFriendRequest(user.userId!) ; $event.stopPropagation()"
-                class="flex items-center gap-2 px-3 py-2 bg-red-600 hover:bg-red-700
-             text-white font-semibold rounded-lg shadow-md transition w-11 h-11 cursor-pointer">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
+                class="action-btn reject">
+          <i class="fa-solid fa-xmark"></i></button>
 
         <button
           *ngIf="!friendRequestMapFromSender[user.userId!] && !friendsMap[user.userId!] && !friendRequestMapForReceiver[user.userId!] && isLoaded "
           (click)="sendFriendRequest(user.userId!) ; $event.stopPropagation()"
-          class="flex items-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700
-             text-white font-semibold rounded-lg shadow-md transition min-w-[160px] justify-center cursor-pointer">
+          class="add-friend-btn">
           Add Friend<i class="fa-solid fa-user-plus"></i>
         </button>
 
         <button *ngIf="friendRequestMapFromSender[user.userId!] && isLoaded"
                 (click)="cancelFriendRequest(user.userId!) ; $event.stopPropagation()"
-                class="flex items-center gap-2 px-3 py-2 bg-gray-500 hover:bg-gray-600
-             text-white font-semibold rounded-lg shadow-md transition min-w-[160px] justify-center cursor-pointer">
+                class="cancel-btn">
           Cancel invite <i class="fa-solid fa-user-minus"></i>
         </button>
 
         <button (click)="openReportUserModal(user) ; $event.stopPropagation()"
-                class="flex items-center gap-2 px-3 py-2 bg-red-600 hover:bg-red-700
-             text-white font-semibold rounded-lg shadow-md transition w-11 h-11 justify-center cursor-pointer">
+                class="action-btn report">
           <i class="fa-solid fa-exclamation"></i>
         </button>
       </div>
-
     </div>
-  </div>
+  </section>
 
   <div *ngIf="userCommunityResponse.content?.length! === 0" class="flex flex-col items-center justify-center h-60text-gray-400">
     <i class="fa-solid fa-sad-tear text-4xl mb-4"></i>
@@ -153,5 +153,13 @@ px-4 py-1.5 rounded-lg transition duration-300 text-[13px]">
     (submit)="handleReport($event)">
   </app-report-user-modal>
 
+</main>
 
+<div class="fixed top-4 right-4 flex flex-col gap-2 z-50">
+  <div *ngIf="successMessage"
+       class="bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg min-w-[250px]
+              transform transition-transform duration-500 ease-in-out opacity-0"
+       [ngClass]="{'translate-x-0 opacity-100': toastVisible, 'translate-x-24 opacity-0': !toastVisible}">
+    {{ successMessage }}
+  </div>
 </div>

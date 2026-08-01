@@ -11,6 +11,7 @@ import {ReportControllerService} from '../../../../services/services/report-cont
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ReportRequest} from '../../../../services/models/report-request';
 import {ReportUserModalComponent} from '../../components/report-user-modal/report-user-modal.component';
+import {SearchBar} from '../../components/search-bar/search-bar';
 
 @Component({
   selector: 'app-community',
@@ -21,7 +22,8 @@ import {ReportUserModalComponent} from '../../components/report-user-modal/repor
     NgClass,
     ReactiveFormsModule,
     FormsModule,
-    ReportUserModalComponent
+    ReportUserModalComponent,
+    SearchBar
   ],
   templateUrl: './community.component.html',
   styleUrl: './community.component.scss'
@@ -164,7 +166,6 @@ export class CommunityComponent implements OnInit {
   }
 
   searchByUsername(value: string) {
-    console.log(value);
     this.page = 0;
     this.userCommunityResponse = {}
     this.loadAllUsers(value);
@@ -234,5 +235,9 @@ export class CommunityComponent implements OnInit {
 
   handleReport(request: ReportRequest) {
     this.showSuccess('User has been reported successfully');
+  }
+
+  resetFilters() {
+
   }
 }

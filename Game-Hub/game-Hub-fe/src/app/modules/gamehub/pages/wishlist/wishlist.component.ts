@@ -15,7 +15,6 @@ import {SearchBar} from '../../components/search-bar/search-bar';
   imports: [
     NgForOf,
     NgIf,
-    MatCheckbox,
     FormsModule,
     SearchBar
   ],

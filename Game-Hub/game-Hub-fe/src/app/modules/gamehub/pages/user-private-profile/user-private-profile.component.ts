@@ -18,6 +18,7 @@ import {RefreshService} from '../../../../services/fn/refresh-service/refresh-se
 import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {FlagsControllerService} from '../../../../services/services/flags-controller.service';
 import {CommunityFlagsResponse} from '../../../../services/models/community-flags-response';
+import {ProfileInfoComponent} from '../../components/profile-info/profile-info.component';
 
 @Component({
   selector: 'app-user-profile',
@@ -28,10 +29,11 @@ import {CommunityFlagsResponse} from '../../../../services/models/community-flag
     FormsModule,
     NgStyle,
     CardPreviewComponent,
-    MatSlideToggle
+    MatSlideToggle,
+    ProfileInfoComponent,
   ],
   templateUrl: './user-private-profile.component.html',
-  styleUrl: './user-private-profile.component.css'
+  styleUrl: './user-private-profile.component.scss'
 })
 export class UserPrivateProfileComponent implements OnInit {
 
