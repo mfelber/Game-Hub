@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {UserPrivateResponse} from '../../../../services/models/user-private-response';
 import {FormsModule} from '@angular/forms';
-import {NgClass, NgIf, NgStyle} from '@angular/common';
+import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
 
 @Component({
   selector: 'app-card-preview',
@@ -9,10 +9,11 @@ import {NgClass, NgIf, NgStyle} from '@angular/common';
     FormsModule,
     NgIf,
     NgClass,
-    NgStyle
+    NgStyle,
+    NgForOf
   ],
   templateUrl: './card-preview.component.html',
-  styleUrl: './card-preview.component.css'
+  styleUrl: './card-preview.component.scss'
 })
 export class CardPreviewComponent{
   @Input() userResponse!: UserPrivateResponse;

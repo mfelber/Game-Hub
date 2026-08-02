@@ -1,0 +1,241 @@
+<div class="modal-overlay">
+  <div class="edit-modal">
+    <button class="close-btn" (click)="close.emit()">
+      &times;
+    </button>
+
+    <h2>Edit Profile</h2>
+
+<!--  TABS  -->
+    <div class="tabs">
+      <button
+        (click)="activeTab='basic'"
+        [class.active]="activeTab==='basic'">
+        Basic Info
+      </button>
+
+      <button
+        (click)="activeTab='profile'"
+        [class.active]="activeTab==='profile'">
+        Profile
+      </button>
+
+      <button
+        (click)="activeTab='security'"
+        [class.active]="activeTab==='security'">
+        Security
+      </button>
+    </div>
+
+<!--  CONTENT  -->
+    <div class="modal-content">
+
+<!--  TAB BASIC INFO   -->
+      <div *ngIf="activeTab==='basic'" class="section">
+        <h3>Personal Information</h3>
+
+        <label>Username</label>
+        <input [value]="user.username" [(ngModel)]="userRequest.username">
+
+        <label>First Name</label>
+        <input [value]="user.firstName" [(ngModel)]="userRequest.firstName">
+
+        <label>Last Name</label>
+        <input [value]="user.lastName" [(ngModel)]="userRequest.lastName">
+
+        <label>Email</label>
+        <input [value]="user.email" [(ngModel)]="userRequest.email">
+
+        <label>Nationality</label>
+
+        <div class="location-wrapper">
+
+          <select [(ngModel)]="userRequest.location">
+            <option value="" disabled>Select location</option>
+
+            <option
+              *ngFor="let loc of allLocations"
+              [value]="loc.name">
+              {{ loc.name }}
+            </option>
+          </select>
+
+
+          <img
+            *ngIf="selectedLocationIcon()"
+            [src]="selectedLocationIcon()"
+            class="location-flag">
+
+        </div>
+
+      </div>
+
+<!--   PROFILE TAB   -->
+
+      <div *ngIf="activeTab==='profile'" class="section">
+        <h3>Profile Banner</h3>
+        <div class="banner-edit">
+          <img [src]="previewBanner || getBanner(user)">
+
+          <button
+            *ngIf="(isPreviewBannerInserted) || (selectedBannerId)"
+            type="button"
+            class="remove-color"
+            (click)="removeSelectedPredefinedBanner()">
+            <i class="fa-solid fa-trash-can"></i>
+          </button>
+
+          <button type="button" class="edit-icon" (click)="bannerFile.click()">
+            <i class="fa-solid fa-pen"></i>
+          </button>
+
+          <input
+            #bannerFile
+            (change)="onBannerSelected($event)"
+            type="file"
+            accept="image/jpeg, image/png"
+            class="hidden"
+          />
+
+        </div>
+
+        <div class="show-banners" (click)="showBanners()">
+          <span>Show predefined banners</span><i
+            class="fa-solid"
+            [ngClass]="showPredefinedBanners ? 'fa-angle-up' : 'fa-angle-down'">
+          </i>
+        </div>
+
+        <div *ngIf="showPredefinedBanners" class="banners">
+
+          <div *ngIf="showPredefinedBanners" class="predefined-banners">
+            <img *ngFor="let bannerId of predefinedBanners"
+                 (click)="selectedBanner(bannerId)"
+                 [src]="'assets/banners/banner_' + bannerId + '.jpg'"
+                 [ngClass]="{'border-2 border-gray-500': selectedBannerId === bannerId, 'border-transparent': selectedBannerId !== bannerId}">
+          </div>
+
+
+        </div>
+        <hr style="border: 1px solid rgba(255,255,255,.08)">
+        <div>
+          <h3>Profile Picture</h3>
+          <div class="profile-image-wrapper">
+            <img *ngIf="!userHasProfilePicture && !isPreviewImageInserted"
+                 src="assets/profilePicture/default_profile_picture.svg"
+                 [ngStyle]="{'background-color': user.profileColor}"
+                 alt="Profile Picture"
+            />
+
+            <img *ngIf="(!userHasProfilePicture && isPreviewImageInserted) || userHasProfilePicture"
+                 [src]=" previewImage || getProfilePicture(user)"
+                 alt="Profile Picture"
+            />
+
+            <button
+              *ngIf="isPreviewImageInserted"
+              type="button"
+              class="remove-color"
+              (click)="removeProfileImage(); $event.stopPropagation()">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+
+            <button type="button" (click)="formFile.click()" class="edit-pen">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+          </div>
+
+          <input
+            #formFile
+            (change)="onFileSelected($event)"
+            type="file"
+            accept="image/jpeg, image/png"
+            class="hidden"
+          />
+
+        </div>
+        <hr style="border: 1px solid rgba(255,255,255,.08);">
+        <div class="colors">
+          <h4>Card colors</h4>
+          <div class="color-list">
+
+            <div
+              *ngFor="let color of cardColors"
+              class="color-item"
+              (click)="selectColor(color.id!, color.colorCode!)">
+
+              <div
+                class="color-box"
+                [ngStyle]="{'background': color.colorCode}">
+
+                <button
+                  *ngIf="selectedColorId === color.id"
+                  type="button"
+                  class="remove-color"
+                  (click)="removeSelectedCardColor(); $event.stopPropagation()">
+
+                  <i class="fa-solid fa-trash-can"></i>
+
+                </button>
+              </div>
+
+              <label>{{color.colorName}}</label>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="activeTab==='security'" class="section">
+        <h3>Privacy & Security</h3>
+        <div class="settings">
+          Friend Request
+          <input type="radio">
+        </div>
+
+        <div class="settings">
+          Send Messages
+          <input type="radio">
+        </div>
+
+        <div class="settings">
+          Profile Visibility
+          Friends <input type="radio">
+          No One<input type="radio">
+          Every One<input type="radio">
+        </div>
+      </div>
+
+    </div>
+
+    <div class="buttons" [class.profile-buttons]="activeTab === 'profile'">
+
+      <button
+              [title]="changesExist ? 'See how your profile will look' : 'Make at least one change to preview your profile'"
+              [disabled]="!changesExist"
+              (click)="showPreview()"
+              *ngIf="activeTab === 'profile'"
+              [ngClass]="changesExist ? 'bg-gray-600 text-white hover:bg-gray-700 cursor-pointer' : 'bg-gray-600 text-gray-400'">
+        Try changes
+      </button>
+
+      <div class="right-buttons">
+        <button class="cancel"
+                (click)="close.emit()">
+          Cancel
+        </button>
+
+        <button class="save"
+                (click)="saveChanges()">
+          Save
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+</div>

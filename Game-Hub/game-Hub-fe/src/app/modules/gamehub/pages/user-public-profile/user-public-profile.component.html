@@ -2,6 +2,203 @@
   Loading...
 </div>
 
+
+<main [class.hidden]="!isLoaded">
+
+  <!--  BANNER  -->
+  <section>
+    <div class="banner">
+
+      <img *ngIf="userResponse.bannerType === 'PREDEFINED'"
+           [src]="userResponse.predefinedBannerPath"
+           alt="Banner cover"
+      />
+
+      <img *ngIf="userResponse.bannerType === 'CUSTOM'"
+           [src]=getBanner(userResponse)
+           alt="Banner cover"
+      />
+
+
+    </div>
+  </section>
+
+  <!--  USER HEADER  -->
+  <section>
+    <div class="profile-header" [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
+      <img *ngIf="userHasProfilePicture"
+           [src]="getProfilePicture(userResponse)"
+           class="avatar"
+      />
+
+      <img *ngIf="!userHasProfilePicture"
+           src="../../../../../assets/profilePicture/default_profile_picture.svg"
+           class="avatar"
+           [ngStyle]="{'background-color': userResponse.profileColor}"
+      />
+      <div class="user-info">
+        <div class="username">
+          {{ userResponse.username }}
+          <span class="status" [ngClass]="{
+            'text-green-500': userResponse.status === 'ONLINE',
+            'text-gray-400': userResponse.status === 'OFFLINE',
+            'text-yellow-400': userResponse.status === 'AWAY'
+            }">• {{ userResponse.status }}</span>
+        </div>
+        <p>Memeber since {{userResponse.joinedDate}}</p>
+        <img [src]="userResponse.location?.iconPath"/>
+        <div class="action">
+          <button class="msg-btn" *ngIf="userIsMyFriend" (click)="message(userResponse.userId!)"> Message <i class="fa-solid fa-message"></i></button>
+          <button class="add-friend-btn" *ngIf="!friendRequestExistsFromSender && !friendRequestFromThisUser && !userIsMyFriend" (click)="sendFriendRequest(userResponse.userId!)"> Add friend <i class="fa-solid fa-user-plus"></i></button>
+          <button class="accept" *ngIf="friendRequestFromThisUser" (click)="acceptFriendRequest(userResponse.userId!)"> Accept <i class="fa-solid fa-user-plus"></i></button>
+          <button class="cancel-btn" *ngIf="friendRequestExistsFromSender" (click)="cancelFriendRequest(userResponse.userId!)"> Cancel invite <i class="fa-solid fa-user-minus"></i></button>
+          <button class="reject" *ngIf="friendRequestFromThisUser" (click)="rejectFriendRequest(userResponse.userId!)"> Decline invite <i class="fa-solid fa-xmark"></i></button>
+          <button class="reject" (click)="rejectFriendRequest(userResponse.userId!)"> Block <i class="fa-solid fa-ban"></i></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="stats" [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
+      <div>
+        <h3>{{userResponse.libraryCount}}</h3>
+        <p>Games</p>
+      </div>
+
+      <div>
+        <h3>{{ userResponse.friendsCount }}</h3>
+        <p>Friends</p>
+      </div>
+
+      <div>
+        <h3>320</h3>
+        <p>Playtime</p>
+      </div>
+
+      <div>
+        <h3>15</h3>
+        <p>reviews</p>
+      </div>
+
+      <div [ngStyle]="{'color': userResponse.level?.levelColor}">
+        <h3>{{ userResponse.level?.level }}</h3>
+        <p [ngStyle]="{'color': userResponse.level?.levelColor}">Level</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="content-grid" *ngIf="isLoaded">
+      <div class="column">
+        <div class="card" [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
+          <div class="card-header">
+            <h2>
+              👤
+              About
+            </h2>
+          </div>
+
+          <hr>
+          <p *ngIf="!userResponse.bio?.length">{{ userResponse.username }} hasn't written anything about themselves yet
+            ✍️</p>
+          <p *ngIf="userResponse.bio?.length" >
+            {{ userResponse.bio }}
+          </p>
+        </div>
+        <div class="card" [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
+          <h2>
+            🎮 Currently Playing
+          </h2>
+          <hr>
+          <div class="game-row">
+            <img
+              src="https://images.unsplash.com/photo-1520209759809-a9bcb6cb3241?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1nfGVufDB8fDB8fHww">
+            <div>
+              <h3>
+                Cyberpunk 2077
+              </h3>
+              <p>35 hours played</p>
+            </div>
+          </div>
+        </div>
+        <div class="card" [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
+          <div class="card-header">
+            <h2> ❤️ Wish List</h2>
+            <button>
+              View all ->
+            </button>
+          </div>
+          <hr>
+          <div class="games">
+            <img
+              src="https://images.unsplash.com/photo-1520209759809-a9bcb6cb3241?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1nfGVufDB8fDB8fHww">
+            <img
+              src="https://images.unsplash.com/photo-1520209759809-a9bcb6cb3241?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1nfGVufDB8fDB8fHww">
+            <img
+              src="https://images.unsplash.com/photo-1520209759809-a9bcb6cb3241?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1nfGVufDB8fDB8fHww">
+          </div>
+        </div>
+      </div>
+
+      <div class="column">
+        <div class="card" [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
+          <div class="card-header">
+            <h2>🎭 Favorite Genres</h2>
+          </div>
+          <hr>
+          <div class="tags" *ngIf="userResponse.favoriteGenres?.length === 0">
+            <p class="text-lg font-semibold">No favorite genres set 🎭</p>
+          </div>
+
+          <div class="tags" *ngIf="userResponse.favoriteGenres?.length !== 0">
+            <span *ngFor="let genre of userResponse.favoriteGenres">{{ genre.name }}</span>
+          </div>
+        </div>
+
+        <div class="card" [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
+          <div class="card-header">
+            <h2>
+              🏅 Badges
+            </h2>
+            <button>
+              View all ->
+            </button>
+          </div>
+          <hr>
+          <p *ngIf="userResponse.badges?.length === 0" class="text-lg font-semibold">You haven't earned any badges yet 🏅</p>
+          <div class="badges" *ngIf="userResponse.badges?.length! > 0">
+            <div *ngFor="let badge of userResponse.badges">
+              <img [src]="badge.iconPath" alt="{{badge.name}}">
+            </div>
+          </div>
+        </div>
+
+        <div class="card" [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
+          <div class="card-header">
+            <h2>
+              👥 Groups
+            </h2>
+            <button>
+              View all ->
+            </button>
+          </div>
+          <hr>
+          <div class="group">
+            <img src="https://images.unsplash.com/photo-1520209759809-a9bcb6cb3241?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1nfGVufDB8fDB8fHww">
+            <div>
+              <h3>RPG Players</h3>
+              <p>120 members</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
 <div [class.hidden]="!isLoaded" class="relative w-full">
   <div class="relative w-full items-center">
     <div class="h-48 w-full overflow-hidden">

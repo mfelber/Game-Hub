@@ -1,16 +1,13 @@
-<div *ngIf="showPreviewColors"
-     class="top-0 left-0 w-full h-full z-50">
-  <app-card-preview
+<app-card-preview
+    *ngIf="showPreviewColors"
     [userResponse]="userResponse"
     [cardColorsResponse]="cardColorsResponse"
-    [selectedColor]="selectedColorCode"
+    [selectedColor]="previewSelectedColor"
     [previewBanner]="previewBanner"
-    [isPreviewImageInserted]="isPreviewImageInserted"
+    [isPreviewImageInserted]="previewImageInserted"
     [previewImage]="previewImage"
   >
-
-  </app-card-preview>
-</div>
+</app-card-preview>
 
 <app-profile-info
   *ngIf="isProfileModalOpen"
@@ -18,10 +15,20 @@
   [hasProfilePicture]="userHasProfilePicture"
   (close)="closeModal()"
   (edit)="editProfile()">
-
 </app-profile-info>
 
-<main [class.hidden]="!isLoaded">
+<app-edit-profile-info
+  *ngIf="isEditProfileModalOpen"
+  [user]="userResponse"
+  [userRequest]="userRequest"
+  [allLocations]="allLocations"
+  [cardColors]="cardColorsResponse"
+  (close)="closeModal()"
+  (save)="saveProfile($event)"
+  (preview)="showPreview($event)">
+</app-edit-profile-info>
+
+<main [class.hidden]="!isLoaded" *ngIf="!showPreviewColors">
 
   <!--  BANNER  -->
   <section>
@@ -142,7 +149,7 @@
         </div>
         <div class="card" [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
           <div class="card-header">
-            <h2>Wish List</h2>
+            <h2>❤️ Wish List</h2>
             <button>
               View all ->
             </button>
@@ -162,7 +169,7 @@
       <div class="column">
         <div class="card" [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
           <div class="card-header">
-            <h2>Favorite Genres</h2>
+            <h2>🎭 Favorite Genres</h2>
             <div class="tooltip">
               <i (click)="isEditGenresModalOpen = true" class="fa-solid fa-ellipsis-vertical text-white text-xl"></i>
               <span class="tooltip-text">
@@ -183,7 +190,7 @@
         <div class="card" [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
           <div class="card-header">
             <h2>
-              Badge
+              🏅 Badges
             </h2>
             <button>
               View all ->
@@ -224,6 +231,151 @@
 </main>
 
 
+<!-- BIO UPDATE MODAL-->
+
+<div *ngIf="isEditBioModalOpen" class="modal-overlay">
+  <div class="bio-modal">
+    <div class="modal-header">
+      <h2>Edit Bio</h2>
+      <button
+        class="close-btn"
+        (click)="closeModal()">
+        &times;
+      </button>
+    </div>
+
+    <div class="modal-content">
+      <label>Abou you</label>
+      <textarea
+      [(ngModel)]="bioUpdateRequest.bio" placeholder="Write something about yourself...">
+      </textarea>
+      <div class="character-counter">{{bioUpdateRequest.bio?.length}} / 300</div>
+    </div>
+
+    <div class="modal-actions">
+      <button
+        class="cancel-btn"
+        (click)="closeModal()">
+        Cancel
+      </button>
+
+      <button
+        class="save-btn"
+        (click)="saveBio()">
+        <i class="fa-solid fa-check"></i>
+        Save
+      </button>
+    </div>
+
+  </div>
+
+</div>
+
+<div *ngIf="isEditGenresModalOpen" class="modal-overlay">
+
+  <div class="genres-modal">
+
+    <!-- HEADER -->
+    <div class="modal-header">
+
+      <h2>
+        <i class="fa-solid fa-gamepad"></i>
+        Favorite Genres
+      </h2>
+
+      <button
+        class="close-btn"
+        (click)="cancelFavoriteGenres()">
+        &times;
+      </button>
+
+    </div>
+
+
+    <!-- CONTENT -->
+
+    <div class="modal-content">
+
+      <p class="description">
+        Select the genres that best describe your gaming preferences.
+      </p>
+
+      <div *ngIf="isLoaded" class="genres-list">
+
+        <div
+          *ngFor="let genre of genreResponse"
+          class="genre-chip"
+
+          (click)="!favoriteGenreIds.includes(genre.id) && selectedGenre(genre.id)"
+
+          [ngClass]="{
+
+            'favorite': favoriteGenreIds.includes(genre.id),
+
+            'selected': selectedGenres.has(genre.id)
+
+          }">
+
+          {{ genre.name }}
+
+          <button
+            *ngIf="favoriteGenreIds.includes(genre.id)"
+            class="remove-btn"
+            (click)="removeFavoriteGenre(genre.id); $event.stopPropagation()">
+
+            <i class="fa-solid fa-xmark"></i>
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- FOOTER -->
+
+    <div class="modal-actions">
+
+      <button
+        class="cancel-btn"
+        (click)="cancelFavoriteGenres()">
+
+        Cancel
+
+      </button>
+
+      <button
+        class="save-btn"
+        (click)="saveFavoriteGenres()">
+
+        <i class="fa-solid fa-check"></i>
+
+        Save
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="fixed top-4 right-4 flex flex-col gap-2 z-50">
+  <div *ngIf="successMessage"
+       class="bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg min-w-[250px]
+              transform transition-transform duration-500 ease-in-out opacity-0"
+       [ngClass]="{'translate-x-0 opacity-100': toastVisible, 'translate-x-24 opacity-0': !toastVisible}">
+    {{ successMessage }}
+  </div>
+</div>
+
+
+
+<div *ngIf="!isLoaded" class="text-center justify-center text-gray-400">
+  Loading...
+</div>
 
 <div *ngIf="showPreviewColors" class="fixed inset-0 z-50 flex flex-col items-center pointer-events-none">
 
@@ -240,23 +392,11 @@
   </div>
 </div>
 
-<div *ngIf="!showPreviewColors" class="relative w-full items-center">
-  <div class="fixed top-4 right-4 flex flex-col gap-2 z-50">
-    <div *ngIf="successMessage"
-         class="bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg min-w-[250px]
-              transform transition-transform duration-500 ease-in-out opacity-0"
-         [ngClass]="{'translate-x-0 opacity-100': toastVisible, 'translate-x-24 opacity-0': !toastVisible}">
-      {{ successMessage }}
-    </div>
-  </div>
+<!--<div [class.hidden]="!isLoaded" class="relative w-full">-->
 
 
 
-  <div *ngIf="!isLoaded" class="text-center justify-center text-gray-400">
-    Loading...
-  </div>
-  <div [class.hidden]="!isLoaded" class="relative w-full">
-
+<!--<div *ngIf="!showPreviewColors" class="relative w-full items-center">-->
 <!--    <div-->
 <!--         class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 animate-fade-in">-->
 <!--      <div class="bg-gray-800 p-6 rounded-2xl w-150 max-w-full relative shadow-2xl border border-white/20">-->
@@ -363,405 +503,367 @@
 <!--      </div>-->
 <!--    </div>-->
 
-    <div *ngIf="isEditProfileModalOpen"
-         class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 animate-fade-in">
-      <div class="relative bg-gray-800 p-6 rounded-2xl w-170 max-w-full shadow-2xl border border-white/20">
+<!--    <div *ngIf="isEditProfileModalOpen"-->
+<!--         class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 animate-fade-in">-->
+<!--      <div class="relative bg-gray-800 p-6 rounded-2xl w-170 max-w-full shadow-2xl border border-white/20">-->
 
-        <h2 class="text-white text-xl font-bold mb-6 text-center">Edit Profile</h2>
+<!--        <h2 class="text-white text-xl font-bold mb-6 text-center">Edit Profile</h2>-->
 
-        <!--TABS-->
-        <div class="flex border-b border-gray-700 mb-6">
-          <button
-            (click)="activeTab = 'basic'"
-            [ngClass]="activeTab === 'basic' ? 'border-b-2 border-blue-500 text-white': 'text-gray-400'"
-            class="px-4 py-2 font-medium focus:outline-none cursor-pointer"
-          >
-            Basic Info
-          </button>
+<!--        &lt;!&ndash;TABS&ndash;&gt;-->
+<!--        <div class="flex border-b border-gray-700 mb-6">-->
+<!--          <button-->
+<!--            (click)="activeTab = 'basic'"-->
+<!--            [ngClass]="activeTab === 'basic' ? 'border-b-2 border-blue-500 text-white': 'text-gray-400'"-->
+<!--            class="px-4 py-2 font-medium focus:outline-none cursor-pointer"-->
+<!--          >-->
+<!--            Basic Info-->
+<!--          </button>-->
 
-          <button
-            (click)="activeTab = 'profile'"
-            [ngClass]="activeTab === 'profile' ? 'border-b-2 border-blue-500 text-white': 'text-gray-400'"
-            class="px-4 py-2 font-medium focus:outline-none cursor-pointer"
-          >
-            Profile & Banner
-          </button>
+<!--          <button-->
+<!--            (click)="activeTab = 'profile'"-->
+<!--            [ngClass]="activeTab === 'profile' ? 'border-b-2 border-blue-500 text-white': 'text-gray-400'"-->
+<!--            class="px-4 py-2 font-medium focus:outline-none cursor-pointer"-->
+<!--          >-->
+<!--            Profile & Banner-->
+<!--          </button>-->
 
-          <button
-            (click)="activeTab = 'security'"
-            [ngClass]="activeTab === 'security' ? 'border-b-2 border-blue-500 text-white': 'text-gray-400'"
-            class="px-4 py-2 font-medium focus:outline-none cursor-pointer"
-          >
-            Privacy & Security
-          </button>
-        </div>
+<!--          <button-->
+<!--            (click)="activeTab = 'security'"-->
+<!--            [ngClass]="activeTab === 'security' ? 'border-b-2 border-blue-500 text-white': 'text-gray-400'"-->
+<!--            class="px-4 py-2 font-medium focus:outline-none cursor-pointer"-->
+<!--          >-->
+<!--            Privacy & Security-->
+<!--          </button>-->
+<!--        </div>-->
 
-        <!--      TABS CONTENT-->
+<!--        &lt;!&ndash;      TABS CONTENT&ndash;&gt;-->
 
-        <div>
-          <!-- Basic Info Tab -->
+<!--        <div>-->
+<!--          &lt;!&ndash; Basic Info Tab &ndash;&gt;-->
 
-          <div *ngIf="activeTab === 'basic'" class="flex flex-col gap-4">
+<!--          <div *ngIf="activeTab === 'basic'" class="flex flex-col gap-4">-->
 
-            <div class="flex flex-col">
-              <label class="text-gray-300 text-sm mb-1">Username</label>
-              <input
-                type="text"
-                [value]="userResponse.username"
-                placeholder="{{userResponse.username}}" [(ngModel)]="userRequest.username"
-                class="mt-1 w-full p-3 rounded-lg border border-gray-700 bg-gray-900 text-white focus:outline-none focus:ring-0"
-              />
-            </div>
+<!--            <div class="flex flex-col">-->
+<!--              <label class="text-gray-300 text-sm mb-1">Username</label>-->
+<!--              <input-->
+<!--                type="text"-->
+<!--                [value]="userResponse.username"-->
+<!--                placeholder="{{userResponse.username}}" [(ngModel)]="userRequest.username"-->
+<!--                class="mt-1 w-full p-3 rounded-lg border border-gray-700 bg-gray-900 text-white focus:outline-none focus:ring-0"-->
+<!--              />-->
+<!--            </div>-->
 
-            <div class="flex flex-col">
-              <label class="text-gray-300 text-sm mb-1">First Name</label>
-              <input
-                type="text"
-                placeholder="{{userResponse.firstName}}" [(ngModel)]="userRequest.firstName"
-                class="mt-1 w-full p-3 rounded-lg border border-gray-700 bg-gray-900 text-white focus:outline-none focus:ring-0"
-              />
-            </div>
+<!--            <div class="flex flex-col">-->
+<!--              <label class="text-gray-300 text-sm mb-1">First Name</label>-->
+<!--              <input-->
+<!--                type="text"-->
+<!--                placeholder="{{userResponse.firstName}}" [(ngModel)]="userRequest.firstName"-->
+<!--                class="mt-1 w-full p-3 rounded-lg border border-gray-700 bg-gray-900 text-white focus:outline-none focus:ring-0"-->
+<!--              />-->
+<!--            </div>-->
 
-            <div class="flex flex-col">
-              <label class="text-gray-300 text-sm mb-1">Last Name</label>
-              <input
-                type="text"
-                placeholder="{{userResponse.lastName}}" [(ngModel)]="userRequest.lastName"
-                class="mt-1 w-full p-3 rounded-lg border border-gray-700 bg-gray-900 text-white focus:outline-none focus:ring-0"
-              />
-            </div>
+<!--            <div class="flex flex-col">-->
+<!--              <label class="text-gray-300 text-sm mb-1">Last Name</label>-->
+<!--              <input-->
+<!--                type="text"-->
+<!--                placeholder="{{userResponse.lastName}}" [(ngModel)]="userRequest.lastName"-->
+<!--                class="mt-1 w-full p-3 rounded-lg border border-gray-700 bg-gray-900 text-white focus:outline-none focus:ring-0"-->
+<!--              />-->
+<!--            </div>-->
 
-            <div class="flex flex-col">
-              <label class="text-gray-300 text-sm mb-1">Email</label>
-              <input
-                type="email"
-                [value]="userResponse.email"
-                [(ngModel)]="userRequest.email"
-                class="mt-1 w-full p-3 rounded-lg border border-gray-700 bg-gray-900 text-white focus:outline-none focus:ring-0"
-              />
-            </div>
+<!--            <div class="flex flex-col">-->
+<!--              <label class="text-gray-300 text-sm mb-1">Email</label>-->
+<!--              <input-->
+<!--                type="email"-->
+<!--                [value]="userResponse.email"-->
+<!--                [(ngModel)]="userRequest.email"-->
+<!--                class="mt-1 w-full p-3 rounded-lg border border-gray-700 bg-gray-900 text-white focus:outline-none focus:ring-0"-->
+<!--              />-->
+<!--            </div>-->
 
-            <label class="text-gray-300 text-sm mb-1">Nationality</label>
-            <div class="flex items-center gap-2 overflow-y-visible">
+<!--            <label class="text-gray-300 text-sm mb-1">Nationality</label>-->
+<!--            <div class="flex items-center gap-2 overflow-y-visible">-->
 
-              <div class="relative w-[150px]">
-                <button (click)="toggleLocationDropdown()"
-                        class="w-full border border-gray-500 bg-gray-900 text-white px-4 py-2 rounded-lg flex justify-between items-center">
-                  {{ userRequest.location || 'Select location' }}
-                  <i class="fa-solid fa-chevron-down"></i>
-                </button>
+<!--              <div class="relative w-[150px]">-->
+<!--                <button-->
+<!--                        class="w-full border border-gray-500 bg-gray-900 text-white px-4 py-2 rounded-lg flex justify-between items-center">-->
+<!--                  {{ userRequest.location || 'Select location' }}-->
+<!--                  <i class="fa-solid fa-chevron-down"></i>-->
+<!--                </button>-->
 
-                <div *ngIf="isLocationDropdownOpen"
-                     class="absolute z-50 w-full max-h-40 overflow-y-auto bg-gray-800 border border-gray-600 rounded-lg mt-1">
-                  <div *ngFor="let loc of allLocations"
-                       (click)="selectLocation(loc.name)"
-                       class="px-4 py-2 cursor-pointer hover:bg-gray-700 flex items-center gap-2"
-                       [ngClass]="{'bg-gray-700': userRequest.location === loc.name}">
-                    <img *ngIf="loc.iconPath" [src]="loc.iconPath" class="w-4 h-4"/>
-                    <span>{{ loc.name }}</span>
-                  </div>
-                </div>
-              </div>
-              <img
-                *ngIf="userRequest.location"
-                [src]="getIconPath(userRequest.location)"
-                alt="{{ userRequest.location }}"
-                class="w-13 h-8 rounded"
-              />
-            </div>
+<!--                <div *ngIf="isLocationDropdownOpen"-->
+<!--                     class="absolute z-50 w-full max-h-40 overflow-y-auto bg-gray-800 border border-gray-600 rounded-lg mt-1">-->
+<!--                  <div *ngFor="let loc of allLocations"-->
+<!--                       class="px-4 py-2 cursor-pointer hover:bg-gray-700 flex items-center gap-2"-->
+<!--                       [ngClass]="{'bg-gray-700': userRequest.location === loc.name}">-->
+<!--                    <img *ngIf="loc.iconPath" [src]="loc.iconPath" class="w-4 h-4"/>-->
+<!--                    <span>{{ loc.name }}</span>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--              <img-->
+<!--                *ngIf="userRequest.location"-->
+<!--                [src]="getIconPath(userRequest.location)"-->
+<!--                alt="{{ userRequest.location }}"-->
+<!--                class="w-13 h-8 rounded"-->
+<!--              />-->
+<!--            </div>-->
 
-          </div>
-
-
-          <!-- Profile & Banner Tab -->
-
-          <div *ngIf="activeTab === 'profile'" class="flex flex-col gap-6">
-
-            <!-- Banner -->
-            <div class="relative w-full h-48 rounded-xl mb-5">
-
-              <img *ngIf="userResponse.bannerType === 'PREDEFINED'"
-                   [src]="previewBanner || getBanner(userResponse)"
-                   class="w-full h-full rounded-2xl object-cover"
-                   alt="Profile Banner"/>
+<!--          </div>-->
 
 
-              <img *ngIf="userResponse.bannerType === 'CUSTOM'"
-                   [src]="previewBanner || getBanner(userResponse)"
-                   class="w-full h-full rounded-2xl object-cover"
-                   alt="Profile Banner"
-              />
+<!--          &lt;!&ndash; Profile & Banner Tab &ndash;&gt;-->
 
-              <label *ngIf="(isPreviewBannerInserted) || (selectedBannerId)"
-                     (click)="removeSelectedPredefinedBanner()"
-                     class="absolute bg-red-500 -top-2 -left-2 text-white flex items-center justify-center w-8 h-8 rounded-full cursor-pointer hover:bg-red-600 transition-colors duration-200"
-              >
-                <i class="fa-solid fa-trash-can"></i>
-              </label>
+<!--          <div *ngIf="activeTab === 'profile'" class="flex flex-col gap-6">-->
 
-              <label
-                for="bannerFile"
-                class="absolute bg-black -top-2 -right-2 text-white flex items-center justify-center w-8 h-8 rounded-full cursor-pointer hover:bg-gray-700 transition-colors duration-200"
-              >
-                <i class="fa-solid fa-pen"></i>
-              </label>
+<!--            &lt;!&ndash; Banner &ndash;&gt;-->
+<!--            <div class="relative w-full h-48 rounded-xl mb-5">-->
 
-              <input
-                (change)="onBannerSelected($event)"
-                type="file"
-                id="bannerFile"
-                accept="image/jpeg, image/png"
-                class="hidden"
-              />
-
-              <div class="absolute left-6 top-1/2 -translate-y-1/2">
-                <div class="relative w-32 h-32">
-
-                  <img *ngIf="!userHasProfilePicture && !isPreviewImageInserted"
-                       src="assets/profilePicture/default_profile_picture.svg"
-                       class="w-32 h-32 rounded-2xl object-cover border-4 border-gray-800"
-                       [ngStyle]="{'background-color': userResponse.profileColor}"
-                       alt="Profile Picture"
-                  />
-
-                  <img *ngIf="(!userHasProfilePicture && isPreviewImageInserted) || userHasProfilePicture"
-                       [src]=" previewImage || getProfilePicture(userResponse)"
-                       class="w-32 h-32 rounded-2xl object-cover border-4 border-gray-800"
-                       alt="Profile Picture"
-                  />
-
-                  <label *ngIf="isPreviewImageInserted"
-                         (click)="removeProfileImage()"
-                         class="absolute bg-red-500 -top-2 -left-2 text-white flex items-center justify-center w-8 h-8 rounded-full cursor-pointer hover:bg-red-600 transition-colors duration-200"
-                  >
-                    <i class="fa-solid fa-trash-can"></i>
-                  </label>
-
-                  <label
-                    for="formFile"
-                    class="absolute bg-black -top-2 -right-2 text-white flex items-center justify-center w-8 h-8 rounded-full cursor-pointer hover:bg-gray-700 transition-colors duration-200"
-                  >
-                    <i class="fa-solid fa-pen"></i>
-                  </label>
-
-                  <input
-                    (change)="onFileSelected($event)"
-                    type="file"
-                    id="formFile"
-                    accept="image/jpeg, image/png"
-                    class="hidden"
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="flex justify-between">
-              <button (click)="showBanners()" class="text-sm w-52 cursor-pointer flex items-center">
-                Show predefined banners <i class="fa-solid fa-angle-down ml-1"></i>
-              </button>
-
-            </div>
-            <div class="flex flex-col gap-6">
-              <div>
-                <label *ngIf="showPredefinedBanners" class="text-gray-300 text-sm mb-2 block">Select a banner</label>
-                <div *ngIf="showPredefinedBanners" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                  <img *ngFor="let bannerId of predefinedBanners"
-                       (click)="selectedBanner(bannerId)"
-                       [src]="'assets/banners/banner_' + bannerId + '.jpg'"
-                       class="w-full h-20 rounded-xl object-cover cursor-pointer border-2"
-                       [ngClass]="{'border-gray-500': selectedBannerId === bannerId, 'border-transparent': selectedBannerId !== bannerId}">
-                </div>
-              </div>
-
-              <div>
-                <div class="flex justify-between items-center mb-2">
-                  <label class="text-gray-300 text-sm">Colors for cards</label>
-                </div>
-                <div class="flex flex-wrap gap-4">
-                  <div *ngFor="let cardColor of cardColorsResponse" class="flex flex-col items-center">
-
-                    <div
-                      (click)="selectColor(cardColor.id, cardColor.colorCode)"
-                      class="relative w-12 h-12 border-2 border-black rounded-xl cursor-pointer hover:scale-110 transition-transform"
-                      [ngStyle]="{'background-color': cardColor.colorCode}"
-                    >
-
-                      <label *ngIf="selectedColorId === cardColor.id"
-                             (click)="removeSelectedCardColor() ; $event.stopPropagation()"
-                             class="absolute bg-red-500 -top-2 -left-2 text-white flex items-center justify-center w-7 h-7 rounded-full cursor-pointer hover:bg-red-600 transition-colors duration-200"
-                      >
-                        <i class="fa-solid fa-trash-can"></i>
-                      </label>
-                    </div>
-
-                    <p class="text-xs text-center mt-1">{{ cardColor.colorName }}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!--        Privacy & Security-->
-
-          <div *ngIf="activeTab === 'security'" class="flex flex-col gap-4">
-
-            <div class=" flex border-b border-gray-500">
-              <button (click)="activeSubTabs='community'"
-                      [ngClass]="activeSubTabs === 'community' ? 'border-b-2 border-blue-500 text-white': 'text-gray-400'"
-                      class="px-3 py-1 font-semibold text-sm cursor-pointer">Community
-              </button>
-              <button (click)="activeSubTabs='store'"
-                      [ngClass]="activeSubTabs === 'store' ? 'border-b-2 border-blue-500 text-white': 'text-gray-400'"
-                      class="px-3 py-1 font-semibold text-sm cursor-pointer">Store
-              </button>
-              <button (click)="activeSubTabs='account'"
-                      [ngClass]="activeSubTabs === 'account' ? 'border-b-2 border-blue-500 text-white': 'text-gray-400'"
-                      class="px-3 py-1 font-semibold text-sm cursor-pointer">Account
-              </button>
-            </div>
+<!--              <img *ngIf="userResponse.bannerType === 'PREDEFINED'"-->
+<!--                   [src]="previewBanner || getBanner(userResponse)"-->
+<!--                   class="w-full h-full rounded-2xl object-cover"-->
+<!--                   alt="Profile Banner"/>-->
 
 
-            <!--COMMUNITY-->
-            <div *ngIf="activeSubTabs === 'community'" class="flex flex-col lg:flex-row gap-1">
+<!--              <img *ngIf="userResponse.bannerType === 'CUSTOM'"-->
+<!--                   [src]="previewBanner || getBanner(userResponse)"-->
+<!--                   class="w-full h-full rounded-2xl object-cover"-->
+<!--                   alt="Profile Banner"-->
+<!--              />-->
 
-              <div class="flex-1 flex flex-col gap-6">
+<!--              <label *ngIf="(isPreviewBannerInserted) || (selectedBannerId)"-->
+<!--                     class="absolute bg-red-500 -top-2 -left-2 text-white flex items-center justify-center w-8 h-8 rounded-full cursor-pointer hover:bg-red-600 transition-colors duration-200"-->
+<!--              >-->
+<!--                <i class="fa-solid fa-trash-can"></i>-->
+<!--              </label>-->
 
-                <fieldset class="border-l-4 border-blue-500 pl-4">
-                  <legend class="font-semibold mb-2">Friend Request</legend>
-                  <div class="flex gap-4">
-                    <label class="flex items-center gap-1.5 cursor-pointer" *ngFor="let option of friendRequestOptions">
-                      <input type="radio" name="friendRequests" value="everyone"/>
-                      {{ option }}
-                    </label>
-                  </div>
-                </fieldset>
+<!--              <label-->
+<!--                for="bannerFile"-->
+<!--                class="absolute bg-black -top-2 -right-2 text-white flex items-center justify-center w-8 h-8 rounded-full cursor-pointer hover:bg-gray-700 transition-colors duration-200"-->
+<!--              >-->
+<!--                <i class="fa-solid fa-pen"></i>-->
+<!--              </label>-->
 
-                <fieldset class="border-l-4 border-blue-500 pl-4">
-                  <legend class="font-semibold mb-2">Send Messages</legend>
-                  <div class="flex gap-4">
-                    <label class="flex items-center gap-1.5  cursor-pointer" *ngFor="let option of sendMessageOptions">
-                      <input type="radio" name="sendMessages" value="everyone"/>
-                      {{ option }}
-                    </label>
-                  </div>
-                </fieldset>
+<!--              <input-->
+<!--                type="file"-->
+<!--                id="bannerFile"-->
+<!--                accept="image/jpeg, image/png"-->
+<!--                class="hidden"-->
+<!--              />-->
 
-                <fieldset class="border-l-4 border-blue-500 pl-4">
-                  <legend class="font-semibold mb-2">Profile Visibility</legend>
-                  <div class="flex gap-4">
-                    <label class="flex items-center gap-1.5 cursor-pointer"
-                           *ngFor="let option of profileVisibilityOptions">
-                      <input type="radio" name="profileVisibility" value="everyone"/>
-                      {{ option }}
-                    </label>
-                  </div>
-                </fieldset>
+<!--              <div class="absolute left-6 top-1/2 -translate-y-1/2">-->
+<!--                <div class="relative w-32 h-32">-->
 
-              </div>
+<!--                  <img *ngIf="!userHasProfilePicture && !isPreviewImageInserted"-->
+<!--                       src="assets/profilePicture/default_profile_picture.svg"-->
+<!--                       class="w-32 h-32 rounded-2xl object-cover border-4 border-gray-800"-->
+<!--                       [ngStyle]="{'background-color': userResponse.profileColor}"-->
+<!--                       alt="Profile Picture"-->
+<!--                  />-->
 
-              <div class="flex-1 flex flex-col gap-6">
+<!--                  <img *ngIf="(!userHasProfilePicture && isPreviewImageInserted) || userHasProfilePicture"-->
+<!--                       [src]=" previewImage || getProfilePicture(userResponse)"-->
+<!--                       class="w-32 h-32 rounded-2xl object-cover border-4 border-gray-800"-->
+<!--                       alt="Profile Picture"-->
+<!--                  />-->
 
-                <fieldset class="border-l-4 border-green-500 pl-4">
-                  <legend class="font-semibold mb-2">Group Invites</legend>
-                  <div class="flex gap-4">
-                    <label class="flex items-center gap-1.5 cursor-pointer" *ngFor="let option of groupInvitesOptions">
-                      <input type="radio" name="groupInvites" value="everyone"/>
-                      {{ option }}
-                    </label>
-                  </div>
-                </fieldset>
+<!--                  <label *ngIf="isPreviewImageInserted"-->
+<!--                         class="absolute bg-red-500 -top-2 -left-2 text-white flex items-center justify-center w-8 h-8 rounded-full cursor-pointer hover:bg-red-600 transition-colors duration-200"-->
+<!--                  >-->
+<!--                    <i class="fa-solid fa-trash-can"></i>-->
+<!--                  </label>-->
 
-                <fieldset class="border-l-4 border-green-500 pl-4">
-                  <legend class="font-semibold mb-2">Play Together Invites</legend>
-                  <div class="flex gap-4">
-                    <label class="flex items-center gap-2 cursor-pointer"
-                           *ngFor="let option of playTogetherInvitesOptions">
-                      <input type="radio" name="playTogetherInvites" value="everyone"/>
-                      {{ option }}
-                    </label>
-                  </div>
-                </fieldset>
-              </div>
-            </div>
-            <!--STORE-->
-            <div *ngIf="activeSubTabs === 'store'">
+<!--                  <label-->
+<!--                    for="formFile"-->
+<!--                    class="absolute bg-black -top-2 -right-2 text-white flex items-center justify-center w-8 h-8 rounded-full cursor-pointer hover:bg-gray-700 transition-colors duration-200"-->
+<!--                  >-->
+<!--                    <i class="fa-solid fa-pen"></i>-->
+<!--                  </label>-->
 
-              <div class="flex items-center mb-2" *ngFor=" let flag of allStoreFlags">
-                <label>{{ flag.flagName }}</label>
-                <mat-slide-toggle class="ml-3"></mat-slide-toggle>
-              </div>
-            </div>
+<!--                  <input-->
+<!--                    type="file"-->
+<!--                    id="formFile"-->
+<!--                    accept="image/jpeg, image/png"-->
+<!--                    class="hidden"-->
+<!--                  />-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="flex justify-between">-->
+<!--              <button class="text-sm w-52 cursor-pointer flex items-center">-->
+<!--                Show predefined banners <i class="fa-solid fa-angle-down ml-1"></i>-->
+<!--              </button>-->
 
-            <!--ACCOUNT-->
-            <div *ngIf="activeSubTabs==='account'">
-              <div class="mb-2">
+<!--            </div>-->
+<!--            <div class="flex flex-col gap-6">-->
+<!--              <div>-->
+<!--                <label *ngIf="showPredefinedBanners" class="text-gray-300 text-sm mb-2 block">Select a banner</label>-->
+<!--                <div *ngIf="showPredefinedBanners" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">-->
+<!--                  <img *ngFor="let bannerId of predefinedBanners"-->
+<!--                       [src]="'assets/banners/banner_' + bannerId + '.jpg'"-->
+<!--                       class="w-full h-20 rounded-xl object-cover cursor-pointer border-2"-->
+<!--                       [ngClass]="{'border-gray-500': selectedBannerId === bannerId, 'border-transparent': selectedBannerId !== bannerId}">-->
+<!--                </div>-->
+<!--              </div>-->
+
+<!--              <div>-->
+<!--                <div class="flex justify-between items-center mb-2">-->
+<!--                  <label class="text-gray-300 text-sm">Colors for cards</label>-->
+<!--                </div>-->
+<!--                <div class="flex flex-wrap gap-4">-->
+<!--                  <div *ngFor="let cardColor of cardColorsResponse" class="flex flex-col items-center">-->
+
+<!--                    <div-->
+<!--                      class="relative w-12 h-12 border-2 border-black rounded-xl cursor-pointer hover:scale-110 transition-transform"-->
+<!--                      [ngStyle]="{'background-color': cardColor.colorCode}"-->
+<!--                    >-->
+
+<!--                      <label *ngIf="selectedColorId === cardColor.id"-->
+<!--                             class="absolute bg-red-500 -top-2 -left-2 text-white flex items-center justify-center w-7 h-7 rounded-full cursor-pointer hover:bg-red-600 transition-colors duration-200"-->
+<!--                      >-->
+<!--                        <i class="fa-solid fa-trash-can"></i>-->
+<!--                      </label>-->
+<!--                    </div>-->
+
+<!--                    <p class="text-xs text-center mt-1">{{ cardColor.colorName }}</p>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+
+<!--          &lt;!&ndash;        Privacy & Security&ndash;&gt;-->
+
+<!--          <div *ngIf="activeTab === 'security'" class="flex flex-col gap-4">-->
+
+<!--            <div class=" flex border-b border-gray-500">-->
+<!--              <button (click)="activeSubTabs='community'"-->
+<!--                      [ngClass]="activeSubTabs === 'community' ? 'border-b-2 border-blue-500 text-white': 'text-gray-400'"-->
+<!--                      class="px-3 py-1 font-semibold text-sm cursor-pointer">Community-->
+<!--              </button>-->
+<!--              <button (click)="activeSubTabs='store'"-->
+<!--                      [ngClass]="activeSubTabs === 'store' ? 'border-b-2 border-blue-500 text-white': 'text-gray-400'"-->
+<!--                      class="px-3 py-1 font-semibold text-sm cursor-pointer">Store-->
+<!--              </button>-->
+<!--              <button (click)="activeSubTabs='account'"-->
+<!--                      [ngClass]="activeSubTabs === 'account' ? 'border-b-2 border-blue-500 text-white': 'text-gray-400'"-->
+<!--                      class="px-3 py-1 font-semibold text-sm cursor-pointer">Account-->
+<!--              </button>-->
+<!--            </div>-->
 
 
-                <div class="mb-2">
-                  <h3 class="text-base font-semibold mb-1">Change password</h3>
-                  <p class="text-sm text-gray-500 mb-1">
-                    We'll send you a secure link to your email to reset your password.
-                  </p>
-                </div>
-                <button
-                  (click)="sendResetLink()"
-                  class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition cursor-pointer">
-                  Send Reset Link
-                </button>
+<!--            &lt;!&ndash;COMMUNITY&ndash;&gt;-->
+<!--            <div *ngIf="activeSubTabs === 'community'" class="flex flex-col lg:flex-row gap-1">-->
 
-              </div>
+<!--              <div class="flex-1 flex flex-col gap-6">-->
 
-              <div class="mb-2">
-                <h3 class="text-base font-semibold mb-1">Delete Account</h3>
-                <p class="text-sm text-gray-500 mb-1">
-                  After deleting your account, you’ll be signed out and won’t be able to log in anymore.
-                  <!--              TODO send email and logout user-->
+<!--                <fieldset class="border-l-4 border-blue-500 pl-4">-->
+<!--                  <legend class="font-semibold mb-2">Friend Request</legend>-->
+<!--                  <div class="flex gap-4">-->
+<!--                    <label class="flex items-center gap-1.5 cursor-pointer" *ngFor="let option of friendRequestOptions">-->
+<!--                      <input type="radio" name="friendRequests" value="everyone"/>-->
+<!--                      {{ option }}-->
+<!--                    </label>-->
+<!--                  </div>-->
+<!--                </fieldset>-->
 
-                </p>
-              </div>
-              <button
-                class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition">
-                Delete account
-                <i class="fa-solid fa-trash-can"></i>
-              </button>
-            </div>
+<!--                <fieldset class="border-l-4 border-blue-500 pl-4">-->
+<!--                  <legend class="font-semibold mb-2">Send Messages</legend>-->
+<!--                  <div class="flex gap-4">-->
+<!--                    <label class="flex items-center gap-1.5  cursor-pointer" *ngFor="let option of sendMessageOptions">-->
+<!--                      <input type="radio" name="sendMessages" value="everyone"/>-->
+<!--                      {{ option }}-->
+<!--                    </label>-->
+<!--                  </div>-->
+<!--                </fieldset>-->
 
-          </div>
+<!--                <fieldset class="border-l-4 border-blue-500 pl-4">-->
+<!--                  <legend class="font-semibold mb-2">Profile Visibility</legend>-->
+<!--                  <div class="flex gap-4">-->
+<!--                    <label class="flex items-center gap-1.5 cursor-pointer"-->
+<!--                           *ngFor="let option of profileVisibilityOptions">-->
+<!--                      <input type="radio" name="profileVisibility" value="everyone"/>-->
+<!--                      {{ option }}-->
+<!--                    </label>-->
+<!--                  </div>-->
+<!--                </fieldset>-->
 
-        </div>
+<!--              </div>-->
+
+<!--              <div class="flex-1 flex flex-col gap-6">-->
+
+<!--                <fieldset class="border-l-4 border-green-500 pl-4">-->
+<!--                  <legend class="font-semibold mb-2">Group Invites</legend>-->
+<!--                  <div class="flex gap-4">-->
+<!--                    <label class="flex items-center gap-1.5 cursor-pointer" *ngFor="let option of groupInvitesOptions">-->
+<!--                      <input type="radio" name="groupInvites" value="everyone"/>-->
+<!--                      {{ option }}-->
+<!--                    </label>-->
+<!--                  </div>-->
+<!--                </fieldset>-->
+
+<!--                <fieldset class="border-l-4 border-green-500 pl-4">-->
+<!--                  <legend class="font-semibold mb-2">Play Together Invites</legend>-->
+<!--                  <div class="flex gap-4">-->
+<!--                    <label class="flex items-center gap-2 cursor-pointer"-->
+<!--                           *ngFor="let option of playTogetherInvitesOptions">-->
+<!--                      <input type="radio" name="playTogetherInvites" value="everyone"/>-->
+<!--                      {{ option }}-->
+<!--                    </label>-->
+<!--                  </div>-->
+<!--                </fieldset>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            &lt;!&ndash;STORE&ndash;&gt;-->
+<!--            <div *ngIf="activeSubTabs === 'store'">-->
+
+<!--              <div class="flex items-center mb-2" *ngFor=" let flag of allStoreFlags">-->
+<!--                <label>{{ flag.flagName }}</label>-->
+<!--                <mat-slide-toggle class="ml-3"></mat-slide-toggle>-->
+<!--              </div>-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash;ACCOUNT&ndash;&gt;-->
+<!--            <div *ngIf="activeSubTabs==='account'">-->
+<!--              <div class="mb-2">-->
 
 
-        <!-- Action Buttons -->
+<!--                <div class="mb-2">-->
+<!--                  <h3 class="text-base font-semibold mb-1">Change password</h3>-->
+<!--                  <p class="text-sm text-gray-500 mb-1">-->
+<!--                    We'll send you a secure link to your email to reset your password.-->
+<!--                  </p>-->
+<!--                </div>-->
+<!--                <button-->
+<!--                  (click)="sendResetLink()"-->
+<!--                  class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition cursor-pointer">-->
+<!--                  Send Reset Link-->
+<!--                </button>-->
 
-        <div class="flex justify-end gap-3 mt-6">
-          <div *ngIf="activeTab === 'profile'" class="w-full flex">
-            <button
-              [disabled]="!changesExist"
-              [title]="changesExist ? 'See how your profile will look' : 'Make at least one change to preview your profile'"
-              (click)="showPreview()"
-              class="px-4 py-2 rounded-lg transition-colors duration-150"
-              [ngClass]="changesExist ? 'bg-gray-600 text-white hover:bg-gray-700 cursor-pointer' : 'bg-gray-600 text-gray-400'"
-            >
-              Try changes
-            </button>
-          </div>
+<!--              </div>-->
 
-          <button (click)="closeModal()"
-                  class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-500 transition-colors cursor-pointer">
-            Cancel
-          </button>
-          <button (click)="saveProfile()"
-                  class="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-500 text-white rounded-lg hover:from-blue-500 hover:to-indigo-400 transition-colors cursor-pointer">
-            Save
-          </button>
-        </div>
-        <button (click)="closeModal()"
-                class=" absolute top-3 right-3 text-2xl hover:text-gray-300 transition-colors cursor-pointer">
-          &times;
-        </button>
-      </div>
-    </div>
+<!--              <div class="mb-2">-->
+<!--                <h3 class="text-base font-semibold mb-1">Delete Account</h3>-->
+<!--                <p class="text-sm text-gray-500 mb-1">-->
+<!--                  After deleting your account, you’ll be signed out and won’t be able to log in anymore.-->
+<!--                  &lt;!&ndash;              TODO send email and logout user&ndash;&gt;-->
 
-  </div>
+<!--                </p>-->
+<!--              </div>-->
+<!--              <button-->
+<!--                class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition">-->
+<!--                Delete account-->
+<!--                <i class="fa-solid fa-trash-can"></i>-->
+<!--              </button>-->
+<!--            </div>-->
+
+<!--          </div>-->
+
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--  </div>-->
 
 
 <!--  <div *ngIf="!showPreviewColors && isLoaded"-->
@@ -812,7 +914,7 @@
 <!--  </div>-->
 
 
-  <div class="w-full h-[60vh] mt-5 flex flex-col lg:flex-row gap-5">
+<!--  <div class="w-full h-[60vh] mt-5 flex flex-col lg:flex-row gap-5">-->
 
 <!--    <div *ngIf="isLoaded"-->
 <!--         class="lg:w-1/5 w-full h-full backdrop-blur-md rounded-2xl flex flex-col shadow-lg border border-white/20"-->
@@ -859,90 +961,90 @@
 <!--        </div>-->
 
 <!--    BIO MODAL    -->
-        <div *ngIf="isEditBioModalOpen"
-             class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 animate-fade-in">
-          <div class="bg-[#1f1f2e] p-6 rounded-2xl w-96 max-w-full relative shadow-2xl border border-white/20">
-            <h2 class="text-white text-xl font-bold mb-4">Edit Bio</h2>
+<!--        <div *ngIf="isEditBioModalOpen"-->
+<!--             class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 animate-fade-in">-->
+<!--          <div class="bg-[#1f1f2e] p-6 rounded-2xl w-96 max-w-full relative shadow-2xl border border-white/20">-->
+<!--            <h2 class="text-white text-xl font-bold mb-4">Edit Bio</h2>-->
 
-            <textarea [(ngModel)]="bioUpdateRequest.bio"
-                      class="w-full h-32 p-3 rounded-lg border border-gray-700 bg-[#1f1f2c] text-white focus:outline-none focus:ring-2 focus:ring-gray-800 resize-none"
-                      placeholder="Write something about yourself..."></textarea>
+<!--            <textarea [(ngModel)]="bioUpdateRequest.bio"-->
+<!--                      class="w-full h-32 p-3 rounded-lg border border-gray-700 bg-[#1f1f2c] text-white focus:outline-none focus:ring-2 focus:ring-gray-800 resize-none"-->
+<!--                      placeholder="Write something about yourself..."></textarea>-->
 
-            <div class="flex justify-end gap-3 mt-4">
-              <button (click)="closeModal()"
-                      class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-500 transition-colors cursor-pointer">
-                Cancel
-              </button>
-              <button (click)="saveBio()"
-                      class="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-500 text-white rounded-lg hover:from-blue-500 hover:to-indigo-400 transition-colors cursor-pointer">
-                Save
-              </button>
-            </div>
+<!--            <div class="flex justify-end gap-3 mt-4">-->
+<!--              <button (click)="closeModal()"-->
+<!--                      class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-500 transition-colors cursor-pointer">-->
+<!--                Cancel-->
+<!--              </button>-->
+<!--              <button (click)="saveBio()"-->
+<!--                      class="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-500 text-white rounded-lg hover:from-blue-500 hover:to-indigo-400 transition-colors cursor-pointer">-->
+<!--                Save-->
+<!--              </button>-->
+<!--            </div>-->
 
-            <button (click)="closeModal()"
-                    class="absolute top-3 right-3 text-white text-2xl hover:text-gray-300 transition-colors cursor-pointer">
-              &times;
-            </button>
-          </div>
-        </div>
+<!--            <button (click)="closeModal()"-->
+<!--                    class="absolute top-3 right-3 text-white text-2xl hover:text-gray-300 transition-colors cursor-pointer">-->
+<!--              &times;-->
+<!--            </button>-->
+<!--          </div>-->
+<!--        </div>-->
 
         <!--        edit genres modal    -->
-        <div *ngIf="isEditGenresModalOpen" class="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-          <div class="bg-[#1f1f2e] p-6 rounded-2xl w-[30rem] relative shadow-2xl border border-[#2e2e40]">
-            <h2 class="text-white text-xl font-semibold mb-5 text-center">
-              Edit Your Favorite Genres
-            </h2>
+<!--        <div *ngIf="isEditGenresModalOpen" class="fixed inset-0 bg-black/60 flex items-center justify-center z-50">-->
+<!--          <div class="bg-[#1f1f2e] p-6 rounded-2xl w-[30rem] relative shadow-2xl border border-[#2e2e40]">-->
+<!--            <h2 class="text-white text-xl font-semibold mb-5 text-center">-->
+<!--              Edit Your Favorite Genres-->
+<!--            </h2>-->
 
 
-            <div *ngIf="isLoaded" class="flex flex-wrap gap-3 mb-6 justify-center">
-              <div
-                *ngFor="let genre of genreResponse"
-                (click)="!favoriteGenreIds.includes(genre.id) && selectedGenre(genre.id)"
-                class="cursor-pointer px-4 py-2 rounded-full transition-all duration-200 relative font-medium"
-                [ngClass]="{
-                    'bg-gradient-to-r from-blue-300 to-purple-400 text-white shadow-md scale-105': selectedGenres.has(genre.id),
-                    'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-md scale-105': favoriteGenreIds.includes(genre.id),
-                    'bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-white':
-                      !selectedGenres.has(genre.id) && !favoriteGenreIds.includes(genre.id)
-                  }"
-              >
-                {{ genre.name }}
-                <button
-                  *ngIf="favoriteGenreIds.includes(genre.id)"
-                  (click)="removeFavoriteGenre(genre.id); $event.stopPropagation()"
-                  class="absolute -top-1 -right-2 text-white bg-gradient-to-r from-red-600 to-red-500 hover:from-red-600 hover:to-red-600 w-5 h-5 rounded-full flex items-center justify-center text-xs shadow-md"
-                  title="Remove from favorites"
-                >
-                  <i class="fa-solid fa-xmark cursor-pointer"></i>
-                </button>
-              </div>
-            </div>
+<!--            <div *ngIf="isLoaded" class="flex flex-wrap gap-3 mb-6 justify-center">-->
+<!--              <div-->
+<!--                *ngFor="let genre of genreResponse"-->
+<!--                (click)="!favoriteGenreIds.includes(genre.id) && selectedGenre(genre.id)"-->
+<!--                class="cursor-pointer px-4 py-2 rounded-full transition-all duration-200 relative font-medium"-->
+<!--                [ngClass]="{-->
+<!--                    'bg-gradient-to-r from-blue-300 to-purple-400 text-white shadow-md scale-105': selectedGenres.has(genre.id),-->
+<!--                    'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-md scale-105': favoriteGenreIds.includes(genre.id),-->
+<!--                    'bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-white':-->
+<!--                      !selectedGenres.has(genre.id) && !favoriteGenreIds.includes(genre.id)-->
+<!--                  }"-->
+<!--              >-->
+<!--                {{ genre.name }}-->
+<!--                <button-->
+<!--                  *ngIf="favoriteGenreIds.includes(genre.id)"-->
+<!--                  (click)="removeFavoriteGenre(genre.id); $event.stopPropagation()"-->
+<!--                  class="absolute -top-1 -right-2 text-white bg-gradient-to-r from-red-600 to-red-500 hover:from-red-600 hover:to-red-600 w-5 h-5 rounded-full flex items-center justify-center text-xs shadow-md"-->
+<!--                  title="Remove from favorites"-->
+<!--                >-->
+<!--                  <i class="fa-solid fa-xmark cursor-pointer"></i>-->
+<!--                </button>-->
+<!--              </div>-->
+<!--            </div>-->
 
-            <div class="flex justify-end gap-3">
-              <button
-                (click)="cancelFavoriteGenres()"
-                class="px-4 py-2 bg-gray-700 text-gray-200 rounded-lg hover:bg-gray-600 hover:text-white transition cursor-pointer"
-              >
-                Cancel
-              </button>
-              <button
-                (click)="saveFavoriteGenres()"
-                class="px-4 py-2 bg-gradient-to-r from-indigo-500 to-violet-500 text-white rounded-lg hover:from-indigo-600 hover:to-violet-600 transition shadow-md shadow-indigo-900/40 cursor-pointer"
-              >
-                Save
-              </button>
-            </div>
+<!--            <div class="flex justify-end gap-3">-->
+<!--              <button-->
+<!--                (click)="cancelFavoriteGenres()"-->
+<!--                class="px-4 py-2 bg-gray-700 text-gray-200 rounded-lg hover:bg-gray-600 hover:text-white transition cursor-pointer"-->
+<!--              >-->
+<!--                Cancel-->
+<!--              </button>-->
+<!--              <button-->
+<!--                (click)="saveFavoriteGenres()"-->
+<!--                class="px-4 py-2 bg-gradient-to-r from-indigo-500 to-violet-500 text-white rounded-lg hover:from-indigo-600 hover:to-violet-600 transition shadow-md shadow-indigo-900/40 cursor-pointer"-->
+<!--              >-->
+<!--                Save-->
+<!--              </button>-->
+<!--            </div>-->
 
-            <button
-              (click)="isEditGenresModalOpen = false"
-              class="absolute top-3 right-3 text-gray-400 hover:text-white text-2xl cursor-pointer transition"
-              title="Close"
-            >
-              &times;
-            </button>
-          </div>
-        </div>
-      </div>
+<!--            <button-->
+<!--              (click)="isEditGenresModalOpen = false"-->
+<!--              class="absolute top-3 right-3 text-gray-400 hover:text-white text-2xl cursor-pointer transition"-->
+<!--              title="Close"-->
+<!--            >-->
+<!--              &times;-->
+<!--            </button>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
 
 
 <!--        <div *ngIf="isLoaded"-->
@@ -1078,4 +1180,4 @@
 <!--      </div>-->
 <!--    </div>-->
 <!--  </div>-->
-</div>
+<!--</div>-->
