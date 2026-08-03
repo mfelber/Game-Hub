@@ -29,4 +29,4 @@ export function acceptFriendRequest(http: HttpClient, rootUrl: string, params: A
   );
 }
 
-acceptFriendRequest.PATH = '/community/accept/friend-request/{userId}';
+acceptFriendRequest.PATH = '/find-players/accept/friend-request/{userId}';

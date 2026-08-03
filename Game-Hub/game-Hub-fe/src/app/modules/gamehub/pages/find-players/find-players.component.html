@@ -4,7 +4,7 @@
 
 <main [class.hidden]="!isLoaded">
 
-<!-- HEADER -->
+  <!-- HEADER -->
   <section>
     <div class="header">
       <div class="header-content">
@@ -19,17 +19,17 @@
     </div>
   </section>
 
-<!-- SEARCH -->
+  <!-- SEARCH -->
   <section>
     <div class="search">
       <app-search-bar
-      placeholder="Search users..."
-      (search)="searchByUsername($event)">
+        placeholder="Search users..."
+        (search)="searchByUsername($event)">
       </app-search-bar>
     </div>
   </section>
 
-<!-- FILTERS -->
+  <!-- FILTERS -->
   <section class="filter-bar">
     <div class="filter-header">
       <span>Filters</span>
@@ -47,7 +47,7 @@
         </select>
       </div>
 
-<!--   TODO retrieve all platforms   -->
+      <!--   TODO retrieve all platforms   -->
 
       <div class="dropdown">
         <label>Platform</label>
@@ -59,7 +59,7 @@
         </select>
       </div>
 
-<!--   TODO   -->
+      <!--   TODO   -->
       <div class="checkbox">
         <label>
           <input type="checkbox"> Looking for teammates
@@ -86,21 +86,21 @@
              class="left-img"
              [ngStyle]="{'background-color': user.profileColor}"/>
         <div>
-        <div class="username">
-          <h3>{{user.username}}</h3>
-          <img class="flag" [src]="user.location?.iconPath" alt="">
-        </div>
-        <span class="text-gray-400 text-sm truncate" [ngClass]="{
+          <div class="username">
+            <h3>{{user.username}}</h3>
+            <img class="flag" [src]="user.location?.iconPath" alt="">
+          </div>
+          <span class="text-gray-400 text-sm truncate" [ngClass]="{
           'text-green-500': user.status === 'ONLINE',
           'text-gray-400': user.status === 'OFFLINE',
           'text-yellow-400': user.status === 'AWAY'
           }">• {{ user.status }} </span>
-        <div class="stats">
-          <span> 🎮 125 games</span>
-          <span> 👥 34 friends</span>
-          <span> ⭐ 55 reviews</span>
-          <span> 📅 joined july 2026</span>
-        </div>
+          <div class="stats">
+            <span> 🎮 125 games</span>
+            <span> 👥 34 friends</span>
+            <span> ⭐ 55 reviews</span>
+            <span> 📅 joined july 2026</span>
+          </div>
         </div>
       </div>
       <div class="right">

@@ -29,4 +29,4 @@ export function cancelFriendRequest(http: HttpClient, rootUrl: string, params: C
   );
 }
 
-cancelFriendRequest.PATH = '/community/cancel/friend-request/{userId}';
+cancelFriendRequest.PATH = '/find-players/cancel/friend-request/{userId}';

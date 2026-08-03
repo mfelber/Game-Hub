@@ -29,4 +29,4 @@ export function rejectFriendRequest(http: HttpClient, rootUrl: string, params: R
   );
 }
 
-rejectFriendRequest.PATH = '/community/delete/friend-request/{userId}';
+rejectFriendRequest.PATH = '/find-players/delete/friend-request/{userId}';

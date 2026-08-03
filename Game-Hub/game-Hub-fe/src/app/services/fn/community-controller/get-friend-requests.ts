@@ -32,4 +32,4 @@ export function getFriendRequests(http: HttpClient, rootUrl: string, params?: Ge
   );
 }
 
-getFriendRequests.PATH = '/community/friend-requests';
+getFriendRequests.PATH = '/find-players/friend-requests';

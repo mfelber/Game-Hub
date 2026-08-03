@@ -4,8 +4,7 @@ import {MainComponent} from './pages/main/main.component';
 import {StoreComponent} from './pages/store/store.component';
 import {LibraryComponent} from './pages/library/library.component';
 import {WishlistComponent} from './pages/wishlist/wishlist.component';
-import {CommunityComponent} from './pages/community/community.component';
-import {DiscountsComponent} from './pages/discounts/discounts.component';
+import {FindPlayersComponent} from './pages/find-players/find-players.component';
 import {FriendRequestsComponent} from './pages/friend-requests/friend-requests.component';
 import {FriendsComponent} from './pages/friends/friends.component';
 import {GameDetailsComponent} from './pages/game-details/game-details.component';
@@ -35,13 +34,8 @@ const routes: Routes = [
         canActivate: [authGuard]
       },
       {
-        path: 'community',
-        component: CommunityComponent,
-        canActivate: [authGuard]
-      },
-      {
-        path: 'discounts',
-        component: DiscountsComponent,
+        path: 'find-players',
+        component: FindPlayersComponent,
         canActivate: [authGuard]
       },
       {

@@ -108,7 +108,7 @@ export class MenuComponent implements OnInit {
   updateActiveTabs(url: string) {
     this.isStoreActive = url === '/gamehub' || url.startsWith('/gamehub/game/');
     this.isLibraryActive = url === '/gamehub/library' || url.startsWith("/gamehub/library/game/");
-    this.isCommunityActive = url === '/gamehub/community';
+    this.isCommunityActive = url === '/gamehub/find-players';
   }
 
   isGameDetailsActive(url: string) {
@@ -116,7 +116,7 @@ export class MenuComponent implements OnInit {
       url.startsWith("/gamehub/library/game/")
       || url.startsWith("/gamehub/game/")
       || url.startsWith("/gamehub/user/")
-      || url.startsWith("/gamehub/community");
+      || url.startsWith("/gamehub/find-players");
   }
 
   goToCart() {

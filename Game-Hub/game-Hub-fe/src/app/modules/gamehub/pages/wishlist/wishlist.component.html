@@ -85,9 +85,6 @@
     <div class="card relative" *ngFor="let game of gamePageResponse.content"
          (click)="goToGame(game.gameId)">
       <img [src]="getGameImageCover(game)" alt="{{game.title}}">
-      <div class="discount">
-        -40%
-      </div>
       <div class="card-content">
         <h3>{{ game.title }}</h3>
         <p>
@@ -97,15 +94,19 @@
         </p>
       </div>
       <div class="price">
-        <span class="old-price">{{ game.price }}</span>
-        <strong>14.99</strong>
+        <span class="current-price">17.99 €</span>
+
+        <div class="price-info">
+          <span class="old-price">29.99 €</span>
+          <span class="discount">-40%</span>
+        </div>
       </div>
       <div class="buttons">
         <button class="buy">
-          <i class="fa-solid fa-cart-shopping"></i> Buy
+          Buy <i class="fa-solid fa-cart-shopping"></i> -> redirect user to fill invoice form
         </button>
-        <button class="remove">
-          <i class="fa-solid fa-xmark"></i> Remove
+        <button class="remove" (click)="removeGameFromWishList(game.gameId); $event.stopPropagation()">
+           Remove <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
     </div>

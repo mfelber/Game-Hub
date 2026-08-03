@@ -111,13 +111,37 @@
   accent-color:#155dfc;
 }
 
-.discount{
-  position: absolute;
-  right: 15px;
-  top: 15px;
-  background: #22c55e;
-  padding: 6px 12px;
-  border-radius: 20px;
+.price {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.current-price {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.price-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.old-price {
+  color: #7b8190;
+  text-decoration: line-through;
+  font-size: 0.9rem;
+}
+
+.discount {
+  background: #00a63e;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
 }
 
 .games{
@@ -188,8 +212,16 @@
   color: white;
 }
 
+.buy:hover {
+  background: #1447e6;
+}
+
 .remove{
-  background: red;
+  background: #dc2626;
   color: white;
   margin: 0px 20px;
+}
+
+.remove:hover{
+  background: #b91c1c;
 }

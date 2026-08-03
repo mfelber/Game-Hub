@@ -41,7 +41,7 @@ export class CommunityControllerService extends BaseService {
   }
 
   /** Path part for operation `sendFriendRequest()` */
-  static readonly SendFriendRequestPath = '/community/send/friend-request/{userId}';
+  static readonly SendFriendRequestPath = '/find-players/send/friend-request/{userId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -66,7 +66,7 @@ export class CommunityControllerService extends BaseService {
   }
 
   /** Path part for operation `acceptFriendRequest()` */
-  static readonly AcceptFriendRequestPath = '/community/accept/friend-request/{userId}';
+  static readonly AcceptFriendRequestPath = '/find-players/accept/friend-request/{userId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -91,7 +91,7 @@ export class CommunityControllerService extends BaseService {
   }
 
   /** Path part for operation `findAllUsers()` */
-  static readonly FindAllUsersPath = '/community/get/all/users';
+  static readonly FindAllUsersPath = '/find-players/get/all/users';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -116,7 +116,7 @@ export class CommunityControllerService extends BaseService {
   }
 
   /** Path part for operation `friendExistsForUser()` */
-  static readonly FriendExistsForUserPath = '/community/friends/{userId}/check';
+  static readonly FriendExistsForUserPath = '/find-players/friends/{userId}/check';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -141,7 +141,7 @@ export class CommunityControllerService extends BaseService {
   }
 
   /** Path part for operation `getFriendRequests()` */
-  static readonly GetFriendRequestsPath = '/community/friend-requests';
+  static readonly GetFriendRequestsPath = '/find-players/friend-requests';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -166,7 +166,7 @@ export class CommunityControllerService extends BaseService {
   }
 
   /** Path part for operation `friendRequestsCount()` */
-  static readonly FriendRequestsCountPath = '/community/friend-requests/count';
+  static readonly FriendRequestsCountPath = '/find-players/friend-requests/count';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -191,7 +191,7 @@ export class CommunityControllerService extends BaseService {
   }
 
   /** Path part for operation `friendRequestExistsFromSender()` */
-  static readonly FriendRequestExistsFromSenderPath = '/community/friend-request/status/sender/{userId}';
+  static readonly FriendRequestExistsFromSenderPath = '/find-players/friend-request/status/sender/{userId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -216,7 +216,7 @@ export class CommunityControllerService extends BaseService {
   }
 
   /** Path part for operation `friendRequestExistsForReceiver()` */
-  static readonly FriendRequestExistsForReceiverPath = '/community/friend-request/status/receiver/{userId}';
+  static readonly FriendRequestExistsForReceiverPath = '/find-players/friend-request/status/receiver/{userId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -241,7 +241,7 @@ export class CommunityControllerService extends BaseService {
   }
 
   /** Path part for operation `rejectFriendRequest()` */
-  static readonly RejectFriendRequestPath = '/community/delete/friend-request/{userId}';
+  static readonly RejectFriendRequestPath = '/find-players/delete/friend-request/{userId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -266,7 +266,7 @@ export class CommunityControllerService extends BaseService {
   }
 
   /** Path part for operation `cancelFriendRequest()` */
-  static readonly CancelFriendRequestPath = '/community/cancel/friend-request/{userId}';
+  static readonly CancelFriendRequestPath = '/find-players/cancel/friend-request/{userId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.

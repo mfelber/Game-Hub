@@ -94,9 +94,9 @@
   padding: 12px;
   border: none;
   border-radius: 8px;
-  background: #155dfc;
   margin-left: 20px;
   color: white;
+  cursor: pointer;
 }
 
 .card-content p{
@@ -113,4 +113,32 @@
   display: block;
   margin-bottom: 15px;
   margin-left: 20px;
+}
+
+.play-btn{
+  background: #22C55E;
+  color: white;
+}
+
+.play-btn:hover{
+  background: #16A34A;
+}
+
+.stop-play-btn{
+  background: #333d52;
+  color: white;
+}
+
+.stop-play-btn:hover{
+  background: #3F4B63;
+}
+
+
+.download-btn{
+  background: #3B82F6;
+  color: white;
+}
+
+.download-btn:hover{
+  background: #2563EB;
 }

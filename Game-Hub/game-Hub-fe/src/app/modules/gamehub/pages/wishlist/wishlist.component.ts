@@ -136,4 +136,17 @@ export class WishlistComponent implements OnInit{
   searchWishlistedGames() {
     console.log('searchWishlistedGames');
   }
+
+  removeGameFromWishList(gameId: any) {
+    this.gameService.removeGameFromWishlist({gameId})
+      .subscribe({
+        next: () => {
+          console.log('game with id: ' + gameId + ' removed from wishlist');
+          this.getAllGamesInWishlist();
+        },
+        error: (err) => {
+          console.error('Error with buying game:', err);
+        }
+      })
+  }
 }

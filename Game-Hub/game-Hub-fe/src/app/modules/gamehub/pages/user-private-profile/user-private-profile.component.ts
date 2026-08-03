@@ -29,7 +29,6 @@ import {EditProfileInfoComponent} from '../../components/edit-profile-info/edit-
     FormsModule,
     NgStyle,
     CardPreviewComponent,
-    MatSlideToggle,
     ProfileInfoComponent,
     EditProfileInfoComponent,
   ],
@@ -59,7 +58,6 @@ export class UserPrivateProfileComponent implements OnInit {
   }
 
   activeTab: 'basic' | 'profile' | 'security' = 'basic';
-  activeSubTabs: 'account' | 'community' | 'store' = 'community';
 
   profilePicture: File | null = null;
   previewImage: string | undefined;
@@ -89,7 +87,6 @@ export class UserPrivateProfileComponent implements OnInit {
   cardColorsResponse: any [] = [];
   selectedColorCode: string = '';
   selectedColorId: number | null = null;
-  predefinedBanners = [1, 2, 3, 4];
 
   showPreviewColors = false
   previewSelectedColor = '';
