@@ -186,26 +186,6 @@ CREATE TABLE game_hub.user_roles
   FOREIGN KEY (role_id) REFERENCES game_hub.role (id)
 );
 
--- Join table: user_library
-CREATE TABLE game_hub.user_library
-(
-  user_id BIGINT NOT NULL,
-  game_id BIGINT NOT NULL,
-  PRIMARY KEY (user_id, game_id),
-  FOREIGN KEY (user_id) REFERENCES game_hub."user" (id),
-  FOREIGN KEY (game_id) REFERENCES game_hub.game (id)
-);
-
--- Join table: user_wishlist
-CREATE TABLE game_hub.user_wishlist
-(
-  user_id BIGINT NOT NULL,
-  game_id BIGINT NOT NULL,
-  PRIMARY KEY (user_id, game_id),
-  FOREIGN KEY (user_id) REFERENCES game_hub."user" (id),
-  FOREIGN KEY (game_id) REFERENCES game_hub.game (id)
-);
-
 -- Join table: user_play_recently
 CREATE TABLE game_hub.user_play_recently
 (

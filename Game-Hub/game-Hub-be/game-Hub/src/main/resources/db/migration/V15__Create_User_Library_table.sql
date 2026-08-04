@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS game_hub.user_library (
   playtime_minutes INTEGER DEFAULT 0,
   favorite BOOLEAN DEFAULT FALSE,
   last_played TIMESTAMP,
-  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT pk_user_library
     PRIMARY KEY (user_id, game_id),
 

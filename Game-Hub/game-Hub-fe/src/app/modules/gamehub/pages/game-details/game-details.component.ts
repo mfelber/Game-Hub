@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {GameControllerService} from '../../../../services/services/game-controller.service';
+import {StoreControllerService} from '../../../../services/services';
 import {NgForOf, NgIf, NgStyle} from '@angular/common';
 import {GameResponse} from '../../../../services/models/game-response';
 
@@ -23,7 +23,7 @@ export class GameDetailsComponent implements OnInit {
 
   constructor(
     private router: ActivatedRoute,
-    private gameService: GameControllerService
+    private gameService: StoreControllerService,
   ) {
   }
 
@@ -82,7 +82,7 @@ export class GameDetailsComponent implements OnInit {
     this.gameService.buyGame({gameId})
       .subscribe({
         next: () => {
-          console.log('game with id: ' + gameId + ' purchased.');
+          this.checkIfGameIsOwned();
         },
         error: (err) => {
           console.error('Error with buying game:', err);
@@ -111,6 +111,7 @@ export class GameDetailsComponent implements OnInit {
   }
 
   removeGameFromWishList(gameId: any) {
+    console.log(gameId);
     this.gameService.removeGameFromWishlist({gameId})
       .subscribe({
         next: () => {

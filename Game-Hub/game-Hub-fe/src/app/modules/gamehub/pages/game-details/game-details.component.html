@@ -44,15 +44,21 @@
           <b>{{game.releaseYear}}</b>
         </div>
       </div>
+
       <div class="price">
-        <h1 class="old-price">{{game.price}} €</h1>
-        <h1>14.99 €</h1>
+
+        <h1 class="old-price" style="font-size: 30px">{{game.price}} €</h1>
+        <div class="badge owned-badge">
+          -30% get discount
+        </div>
+        <h1 style="margin-left: 10px;font-size: 30px">14.99 €</h1>
       </div>
 
       <div class="purchase-actions">
 
-        <div style="display: flex; gap: 10px">
-          <button style="width: 90%"
+        <div class="purchase-row">
+
+          <button
             *ngIf="!gameIsOwned"
             (click)="buyGame(game.gameId)"
             class="buy">
@@ -60,24 +66,25 @@
             <i class="fa-solid fa-cart-shopping"></i>
           </button>
 
-          <button style="width: 10%"
-                  *ngIf="!gameIsOwned && !gameInWishList"
-                  (click)="addGameToWishList(game.gameId)"
-                  class="wishlist">
+          <button
+            *ngIf="!gameIsOwned && !gameInWishList"
+            (click)="addGameToWishList(game.gameId)"
+            class="wishlist">
             <i class="fa-regular fa-heart"></i>
           </button>
 
-          <button style="width: 10%"
-                  *ngIf="gameInWishList && !gameIsOwned"
-                  (click)="removeGameFromWishList(game.gameId)"
-                  class="remove">
+          <button
+            *ngIf="gameInWishList && !gameIsOwned"
+            (click)="removeGameFromWishList(game.gameId)"
+            class="remove">
             <i class="fa-solid fa-heart"></i>
           </button>
+
         </div>
 
         <button
           *ngIf="gameIsOwned"
-          class="buy">
+          class="in-library">
           In Library 🎮
         </button>
 
@@ -227,11 +234,18 @@
 
     <h2>More like this (based on previewing game)</h2>
     <div class="recommended-grid">
-      <div class="recommended-card">
+      <div class="recommended-card relative">
+        <div class="badges">
+          <div class="badge owned-badge">
+            -30% get discount
+          </div>
+
+        </div>
         <img src="assets/profilePicture/default_profile_picture.svg">
         <div>
           <h3>{{game.title}}</h3>
-          <span>{{game.price}} €</span>
+            <span class="old-price">{{game.price}} €</span>
+            <span>29.99 € set discount price </span>
         </div>
       </div>
     </div>

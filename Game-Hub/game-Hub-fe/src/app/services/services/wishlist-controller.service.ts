@@ -13,7 +13,7 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { getWishlist } from '../fn/wishlist-controller/get-wishlist';
 import { GetWishlist$Params } from '../fn/wishlist-controller/get-wishlist';
-import { PageResponseGameResponse } from '../models/page-response-game-response';
+import { PageResponseWishlistResponse } from '../models/page-response-wishlist-response';
 
 @Injectable({ providedIn: 'root' })
 export class WishlistControllerService extends BaseService {
@@ -30,7 +30,7 @@ export class WishlistControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getWishlist$Response(params?: GetWishlist$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseGameResponse>> {
+  getWishlist$Response(params?: GetWishlist$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseWishlistResponse>> {
     return getWishlist(this.http, this.rootUrl, params, context);
   }
 
@@ -40,9 +40,9 @@ export class WishlistControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getWishlist(params?: GetWishlist$Params, context?: HttpContext): Observable<PageResponseGameResponse> {
+  getWishlist(params?: GetWishlist$Params, context?: HttpContext): Observable<PageResponseWishlistResponse> {
     return this.getWishlist$Response(params, context).pipe(
-      map((r: StrictHttpResponse<PageResponseGameResponse>): PageResponseGameResponse => r.body)
+      map((r: StrictHttpResponse<PageResponseWishlistResponse>): PageResponseWishlistResponse => r.body)
     );
   }
 

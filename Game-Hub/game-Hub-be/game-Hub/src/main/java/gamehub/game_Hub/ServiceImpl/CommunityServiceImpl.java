@@ -61,7 +61,7 @@ public class CommunityServiceImpl implements CommunityService {
           users.isLast()
       );
     } else {
-      Page<User> users = userRepository.findAllByEmailIsNotAndUsername(user.getEmail(), query, pageable);
+      Page<User> users = userRepository.findAllByEmailIsNotAndUsernameContainingIgnoreCase(user.getEmail(), query, pageable);
 
       List<UserCommunityResponse> communityResponse = users.stream()
           .map(communityMapper::toUserCommunityResponse)

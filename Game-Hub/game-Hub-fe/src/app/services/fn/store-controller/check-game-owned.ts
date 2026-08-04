@@ -8,18 +8,15 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { PageResponseWishlistResponse } from '../../models/page-response-wishlist-response';
 
-export interface GetWishlist$Params {
-  page?: number;
-  size?: number;
+export interface CheckGameOwned$Params {
+  gameId: number;
 }
 
-export function getWishlist(http: HttpClient, rootUrl: string, params?: GetWishlist$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseWishlistResponse>> {
-  const rb = new RequestBuilder(rootUrl, getWishlist.PATH, 'get');
+export function checkGameOwned(http: HttpClient, rootUrl: string, params: CheckGameOwned$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+  const rb = new RequestBuilder(rootUrl, checkGameOwned.PATH, 'get');
   if (params) {
-    rb.query('page', params.page, {});
-    rb.query('size', params.size, {});
+    rb.path('gameId', params.gameId, {});
   }
 
   return http.request(
@@ -27,9 +24,9 @@ export function getWishlist(http: HttpClient, rootUrl: string, params?: GetWishl
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<PageResponseWishlistResponse>;
+      return (r as HttpResponse<any>).clone({ body: String((r as HttpResponse<any>).body) === 'true' }) as StrictHttpResponse<boolean>;
     })
   );
 }
 
-getWishlist.PATH = '/wishlist/wishlist';
+checkGameOwned.PATH = '/store/check/game/{gameId}/owned/';

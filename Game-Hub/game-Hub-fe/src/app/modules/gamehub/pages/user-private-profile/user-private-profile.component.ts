@@ -5,7 +5,7 @@ import {Router} from '@angular/router';
 import {UserProfileControllerService} from '../../../../services/services/user-profile-controller.service';
 import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {GameResponse} from '../../../../services/models/game-response';
-import {GameControllerService} from '../../../../services/services/game-controller.service';
+import {StoreControllerService} from '../../../../services/services';
 import {FormsModule} from '@angular/forms';
 import {UserUpdateRequest} from '../../../../services/models/user-update-request';
 import {LocationControllerService} from '../../../../services/services/location-controller.service';
@@ -47,7 +47,7 @@ export class UserPrivateProfileComponent implements OnInit {
   constructor(
     private router: Router,
     private userService: UserProfileControllerService,
-    private gameService: GameControllerService,
+    private gameService: StoreControllerService,
     private locationService: LocationControllerService,
     private http: HttpClient,
     private authenticationService: AuthenticationService,

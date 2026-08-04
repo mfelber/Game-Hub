@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {NgForOf, NgIf, NgOptimizedImage} from '@angular/common';
-import {GameControllerService} from '../../../../services/services/game-controller.service';
+import {StoreControllerService} from '../../../../services/services';
 import {Router, RouterOutlet} from '@angular/router';
 import {PageResponseGameResponse} from '../../../../services/models/page-response-game-response';
 import {GameResponse} from '../../../../services/models/game-response';
@@ -46,7 +46,7 @@ export class StoreComponent implements OnInit{
 
 
   constructor(
-    private gameService: GameControllerService,
+    private gameService: StoreControllerService,
     private router: Router
   ) {
   }

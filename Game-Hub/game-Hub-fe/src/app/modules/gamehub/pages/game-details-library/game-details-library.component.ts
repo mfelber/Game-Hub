@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {NgForOf, NgIf, NgStyle} from '@angular/common';
 import {ActivatedRoute} from '@angular/router';
-import {GameControllerService} from '../../../../services/services/game-controller.service';
+import {StoreControllerService} from '../../../../services/services';
 import {GameResponse} from '../../../../services/models/game-response';
 import {LibraryControllerService} from '../../../../services/services/library-controller.service';
 import {UserPublicProfileComponent} from '../user-public-profile/user-public-profile.component';
@@ -25,7 +25,7 @@ export class GameDetailsLibraryComponent implements OnInit {
 
   constructor(
     private router: ActivatedRoute,
-    private gameService: GameControllerService,
+    private gameService: StoreControllerService,
     private libraryService: LibraryControllerService,
   ) {
   }

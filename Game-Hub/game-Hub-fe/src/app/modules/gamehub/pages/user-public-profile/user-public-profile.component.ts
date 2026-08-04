@@ -3,7 +3,7 @@ import {UserProfileControllerService} from '../../../../services/services/user-p
 import {UserPublicResponse} from '../../../../services/models/user-public-response';
 import {ActivatedRoute, Router} from '@angular/router';
 import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
-import {GameControllerService} from '../../../../services/services/game-controller.service';
+import {StoreControllerService} from '../../../../services/services';
 import {GameResponse} from '../../../../services/models/game-response';
 import {CommunityControllerService} from '../../../../services/services/community-controller.service';
 import {cancelFriendRequest} from '../../../../services/fn/community-controller/cancel-friend-request';
@@ -29,7 +29,7 @@ export class UserPublicProfileComponent implements OnInit {
 
   constructor(
     private userService: UserProfileControllerService,
-    private gameService: GameControllerService,
+    private gameService: StoreControllerService,
     private communityService: CommunityControllerService,
     private router: ActivatedRoute,
     private route: Router,

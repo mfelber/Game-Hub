@@ -24,7 +24,7 @@ public interface GameService {
 
   Long addGameToWishList(Long gameId, Authentication connectedUser);
 
-  Long removeGameToWishList(Long gameId, Authentication connectedUser);
+  Long removeGameFromWishList(Long gameId, Authentication connectedUser);
 
   Boolean checkGameInWishlist(Long gameId, Authentication connectedUser);
 

@@ -70,7 +70,7 @@ public class StoreController {
   // Remove game from wishlist
   @PostMapping("/delete/wishlist/{gameId}")
   public ResponseEntity<Long> removeGameFromWishlist(@PathVariable final Long gameId, final Authentication connectedUser) {
-    return ResponseEntity.ok(gameService.removeGameToWishList(gameId, connectedUser));
+    return ResponseEntity.ok(gameService.removeGameFromWishList(gameId, connectedUser));
   }
 
   // Get gameId
