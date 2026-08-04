@@ -70,10 +70,6 @@ public class UserMapper {
             .map(g -> new GameResponseShort(
                 g.getId(), g.getTitle(), FileUtils.readCoverFromLocation(g.getGameCoverImage())))
             .collect(Collectors.toSet()))
-        .favoriteGames(user.getFavoriteGames().stream()
-            .map(g -> new GameResponseShort(
-                g.getId(), g.getTitle(), FileUtils.readCoverFromLocation(g.getGameCoverImage())))
-            .collect(Collectors.toSet()))
         .favoriteGenres(user.getFavoriteGenres().stream()
             .map(g -> new GenreResponse(g.getId(), g.getName()))
             .collect(Collectors.toSet()))
@@ -123,10 +119,6 @@ public class UserMapper {
         .badges(user.getBadges().stream().map(badge -> new BadgeResponse(badge.getId(), badge.getName(),
             badge.getDescription(), badge.getIconPath())).collect(Collectors.toSet()))
         .playRecently(user.getPlayRecently().stream().limit(5)
-            .map(g -> new GameResponseShort(
-                g.getId(), g.getTitle(), FileUtils.readCoverFromLocation(g.getGameCoverImage())))
-            .collect(Collectors.toSet()))
-        .favoriteGames(user.getFavoriteGames().stream()
             .map(g -> new GameResponseShort(
                 g.getId(), g.getTitle(), FileUtils.readCoverFromLocation(g.getGameCoverImage())))
             .collect(Collectors.toSet()))

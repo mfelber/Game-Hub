@@ -196,16 +196,6 @@ CREATE TABLE game_hub.user_play_recently
   FOREIGN KEY (game_id) REFERENCES game_hub.game (id)
 );
 
--- Join table: user_favorite_game
-CREATE TABLE game_hub.user_favorite_game
-(
-  user_id BIGINT NOT NULL,
-  game_id BIGINT NOT NULL,
-  PRIMARY KEY (user_id, game_id),
-  FOREIGN KEY (user_id) REFERENCES game_hub."user" (id),
-  FOREIGN KEY (game_id) REFERENCES game_hub.game (id)
-);
-
 -- Join table: user_favorite_genre
 CREATE TABLE game_hub.user_favorite_genre
 (

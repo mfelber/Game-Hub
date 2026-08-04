@@ -142,21 +142,10 @@ public class User implements UserDetails, Principal {
       joinColumns = @JoinColumn(name = "friend_id"))
   private Set<User> friends = new HashSet<>();
 
-  // @ManyToMany(fetch = FetchType.LAZY)
-  // @JoinTable(name = "user_wishlist", schema = "game_hub",
-  //     inverseJoinColumns = @JoinColumn(name = "game_id"),
-  //     joinColumns = @JoinColumn(name = "user_id"))
-  // private Set<Game> wishlist;
-
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(name = "user_play_recently", schema = "game_hub",
       joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "game_id"))
   private Set<Game> playRecently;
-
-  @ManyToMany(fetch = FetchType.LAZY)
-  @JoinTable(name = "user_favorite_game", schema = "game_hub",
-      joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "game_id"))
-  private Set<Game> favoriteGames;
 
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(name = "user_favorite_genre", schema = "game_hub",
