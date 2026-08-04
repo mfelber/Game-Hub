@@ -11,6 +11,7 @@ import { Level } from '../models/level';
 import { PasswordResetToken } from '../models/password-reset-token';
 import { Role } from '../models/role';
 import { UserLibrary } from '../models/user-library';
+import { Wishlist } from '../models/wishlist';
 export interface User {
   accountNonExpired?: boolean;
   accountNonLocked?: boolean;
@@ -35,7 +36,7 @@ export interface User {
   lastModifiedAt?: string;
   lastName?: string;
   level?: Level;
-  library?: Array<Game>;
+  library?: Array<UserLibrary>;
   location?: 'SK' | 'CZ' | 'PL' | 'HU' | 'US' | 'UNKNOWN';
   name?: string;
   parentEmail?: string;
@@ -46,9 +47,8 @@ export interface User {
   recommendationGames?: Array<Game>;
   roles?: Array<Role>;
   status?: 'ONLINE' | 'OFFLINE' | 'AWAY';
-  userLibrary?: Array<UserLibrary>;
   userProfilePicture?: string;
   username?: string;
-  wishlist?: Array<Game>;
+  wishlist?: Array<Wishlist>;
   xp?: number;
 }

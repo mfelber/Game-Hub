@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +16,7 @@ import gamehub.game_Hub.Mapper.GameMapper;
 import gamehub.game_Hub.Mapper.LibraryMapper;
 import gamehub.game_Hub.Module.Game;
 import gamehub.game_Hub.Module.User.User;
-import gamehub.game_Hub.Module.UserLibrary;
+import gamehub.game_Hub.Module.User.UserLibrary;
 import gamehub.game_Hub.Repository.UserLibraryRepository;
 import gamehub.game_Hub.Repository.game.GameRepository;
 import gamehub.game_Hub.Repository.user.UserRepository;
@@ -40,6 +41,7 @@ public class LibraryServiceImpl implements LibraryService {
   private final LibraryMapper libraryMapper;
 
   @Override
+  @PreAuthorize("isAuthenticated()")
   public PageResponse<UserLibraryResponse> getUserLibrary(final int page, final int size,
       final Authentication connectedUser)
       throws AccessDeniedException {

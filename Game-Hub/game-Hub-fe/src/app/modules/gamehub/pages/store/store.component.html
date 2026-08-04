@@ -77,7 +77,7 @@
         </div>
         <div
           class="badge discount-badge">
-          Discount %
+          -30% get discount
         </div>
         <div
           *ngIf="gameWishListMap?.[game.gameId!] && !gamesOwnedMap?.[game.gameId!]"
@@ -96,11 +96,10 @@
           123K <i class="fa-regular fa-thumbs-up text-white"></i>
         </div>
         <div class="price">
-          <span class="current-price">17.99 €</span>
+          <span class="current-price">29.99 € set discount price</span>
 
           <div class="price-info">
-            <span class="old-price">29.99 €</span>
-            <span class="discount">-40%</span>
+            <span class="old-price"> {{ game.price }} €</span>
           </div>
         </div>
       </div>

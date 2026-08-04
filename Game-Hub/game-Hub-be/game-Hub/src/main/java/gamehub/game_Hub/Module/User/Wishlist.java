@@ -1,14 +1,12 @@
-package gamehub.game_Hub.Module;
+package gamehub.game_Hub.Module.User;
 
 import java.time.LocalDateTime;
 
-import gamehub.game_Hub.Module.User.User;
+import gamehub.game_Hub.Module.Game;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
@@ -25,12 +23,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "user_library", schema = "game_hub")
-public class UserLibrary {
+@Table(name = "wishlist", schema = "game_hub")
+public class Wishlist {
 
   @EmbeddedId
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private UserGameId id;
+  private UserWishlistId id;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @MapsId("userId")
@@ -42,17 +39,9 @@ public class UserLibrary {
   @JoinColumn(name = "game_id")
   private Game game;
 
-  private boolean installed;
+  @Column(name = "added_at")
+  private LocalDateTime addedAt;
 
-  @Column(name = "playtime_minutes")
-  private Integer playtimeMinutes;
 
-  @Column(name = "last_played")
-  private LocalDateTime lastPlayed;
-
-  private boolean favorite;
-
-  @Column(name = "created_at")
-  private LocalDateTime createdAt;
 
 }

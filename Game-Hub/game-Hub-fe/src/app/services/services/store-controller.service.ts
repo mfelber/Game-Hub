@@ -11,35 +11,35 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { addGame } from '../fn/game-controller/add-game';
-import { AddGame$Params } from '../fn/game-controller/add-game';
-import { addGameToWishlist } from '../fn/game-controller/add-game-to-wishlist';
-import { AddGameToWishlist$Params } from '../fn/game-controller/add-game-to-wishlist';
-import { buyGame } from '../fn/game-controller/buy-game';
-import { BuyGame$Params } from '../fn/game-controller/buy-game';
-import { checkGameInWishlist } from '../fn/game-controller/check-game-in-wishlist';
-import { CheckGameInWishlist$Params } from '../fn/game-controller/check-game-in-wishlist';
-import { checkGameOwned } from '../fn/game-controller/check-game-owned';
-import { CheckGameOwned$Params } from '../fn/game-controller/check-game-owned';
-import { findAllGames } from '../fn/game-controller/find-all-games';
-import { FindAllGames$Params } from '../fn/game-controller/find-all-games';
+import { addGame } from '../fn/store-controller/add-game';
+import { AddGame$Params } from '../fn/store-controller/add-game';
+import { addGameToWishlist } from '../fn/store-controller/add-game-to-wishlist';
+import { AddGameToWishlist$Params } from '../fn/store-controller/add-game-to-wishlist';
+import { buyGame } from '../fn/store-controller/buy-game';
+import { BuyGame$Params } from '../fn/store-controller/buy-game';
+import { checkGameInWishlist } from '../fn/store-controller/check-game-in-wishlist';
+import { CheckGameInWishlist$Params } from '../fn/store-controller/check-game-in-wishlist';
+import { checkGameOwned } from '../fn/store-controller/check-game-owned';
+import { CheckGameOwned$Params } from '../fn/store-controller/check-game-owned';
+import { findAllGames } from '../fn/store-controller/find-all-games';
+import { FindAllGames$Params } from '../fn/store-controller/find-all-games';
 import { GameResponse } from '../models/game-response';
 import { GenreResponse } from '../models/genre-response';
-import { getAllGenres } from '../fn/game-controller/get-all-genres';
-import { GetAllGenres$Params } from '../fn/game-controller/get-all-genres';
-import { getAllPlatforms } from '../fn/game-controller/get-all-platforms';
-import { GetAllPlatforms$Params } from '../fn/game-controller/get-all-platforms';
-import { getGameById } from '../fn/game-controller/get-game-by-id';
-import { GetGameById$Params } from '../fn/game-controller/get-game-by-id';
+import { getAllGenres } from '../fn/store-controller/get-all-genres';
+import { GetAllGenres$Params } from '../fn/store-controller/get-all-genres';
+import { getAllPlatforms } from '../fn/store-controller/get-all-platforms';
+import { GetAllPlatforms$Params } from '../fn/store-controller/get-all-platforms';
+import { getGameById } from '../fn/store-controller/get-game-by-id';
+import { GetGameById$Params } from '../fn/store-controller/get-game-by-id';
 import { PageResponseGameResponse } from '../models/page-response-game-response';
 import { PlatformResponse } from '../models/platform-response';
-import { removeGameFromWishlist } from '../fn/game-controller/remove-game-from-wishlist';
-import { RemoveGameFromWishlist$Params } from '../fn/game-controller/remove-game-from-wishlist';
-import { uploadGameCoverImage } from '../fn/game-controller/upload-game-cover-image';
-import { UploadGameCoverImage$Params } from '../fn/game-controller/upload-game-cover-image';
+import { removeGameFromWishlist } from '../fn/store-controller/remove-game-from-wishlist';
+import { RemoveGameFromWishlist$Params } from '../fn/store-controller/remove-game-from-wishlist';
+import { uploadGameCoverImage } from '../fn/store-controller/upload-game-cover-image';
+import { UploadGameCoverImage$Params } from '../fn/store-controller/upload-game-cover-image';
 
 @Injectable({ providedIn: 'root' })
-export class GameControllerService extends BaseService {
+export class StoreControllerService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
   }

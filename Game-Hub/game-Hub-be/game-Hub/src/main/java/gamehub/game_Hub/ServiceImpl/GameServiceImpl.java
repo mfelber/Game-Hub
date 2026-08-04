@@ -5,7 +5,6 @@ import static gamehub.game_Hub.Module.User.AccountType.CHILD;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,15 +19,15 @@ import gamehub.game_Hub.Common.PageResponse;
 import gamehub.game_Hub.Mapper.GameMapper;
 import gamehub.game_Hub.Module.Badge;
 import gamehub.game_Hub.Module.Game;
-import gamehub.game_Hub.Module.Level;
-import gamehub.game_Hub.Module.User.AccountType;
 import gamehub.game_Hub.Module.User.User;
-import gamehub.game_Hub.Module.UserGameId;
-import gamehub.game_Hub.Module.UserLibrary;
+import gamehub.game_Hub.Module.User.UserGameId;
+import gamehub.game_Hub.Module.User.UserLibrary;
+import gamehub.game_Hub.Module.User.UserWishlistId;
+import gamehub.game_Hub.Module.User.Wishlist;
 import gamehub.game_Hub.Repository.BadgeRepository;
-import gamehub.game_Hub.Repository.LevelRepository;
 import gamehub.game_Hub.Repository.UserLibraryRepository;
 import gamehub.game_Hub.Repository.UserStoreFlagRepository;
+import gamehub.game_Hub.Repository.WishlistRepository;
 import gamehub.game_Hub.Repository.game.GameRepository;
 import gamehub.game_Hub.Repository.user.UserRepository;
 import gamehub.game_Hub.File.FileStorageService;
@@ -56,7 +55,9 @@ public class GameServiceImpl implements GameService {
 
   private final UserStoreFlagRepository userStoreFlagRepository;
 
-  private final UserLibraryRepository userLibraryRepository;
+  private final UserLibraryRepository libraryRepository;
+
+  private final WishlistRepository wishlistRepository;
 
   @Override
   public Long save(final GameRequest gameRequest) {
@@ -130,12 +131,7 @@ public class GameServiceImpl implements GameService {
     User user = userRepository.findById(authUser.getId())
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
 
-    if (user.getWishlist().contains(game)) {
-      user.getWishlist().remove(game);
-      userRepository.save(user);
-    }
-
-    boolean alreadyOwned = userLibraryRepository.existsUserLibrariesByUserAndGame(user, game);
+    boolean alreadyOwned = libraryRepository.existsUserLibrariesByUserAndGame(user, game);
 
     if (!alreadyOwned) {
       UserLibrary userLibrary = UserLibrary.builder()
@@ -147,7 +143,12 @@ public class GameServiceImpl implements GameService {
           .playtimeMinutes(0)
           .createdAt(LocalDateTime.now())
           .build();
-      userLibraryRepository.save(userLibrary);
+      libraryRepository.save(userLibrary);
+    }
+
+    boolean gameInWishlist = wishlistRepository.existsByUserAndGame(user, game);
+    if (gameInWishlist){
+      wishlistRepository.deleteByUserAndGame(user, game);
     }
 
     addGameCollectorBadge(user);
@@ -191,16 +192,27 @@ public class GameServiceImpl implements GameService {
     User user = userRepository.findById(authUser.getId())
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
 
-    if (!user.getWishlist().contains(game)) {
-      user.getWishlist().add(game);
-      userRepository.save(user);
+    boolean gameInWishlist = wishlistRepository.existsByUserAndGame(user, game);
+    if (gameInWishlist){
+      wishlistRepository.deleteByUserAndGame(user, game);
+    }
+
+    if (!gameInWishlist) {
+      Wishlist wishlist = Wishlist.builder()
+          .id(new UserWishlistId(user.getId(), game.getId()))
+          .user(user)
+          .game(game)
+          .addedAt(LocalDateTime.now())
+          .build();
+      wishlistRepository.save(wishlist);
     }
 
     return game.getId();
   }
 
   @Override
-  public Long removeGameToWishList(final Long gameId, final Authentication connectedUser) {
+  @Transactional
+  public Long removeGameFromWishList(final Long gameId, final Authentication connectedUser) {
     Game game = gameRepository.findById(gameId)
         .orElseThrow(() -> new EntityNotFoundException("No game found with id: " + gameId));
 
@@ -208,9 +220,10 @@ public class GameServiceImpl implements GameService {
     User user = userRepository.findById(authUser.getId())
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
 
-    if (user.getWishlist().contains(game)) {
-      user.getWishlist().remove(game);
-      userRepository.save(user);
+    boolean gameInWishlist = wishlistRepository.existsByUserAndGame(user, game);
+
+    if (gameInWishlist){
+      wishlistRepository.deleteByUserAndGame(user, game);
     }
 
     return game.getId();
@@ -224,7 +237,7 @@ public class GameServiceImpl implements GameService {
     User user = userRepository.findById(authUser.getId())
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
 
-    return userLibraryRepository.existsUserLibrariesByUserAndGame(user, game);
+    return libraryRepository.existsUserLibrariesByUserAndGame(user, game);
   }
 
   @Override
@@ -235,7 +248,7 @@ public class GameServiceImpl implements GameService {
     User user = userRepository.findById(authUser.getId())
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
 
-    return user.getWishlist().contains(game);
+    return wishlistRepository.existsByUserAndGame(user, game);
   }
 
 }

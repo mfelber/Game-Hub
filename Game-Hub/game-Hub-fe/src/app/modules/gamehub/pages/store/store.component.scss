@@ -166,15 +166,6 @@
   font-size: 0.9rem;
 }
 
-.discount {
-  background: #00a63e;
-  color: white;
-  padding: 2px 8px;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-
 .badges{
   position: absolute;
   top: 12px;
@@ -198,11 +189,11 @@
 }
 
 .owned-badge {
-  background: rgba(34, 197, 94, 0.9);
+  background: #374151;
 }
 
 .discount-badge {
-  background: rgba(245, 158, 11, 0.9);
+  background: #00a63e;
 }
 
 .wishlist-badge {

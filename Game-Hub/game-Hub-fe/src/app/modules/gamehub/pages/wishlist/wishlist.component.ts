@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {WishlistControllerService} from '../../../../services/services/wishlist-controller.service';
-import {GameControllerService} from '../../../../services/services/game-controller.service';
+import {StoreControllerService} from '../../../../services/services/store-controller.service';
 import {PageResponseGameResponse} from '../../../../services/models/page-response-game-response';
 import {NgForOf, NgIf} from '@angular/common';
 import {GameResponse} from '../../../../services/models/game-response';
@@ -9,6 +9,8 @@ import {MatCheckbox} from '@angular/material/checkbox';
 import {FormsModule} from '@angular/forms';
 import {platform} from 'node:os';
 import {SearchBar} from '../../components/search-bar/search-bar';
+import {WishlistResponse} from '../../../../services/models/wishlist-response';
+import {PageResponseWishlistResponse} from '../../../../services/models/page-response-wishlist-response';
 
 @Component({
   selector: 'app-wishlist',
@@ -23,13 +25,13 @@ import {SearchBar} from '../../components/search-bar/search-bar';
 })
 export class WishlistComponent implements OnInit{
 
-  gamePageResponse: PageResponseGameResponse = {};
+  wishlistPageResponse: PageResponseWishlistResponse = {};
+  filteredGames: WishlistResponse[] = [];
   allPlatforms: string[] = [];
   allGenres: string[] = [];
   emptyWishlist = false;
   isLoaded = false;
 
-  filteredGames: GameResponse[] = [];
 
   filters = {
     genre: '',
@@ -39,7 +41,7 @@ export class WishlistComponent implements OnInit{
 
   constructor(
     private wishListService: WishlistControllerService,
-    private gameService: GameControllerService,
+    private gameService: StoreControllerService,
     private router: Router
   ) {
   }
@@ -60,7 +62,8 @@ export class WishlistComponent implements OnInit{
     }).subscribe(
       {
         next: (games) => {
-          this.gamePageResponse = games;
+          this.wishlistPageResponse = games;
+          console.log(games.content);
           this.isLoaded = true;
           if (games.totalElements == 0) {
             this.emptyWishlist = true
@@ -98,13 +101,14 @@ export class WishlistComponent implements OnInit{
     const selectedPlatform = this.filters.platform;
     const selectedGenre = this.filters.genre;
     const onSale = this.filters.onSale;
-    this.filteredGames = (this.gamePageResponse.content || []).filter(game => {
-      const platformMatch = !selectedPlatform || game.platforms!.some(platform => platform.platformName === selectedPlatform);
-      const genreMatch = !selectedGenre || game.genres!.some(genre => genre.name === selectedGenre);
+    this.filteredGames = (this.wishlistPageResponse.content || []).filter(game => {
+      // const platformMatch = !selectedPlatform || game.platforms!.some(platform => platform.platformName === selectedPlatform);
+      const genreMatch = !selectedGenre || game.game!.genres!.some(genre => genre.name === selectedGenre);
       // TODO
       // const saleMatch = !onSale || game.onSale;
       // return platformMatch && genreMatch && onSale;
-      return platformMatch && genreMatch;
+      // return platformMatch && genreMatch;
+      return genreMatch;
     })
   }
 
@@ -114,7 +118,7 @@ export class WishlistComponent implements OnInit{
       platform: '',
       onSale: false
     };
-    this.filteredGames = [...(this.gamePageResponse.content || [])];
+    this.filteredGames = [...(this.wishlistPageResponse.content || [])];
   }
 
   private getPlatforms() {

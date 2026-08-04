@@ -20,7 +20,6 @@ import gamehub.game_Hub.Module.CardColor;
 import gamehub.game_Hub.Module.Game;
 import gamehub.game_Hub.Module.Genre;
 import gamehub.game_Hub.Module.Level;
-import gamehub.game_Hub.Module.UserLibrary;
 import gamehub.game_Hub.Role.Role;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -134,17 +133,20 @@ public class User implements UserDetails, Principal {
   @OneToMany(mappedBy = "user")
   private Set<UserLibrary> library;
 
+  @OneToMany(mappedBy = "user")
+  private Set<Wishlist> wishlist;
+
   @ManyToMany
   @JoinTable(name = "user_friends", schema = "game_hub",
       inverseJoinColumns = @JoinColumn(name = "user_id"),
       joinColumns = @JoinColumn(name = "friend_id"))
   private Set<User> friends = new HashSet<>();
 
-  @ManyToMany(fetch = FetchType.LAZY)
-  @JoinTable(name = "user_wishlist", schema = "game_hub",
-      inverseJoinColumns = @JoinColumn(name = "game_id"),
-      joinColumns = @JoinColumn(name = "user_id"))
-  private Set<Game> wishlist;
+  // @ManyToMany(fetch = FetchType.LAZY)
+  // @JoinTable(name = "user_wishlist", schema = "game_hub",
+  //     inverseJoinColumns = @JoinColumn(name = "game_id"),
+  //     joinColumns = @JoinColumn(name = "user_id"))
+  // private Set<Game> wishlist;
 
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(name = "user_play_recently", schema = "game_hub",

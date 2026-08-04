@@ -5,6 +5,8 @@ import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import gamehub.game_Hub.Module.User.User;
+import gamehub.game_Hub.Module.User.UserLibrary;
+import gamehub.game_Hub.Module.User.Wishlist;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -97,11 +99,10 @@ public class Game {
   @OneToMany(mappedBy = "game")
   private Set<UserLibrary> users;
 
-  @ManyToMany(mappedBy = "wishlist", fetch = FetchType.LAZY)
-  @Nullable
+  @OneToMany(mappedBy = "game", fetch = FetchType.LAZY)
   @ToString.Exclude
   @JsonIgnore
-  private Set<User> wishlists;
+  private Set<Wishlist> wishlists;
 
   @ManyToMany(mappedBy = "playRecently", fetch = FetchType.LAZY)
   @ToString.Exclude

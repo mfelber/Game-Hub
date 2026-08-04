@@ -1,10 +1,9 @@
-package gamehub.game_Hub.Module;
+package gamehub.game_Hub.Module.User;
 
 import java.io.Serializable;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.Embedded;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +14,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserGameId implements Serializable {
+public class UserWishlistId implements Serializable {
 
   @Column(name = "user_id")
   private Long userId;

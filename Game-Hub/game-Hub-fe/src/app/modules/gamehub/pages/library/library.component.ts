@@ -3,7 +3,7 @@ import {NgForOf, NgIf} from "@angular/common";
 import {PageResponseGameResponse} from '../../../../services/models/page-response-game-response';
 import {LibraryControllerService} from '../../../../services/services/library-controller.service';
 import {GameResponse} from '../../../../services/models/game-response';
-import {GameControllerService} from '../../../../services/services/game-controller.service';
+import {StoreControllerService} from '../../../../services/services';
 import {Router} from '@angular/router';
 import {SearchBar} from '../../components/search-bar/search-bar';
 
@@ -34,7 +34,7 @@ export class LibraryComponent implements OnInit{
 
   constructor(
     private libraryService: LibraryControllerService,
-    private storeService: GameControllerService,
+    private storeService: StoreControllerService,
     private router: Router
   ) {
   }

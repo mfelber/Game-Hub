@@ -6,7 +6,7 @@ import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core
 import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
-import { GameControllerService } from './services/game-controller.service';
+import { StoreControllerService } from './services/store-controller.service';
 import { ReportControllerService } from './services/report-controller.service';
 import { UserProfileControllerService } from './services/user-profile-controller.service';
 import { LibraryControllerService } from './services/library-controller.service';
@@ -26,7 +26,7 @@ import { CardColorControllerService } from './services/card-color-controller.ser
   exports: [],
   declarations: [],
   providers: [
-    GameControllerService,
+    StoreControllerService,
     ReportControllerService,
     UserProfileControllerService,
     LibraryControllerService,

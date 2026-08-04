@@ -21,4 +21,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
   boolean existsByIdAndFriends_Id(Long id, Long friendsId);
 
+  Page<User> findAllByEmailIsNotAndUsernameContainingIgnoreCase(String email, String username, Pageable pageable);
+
 }

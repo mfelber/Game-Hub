@@ -6,8 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import gamehub.game_Hub.Module.Game;
 import gamehub.game_Hub.Module.User.User;
-import gamehub.game_Hub.Module.UserGameId;
-import gamehub.game_Hub.Module.UserLibrary;
+import gamehub.game_Hub.Module.User.UserGameId;
+import gamehub.game_Hub.Module.User.UserLibrary;
 
 public interface UserLibraryRepository extends JpaRepository<UserLibrary, UserGameId> {
 

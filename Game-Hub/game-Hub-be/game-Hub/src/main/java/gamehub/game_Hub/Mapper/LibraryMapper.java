@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 import gamehub.game_Hub.File.FileUtils;
 import gamehub.game_Hub.Module.Game;
-import gamehub.game_Hub.Module.UserLibrary;
+import gamehub.game_Hub.Module.User.UserLibrary;
 import gamehub.game_Hub.Response.UserLibraryResponse;
 
 @Service

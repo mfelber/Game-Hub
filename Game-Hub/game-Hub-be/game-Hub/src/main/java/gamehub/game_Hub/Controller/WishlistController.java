@@ -1,5 +1,7 @@
 package gamehub.game_Hub.Controller;
 
+import java.nio.file.AccessDeniedException;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import gamehub.game_Hub.Common.PageResponse;
 import gamehub.game_Hub.Response.GameResponse;
+import gamehub.game_Hub.Response.WishlistResponse;
 import gamehub.game_Hub.Service.WishlistService;
 import lombok.RequiredArgsConstructor;
 
@@ -21,11 +24,11 @@ public class WishlistController {
 
   // Retrieve the wishlist of a user
   @GetMapping("/wishlist")
-  public ResponseEntity<PageResponse<GameResponse>> getWishlist(
+  public ResponseEntity<PageResponse<WishlistResponse>> getWishlist(
       @RequestParam(name = "page", defaultValue = "0", required = false) int page,
       @RequestParam(name = "size", defaultValue = "10", required = false) int size,
-      final Authentication connectedUser) {
-    return ResponseEntity.ok(wishlistService.FindAllWishlistGames(page, size, connectedUser));
+      final Authentication connectedUser) throws AccessDeniedException {
+    return ResponseEntity.ok(wishlistService.getUserWishlist(page, size, connectedUser));
   }
 
 }
