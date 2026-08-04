@@ -4,6 +4,7 @@
 
 import { AgeRating } from '../models/age-rating';
 import { SystemRequirements } from '../models/system-requirements';
+import { UserLibrary } from '../models/user-library';
 export interface Game {
   ageRating?: AgeRating;
   description?: string;
@@ -16,4 +17,5 @@ export interface Game {
   releaseYear?: string;
   systemRequirements?: SystemRequirements;
   title?: string;
+  users?: Array<UserLibrary>;
 }

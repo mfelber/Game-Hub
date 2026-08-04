@@ -2,6 +2,7 @@ package gamehub.game_Hub.ServiceImpl;
 
 import static gamehub.game_Hub.Module.User.AccountType.CHILD;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,8 +23,11 @@ import gamehub.game_Hub.Module.Game;
 import gamehub.game_Hub.Module.Level;
 import gamehub.game_Hub.Module.User.AccountType;
 import gamehub.game_Hub.Module.User.User;
+import gamehub.game_Hub.Module.UserGameId;
+import gamehub.game_Hub.Module.UserLibrary;
 import gamehub.game_Hub.Repository.BadgeRepository;
 import gamehub.game_Hub.Repository.LevelRepository;
+import gamehub.game_Hub.Repository.UserLibraryRepository;
 import gamehub.game_Hub.Repository.UserStoreFlagRepository;
 import gamehub.game_Hub.Repository.game.GameRepository;
 import gamehub.game_Hub.Repository.user.UserRepository;
@@ -51,6 +55,8 @@ public class GameServiceImpl implements GameService {
   private final UserProgressService userProgressService;
 
   private final UserStoreFlagRepository userStoreFlagRepository;
+
+  private final UserLibraryRepository userLibraryRepository;
 
   @Override
   public Long save(final GameRequest gameRequest) {
@@ -129,12 +135,22 @@ public class GameServiceImpl implements GameService {
       userRepository.save(user);
     }
 
-    addGameCollectorBadge(user);
+    boolean alreadyOwned = userLibraryRepository.existsUserLibrariesByUserAndGame(user, game);
 
-    if (!user.getLibrary().contains(game)) {
-      user.getLibrary().add(game);
-      userRepository.save(user);
+    if (!alreadyOwned) {
+      UserLibrary userLibrary = UserLibrary.builder()
+          .id(new UserGameId(user.getId(), game.getId()))
+          .user(user)
+          .game(game)
+          .installed(false)
+          .favorite(false)
+          .playtimeMinutes(0)
+          .createdAt(LocalDateTime.now())
+          .build();
+      userLibraryRepository.save(userLibrary);
     }
+
+    addGameCollectorBadge(user);
 
     // TODO: Subtract the game price from the user's balance upon purchase
 
@@ -208,7 +224,7 @@ public class GameServiceImpl implements GameService {
     User user = userRepository.findById(authUser.getId())
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
 
-    return user.getLibrary().contains(game);
+    return userLibraryRepository.existsUserLibrariesByUserAndGame(user, game);
   }
 
   @Override

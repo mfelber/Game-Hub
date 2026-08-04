@@ -29,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("store")
 @RequiredArgsConstructor
-public class GameController {
+public class StoreController {
 
   private final GameService gameService;
 

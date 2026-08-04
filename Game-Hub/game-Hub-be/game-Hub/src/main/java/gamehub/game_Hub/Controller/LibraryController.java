@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import gamehub.game_Hub.Common.PageResponse;
 import gamehub.game_Hub.Response.GameResponse;
+import gamehub.game_Hub.Response.UserLibraryResponse;
 import gamehub.game_Hub.Service.LibraryService;
 import lombok.RequiredArgsConstructor;
 
@@ -25,11 +26,11 @@ public class LibraryController {
 
   // Retrieve library of authenticated user
   @GetMapping("/library")
-  public ResponseEntity<PageResponse<GameResponse>> getLibrary(
+  public ResponseEntity<PageResponse<UserLibraryResponse>> getLibrary(
       @RequestParam(name = "page", defaultValue = "0", required = false) int page,
       @RequestParam(name = "size", defaultValue = "10", required = false) int size,
       final Authentication connectedUser) throws AccessDeniedException {
-    return ResponseEntity.ok(libraryService.FindAllOwnedGames(page, size, connectedUser));
+    return ResponseEntity.ok(libraryService.getUserLibrary(page, size, connectedUser));
   }
 
   // Get all favorite games

@@ -6,10 +6,11 @@ import org.springframework.security.core.Authentication;
 
 import gamehub.game_Hub.Common.PageResponse;
 import gamehub.game_Hub.Response.GameResponse;
+import gamehub.game_Hub.Response.UserLibraryResponse;
 
 public interface LibraryService {
 
-  PageResponse<GameResponse> FindAllOwnedGames(int page, int size, Authentication connectedUser)
+  PageResponse<UserLibraryResponse> getUserLibrary(int page, int size, Authentication connectedUser)
       throws AccessDeniedException;
 
   Long addGameToFavorites(Long gameId, Authentication connectedUser);
@@ -25,5 +26,6 @@ public interface LibraryService {
   PageResponse<GameResponse> findAllFavoriteGames(int page, int size, Authentication connectedUser);
 
   Boolean checkGameRecommended(Long gameId, Authentication connectedUser);
+
 
 }
