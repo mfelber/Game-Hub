@@ -28,4 +28,4 @@ export function getAllCommunityFlags(http: HttpClient, rootUrl: string, params?:
   );
 }
 
-getAllCommunityFlags.PATH = '/flags/get/find-players/flags';
+getAllCommunityFlags.PATH = '/flags/get/community/flags';

@@ -75,30 +75,42 @@
       </ng-container>
 
     <ng-container *ngIf="loadFavoriteGames">
-      <div class="card"  *ngFor="let game of gamePageResponse.content"
+      <div class="card" *ngFor="let game of gamePageResponse.content"
            (click)="goToGame(game.gameId)">
         <img [src]="getGameImageCover(game)" alt="{{game.title}}}">
         <div class="card-content">
           <h3>{{ game.title }}</h3>
           <p>💾 Installed || Not Installed</p>
           <small>Played : 120h</small>
-          <button>
-            Download || Play
+          <button class="play-btn">
+            Play <i class="fa-solid fa-play"></i>
+          </button>
+          <button class="download-btn">
+            Download <i class="fa-solid fa-download"></i>
+          </button>
+          <button class="stop-play-btn">
+            Stop playing <i class="fa-solid fa-xmark"></i>
           </button>
         </div>
       </div>
     </ng-container>
 
     <ng-container *ngIf="loadDownloadedGames">
-      <div class="card"  *ngFor="let game of gamePageResponse.content"
+      <div class="card" *ngFor="let game of gamePageResponse.content"
            (click)="goToGame(game.gameId)">
         <img [src]="getGameImageCover(game)" alt="{{game.title}}}">
         <div class="card-content">
           <h3>{{ game.title }}</h3>
           <p>💾 Installed || Not Installed</p>
           <small>Played : 120h</small>
-          <button>
-            Download || Play
+          <button class="play-btn">
+            Play <i class="fa-solid fa-play"></i>
+          </button>
+          <button class="download-btn">
+            Download <i class="fa-solid fa-download"></i>
+          </button>
+          <button class="stop-play-btn">
+            Stop playing <i class="fa-solid fa-xmark"></i>
           </button>
         </div>
       </div>

@@ -50,7 +50,7 @@ export class FlagsControllerService extends BaseService {
   }
 
   /** Path part for operation `getAllCommunityFlags()` */
-  static readonly GetAllCommunityFlagsPath = '/flags/get/find-players/flags';
+  static readonly GetAllCommunityFlagsPath = '/flags/get/community/flags';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.

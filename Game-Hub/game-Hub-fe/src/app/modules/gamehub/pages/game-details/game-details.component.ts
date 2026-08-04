@@ -82,7 +82,7 @@ export class GameDetailsComponent implements OnInit {
     this.gameService.buyGame({gameId})
       .subscribe({
         next: () => {
-          this.checkIfGameIsOwned();
+          console.log('game with id: ' + gameId + ' purchased.');
         },
         error: (err) => {
           console.error('Error with buying game:', err);
@@ -99,14 +99,13 @@ export class GameDetailsComponent implements OnInit {
   }
 
   addGameToWishList(gameId: any) {
-    console.log(this.gameInWishList);
     this.gameService.addGameToWishlist({gameId})
       .subscribe({
         next: () => {
           this.checkIfGameIsInWishlist();
         },
         error: (err) => {
-          console.error('Error with buying game:', err);
+          console.error('Error with adding game to wishlist:', err);
         }
       })
   }
@@ -118,7 +117,7 @@ export class GameDetailsComponent implements OnInit {
           this.gameInWishList = false;
         },
         error: (err) => {
-          console.error('Error with buying game:', err);
+          console.error('Error with removing game from wishlist:', err);
         }
       })
   }

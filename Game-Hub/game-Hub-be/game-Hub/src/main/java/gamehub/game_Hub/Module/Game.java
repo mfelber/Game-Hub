@@ -17,6 +17,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -93,11 +94,8 @@ public class Game {
       inverseJoinColumns = @JoinColumn(name = "language_id"))
   private Set<Language> languages;
 
-  @ManyToMany(mappedBy = "library", fetch = FetchType.LAZY)
-  @Nullable
-  @ToString.Exclude
-  @JsonIgnore
-  private Set<User> owners;
+  @OneToMany(mappedBy = "game")
+  private Set<UserLibrary> users;
 
   @ManyToMany(mappedBy = "wishlist", fetch = FetchType.LAZY)
   @Nullable

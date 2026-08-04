@@ -8,14 +8,14 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { PageResponseGameResponse } from '../../models/page-response-game-response';
+import { PageResponseUserLibraryResponse } from '../../models/page-response-user-library-response';
 
 export interface GetLibrary$Params {
   page?: number;
   size?: number;
 }
 
-export function getLibrary(http: HttpClient, rootUrl: string, params?: GetLibrary$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseGameResponse>> {
+export function getLibrary(http: HttpClient, rootUrl: string, params?: GetLibrary$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseUserLibraryResponse>> {
   const rb = new RequestBuilder(rootUrl, getLibrary.PATH, 'get');
   if (params) {
     rb.query('page', params.page, {});
@@ -27,7 +27,7 @@ export function getLibrary(http: HttpClient, rootUrl: string, params?: GetLibrar
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<PageResponseGameResponse>;
+      return r as StrictHttpResponse<PageResponseUserLibraryResponse>;
     })
   );
 }

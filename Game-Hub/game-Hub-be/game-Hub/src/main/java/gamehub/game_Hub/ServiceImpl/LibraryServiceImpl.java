@@ -2,7 +2,6 @@ package gamehub.game_Hub.ServiceImpl;
 
 import java.nio.file.AccessDeniedException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,11 +12,15 @@ import org.springframework.stereotype.Service;
 
 import gamehub.game_Hub.Common.PageResponse;
 import gamehub.game_Hub.Mapper.GameMapper;
+import gamehub.game_Hub.Mapper.LibraryMapper;
 import gamehub.game_Hub.Module.Game;
 import gamehub.game_Hub.Module.User.User;
+import gamehub.game_Hub.Module.UserLibrary;
+import gamehub.game_Hub.Repository.UserLibraryRepository;
 import gamehub.game_Hub.Repository.game.GameRepository;
 import gamehub.game_Hub.Repository.user.UserRepository;
 import gamehub.game_Hub.Response.GameResponse;
+import gamehub.game_Hub.Response.UserLibraryResponse;
 import gamehub.game_Hub.Service.LibraryService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -32,22 +35,26 @@ public class LibraryServiceImpl implements LibraryService {
 
   private final GameRepository gameRepository;
 
-  @Override
-  public PageResponse<GameResponse> FindAllOwnedGames(final int page, final int size,
-      final Authentication connectedUser) throws AccessDeniedException {
+  private final UserLibraryRepository libraryRepository;
 
+  private final LibraryMapper libraryMapper;
+
+  @Override
+  public PageResponse<UserLibraryResponse> getUserLibrary(final int page, final int size,
+      final Authentication connectedUser)
+      throws AccessDeniedException {
     if (connectedUser == null || !connectedUser.isAuthenticated()) {
       throw new AccessDeniedException("User is not authenticated");
     }
 
     User authUser = (User) connectedUser.getPrincipal();
-    Pageable pageable = PageRequest.of(page, size, Sort.by("title").ascending());
-    Page<Game> library = gameRepository.findByOwnersContaining(authUser,pageable);
+    Pageable pageable = PageRequest.of(page, size, Sort.by("game").ascending());
+    Page<UserLibrary> library = libraryRepository.findUserLibrariesByUser(authUser,pageable);
 
-    List<GameResponse> gameResponse = library.stream().map(gameMapper::toGameResponse).toList();
+    List<UserLibraryResponse> libraryResponse = library.stream().map(libraryMapper::toUserLibraryResponse).toList();
 
     return new PageResponse<>(
-        gameResponse,
+        libraryResponse,
         library.getNumber(),
         library.getSize(),
         library.getTotalElements(),
@@ -55,7 +62,6 @@ public class LibraryServiceImpl implements LibraryService {
         library.isFirst(),
         library.isLast()
     );
-
   }
 
   @Override

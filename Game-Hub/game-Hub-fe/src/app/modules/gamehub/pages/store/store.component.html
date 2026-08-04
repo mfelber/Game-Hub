@@ -104,10 +104,10 @@
           </div>
         </div>
       </div>
-      <button (click)="buyGame(game.gameId) ; $event.stopPropagation() ">
-        Buy now <i class="fa-solid fa-cart-shopping"></i>
+      <button *ngIf="!gamesOwnedMap[game.gameId!]" (click)="buyGame(game.gameId) ; $event.stopPropagation()">
+        Buy now <i class="fa-solid fa-cart-shopping"></i> redirect to form page
       </button>
-      <button class="in-library" (click)=" $event.stopPropagation() ">
+      <button *ngIf="gamesOwnedMap[game.gameId!]" class="in-library" (click)=" $event.stopPropagation() ">
         In Library 🎮
       </button>
     </div>
