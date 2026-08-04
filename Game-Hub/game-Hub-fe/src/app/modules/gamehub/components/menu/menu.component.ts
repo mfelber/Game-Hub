@@ -15,6 +15,7 @@ import {RefreshService} from '../../../../services/fn/refresh-service/refresh-se
     RouterLinkActive,
     NgIf,
     FormsModule,
+    RouterLinkActive,
     NgForOf,
     NgClass,
     NgStyle
@@ -42,7 +43,7 @@ export class MenuComponent implements OnInit {
     });
   }
 
-
+  statusMenuOpen = false;
   isStoreActive = false;
   isLibraryActive = false;
   isCommunityActive = false;
@@ -107,7 +108,7 @@ export class MenuComponent implements OnInit {
   updateActiveTabs(url: string) {
     this.isStoreActive = url === '/gamehub' || url.startsWith('/gamehub/game/');
     this.isLibraryActive = url === '/gamehub/library' || url.startsWith("/gamehub/library/game/");
-    this.isCommunityActive = url === '/gamehub/community';
+    this.isCommunityActive = url === '/gamehub/find-players';
   }
 
   isGameDetailsActive(url: string) {
@@ -115,7 +116,7 @@ export class MenuComponent implements OnInit {
       url.startsWith("/gamehub/library/game/")
       || url.startsWith("/gamehub/game/")
       || url.startsWith("/gamehub/user/")
-      || url.startsWith("/gamehub/community");
+      || url.startsWith("/gamehub/find-players");
   }
 
   goToCart() {
@@ -170,8 +171,8 @@ export class MenuComponent implements OnInit {
     })
   }
 
-  onStatusChange($event: Event) {
-    const newStatus = (event?.target as HTMLSelectElement).value;
+  onStatusChange(newStatus: string) {
+
 
     switch (newStatus) {
       case 'ONLINE':
@@ -189,6 +190,16 @@ export class MenuComponent implements OnInit {
 
   getAvailableStatuses(): string[] {
     return this.statuses.filter(s => s !== this.userResponse.status);
+  }
+
+  toggleStatusMenu(event: MouseEvent) {
+    event.stopPropagation();
+    this.statusMenuOpen = !this.statusMenuOpen;
+  }
+
+  changeStatus(status: string) {
+    this.statusMenuOpen = false;
+    this.onStatusChange(status)
   }
 
 }

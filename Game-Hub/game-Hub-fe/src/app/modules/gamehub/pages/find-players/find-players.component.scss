@@ -1,0 +1,272 @@
+input,
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-text-fill-color: #fff !important;
+  caret-color: #fff !important;
+  color: white;
+  -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.header-content{
+  display: flex;
+  justify-content: space-between;
+}
+
+.header-content h1{
+  font-size: 1.9rem;
+}
+
+.header-content button{
+  background: #171d29;
+  border: none;
+  color: white;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.header p{
+  color: #777;
+  margin-top: -12px;
+}
+
+.search{
+  margin-top: 15px;
+  margin-bottom: 20px;
+}
+
+.filter-bar{
+  background: #151923;
+  border-radius: 16px;
+  padding: 10px 22px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.filter-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.filter-header span{
+  color: #ddd;
+}
+
+.filter-header button{
+  background: transparent;
+  border: none;
+  color: #777;
+  cursor: pointer;
+}
+
+.filter-header button:hover{
+  color: #155dfc;
+}
+
+.filter-options{
+  display: flex;
+  gap: 20px;
+  align-items:flex-end;
+}
+
+.dropdown{
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 14px;
+}
+
+.dropdown label{
+  font-size: 12px;
+  color: #777;
+}
+
+.dropdown option{
+  background: #1b2230;
+  font-size: 14px;
+}
+
+.dropdown select{
+  background: #1b2230;
+  border: none;
+  color: #ddd;
+  border-radius: 10px;
+  cursor: pointer;
+  padding: 12px 40px 12px 15px;
+}
+
+.dropdown select:hover{
+  background: #26334a;
+}
+
+.checkbox{
+  display:flex;
+  align-items:center;
+  background:#1b2230;
+  border-radius:10px;
+  padding:12px 15px;
+  height:47px;
+}
+
+.checkbox label{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  color:#ddd;
+  cursor:pointer;
+}
+
+.checkbox input{
+  width:16px;
+  height:16px;
+  cursor:pointer;
+  accent-color:#155dfc;
+}
+
+.users{
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  margin-top: 20px;
+}
+
+.user-card{
+  background: #151b27;
+  padding: 22px;
+  border-radius: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: 0.25s;
+
+}
+
+.user-card:hover{
+  transform: translateY(-5px);
+  cursor: pointer;
+}
+
+.left{
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.flag{
+  width: 30px;
+  height: 20px;
+  border-radius: 5px;
+}
+
+.left-img{
+  width: 75px;
+  height: 75px;
+  border-radius: 5px;
+  object-fit: cover;
+}
+
+.username{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.stats{
+  display: flex;
+  gap: 18px;
+  margin-top: 10px;
+  color: #8892a6;
+  font-size: 14px;
+}
+
+.right{
+  display: flex;
+  gap: 15px;
+}
+
+.action-btn{
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+  border: 1px solid transparent;
+  font-size: 15px;
+}
+
+.friend{
+  background: #155dfc;
+}
+
+.friend:hover{
+  background: #1447e6;
+}
+
+.accept{
+  background: #16a34a;
+}
+
+.accept:hover{
+  background: #15803d;
+}
+
+.reject{
+  background: #dc2626;
+}
+
+.reject:hover{
+  background: #b91c1c;
+}
+
+.report{
+  background: #7f1d1d;
+}
+
+.report:hover{
+  background: #991b1b
+}
+
+.add-friend-btn{
+  height: 42px;
+  padding: 0px 18px;
+  border-radius: 12px;
+  background: #00a63e;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.add-friend-btn:hover{
+  background: #008236;
+}
+
+.cancel-btn{
+  height:42px;
+  padding:0 18px;
+  border-radius:12px;
+  background:#475569;
+  color:white;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+
+.cancel-btn:hover{
+  background:#334155;
+}

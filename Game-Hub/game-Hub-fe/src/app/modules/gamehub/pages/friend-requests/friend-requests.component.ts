@@ -6,6 +6,7 @@ import {FriendRequestResponse} from '../../../../services/models/friend-request-
 import {PageResponseFriendRequestResponse} from '../../../../services/models/page-response-friend-request-response';
 import {RefreshService} from '../../../../services/fn/refresh-service/refresh-service';
 import {Router} from '@angular/router';
+import {SearchBar} from '../../components/search-bar/search-bar';
 
 @Component({
   selector: 'app-friend-requests',
@@ -13,7 +14,8 @@ import {Router} from '@angular/router';
     NgIf,
     NgForOf,
     NgClass,
-    NgStyle
+    NgStyle,
+    SearchBar
   ],
   templateUrl: './friend-requests.component.html',
   styleUrl: './friend-requests.component.scss'
@@ -79,5 +81,9 @@ export class FriendRequestsComponent implements OnInit {
 
   navigateToUser(userId: number) {
     this.router.navigate(['gamehub/user', userId]);
+  }
+
+  searchFriendRequests() {
+    console.log('searchFriendRequests');
   }
 }

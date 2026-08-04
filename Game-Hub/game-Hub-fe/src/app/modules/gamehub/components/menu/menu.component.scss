@@ -16,27 +16,6 @@
     color: #a5b4fc;
     transform: translateX(3px);
   }
-
-  &.active {
-    &::before {
-      content: '';
-      width: 5px;
-      height: 60%;
-      background: linear-gradient(to bottom, #60a5fa, #a78bfa);
-      border-radius: 2px;
-      position: absolute;
-      left: 0;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      box-shadow: 0 0 10px rgba(147, 197, 253, 0.6);
-    }
-
-    a,
-    mat-icon,
-    i {
-      color: #93c5fd;
-    }
-  }
 }
 
 input {
@@ -49,3 +28,69 @@ input:-webkit-autofill {
   transition: background-color 5000s ease-in-out 0s;
 }
 
+.sidebar{
+  width: 260px;
+  background: #151923;
+  padding: 25px;
+  position: fixed;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.logo{
+  font-size: 2.3rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+nav{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+nav p{
+  color: #666;
+  font-size: 14px;
+  margin-top: 20px;
+}
+
+nav a{
+  text-decoration: none;
+  color: #aaa;
+  padding: 13px;
+  border-radius: 10px;
+}
+
+nav a:hover,
+nav a.active{
+  background:#26334a;
+  color:#4da3ff;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing: border-box;
+
+}
+
+.profile{
+  margin-top: auto;
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  background: #1b2230;
+  padding: 15px;
+  border-radius: 12px;
+}
+
+.profile span{
+  font-size: 13px;
+}
+
+select option{
+  color: white;
+  background: #1b2230;
+}

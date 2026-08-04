@@ -29,4 +29,4 @@ export function friendExistsForUser(http: HttpClient, rootUrl: string, params: F
   );
 }
 
-friendExistsForUser.PATH = '/community/friends/{userId}/check';
+friendExistsForUser.PATH = '/find-players/friends/{userId}/check';

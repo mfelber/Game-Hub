@@ -29,4 +29,4 @@ export function sendFriendRequest(http: HttpClient, rootUrl: string, params: Sen
   );
 }
 
-sendFriendRequest.PATH = '/community/send/friend-request/{userId}';
+sendFriendRequest.PATH = '/find-players/send/friend-request/{userId}';

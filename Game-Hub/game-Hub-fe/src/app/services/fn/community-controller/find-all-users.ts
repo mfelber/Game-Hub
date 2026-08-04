@@ -34,4 +34,4 @@ export function findAllUsers(http: HttpClient, rootUrl: string, params?: FindAll
   );
 }
 
-findAllUsers.PATH = '/community/get/all/users';
+findAllUsers.PATH = '/find-players/get/all/users';

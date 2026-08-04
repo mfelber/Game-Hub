@@ -1,209 +1,253 @@
-<div class="flex flex-col lg:flex-row gap-6 mb-10 mt-13">
+<div *ngIf="!game" class="text-center justify-center text-gray-400">
+  Loading...
+</div>
 
-  <div *ngIf="game" class="flex-[3] relative lg:w-1/4 rounded-2xl overflow-hidden shadow-lg">
+<main *ngIf="game">
 
+  <section class="hero">
     <img
       [src]="getGameImageCover(game)"
       alt="Game cover"
-      class="w-full h-full object-cover max-h-[600px]"
+      class="hero-image"
     />
-
-    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-6">
-      <h2 class="text-2xl font-bold text-white mb-2">{{ game.title }}</h2>
-
-      <div class="flex flex-wrap gap-2">
-      <span *ngFor="let genre of game.genres" class="bg-white/20 text-gray-200 rounded-md px-2 py-1 w-fit text-sm">
-        {{ genre.name }}
-      </span>
-        <span class="text-gray-200 rounded-md px-2 py-1 w-fit text-sm"
-              [ngStyle]="{'background-color': game.ageRating.ageRatingColor}">
-      {{ game.ageRating.ageRating }}
-    </span>
+    <div class="overlay"></div>
+    <div class="hero-content">
+      <h1>{{ game.title }}</h1>
+      <div class="tags">
+         <span *ngFor="let genre of game.genres">
+      {{ genre.name }}
+        </span>
+        <span [ngStyle]="{'background-color': game.ageRating.ageRatingColor}">
+      {{ game.ageRating.ageRating }} </span>
       </div>
     </div>
+  </section>
 
-    <button *ngIf="!isRecommended" (click)="recommendGame(game.gameId)"
-            class="absolute bottom-4 right-4 bg-gray-500 hover:bg-gray-600 text-white font-semibold px-3 py-1.5 rounded flex items-center gap-1 cursor-pointer">
-      Recommend <i class="fa-solid fa-thumbs-up"></i>
-    </button>
-
-    <button *ngIf="isRecommended" (click)="recommendGame(game.gameId)"
-            class="absolute bottom-4 right-4 bg-green-600 hover:bg-green-700 text-white font-semibold px-3 py-1.5 rounded flex items-center gap-1 cursor-pointer">
-      Already recommended <i class="fa-solid fa-thumbs-up"></i>
-    </button>
-
-  </div>
-
-  <div class="flex flex-col gap-4 flex-[1] lg:w-1/3">
-    <div class="flex flex-col h-full">
-      <div class="bg-black/30 rounded-xl p-6 shadow-md flex-1 flex flex-col gap-2">
-
-        <div class="flex mb-4 border-b border-gray-600">
-          <button (click)="activeTab='details'"
-                  [class.border-b-2]="activeTab==='details'"
-                  [class.border-blue-500]="activeTab==='details'"
-                  class="py-2 px-4 font-semibold text-sm hover:text-blue-400">
-            Game Details
-          </button>
-
-          <button (click)="activeTab='system'"
-                  [class.border-b-2]="activeTab==='system'"
-                  [class.border-blue-500]="activeTab==='system'"
-                  class="py-2 px-4 font-semibold text-sm hover:text-blue-400">
-            System Req
-          </button>
-        </div>
-
-        <div *ngIf="activeTab === 'details'">
-          <div class="flex justify-between mb-3">
-            <h2 class="font-semibold">Developer:</h2>
-            <h3>{{ game.developer }}</h3>
-          </div>
-
-          <div class="flex justify-between mb-3">
-            <h2 class="font-semibold">Publisher:</h2>
-            <h3>{{ game.publisher }}</h3>
-          </div>
-
-          <div class="flex justify-between mb-3">
-            <h2 class="font-semibold">Release Date:</h2>
-            <h3>{{ game.releaseYear }}</h3>
-          </div>
-
-          <div class="flex justify-between mb-3">
-            <h2 class="font-semibold">Price:</h2>
-            <h3>{{ game.price }}</h3>
-          </div>
-
-          <div class="flex gap-1 mb-3">
-            <h2 class="font-semibold">Genres</h2>
-            <h3 *ngFor="let genre of game.genres"
-                class="bg-white/20 text-gray-200 rounded-md px-2 py-1 w-fit text-sm">{{ genre.name }}</h3>
-          </div>
-
-        </div>
-
-        <button *ngIf="!inFavorites" (click)="addGameToFavorite(game.gameId)"
-                class="mt-auto mb-2 bg-gray-500 hover:bg-gray-600  text-white font-semibold py-2 px-4 rounded cursor-pointer">
-          Add as favorite <i class="fa-solid fa-heart"></i>
-        </button>
-
-        <button *ngIf="inFavorites" (click)="removeGameFromFavorite(game.gameId)"
-                class="mt-auto mb-2 bg-red-600 hover:bg-red-700  text-white font-semibold py-2 px-4 rounded cursor-pointer">
-          Remove from favorites <i class="fa-solid fa-heart"></i>
-        </button>
-
-        <button
-          class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded cursor-pointer">
-          Download <i class="fa-solid fa-download"></i>
-        </button>
-
-      </div>
+  <section class="main-grid">
+    <div class="description card">
+      <h2>About this game</h2>
+      <p>
+        {{game.description}}
+      </p>
     </div>
-  </div>
-</div>
+    <div class="purchase card">
+      <h2>{{game.title}}</h2>
+      <div class="details">
+        <div>
+          <span>Developer</span>
+          <b>{{game.developer}}</b>
+        </div>
 
-  <!--  <div class="flex flex-col gap-4 flex-[1] lg:w-1/4">-->
-  <!--    <div class="flex flex-col h-full">-->
-  <!--      <div class="bg-[#1E2A4A] rounded-xl p-6 shadow-md flex-1 flex flex-col gap-2">-->
-  <!--        <p class="text-sm text-center mb-2">Game Details</p>-->
+        <div>
+          <span>Release Date</span>
+          <b>{{game.releaseYear}}</b>
+        </div>
+      </div>
 
-  <!--        <div class="flex justify-between mb-1">-->
-  <!--          <h2 class="font-semibold">Developer:</h2>-->
-  <!--          <h3>{{ game.developer }}</h3>-->
-  <!--        </div>-->
+      <button class="favorite" *ngIf="!inFavorites" (click)="addGameToFavorite(game.gameId)"> Add ass favorite ❤️</button>
+      <button class="favorite-remove" *ngIf="inFavorites" (click)="removeGameFromFavorite(game.gameId)"> Remove from favorites <i class="fa-solid fa-xmark"></i></button>
+      <button class="download-btn"> Download <i class="fa-solid fa-download"></i> </button>
+      <button class="play-btn"> Play <i class="fa-solid fa-play"></i></button>
 
-  <!--        <div class="flex justify-between mb-1">-->
-  <!--          <h2 class="font-semibold">Publisher:</h2>-->
-  <!--          <h3>{{ game.publisher }}</h3>-->
-  <!--        </div>-->
+    </div>
 
-  <!--        <div class="flex justify-between mb-1">-->
-  <!--          <h2 class="font-semibold">Release Date:</h2>-->
-  <!--          <h3>{{ game.releaseYear }}</h3>-->
-  <!--        </div>-->
+  </section>
 
+<!--  <section class="card requirements">-->
+<!--    <h2>System Requirements</h2>-->
+<!--    <div class="requirements-grid">-->
+<!--      <div>-->
+<!--        <span>CPU</span>-->
+<!--        <p>{{game.systemRequirements.cpu}}</p>-->
+<!--      </div>-->
 
-  <!--        <button *ngIf="inFavorites" (click)="removeGameFromFavorite(game.gameId)"-->
-  <!--                class="bg-red-600 hover:bg-red-700  text-white font-semibold py-2 px-4 rounded cursor-pointer">-->
-  <!--          Remove from favorites <i class="fa-solid fa-heart"></i>-->
-  <!--        </button>-->
+<!--      <div>-->
+<!--        <span>GPU</span>-->
+<!--        <p>{{game.systemRequirements.gpu}}</p>-->
+<!--      </div>-->
 
-  <!--        <button *ngIf="!inFavorites" (click)="addGameToFavorite(game.gameId)"-->
-  <!--                class="bg-gray-500 hover:bg-gray-600  text-white font-semibold py-2 px-4 rounded cursor-pointer">-->
-  <!--          Add as favorite <i class="fa-solid fa-heart"></i>-->
-  <!--        </button>-->
+<!--      <div>-->
+<!--        <span>RAM</span>-->
+<!--        <p>-->
+<!--          {{game.systemRequirements.ram}}-->
+<!--        </p>-->
+<!--      </div>-->
 
-  <!--        <button-->
-  <!--          class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded mt-auto cursor-pointer">-->
-  <!--          Download <i class="fa-solid fa-download"></i>-->
-  <!--        </button>-->
+<!--      <div>-->
+<!--        <span>Storage</span>-->
+<!--        <p>-->
+<!--          {{game.systemRequirements.storage}}-->
+<!--        </p>-->
+<!--      </div>-->
 
+<!--      <div>-->
+<!--        <span>OS</span>-->
+<!--        <p>-->
+<!--          {{game.systemRequirements.os}}-->
+<!--        </p>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </section>-->
 
-  <!--      </div>-->
+<!--  <section class="extra">-->
+<!--    <div class="card">-->
+<!--      <h3>Platforms</h3>-->
+<!--      <div class="small-tags">-->
+<!--        <span *ngFor="let platform of game.platforms">{{ platform.platformName }}</span>-->
+<!--      </div>-->
+<!--    </div>-->
 
-  <!--      <div class="bg-[#1E2A4A] rounded-xl p-6 shadow-md flex-1 flex flex-col mt-4">-->
-  <!--        <p class="text-center text-sm mb-2">System Requiriments </p>-->
+<!--    <div class="card">-->
+<!--      <h3>Languages</h3>-->
+<!--      <div class="small-tags">-->
+<!--        <span *ngFor="let language of game.languages">{{ language.languageName }}</span>-->
+<!--      </div>-->
+<!--    </div>-->
 
-  <!--        <div class="flex justify-between mb-3 mt-auto">-->
-  <!--          <h2 class="font-semibold">Processor:</h2>-->
-  <!--          <h3>{{ game.systemRequirements.cpu }}</h3>-->
-  <!--        </div>-->
+<!--    <div class="card">-->
+<!--      <h3>Subtitles</h3>-->
+<!--      <div class="small-tags">-->
+<!--        <span *ngFor="let subtitles of game.subtitles">{{ subtitles.subtitleName }}</span>-->
+<!--      </div>-->
+<!--    </div>-->
 
-  <!--        <div class="flex justify-between mb-3">-->
-  <!--          <h2 class="font-semibold">GPu:</h2>-->
-  <!--          <h3>{{ game.systemRequirements.gpu }}</h3>-->
-  <!--        </div>-->
-
-  <!--        <div class="flex justify-between mb-3">-->
-  <!--          <h2 class="font-semibold">Memory:</h2>-->
-  <!--          <h3>{{ game.systemRequirements.ram }}</h3>-->
-  <!--        </div>-->
-
-  <!--        <div class="flex justify-between mb-3">-->
-  <!--          <h2 class="font-semibold">Storage:</h2>-->
-  <!--          <h3>{{ game.systemRequirements.storage }}</h3>-->
-  <!--        </div>-->
-
-  <!--        <div class="flex justify-between mb-3">-->
-  <!--          <h2 class="font-semibold">Operating System:</h2>-->
-  <!--          <h3>{{ game.systemRequirements.os }}</h3>-->
-  <!--        </div>-->
-
-
-  <!--      </div>-->
-  <!--    </div>-->
-  <!--  </div>-->
-
-
-<div class="bg-[#1E2A4A] rounded-xl p-4 shadow-md mb-4">
-  <h3 class="text-lg font-semibold mb-3">Description of the game</h3>
-  <div class="flex gap-3">
-    <span class="px-3 py-1 text-sm">{{ game.description }}</span>
-  </div>
-</div>
-
-<div class="bg-[#1E2A4A] rounded-xl p-4 shadow-md mb-4">
-  <h3 class="text-lg font-semibold mb-3">Platforms</h3>
-  <div class="flex gap-3">
-    <span *ngFor="let platform of game.platforms"
-          class="bg-[#2B3A66] px-3 py-1 rounded-lg text-sm">{{ platform.platformName }}</span>
-  </div>
-</div>
-
-<div class="bg-[#1E2A4A] rounded-xl p-4 shadow-md mb-4">
-  <h3 class="text-lg font-semibold mb-3">Languages</h3>
-  <div class="flex gap-3">
-    <span *ngFor="let language of game.languages"
-          class="bg-[#2B3A66] px-3 py-1 rounded-lg text-sm">{{ language.languageName }}</span>
-  </div>
-</div>
+<!--  </section>-->
+</main>
 
 
-<div class="bg-[#1E2A4A] rounded-xl p-4 shadow-md">
-  <h3 class="text-lg font-semibold mb-3">Subtitles</h3>
-  <div class="flex gap-3">
-    <span *ngFor="let subtitles of game.subtitles"
-          class="bg-[#2B3A66] px-3 py-1 rounded-lg text-sm">{{ subtitles.subtitleName }}</span>
-  </div>
-</div>
+<!--<div class="flex flex-col lg:flex-row gap-6 mb-10 mt-13">-->
+
+<!--  <div *ngIf="game" class="flex-[3] relative lg:w-1/4 rounded-2xl overflow-hidden shadow-lg">-->
+
+<!--    <img-->
+<!--      [src]="getGameImageCover(game)"-->
+<!--      alt="Game cover"-->
+<!--      class="w-full h-full object-cover max-h-[600px]"-->
+<!--    />-->
+
+<!--    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-6">-->
+<!--      <h2 class="text-2xl font-bold text-white mb-2">{{ game.title }}</h2>-->
+
+<!--      <div class="flex flex-wrap gap-2">-->
+<!--      <span *ngFor="let genre of game.genres" class="bg-white/20 text-gray-200 rounded-md px-2 py-1 w-fit text-sm">-->
+<!--        {{ genre.name }}-->
+<!--      </span>-->
+<!--        <span class="text-gray-200 rounded-md px-2 py-1 w-fit text-sm"-->
+<!--              [ngStyle]="{'background-color': game.ageRating.ageRatingColor}">-->
+<!--      {{ game.ageRating.ageRating }}-->
+<!--    </span>-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--    <button *ngIf="!isRecommended" (click)="recommendGame(game.gameId)"-->
+<!--            class="absolute bottom-4 right-4 bg-gray-500 hover:bg-gray-600 text-white font-semibold px-3 py-1.5 rounded flex items-center gap-1 cursor-pointer">-->
+<!--      Recommend <i class="fa-solid fa-thumbs-up"></i>-->
+<!--    </button>-->
+
+<!--    <button *ngIf="isRecommended" (click)="recommendGame(game.gameId)"-->
+<!--            class="absolute bottom-4 right-4 bg-green-600 hover:bg-green-700 text-white font-semibold px-3 py-1.5 rounded flex items-center gap-1 cursor-pointer">-->
+<!--      Already recommended <i class="fa-solid fa-thumbs-up"></i>-->
+<!--    </button>-->
+
+<!--  </div>-->
+
+<!--  <div class="flex flex-col gap-4 flex-[1] lg:w-1/3">-->
+<!--    <div class="flex flex-col h-full">-->
+<!--      <div class="bg-black/30 rounded-xl p-6 shadow-md flex-1 flex flex-col gap-2">-->
+
+<!--        <div class="flex mb-4 border-b border-gray-600">-->
+<!--          <button (click)="activeTab='details'"-->
+<!--                  [class.border-b-2]="activeTab==='details'"-->
+<!--                  [class.border-blue-500]="activeTab==='details'"-->
+<!--                  class="py-2 px-4 font-semibold text-sm hover:text-blue-400">-->
+<!--            Game Details-->
+<!--          </button>-->
+
+<!--          <button (click)="activeTab='system'"-->
+<!--                  [class.border-b-2]="activeTab==='system'"-->
+<!--                  [class.border-blue-500]="activeTab==='system'"-->
+<!--                  class="py-2 px-4 font-semibold text-sm hover:text-blue-400">-->
+<!--            System Req-->
+<!--          </button>-->
+<!--        </div>-->
+
+<!--        <div *ngIf="activeTab === 'details'">-->
+<!--          <div class="flex justify-between mb-3">-->
+<!--            <h2 class="font-semibold">Developer:</h2>-->
+<!--            <h3>{{ game.developer }}</h3>-->
+<!--          </div>-->
+
+<!--          <div class="flex justify-between mb-3">-->
+<!--            <h2 class="font-semibold">Publisher:</h2>-->
+<!--            <h3>{{ game.publisher }}</h3>-->
+<!--          </div>-->
+
+<!--          <div class="flex justify-between mb-3">-->
+<!--            <h2 class="font-semibold">Release Date:</h2>-->
+<!--            <h3>{{ game.releaseYear }}</h3>-->
+<!--          </div>-->
+
+<!--          <div class="flex justify-between mb-3">-->
+<!--            <h2 class="font-semibold">Price:</h2>-->
+<!--            <h3>{{ game.price }}</h3>-->
+<!--          </div>-->
+
+<!--          <div class="flex gap-1 mb-3">-->
+<!--            <h2 class="font-semibold">Genres</h2>-->
+<!--            <h3 *ngFor="let genre of game.genres"-->
+<!--                class="bg-white/20 text-gray-200 rounded-md px-2 py-1 w-fit text-sm">{{ genre.name }}</h3>-->
+<!--          </div>-->
+
+<!--        </div>-->
+
+<!--        <button *ngIf="!inFavorites" (click)="addGameToFavorite(game.gameId)"-->
+<!--                class="mt-auto mb-2 bg-gray-500 hover:bg-gray-600  text-white font-semibold py-2 px-4 rounded cursor-pointer">-->
+<!--          Add as favorite <i class="fa-solid fa-heart"></i>-->
+<!--        </button>-->
+
+<!--        <button *ngIf="inFavorites" (click)="removeGameFromFavorite(game.gameId)"-->
+<!--                class="mt-auto mb-2 bg-red-600 hover:bg-red-700  text-white font-semibold py-2 px-4 rounded cursor-pointer">-->
+<!--          Remove from favorites <i class="fa-solid fa-heart"></i>-->
+<!--        </button>-->
+
+<!--        <button-->
+<!--          class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded cursor-pointer">-->
+<!--          Download <i class="fa-solid fa-download"></i>-->
+<!--        </button>-->
+
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
+<!--<div class="bg-[#1E2A4A] rounded-xl p-4 shadow-md mb-4">-->
+<!--  <h3 class="text-lg font-semibold mb-3">Description of the game</h3>-->
+<!--  <div class="flex gap-3">-->
+<!--    <span class="px-3 py-1 text-sm">{{ game.description }}</span>-->
+<!--  </div>-->
+<!--</div>-->
+
+<!--<div class="bg-[#1E2A4A] rounded-xl p-4 shadow-md mb-4">-->
+<!--  <h3 class="text-lg font-semibold mb-3">Platforms</h3>-->
+<!--  <div class="flex gap-3">-->
+<!--    <span *ngFor="let platform of game.platforms"-->
+<!--          class="bg-[#2B3A66] px-3 py-1 rounded-lg text-sm">{{ platform.platformName }}</span>-->
+<!--  </div>-->
+<!--</div>-->
+
+<!--<div class="bg-[#1E2A4A] rounded-xl p-4 shadow-md mb-4">-->
+<!--  <h3 class="text-lg font-semibold mb-3">Languages</h3>-->
+<!--  <div class="flex gap-3">-->
+<!--    <span *ngFor="let language of game.languages"-->
+<!--          class="bg-[#2B3A66] px-3 py-1 rounded-lg text-sm">{{ language.languageName }}</span>-->
+<!--  </div>-->
+<!--</div>-->
+
+
+<!--<div class="bg-[#1E2A4A] rounded-xl p-4 shadow-md">-->
+<!--  <h3 class="text-lg font-semibold mb-3">Subtitles</h3>-->
+<!--  <div class="flex gap-3">-->
+<!--    <span *ngFor="let subtitles of game.subtitles"-->
+<!--          class="bg-[#2B3A66] px-3 py-1 rounded-lg text-sm">{{ subtitles.subtitleName }}</span>-->
+<!--  </div>-->
+<!--</div>-->

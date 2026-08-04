@@ -1,0 +1,150 @@
+.header-content{
+  display: flex;
+  justify-content: space-between;
+}
+
+.header-content h1{
+  font-size: 1.9rem;
+}
+
+.header-content button{
+  background: #171d29;
+  border: none;
+  color: white;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.header p{
+  color: #777;
+  margin-top: -12px;
+}
+
+.search{
+  margin-top: 15px;
+  margin-bottom: 20px;
+}
+
+.tabs{
+  display: flex;
+  gap: 15px;
+  margin: 20px 0px;
+}
+
+.tabs button{
+  background: #1b2230;
+  color: #aaa;
+  padding: 10px 15px;
+  border-radius: 10px;
+  border: solid 1px #1b2230;
+  cursor: pointer;
+  transition:.2s;
+}
+
+.tabs button:hover{
+  color: white;
+}
+
+.tabs .selected{
+  background: #00bc7d1a;
+  color: #00d492;
+  border: #00bc7d 1px solid;
+}
+
+.tabs .selected:hover{
+  color: #00d492;
+}
+
+.tabs .commingsoon{
+  background: rgba(106, 114, 130, 0.25);
+  color: #6a7282;
+  border: 1px solid rgba(106, 114, 130, 0.35);
+  cursor: default;
+}
+
+.tabs .commingsoon:hover{
+  color: #6a7282;
+}
+
+.requests{
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.request-card{
+  background: #151b27;
+  padding: 20px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  transition: 0.25s;
+}
+
+.request-card:hover{
+  transform:translateY(-2px);
+  cursor: pointer;
+}
+
+.request-card img{
+  width: 75px;
+  height: 75px;
+  border-radius: 5px;
+  object-fit: cover;
+}
+
+.user-info{
+  flex: 1;
+}
+
+.user-info h3{
+  font-size: 18px;
+}
+
+.user-info p{
+  color: #777;
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+.details{
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+  font-size: 13px;
+  color: #999;
+}
+
+.actions{
+  display: flex;
+  gap: 10px;
+}
+
+.actions button{
+  width: 100px;
+  height: 40px;
+  border: none;
+  border-radius: 12px;
+  color: white;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.accept{
+  background: #16a34a
+}
+
+.accept:hover{
+  background: #15803d
+}
+
+.decline{
+  background: #dc2626;
+}
+
+
+
+.decline:hover{
+  background: #b91c1c;
+}

@@ -5,12 +5,14 @@ import {LibraryControllerService} from '../../../../services/services/library-co
 import {GameResponse} from '../../../../services/models/game-response';
 import {GameControllerService} from '../../../../services/services/game-controller.service';
 import {Router} from '@angular/router';
+import {SearchBar} from '../../components/search-bar/search-bar';
 
 @Component({
   selector: 'app-library',
   imports: [
     NgForOf,
-    NgIf
+    NgIf,
+    SearchBar
   ],
   templateUrl: './library.component.html',
   styleUrl: './library.component.scss'
@@ -94,4 +96,7 @@ export class LibraryComponent implements OnInit{
     return 'https://images.pexels.com/photos/1054655/pexels-photo-1054655.jpeg';
   }
 
+  searchYourGames($event: string) {
+    console.log('searchYourGames');
+  }
 }

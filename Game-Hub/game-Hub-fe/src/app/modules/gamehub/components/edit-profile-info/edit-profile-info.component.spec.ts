@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DiscountsComponent } from './discounts.component';
+import { EditProfileInfoComponent } from './edit-profile-info.component';
 
-describe('DiscountsComponent', () => {
-  let component: DiscountsComponent;
-  let fixture: ComponentFixture<DiscountsComponent>;
+describe('EditProfileInfoComponent', () => {
+  let component: EditProfileInfoComponent;
+  let fixture: ComponentFixture<EditProfileInfoComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DiscountsComponent]
+      imports: [EditProfileInfoComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(DiscountsComponent);
+    fixture = TestBed.createComponent(EditProfileInfoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -27,4 +27,4 @@ export function friendRequestsCount(http: HttpClient, rootUrl: string, params?: 
   );
 }
 
-friendRequestsCount.PATH = '/community/friend-requests/count';
+friendRequestsCount.PATH = '/find-players/friend-requests/count';

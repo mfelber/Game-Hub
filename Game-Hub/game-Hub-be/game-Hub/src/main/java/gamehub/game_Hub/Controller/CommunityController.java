@@ -22,7 +22,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("community")
+@RequestMapping("find-players")
 @RequiredArgsConstructor
 public class CommunityController {
 

@@ -1,19 +1,20 @@
 import {Component, OnInit} from '@angular/core';
+import {ReportRequest} from '../../../../services/models/report-request';
+import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {ReportUserModalComponent} from '../../components/report-user-modal/report-user-modal.component';
+import {SearchBar} from '../../components/search-bar/search-bar';
 import {initFlowbite} from 'flowbite';
 import {CommunityControllerService} from '../../../../services/services/community-controller.service';
+import {ReportControllerService} from '../../../../services/services/report-controller.service';
+import {Router} from '@angular/router';
+import {RefreshService} from '../../../../services/fn/refresh-service/refresh-service';
 import {UserCommunityResponse} from '../../../../services/models/user-community-response';
 import {PageResponseUserCommunityResponse} from '../../../../services/models/page-response-user-community-response';
-import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
-import {Router} from '@angular/router';
 import {firstValueFrom} from 'rxjs';
-import {RefreshService} from '../../../../services/fn/refresh-service/refresh-service';
-import {ReportControllerService} from '../../../../services/services/report-controller.service';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {ReportRequest} from '../../../../services/models/report-request';
-import {ReportUserModalComponent} from '../../components/report-user-modal/report-user-modal.component';
 
 @Component({
-  selector: 'app-community',
+  selector: 'app-find-players',
   imports: [
     NgForOf,
     NgIf,
@@ -21,13 +22,13 @@ import {ReportUserModalComponent} from '../../components/report-user-modal/repor
     NgClass,
     ReactiveFormsModule,
     FormsModule,
-    ReportUserModalComponent
+    ReportUserModalComponent,
+    SearchBar
   ],
-  templateUrl: './community.component.html',
-  styleUrl: './community.component.scss'
+  templateUrl: './find-players.component.html',
+  styleUrl: './find-players.component.scss',
 })
-export class CommunityComponent implements OnInit {
-
+export class FindPlayersComponent implements OnInit {
 
   ngOnInit(): void {
     initFlowbite();
@@ -156,15 +157,13 @@ export class CommunityComponent implements OnInit {
           this.showSuccess('User has been reported successfully');
         }
       })
-    }
-    else {
+    } else {
       this.errorMessage = 'Please select a reason before submitting';
     }
 
   }
 
   searchByUsername(value: string) {
-    console.log(value);
     this.page = 0;
     this.userCommunityResponse = {}
     this.loadAllUsers(value);
@@ -234,5 +233,9 @@ export class CommunityComponent implements OnInit {
 
   handleReport(request: ReportRequest) {
     this.showSuccess('User has been reported successfully');
+  }
+
+  resetFilters() {
+
   }
 }

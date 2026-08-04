@@ -17,7 +17,8 @@ import {CardPreviewComponent} from '../../components/card-preview/card-preview.c
 import {RefreshService} from '../../../../services/fn/refresh-service/refresh-service';
 import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {FlagsControllerService} from '../../../../services/services/flags-controller.service';
-import {CommunityFlagsResponse} from '../../../../services/models/community-flags-response';
+import {ProfileInfoComponent} from '../../components/profile-info/profile-info.component';
+import {EditProfileInfoComponent} from '../../components/edit-profile-info/edit-profile-info.component';
 
 @Component({
   selector: 'app-user-profile',
@@ -28,10 +29,11 @@ import {CommunityFlagsResponse} from '../../../../services/models/community-flag
     FormsModule,
     NgStyle,
     CardPreviewComponent,
-    MatSlideToggle
+    ProfileInfoComponent,
+    EditProfileInfoComponent,
   ],
   templateUrl: './user-private-profile.component.html',
-  styleUrl: './user-private-profile.component.css'
+  styleUrl: './user-private-profile.component.scss'
 })
 export class UserPrivateProfileComponent implements OnInit {
 
@@ -39,6 +41,7 @@ export class UserPrivateProfileComponent implements OnInit {
     initFlowbite();
     this.loadUserPrivateProfile();
     this.getGenres();
+    this.getColorsForCard()
   }
 
   constructor(
@@ -55,7 +58,6 @@ export class UserPrivateProfileComponent implements OnInit {
   }
 
   activeTab: 'basic' | 'profile' | 'security' = 'basic';
-  activeSubTabs: 'account' | 'community' | 'store' = 'community';
 
   profilePicture: File | null = null;
   previewImage: string | undefined;
@@ -86,6 +88,16 @@ export class UserPrivateProfileComponent implements OnInit {
   selectedColorCode: string = '';
   selectedColorId: number | null = null;
 
+  showPreviewColors = false
+  previewSelectedColor = '';
+  previewImageInserted = false;
+
+  friendRequestOptions: string[] = [];
+  sendMessageOptions: string[] = [];
+  profileVisibilityOptions: string[] = [];
+  groupInvitesOptions: string[] = [];
+  playTogetherInvitesOptions: string[] = [];
+
   userResponse: UserPrivateResponse = {
     bio: '',
     badges: [],
@@ -114,7 +126,7 @@ export class UserPrivateProfileComponent implements OnInit {
     password: ''
   }
 
-  private loadUserPrivateProfile() {
+  loadUserPrivateProfile() {
     this.userService.getUserPrivate().subscribe({
       next: (user) => {
         this.userResponse = user;
@@ -131,6 +143,7 @@ export class UserPrivateProfileComponent implements OnInit {
           lastName: user.lastName,
           username: user.username,
           location: this.userResponse.location?.name as undefined
+
         }
         this.authenticationRequest = {
           email: user.email!,
@@ -153,7 +166,7 @@ export class UserPrivateProfileComponent implements OnInit {
 
     setTimeout(() => this.successMessage = null, 500);
   }
-
+  // TODO use this while retrieving game images for currently playing , wishlist,
   getGameImageCover(game: GameResponse): string {
     if (game.gameCoverImage) {
       return 'data:image/jpeg;base64,' + game.gameCoverImage;
@@ -178,6 +191,7 @@ export class UserPrivateProfileComponent implements OnInit {
     return user.predefinedBannerPath;
   }
 
+  // TODO click event for use this while retrieving game images for currently playing , wishlist,
   goToGame(gameId: any) {
     this.gameService.getGameById({gameId}).subscribe({
       next: (game) => {
@@ -271,25 +285,28 @@ export class UserPrivateProfileComponent implements OnInit {
 
   }
 
-  async saveProfile() {
+  async saveProfile(event:any) {
+
+    console.log("received picture:", event.profilePicture);
+    console.log("received banner:", event.profileBanner);
     try {
 
-      if (this.selectedBannerId !== null) {
-        const bannerPath = "/assets/banners/banner_" + this.selectedBannerId + ".jpg";
+      if (event.selectedBannerId !== null) {
+        const bannerPath = "/assets/banners/banner_" + event.selectedBannerId + ".jpg";
         await this.userService.setPredefinedBanner({body: {bannerPath}}).toPromise();
         this.profileBanner = null;
         this.showSuccess('You have successfully updated profile')
 
-      } else if (this.profileBanner) {
+      } else if (event.profileBanner) {
         const formData = new FormData();
-        formData.append('file', this.profileBanner);
+        formData.append('file', event.profileBanner);
         await this.http.post('http://localhost:8088/api/v1/profile/custom/banner', formData).toPromise();
         this.showSuccess('You have successfully updated profile')
       }
 
-      if (this.profilePicture) {
+      if (event.profilePicture) {
         const formData = new FormData();
-        formData.append('file', this.profilePicture);
+        formData.append('file', event.profilePicture);
 
         try {
           await this.http.post('http://localhost:8088/api/v1/profile/image', formData).toPromise()
@@ -315,7 +332,7 @@ export class UserPrivateProfileComponent implements OnInit {
         }).toPromise();
 
       }
-
+      console.log('lalala')
       this.refreshService.triggerRefresh();
       this.loadUserPrivateProfile();
       this.closeModal();
@@ -360,7 +377,6 @@ export class UserPrivateProfileComponent implements OnInit {
     this.closeModal();
     this.isEditProfileModalOpen = true;
     this.getLocations();
-    this.getColorsForCard();
     this.getStoreFlags();
     this.getCommunityFlags()
   }
@@ -376,39 +392,12 @@ export class UserPrivateProfileComponent implements OnInit {
     })
   }
 
-
   getIconPath(locationName: string): string | undefined {
     const loc = this.allLocations.find(l => l.name === locationName);
     return loc?.iconPath;
   }
 
-  onFileSelected(event: any) {
-    const input = event.target as HTMLInputElement;
-    this.profilePicture = input.files![0];
-    if (this.profilePicture) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.previewImage = reader.result as string;
-        this.isPreviewImageInserted = true;
-      }
-      reader.readAsDataURL(this.profilePicture);
-    }
-  }
-
-  onBannerSelected(event: Event) {
-    const input = event.target as HTMLInputElement;
-    this.profileBanner = input.files![0];
-    if (this.profileBanner) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.previewBanner = reader.result as string;
-        this.isPreviewBannerInserted = true;
-        this.selectedBannerId = null;
-      }
-      reader.readAsDataURL(this.profileBanner);
-    }
-  }
-
+  // TODO use this method in settings page
   sendResetLink() {
     this.authenticationService.processForgotPasswordRequest({
       body: this.authenticationRequest
@@ -419,51 +408,15 @@ export class UserPrivateProfileComponent implements OnInit {
     })
   }
 
-  showBanners() {
-    this.showPredefinedBanners = !this.showPredefinedBanners;
-  }
 
-  predefinedBanners = [1, 2, 3, 4];
+  showPreview(data:any) {
+    this.previewSelectedColor = data.selectedColorCode;
+    this.previewBanner = data.previewBanner;
+    this.previewImage = data.previewImage;
+    this.previewImageInserted = data.isPreviewImageInserted;
 
-  selectedBanner(bannerId: number) {
-    if (this.selectedBannerId === bannerId) {
-      this.selectedBannerId = null;
-      this.previewBanner = undefined;
-    } else {
-      this.selectedBannerId = bannerId;
-      this.previewBanner = `assets/banners/banner_${bannerId}.jpg`;
-    }
-    console.log(bannerId);
-
-  }
-
-  removeSelectedPredefinedBanner() {
-    this.selectedBannerId = null;
-    this.previewBanner = undefined;
-    this.isPreviewBannerInserted = false;
-  }
-
-  removeProfileImage() {
-    this.isPreviewImageInserted = false;
-    this.previewImage = undefined;
-  }
-
-
-  selectColor(id: number, colorCode: string) {
-    console.log('you have selected', id, colorCode)
-    this.selectedColorCode = colorCode;
-    this.selectedColorId = id;
-    this.userRequest.cardColorId = id;
-  }
-
-  get changesExist(): boolean {
-    return this.selectedColorId !== null || this.isPreviewBannerInserted || this.isPreviewImageInserted || this.selectedBannerId !== null;
-  }
-
-  showPreviewColors = false
-
-  showPreview() {
     this.showPreviewColors = true;
+    this.isEditProfileModalOpen = false;
   }
 
   hidePreview() {
@@ -471,20 +424,7 @@ export class UserPrivateProfileComponent implements OnInit {
     // this.selectedColorCode = '';
   }
 
-  removeSelectedCardColor() {
-    this.selectedColorCode = '';
-    this.selectedColorId = null;
-
-  }
-
-  toggleLocationDropdown() {
-    this.isLocationDropdownOpen = !this.isLocationDropdownOpen;
-  }
-
-  selectLocation(name: any) {
-    this.userRequest.location = name;
-  }
-
+  // TODO settings page
   getStoreFlags() {
     this.storeFlagsService.getAllStoreFlags().subscribe({
       next: (res) => {
@@ -497,12 +437,7 @@ export class UserPrivateProfileComponent implements OnInit {
     })
   }
 
-  friendRequestOptions: string[] = [];
-  sendMessageOptions: string[] = [];
-  profileVisibilityOptions: string[] = [];
-  groupInvitesOptions: string[] = [];
-  playTogetherInvitesOptions: string[] = [];
-
+  // TODO settings page
   getCommunityFlags() {
     this.storeFlagsService.getAllCommunityFlags().subscribe(res => {
       res.forEach(flag => {

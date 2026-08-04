@@ -1,0 +1,181 @@
+.hero{
+  height: 550px;
+  position: relative;
+  border-radius: 25px;
+  overflow: hidden;
+}
+
+.hero-image{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.overlay{
+  position: absolute;
+  inset: 0;
+  background: linear-gradient( to top, #0b0e14,transparent 70%);
+}
+
+.hero-content{
+  position: absolute;
+  bottom: 40px;
+  left: 40px;
+}
+
+.hero h1{
+  font-size: 55px;
+  margin-bottom: 20px;
+}
+
+.tags{
+  display: flex;
+  gap: 12px;
+}
+
+.tags span{
+  background: rgba(255,255,255,.2);
+  padding: 10px 18px;
+  border-radius: 20px;
+}
+
+.main-grid{
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 25px;
+  margin-top: 30px;
+}
+
+.card{
+  background: #151b27;
+  border-radius: 20px;
+  padding: 30px;
+}
+
+.card h2{
+  margin-bottom: 25px;
+}
+
+.description p{
+  color: #b0b0b0;
+  line-height: 1.8;
+  font-size: 17px;
+}
+
+.details div{
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.details span{
+  color: #888;
+}
+
+button{
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 12px;
+}
+
+.download-btn{
+  background: #3B82F6;
+  color: white;
+}
+
+.download-btn:hover{
+  background: #2563EB;
+}
+
+.play-btn{
+  background: #22C55E;
+  color: white;
+}
+
+.play-btn:hover{
+  background: #16A34A;
+}
+
+.favorite-remove{
+  background: #dc2626;
+  color: white;
+}
+
+.favorite-remove:hover{
+  background: #b91c1c;
+}
+
+.favorite{
+  background: #333d52;
+  color: white;
+}
+
+.favorite:hover{
+  background: #3F4B63;
+}
+
+.requirements{
+  margin-top: 30px;
+}
+
+.requirements-grid{
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 25px;
+}
+
+.requirements-grid div{
+  background: #1b2230;
+  padding: 20px;
+  border-radius: 15px;
+}
+
+.requirements-grid span{
+  color: #888;
+  font-size: 14px;
+}
+
+.requirements-grid p{
+  margin-top: 10px;
+}
+
+.extra{
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 25px;
+  margin-top: 30px;
+}
+
+.extra h3{
+  margin-bottom: 20px;
+}
+
+.small-tags{
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.small-tags span{
+  background: #26334a;
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-size: 14px;
+}
+
+@media(max-width:900px){
+  .main-grid,
+  .extra{
+    grid-template-columns: 1fr;
+  }
+  .requirements-grid{
+    grid-template-columns: 1fr;
+  }
+  .hero h1{
+    font-size: 35px;
+  }
+}

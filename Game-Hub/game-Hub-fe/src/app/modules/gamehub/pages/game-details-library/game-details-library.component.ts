@@ -14,7 +14,7 @@ import {UserPublicProfileComponent} from '../user-public-profile/user-public-pro
     NgStyle
   ],
   templateUrl: './game-details-library.component.html',
-  styleUrl: './game-details-library.component.css'
+  styleUrl: './game-details-library.component.scss'
 })
 export class GameDetailsLibraryComponent implements OnInit {
 

@@ -8,13 +8,17 @@ import {checkGameInWishlist} from '../../../../services/fn/game-controller/check
 import {FormsModule} from '@angular/forms';
 import {Game} from '../../../../services/models/game';
 import {PlatformResponse} from '../../../../services/models/platform-response';
+import {SearchBar} from '../../components/search-bar/search-bar';
+import {buyGame} from '../../../../services/fn/game-controller/buy-game';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-store',
   imports: [
     NgForOf,
     NgIf,
-    FormsModule
+    FormsModule,
+    SearchBar
   ],
   templateUrl: './store.component.html',
   styleUrl: './store.component.scss'
@@ -155,4 +159,18 @@ export class StoreComponent implements OnInit{
     };
     this.filteredGames = [...(this.gamePageResponse.content || [])]
   }
+
+  buyGame(gameId:any) {
+    console.log(gameId);
+  }
+
+  searchGames(query: string) {
+    console.log(query);
+  }
+
+  // protected readonly buyGame = buyGame;
+
+
+
 }
+

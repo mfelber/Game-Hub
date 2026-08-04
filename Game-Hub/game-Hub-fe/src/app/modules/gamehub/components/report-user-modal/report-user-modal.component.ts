@@ -14,7 +14,7 @@ import {ReportControllerService} from '../../../../services/services/report-cont
     NgIf
   ],
   templateUrl: './report-user-modal.component.html',
-  styleUrl: './report-user-modal.component.css'
+  styleUrl: './report-user-modal.component.scss'
 })
 export class ReportUserModalComponent implements OnInit{
 

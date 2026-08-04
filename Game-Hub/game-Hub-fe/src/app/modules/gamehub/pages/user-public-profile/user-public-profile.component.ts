@@ -18,7 +18,7 @@ import {RefreshService} from '../../../../services/fn/refresh-service/refresh-se
     NgStyle
   ],
   templateUrl: './user-public-profile.component.html',
-  styleUrl: './user-public-profile.component.css'
+  styleUrl: './user-public-profile.component.scss'
 })
 export class UserPublicProfileComponent implements OnInit {
 

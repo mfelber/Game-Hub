@@ -29,4 +29,4 @@ export function friendRequestExistsForReceiver(http: HttpClient, rootUrl: string
   );
 }
 
-friendRequestExistsForReceiver.PATH = '/community/friend-request/status/receiver/{userId}';
+friendRequestExistsForReceiver.PATH = '/find-players/friend-request/status/receiver/{userId}';

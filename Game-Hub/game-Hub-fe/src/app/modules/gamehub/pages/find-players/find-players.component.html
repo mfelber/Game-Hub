@@ -1,0 +1,165 @@
+<div *ngIf="!isLoaded" class="text-center justify-center text-gray-400">
+  Loading...
+</div>
+
+<main [class.hidden]="!isLoaded">
+
+  <!-- HEADER -->
+  <section>
+    <div class="header">
+      <div class="header-content">
+        <h1>Find Players</h1>
+        <button class="relative cursor-pointer">
+          🔔
+          <span class="absolute -top-1 -right-2 bg-red-600 text-white text-xs font-bold
+        rounded-full w-5 h-5 flex items-center justify-center"> 1 </span>
+        </button>
+      </div>
+      <p>Search for players and add new friends</p>
+    </div>
+  </section>
+
+  <!-- SEARCH -->
+  <section>
+    <div class="search">
+      <app-search-bar
+        placeholder="Search users..."
+        (search)="searchByUsername($event)">
+      </app-search-bar>
+    </div>
+  </section>
+
+  <!-- FILTERS -->
+  <section class="filter-bar">
+    <div class="filter-header">
+      <span>Filters</span>
+      <button (click)="resetFilters()"> Reset <i class="fa-solid fa-rotate-right text-sm"></i></button>
+    </div>
+
+    <div class="filter-options">
+      <div class="dropdown">
+        <label>Country</label>
+        <select>
+          <option value="">All Countries</option>
+          <option value="SK">Slovakia</option>
+          <option value="CZ">Czechia</option>
+          <option value="GE">Germany</option>
+        </select>
+      </div>
+
+      <!--   TODO retrieve all platforms   -->
+
+      <div class="dropdown">
+        <label>Platform</label>
+        <select>
+          <option value="">All Platforms</option>
+          <option value="pc">PC</option>
+          <option value="xbox">Xbox</option>
+          <option value="ps5">PS</option>
+        </select>
+      </div>
+
+      <!--   TODO   -->
+      <div class="checkbox">
+        <label>
+          <input type="checkbox"> Looking for teammates
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <label>
+          <input type="checkbox"> Voice chat
+        </label>
+      </div>
+    </div>
+  </section>
+
+  <section class="users" *ngFor="let user of userCommunityResponse.content">
+    <div class="user-card" (click)="navigateToUser(user.userId)">
+      <div class="left">
+        <img *ngIf="user.userProfilePicture"
+             [src]="getProfilePicture(user)"
+             class="left-img"/>
+
+        <img *ngIf="!user.userProfilePicture"
+             src="../../../../../assets/profilePicture/default_profile_picture.svg"
+             class="left-img"
+             [ngStyle]="{'background-color': user.profileColor}"/>
+        <div>
+          <div class="username">
+            <h3>{{user.username}}</h3>
+            <img class="flag" [src]="user.location?.iconPath" alt="">
+          </div>
+          <span class="text-gray-400 text-sm truncate" [ngClass]="{
+          'text-green-500': user.status === 'ONLINE',
+          'text-gray-400': user.status === 'OFFLINE',
+          'text-yellow-400': user.status === 'AWAY'
+          }">• {{ user.status }} </span>
+          <div class="stats">
+            <span> 🎮 125 games</span>
+            <span> 👥 34 friends</span>
+            <span> ⭐ 55 reviews</span>
+            <span> 📅 joined july 2026</span>
+          </div>
+        </div>
+      </div>
+      <div class="right">
+
+        <button *ngIf="friendsMap[user.userId!] && isLoaded" (click)="$event.stopPropagation()"
+                class="action-btn friend">
+          <i class="fa-solid fa-user-check"></i>
+        </button>
+
+        <button *ngIf="friendRequestMapForReceiver[user.userId!] && isLoaded"
+                (click)=" acceptFriendRequest(user.userId!) ; $event.stopPropagation()"
+                class="action-btn accept">
+          <i class="fa-solid fa-check"></i></button>
+
+        <button *ngIf="friendRequestMapForReceiver[user.userId!] && isLoaded"
+                (click)=" rejectFriendRequest(user.userId!) ; $event.stopPropagation()"
+                class="action-btn reject">
+          <i class="fa-solid fa-xmark"></i></button>
+
+        <button
+          *ngIf="!friendRequestMapFromSender[user.userId!] && !friendsMap[user.userId!] && !friendRequestMapForReceiver[user.userId!] && isLoaded "
+          (click)="sendFriendRequest(user.userId!) ; $event.stopPropagation()"
+          class="add-friend-btn">
+          Add Friend<i class="fa-solid fa-user-plus"></i>
+        </button>
+
+        <button *ngIf="friendRequestMapFromSender[user.userId!] && isLoaded"
+                (click)="cancelFriendRequest(user.userId!) ; $event.stopPropagation()"
+                class="cancel-btn">
+          Cancel invite <i class="fa-solid fa-user-minus"></i>
+        </button>
+
+        <button (click)="openReportUserModal(user) ; $event.stopPropagation()"
+                class="action-btn report">
+          <i class="fa-solid fa-exclamation"></i>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <div *ngIf="userCommunityResponse.content?.length! === 0" class="flex flex-col items-center justify-center h-60text-gray-400">
+    <i class="fa-solid fa-sad-tear text-4xl mb-4"></i>
+    <p class="text-lg font-semibold">No users were founded</p>
+  </div>
+
+  <app-report-user-modal
+    [isOpen]="isReportUserModalOpen"
+    [selectedUser]="selectedUserToReport"
+    (close)="isReportUserModalOpen = false"
+    (submit)="handleReport($event)">
+  </app-report-user-modal>
+
+</main>
+
+<div class="fixed top-4 right-4 flex flex-col gap-2 z-50">
+  <div *ngIf="successMessage"
+       class="bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg min-w-[250px]
+              transform transition-transform duration-500 ease-in-out opacity-0"
+       [ngClass]="{'translate-x-0 opacity-100': toastVisible, 'translate-x-24 opacity-0': !toastVisible}">
+    {{ successMessage }}
+  </div>
+</div>
