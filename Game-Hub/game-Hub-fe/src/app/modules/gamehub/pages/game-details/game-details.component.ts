@@ -99,6 +99,7 @@ export class GameDetailsComponent implements OnInit {
   }
 
   addGameToWishList(gameId: any) {
+    console.log(this.gameInWishList);
     this.gameService.addGameToWishlist({gameId})
       .subscribe({
         next: () => {

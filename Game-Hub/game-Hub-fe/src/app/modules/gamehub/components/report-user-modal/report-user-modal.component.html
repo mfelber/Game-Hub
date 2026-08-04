@@ -1,60 +1,117 @@
-<div *ngIf="isOpen"
-     class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 animate-fade-in">
+<div *ngIf="isOpen" class="modal-overlay">
 
-  <div class="bg-gray-800 p-6 rounded-2xl w-[32rem] max-w-full relative shadow-2xl border border-white/20">
-
-    <!-- Title -->
-    <h2 class="text-white text-2xl font-bold mb-6">Reporting user: {{ selectedUser?.username }} </h2>
-
-    <!-- Reason Title -->
-    <h3 class="text-white text-lg font-semibold mb-3">Reason:</h3>
-
-    <div *ngIf="errorMessage" class="text-sm text-center mb-5">
-      <p style="color:red">{{ errorMessage }}</p>
-    </div>
-
-    <!-- Reason List -->
-    <div [attr.key]="reportRequest.reason" class="space-y-3 mb-6">
-      <label *ngFor="let reason of allReportReasons"
-             class="flex items-center gap-3 p-3 rounded-xl bg-gray-700 cursor-pointer hover:bg-gray-600 transition">
-
-        <input type="radio"
-               name="reportReason"
-               [value]="reason.id"
-               [(ngModel)]="reportRequest.reason"
-               class="w-4 h-4 cursor-pointer">
-
-        <span class="text-white">{{ reason.reason }}</span>
-      </label>
-    </div>
-
-    <!-- Message Field -->
-    <h3 class="text-white text-lg font-semibold mb-3">Additional comments:</h3>
-
-    <textarea [(ngModel)]="reportRequest.message"
-              class="w-full h-32 p-3 rounded-lg bg-[#1f1f2c] text-white border border-white/10
-             focus:outline-none focus:ring-2 focus:ring-gray-700 resize-none"
-    ></textarea>
-
-    <!-- Buttons -->
-    <div class="flex justify-end gap-3 mt-6">
-
-      <button (click)="closeModal()"
-              class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition cursor-pointer">
-        Cancel
-      </button>
-
-      <button (click)="reportUser(selectedUser?.userId!)"
-              class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition cursor-pointer">
-        Submit Report
-      </button>
-    </div>
-
-    <!-- Close Icon -->
-    <button (click)="closeModal()"
-            class="absolute top-3 right-3 text-white text-2xl hover:text-gray-300 transition cursor-pointer">
+  <div class="report-modal">
+    <button class="close-btn" (click)="closeModal()">
       &times;
     </button>
 
+    <h2>Report User</h2>
+
+    <p class="username">Reporting:
+    <span>{{selectedUser?.username}}</span>
+    </p>
+
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+
+    <div class="section">
+      <label>Reason</label>
+
+      <div class="reason-list">
+        <label *ngFor="let reason of allReportReasons" class="reason-item">
+          <input type="radio"
+                 name="reportReason"
+                 [value]="reason.id"
+                 [(ngModel)]="reportRequest.reason">
+        <span>{{reason.reason}}</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="section">
+      <label>Additional comments</label>
+      <textarea [(ngModel)]="reportRequest.message" placeholder="Descrbe the problem...">
+      </textarea>
+    </div>
+
+    <div class="buttons">
+      <button
+        class="cancel"
+        (click)="closeModal()">
+        Cancel
+      </button>
+
+      <button
+        class="report"
+        (click)="reportUser(selectedUser?.userId!)">
+        Submit Report
+        <i class="fa-solid fa-flag"></i>
+      </button>
+    </div>
+
   </div>
+
 </div>
+
+
+<!--<div *ngIf="isOpen"-->
+<!--     class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 animate-fade-in">-->
+
+<!--  <div class="bg-gray-800 p-6 rounded-2xl w-[32rem] max-w-full relative shadow-2xl border border-white/20">-->
+
+<!--    &lt;!&ndash; Title &ndash;&gt;-->
+<!--    <h2 class="text-white text-2xl font-bold mb-6">Reporting user: {{ selectedUser?.username }} </h2>-->
+
+<!--    &lt;!&ndash; Reason Title &ndash;&gt;-->
+<!--    <h3 class="text-white text-lg font-semibold mb-3">Reason:</h3>-->
+
+<!--    <div *ngIf="errorMessage" class="text-sm text-center mb-5">-->
+<!--      <p style="color:red">{{ errorMessage }}</p>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Reason List &ndash;&gt;-->
+<!--    <div [attr.key]="reportRequest.reason" class="space-y-3 mb-6">-->
+<!--      <label *ngFor="let reason of allReportReasons"-->
+<!--             class="flex items-center gap-3 p-3 rounded-xl bg-gray-700 cursor-pointer hover:bg-gray-600 transition">-->
+
+<!--        <input type="radio"-->
+<!--               name="reportReason"-->
+<!--               [value]="reason.id"-->
+<!--               [(ngModel)]="reportRequest.reason"-->
+<!--               class="w-4 h-4 cursor-pointer">-->
+
+<!--        <span class="text-white">{{ reason.reason }}</span>-->
+<!--      </label>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Message Field &ndash;&gt;-->
+<!--    <h3 class="text-white text-lg font-semibold mb-3">Additional comments:</h3>-->
+
+<!--    <textarea [(ngModel)]="reportRequest.message"-->
+<!--              class="w-full h-32 p-3 rounded-lg bg-[#1f1f2c] text-white border border-white/10-->
+<!--             focus:outline-none focus:ring-2 focus:ring-gray-700 resize-none"-->
+<!--    ></textarea>-->
+
+<!--    &lt;!&ndash; Buttons &ndash;&gt;-->
+<!--    <div class="flex justify-end gap-3 mt-6">-->
+
+<!--      <button (click)="closeModal()"-->
+<!--              class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition cursor-pointer">-->
+<!--        Cancel-->
+<!--      </button>-->
+
+<!--      <button (click)="reportUser(selectedUser?.userId!)"-->
+<!--              class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition cursor-pointer">-->
+<!--        Submit Report-->
+<!--      </button>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Close Icon &ndash;&gt;-->
+<!--    <button (click)="closeModal()"-->
+<!--            class="absolute top-3 right-3 text-white text-2xl hover:text-gray-300 transition cursor-pointer">-->
+<!--      &times;-->
+<!--    </button>-->
+
+<!--  </div>-->
+<!--</div>-->

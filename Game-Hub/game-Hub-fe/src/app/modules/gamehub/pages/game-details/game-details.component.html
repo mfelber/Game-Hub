@@ -51,28 +51,29 @@
 
       <div class="purchase-actions">
 
-        <button
-          *ngIf="!gameIsOwned"
-          (click)="buyGame(game.gameId)"
-          class="buy">
-          Buy Now
-          <i class="fa-solid fa-cart-shopping"></i>
-        </button>
+        <div style="display: flex; gap: 10px">
+          <button style="width: 90%"
+            *ngIf="!gameIsOwned"
+            (click)="buyGame(game.gameId)"
+            class="buy">
+            Buy Now
+            <i class="fa-solid fa-cart-shopping"></i>
+          </button>
 
-        <button
-          class="wishlist"
-          *ngIf="!gameIsOwned && !gameInWishList"
-          (click)="addGameToWishList(game.gameId)">
-          Add to Wishlist ❤️
-        </button>
+          <button style="width: 10%"
+                  *ngIf="!gameIsOwned && !gameInWishList"
+                  (click)="addGameToWishList(game.gameId)"
+                  class="wishlist">
+            <i class="fa-regular fa-heart"></i>
+          </button>
 
-        <button
-          class="remove"
-          *ngIf="gameInWishList && !gameIsOwned"
-          (click)="removeGameFromWishList(game.gameId)">
-          Remove from Wishlist
-          <i class="fa-solid fa-xmark"></i>
-        </button>
+          <button style="width: 10%"
+                  *ngIf="gameInWishList && !gameIsOwned"
+                  (click)="removeGameFromWishList(game.gameId)"
+                  class="remove">
+            <i class="fa-solid fa-heart"></i>
+          </button>
+        </div>
 
         <button
           *ngIf="gameIsOwned"

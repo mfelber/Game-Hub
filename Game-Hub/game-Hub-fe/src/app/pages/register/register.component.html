@@ -1,3 +1,124 @@
+<main>
+  <div class="auth-page">
+
+    <div class="auth-container">
+
+      <!-- LEFT SIDE -->
+      <section class="auth-form">
+
+        <img ngSrc="joystick.png"
+             alt="GameHub Logo"
+             class="logo"
+             width="80"
+             height="80"/>
+
+        <h1>Welcome</h1>
+
+        <p class="subtitle">
+          Register to get access to hundreds of games
+        </p>
+
+        <div *ngIf="errorMessage" class="error">
+          {{ errorMessage }}
+        </div>
+
+        <div *ngIf="successMessage" class="success">
+          {{ successMessage }}
+        </div>
+
+        <form>
+
+          <div class="input-group">
+            <i class="fa-solid fa-user"></i>
+            <input [(ngModel)]="registerRequest.firstName"
+                   type="text"
+                   name="firstName"
+                   id="firstName"
+                   placeholder="First Name"/>
+          </div>
+
+          <div class="input-group">
+            <i class="fa-solid fa-user-tag"></i>
+            <input [(ngModel)]="registerRequest.lastName"
+                   type="text"
+                   name="lastName"
+                   id="lastName"
+                   placeholder="Last Name"/>
+          </div>
+
+          <div class="input-group">
+            <i class="fa-solid fa-id-badge"></i>
+            <input [(ngModel)]="registerRequest.username"
+                   type="text"
+                   name="userName"
+                   id="userName"
+                   placeholder="Username"/>
+          </div>
+
+          <div class="input-group">
+            <i class="fa-solid fa-envelope"></i>
+            <input [(ngModel)]="registerRequest.email"
+                   type="email"
+                   name="email"
+                   placeholder="Email"/>
+          </div>
+
+          <div *ngIf="childAccount" class="input-group">
+            <i class="fa-solid fa-envelope"></i>
+            <input [(ngModel)]="registerRequest.parentEmail"
+                   type="email"
+                   name="parentEmail"
+                   placeholder="Parent email"/>
+          </div>
+
+          <div class="input-group">
+            <i class="fa-solid fa-lock"></i>
+            <input [(ngModel)]="registerRequest.password"
+                   type="password"
+                   name="password"
+                   placeholder="Password"/>
+          </div>
+
+          <div class="options">
+            <label>
+              <input type="checkbox" id="childAccount" name="childAccount" (click)="createChildAccount()" [(ngModel)]="registerRequest.childAccount">
+              Create a child account
+            </label>
+          </div>
+
+          <button
+            type="submit"
+            (click)="register()"
+            class="register-btn">
+            Register
+            <i class="fa-solid fa-user-plus"></i>
+          </button>
+
+          <p class="have-account-text">
+            Already have an account?
+            <button type="button" (click)="login()">
+              Login
+            </button>
+          </p>
+
+        </form>
+
+      </section>
+
+      <!-- RIGHT SIDE -->
+      <section class="astronaut">
+
+        <img ngSrc="assets/images/astronaut_logIn.svg"
+             alt="Astronaut"
+             width="700"
+             height="700"/>
+
+      </section>
+    </div>
+  </div>
+</main>
+
+
 <div class="min-h-screen bg-gradient-to-b from-[#090C2D] to-[#1D2793] flex items-center justify-center p-4">
   <div class="w-full max-w-6xl flex flex-col md:flex-row overflow-hidden justify-center">
 
