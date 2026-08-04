@@ -2,6 +2,7 @@ package gamehub.game_Hub.ServiceImpl;
 
 import java.nio.file.AccessDeniedException;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import gamehub.game_Hub.Common.PageResponse;
 import gamehub.game_Hub.Mapper.GameMapper;
@@ -67,6 +69,7 @@ public class LibraryServiceImpl implements LibraryService {
   }
 
   @Override
+  @Transactional
   public Long addGameToFavorites(final Long gameId, final Authentication connectedUser) {
     Game game = gameRepository.findById(gameId)
         .orElseThrow(() -> new EntityNotFoundException("No game found with id: " + gameId));
@@ -75,15 +78,20 @@ public class LibraryServiceImpl implements LibraryService {
     User user = userRepository.findById(authUser.getId())
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
 
-    if (!user.getFavoriteGames().contains(game)) {
-      user.getFavoriteGames().add(game);
-      userRepository.save(user);
+    UserLibrary library = libraryRepository
+        .findByUserIdAndGameId(user.getId(), gameId)
+        .orElseThrow(() -> new EntityNotFoundException("Game is not in library"));
+
+    if (!library.isFavorite()) {
+      library.setFavorite(true);
+      libraryRepository.save(library);
     }
 
     return game.getId();
   }
 
   @Override
+  @Transactional
   public Long removeGameFromFavorites(final Long gameId, final Authentication connectedUser) {
     Game game = gameRepository.findById(gameId)
         .orElseThrow(() -> new EntityNotFoundException("No game found with id: " + gameId));
@@ -92,9 +100,13 @@ public class LibraryServiceImpl implements LibraryService {
     User user = userRepository.findById(authUser.getId())
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
 
-    if (user.getFavoriteGames().contains(game)) {
-      user.getFavoriteGames().remove(game);
-      userRepository.save(user);
+    UserLibrary library = libraryRepository
+        .findByUserIdAndGameId(user.getId(), gameId)
+        .orElseThrow(() -> new EntityNotFoundException("Game is not in library"));
+
+    if (library.isFavorite()) {
+      library.setFavorite(false);
+      libraryRepository.save(library);
     }
 
     return game.getId();
@@ -108,20 +120,20 @@ public class LibraryServiceImpl implements LibraryService {
     User user = userRepository.findById(authUser.getId())
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
 
-    return user.getFavoriteGames().contains(game);
+    return libraryRepository.existsByUserAndGameAndFavoriteTrue(user, game);
   }
 
   @Override
-  public PageResponse<GameResponse> findAllFavoriteGames(final int page, final int size,
+  public PageResponse<UserLibraryResponse> findAllFavoriteGames(final int page, final int size,
       final Authentication connectedUser) {
     User authUser = (User) connectedUser.getPrincipal();
-    Pageable pageable = PageRequest.of(page, size, Sort.by("title").ascending());
-    Page<Game> favoriteGames = gameRepository.findByFavoriteGamesContaining(authUser,pageable);
+    Pageable pageable = PageRequest.of(page, size);
+    Page<UserLibrary> favoriteGames = libraryRepository.findUserLibraryByUserAndFavoriteTrue(authUser, pageable);
 
-    List<GameResponse> gameResponse = favoriteGames.stream().map(gameMapper::toGameResponse).toList();
+    List<UserLibraryResponse> favoriteGamesResponse = favoriteGames.stream().map(libraryMapper::toUserLibraryResponse).toList();
 
     return new PageResponse<>(
-        gameResponse,
+        favoriteGamesResponse,
         favoriteGames.getNumber(),
         favoriteGames.getSize(),
         favoriteGames.getTotalElements(),

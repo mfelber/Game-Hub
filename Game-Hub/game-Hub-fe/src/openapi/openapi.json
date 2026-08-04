@@ -1280,7 +1280,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PageResponseGameResponse"
+                  "$ref": "#/components/schemas/PageResponseUserLibraryResponse"
                 }
               }
             }
@@ -2227,13 +2227,6 @@
             }
           },
           "playRecently": {
-            "uniqueItems": true,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Game"
-            }
-          },
-          "favoriteGames": {
             "uniqueItems": true,
             "type": "array",
             "items": {

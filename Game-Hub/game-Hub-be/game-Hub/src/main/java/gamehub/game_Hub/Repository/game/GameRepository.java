@@ -11,9 +11,5 @@ import gamehub.game_Hub.Module.User.User;
 
 public interface GameRepository extends JpaRepository<Game, Long> {
 
-  Page<Game> findByWishlistsContaining(User connectedUser, Pageable pageable);
-
-  Page<Game> findByFavoriteGamesContaining(User connectedUser, Pageable pageable);
-
   Page<Game> findAllByAgeRating_AgeRatingNotIn(Collection<String> ageRatingAgeRatings, Pageable pageable);
 }
