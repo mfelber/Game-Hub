@@ -17,6 +17,7 @@ import { UserLevelControllerService } from './services/user-level-controller.ser
 import { LocationControllerService } from './services/location-controller.service';
 import { FlagsControllerService } from './services/flags-controller.service';
 import { CardColorControllerService } from './services/card-color-controller.service';
+import { AdminControllerService } from './services/admin-controller.service';
 
 /**
  * Module that provides all services and configuration.
@@ -37,6 +38,7 @@ import { CardColorControllerService } from './services/card-color-controller.ser
     LocationControllerService,
     FlagsControllerService,
     CardColorControllerService,
+    AdminControllerService,
     ApiConfiguration
   ],
 })

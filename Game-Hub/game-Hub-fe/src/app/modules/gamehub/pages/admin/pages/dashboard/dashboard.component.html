@@ -1,1 +1,75 @@
-<p>dashboard.component works!</p>
+<main>
+  <section class="dashboard">
+
+    <div class="page-header">
+      <h1>Dashboard</h1>
+      <p>Welcome back, Admin</p>
+    </div>
+
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-icon games">
+          <i class="fa-solid fa-gamepad"></i>
+        </div>
+        <div>
+          <span>Total games</span>
+          <h2>{{dashboardPageResponse.totalGames}}</h2>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon users">
+          <i class="fa-solid fa-user"></i>
+        </div>
+        <div>
+          <span>Total users</span>
+          <h2>{{dashboardPageResponse.totalUsers}}</h2>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon reports">
+          <i class="fa-solid fa-flag"></i>
+        </div>
+        <div>
+          <span>Pending Reports</span>
+          <h2>{{dashboardPageResponse.pendingReports}}</h2>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon reviews">
+          <i class="fa-solid fa-star"></i>
+        </div>
+        <div>
+          <span>Total Reviews</span>
+          <h2>{{dashboardPageResponse.totalReviews}}</h2>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-grid">
+      <div class="panel">
+        <h3>Recent Users</h3>
+        <div class="list-item" *ngIf="dashboardPageResponse.recentUsers?.length === 0" style="justify-content: center">
+          <span>No recently registered users <i class="fa-solid fa-user-xmark"></i> </span>
+        </div>
+        <div class="list-item" *ngFor="let user of dashboardPageResponse.recentUsers">
+          <span>{{user.name}}</span>
+          <small>{{user.createdAt}}</small>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>Latest Reports</h3>
+        <div class="list-item" *ngIf="dashboardPageResponse.latestReports?.length === 0" style="justify-content: center"  >
+          <span>Nobody was recently reported </span>
+        </div>
+        <div class="list-item" *ngFor="let report of dashboardPageResponse.latestReports">
+          <span>{{report.reportedUser}}</span>
+          <span>{{report.reason}}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

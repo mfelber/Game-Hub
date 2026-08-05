@@ -13,6 +13,8 @@ export type { BannerRequest } from './models/banner-request';
 export type { CardColor } from './models/card-color';
 export type { CardColorResponse } from './models/card-color-response';
 export type { CommunityFlagsResponse } from './models/community-flags-response';
+export type { DashboardReportResponse } from './models/dashboard-report-response';
+export type { DashboardResponse } from './models/dashboard-response';
 export type { ForgotPasswordRequest } from './models/forgot-password-request';
 export type { FriendRequestResponse } from './models/friend-request-response';
 export type { Game } from './models/game';

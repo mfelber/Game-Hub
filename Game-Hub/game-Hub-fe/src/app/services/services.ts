@@ -13,3 +13,4 @@ export { UserLevelControllerService } from './services/user-level-controller.ser
 export { LocationControllerService } from './services/location-controller.service';
 export { FlagsControllerService } from './services/flags-controller.service';
 export { CardColorControllerService } from './services/card-color-controller.service';
+export { AdminControllerService } from './services/admin-controller.service';
