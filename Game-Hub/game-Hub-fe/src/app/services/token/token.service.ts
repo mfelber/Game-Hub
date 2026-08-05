@@ -10,8 +10,16 @@ export class TokenService {
     localStorage.setItem('token', token);
   }
 
+  set role(role: string) {
+    localStorage.setItem('role', role);
+  }
+
   get token() {
     return localStorage.getItem('token') as string;
+  }
+
+  get role() {
+    return localStorage.getItem('role') as string;
   }
 
   isTokenNotValid() {

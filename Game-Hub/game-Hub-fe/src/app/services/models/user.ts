@@ -9,7 +9,6 @@ import { Genre } from '../models/genre';
 import { GrantedAuthority } from '../models/granted-authority';
 import { Level } from '../models/level';
 import { PasswordResetToken } from '../models/password-reset-token';
-import { Role } from '../models/role';
 import { UserLibrary } from '../models/user-library';
 import { Wishlist } from '../models/wishlist';
 export interface User {
@@ -27,7 +26,6 @@ export interface User {
   credentialsNonExpired?: boolean;
   email?: string;
   enabled?: boolean;
-  favoriteGames?: Array<Game>;
   favoriteGenres?: Array<Genre>;
   firstName?: string;
   friends?: Array<User>;
@@ -45,7 +43,7 @@ export interface User {
   playRecently?: Array<Game>;
   profileColor?: string;
   recommendationGames?: Array<Game>;
-  roles?: Array<Role>;
+  role?: 'USER' | 'ADMIN';
   status?: 'ONLINE' | 'OFFLINE' | 'AWAY';
   userProfilePicture?: string;
   username?: string;

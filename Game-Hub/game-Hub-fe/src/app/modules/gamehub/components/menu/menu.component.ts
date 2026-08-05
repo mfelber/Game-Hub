@@ -138,8 +138,8 @@ export class MenuComponent implements OnInit {
 
     this.userService.setStatusToOffline().subscribe({
       next: () => {
-        window.location.href = '/logout';
         localStorage.clear();
+        this.router.navigate(['login']);
       },
       error: (err) => console.error(err)
     })

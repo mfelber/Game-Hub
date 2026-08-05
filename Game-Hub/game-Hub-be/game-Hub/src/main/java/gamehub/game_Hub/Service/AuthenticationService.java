@@ -22,6 +22,7 @@ import gamehub.game_Hub.Module.Flags.UserCommunityFlag;
 import gamehub.game_Hub.Module.Flags.UserStoreFlag;
 import gamehub.game_Hub.Module.Level;
 import gamehub.game_Hub.Module.User.Location;
+import gamehub.game_Hub.Module.User.Role;
 import gamehub.game_Hub.Module.User.Status;
 import gamehub.game_Hub.Repository.CardColorRepository;
 import gamehub.game_Hub.Repository.CommunityFlagTypeRepository;
@@ -98,7 +99,7 @@ public class AuthenticationService {
           .username(request.getUsername())
           .email(request.getEmail())
           .password(passwordEncoder.encode(request.getPassword()))
-          .roles(List.of(userRole))
+          .role(Role.USER)
           .status(Status.OFFLINE)
           .location(Location.UNKNOWN)
           .profileColor(getRandomColor())
@@ -133,7 +134,7 @@ public class AuthenticationService {
         .email(request.getEmail())
         .parentEmail(request.getParentEmail())
         .password(passwordEncoder.encode(request.getPassword()))
-        .roles(List.of(UserRole))
+        .role(Role.USER)
         .status(Status.OFFLINE)
         .location(Location.UNKNOWN)
         .profileColor(getRandomColor())
@@ -220,7 +221,7 @@ public class AuthenticationService {
     var user = (User) authentication.getPrincipal();
     claims.put("fullName", user.getFullName());
     var jwtToken = jwtService.generateToken(claims, user);
-    return AuthenticationResponse.builder().token(jwtToken).build();
+    return AuthenticationResponse.builder().token(jwtToken).role(user.getRole().name()).build();
   }
 
   public void forgotPassword(final ForgotPasswordRequest forgotPasswordRequest) throws MessagingException {

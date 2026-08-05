@@ -40,7 +40,7 @@
 
 <!-- FRIEND REQUESTS -->
   <section class="requests" *ngFor="let friendRequest of friendRequestsResponse.content">
-    <div class="request-card">
+    <div class="request-card" (click)="navigateToUser(friendRequest.userId!)">
       <img *ngIf="friendRequest.userProfilePicture"
            [src]="getProfilePicture(friendRequest)"/>
 

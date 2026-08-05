@@ -21,7 +21,6 @@ import { getFavorites } from '../fn/library-controller/get-favorites';
 import { GetFavorites$Params } from '../fn/library-controller/get-favorites';
 import { getLibrary } from '../fn/library-controller/get-library';
 import { GetLibrary$Params } from '../fn/library-controller/get-library';
-import { PageResponseGameResponse } from '../models/page-response-game-response';
 import { PageResponseUserLibraryResponse } from '../models/page-response-user-library-response';
 import { recommendGame } from '../fn/library-controller/recommend-game';
 import { RecommendGame$Params } from '../fn/library-controller/recommend-game';
@@ -170,7 +169,7 @@ export class LibraryControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getFavorites$Response(params?: GetFavorites$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseGameResponse>> {
+  getFavorites$Response(params?: GetFavorites$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseUserLibraryResponse>> {
     return getFavorites(this.http, this.rootUrl, params, context);
   }
 
@@ -180,9 +179,9 @@ export class LibraryControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getFavorites(params?: GetFavorites$Params, context?: HttpContext): Observable<PageResponseGameResponse> {
+  getFavorites(params?: GetFavorites$Params, context?: HttpContext): Observable<PageResponseUserLibraryResponse> {
     return this.getFavorites$Response(params, context).pipe(
-      map((r: StrictHttpResponse<PageResponseGameResponse>): PageResponseGameResponse => r.body)
+      map((r: StrictHttpResponse<PageResponseUserLibraryResponse>): PageResponseUserLibraryResponse => r.body)
     );
   }
 

@@ -49,8 +49,16 @@ export class LoginComponent {
     }).subscribe({
       next: (res) => {
         this.tokenService.token = res.token as string;
-        this.router.navigate(['gamehub']);
-        this.setUserToOnline()
+        this.tokenService.role = res.role as string;
+        console.log(this.tokenService.role);
+        if (this.tokenService.role === 'USER') {
+          this.router.navigate(['gamehub']);
+          this.setUserToOnline();
+          return;
+        }
+        this.router.navigate(['/gamehub/admin/dashboard']);
+
+
       },
       error: (err) => {
         if (err.status === 403) {
