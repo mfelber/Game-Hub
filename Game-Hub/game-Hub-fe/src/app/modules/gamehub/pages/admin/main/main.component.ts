@@ -6,7 +6,6 @@ import {AdminMenuComponent} from '../components/menu/menu.component';
 @Component({
   selector: 'app-main',
   imports: [
-    MenuComponent,
     RouterOutlet,
     AdminMenuComponent
   ],

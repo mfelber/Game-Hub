@@ -4,13 +4,9 @@ import {StoreControllerService} from '../../../../services/services';
 import {Router, RouterOutlet} from '@angular/router';
 import {PageResponseGameResponse} from '../../../../services/models/page-response-game-response';
 import {GameResponse} from '../../../../services/models/game-response';
-import {checkGameInWishlist} from '../../../../services/fn/game-controller/check-game-in-wishlist';
 import {FormsModule} from '@angular/forms';
-import {Game} from '../../../../services/models/game';
-import {PlatformResponse} from '../../../../services/models/platform-response';
 import {SearchBar} from '../../components/search-bar/search-bar';
-import {buyGame} from '../../../../services/fn/game-controller/buy-game';
-import {Observable} from 'rxjs';
+
 
 @Component({
   selector: 'app-store',
