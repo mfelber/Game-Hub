@@ -39,10 +39,6 @@ public class Role {
   @Column(unique = true)
   private String name;
 
-  @ManyToMany(mappedBy = "roles")
-  @JsonIgnore
-  private List<User> users;
-
   @CreatedDate
   @Column(nullable = false, updatable = false, name = "created_at")
   private LocalDateTime createdAt;

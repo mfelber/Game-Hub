@@ -20,7 +20,6 @@ import gamehub.game_Hub.Module.CardColor;
 import gamehub.game_Hub.Module.Game;
 import gamehub.game_Hub.Module.Genre;
 import gamehub.game_Hub.Module.Level;
-import gamehub.game_Hub.Role.Role;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -121,14 +120,9 @@ public class User implements UserDetails, Principal {
   @JoinColumn(name = "level_id")
   private Level level;
 
-  @ManyToMany(fetch = FetchType.EAGER)
-  @JoinTable(
-      name = "user_roles",
-      schema = "game_hub",
-      joinColumns = @JoinColumn(name = "user_id"),
-      inverseJoinColumns = @JoinColumn(name = "role_id")
-  )
-  private List<Role> roles;
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
+  private Role role;
 
   @OneToMany(mappedBy = "user")
   private Set<UserLibrary> library;
@@ -165,10 +159,9 @@ public class User implements UserDetails, Principal {
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return this.roles
-        .stream()
-        .map(role -> new SimpleGrantedAuthority(role.getName()))
-        .collect(Collectors.toList());
+    return List.of(new SimpleGrantedAuthority(
+        "ROLE_" + role.name()
+    ));
   }
 
   @Override

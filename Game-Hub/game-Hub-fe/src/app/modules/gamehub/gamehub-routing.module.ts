@@ -12,6 +12,8 @@ import {GameDetailsLibraryComponent} from './pages/game-details-library/game-det
 import {UserPrivateProfileComponent} from './pages/user-private-profile/user-private-profile.component';
 import {UserPublicProfileComponent} from './pages/user-public-profile/user-public-profile.component';
 import {authGuard} from '../../services/guard/auth.guard';
+import {DashboardComponent} from './pages/admin/pages/dashboard/dashboard.component';
+import {MainAdminComponent} from './pages/admin/main/main.component';
 
 const routes: Routes = [
   {
@@ -65,6 +67,17 @@ const routes: Routes = [
         path: 'user/:id',
         component: UserPublicProfileComponent,
         canActivate: [authGuard]
+      }
+    ]
+  },
+  {
+    path: 'admin',
+    component: MainAdminComponent,
+    canActivate: [authGuard],
+    children: [
+      {
+        path: 'dashboard',
+        component: DashboardComponent,
       }
     ]
   }

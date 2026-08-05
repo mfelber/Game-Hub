@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {CommunityControllerService} from '../../../../services/services/community-controller.service';
-import {PageResponseUserCommunityResponse} from '../../../../services/models/page-response-user-community-response';
 import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {FriendRequestResponse} from '../../../../services/models/friend-request-response';
 import {PageResponseFriendRequestResponse} from '../../../../services/models/page-response-friend-request-response';
@@ -86,4 +85,5 @@ export class FriendRequestsComponent implements OnInit {
   searchFriendRequests() {
     console.log('searchFriendRequests');
   }
+
 }

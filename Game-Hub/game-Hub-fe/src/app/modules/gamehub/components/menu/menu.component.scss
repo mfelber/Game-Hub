@@ -2,20 +2,6 @@
   position: relative;
   cursor: pointer;
   transition: all 0.25s ease;
-
-  a,
-  mat-icon,
-  i {
-    color: white;
-    transition: color 0.3s ease, transform 0.2s ease;
-  }
-
-  &:hover a,
-  &:hover mat-icon,
-  &:hover i {
-    color: #a5b4fc;
-    transform: translateX(3px);
-  }
 }
 
 input {
@@ -53,7 +39,7 @@ nav{
 nav p{
   color: #666;
   font-size: 14px;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 nav a{
@@ -93,4 +79,22 @@ nav a.active{
 select option{
   color: white;
   background: #1b2230;
+}
+
+.logout-item {
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 15px;
+  border-radius: 10px;
+  color: #A8B0C3;
+  text-decoration: none;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.logout:hover {
+  background: #3B1D24;
+  color: #EF4444!important;
 }

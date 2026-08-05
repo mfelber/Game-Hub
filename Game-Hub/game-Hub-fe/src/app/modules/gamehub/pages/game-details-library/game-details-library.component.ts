@@ -21,7 +21,6 @@ export class GameDetailsLibraryComponent implements OnInit {
   game:any
   inFavorites = false
   isRecommended = false
-  activeTab: 'details' | 'system' = 'details'
 
   constructor(
     private router: ActivatedRoute,

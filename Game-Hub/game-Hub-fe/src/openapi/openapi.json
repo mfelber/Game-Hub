@@ -2046,26 +2046,6 @@
           }
         }
       },
-      "Role": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "name": {
-            "type": "string"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "lastModifiedAt": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
       "Subtitles": {
         "type": "object",
         "properties": {
@@ -2199,11 +2179,12 @@
           "level": {
             "$ref": "#/components/schemas/Level"
           },
-          "roles": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Role"
-            }
+          "role": {
+            "type": "string",
+            "enum": [
+              "USER",
+              "ADMIN"
+            ]
           },
           "library": {
             "uniqueItems": true,
@@ -2260,14 +2241,14 @@
           "fullName": {
             "type": "string"
           },
-          "banned": {
-            "type": "boolean"
-          },
           "authorities": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/GrantedAuthority"
             }
+          },
+          "banned": {
+            "type": "boolean"
           },
           "enabled": {
             "type": "boolean"
@@ -2481,6 +2462,9 @@
       "AuthenticationResponse": {
         "type": "object",
         "properties": {
+          "role": {
+            "type": "string"
+          },
           "token": {
             "type": "string"
           }

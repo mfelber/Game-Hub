@@ -62,9 +62,8 @@
         />
       </div>
       <div>
-        <div style="display: flex; justify-content: space-between; align-items: center">
+        <div>
           <h4>{{ userResponse.username }}</h4>
-          <a (click)="logoutUser(); $event.stopPropagation()" href="#"><i class="fa-solid fa-arrow-right-from-bracket" style="margin-left: -20px"></i></a>
         </div>
 
         <div class="relative">
@@ -121,6 +120,11 @@
       </div>
 
     </div>
+
+    <a class="logout-item logout" (click)="logoutUser()">
+      <i class="fa-solid fa-right-from-bracket"></i>
+      <span>Logout</span>
+    </a>
 
   </aside>
 

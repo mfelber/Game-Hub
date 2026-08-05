@@ -8,14 +8,14 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { PageResponseGameResponse } from '../../models/page-response-game-response';
+import { PageResponseUserLibraryResponse } from '../../models/page-response-user-library-response';
 
 export interface GetFavorites$Params {
   page?: number;
   size?: number;
 }
 
-export function getFavorites(http: HttpClient, rootUrl: string, params?: GetFavorites$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseGameResponse>> {
+export function getFavorites(http: HttpClient, rootUrl: string, params?: GetFavorites$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseUserLibraryResponse>> {
   const rb = new RequestBuilder(rootUrl, getFavorites.PATH, 'get');
   if (params) {
     rb.query('page', params.page, {});
@@ -27,7 +27,7 @@ export function getFavorites(http: HttpClient, rootUrl: string, params?: GetFavo
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<PageResponseGameResponse>;
+      return r as StrictHttpResponse<PageResponseUserLibraryResponse>;
     })
   );
 }
