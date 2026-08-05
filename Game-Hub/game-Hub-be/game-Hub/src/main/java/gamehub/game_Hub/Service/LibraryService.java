@@ -13,19 +13,26 @@ public interface LibraryService {
   PageResponse<UserLibraryResponse> getUserLibrary(int page, int size, Authentication connectedUser)
       throws AccessDeniedException;
 
+  PageResponse<UserLibraryResponse> findAllFavoriteGames(int page, int size, Authentication connectedUser) throws AccessDeniedException;
+
+  PageResponse<UserLibraryResponse> getDownloadedGames(int page, int size, Authentication connectedUser) throws AccessDeniedException;
+
   Long addGameToFavorites(Long gameId, Authentication connectedUser);
 
   Long removeGameFromFavorites(Long gameId, Authentication connectedUser);
 
   Boolean checkGameFavorite(Long gameId, Authentication connectedUser);
 
+  Long downloadGame(Long gameId, Authentication connectedUser);
+
+  Long uninstallGame(Long gameId, Authentication connectedUser);
+
+  Boolean checkDownloadedGame(Long gameId, Authentication connectedUser);
+
   Long recommendGame(Long gameId, Authentication connectedUser);
 
   Long removeRecommendGame(Long gameId, Authentication connectedUser);
 
-  PageResponse<UserLibraryResponse> findAllFavoriteGames(int page, int size, Authentication connectedUser);
-
   Boolean checkGameRecommended(Long gameId, Authentication connectedUser);
-
 
 }

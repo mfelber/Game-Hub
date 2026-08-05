@@ -46,8 +46,9 @@
 
       <button class="favorite" *ngIf="!inFavorites" (click)="addGameToFavorite(game.gameId)"> Add ass favorite ❤️</button>
       <button class="favorite-remove" *ngIf="inFavorites" (click)="removeGameFromFavorite(game.gameId)"> Remove from favorites <i class="fa-solid fa-xmark"></i></button>
-      <button class="download-btn"> Download <i class="fa-solid fa-download"></i> </button>
-      <button class="play-btn"> Play <i class="fa-solid fa-play"></i></button>
+      <button class="download-btn" *ngIf="!isDownloaded" (click)="downloadGame(game.gameId)"> Download <i class="fa-solid fa-download"></i> </button>
+      <button class="play-btn" *ngIf="isDownloaded"> Play <i class="fa-solid fa-play"></i></button>
+      <button class="favorite-remove" *ngIf="isDownloaded" (click)="uninstallGame(game.gameId)"> Uninstall <i class="fa-solid fa-trash-can"></i> </button>
 
     </div>
 

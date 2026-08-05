@@ -27,4 +27,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
   List<User> findTop5ByRoleNotOrderByCreatedAtDesc(Role role);
 
+  Long countByRole(Role role);
+
 }

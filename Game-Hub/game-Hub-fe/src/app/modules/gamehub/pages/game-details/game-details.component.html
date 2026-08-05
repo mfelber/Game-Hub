@@ -80,13 +80,15 @@
             <i class="fa-solid fa-heart"></i>
           </button>
 
+          <button
+            *ngIf="gameIsOwned"
+            class="in-library">
+            In Library 🎮
+          </button>
+
         </div>
 
-        <button
-          *ngIf="gameIsOwned"
-          class="in-library">
-          In Library 🎮
-        </button>
+
 
         <hr>
 

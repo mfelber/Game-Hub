@@ -13,10 +13,16 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { addGameToFavorites } from '../fn/library-controller/add-game-to-favorites';
 import { AddGameToFavorites$Params } from '../fn/library-controller/add-game-to-favorites';
+import { checkDownloadedGame } from '../fn/library-controller/check-downloaded-game';
+import { CheckDownloadedGame$Params } from '../fn/library-controller/check-downloaded-game';
 import { checkGameFavorite } from '../fn/library-controller/check-game-favorite';
 import { CheckGameFavorite$Params } from '../fn/library-controller/check-game-favorite';
 import { checkGameRecommended } from '../fn/library-controller/check-game-recommended';
 import { CheckGameRecommended$Params } from '../fn/library-controller/check-game-recommended';
+import { downloadGame } from '../fn/library-controller/download-game';
+import { DownloadGame$Params } from '../fn/library-controller/download-game';
+import { getDownloadedGames } from '../fn/library-controller/get-downloaded-games';
+import { GetDownloadedGames$Params } from '../fn/library-controller/get-downloaded-games';
 import { getFavorites } from '../fn/library-controller/get-favorites';
 import { GetFavorites$Params } from '../fn/library-controller/get-favorites';
 import { getLibrary } from '../fn/library-controller/get-library';
@@ -28,11 +34,38 @@ import { removeGameFromFavorites } from '../fn/library-controller/remove-game-fr
 import { RemoveGameFromFavorites$Params } from '../fn/library-controller/remove-game-from-favorites';
 import { removeRecommendGame } from '../fn/library-controller/remove-recommend-game';
 import { RemoveRecommendGame$Params } from '../fn/library-controller/remove-recommend-game';
+import { uninstallGame } from '../fn/library-controller/uninstall-game';
+import { UninstallGame$Params } from '../fn/library-controller/uninstall-game';
 
 @Injectable({ providedIn: 'root' })
 export class LibraryControllerService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
+  }
+
+  /** Path part for operation `uninstallGame()` */
+  static readonly UninstallGamePath = '/library/uninstall/{gameId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `uninstallGame()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  uninstallGame$Response(params: UninstallGame$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return uninstallGame(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `uninstallGame$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  uninstallGame(params: UninstallGame$Params, context?: HttpContext): Observable<number> {
+    return this.uninstallGame$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
   }
 
   /** Path part for operation `removeRecommendGame()` */
@@ -81,6 +114,56 @@ export class LibraryControllerService extends BaseService {
    */
   recommendGame(params: RecommendGame$Params, context?: HttpContext): Observable<number> {
     return this.recommendGame$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `getDownloadedGames()` */
+  static readonly GetDownloadedGamesPath = '/library/downloaded-games';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getDownloadedGames()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getDownloadedGames$Response(params?: GetDownloadedGames$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseUserLibraryResponse>> {
+    return getDownloadedGames(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getDownloadedGames$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getDownloadedGames(params?: GetDownloadedGames$Params, context?: HttpContext): Observable<PageResponseUserLibraryResponse> {
+    return this.getDownloadedGames$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PageResponseUserLibraryResponse>): PageResponseUserLibraryResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `downloadGame()` */
+  static readonly DownloadGamePath = '/library/download/{gameId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `downloadGame()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  downloadGame$Response(params: DownloadGame$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return downloadGame(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `downloadGame$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  downloadGame(params: DownloadGame$Params, context?: HttpContext): Observable<number> {
+    return this.downloadGame$Response(params, context).pipe(
       map((r: StrictHttpResponse<number>): number => r.body)
     );
   }
@@ -231,6 +314,31 @@ export class LibraryControllerService extends BaseService {
    */
   checkGameFavorite(params: CheckGameFavorite$Params, context?: HttpContext): Observable<boolean> {
     return this.checkGameFavorite$Response(params, context).pipe(
+      map((r: StrictHttpResponse<boolean>): boolean => r.body)
+    );
+  }
+
+  /** Path part for operation `checkDownloadedGame()` */
+  static readonly CheckDownloadedGamePath = '/library/check/game/{gameId}/downloaded';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `checkDownloadedGame()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  checkDownloadedGame$Response(params: CheckDownloadedGame$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+    return checkDownloadedGame(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `checkDownloadedGame$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  checkDownloadedGame(params: CheckDownloadedGame$Params, context?: HttpContext): Observable<boolean> {
+    return this.checkDownloadedGame$Response(params, context).pipe(
       map((r: StrictHttpResponse<boolean>): boolean => r.body)
     );
   }
