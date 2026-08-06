@@ -6,7 +6,10 @@ import {PageResponseGamePreviewResponse} from '../../../../../../services/models
 import {NgForOf, NgIf} from '@angular/common';
 import {SearchBar} from '../../../../components/search-bar/search-bar';
 import {ReactiveFormsModule} from '@angular/forms';
+import {GameInfoModalComponent} from '../../components/game-info/game-info-modal.component';
 import {GameResponse} from '../../../../../../services/models/game-response';
+import {DeleteGameModalComponent} from '../../components/delete-game-modal/delete-game-modal.component';
+import {AddGameModalComponent} from '../../components/add-game-modal/add-game-modal.component';
 
 @Component({
   selector: 'app-all-games',
@@ -14,7 +17,10 @@ import {GameResponse} from '../../../../../../services/models/game-response';
     NgIf,
     SearchBar,
     NgForOf,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    GameInfoModalComponent,
+    DeleteGameModalComponent,
+    AddGameModalComponent
   ],
   templateUrl: './all-games.component.html',
   styleUrl: './all-games.component.scss',
@@ -22,7 +28,10 @@ import {GameResponse} from '../../../../../../services/models/game-response';
 export class AllGamesComponent implements OnInit {
 
   gamesResponse: PageResponseGamePreviewResponse = {}
+  selectedGame: GameResponse = {}
   isLoaded = false;
+  isGameInfoModalOpen = false;
+  isGameDeleteModalOpen = false;
 
   constructor(
     private adminControllerService: AdminControllerService,
@@ -32,6 +41,31 @@ export class AllGamesComponent implements OnInit {
 
   ngOnInit() {
     this.loadGamesTableData();
+  }
+
+  getGameInfo(gameId: any) {
+    this.selectedGame = {};
+    this.isGameInfoModalOpen = true;
+    this.adminControllerService.getGameInfo({gameId}).subscribe({
+      next: (data: any) => {
+        this.selectedGame = data;
+        console.log(data);
+      },
+      error: (err) => {
+        console.log(err);
+        this.isGameInfoModalOpen = false;
+      }
+    })
+  }
+
+  deleteGame(game: any) {
+    this.isGameDeleteModalOpen = true;
+    this.selectedGame = game;
+    // this.adminControllerService.deleteGame(gameId).subscribe({
+    //   next: (data) => {
+    //     console.log(data);
+    //   }
+    // })
   }
 
   loadGamesTableData() {
@@ -58,5 +92,11 @@ export class AllGamesComponent implements OnInit {
 
   searchGames($event: string) {
     console.log($event);
+  }
+
+  closeModal() {
+    this.isGameInfoModalOpen = false;
+    this.isGameDeleteModalOpen = false;
+    this.selectedGame = {};
   }
 }

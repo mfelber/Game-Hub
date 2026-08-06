@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import gamehub.game_Hub.Common.PageResponse;
 import gamehub.game_Hub.Mapper.GameMapper;
@@ -15,12 +16,17 @@ import gamehub.game_Hub.Mapper.ReportMapper;
 import gamehub.game_Hub.Mapper.UserMapper;
 import gamehub.game_Hub.Module.Game;
 import gamehub.game_Hub.Module.User.Role;
+import gamehub.game_Hub.Module.User.Wishlist;
 import gamehub.game_Hub.Repository.ReportRepository;
+import gamehub.game_Hub.Repository.UserLibraryRepository;
+import gamehub.game_Hub.Repository.WishlistRepository;
 import gamehub.game_Hub.Repository.game.GameRepository;
 import gamehub.game_Hub.Repository.user.UserRepository;
 import gamehub.game_Hub.Response.Admin.DashboardResponse;
 import gamehub.game_Hub.Response.GamePreviewResponse;
+import gamehub.game_Hub.Response.GameResponse;
 import gamehub.game_Hub.Service.Admin.AdminService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -38,6 +44,10 @@ public class DashboardServiceImpl implements AdminService {
   private final GameMapper gameMapper;
 
   private final UserMapper userMapper;
+
+  private final WishlistRepository wishlistRepository;
+
+  private final UserLibraryRepository userLibraryRepository;
 
   @Override
   public DashboardResponse loadDashboardData(final Authentication connectedUser, final int page,
@@ -69,6 +79,21 @@ public class DashboardServiceImpl implements AdminService {
         games.isFirst(),
         games.isLast()
     );
+  }
+
+  @Override
+  public GameResponse getGameInfo(final Long gameId) {
+    Game game = gameRepository.findById(gameId).orElseThrow(() -> new EntityNotFoundException("Game with id " + gameId + " was not found"));
+    return gameMapper.toGameResponse(game);
+  }
+
+  @Override
+  @Transactional
+  public void deleteGame(final Long gameId) {
+    Game game = gameRepository.findById(gameId).orElseThrow(() -> new EntityNotFoundException("Game with id " + gameId + " was not found"));
+    wishlistRepository.deleteAllByGame(game);
+    userLibraryRepository.deleteAllByGame(game);
+    gameRepository.delete(game);
   }
 
 }

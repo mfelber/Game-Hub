@@ -40,6 +40,7 @@ export type { PageResponseWishlistResponse } from './models/page-response-wishli
 export type { PasswordResetToken } from './models/password-reset-token';
 export type { Platform } from './models/platform';
 export type { PlatformResponse } from './models/platform-response';
+export type { RecentUserResponse } from './models/recent-user-response';
 export type { RegistrationRequest } from './models/registration-request';
 export type { ReportReasonResponse } from './models/report-reason-response';
 export type { ReportRequest } from './models/report-request';

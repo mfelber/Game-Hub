@@ -12,12 +12,12 @@ import { UserProfileControllerService } from './services/user-profile-controller
 import { LibraryControllerService } from './services/library-controller.service';
 import { CommunityControllerService } from './services/community-controller.service';
 import { AuthenticationService } from './services/authentication.service';
+import { AdminControllerService } from './services/admin-controller.service';
 import { WishlistControllerService } from './services/wishlist-controller.service';
 import { UserLevelControllerService } from './services/user-level-controller.service';
 import { LocationControllerService } from './services/location-controller.service';
 import { FlagsControllerService } from './services/flags-controller.service';
 import { CardColorControllerService } from './services/card-color-controller.service';
-import { AdminControllerService } from './services/admin-controller.service';
 
 /**
  * Module that provides all services and configuration.
@@ -33,12 +33,12 @@ import { AdminControllerService } from './services/admin-controller.service';
     LibraryControllerService,
     CommunityControllerService,
     AuthenticationService,
+    AdminControllerService,
     WishlistControllerService,
     UserLevelControllerService,
     LocationControllerService,
     FlagsControllerService,
     CardColorControllerService,
-    AdminControllerService,
     ApiConfiguration
   ],
 })

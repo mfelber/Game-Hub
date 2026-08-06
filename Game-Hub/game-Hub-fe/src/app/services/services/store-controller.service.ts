@@ -11,8 +11,6 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { addGame } from '../fn/store-controller/add-game';
-import { AddGame$Params } from '../fn/store-controller/add-game';
 import { addGameToWishlist } from '../fn/store-controller/add-game-to-wishlist';
 import { AddGameToWishlist$Params } from '../fn/store-controller/add-game-to-wishlist';
 import { buyGame } from '../fn/store-controller/buy-game';
@@ -35,8 +33,6 @@ import { PageResponseGameResponse } from '../models/page-response-game-response'
 import { PlatformResponse } from '../models/platform-response';
 import { removeGameFromWishlist } from '../fn/store-controller/remove-game-from-wishlist';
 import { RemoveGameFromWishlist$Params } from '../fn/store-controller/remove-game-from-wishlist';
-import { uploadGameCoverImage } from '../fn/store-controller/upload-game-cover-image';
-import { UploadGameCoverImage$Params } from '../fn/store-controller/upload-game-cover-image';
 
 @Injectable({ providedIn: 'root' })
 export class StoreControllerService extends BaseService {
@@ -66,35 +62,6 @@ export class StoreControllerService extends BaseService {
   removeGameFromWishlist(params: RemoveGameFromWishlist$Params, context?: HttpContext): Observable<number> {
     return this.removeGameFromWishlist$Response(params, context).pipe(
       map((r: StrictHttpResponse<number>): number => r.body)
-    );
-  }
-
-  /** Path part for operation `uploadGameCoverImage()` */
-  static readonly UploadGameCoverImagePath = '/store/cover/{gameId}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `uploadGameCoverImage()` instead.
-   *
-   * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
-   */
-  uploadGameCoverImage$Response(params: UploadGameCoverImage$Params, context?: HttpContext): Observable<StrictHttpResponse<{
-}>> {
-    return uploadGameCoverImage(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `uploadGameCoverImage$Response()` instead.
-   *
-   * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
-   */
-  uploadGameCoverImage(params: UploadGameCoverImage$Params, context?: HttpContext): Observable<{
-}> {
-    return this.uploadGameCoverImage$Response(params, context).pipe(
-      map((r: StrictHttpResponse<{
-}>): {
-} => r.body)
     );
   }
 
@@ -144,31 +111,6 @@ export class StoreControllerService extends BaseService {
    */
   addGameToWishlist(params: AddGameToWishlist$Params, context?: HttpContext): Observable<number> {
     return this.addGameToWishlist$Response(params, context).pipe(
-      map((r: StrictHttpResponse<number>): number => r.body)
-    );
-  }
-
-  /** Path part for operation `addGame()` */
-  static readonly AddGamePath = '/store/add-game';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `addGame()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  addGame$Response(params: AddGame$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
-    return addGame(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `addGame$Response()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  addGame(params: AddGame$Params, context?: HttpContext): Observable<number> {
-    return this.addGame$Response(params, context).pipe(
       map((r: StrictHttpResponse<number>): number => r.body)
     );
   }

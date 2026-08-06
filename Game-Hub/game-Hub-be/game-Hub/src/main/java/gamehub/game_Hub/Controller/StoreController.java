@@ -37,24 +37,6 @@ public class StoreController {
 
   private final GenreService genreService;
 
-  // Add game to the store
-  @PostMapping("/add-game")
-  public ResponseEntity<Long> addGame(@Valid @RequestBody GameRequest gameRequest) {
-    return ResponseEntity.ok(gameService.save(gameRequest));
-  }
-
-  // Upload game cover picture
-  @PostMapping(value = "/cover/{gameId}", consumes = "multipart/form-data")
-  public ResponseEntity<?> uploadGameCoverImage(
-      @PathVariable final Long gameId,
-      @Parameter()
-      @RequestPart("file") MultipartFile file,
-      final Authentication connectedUser
-      ){
-    gameService.uploadGameCoverImage(gameId,file);
-    return ResponseEntity.accepted().build();
-  }
-
   // Buy game
   @PostMapping("/buy/{gameId}")
   public ResponseEntity<Long> buyGame(@PathVariable final Long gameId, final Authentication connectedUser) {

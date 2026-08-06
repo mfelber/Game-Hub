@@ -2,6 +2,23 @@
   Loading...
 </div>
 
+<app-game-info
+  *ngIf="isGameInfoModalOpen && selectedGame"
+  [game]="selectedGame"
+  (close)="closeModal()">
+</app-game-info>
+
+<app-delete-game-modal
+  *ngIf="isGameDeleteModalOpen"
+  [game]="selectedGame"
+  (close)="closeModal()"
+  (deleted)="loadGamesTableData()">
+</app-delete-game-modal>
+
+<app-add-game-modal>
+  
+</app-add-game-modal>
+
 <main [class.hidden]="!isLoaded">
   <section class="games-page">
     <div class="page-header">
@@ -65,11 +82,11 @@
               <i class="fa-solid fa-pen"></i>
             </button>
 
-            <button class="action view">
+            <button class="action view" (click)="getGameInfo(game.gameId)">
               <i class="fa-solid fa-eye"></i>
             </button>
 
-            <button class="action delete">
+            <button class="action delete" (click)="deleteGame(game)">
               <i class="fa-solid fa-trash"></i>
             </button>
           </td>

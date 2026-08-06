@@ -8,16 +8,16 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { GameRequest } from '../../models/game-request';
+import { GameResponse } from '../../models/game-response';
 
-export interface AddGame$Params {
-      body: GameRequest
+export interface GetGameInfo$Params {
+  gameId: number;
 }
 
-export function addGame(http: HttpClient, rootUrl: string, params: AddGame$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
-  const rb = new RequestBuilder(rootUrl, addGame.PATH, 'post');
+export function getGameInfo(http: HttpClient, rootUrl: string, params: GetGameInfo$Params, context?: HttpContext): Observable<StrictHttpResponse<GameResponse>> {
+  const rb = new RequestBuilder(rootUrl, getGameInfo.PATH, 'get');
   if (params) {
-    rb.body(params.body, 'application/json');
+    rb.path('gameId', params.gameId, {});
   }
 
   return http.request(
@@ -25,9 +25,9 @@ export function addGame(http: HttpClient, rootUrl: string, params: AddGame$Param
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: parseFloat(String((r as HttpResponse<any>).body)) }) as StrictHttpResponse<number>;
+      return r as StrictHttpResponse<GameResponse>;
     })
   );
 }
 
-addGame.PATH = '/store/add-game';
+getGameInfo.PATH = '/admin/game/info/{gameId}';

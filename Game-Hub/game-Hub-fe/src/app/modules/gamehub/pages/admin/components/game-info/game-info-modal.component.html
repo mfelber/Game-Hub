@@ -1,0 +1,130 @@
+<div class="modal-backdrop">
+
+  <div class="game-modal">
+    <button (click)="close.emit()" class="close-btn">
+      &times;
+    </button>
+
+    <h2>Game Information</h2>
+    <div class="game-header">
+      <img [src]="getGameImageCover(game)" class="cover">
+      <div class="game-info">
+        <h3>{{game.title}}</h3>
+        <h4>Developer : {{game.developer}}</h4>
+        <h4>Publisher : {{game.publisher}}</h4>
+        <span [ngStyle]="{'background-color': game.ageRating?.ageRatingColor}" class="age-rating">
+      {{ game.ageRating?.ageRating }} </span>
+        <div class="prices">
+          <ng-container *ngIf="game.discountPrice! > 0; else normalPrice">
+            <span class="old-price">{{game.price}}</span>
+            <span class="discount">-{{game.discountPercent}}%</span>
+            <span class="new-price">{{game.discountPrice}} €</span>
+          </ng-container>
+          <ng-template #normalPrice>
+            <span class="new-price">{{game.price}} €</span>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h4>
+        Genres
+      </h4>
+      <div class="tags">
+        <span class="tag" *ngFor="let genre of game.genres">
+          {{genre.name}}
+        </span>
+      </div>
+    </div>
+
+    <div class="section">
+      <h4>
+        Description
+      </h4>
+      <p class="description">
+        {{game.description}}
+      </p>
+    </div>
+
+    <div class="section">
+      <h4>
+        System Requirements
+      </h4>
+
+      <div class="requirements">
+
+
+        <div class="requirement-grid">
+
+          <div class="requirement-item">
+            <span>OS</span>
+            <strong>{{game.systemRequirements?.os}}</strong>
+          </div>
+
+          <div class="requirement-item">
+            <span>CPU</span>
+            <strong>{{game.systemRequirements?.cpu}}</strong>
+          </div>
+
+          <div class="requirement-item">
+            <span>GPU</span>
+            <strong>{{game.systemRequirements?.gpu}}</strong>
+          </div>
+
+          <div class="requirement-item">
+            <span>RAM</span>
+            <strong>{{game.systemRequirements?.ram}}</strong>
+          </div>
+
+          <div class="requirement-item">
+            <span>Storage</span>
+            <strong>{{game.systemRequirements?.storage}}</strong>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <div class="section">
+      <h4>
+        Platforms
+        <div class="tags">
+        <span class="tag" *ngFor="let platform of game.platforms">
+          {{platform.platformName}}
+        </span>
+        </div>
+      </h4>
+    </div>
+
+    <div class="section">
+      <h4>
+        Languages
+        <div class="tags">
+        <span class="tag" *ngFor="let language of game.languages">
+          {{language.languageName}}
+        </span>
+        </div>
+      </h4>
+    </div>
+
+    <div class="section">
+      <h4>
+        Subtitles
+        <div class="tags">
+        <span class="tag" *ngFor="let subtitle of game.subtitles">
+          {{subtitle.subtitleName}}
+        </span>
+        </div>
+      </h4>
+    </div>
+
+    <div class="buttons">
+      <button class="cancel" (click)="close.emit()">
+        Close
+      </button>
+    </div>
+
+  </div>
+</div>

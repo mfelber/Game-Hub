@@ -27,4 +27,6 @@ public interface UserLibraryRepository extends JpaRepository<UserLibrary, UserGa
 
   Boolean existsByUserAndGameAndInstalledTrue(User user, Game game);
 
+  void deleteAllByGame(Game game);
+
 }

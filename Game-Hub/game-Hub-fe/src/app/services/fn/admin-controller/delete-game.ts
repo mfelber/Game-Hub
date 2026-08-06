@@ -9,30 +9,24 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 
-export interface UploadGameCoverImage$Params {
+export interface DeleteGame$Params {
   gameId: number;
-      body?: {
-'file': Blob;
-}
 }
 
-export function uploadGameCoverImage(http: HttpClient, rootUrl: string, params: UploadGameCoverImage$Params, context?: HttpContext): Observable<StrictHttpResponse<{
-}>> {
-  const rb = new RequestBuilder(rootUrl, uploadGameCoverImage.PATH, 'post');
+export function deleteGame(http: HttpClient, rootUrl: string, params: DeleteGame$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  const rb = new RequestBuilder(rootUrl, deleteGame.PATH, 'delete');
   if (params) {
     rb.path('gameId', params.gameId, {});
-    rb.body(params.body, 'multipart/form-data');
   }
 
   return http.request(
-    rb.build({ responseType: 'json', accept: 'application/json', context })
+    rb.build({ responseType: 'text', accept: '*/*', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<{
-      }>;
+      return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
     })
   );
 }
 
-uploadGameCoverImage.PATH = '/store/cover/{gameId}';
+deleteGame.PATH = '/admin/game/delete/{gameId}';
