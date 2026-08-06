@@ -484,6 +484,38 @@
         }
       }
     },
+    "/library/uninstall/{gameId}": {
+      "post": {
+        "tags": [
+          "library-controller"
+        ],
+        "operationId": "uninstallGame",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/library/remove/recommend/game/{gameId}": {
       "post": {
         "tags": [
@@ -522,6 +554,80 @@
           "library-controller"
         ],
         "operationId": "recommendGame",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/library/downloaded-games": {
+      "post": {
+        "tags": [
+          "library-controller"
+        ],
+        "operationId": "getDownloadedGames",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseUserLibraryResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/library/download/{gameId}": {
+      "post": {
+        "tags": [
+          "library-controller"
+        ],
+        "operationId": "downloadGame",
         "parameters": [
           {
             "name": "gameId",
@@ -1325,6 +1431,37 @@
           "library-controller"
         ],
         "operationId": "checkGameFavorite",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/library/check/game/{gameId}/downloaded": {
+      "get": {
+        "tags": [
+          "library-controller"
+        ],
+        "operationId": "checkDownloadedGame",
         "parameters": [
           {
             "name": "gameId",
@@ -2440,6 +2577,72 @@
           }
         }
       },
+      "PageResponseUserLibraryResponse": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserLibraryResponse"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          }
+        }
+      },
+      "UserLibraryResponse": {
+        "type": "object",
+        "properties": {
+          "gameId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "title": {
+            "type": "string"
+          },
+          "gameCoverImage": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "byte"
+            }
+          },
+          "installed": {
+            "type": "boolean"
+          },
+          "favorite": {
+            "type": "boolean"
+          },
+          "playtimeMinutes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lastPlayed": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
       "RegistrationRequest": {
         "required": [
           "email",
@@ -3095,72 +3298,6 @@
               "OFFLINE",
               "AWAY"
             ]
-          }
-        }
-      },
-      "PageResponseUserLibraryResponse": {
-        "type": "object",
-        "properties": {
-          "content": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/UserLibraryResponse"
-            }
-          },
-          "number": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "size": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "totalElements": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "totalPages": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "first": {
-            "type": "boolean"
-          },
-          "last": {
-            "type": "boolean"
-          }
-        }
-      },
-      "UserLibraryResponse": {
-        "type": "object",
-        "properties": {
-          "gameId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "title": {
-            "type": "string"
-          },
-          "gameCoverImage": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "byte"
-            }
-          },
-          "installed": {
-            "type": "boolean"
-          },
-          "favorite": {
-            "type": "boolean"
-          },
-          "playtimeMinutes": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "lastPlayed": {
-            "type": "string",
-            "format": "date-time"
           }
         }
       },

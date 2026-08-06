@@ -23,4 +23,8 @@ public interface UserLibraryRepository extends JpaRepository<UserLibrary, UserGa
 
   Boolean existsByUserAndGameAndFavoriteTrue(User user, Game game);
 
+  Page<UserLibrary> findUserLibraryByUserAndInstalledIsTrue(User user, Pageable pageable);
+
+  Boolean existsByUserAndGameAndInstalledTrue(User user, Game game);
+
 }

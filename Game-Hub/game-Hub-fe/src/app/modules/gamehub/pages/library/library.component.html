@@ -34,9 +34,14 @@
         ⭐ Favorite Games
       </button>
 
-      <button class="commingsoon">
+<!--        <span class="text-[10px] bg-gray-700/60 px-2 py-0.5 rounded-md">Coming soon</span>-->
+
+      <button class="selected" *ngIf="loadDownloadedGames" (click)="getDownloadedGames()">
         💾 Downloaded Games
-        <span class="text-[10px] bg-gray-700/60 px-2 py-0.5 rounded-md">Coming soon</span>
+      </button>
+
+      <button *ngIf="!loadDownloadedGames" (click)="getDownloadedGames()">
+        💾 Downloaded Games
       </button>
     </div>
   </section>
@@ -59,17 +64,9 @@
         <img [src]="getGameImageCover(game)" alt="{{game.title}}}">
         <div class="card-content">
           <h3>{{ game.title }}</h3>
-          <p>💾 Installed || Not Installed</p>
-          <small>Played : 120h</small>
-          <button class="play-btn">
-            Play <i class="fa-solid fa-play"></i>
-          </button>
-          <button class="download-btn">
-            Download <i class="fa-solid fa-download"></i>
-          </button>
-          <button class="stop-play-btn">
-            Stop playing <i class="fa-solid fa-xmark"></i>
-          </button>
+          <p *ngIf="!gamesDownloadedMap[game.gameId!]" >Not Installed</p>
+          <p *ngIf="gamesDownloadedMap[game.gameId!]"> 💾 Installed</p>
+          <small>Played : {{game.playtimeMinutes}}</small>
         </div>
       </div>
       </ng-container>
@@ -80,12 +77,13 @@
         <img [src]="getGameImageCover(game)" alt="{{game.title}}}">
         <div class="card-content">
           <h3>{{ game.title }}</h3>
-          <p>💾 Installed || Not Installed</p>
-          <small>Played : 120h</small>
-          <button class="play-btn">
+          <p *ngIf="!gamesDownloadedMap[game.gameId!]" >Not Installed</p>
+          <p *ngIf="gamesDownloadedMap[game.gameId!]"> 💾 Installed</p>
+          <small>Played : {{game.playtimeMinutes}}</small>
+          <button *ngIf="gamesDownloadedMap[game.gameId!]" class="play-btn">
             Play <i class="fa-solid fa-play"></i>
           </button>
-          <button class="download-btn">
+          <button *ngIf="!gamesDownloadedMap[game.gameId!]" class="download-btn" (click)="downloadGame(game.gameId); $event.stopPropagation()">
             Download <i class="fa-solid fa-download"></i>
           </button>
           <button class="stop-play-btn">
@@ -101,13 +99,11 @@
         <img [src]="getGameImageCover(game)" alt="{{game.title}}}">
         <div class="card-content">
           <h3>{{ game.title }}</h3>
-          <p>💾 Installed || Not Installed</p>
-          <small>Played : 120h</small>
+          <p *ngIf="!gamesDownloadedMap[game.gameId!]" >Not Installed</p>
+          <p *ngIf="gamesDownloadedMap[game.gameId!]"> 💾 Installed</p>
+          <small>Played : {{game.playtimeMinutes}}</small>
           <button class="play-btn">
             Play <i class="fa-solid fa-play"></i>
-          </button>
-          <button class="download-btn">
-            Download <i class="fa-solid fa-download"></i>
           </button>
           <button class="stop-play-btn">
             Stop playing <i class="fa-solid fa-xmark"></i>

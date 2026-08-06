@@ -20,6 +20,7 @@ export class GameDetailsLibraryComponent implements OnInit {
 
   game:any
   inFavorites = false
+  isDownloaded = false;
   isRecommended = false
 
   constructor(
@@ -32,6 +33,7 @@ export class GameDetailsLibraryComponent implements OnInit {
   ngOnInit(): void {
     this.getInfoGame();
     this.checkGameIsFavorite();
+    this.checkIfGameIsDownload();
     this.isGameRecommended();
   }
 
@@ -87,6 +89,39 @@ export class GameDetailsLibraryComponent implements OnInit {
     })
   }
 
+  downloadGame(gameId:any) {
+    console.log(gameId);
+    this.libraryService.downloadGame({gameId}).subscribe({
+      next: res => {
+        console.log('game was downloaded');
+        this.checkIfGameIsDownload()
+      }
+    })
+  }
+
+  uninstallGame(gameId:any) {
+    this.libraryService.uninstallGame({gameId}).subscribe({
+      next: res => {
+        console.log('game was uninstalled');
+        this.isDownloaded = false;
+        this.checkIfGameIsDownload()
+      }
+    })
+  }
+
+  checkIfGameIsDownload() {
+    const gameId: any = this.router.snapshot.paramMap.get('id')
+    this.libraryService.checkDownloadedGame({gameId}).subscribe({
+      next: (isDownloaded) => {
+        if (isDownloaded) {
+          this.isDownloaded = true;
+        } else {
+          this.isDownloaded = false
+        }
+      }
+    })
+  }
+
   recommendGame(gameId: any) {
     if (!this.isRecommended) {
       this.libraryService.recommendGame({gameId}).subscribe({
@@ -116,4 +151,6 @@ export class GameDetailsLibraryComponent implements OnInit {
     }
     })
   }
+
+
 }

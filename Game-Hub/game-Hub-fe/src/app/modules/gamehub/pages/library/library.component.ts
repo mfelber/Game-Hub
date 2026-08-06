@@ -6,6 +6,8 @@ import {GameResponse} from '../../../../services/models/game-response';
 import {StoreControllerService} from '../../../../services/services';
 import {Router} from '@angular/router';
 import {SearchBar} from '../../components/search-bar/search-bar';
+import {PageResponseUserLibraryResponse} from '../../../../services/models/page-response-user-library-response';
+import {UserLibraryResponse} from '../../../../services/models/user-library-response';
 
 @Component({
   selector: 'app-library',
@@ -19,7 +21,8 @@ import {SearchBar} from '../../components/search-bar/search-bar';
 })
 export class LibraryComponent implements OnInit{
 
-  gamePageResponse: PageResponseGameResponse = {};
+  gamePageResponse: PageResponseUserLibraryResponse = {};
+  libraryResponse: UserLibraryResponse = {};
   public page = 0;
   public size = 15;
   emptyLibrary = false;
@@ -27,6 +30,7 @@ export class LibraryComponent implements OnInit{
   loadDownloadedGames = false;
   loadAllGames = false;
   isLoaded = false;
+  gamesDownloadedMap: { [key: number]: boolean } = {};
 
   ngOnInit() {
     this.getOwnedGame()
@@ -49,6 +53,26 @@ export class LibraryComponent implements OnInit{
         this.loadAllGames = false;
         this.loadDownloadedGames = false;
         this.loadFavoriteGames = true;
+        this.gamePageResponse.content?.forEach(game => {
+          this.checkIfGameIsDownload(game.gameId);
+        })
+      }
+    })
+  }
+
+  getDownloadedGames() {
+    this.libraryService.getDownloadedGames({
+      page: this.page,
+      size: this.size
+    }).subscribe({
+      next: (games) => {
+        this.gamePageResponse = games;
+        this.loadDownloadedGames = true;
+        this.loadAllGames = false;
+        this.loadFavoriteGames = false;
+        this.gamePageResponse.content?.forEach(game => {
+          this.checkIfGameIsDownload(game.gameId);
+        })
       }
     })
   }
@@ -70,6 +94,9 @@ export class LibraryComponent implements OnInit{
           } else {
             this.emptyLibrary = false
           }
+          this.gamePageResponse.content?.forEach(game => {
+            this.checkIfGameIsDownload(game.gameId);
+          })
         },
         error: (err) => {
           console.error('Error loading library:', err);
@@ -98,5 +125,23 @@ export class LibraryComponent implements OnInit{
 
   searchYourGames($event: string) {
     console.log('searchYourGames');
+  }
+
+  downloadGame(gameId:any) {
+    console.log(gameId);
+    this.libraryService.downloadGame({gameId}).subscribe({
+      next: res => {
+        console.log('game was downloaded');
+        this.checkIfGameIsDownload(gameId);
+      }
+    })
+  }
+
+  checkIfGameIsDownload(gameId:any) {
+    this.libraryService.checkDownloadedGame({gameId}).subscribe({
+      next: (downloaded: boolean) => {
+        this.gamesDownloadedMap[gameId] = downloaded;
+      }
+    })
   }
 }

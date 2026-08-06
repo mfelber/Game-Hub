@@ -31,7 +31,7 @@ public class DashboardServiceImpl implements DashboardService {
     // TODO change total reviews while implementing reviews
     return DashboardResponse.builder()
         .totalGames(gameRepository.count())
-        .totalUsers(userRepository.count() - 1)
+        .totalUsers(userRepository.countByRole(Role.USER))
         .pendingReports(reportRepository.countReportsByStatus_Id(1L))
         .totalReviews(100L)
         .recentUsers(userRepository.findTop5ByRoleNotOrderByCreatedAtDesc(Role.ADMIN))

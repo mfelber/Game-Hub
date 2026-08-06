@@ -22,7 +22,6 @@ import gamehub.game_Hub.Module.User.UserLibrary;
 import gamehub.game_Hub.Repository.UserLibraryRepository;
 import gamehub.game_Hub.Repository.game.GameRepository;
 import gamehub.game_Hub.Repository.user.UserRepository;
-import gamehub.game_Hub.Response.GameResponse;
 import gamehub.game_Hub.Response.UserLibraryResponse;
 import gamehub.game_Hub.Service.LibraryService;
 import jakarta.persistence.EntityNotFoundException;
@@ -69,7 +68,59 @@ public class LibraryServiceImpl implements LibraryService {
   }
 
   @Override
+  @PreAuthorize("isAuthenticated()")
+  public PageResponse<UserLibraryResponse> findAllFavoriteGames(final int page, final int size,
+      final Authentication connectedUser) throws AccessDeniedException {
+
+    if (connectedUser == null || !connectedUser.isAuthenticated()) {
+      throw new AccessDeniedException("User is not authenticated");
+    }
+
+    User authUser = (User) connectedUser.getPrincipal();
+    Pageable pageable = PageRequest.of(page, size);
+    Page<UserLibrary> favoriteGames = libraryRepository.findUserLibraryByUserAndFavoriteTrue(authUser, pageable);
+
+    List<UserLibraryResponse> favoriteGamesResponse = favoriteGames.stream().map(libraryMapper::toUserLibraryResponse).toList();
+
+    return new PageResponse<>(
+        favoriteGamesResponse,
+        favoriteGames.getNumber(),
+        favoriteGames.getSize(),
+        favoriteGames.getTotalElements(),
+        favoriteGames.getTotalPages(),
+        favoriteGames.isFirst(),
+        favoriteGames.isLast()
+    );
+  }
+
+  @Override
+  @PreAuthorize("isAuthenticated()")
+  public PageResponse<UserLibraryResponse> getDownloadedGames(final int page, final int size,
+      final Authentication connectedUser) throws AccessDeniedException {
+    if (connectedUser == null || !connectedUser.isAuthenticated()) {
+      throw new AccessDeniedException("User is not authenticated");
+    }
+
+    User authUser = (User) connectedUser.getPrincipal();
+    Pageable pageable = PageRequest.of(page, size);
+    Page<UserLibrary> downloadedGames = libraryRepository.findUserLibraryByUserAndInstalledIsTrue(authUser, pageable);
+
+    List<UserLibraryResponse> downloadedGamesResponse = downloadedGames.stream().map(libraryMapper::toUserLibraryResponse).toList();
+
+    return new PageResponse<>(
+        downloadedGamesResponse,
+        downloadedGames.getNumber(),
+        downloadedGames.getSize(),
+        downloadedGames.getTotalElements(),
+        downloadedGames.getTotalPages(),
+        downloadedGames.isFirst(),
+        downloadedGames.isLast()
+    );
+  }
+
+  @Override
   @Transactional
+  @PreAuthorize("isAuthenticated()")
   public Long addGameToFavorites(final Long gameId, final Authentication connectedUser) {
     Game game = gameRepository.findById(gameId)
         .orElseThrow(() -> new EntityNotFoundException("No game found with id: " + gameId));
@@ -92,6 +143,7 @@ public class LibraryServiceImpl implements LibraryService {
 
   @Override
   @Transactional
+  @PreAuthorize("isAuthenticated()")
   public Long removeGameFromFavorites(final Long gameId, final Authentication connectedUser) {
     Game game = gameRepository.findById(gameId)
         .orElseThrow(() -> new EntityNotFoundException("No game found with id: " + gameId));
@@ -102,7 +154,7 @@ public class LibraryServiceImpl implements LibraryService {
 
     UserLibrary library = libraryRepository
         .findByUserIdAndGameId(user.getId(), gameId)
-        .orElseThrow(() -> new EntityNotFoundException("Game is not in library"));
+        .orElseThrow(() -> new EntityNotFoundException("Game with "+ gameId + " is not in library"));
 
     if (library.isFavorite()) {
       library.setFavorite(false);
@@ -113,6 +165,7 @@ public class LibraryServiceImpl implements LibraryService {
   }
 
   @Override
+  @PreAuthorize("isAuthenticated()")
   public Boolean checkGameFavorite(final Long gameId, final Authentication connectedUser) {
     Game game = gameRepository.findById(gameId)
         .orElseThrow(() -> new EntityNotFoundException("No game found with id: " + gameId));
@@ -124,23 +177,55 @@ public class LibraryServiceImpl implements LibraryService {
   }
 
   @Override
-  public PageResponse<UserLibraryResponse> findAllFavoriteGames(final int page, final int size,
-      final Authentication connectedUser) {
+  public Long downloadGame(final Long gameId, final Authentication connectedUser) {
+    Game game = gameRepository.findById(gameId)
+        .orElseThrow(() -> new EntityNotFoundException("No game found with id: " + gameId));
+
     User authUser = (User) connectedUser.getPrincipal();
-    Pageable pageable = PageRequest.of(page, size);
-    Page<UserLibrary> favoriteGames = libraryRepository.findUserLibraryByUserAndFavoriteTrue(authUser, pageable);
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
 
-    List<UserLibraryResponse> favoriteGamesResponse = favoriteGames.stream().map(libraryMapper::toUserLibraryResponse).toList();
+    UserLibrary library = libraryRepository.findByUserIdAndGameId(user.getId(), gameId)
+        .orElseThrow(() -> new EntityNotFoundException("Game with "+ gameId + " is not in library"));
 
-    return new PageResponse<>(
-        favoriteGamesResponse,
-        favoriteGames.getNumber(),
-        favoriteGames.getSize(),
-        favoriteGames.getTotalElements(),
-        favoriteGames.getTotalPages(),
-        favoriteGames.isFirst(),
-        favoriteGames.isLast()
-    );
+    if (!library.isInstalled()) {
+      library.setInstalled(true);
+      libraryRepository.save(library);
+    }
+
+    return game.getId();
+  }
+
+  @Override
+  public Long uninstallGame(final Long gameId, final Authentication connectedUser) {
+    Game game = gameRepository.findById(gameId)
+        .orElseThrow(() -> new EntityNotFoundException("No game found with id: " + gameId));
+
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+    UserLibrary library = libraryRepository.findByUserIdAndGameId(user.getId(), gameId)
+        .orElseThrow(() -> new EntityNotFoundException("Game with "+ gameId + " is not in library"));
+
+    if (library.isInstalled()) {
+      library.setInstalled(false);
+      libraryRepository.save(library);
+    }
+
+    return game.getId();
+  }
+
+  @Override
+  public Boolean checkDownloadedGame(final Long gameId, final Authentication connectedUser) {
+    Game game = gameRepository.findById(gameId)
+        .orElseThrow(() -> new EntityNotFoundException("No game found with id: " + gameId));
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+    // return libraryRepository.existsByUserAndGameAndFavoriteTrue(user, game);
+    return libraryRepository.existsByUserAndGameAndInstalledTrue(user, game);
   }
 
   @Override

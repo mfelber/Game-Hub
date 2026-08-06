@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import gamehub.game_Hub.Common.PageResponse;
-import gamehub.game_Hub.Response.GameResponse;
 import gamehub.game_Hub.Response.UserLibraryResponse;
 import gamehub.game_Hub.Service.LibraryService;
 import lombok.RequiredArgsConstructor;
@@ -38,13 +37,14 @@ public class LibraryController {
   public ResponseEntity<PageResponse<UserLibraryResponse>> getFavorites(
       @RequestParam(name = "page", defaultValue = "0", required = false) int page,
       @RequestParam(name = "size", defaultValue = "10", required = false) int size,
-      final Authentication connectedUser) {
+      final Authentication connectedUser) throws AccessDeniedException {
     return ResponseEntity.ok(libraryService.findAllFavoriteGames(page, size, connectedUser));
   }
 
   // Check if game is favorite
   @GetMapping("/check/game/{gameId}/favorite")
-  public ResponseEntity<Boolean> checkGameFavorite(@PathVariable final Long gameId, final Authentication connectedUser) {
+  public ResponseEntity<Boolean> checkGameFavorite(@PathVariable final Long gameId,
+      final Authentication connectedUser) {
     return ResponseEntity.ok(libraryService.checkGameFavorite(gameId, connectedUser));
   }
 
@@ -60,6 +60,34 @@ public class LibraryController {
   public ResponseEntity<Long> removeGameFromFavorites(@PathVariable final Long gameId,
       final Authentication connectedUser) {
     return ResponseEntity.ok(libraryService.removeGameFromFavorites(gameId, connectedUser));
+  }
+
+  // Get all downloaded games
+  @PostMapping("/downloaded-games")
+  public ResponseEntity<PageResponse<UserLibraryResponse>> getDownloadedGames(
+      @RequestParam(name = "page", defaultValue = "0", required = false) int page,
+      @RequestParam(name = "size", defaultValue = "10", required = false) int size,
+      final Authentication connectedUser) throws AccessDeniedException {
+    return ResponseEntity.ok(libraryService.getDownloadedGames(page, size, connectedUser));
+  }
+
+  // Download game
+  @PostMapping("/download/{gameId}")
+  public ResponseEntity<Long> downloadGame(@PathVariable final Long gameId, final Authentication connectedUser) {
+    return ResponseEntity.ok(libraryService.downloadGame(gameId, connectedUser));
+  }
+
+  // Uninstall game
+  @PostMapping("/uninstall/{gameId}")
+  public ResponseEntity<Long> uninstallGame(@PathVariable final Long gameId, final Authentication connectedUser) {
+    return ResponseEntity.ok(libraryService.uninstallGame(gameId, connectedUser));
+  }
+
+  // Check if game downloaded
+  @GetMapping("/check/game/{gameId}/downloaded")
+  public ResponseEntity<Boolean> checkDownloadedGame(@PathVariable final Long gameId,
+      final Authentication connectedUser) {
+    return ResponseEntity.ok(libraryService.checkDownloadedGame(gameId, connectedUser));
   }
 
   // Allows a user to recommend a game
