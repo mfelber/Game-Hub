@@ -39,6 +39,7 @@ export class GameDetailsComponent implements OnInit {
       this.gameService.getGameById({gameId}).subscribe({
           next: (data) => {
             this.game = data;
+            console.log(this.game);
           },
 
           error: (err) => console.error('Error with loading details of this game', err)

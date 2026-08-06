@@ -16,6 +16,7 @@ import gamehub.game_Hub.Response.GenreResponse;
 import gamehub.game_Hub.Response.LevelProgressResponse;
 import gamehub.game_Hub.Response.LevelResponse;
 import gamehub.game_Hub.Response.LocationResponse;
+import gamehub.game_Hub.Response.RecentUserResponse;
 import gamehub.game_Hub.Response.StatusResponse;
 import gamehub.game_Hub.Response.UserPrivateResponse;
 import gamehub.game_Hub.Response.UserPublicResponse;
@@ -177,6 +178,17 @@ public class UserMapper {
         .currentXp(user.getXp())
         .requiredXp(requiredXP)
         .nextLevel(nextLevel.getLevelNumber())
+        .build();
+  }
+
+  public RecentUserResponse toRecentUserResponse(User user) {
+    return RecentUserResponse.builder()
+        .id(user.getId())
+        .username(user.getName())
+        .firstName(user.getFirstName())
+        .lastName(user.getLastName())
+        .email(user.getEmail())
+        .createdAt(user.getCreatedAt())
         .build();
   }
 

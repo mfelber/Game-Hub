@@ -9,6 +9,7 @@ import gamehub.game_Hub.Module.Game;
 import gamehub.game_Hub.Module.SystemRequirements;
 import gamehub.game_Hub.Request.GameRequest;
 import gamehub.game_Hub.Response.AgeratingResponse;
+import gamehub.game_Hub.Response.GamePreviewResponse;
 import gamehub.game_Hub.Response.GameResponse;
 import gamehub.game_Hub.Response.GenreResponse;
 import gamehub.game_Hub.Response.LanguageResponse;
@@ -57,6 +58,9 @@ public class GameMapper {
         .developer(game.getDeveloper())
         .publisher(game.getPublisher())
         .price(game.getPrice())
+        .discountPrice(game.getDiscountPrice())
+        .discountPercent(game.getDiscountPercent())
+        .hasDiscount(game.isHasDiscount())
         .ageRating(new AgeratingResponse(game.getId(), game.getAgeRating().getAgeRating(), game.getAgeRating().getAgeRatingColor()))
         .gameCoverImage(FileUtils.readCoverFromLocation(game.getGameCoverImage()))
         .systemRequirements(game.getSystemRequirements())
@@ -71,5 +75,19 @@ public class GameMapper {
             .collect(Collectors.toSet()))
         .build();
   }
+
+  public GamePreviewResponse toGamePreviewResponse(Game game) {
+
+    return GamePreviewResponse.builder()
+        .gameId(game.getId())
+        .title(game.getTitle())
+        .gameCoverImage(FileUtils.readCoverFromLocation(game.getGameCoverImage()))
+        .price(game.getPrice())
+        .discountPrice(game.getDiscountPrice())
+        .discountPercent(game.getDiscountPercent())
+        .hasDiscount(game.isHasDiscount())
+        .build();
+  }
+
 
 }

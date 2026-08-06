@@ -1,0 +1,84 @@
+<div *ngIf="!isLoaded" class="text-center justify-center text-gray-400">
+  Loading...
+</div>
+
+<main [class.hidden]="!isLoaded">
+  <section class="games-page">
+    <div class="page-header">
+      <div>
+        <h1>All Games</h1>
+        <p>Manage all games in your store</p>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <div style="display: flex; justify-content: space-between">
+        <div style="display: flex; gap: 15px">
+          <app-search-bar
+            placeholder="Search games..."
+            (search)="searchGames($event)">
+          </app-search-bar>
+
+          <div class="checkbox">
+            <label>
+              <input type="checkbox"> Discount
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <button class="add-game-btn">
+            <i class="fa-solid fa-plus"></i>
+            Add Game
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <table>
+        <thead>
+        <tr>
+          <th>Cover</th>
+          <th>Name</th>
+          <th>Price</th>
+          <th>Discounted Price</th>
+          <th>Discount</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let game of gamesResponse.content">
+          <td>
+            <img [src]="getGameImageCover(game)" alt="{{game.title}}}">
+          </td>
+          <td>{{ game.title }}</td>
+          <td>{{ game.price }} €</td>
+          <td>{{ game.discountPrice! > 0 ? (game.discountPrice + ' €') : '' }}</td>
+          <td>
+              <span class="discount" *ngIf="game.discountPercent! > 0">
+                - {{ game.discountPercent }} %
+              </span>
+          </td>
+          <td>
+            <button class="action edit">
+              <i class="fa-solid fa-pen"></i>
+            </button>
+
+            <button class="action view">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+
+            <button class="action delete">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+  </section>
+
+</main>

@@ -14,7 +14,7 @@ import gamehub.game_Hub.Response.WishlistResponse;
 @Service
 public class WishlistMapper {
 
-  public WishlistResponse toWishlistResponse(Wishlist wishlist){
+  public WishlistResponse toWishlistResponse(Wishlist wishlist) {
     Game game = wishlist.getGame();
     System.out.printf(game.getTitle());
 
@@ -22,7 +22,8 @@ public class WishlistMapper {
         .addedAt(wishlist.getAddedAt())
         .game(new GamePreviewResponse(
             game.getId(), game.getTitle(),
-            FileUtils.readCoverFromLocation(game.getGameCoverImage()), game.getPrice(),
+            FileUtils.readCoverFromLocation(game.getGameCoverImage()), game.getPrice(), game.getDiscountPrice(),
+            game.getDiscountPercent(), game.isHasDiscount(),
             game.getGenres().stream().map(genre -> new GenreResponse(
                 genre.getId(), genre.getName())).collect(Collectors.toSet())))
         .build();
