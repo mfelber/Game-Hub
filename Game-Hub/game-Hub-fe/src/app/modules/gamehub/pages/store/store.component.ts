@@ -82,6 +82,7 @@ export class StoreComponent implements OnInit{
     }).subscribe({
       next: (games) => {
         this.gamePageResponse = games;
+        console.log(this.gamePageResponse);
         this.isLoaded = true;
         this.gamePageResponse.content?.forEach(game => {
           this.checkIfGameIsInWishlist(game.gameId);

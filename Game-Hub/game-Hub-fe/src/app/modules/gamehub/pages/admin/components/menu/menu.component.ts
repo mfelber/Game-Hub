@@ -6,6 +6,8 @@ import {UserProfileControllerService} from '../../../../../../services/services/
 @Component({
   selector: 'app-menu-admin',
   imports: [
+    RouterLinkActive,
+    RouterLink
   ],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.scss',

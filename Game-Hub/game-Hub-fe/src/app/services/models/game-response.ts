@@ -12,9 +12,12 @@ export interface GameResponse {
   ageRating?: AgeratingResponse;
   description?: string;
   developer?: string;
+  discountPercent?: number;
+  discountPrice?: number;
   gameCoverImage?: Array<string>;
   gameId?: number;
   genres?: Array<GenreResponse>;
+  hasDiscount?: boolean;
   languages?: Array<LanguageResponse>;
   platforms?: Array<PlatformResponse>;
   price?: number;

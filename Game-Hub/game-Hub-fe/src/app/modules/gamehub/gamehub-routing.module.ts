@@ -14,6 +14,7 @@ import {UserPublicProfileComponent} from './pages/user-public-profile/user-publi
 import {authGuard} from '../../services/guard/auth.guard';
 import {DashboardComponent} from './pages/admin/pages/dashboard/dashboard.component';
 import {MainAdminComponent} from './pages/admin/main/main.component';
+import {AllGamesComponent} from './pages/admin/pages/all-games/all-games.component';
 
 const routes: Routes = [
   {
@@ -78,6 +79,10 @@ const routes: Routes = [
       {
         path: 'dashboard',
         component: DashboardComponent,
+      },
+      {
+        path: 'games',
+        component: AllGamesComponent,
       }
     ]
   }

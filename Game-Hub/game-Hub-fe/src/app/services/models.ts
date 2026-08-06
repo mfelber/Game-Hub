@@ -32,6 +32,7 @@ export type { LevelProgressResponse } from './models/level-progress-response';
 export type { LevelResponse } from './models/level-response';
 export type { LocationResponse } from './models/location-response';
 export type { PageResponseFriendRequestResponse } from './models/page-response-friend-request-response';
+export type { PageResponseGamePreviewResponse } from './models/page-response-game-preview-response';
 export type { PageResponseGameResponse } from './models/page-response-game-response';
 export type { PageResponseUserCommunityResponse } from './models/page-response-user-community-response';
 export type { PageResponseUserLibraryResponse } from './models/page-response-user-library-response';

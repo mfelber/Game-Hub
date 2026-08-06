@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import gamehub.game_Hub.Common.PageResponse;
 import gamehub.game_Hub.Response.Admin.DashboardResponse;
-import gamehub.game_Hub.Service.Admin.DashboardService;
+import gamehub.game_Hub.Response.GamePreviewResponse;
+import gamehub.game_Hub.Service.Admin.AdminService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -17,18 +18,24 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AdminController {
 
-  private final DashboardService dashboardService;
+  private final AdminService adminService;
 
+  // Load admin dashboard
   @GetMapping("/dashboard")
   public DashboardResponse loadDashboardData (
       @RequestParam(name = "page", defaultValue = "0", required = false) int page,
       @RequestParam(name = "size", defaultValue = "10", required = false) int size,
       Authentication connectedUser){
-    return dashboardService.loadDashboardData(connectedUser, page, size);
+    return adminService.loadDashboardData(connectedUser, page, size);
   }
 
-
-  // fetch games with gamePreviewResponse with price and discounted price, possibility to add new games
+  // Fetch games for admin
+  @GetMapping("/admin/games")
+  public ResponseEntity<PageResponse<GamePreviewResponse>> getAllGames(
+      @RequestParam(name = "page", defaultValue = "0", required = false) int page,
+      @RequestParam(name = "size", defaultValue = "10", required = false) int size) {
+    return ResponseEntity.ok(adminService.getAllGames(page, size));
+  }
   // fetch users with only name, lastname, username, email, profile pic
   // fetch all reports
   // fetch all genres , possibility to add new genres (not duplicated)

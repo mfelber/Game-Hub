@@ -18,6 +18,9 @@ public class GamePreviewResponse {
   private String title;
   private byte[] gameCoverImage;
   private Double price;
+  private Double discountPrice;
+  private Integer discountPercent;
+  private boolean hasDiscount;
   private Set<GenreResponse> genres;
 
 }

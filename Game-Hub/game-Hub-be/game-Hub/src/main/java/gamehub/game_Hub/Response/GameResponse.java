@@ -24,6 +24,9 @@ public class GameResponse {
   private String publisher;
   private String releaseYear;
   private Double price;
+  private Double discountPrice;
+  private Integer discountPercent;
+  private boolean hasDiscount;
   private AgeratingResponse ageRating;
   private byte [] gameCoverImage;
   private SystemRequirements systemRequirements;

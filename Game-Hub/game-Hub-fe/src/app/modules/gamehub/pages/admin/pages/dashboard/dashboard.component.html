@@ -1,4 +1,8 @@
-<main>
+<div *ngIf="!isLoaded" class="text-center justify-center text-gray-400">
+  Loading...
+</div>
+
+<main [class.hidden]="!isLoaded">
   <section class="dashboard">
 
     <div class="page-header">
@@ -55,7 +59,7 @@
           <span>No recently registered users <i class="fa-solid fa-user-xmark"></i> </span>
         </div>
         <div class="list-item" *ngFor="let user of dashboardPageResponse.recentUsers">
-          <span>{{user.name}}</span>
+          <span>{{user.username}}</span>
           <small>{{user.createdAt}}</small>
         </div>
       </div>

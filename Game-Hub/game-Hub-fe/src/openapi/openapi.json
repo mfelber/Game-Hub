@@ -1865,6 +1865,48 @@
         }
       }
     },
+    "/admin/admin/games": {
+      "get": {
+        "tags": [
+          "admin-controller"
+        ],
+        "operationId": "getAllGames",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseGamePreviewResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/find-players/delete/friend-request/{userId}": {
       "delete": {
         "tags": [
@@ -2011,6 +2053,17 @@
           "price": {
             "type": "number",
             "format": "double"
+          },
+          "discountPrice": {
+            "type": "number",
+            "format": "double"
+          },
+          "discountPercent": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "hasDiscount": {
+            "type": "boolean"
           },
           "ageRating": {
             "$ref": "#/components/schemas/AgeRating"
@@ -2432,13 +2485,13 @@
           "enabled": {
             "type": "boolean"
           },
-          "accountNonLocked": {
-            "type": "boolean"
-          },
           "credentialsNonExpired": {
             "type": "boolean"
           },
           "accountNonExpired": {
+            "type": "boolean"
+          },
+          "accountNonLocked": {
             "type": "boolean"
           }
         }
@@ -2736,6 +2789,17 @@
             "type": "number",
             "format": "double"
           },
+          "discountPrice": {
+            "type": "number",
+            "format": "double"
+          },
+          "discountPercent": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "hasDiscount": {
+            "type": "boolean"
+          },
           "genres": {
             "uniqueItems": true,
             "type": "array",
@@ -2897,6 +2961,17 @@
           "price": {
             "type": "number",
             "format": "double"
+          },
+          "discountPrice": {
+            "type": "number",
+            "format": "double"
+          },
+          "discountPercent": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "hasDiscount": {
+            "type": "boolean"
           },
           "ageRating": {
             "$ref": "#/components/schemas/AgeratingResponse"
@@ -3521,6 +3596,39 @@
             "items": {
               "$ref": "#/components/schemas/DashboardReportResponse"
             }
+          }
+        }
+      },
+      "PageResponseGamePreviewResponse": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GamePreviewResponse"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
           }
         }
       }

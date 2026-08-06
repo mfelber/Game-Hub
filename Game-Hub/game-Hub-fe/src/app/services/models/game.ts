@@ -9,8 +9,11 @@ export interface Game {
   ageRating?: AgeRating;
   description?: string;
   developer?: string;
+  discountPercent?: number;
+  discountPrice?: number;
   dlc?: boolean;
   gameCoverImage?: string;
+  hasDiscount?: boolean;
   id?: number;
   price?: number;
   publisher?: string;

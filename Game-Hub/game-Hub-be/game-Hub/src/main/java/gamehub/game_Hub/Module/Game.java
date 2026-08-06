@@ -55,6 +55,15 @@ public class Game {
 
   private double price;
 
+  @Column(name = "discount_price")
+  private Double discountPrice;
+
+  @Column(name = "discount_percent")
+  private Integer discountPercent;
+
+  @Column(name = "has_discount")
+  private boolean hasDiscount;
+
   @ManyToOne
   @JoinColumn(name = "age_rating")
   private AgeRating ageRating;

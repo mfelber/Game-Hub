@@ -12,8 +12,11 @@ import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
 import { DashboardResponse } from '../models/dashboard-response';
+import { getAllGames } from '../fn/admin-controller/get-all-games';
+import { GetAllGames$Params } from '../fn/admin-controller/get-all-games';
 import { loadDashboardData } from '../fn/admin-controller/load-dashboard-data';
 import { LoadDashboardData$Params } from '../fn/admin-controller/load-dashboard-data';
+import { PageResponseGamePreviewResponse } from '../models/page-response-game-preview-response';
 
 @Injectable({ providedIn: 'root' })
 export class AdminControllerService extends BaseService {
@@ -43,6 +46,31 @@ export class AdminControllerService extends BaseService {
   loadDashboardData(params?: LoadDashboardData$Params, context?: HttpContext): Observable<DashboardResponse> {
     return this.loadDashboardData$Response(params, context).pipe(
       map((r: StrictHttpResponse<DashboardResponse>): DashboardResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `getAllGames()` */
+  static readonly GetAllGamesPath = '/admin/admin/games';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAllGames()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllGames$Response(params?: GetAllGames$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseGamePreviewResponse>> {
+    return getAllGames(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getAllGames$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllGames(params?: GetAllGames$Params, context?: HttpContext): Observable<PageResponseGamePreviewResponse> {
+    return this.getAllGames$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PageResponseGamePreviewResponse>): PageResponseGamePreviewResponse => r.body)
     );
   }
 
