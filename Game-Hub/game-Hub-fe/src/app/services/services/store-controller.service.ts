@@ -13,6 +13,7 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { addGameToWishlist } from '../fn/store-controller/add-game-to-wishlist';
 import { AddGameToWishlist$Params } from '../fn/store-controller/add-game-to-wishlist';
+import { AgeRatingResponse } from '../models/age-rating-response';
 import { buyGame } from '../fn/store-controller/buy-game';
 import { BuyGame$Params } from '../fn/store-controller/buy-game';
 import { checkGameInWishlist } from '../fn/store-controller/check-game-in-wishlist';
@@ -23,16 +24,24 @@ import { findAllGames } from '../fn/store-controller/find-all-games';
 import { FindAllGames$Params } from '../fn/store-controller/find-all-games';
 import { GameResponse } from '../models/game-response';
 import { GenreResponse } from '../models/genre-response';
+import { getAgeRating } from '../fn/store-controller/get-age-rating';
+import { GetAgeRating$Params } from '../fn/store-controller/get-age-rating';
 import { getAllGenres } from '../fn/store-controller/get-all-genres';
 import { GetAllGenres$Params } from '../fn/store-controller/get-all-genres';
 import { getAllPlatforms } from '../fn/store-controller/get-all-platforms';
 import { GetAllPlatforms$Params } from '../fn/store-controller/get-all-platforms';
 import { getGameById } from '../fn/store-controller/get-game-by-id';
 import { GetGameById$Params } from '../fn/store-controller/get-game-by-id';
+import { getLanguages } from '../fn/store-controller/get-languages';
+import { GetLanguages$Params } from '../fn/store-controller/get-languages';
+import { getSubtitles } from '../fn/store-controller/get-subtitles';
+import { GetSubtitles$Params } from '../fn/store-controller/get-subtitles';
+import { LanguageResponse } from '../models/language-response';
 import { PageResponseGameResponse } from '../models/page-response-game-response';
 import { PlatformResponse } from '../models/platform-response';
 import { removeGameFromWishlist } from '../fn/store-controller/remove-game-from-wishlist';
 import { RemoveGameFromWishlist$Params } from '../fn/store-controller/remove-game-from-wishlist';
+import { SubtitleResponse } from '../models/subtitle-response';
 
 @Injectable({ providedIn: 'root' })
 export class StoreControllerService extends BaseService {
@@ -115,6 +124,31 @@ export class StoreControllerService extends BaseService {
     );
   }
 
+  /** Path part for operation `getSubtitles()` */
+  static readonly GetSubtitlesPath = '/store/subtitles';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getSubtitles()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getSubtitles$Response(params?: GetSubtitles$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<SubtitleResponse>>> {
+    return getSubtitles(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getSubtitles$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getSubtitles(params?: GetSubtitles$Params, context?: HttpContext): Observable<Array<SubtitleResponse>> {
+    return this.getSubtitles$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<SubtitleResponse>>): Array<SubtitleResponse> => r.body)
+    );
+  }
+
   /** Path part for operation `getAllPlatforms()` */
   static readonly GetAllPlatformsPath = '/store/platforms';
 
@@ -137,6 +171,31 @@ export class StoreControllerService extends BaseService {
   getAllPlatforms(params?: GetAllPlatforms$Params, context?: HttpContext): Observable<Array<PlatformResponse>> {
     return this.getAllPlatforms$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<PlatformResponse>>): Array<PlatformResponse> => r.body)
+    );
+  }
+
+  /** Path part for operation `getLanguages()` */
+  static readonly GetLanguagesPath = '/store/languages';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getLanguages()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getLanguages$Response(params?: GetLanguages$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<LanguageResponse>>> {
+    return getLanguages(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getLanguages$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getLanguages(params?: GetLanguages$Params, context?: HttpContext): Observable<Array<LanguageResponse>> {
+    return this.getLanguages$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<LanguageResponse>>): Array<LanguageResponse> => r.body)
     );
   }
 
@@ -262,6 +321,31 @@ export class StoreControllerService extends BaseService {
   findAllGames(params?: FindAllGames$Params, context?: HttpContext): Observable<PageResponseGameResponse> {
     return this.findAllGames$Response(params, context).pipe(
       map((r: StrictHttpResponse<PageResponseGameResponse>): PageResponseGameResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `getAgeRating()` */
+  static readonly GetAgeRatingPath = '/store/age-ratings';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAgeRating()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAgeRating$Response(params?: GetAgeRating$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<AgeRatingResponse>>> {
+    return getAgeRating(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getAgeRating$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAgeRating(params?: GetAgeRating$Params, context?: HttpContext): Observable<Array<AgeRatingResponse>> {
+    return this.getAgeRating$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<AgeRatingResponse>>): Array<AgeRatingResponse> => r.body)
     );
   }
 

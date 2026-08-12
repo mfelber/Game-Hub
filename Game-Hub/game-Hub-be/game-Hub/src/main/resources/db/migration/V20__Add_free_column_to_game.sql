@@ -1,0 +1,2 @@
+ALTER TABLE game_hub.game
+  ADD free BOOLEAN DEFAULT FALSE;

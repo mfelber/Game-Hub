@@ -46,7 +46,7 @@ public class AdminController {
   @GetMapping("/admin/games")
   public ResponseEntity<PageResponse<GamePreviewResponse>> getAllGames(
       @RequestParam(name = "page", defaultValue = "0", required = false) int page,
-      @RequestParam(name = "size", defaultValue = "10", required = false) int size) {
+      @RequestParam(name = "size", defaultValue = "50", required = false) int size) {
     return ResponseEntity.ok(adminService.getAllGames(page, size));
   }
   // fetch users with only name, lastname, username, email, profile pic

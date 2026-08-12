@@ -972,6 +972,29 @@
         }
       }
     },
+    "/store/subtitles": {
+      "get": {
+        "tags": [
+          "store-controller"
+        ],
+        "operationId": "getSubtitles",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SubtitleResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/store/platforms": {
       "get": {
         "tags": [
@@ -987,6 +1010,29 @@
                   "type": "array",
                   "items": {
                     "$ref": "#/components/schemas/PlatformResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/store/languages": {
+      "get": {
+        "tags": [
+          "store-controller"
+        ],
+        "operationId": "getLanguages",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LanguageResponse"
                   }
                 }
               }
@@ -1146,6 +1192,29 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/PageResponseGameResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/store/age-ratings": {
+      "get": {
+        "tags": [
+          "store-controller"
+        ],
+        "operationId": "getAgeRating",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AgeRatingResponse"
+                  }
                 }
               }
             }
@@ -1920,7 +1989,7 @@
             "schema": {
               "type": "integer",
               "format": "int32",
-              "default": 10
+              "default": 50
             }
           }
         ],
@@ -2209,150 +2278,22 @@
           }
         }
       },
-      "AgeRating": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "ageRating": {
-            "type": "string"
-          },
-          "ageRatingColor": {
-            "type": "string"
-          }
-        }
-      },
-      "Badge": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "name": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "iconPath": {
-            "type": "string"
-          },
-          "badgeCategory": {
-            "$ref": "#/components/schemas/BadgeCategory"
-          },
-          "xpReward": {
-            "type": "integer",
-            "format": "int64"
-          }
-        }
-      },
-      "BadgeCategory": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "categoryName": {
-            "type": "string"
-          },
-          "categoryNameCode": {
-            "type": "string"
-          }
-        }
-      },
-      "CardColor": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "colorName": {
-            "type": "string"
-          },
-          "colorCode": {
-            "type": "string"
-          }
-        }
-      },
-      "Game": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "title": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "publisher": {
-            "type": "string"
-          },
-          "developer": {
-            "type": "string"
-          },
-          "releaseYear": {
-            "type": "string"
-          },
-          "price": {
-            "type": "number",
-            "format": "double"
-          },
-          "discountPrice": {
-            "type": "number",
-            "format": "double"
-          },
-          "discountPercent": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "hasDiscount": {
-            "type": "boolean"
-          },
-          "ageRating": {
-            "$ref": "#/components/schemas/AgeRating"
-          },
-          "dlc": {
-            "type": "boolean"
-          },
-          "gameCoverImage": {
-            "type": "string"
-          },
-          "users": {
-            "uniqueItems": true,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/UserLibrary"
-            }
-          },
-          "systemRequirements": {
-            "$ref": "#/components/schemas/SystemRequirements"
-          }
-        }
-      },
       "GameRequest": {
         "required": [
+          "ageRatingId",
           "cpu",
           "description",
           "developer",
-          "genres",
+          "genresIds",
           "gpu",
-          "languages",
-          "os",
-          "platforms",
+          "languageIds",
+          "platformIds",
           "price",
           "publisher",
           "ram",
           "releaseYear",
           "storage",
-          "subtitles",
+          "subtitleIds",
           "title"
         ],
         "type": "object",
@@ -2364,11 +2305,12 @@
           "title": {
             "type": "string"
           },
-          "genres": {
+          "genresIds": {
             "uniqueItems": true,
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Genre"
+              "type": "integer",
+              "format": "int64"
             }
           },
           "description": {
@@ -2399,427 +2341,33 @@
           "storage": {
             "type": "string"
           },
-          "os": {
-            "type": "string"
-          },
-          "platforms": {
+          "platformIds": {
             "uniqueItems": true,
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Platform"
+              "type": "integer",
+              "format": "int64"
             }
           },
-          "languages": {
+          "languageIds": {
             "uniqueItems": true,
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Language"
+              "type": "integer",
+              "format": "int64"
             }
           },
-          "subtitles": {
+          "subtitleIds": {
             "uniqueItems": true,
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Subtitles"
-            }
-          }
-        }
-      },
-      "Genre": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "name": {
-            "type": "string"
-          },
-          "games": {
-            "uniqueItems": true,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Game"
-            }
-          }
-        }
-      },
-      "GrantedAuthority": {
-        "type": "object",
-        "properties": {
-          "authority": {
-            "type": "string"
-          }
-        }
-      },
-      "Language": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "name": {
-            "type": "string"
-          },
-          "games": {
-            "uniqueItems": true,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Game"
-            }
-          }
-        }
-      },
-      "Level": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "levelNumber": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "requiredXp": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "levelColor": {
-            "type": "string"
-          }
-        }
-      },
-      "PasswordResetToken": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "token": {
-            "type": "string"
-          },
-          "expirationDateTime": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "user": {
-            "$ref": "#/components/schemas/User"
-          }
-        }
-      },
-      "Platform": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "name": {
-            "type": "string"
-          },
-          "games": {
-            "uniqueItems": true,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Game"
-            }
-          }
-        }
-      },
-      "Subtitles": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "name": {
-            "type": "string"
-          },
-          "games": {
-            "uniqueItems": true,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Game"
-            }
-          }
-        }
-      },
-      "SystemRequirements": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "cpu": {
-            "type": "string"
-          },
-          "gpu": {
-            "type": "string"
-          },
-          "ram": {
-            "type": "string"
-          },
-          "storage": {
-            "type": "string"
-          },
-          "os": {
-            "type": "string"
-          }
-        }
-      },
-      "User": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "firstName": {
-            "type": "string"
-          },
-          "lastName": {
-            "type": "string"
-          },
-          "username": {
-            "type": "string"
-          },
-          "password": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string"
-          },
-          "bio": {
-            "type": "string"
-          },
-          "location": {
-            "type": "string",
-            "enum": [
-              "SK",
-              "CZ",
-              "PL",
-              "HU",
-              "US",
-              "UNKNOWN"
-            ]
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "ONLINE",
-              "OFFLINE",
-              "AWAY"
-            ]
-          },
-          "userProfilePicture": {
-            "type": "string"
-          },
-          "banner": {
-            "type": "string"
-          },
-          "bannerType": {
-            "type": "string"
-          },
-          "cardColor": {
-            "$ref": "#/components/schemas/CardColor"
-          },
-          "profileColor": {
-            "type": "string"
-          },
-          "xp": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "accountType": {
-            "type": "string",
-            "enum": [
-              "ADULT",
-              "CHILD"
-            ]
-          },
-          "parentEmail": {
-            "type": "string"
-          },
-          "passwordResetTokens": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PasswordResetToken"
+              "type": "integer",
+              "format": "int64"
             }
           },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "lastModifiedAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "level": {
-            "$ref": "#/components/schemas/Level"
-          },
-          "role": {
-            "type": "string",
-            "enum": [
-              "USER",
-              "ADMIN"
-            ]
-          },
-          "library": {
-            "uniqueItems": true,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/UserLibrary"
-            }
-          },
-          "wishlist": {
-            "uniqueItems": true,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Wishlist"
-            }
-          },
-          "friends": {
-            "uniqueItems": true,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/User"
-            }
-          },
-          "playRecently": {
-            "uniqueItems": true,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Game"
-            }
-          },
-          "favoriteGenres": {
-            "uniqueItems": true,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Genre"
-            }
-          },
-          "recommendationGames": {
-            "uniqueItems": true,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Game"
-            }
-          },
-          "badges": {
-            "uniqueItems": true,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Badge"
-            }
-          },
-          "name": {
-            "type": "string"
-          },
-          "fullName": {
-            "type": "string"
-          },
-          "authorities": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/GrantedAuthority"
-            }
-          },
-          "banned": {
-            "type": "boolean"
-          },
-          "enabled": {
-            "type": "boolean"
-          },
-          "accountNonLocked": {
-            "type": "boolean"
-          },
-          "accountNonExpired": {
-            "type": "boolean"
-          },
-          "credentialsNonExpired": {
-            "type": "boolean"
-          }
-        }
-      },
-      "UserGameId": {
-        "type": "object",
-        "properties": {
-          "userId": {
+          "ageRatingId": {
             "type": "integer",
             "format": "int64"
-          },
-          "gameId": {
-            "type": "integer",
-            "format": "int64"
-          }
-        }
-      },
-      "UserLibrary": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "$ref": "#/components/schemas/UserGameId"
-          },
-          "user": {
-            "$ref": "#/components/schemas/User"
-          },
-          "game": {
-            "$ref": "#/components/schemas/Game"
-          },
-          "installed": {
-            "type": "boolean"
-          },
-          "playtimeMinutes": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "lastPlayed": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "favorite": {
-            "type": "boolean"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
-      "UserWishlistId": {
-        "type": "object",
-        "properties": {
-          "userId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "gameId": {
-            "type": "integer",
-            "format": "int64"
-          }
-        }
-      },
-      "Wishlist": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "$ref": "#/components/schemas/UserWishlistId"
-          },
-          "user": {
-            "$ref": "#/components/schemas/User"
-          },
-          "game": {
-            "$ref": "#/components/schemas/Game"
-          },
-          "addedAt": {
-            "type": "string",
-            "format": "date-time"
           }
         }
       },
@@ -2865,6 +2413,10 @@
         }
       },
       "GenreResponse": {
+        "required": [
+          "id",
+          "name"
+        ],
         "type": "object",
         "properties": {
           "id": {
@@ -2957,7 +2509,27 @@
           }
         }
       },
+      "SubtitleResponse": {
+        "required": [
+          "id",
+          "subtitleName"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "subtitleName": {
+            "type": "string"
+          }
+        }
+      },
       "PlatformResponse": {
+        "required": [
+          "id",
+          "platformName"
+        ],
         "type": "object",
         "properties": {
           "id": {
@@ -2969,7 +2541,28 @@
           }
         }
       },
-      "AgeratingResponse": {
+      "LanguageResponse": {
+        "required": [
+          "id",
+          "languageName"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "languageName": {
+            "type": "string"
+          }
+        }
+      },
+      "AgeRatingResponse": {
+        "required": [
+          "ageRating",
+          "ageRatingColor",
+          "id"
+        ],
         "type": "object",
         "properties": {
           "id": {
@@ -3029,7 +2622,7 @@
             "type": "boolean"
           },
           "ageRating": {
-            "$ref": "#/components/schemas/AgeratingResponse"
+            "$ref": "#/components/schemas/AgeRatingResponse"
           },
           "gameCoverImage": {
             "type": "array",
@@ -3064,26 +2657,26 @@
           }
         }
       },
-      "LanguageResponse": {
+      "SystemRequirements": {
         "type": "object",
         "properties": {
           "id": {
             "type": "integer",
             "format": "int64"
           },
-          "languageName": {
+          "cpu": {
             "type": "string"
-          }
-        }
-      },
-      "SubtitleResponse": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
           },
-          "subtitleName": {
+          "gpu": {
+            "type": "string"
+          },
+          "ram": {
+            "type": "string"
+          },
+          "storage": {
+            "type": "string"
+          },
+          "os": {
             "type": "string"
           }
         }

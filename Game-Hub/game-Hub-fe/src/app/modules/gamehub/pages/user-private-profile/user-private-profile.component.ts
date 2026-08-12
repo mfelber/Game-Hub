@@ -332,7 +332,6 @@ export class UserPrivateProfileComponent implements OnInit {
         }).toPromise();
 
       }
-      console.log('lalala')
       this.refreshService.triggerRefresh();
       this.loadUserPrivateProfile();
       this.closeModal();

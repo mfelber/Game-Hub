@@ -3,7 +3,7 @@ import {GamePreviewResponse} from '../../../../../../services/models/game-previe
 import {AdminControllerService} from '../../../../../../services/services/admin-controller.service';
 import {Router} from '@angular/router';
 import {PageResponseGamePreviewResponse} from '../../../../../../services/models/page-response-game-preview-response';
-import {NgForOf, NgIf} from '@angular/common';
+import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {SearchBar} from '../../../../components/search-bar/search-bar';
 import {ReactiveFormsModule} from '@angular/forms';
 import {GameInfoModalComponent} from '../../components/game-info/game-info-modal.component';
@@ -20,7 +20,8 @@ import {AddGameModalComponent} from '../../components/add-game-modal/add-game-mo
     ReactiveFormsModule,
     GameInfoModalComponent,
     DeleteGameModalComponent,
-    AddGameModalComponent
+    AddGameModalComponent,
+    NgClass
   ],
   templateUrl: './all-games.component.html',
   styleUrl: './all-games.component.scss',
@@ -32,6 +33,7 @@ export class AllGamesComponent implements OnInit {
   isLoaded = false;
   isGameInfoModalOpen = false;
   isGameDeleteModalOpen = false;
+  isAddGameModalOpen = false;
 
   constructor(
     private adminControllerService: AdminControllerService,
@@ -68,6 +70,29 @@ export class AllGamesComponent implements OnInit {
     // })
   }
 
+  addGame() {
+    this.isAddGameModalOpen = true;
+  }
+
+  successMessage: string | null = null;
+  toastVisible = false;
+
+  showSuccess(message: string) {
+    this.loadGamesTableData();
+    this.successMessage = message;
+
+    setTimeout(() => this.toastVisible = true, 10);
+
+    setTimeout(() => this.hideToast(), 3000);
+
+  }
+
+  hideToast() {
+    this.toastVisible = false;
+
+    setTimeout(() => this.successMessage = null, 500);
+  }
+
   loadGamesTableData() {
     this.adminControllerService.getAllGames().subscribe({
       next: (data) => {
@@ -97,6 +122,7 @@ export class AllGamesComponent implements OnInit {
   closeModal() {
     this.isGameInfoModalOpen = false;
     this.isGameDeleteModalOpen = false;
+    this.isAddGameModalOpen = false;
     this.selectedGame = {};
   }
 }

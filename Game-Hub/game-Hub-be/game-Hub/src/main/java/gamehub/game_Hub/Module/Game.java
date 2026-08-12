@@ -73,6 +73,8 @@ public class Game {
   @Column(name = "game_cover_image")
   private String gameCoverImage;
 
+  private boolean free;
+
   @ManyToMany(fetch = FetchType.LAZY)
   @ToString.Exclude
   @JsonIgnore

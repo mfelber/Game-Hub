@@ -2,6 +2,7 @@ package gamehub.game_Hub.Request;
 
 import java.util.Set;
 
+import gamehub.game_Hub.Module.AgeRating;
 import gamehub.game_Hub.Module.Genre;
 import gamehub.game_Hub.Module.Language;
 import gamehub.game_Hub.Module.Platform;
@@ -15,7 +16,7 @@ public record GameRequest(
     @NotEmpty(message = "100")
     String title,
     @NotEmpty(message = "101")
-    Set<Genre> genres,
+    Set<Long> genresIds,
     @NotNull(message = "102")
     @NotEmpty(message = "102")
     String description,
@@ -39,13 +40,14 @@ public record GameRequest(
     @NotNull(message = "110")
     String storage,
     @NotNull(message = "111")
-    String os,
+    Set<Long> platformIds,
     @NotNull(message = "112")
-    Set<Platform> platforms,
+    Set<Long> languageIds,
     @NotNull(message = "113")
-    Set<Language> languages,
+    Set<Long> subtitleIds,
     @NotNull(message = "114")
-    Set<Subtitles> subtitles
+    Long ageRatingId
+
 ) {
 
 }

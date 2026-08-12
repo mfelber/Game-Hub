@@ -20,8 +20,9 @@
             <span class="discount">-{{game.discountPercent}}%</span>
             <span class="new-price">{{game.discountPrice}} €</span>
           </ng-container>
+
           <ng-template #normalPrice>
-            <span class="new-price">{{game.price}} €</span>
+            <span class="new-price">{{ game.price! > 0 ? (game.price + ' €'): 'Free' }}</span>
           </ng-template>
         </div>
       </div>
@@ -56,11 +57,6 @@
 
 
         <div class="requirement-grid">
-
-          <div class="requirement-item">
-            <span>OS</span>
-            <strong>{{game.systemRequirements?.os}}</strong>
-          </div>
 
           <div class="requirement-item">
             <span>CPU</span>
