@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import gamehub.game_Hub.Common.PageResponse;
 import gamehub.game_Hub.Request.GameRequest;
+import gamehub.game_Hub.Request.GameUpdateRequest;
 import gamehub.game_Hub.Response.Admin.DashboardResponse;
 import gamehub.game_Hub.Response.GamePreviewResponse;
 import gamehub.game_Hub.Response.GameResponse;
@@ -35,10 +37,10 @@ public class AdminController {
 
   // Load admin dashboard
   @GetMapping("/dashboard")
-  public DashboardResponse loadDashboardData (
+  public DashboardResponse loadDashboardData(
       @RequestParam(name = "page", defaultValue = "0", required = false) int page,
       @RequestParam(name = "size", defaultValue = "10", required = false) int size,
-      Authentication connectedUser){
+      Authentication connectedUser) {
     return adminService.loadDashboardData(connectedUser, page, size);
   }
 
@@ -77,8 +79,15 @@ public class AdminController {
       @Parameter()
       @RequestPart("file") MultipartFile file,
       final Authentication connectedUser
-  ){
-    gameService.uploadGameCoverImage(gameId,file);
+  ) {
+    gameService.uploadGameCoverImage(gameId, file);
     return ResponseEntity.accepted().build();
   }
+
+  @PutMapping("/edit-game/{gameId}")
+  public ResponseEntity<Long> updateGame(@PathVariable Long gameId,
+      @Valid @RequestBody GameUpdateRequest gameUpdateRequest) {
+    return ResponseEntity.ok(gameService.update(gameId, gameUpdateRequest));
+  }
+
 }

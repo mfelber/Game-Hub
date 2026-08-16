@@ -98,7 +98,7 @@ public class GameMapper {
         .discountPrice(game.getDiscountPrice())
         .discountPercent(game.getDiscountPercent())
         .hasDiscount(game.isHasDiscount())
-        .ageRating(new AgeRatingResponse(game.getId(), game.getAgeRating().getAgeRating(), game.getAgeRating().getAgeRatingColor()))
+        .ageRating(new AgeRatingResponse(game.getAgeRating().getId(), game.getAgeRating().getAgeRating(), game.getAgeRating().getAgeRatingColor()))
         .gameCoverImage(FileUtils.readCoverFromLocation(game.getGameCoverImage()))
         .systemRequirements(game.getSystemRequirements())
         .platforms(game.getPlatforms().stream()

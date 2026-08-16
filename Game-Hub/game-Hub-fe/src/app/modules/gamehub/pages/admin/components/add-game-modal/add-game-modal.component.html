@@ -73,11 +73,12 @@
             min="0.1"
             step="0.01"
             placeholder="0.00"
+            (input)="limitPrice($event)"
           />
         </div>
 
         <div class="free-message" *ngIf="isGameToggleFree && isPricingOpen">
-          This game is free to play.
+          This game is going to be free to play.
         </div>
     </div>
 
@@ -165,7 +166,7 @@
         <i class="fa-solid" [ngClass]="{
       'fa-chevron-right': !isPlatformOptionOpen,
       'fa-chevron-down': isPlatformOptionOpen
-      }"></i> Platforms <span class="required">*</span></h4>
+      }"></i> Operation System <span class="required">*</span></h4>
       <div class="tags" *ngIf="isPlatformOptionOpen">
         <span class="tag"
               *ngFor="let platform of platformResponse"

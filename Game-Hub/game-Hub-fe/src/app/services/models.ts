@@ -17,6 +17,7 @@ export type { GamePreviewResponse } from './models/game-preview-response';
 export type { GameRequest } from './models/game-request';
 export type { GameResponse } from './models/game-response';
 export type { GameResponseShort } from './models/game-response-short';
+export type { GameUpdateRequest } from './models/game-update-request';
 export type { GenreResponse } from './models/genre-response';
 export type { LanguageResponse } from './models/language-response';
 export type { LevelProgressResponse } from './models/level-progress-response';

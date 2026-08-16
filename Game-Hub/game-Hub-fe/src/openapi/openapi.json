@@ -31,6 +31,48 @@
     }
   ],
   "paths": {
+    "/admin/edit-game/{gameId}": {
+      "put": {
+        "tags": [
+          "admin-controller"
+        ],
+        "operationId": "updateGame",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GameUpdateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/store/delete/wishlist/{gameId}": {
       "post": {
         "tags": [
@@ -2082,6 +2124,100 @@
   },
   "components": {
     "schemas": {
+      "GameUpdateRequest": {
+        "required": [
+          "ageRatingId",
+          "cpu",
+          "description",
+          "developer",
+          "genresIds",
+          "gpu",
+          "languageIds",
+          "platformIds",
+          "price",
+          "publisher",
+          "ram",
+          "releaseYear",
+          "storage",
+          "subtitleIds",
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "publisher": {
+            "type": "string"
+          },
+          "developer": {
+            "type": "string"
+          },
+          "releaseYear": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number",
+            "format": "double"
+          },
+          "discountPercent": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "cpu": {
+            "type": "string"
+          },
+          "gpu": {
+            "type": "string"
+          },
+          "ram": {
+            "type": "string"
+          },
+          "storage": {
+            "type": "string"
+          },
+          "platformIds": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          "languageIds": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          "subtitleIds": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          "genresIds": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          "ageRatingId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
       "ReportRequest": {
         "type": "object",
         "properties": {

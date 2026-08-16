@@ -1,0 +1,300 @@
+<div class="modal-backdrop">
+  <div class="add-game-modal">
+
+    <button (click)="close.emit()" class="close-btn">&times;</button>
+
+    <h2>Edit Existing Game</h2>
+
+    <div class="section" style="display: flex">
+      <h4 (click)="openBasicInfo()" style="cursor: pointer;">
+        <i class="fa-solid" [ngClass]="{
+      'fa-chevron-right': !isBasicInfoOpen,
+      'fa-chevron-down': isBasicInfoOpen
+      }"></i> Basic Information </h4>
+
+    </div>
+
+    <div class="form-grid" *ngIf="isBasicInfoOpen">
+
+      <div>
+        <label>Title <span class="required">*</span></label>
+        <input [(ngModel)]="updateGameRequest.title" type="text">
+      </div>
+
+      <div>
+        <label>Developer <span class="required">*</span></label>
+        <input [(ngModel)]="updateGameRequest.developer" type="text">
+      </div>
+
+      <div>
+        <label>Publisher <span class="required">*</span></label>
+        <input [(ngModel)]="updateGameRequest.publisher" type="text">
+      </div>
+
+      <div>
+        <label>Release Date <span class="required">*</span></label>
+        <input
+          [(ngModel)]="updateGameRequest.releaseYear"
+          type="date"
+          id="start"
+          name="trip-start"
+        />
+      </div>
+
+      <div class="section">
+        <h4 (click)="openCoverPhoto()" style="cursor: pointer;">
+          <i class="fa-solid" [ngClass]="{
+      'fa-chevron-right': !isCoverPhotoOpen,
+      'fa-chevron-down': isCoverPhotoOpen
+      }"></i> Cover Photo </h4>
+        <div *ngIf="isCoverPhotoOpen">
+          <label>Cover Photo</label>
+          <input
+            (change)="onFileSelected($event)"
+            type="file"
+            accept="image/jpeg, image/png"
+          />
+        </div>
+
+      </div>
+    </div>
+
+    <div class="section">
+      <h4 (click)="openPricing()" style="cursor: pointer;">
+        <i class="fa-solid" [ngClass]="{
+      'fa-chevron-right': !isPricingOpen,
+      'fa-chevron-down': isPricingOpen
+      }"></i>
+        Pricing </h4>
+      <div *ngIf="game.price === 0 && isPricingOpen">
+        <h3 class="free-message">This game is free to play</h3>
+      </div>
+
+      <div class="price-input" *ngIf="game.price != 0 && isPricingOpen">
+        <div class="form-grid">
+          <div>
+            <label>Price <span class="required">*</span></label>
+            <input
+              [(ngModel)]="updateGameRequest.price"
+              type="number"
+              min="0.1"
+              step="0.01"
+              placeholder="0.00"
+            />
+          </div>
+
+          <div class="discount-field">
+            <label>Discount in %</label>
+            <input
+              [(ngModel)]="updateGameRequest.discountPercent"
+              type="number"
+              min="1"
+              step="1"
+              max="100"
+              (ngModelChange)="limitDiscount($event)"
+              (keydown)="preventDecimalInput($event)"
+            />
+
+
+            <button
+              *ngIf="updateGameRequest.discountPercent! > 0"
+              [class.hidden]="updateGameRequest.discountPercent! <= 0"
+              type="button"
+              class="remove-discount-btn"
+              (click)="removeDiscount()"
+            >
+              Remove discount
+            </button>
+
+          </div>
+          <div>
+            <label>Price after discount</label>
+            <input
+              [value]="updateGameRequest.price! * (1 - updateGameRequest.discountPercent! / 100) | number:'1.2-2'"
+              type="number"
+              readonly
+            />
+          </div>
+        </div>
+      </div>
+      <div class="free-message" *ngIf="updateGameRequest.discountPercent === 100">
+        This game is going to be free to play.
+      </div>
+    </div>
+
+    <div class="section">
+      <h4 (click)="openDescription()" style="cursor: pointer;">
+        <i class="fa-solid" [ngClass]="{
+      'fa-chevron-right': !isDescriptionOpen,
+      'fa-chevron-down': isDescriptionOpen
+      }"></i>
+        Description <span class="required">*</span></h4>
+
+      <textarea [(ngModel)]="game.description" rows="5" *ngIf="isDescriptionOpen"></textarea>
+    </div>
+
+    <div class="section">
+      <h4 (click)="openSystemRequirements()" style="cursor: pointer;">
+        <i class="fa-solid" [ngClass]="{
+      'fa-chevron-right': !isSystemRequirementsOpen,
+      'fa-chevron-down': isSystemRequirementsOpen
+      }"></i>
+        System Requirements <span class="required">*</span></h4>
+      <div *ngIf="isSystemRequirementsOpen">
+        <div class="section">
+          <label>CPU</label>
+          <input [(ngModel)]="updateGameRequest.cpu" type="text">
+        </div>
+        <div class="section">
+          <label>GPU</label>
+          <input [(ngModel)]="updateGameRequest.gpu" type="text">
+        </div>
+        <div class="section">
+          <label>RAM</label>
+          <input [(ngModel)]="updateGameRequest.ram" type="text">
+        </div>
+        <div class="section">
+          <label>Storage</label>
+          <input [(ngModel)]="updateGameRequest.storage" type="text">
+        </div>
+
+      </div>
+
+      <div>
+
+      </div>
+    </div>
+
+    <div class="section">
+      <h4 (click)="openAgeRatingOption()" style="cursor: pointer;">
+        <i class="fa-solid" [ngClass]="{
+      'fa-chevron-right': !isAgeRatingOpen,
+      'fa-chevron-down': isAgeRatingOpen
+      }"></i>
+        Age Rating <span class="required">*</span></h4>
+      <div class="tags" *ngIf="isAgeRatingOpen">
+        <span class="tag"
+              (click)="selectAgeRating(ageRating.id)"
+              *ngFor="let ageRating of ageRatingResponse"
+              [ngStyle]="{'background-color': ageRating.ageRatingColor}"
+              [ngClass]="{
+              'selected': gameHasSelectedAgeRatingId === ageRating.id
+              }"
+        >{{ ageRating.ageRating }}<i class="fa-solid fa-check selected-tag"
+                                     *ngIf="gameHasSelectedAgeRatingId === ageRating.id"></i></span>
+      </div>
+
+    </div>
+
+    <div class="section">
+      <h4 (click)="openGenreOption()" style="cursor: pointer;">
+        <i class="fa-solid" [ngClass]="{
+      'fa-chevron-right': !isGenreOptionOpen,
+      'fa-chevron-down': isGenreOptionOpen
+      }"></i>
+        Genres <span class="required">*</span></h4>
+      <div class="tags" *ngIf="isGenreOptionOpen">
+        <span class="tag"
+              (click)="!gameHasGenresIds.includes(genre.id) && selectedGenre(genre.id)"
+              *ngFor="let genre of genreResponse"
+              [ngClass]="{
+              'game-genre': gameHasGenresIds.includes(genre.id),
+              'selected': selectedGenresIds.has(genre.id)
+              }"
+        >
+          {{ genre.name }}
+          <div style="align-content: space-between">
+          <i class="fa-solid fa-xmark selected-tag-remove"
+             (click)="removeSelectedGenre(genre.id); $event.stopPropagation()"
+             *ngIf="gameHasGenresIds.includes(genre.id)"></i>
+          </div>
+
+        </span>
+
+      </div>
+    </div>
+
+    <div class="section">
+      <h4 (click)="openPlatformOption()" style="cursor: pointer;">
+        <i class="fa-solid" [ngClass]="{
+      'fa-chevron-right': !isPlatformOptionOpen,
+      'fa-chevron-down': isPlatformOptionOpen
+      }"></i>
+        Operation System <span class="required">*</span></h4>
+      <div class="tags" *ngIf="isPlatformOptionOpen">
+        <span class="tag"
+              *ngFor="let platform of platformResponse"
+              (click)="!gameHasOsIds.includes(platform.id) && selectedOs(platform.id)"
+              [ngClass]="{
+              'game-genre': gameHasOsIds.includes(platform.id),
+              'selected': selectedOsIds.has(platform.id)
+              }"
+        > {{ platform.platformName }}
+          <i class="fa-solid fa-xmark selected-tag-remove"
+             (click)="removeSelectedOs(platform.id); $event.stopPropagation()"
+             *ngIf="gameHasOsIds.includes(platform.id)"></i></span>
+      </div>
+    </div>
+
+    <div class="section">
+      <h4 (click)="openLanguageOption()" style="cursor: pointer;">
+        <i class="fa-solid" [ngClass]="{
+      'fa-chevron-right': !isLanguageOptionOpen,
+      'fa-chevron-down': isLanguageOptionOpen
+      }"></i>
+        Languages <span class="required">*</span></h4>
+      <div class="tags" *ngIf="isLanguageOptionOpen">
+        <span class="tag"
+              *ngFor="let language of languageResponse"
+              (click)="!gameHasLanguagesIds.includes(language.id) && selectedLanguages(language.id)"
+              [ngClass]="{
+              'game-genre': gameHasLanguagesIds.includes(language.id),
+              'selected': selectedLanguagesIds.has(language.id)
+              }"
+        > {{ language.languageName }}
+          <i class="fa-solid fa-xmark selected-tag-remove"
+             (click)="removeSelectedLanguage(language.id); $event.stopPropagation()"
+             *ngIf="gameHasLanguagesIds.includes(language.id)"></i></span>
+      </div>
+    </div>
+
+    <div class="section">
+      <h4 (click)="openSubtitleOption()" style="cursor: pointer;">
+        <i class="fa-solid" [ngClass]="{
+      'fa-chevron-right': !isSubtitleOptionOpen,
+      'fa-chevron-down': isSubtitleOptionOpen
+      }"></i>
+        Subtitles <span class="required">*</span></h4>
+      <div class="tags" *ngIf="isSubtitleOptionOpen">
+        <span class="tag"
+              *ngFor="let subtitle of subtitleResponses"
+              (click)="!gameHasSubtitlesIds.includes(subtitle.id) && selectedSubtitles(subtitle.id)"
+              [ngClass]="{
+              'game-genre': gameHasSubtitlesIds.includes(subtitle.id),
+              'selected': selectedSubtitlesIds.has(subtitle.id)
+              }"
+        > {{ subtitle.subtitleName }}
+          <i class="fa-solid fa-xmark selected-tag-remove"
+             (click)="removeSelectedSubtitle(subtitle.id); $event.stopPropagation()"
+             *ngIf="gameHasSubtitlesIds.includes(subtitle.id)"></i></span>
+      </div>
+    </div>
+
+
+    <div class="buttons">
+      <div style="align-content: center" class="error" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+      <button (click)="close.emit()" class="cancel">
+        Cancel
+      </button>
+
+      <button class="add" [ngClass]="{ 'save': hasChanges(), 'cannot-save': !hasChanges() }" [disabled]="!hasChanges()"
+              (click)="saveGame()">
+        Apply
+      </button>
+    </div>
+
+  </div>
+</div>
+

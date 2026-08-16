@@ -6,7 +6,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import gamehub.game_Hub.Common.PageResponse;
 import gamehub.game_Hub.Request.GameRequest;
+import gamehub.game_Hub.Request.GameUpdateRequest;
 import gamehub.game_Hub.Response.GameResponse;
+import jakarta.validation.Valid;
 
 public interface GameService {
 
@@ -27,5 +29,7 @@ public interface GameService {
   Long removeGameFromWishList(Long gameId, Authentication connectedUser);
 
   Boolean checkGameInWishlist(Long gameId, Authentication connectedUser);
+
+  Long update(Long gameId, @Valid GameUpdateRequest gameUpdateRequest);
 
 }

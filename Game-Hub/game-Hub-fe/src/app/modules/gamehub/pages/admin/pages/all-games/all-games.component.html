@@ -21,6 +21,13 @@
   (gameAdded)="showSuccess($event)">
 </app-add-game-modal>
 
+<app-edit-game-modal
+  *ngIf="isEditGameModalOpen"
+  [game]="selectedGame"
+  (close)="closeModal()"
+  (gameEdited)="showSuccess($event)">
+</app-edit-game-modal>
+
 
 <div class="fixed top-4 right-4 flex flex-col gap-2 z-50">
   <div *ngIf="successMessage"
@@ -70,7 +77,7 @@
         <tr>
           <th>Cover</th>
           <th>Name</th>
-          <th>Price</th>
+          <th>Original Price</th>
           <th>Discounted Price</th>
           <th>Discount</th>
           <th>Actions</th>
@@ -83,7 +90,7 @@
           </td>
           <td>{{ game.title }}</td>
           <td [ngClass]="{'free-price' : game.price === 0}">{{ game.price! > 0 ? (game.price + ' €'): 'Free' }} </td>
-          <td>{{ game.discountPrice! > 0 ? (game.discountPrice + ' €') : '' }}</td>
+          <td [ngClass]="{'free-price' : game.discountPercent === 100}">{{ game.discountPercent === 100 ? 'Free' : game.discountPrice! > 0 ? (game.discountPrice + ' €') : '' }}</td>
           <td>
               <span class="discount" *ngIf="game.discountPercent! > 0">
                 - {{ game.discountPercent }} %
@@ -91,7 +98,7 @@
           </td>
           <td>
             <button class="action edit">
-              <i class="fa-solid fa-pen"></i>
+              <i class="fa-solid fa-pen" (click)="loadGameDataEditModal(game.gameId)"></i>
             </button>
 
             <button class="action view" (click)="getGameInfo(game.gameId)">

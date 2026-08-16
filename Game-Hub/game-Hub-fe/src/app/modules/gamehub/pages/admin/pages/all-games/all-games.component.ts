@@ -10,6 +10,7 @@ import {GameInfoModalComponent} from '../../components/game-info/game-info-modal
 import {GameResponse} from '../../../../../../services/models/game-response';
 import {DeleteGameModalComponent} from '../../components/delete-game-modal/delete-game-modal.component';
 import {AddGameModalComponent} from '../../components/add-game-modal/add-game-modal.component';
+import {EditGameModalComponent} from '../../components/edit-game-modal/edit-game-modal.component';
 
 @Component({
   selector: 'app-all-games',
@@ -21,7 +22,8 @@ import {AddGameModalComponent} from '../../components/add-game-modal/add-game-mo
     GameInfoModalComponent,
     DeleteGameModalComponent,
     AddGameModalComponent,
-    NgClass
+    NgClass,
+    EditGameModalComponent
   ],
   templateUrl: './all-games.component.html',
   styleUrl: './all-games.component.scss',
@@ -31,9 +33,11 @@ export class AllGamesComponent implements OnInit {
   gamesResponse: PageResponseGamePreviewResponse = {}
   selectedGame: GameResponse = {}
   isLoaded = false;
+
   isGameInfoModalOpen = false;
   isGameDeleteModalOpen = false;
   isAddGameModalOpen = false;
+  isEditGameModalOpen = false;
 
   constructor(
     private adminControllerService: AdminControllerService,
@@ -123,6 +127,21 @@ export class AllGamesComponent implements OnInit {
     this.isGameInfoModalOpen = false;
     this.isGameDeleteModalOpen = false;
     this.isAddGameModalOpen = false;
+    this.isEditGameModalOpen = false;
     this.selectedGame = {};
+  }
+
+  loadGameDataEditModal(gameId: any) {
+    this.selectedGame = {};
+    this.adminControllerService.getGameInfo({gameId}).subscribe({
+      next: (data: any) => {
+        this.selectedGame = data;
+        this.isEditGameModalOpen = true;
+      },
+      error: (err) => {
+        console.log(err);
+        this.isGameInfoModalOpen = false;
+      }
+    })
   }
 }

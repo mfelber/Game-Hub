@@ -244,8 +244,6 @@ export class AddGameModalComponent implements OnInit {
     const ramValue = Number(ram)
     const storageValue = Number(storage)
 
-    console.log(ageRatingId)
-
     if (!title?.trim() &&
       !genresIds?.length &&
       !description?.trim() &&
@@ -326,6 +324,11 @@ export class AddGameModalComponent implements OnInit {
       return false;
     }
 
+    if (price < 0) {
+      this.errorMessage = 'Price must be greater than 0 for paid games.';
+      return false;
+    }
+
     return true;
   }
 
@@ -363,5 +366,14 @@ export class AddGameModalComponent implements OnInit {
 
   openSubtitleOption() {
     this.isSubtitleOptionOpen = !this.isSubtitleOptionOpen;
+  }
+
+  limitPrice(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const value = Number(input.value);
+
+    if (value <= 0 ) {
+      this.gameRequest.price = 0;
+    }
   }
 }

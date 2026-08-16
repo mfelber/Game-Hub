@@ -159,10 +159,6 @@ export class EditProfileInfoComponent implements OnInit {
   }
 
   saveChanges(){
-
-    console.log("sending picture:", this.profilePicture);
-    console.log("sending banner:", this.profileBanner);
-
     this.save.emit({
       profilePicture: this.profilePicture,
       profileBanner: this.profileBanner,
