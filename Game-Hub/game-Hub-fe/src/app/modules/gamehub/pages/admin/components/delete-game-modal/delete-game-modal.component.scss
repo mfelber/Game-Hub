@@ -1,0 +1,79 @@
+.modal-backdrop{
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0,0,0,.6);
+  z-index: 9999;
+}
+
+.delete-modal{
+  width: 550px;
+  max-width: 95%;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #151B27;
+  border-radius: 14px;
+  padding: 30px;
+  color: white;
+  position: relative;
+}
+
+.delete-modal h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+
+.delete-modal p {
+  color: #a7adbd;
+  line-height: 1.5;
+}
+
+
+.game-name {
+  color: white;
+}
+
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+
+  margin-top: 30px;
+}
+
+
+.buttons button {
+  padding: 10px 22px;
+  border-radius: 8px;
+
+  border: none;
+  cursor: pointer;
+
+  font-weight: 600;
+}
+
+
+.cancel {
+  background: #333d52;
+  color: white;
+}
+
+
+.cancel:hover {
+  background: #46526b;
+}
+
+
+.delete {
+  background: #dc2626;
+  color: white;
+}
+
+
+.delete:hover {
+  background: #ef4444;
+}

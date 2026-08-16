@@ -1,0 +1,26 @@
+<div class="modal-backdrop">
+  <div class="delete-modal">
+    <h2>Delete Game</h2>
+    <p>
+      Are you sure you want to delete:  <strong class="game-name">
+      {{game.title}}
+    </strong>
+    </p>
+
+
+
+    <div class="buttons">
+      <button class="cancel"
+      (click)="close.emit()">
+      Cancel
+      </button>
+
+
+      <button class="delete"
+              (click)="deleteGame()">
+        Delete
+      </button>
+    </div>
+  </div>
+
+</div>

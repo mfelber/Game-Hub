@@ -7,23 +7,23 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-
 import gamehub.game_Hub.Common.PageResponse;
-import gamehub.game_Hub.Request.GameRequest;
+import gamehub.game_Hub.Repository.AgeRatingRepository;
+import gamehub.game_Hub.Response.AgeRatingResponse;
 import gamehub.game_Hub.Response.GameResponse;
 import gamehub.game_Hub.Response.GenreResponse;
+import gamehub.game_Hub.Response.LanguageResponse;
 import gamehub.game_Hub.Response.PlatformResponse;
+import gamehub.game_Hub.Response.SubtitleResponse;
+import gamehub.game_Hub.Service.AgeRatingService;
 import gamehub.game_Hub.Service.GameService;
 import gamehub.game_Hub.Service.GenreService;
+import gamehub.game_Hub.Service.LanguageService;
 import gamehub.game_Hub.Service.PlatformService;
-import io.swagger.v3.oas.annotations.Parameter;
-import jakarta.validation.Valid;
+import gamehub.game_Hub.Service.SubtitleService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -37,23 +37,13 @@ public class StoreController {
 
   private final GenreService genreService;
 
-  // Add game to the store
-  @PostMapping("/add-game")
-  public ResponseEntity<Long> addGame(@Valid @RequestBody GameRequest gameRequest) {
-    return ResponseEntity.ok(gameService.save(gameRequest));
-  }
+  private final LanguageService languageservice;
 
-  // Upload game cover picture
-  @PostMapping(value = "/cover/{gameId}", consumes = "multipart/form-data")
-  public ResponseEntity<?> uploadGameCoverImage(
-      @PathVariable final Long gameId,
-      @Parameter()
-      @RequestPart("file") MultipartFile file,
-      final Authentication connectedUser
-      ){
-    gameService.uploadGameCoverImage(gameId,file);
-    return ResponseEntity.accepted().build();
-  }
+  private final SubtitleService subtitleService;
+
+  private final AgeRatingRepository ageRatingRepository;
+
+  private final AgeRatingService ageRatingService;
 
   // Buy game
   @PostMapping("/buy/{gameId}")
@@ -91,6 +81,23 @@ public class StoreController {
     return ResponseEntity.ok(genreService.findAllGenres());
   }
 
+  // Get all languages
+  @GetMapping("/languages")
+  public ResponseEntity<List<LanguageResponse>> getLanguages() {
+    return ResponseEntity.ok(languageservice.findAllLanguages());
+  }
+
+  // Get all subtitles
+  @GetMapping("/subtitles")
+  public ResponseEntity<List<SubtitleResponse>> getSubtitles() {
+    return ResponseEntity.ok(subtitleService.findAllSubtitles());
+  }
+
+  @GetMapping("/age-ratings")
+  public ResponseEntity<List<AgeRatingResponse>> getAgeRating() {
+    return ResponseEntity.ok(ageRatingService.findAllAgeRating());
+  }
+
   // Get all games
   @GetMapping("/all-games")
   public ResponseEntity<PageResponse<GameResponse>> findAllGames(
@@ -110,5 +117,7 @@ public class StoreController {
   public ResponseEntity<Boolean> checkGameInWishlist(@PathVariable final Long gameId, final Authentication connectedUser) {
     return ResponseEntity.ok(gameService.checkGameInWishlist(gameId, connectedUser));
   }
+
+
 
 }

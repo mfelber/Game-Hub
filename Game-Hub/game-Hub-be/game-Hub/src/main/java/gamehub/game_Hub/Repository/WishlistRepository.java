@@ -17,4 +17,6 @@ public interface WishlistRepository extends JpaRepository<Wishlist, UserWishlist
 
   void deleteByUserAndGame(User user, Game game);
 
+  void deleteAllByGame(Game game);
+
 }

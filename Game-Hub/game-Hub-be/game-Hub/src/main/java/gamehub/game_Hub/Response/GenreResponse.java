@@ -1,5 +1,6 @@
 package gamehub.game_Hub.Response;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +14,9 @@ import lombok.Setter;
 @Builder
 public class GenreResponse {
 
+  @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
   private Long id;
+  @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
   private String name;
 
 }

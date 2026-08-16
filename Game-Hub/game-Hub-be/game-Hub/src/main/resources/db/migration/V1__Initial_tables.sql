@@ -50,7 +50,7 @@ CREATE TABLE game_hub.system_requirements
   os      VARCHAR(255)
 );
 
-CREATE TABLE game_hub.game
+CREATE TABLE IF NOT EXISTS game_hub.game
 (
   id               BIGSERIAL PRIMARY KEY,
   title            VARCHAR(255),

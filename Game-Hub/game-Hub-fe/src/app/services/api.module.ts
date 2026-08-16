@@ -6,6 +6,7 @@ import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core
 import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
+import { AdminControllerService } from './services/admin-controller.service';
 import { StoreControllerService } from './services/store-controller.service';
 import { ReportControllerService } from './services/report-controller.service';
 import { UserProfileControllerService } from './services/user-profile-controller.service';
@@ -17,7 +18,6 @@ import { UserLevelControllerService } from './services/user-level-controller.ser
 import { LocationControllerService } from './services/location-controller.service';
 import { FlagsControllerService } from './services/flags-controller.service';
 import { CardColorControllerService } from './services/card-color-controller.service';
-import { AdminControllerService } from './services/admin-controller.service';
 
 /**
  * Module that provides all services and configuration.
@@ -27,6 +27,7 @@ import { AdminControllerService } from './services/admin-controller.service';
   exports: [],
   declarations: [],
   providers: [
+    AdminControllerService,
     StoreControllerService,
     ReportControllerService,
     UserProfileControllerService,
@@ -38,7 +39,6 @@ import { AdminControllerService } from './services/admin-controller.service';
     LocationControllerService,
     FlagsControllerService,
     CardColorControllerService,
-    AdminControllerService,
     ApiConfiguration
   ],
 })

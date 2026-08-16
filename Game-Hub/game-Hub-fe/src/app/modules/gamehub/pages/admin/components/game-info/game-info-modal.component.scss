@@ -1,0 +1,186 @@
+.modal-backdrop{
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0,0,0,.6);
+  z-index: 9999;
+}
+
+.game-modal{
+  width: 900px;
+  max-width: 95%;
+  max-height: 90vh;
+  overflow-y: auto;
+  //overflow: hidden;
+  background: #151B27;
+  border-radius: 14px;
+  padding: 30px;
+  color: white;
+  position: relative;
+}
+
+.game-header{
+  display: flex;
+  gap: 25px;
+  margin-bottom: 30px;
+}
+
+.game-modal h2{
+  font-size: 30px;
+}
+
+.cover{
+  width: 180px;
+  height: 240px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-top: 20px;
+}
+
+.game-info{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.game-info h3{
+  font-size: 30px;
+}
+
+.age-rating{
+  padding: 10px 18px;
+  border-radius: 10px;
+  width: 105px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.game-info h4:last-of-type{
+  margin-bottom: 10px;
+}
+
+.prices{
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.old-price{
+  text-decoration: line-through;
+  color: #8d8d8d;
+}
+
+.new-price{
+  color: #46d160;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.discount{
+  background: #e53935;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.section{
+  margin-top: 25px;
+}
+
+.section h4{
+  margin-bottom: 12px;
+  color: #d6d6d6;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tags{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tag{
+  background: #262f44;
+  padding: 8px 14px;
+  border-radius: 30px;
+  font-size: .9rem;
+}
+
+.description{
+  color: #d0d0d0;
+  line-height: 1.7;
+}
+
+pre{
+  white-space: pre-wrap;
+  background: #101520;
+  padding: 16px;
+  border-radius: 10px;
+  font-family: inherit;
+  color: #ddd;
+}
+
+.buttons{
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 30px;
+}
+
+.cancel{
+  background:#31394d;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.requirements {
+  background: #101520;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+}
+
+.requirement-grid {
+  display: grid;
+  grid-template-columns:repeat(2, 1fr);
+  gap: 12px;
+}
+
+.requirement-item {
+  background: #1b2333;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.requirement-item span {
+  display: block;
+  color: #8b93a7;
+  font-size: 13px;
+  margin-bottom: 5px;
+}
+
+.requirement-item strong {
+  color: white;
+  font-size: 14px;
+}
+.close-btn{
+  position: absolute;
+  right: 18px;
+  top: 15px;
+  border: none;
+  background: none;
+  color: #999;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.close-btn:hover{
+  color: white;
+}

@@ -1,0 +1,184 @@
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0,0,0,.6);
+  z-index: 9999;
+}
+
+.add-game-modal {
+  width: 700px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #161B22;
+  color: white;
+  padding: 30px;
+  border-radius: 16px;
+}
+
+.close-btn {
+  float: right;
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 25px;
+  cursor: pointer;
+}
+
+.section {
+  margin-top: 25px;
+}
+
+.section h4 {
+  margin-bottom: 15px;
+  color: #8ea7ff;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+label {
+  display: block;
+  color: #9ca3af;
+  margin-bottom: 5px;
+}
+
+input:not([type="file"]),
+textarea {
+  width: 100%;
+  background: #0f141f;
+  border: 1px solid #333d52;
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  background: #333d52;
+  padding: 6px 12px;
+  border-radius: 20px;
+  &:hover{
+    background: #2a3144;
+    cursor: pointer;
+  }
+  position: relative;
+}
+
+.tag.selected{
+  background: #2563eb;
+  color: white;
+}
+
+.remove-genre{
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 22px;
+  height: 22px;
+  border: none;
+  border-radius: 50%;
+  background: #dc2626;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: .7rem;
+}
+
+.selected-tag{
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 22px;
+  height: 22px;
+  border: none;
+  border-radius: 50%;
+  background: green;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: .7rem;
+}
+
+.free-message{
+  color: red;
+}
+
+.error{
+  color: red;
+}
+
+.buttons {
+  margin-top: 30px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+}
+
+.cancel,
+.add {
+  padding:10px 25px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+.cancel {
+  background: #333d52;
+  color: white;
+}
+
+.add {
+  background: #16a34a;
+  color: white;
+}
+
+input[type="date"] {
+  &::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+  }
+}
+
+input[type="file"] {
+  width: 100%;
+  padding: 8px;
+  background: #0f141f;
+  border: 1px solid #333d52;
+  border-radius: 8px;
+  color: #9ca3af;
+  cursor: pointer;
+}
+
+input[type="file"]::file-selector-button {
+  background: #333d52;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  margin-right: 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+input[type="file"]::file-selector-button:hover {
+  background: #2563eb;
+}
+
+.free-toggle{
+  margin-bottom: 10px;
+}

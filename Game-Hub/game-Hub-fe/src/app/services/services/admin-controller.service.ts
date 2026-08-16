@@ -11,17 +11,132 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { addGame } from '../fn/admin-controller/add-game';
+import { AddGame$Params } from '../fn/admin-controller/add-game';
 import { DashboardResponse } from '../models/dashboard-response';
+import { deleteGame } from '../fn/admin-controller/delete-game';
+import { DeleteGame$Params } from '../fn/admin-controller/delete-game';
+import { GameResponse } from '../models/game-response';
 import { getAllGames } from '../fn/admin-controller/get-all-games';
 import { GetAllGames$Params } from '../fn/admin-controller/get-all-games';
+import { getGameInfo } from '../fn/admin-controller/get-game-info';
+import { GetGameInfo$Params } from '../fn/admin-controller/get-game-info';
 import { loadDashboardData } from '../fn/admin-controller/load-dashboard-data';
 import { LoadDashboardData$Params } from '../fn/admin-controller/load-dashboard-data';
 import { PageResponseGamePreviewResponse } from '../models/page-response-game-preview-response';
+import { updateGame } from '../fn/admin-controller/update-game';
+import { UpdateGame$Params } from '../fn/admin-controller/update-game';
+import { uploadGameCoverImage } from '../fn/admin-controller/upload-game-cover-image';
+import { UploadGameCoverImage$Params } from '../fn/admin-controller/upload-game-cover-image';
 
 @Injectable({ providedIn: 'root' })
 export class AdminControllerService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
+  }
+
+  /** Path part for operation `updateGame()` */
+  static readonly UpdateGamePath = '/admin/edit-game/{gameId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateGame()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateGame$Response(params: UpdateGame$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return updateGame(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateGame$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateGame(params: UpdateGame$Params, context?: HttpContext): Observable<number> {
+    return this.updateGame$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `uploadGameCoverImage()` */
+  static readonly UploadGameCoverImagePath = '/admin/cover/{gameId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `uploadGameCoverImage()` instead.
+   *
+   * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
+   */
+  uploadGameCoverImage$Response(params: UploadGameCoverImage$Params, context?: HttpContext): Observable<StrictHttpResponse<{
+}>> {
+    return uploadGameCoverImage(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `uploadGameCoverImage$Response()` instead.
+   *
+   * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
+   */
+  uploadGameCoverImage(params: UploadGameCoverImage$Params, context?: HttpContext): Observable<{
+}> {
+    return this.uploadGameCoverImage$Response(params, context).pipe(
+      map((r: StrictHttpResponse<{
+}>): {
+} => r.body)
+    );
+  }
+
+  /** Path part for operation `addGame()` */
+  static readonly AddGamePath = '/admin/add-game';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `addGame()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  addGame$Response(params: AddGame$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return addGame(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `addGame$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  addGame(params: AddGame$Params, context?: HttpContext): Observable<number> {
+    return this.addGame$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `getGameInfo()` */
+  static readonly GetGameInfoPath = '/admin/game/info/{gameId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getGameInfo()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getGameInfo$Response(params: GetGameInfo$Params, context?: HttpContext): Observable<StrictHttpResponse<GameResponse>> {
+    return getGameInfo(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getGameInfo$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getGameInfo(params: GetGameInfo$Params, context?: HttpContext): Observable<GameResponse> {
+    return this.getGameInfo$Response(params, context).pipe(
+      map((r: StrictHttpResponse<GameResponse>): GameResponse => r.body)
+    );
   }
 
   /** Path part for operation `loadDashboardData()` */
@@ -71,6 +186,31 @@ export class AdminControllerService extends BaseService {
   getAllGames(params?: GetAllGames$Params, context?: HttpContext): Observable<PageResponseGamePreviewResponse> {
     return this.getAllGames$Response(params, context).pipe(
       map((r: StrictHttpResponse<PageResponseGamePreviewResponse>): PageResponseGamePreviewResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `deleteGame()` */
+  static readonly DeleteGamePath = '/admin/game/delete/{gameId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `deleteGame()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteGame$Response(params: DeleteGame$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return deleteGame(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `deleteGame$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  deleteGame(params: DeleteGame$Params, context?: HttpContext): Observable<void> {
+    return this.deleteGame$Response(params, context).pipe(
+      map((r: StrictHttpResponse<void>): void => r.body)
     );
   }
 

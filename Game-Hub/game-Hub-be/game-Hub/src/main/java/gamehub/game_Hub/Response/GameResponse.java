@@ -27,7 +27,7 @@ public class GameResponse {
   private Double discountPrice;
   private Integer discountPercent;
   private boolean hasDiscount;
-  private AgeratingResponse ageRating;
+  private AgeRatingResponse ageRating;
   private byte [] gameCoverImage;
   private SystemRequirements systemRequirements;
   private Set<PlatformResponse> platforms;

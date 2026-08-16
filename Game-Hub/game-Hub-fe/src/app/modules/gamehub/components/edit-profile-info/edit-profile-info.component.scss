@@ -8,7 +8,6 @@
   z-index: 1000;
 }
 
-
 .edit-modal{
   width: 700px;
   max-width: 95%;
@@ -217,20 +216,15 @@ input{
   position: absolute;
   top: -8px;
   left: -8px;
-
   width: 28px;
   height: 28px;
-
   border: none;
   border-radius: 50%;
-
   background: #ef4444;
   color: white;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   cursor: pointer;
   transition: background .2s ease, transform .2s ease;
 }
@@ -345,3 +339,4 @@ input{
 .show-banners i {
   transition: transform .2s ease;
 }
+

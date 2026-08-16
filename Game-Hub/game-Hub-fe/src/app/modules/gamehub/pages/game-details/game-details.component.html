@@ -40,6 +40,11 @@
         </div>
 
         <div>
+          <span>Publisher</span>
+          <b>{{game.publisher}}</b>
+        </div>
+
+        <div>
           <span>Release Date</span>
           <b>{{game.releaseYear}}</b>
         </div>
@@ -129,19 +134,12 @@
           {{game.systemRequirements.storage}}
         </p>
       </div>
-
-      <div>
-        <span>OS</span>
-        <p>
-          {{game.systemRequirements.os}}
-        </p>
-      </div>
     </div>
   </section>
 
   <section class="extra">
     <div class="card">
-      <h3>Platforms</h3>
+      <h3>Operation System</h3>
       <div class="small-tags">
         <span *ngFor="let platform of game.platforms">{{ platform.platformName }}</span>
       </div>

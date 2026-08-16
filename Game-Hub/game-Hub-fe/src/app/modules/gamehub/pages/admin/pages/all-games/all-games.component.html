@@ -2,6 +2,42 @@
   Loading...
 </div>
 
+<app-game-info
+  *ngIf="isGameInfoModalOpen && selectedGame"
+  [game]="selectedGame"
+  (close)="closeModal()">
+</app-game-info>
+
+<app-delete-game-modal
+  *ngIf="isGameDeleteModalOpen"
+  [game]="selectedGame"
+  (close)="closeModal()"
+  (deleted)="loadGamesTableData()">
+</app-delete-game-modal>
+
+<app-add-game-modal
+  *ngIf="isAddGameModalOpen"
+  (close)="closeModal()"
+  (gameAdded)="showSuccess($event)">
+</app-add-game-modal>
+
+<app-edit-game-modal
+  *ngIf="isEditGameModalOpen"
+  [game]="selectedGame"
+  (close)="closeModal()"
+  (gameEdited)="showSuccess($event)">
+</app-edit-game-modal>
+
+
+<div class="fixed top-4 right-4 flex flex-col gap-2 z-50">
+  <div *ngIf="successMessage"
+       class="bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg min-w-[250px]
+              transform transition-transform duration-500 ease-in-out opacity-0"
+       [ngClass]="{'translate-x-0 opacity-100': toastVisible, 'translate-x-24 opacity-0': !toastVisible}">
+    {{ successMessage }}
+  </div>
+</div>
+
 <main [class.hidden]="!isLoaded">
   <section class="games-page">
     <div class="page-header">
@@ -27,7 +63,7 @@
         </div>
 
         <div>
-          <button class="add-game-btn">
+          <button (click)="addGame()" class="add-game-btn">
             <i class="fa-solid fa-plus"></i>
             Add Game
           </button>
@@ -41,7 +77,7 @@
         <tr>
           <th>Cover</th>
           <th>Name</th>
-          <th>Price</th>
+          <th>Original Price</th>
           <th>Discounted Price</th>
           <th>Discount</th>
           <th>Actions</th>
@@ -53,8 +89,8 @@
             <img [src]="getGameImageCover(game)" alt="{{game.title}}}">
           </td>
           <td>{{ game.title }}</td>
-          <td>{{ game.price }} €</td>
-          <td>{{ game.discountPrice! > 0 ? (game.discountPrice + ' €') : '' }}</td>
+          <td [ngClass]="{'free-price' : game.price === 0}">{{ game.price! > 0 ? (game.price + ' €'): 'Free' }} </td>
+          <td [ngClass]="{'free-price' : game.discountPercent === 100}">{{ game.discountPercent === 100 ? 'Free' : game.discountPrice! > 0 ? (game.discountPrice + ' €') : '' }}</td>
           <td>
               <span class="discount" *ngIf="game.discountPercent! > 0">
                 - {{ game.discountPercent }} %
@@ -62,14 +98,14 @@
           </td>
           <td>
             <button class="action edit">
-              <i class="fa-solid fa-pen"></i>
+              <i class="fa-solid fa-pen" (click)="loadGameDataEditModal(game.gameId)"></i>
             </button>
 
-            <button class="action view">
+            <button class="action view" (click)="getGameInfo(game.gameId)">
               <i class="fa-solid fa-eye"></i>
             </button>
 
-            <button class="action delete">
+            <button class="action delete" (click)="deleteGame(game)">
               <i class="fa-solid fa-trash"></i>
             </button>
           </td>

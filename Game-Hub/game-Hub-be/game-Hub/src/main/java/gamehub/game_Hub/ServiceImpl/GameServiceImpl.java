@@ -2,9 +2,13 @@ package gamehub.game_Hub.ServiceImpl;
 
 import static gamehub.game_Hub.Module.User.AccountType.CHILD;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,21 +21,33 @@ import org.springframework.web.multipart.MultipartFile;
 
 import gamehub.game_Hub.Common.PageResponse;
 import gamehub.game_Hub.Mapper.GameMapper;
+import gamehub.game_Hub.Module.AgeRating;
 import gamehub.game_Hub.Module.Badge;
 import gamehub.game_Hub.Module.Game;
+import gamehub.game_Hub.Module.Genre;
+import gamehub.game_Hub.Module.Language;
+import gamehub.game_Hub.Module.Platform;
+import gamehub.game_Hub.Module.Subtitles;
+import gamehub.game_Hub.Module.SystemRequirements;
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Module.User.UserGameId;
 import gamehub.game_Hub.Module.User.UserLibrary;
 import gamehub.game_Hub.Module.User.UserWishlistId;
 import gamehub.game_Hub.Module.User.Wishlist;
+import gamehub.game_Hub.Repository.AgeRatingRepository;
 import gamehub.game_Hub.Repository.BadgeRepository;
+import gamehub.game_Hub.Repository.LanguageRepository;
+import gamehub.game_Hub.Repository.PlatformRepository;
+import gamehub.game_Hub.Repository.SubtitleRepository;
 import gamehub.game_Hub.Repository.UserLibraryRepository;
 import gamehub.game_Hub.Repository.UserStoreFlagRepository;
 import gamehub.game_Hub.Repository.WishlistRepository;
 import gamehub.game_Hub.Repository.game.GameRepository;
+import gamehub.game_Hub.Repository.genre.GenreRepository;
 import gamehub.game_Hub.Repository.user.UserRepository;
 import gamehub.game_Hub.File.FileStorageService;
 import gamehub.game_Hub.Request.GameRequest;
+import gamehub.game_Hub.Request.GameUpdateRequest;
 import gamehub.game_Hub.Response.GameResponse;
 import gamehub.game_Hub.Service.GameService;
 import jakarta.persistence.EntityNotFoundException;
@@ -59,6 +75,16 @@ public class GameServiceImpl implements GameService {
 
   private final WishlistRepository wishlistRepository;
 
+  private final PlatformRepository platformRepository;
+
+  private final GenreRepository genreRepository;
+
+  private final LanguageRepository languageRepository;
+
+  private final SubtitleRepository subtitleRepository;
+
+  private final AgeRatingRepository ageRatingRepository;
+
   @Override
   public Long save(final GameRequest gameRequest) {
     Game game = gameMapper.toGame(gameRequest);
@@ -70,7 +96,9 @@ public class GameServiceImpl implements GameService {
     Game game = gameRepository.findById(gameId)
         .orElseThrow(() -> new EntityNotFoundException("Game not found with id: " + gameId));
     var gameCoverImage = fileStorageService.saveGameCoverImage(file, game.getId());
+    System.out.printf("new image: " + gameCoverImage);
     game.setGameCoverImage(gameCoverImage);
+    System.out.printf("before new image: " + game.getGameCoverImage());
     gameRepository.save(game);
   }
 
@@ -112,15 +140,15 @@ public class GameServiceImpl implements GameService {
 
     List<GameResponse> gameResponse = games.stream().map(gameMapper::toGameResponse).toList();
 
-      return new PageResponse<>(
-          gameResponse,
-          games.getNumber(),
-          games.getSize(),
-          games.getTotalElements(),
-          games.getTotalPages(),
-          games.isFirst(),
-          games.isLast()
-      );
+    return new PageResponse<>(
+        gameResponse,
+        games.getNumber(),
+        games.getSize(),
+        games.getTotalElements(),
+        games.getTotalPages(),
+        games.isFirst(),
+        games.isLast()
+    );
   }
 
   @Transactional
@@ -147,7 +175,7 @@ public class GameServiceImpl implements GameService {
     }
 
     boolean gameInWishlist = wishlistRepository.existsByUserAndGame(user, game);
-    if (gameInWishlist){
+    if (gameInWishlist) {
       wishlistRepository.deleteByUserAndGame(user, game);
     }
 
@@ -193,7 +221,7 @@ public class GameServiceImpl implements GameService {
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
 
     boolean gameInWishlist = wishlistRepository.existsByUserAndGame(user, game);
-    if (gameInWishlist){
+    if (gameInWishlist) {
       wishlistRepository.deleteByUserAndGame(user, game);
     }
 
@@ -222,7 +250,7 @@ public class GameServiceImpl implements GameService {
 
     boolean gameInWishlist = wishlistRepository.existsByUserAndGame(user, game);
 
-    if (gameInWishlist){
+    if (gameInWishlist) {
       wishlistRepository.deleteByUserAndGame(user, game);
     }
 
@@ -249,6 +277,77 @@ public class GameServiceImpl implements GameService {
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
 
     return wishlistRepository.existsByUserAndGame(user, game);
+  }
+
+  @Override
+  public Long update(final Long gameId, final GameUpdateRequest gameUpdateRequest) {
+    Game game = gameRepository.findById(gameId)
+        .orElseThrow(() -> new EntityNotFoundException("Game with id: " + gameId + " was not found"));
+
+    Set<Genre> genres = gameUpdateRequest.genresIds()
+        .stream()
+        .map(genreRepository::getReferenceById)
+        .collect(Collectors.toSet());
+
+    Set<Platform> platforms = gameUpdateRequest.platformIds()
+        .stream()
+        .map(platformRepository::getReferenceById)
+        .collect(Collectors.toSet());
+
+    Set<Language> languages = gameUpdateRequest.languageIds()
+        .stream()
+        .map(languageRepository::getReferenceById)
+        .collect(Collectors.toSet());
+
+    Set<Subtitles> subtitles = gameUpdateRequest.subtitleIds()
+        .stream()
+        .map(subtitleRepository::getReferenceById)
+        .collect(Collectors.toSet());
+
+    AgeRating ageRating = ageRatingRepository.findById(gameUpdateRequest.ageRatingId())
+        .orElseThrow(() -> new EntityNotFoundException("Age rating not found"));
+
+    // discounted price and set isInDiscount, set free game when discount is 100%
+    // boolean free = gameRequest.price() == 0;
+    boolean freeGame = gameUpdateRequest.price() == 0 ||  (gameUpdateRequest.discountPercent() != null && gameUpdateRequest.discountPercent() == 100);
+    boolean gameHasDiscount = gameUpdateRequest.discountPercent() != null;
+
+    Double discountedPrice = null;
+
+    game.setPrice(gameUpdateRequest.price());
+
+    if (gameUpdateRequest.discountPercent() != null) {
+       discountedPrice = BigDecimal.valueOf(
+              game.getPrice() * (1 - (double) gameUpdateRequest.discountPercent() / 100))
+          .setScale(2, RoundingMode.DOWN)
+          .doubleValue();
+    }
+
+    game.setTitle(gameUpdateRequest.title());
+    game.setDescription(gameUpdateRequest.description());
+    game.setPublisher(gameUpdateRequest.publisher());
+    game.setDeveloper(gameUpdateRequest.developer());
+    game.setReleaseYear(gameUpdateRequest.releaseYear());
+
+    game.setDiscountPercent(gameUpdateRequest.discountPercent());
+    game.setDiscountPrice(discountedPrice);
+    game.setHasDiscount(gameHasDiscount);
+    game.setFree(freeGame);
+    game.setGenres(genres);
+    game.setPlatforms(platforms);
+    game.setLanguages(languages);
+    game.setSubtitles(subtitles);
+    game.setAgeRating(ageRating);
+    
+    SystemRequirements systemRequirements = SystemRequirements.builder()
+        .cpu(gameUpdateRequest.cpu())
+        .gpu(gameUpdateRequest.gpu())
+        .ram(gameUpdateRequest.ram())
+        .storage(gameUpdateRequest.storage())
+        .build();
+
+    game.setSystemRequirements(systemRequirements);
+    return gameRepository.save(game).getId();
   }
 
 }

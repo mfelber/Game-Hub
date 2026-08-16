@@ -3,10 +3,14 @@ import {GamePreviewResponse} from '../../../../../../services/models/game-previe
 import {AdminControllerService} from '../../../../../../services/services/admin-controller.service';
 import {Router} from '@angular/router';
 import {PageResponseGamePreviewResponse} from '../../../../../../services/models/page-response-game-preview-response';
-import {NgForOf, NgIf} from '@angular/common';
+import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {SearchBar} from '../../../../components/search-bar/search-bar';
 import {ReactiveFormsModule} from '@angular/forms';
+import {GameInfoModalComponent} from '../../components/game-info/game-info-modal.component';
 import {GameResponse} from '../../../../../../services/models/game-response';
+import {DeleteGameModalComponent} from '../../components/delete-game-modal/delete-game-modal.component';
+import {AddGameModalComponent} from '../../components/add-game-modal/add-game-modal.component';
+import {EditGameModalComponent} from '../../components/edit-game-modal/edit-game-modal.component';
 
 @Component({
   selector: 'app-all-games',
@@ -14,7 +18,12 @@ import {GameResponse} from '../../../../../../services/models/game-response';
     NgIf,
     SearchBar,
     NgForOf,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    GameInfoModalComponent,
+    DeleteGameModalComponent,
+    AddGameModalComponent,
+    NgClass,
+    EditGameModalComponent
   ],
   templateUrl: './all-games.component.html',
   styleUrl: './all-games.component.scss',
@@ -22,7 +31,13 @@ import {GameResponse} from '../../../../../../services/models/game-response';
 export class AllGamesComponent implements OnInit {
 
   gamesResponse: PageResponseGamePreviewResponse = {}
+  selectedGame: GameResponse = {}
   isLoaded = false;
+
+  isGameInfoModalOpen = false;
+  isGameDeleteModalOpen = false;
+  isAddGameModalOpen = false;
+  isEditGameModalOpen = false;
 
   constructor(
     private adminControllerService: AdminControllerService,
@@ -32,6 +47,54 @@ export class AllGamesComponent implements OnInit {
 
   ngOnInit() {
     this.loadGamesTableData();
+  }
+
+  getGameInfo(gameId: any) {
+    this.selectedGame = {};
+    this.isGameInfoModalOpen = true;
+    this.adminControllerService.getGameInfo({gameId}).subscribe({
+      next: (data: any) => {
+        this.selectedGame = data;
+        console.log(data);
+      },
+      error: (err) => {
+        console.log(err);
+        this.isGameInfoModalOpen = false;
+      }
+    })
+  }
+
+  deleteGame(game: any) {
+    this.isGameDeleteModalOpen = true;
+    this.selectedGame = game;
+    // this.adminControllerService.deleteGame(gameId).subscribe({
+    //   next: (data) => {
+    //     console.log(data);
+    //   }
+    // })
+  }
+
+  addGame() {
+    this.isAddGameModalOpen = true;
+  }
+
+  successMessage: string | null = null;
+  toastVisible = false;
+
+  showSuccess(message: string) {
+    this.loadGamesTableData();
+    this.successMessage = message;
+
+    setTimeout(() => this.toastVisible = true, 10);
+
+    setTimeout(() => this.hideToast(), 3000);
+
+  }
+
+  hideToast() {
+    this.toastVisible = false;
+
+    setTimeout(() => this.successMessage = null, 500);
   }
 
   loadGamesTableData() {
@@ -58,5 +121,27 @@ export class AllGamesComponent implements OnInit {
 
   searchGames($event: string) {
     console.log($event);
+  }
+
+  closeModal() {
+    this.isGameInfoModalOpen = false;
+    this.isGameDeleteModalOpen = false;
+    this.isAddGameModalOpen = false;
+    this.isEditGameModalOpen = false;
+    this.selectedGame = {};
+  }
+
+  loadGameDataEditModal(gameId: any) {
+    this.selectedGame = {};
+    this.adminControllerService.getGameInfo({gameId}).subscribe({
+      next: (data: any) => {
+        this.selectedGame = data;
+        this.isEditGameModalOpen = true;
+      },
+      error: (err) => {
+        console.log(err);
+        this.isGameInfoModalOpen = false;
+      }
+    })
   }
 }
