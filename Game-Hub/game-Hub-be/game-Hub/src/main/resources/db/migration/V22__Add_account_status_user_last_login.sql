@@ -1,0 +1,3 @@
+ALTER TABLE game_hub."user"
+  ADD COLUMN last_login TIMESTAMP,
+  ADD COLUMN account_status VARCHAR NOT NULL DEFAULT 'ACTIVE';

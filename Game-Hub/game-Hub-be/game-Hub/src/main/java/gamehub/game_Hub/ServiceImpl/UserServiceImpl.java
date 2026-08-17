@@ -2,6 +2,7 @@ package gamehub.game_Hub.ServiceImpl;
 
 import static gamehub.game_Hub.enums.Status.*;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -148,6 +149,7 @@ public class UserServiceImpl implements UserService {
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
 
     user.setStatus(ONLINE);
+    user.setLastLogin(LocalDateTime.now());
     userRepository.save(user);
   }
 

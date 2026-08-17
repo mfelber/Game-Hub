@@ -15,6 +15,8 @@ import gamehub.game_Hub.Mapper.GameMapper;
 import gamehub.game_Hub.Mapper.ReportMapper;
 import gamehub.game_Hub.Mapper.UserMapper;
 import gamehub.game_Hub.Module.Game;
+import gamehub.game_Hub.Module.User.User;
+import gamehub.game_Hub.Response.Admin.AdminUserResponse;
 import gamehub.game_Hub.enums.Role;
 import gamehub.game_Hub.Repository.ReportRepository;
 import gamehub.game_Hub.Repository.UserLibraryRepository;
@@ -93,6 +95,23 @@ public class DashboardServiceImpl implements AdminService {
     wishlistRepository.deleteAllByGame(game);
     userLibraryRepository.deleteAllByGame(game);
     gameRepository.delete(game);
+  }
+
+  @Override
+  public PageResponse<AdminUserResponse> getAllUsers(final int page, final int size) {
+    Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
+    Page<User> users = userRepository.findAll(pageable);
+    List<AdminUserResponse> userResponse = users.stream().map(userMapper::toAdminUserResponse).toList();
+
+    return new PageResponse<>(
+        userResponse,
+        users.getNumber(),
+        users.getSize(),
+        users.getTotalElements(),
+        users.getTotalPages(),
+        users.isFirst(),
+        users.isLast()
+    );
   }
 
 }

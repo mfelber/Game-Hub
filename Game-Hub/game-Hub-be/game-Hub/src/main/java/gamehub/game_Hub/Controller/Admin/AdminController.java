@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import gamehub.game_Hub.Common.PageResponse;
 import gamehub.game_Hub.Request.GameRequest;
 import gamehub.game_Hub.Request.GameUpdateRequest;
+import gamehub.game_Hub.Response.Admin.AdminUserResponse;
 import gamehub.game_Hub.Response.Admin.DashboardResponse;
 import gamehub.game_Hub.Response.GamePreviewResponse;
 import gamehub.game_Hub.Response.GameResponse;
@@ -51,7 +52,15 @@ public class AdminController {
       @RequestParam(name = "size", defaultValue = "50", required = false) int size) {
     return ResponseEntity.ok(adminService.getAllGames(page, size));
   }
-  // fetch users with only name, lastname, username, email, profile pic
+
+  // fetch users with only name, lastname, username, email, profile pic, role, registered, lastLogin, accountStatus
+  @GetMapping("/users")
+  public ResponseEntity<PageResponse<AdminUserResponse>> getAllUsers(
+      @RequestParam(name = "page", defaultValue = "0", required = false) int page,
+      @RequestParam(name = "page", defaultValue = "50", required = false) int size
+  ) {
+    return ResponseEntity.ok(adminService.getAllUsers(page, size));
+  }
   // fetch all reports
   // fetch all genres , possibility to add new genres (not duplicated)
   // fetch all reviews

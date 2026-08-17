@@ -19,10 +19,13 @@ import { DeleteGame$Params } from '../fn/admin-controller/delete-game';
 import { GameResponse } from '../models/game-response';
 import { getAllGames } from '../fn/admin-controller/get-all-games';
 import { GetAllGames$Params } from '../fn/admin-controller/get-all-games';
+import { getAllUsers } from '../fn/admin-controller/get-all-users';
+import { GetAllUsers$Params } from '../fn/admin-controller/get-all-users';
 import { getGameInfo } from '../fn/admin-controller/get-game-info';
 import { GetGameInfo$Params } from '../fn/admin-controller/get-game-info';
 import { loadDashboardData } from '../fn/admin-controller/load-dashboard-data';
 import { LoadDashboardData$Params } from '../fn/admin-controller/load-dashboard-data';
+import { PageResponseAdminUserResponse } from '../models/page-response-admin-user-response';
 import { PageResponseGamePreviewResponse } from '../models/page-response-game-preview-response';
 import { updateGame } from '../fn/admin-controller/update-game';
 import { UpdateGame$Params } from '../fn/admin-controller/update-game';
@@ -111,6 +114,31 @@ export class AdminControllerService extends BaseService {
   addGame(params: AddGame$Params, context?: HttpContext): Observable<number> {
     return this.addGame$Response(params, context).pipe(
       map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `getAllUsers()` */
+  static readonly GetAllUsersPath = '/admin/users';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAllUsers()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllUsers$Response(params?: GetAllUsers$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseAdminUserResponse>> {
+    return getAllUsers(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getAllUsers$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllUsers(params?: GetAllUsers$Params, context?: HttpContext): Observable<PageResponseAdminUserResponse> {
+    return this.getAllUsers$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PageResponseAdminUserResponse>): PageResponseAdminUserResponse => r.body)
     );
   }
 
