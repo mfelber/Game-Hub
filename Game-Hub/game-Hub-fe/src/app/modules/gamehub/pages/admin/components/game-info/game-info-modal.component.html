@@ -15,10 +15,10 @@
         <span [ngStyle]="{'background-color': game.ageRating?.ageRatingColor}" class="age-rating">
       {{ game.ageRating?.ageRating }} </span>
         <div class="prices">
-          <ng-container *ngIf="game.discountPrice! > 0; else normalPrice">
+          <ng-container *ngIf="game.discountPrice! > 0 || game.discountPercent === 100; else normalPrice">
             <span class="old-price">{{game.price}}</span>
             <span class="discount">-{{game.discountPercent}}%</span>
-            <span class="new-price">{{game.discountPrice}} €</span>
+            <span class="new-price">{{ game.discountPrice! > 0 ? (game.discountPrice + ' €'): 'Free' }}</span>
           </ng-container>
 
           <ng-template #normalPrice>

@@ -123,17 +123,16 @@
   color: #fff;
 }
 
+.free-price{
+  color: #46d160;
+}
+
 .price-info {
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
-.old-price {
-  color: #7b8190;
-  text-decoration: line-through;
-  font-size: 0.9rem;
-}
 
 .discount {
   background: #00a63e;
@@ -156,6 +155,16 @@
   border-radius: 15px;
   overflow: hidden;
   transition: 0.3s;
+}
+
+.added-at {
+  margin-top: auto;
+  margin-left: 20px;
+  padding-top: 12px;
+  font-size: 0.75rem;
+  color: #777;
+  font-weight: 500;
+  letter-spacing: 0.2px;
 }
 
 .card img{

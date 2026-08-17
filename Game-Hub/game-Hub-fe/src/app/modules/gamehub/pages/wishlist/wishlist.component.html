@@ -3,7 +3,6 @@
 </div>
 
 
-
 <main [class.hidden]="!isLoaded">
 
   <section>
@@ -92,21 +91,34 @@
         {{ genre.name }}<span *ngIf="!last">&nbsp; • &nbsp;</span>
       </span>
         </p>
+      <span class="added-at">
+        Added {{ wishlist.addedAt | date:'dd.MM.yyyy' }}
+      </span>
       </div>
-      <div class="price">
-        <span class="current-price">29.99 € set discount price</span>
+      <div class="price" *ngIf="wishlist.game?.discountPercent! > 0">
+        <span class="current-price" [ngClass]="{ 'free-price' : wishlist.game?.discountPercent === 100}">{{
+            wishlist.game?.discountPercent === 100
+              ? 'Free'
+              : wishlist.game?.discountPrice + ' €'
+          }}
+
+        </span>
 
         <div class="price-info">
           <span class="old-price">{{ wishlist.game?.price }} €</span>
-          <span class="discount">-40%</span>
+          <span class="discount">-{{ wishlist.game?.discountPercent }}%</span>
         </div>
+      </div>
+
+      <div class="price" *ngIf="!wishlist.game?.discountPercent!">
+        <span class="current-price">{{ wishlist.game?.price }} €</span>
       </div>
       <div class="buttons">
         <button class="buy">
           Buy <i class="fa-solid fa-cart-shopping"></i> -> redirect user to fill invoice form
         </button>
         <button class="remove" (click)="removeGameFromWishList(wishlist.game?.gameId); $event.stopPropagation()">
-           Remove <i class="fa-solid fa-heart-broken"></i>
+          Remove <i class="fa-solid fa-heart-broken"></i>
         </button>
       </div>
     </div>

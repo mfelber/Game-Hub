@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {NgForOf, NgIf, NgOptimizedImage} from '@angular/common';
+import {NgClass, NgForOf, NgIf, NgOptimizedImage} from '@angular/common';
 import {StoreControllerService} from '../../../../services/services';
 import {Router, RouterOutlet} from '@angular/router';
 import {PageResponseGameResponse} from '../../../../services/models/page-response-game-response';
@@ -14,7 +14,8 @@ import {SearchBar} from '../../components/search-bar/search-bar';
     NgForOf,
     NgIf,
     FormsModule,
-    SearchBar
+    SearchBar,
+    NgClass
   ],
   templateUrl: './store.component.html',
   styleUrl: './store.component.scss'

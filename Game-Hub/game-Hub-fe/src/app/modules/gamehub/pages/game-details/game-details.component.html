@@ -28,35 +28,45 @@
     <div class="description card">
       <h2>About this game</h2>
       <p>
-        {{game.description}}
+        {{ game.description }}
       </p>
     </div>
     <div class="purchase card">
-      <h2>{{game.title}}</h2>
+      <h2>{{ game.title }}</h2>
       <div class="details">
         <div>
           <span>Developer</span>
-          <b>{{game.developer}}</b>
+          <b>{{ game.developer }}</b>
         </div>
 
         <div>
           <span>Publisher</span>
-          <b>{{game.publisher}}</b>
+          <b>{{ game.publisher }}</b>
         </div>
 
         <div>
           <span>Release Date</span>
-          <b>{{game.releaseYear}}</b>
+          <b>{{ game.releaseYear }}</b>
         </div>
       </div>
 
-      <div class="price">
+      <div class="price" *ngIf="game.discountPercent! > 0">
 
-        <h1 class="old-price" style="font-size: 30px">{{game.price}} €</h1>
+        <h1 class="old-price" style="font-size: 30px">{{ game.price }} €</h1>
         <div class="badge owned-badge">
-          -30% get discount
+          -{{ game.discountPercent }}%
         </div>
-        <h1 style="margin-left: 10px;font-size: 30px">14.99 €</h1>
+        <h1 style="margin-left: 10px;font-size: 30px" [ngClass]="{'free-price' : game.discountPercent === 100}"> {{
+            game.discountPercent === 100
+              ? 'Free'
+              : game.discountPrice + ' €'
+          }} </h1>
+      </div>
+
+      <div class="price" *ngIf="!game.discountPercent || game.discountPercent <= 0">
+
+        <h1 style="font-size: 30px">{{ game.price }} €</h1>
+
       </div>
 
       <div class="purchase-actions">
@@ -94,7 +104,6 @@
         </div>
 
 
-
         <hr>
 
         <button class="gift">
@@ -113,25 +122,25 @@
     <div class="requirements-grid">
       <div>
         <span>CPU</span>
-        <p>{{game.systemRequirements.cpu}}</p>
+        <p>{{ game.systemRequirements.cpu }}</p>
       </div>
 
       <div>
         <span>GPU</span>
-        <p>{{game.systemRequirements.gpu}}</p>
+        <p>{{ game.systemRequirements.gpu }}</p>
       </div>
 
       <div>
         <span>RAM</span>
         <p>
-          {{game.systemRequirements.ram}}
+          {{ game.systemRequirements.ram }}
         </p>
       </div>
 
       <div>
         <span>Storage</span>
         <p>
-          {{game.systemRequirements.storage}}
+          {{ game.systemRequirements.storage }}
         </p>
       </div>
     </div>
@@ -163,7 +172,8 @@
 
   <section class="card reviews">
 
-    <button>View All Reviews on other side from reviews (in reviews page filter based on positive/negative reviews)</button>
+    <button>View All Reviews on other side from reviews (in reviews page filter based on positive/negative reviews)
+    </button>
     <div class="card-header">
       <h2>Reviews</h2>
       <button class="review-button">
@@ -171,7 +181,6 @@
         Write a review
       </button>
     </div>
-
 
 
     <div class="rating-summary">
@@ -237,15 +246,15 @@
       <div class="recommended-card relative">
         <div class="badges">
           <div class="badge owned-badge">
-            -30% get discount
+            -get%
           </div>
 
         </div>
         <img src="assets/profilePicture/default_profile_picture.svg">
         <div>
-          <h3>{{game.title}}</h3>
-            <span class="old-price">{{game.price}} €</span>
-            <span>29.99 € set discount price </span>
+          <h3>Title</h3>
+          <span class="old-price">Price €</span>
+          <span>29.99 € set discount price </span>
         </div>
       </div>
     </div>

@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {WishlistControllerService} from '../../../../services/services/wishlist-controller.service';
 import {StoreControllerService} from '../../../../services/services/store-controller.service';
 import {PageResponseGameResponse} from '../../../../services/models/page-response-game-response';
-import {NgForOf, NgIf} from '@angular/common';
+import {DatePipe, NgClass, NgForOf, NgIf} from '@angular/common';
 import {GameResponse} from '../../../../services/models/game-response';
 import {Router} from '@angular/router';
 import {MatCheckbox} from '@angular/material/checkbox';
@@ -18,7 +18,9 @@ import {PageResponseWishlistResponse} from '../../../../services/models/page-res
     NgForOf,
     NgIf,
     FormsModule,
-    SearchBar
+    SearchBar,
+    NgClass,
+    DatePipe,
   ],
   templateUrl: './wishlist.component.html',
   styleUrl: './wishlist.component.scss'

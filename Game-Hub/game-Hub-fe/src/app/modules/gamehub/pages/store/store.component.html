@@ -73,16 +73,15 @@
         <div
           *ngIf="gamesOwnedMap?.[game.gameId!]"
           class="badge owned-badge">
-           Owned <i class="fa-solid fa-check mr-1"></i>
+          Owned <i class="fa-solid fa-check mr-1"></i>
         </div>
-        <div
-          class="badge discount-badge">
-          -30% get discount
+        <div *ngIf="game.discountPercent! > 0"
+             class="badge discount-badge">- {{ game.discountPercent }} %
         </div>
         <div
           *ngIf="gameWishListMap?.[game.gameId!] && !gamesOwnedMap?.[game.gameId!]"
           class="badge wishlist-badge">
-           Wishlisted <i class="fa-solid fa-heart mr-1"></i>
+          Wishlisted <i class="fa-solid fa-heart mr-1"></i>
         </div>
       </div>
       <h3>{{ game.title }}</h3>
@@ -95,12 +94,21 @@
         <div>
           123K <i class="fa-regular fa-thumbs-up text-white"></i>
         </div>
-        <div class="price">
-          <span class="current-price">29.99 € set discount price</span>
+        <div class="price" *ngIf="game.discountPercent! > 0">
+          <span class="current-price" [ngClass]="{'free-price' : game.discountPercent === 100}">{{
+              game.discountPercent === 100
+                ? 'Free'
+                : game.discountPrice + ' €'
+            }}</span>
 
           <div class="price-info">
             <span class="old-price"> {{ game.price }} €</span>
           </div>
+        </div>
+        <div class="price" *ngIf="!game.discountPercent || game.discountPercent <= 0">
+          <span class="current-price" [ngClass]="{'free-price' : game.price === 0}">{{
+              game.price! > 0 ? (game.price + ' €') : 'Free'
+            }} </span>
         </div>
       </div>
       <button *ngIf="!gamesOwnedMap[game.gameId!]" (click)="buyGame(game.gameId) ; $event.stopPropagation()">

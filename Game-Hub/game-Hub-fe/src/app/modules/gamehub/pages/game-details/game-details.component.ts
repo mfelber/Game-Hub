@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {StoreControllerService} from '../../../../services/services';
-import {NgForOf, NgIf, NgStyle} from '@angular/common';
+import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {GameResponse} from '../../../../services/models/game-response';
 
 @Component({
@@ -9,7 +9,8 @@ import {GameResponse} from '../../../../services/models/game-response';
   imports: [
     NgIf,
     NgForOf,
-    NgStyle
+    NgStyle,
+    NgClass
   ],
   templateUrl: './game-details.component.html',
   styleUrl: './game-details.component.scss'
