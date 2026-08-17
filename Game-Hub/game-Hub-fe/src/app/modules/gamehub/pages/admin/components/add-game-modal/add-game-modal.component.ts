@@ -11,6 +11,10 @@ import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {AgeRatingResponse} from '../../../../../../services/models/age-rating-response';
 import {AdminControllerService} from '../../../../../../services/services/admin-controller.service';
 import {HttpClient} from '@angular/common/http';
+import {
+  SystemRequirementsControllerService
+} from '../../../../../../services/services/system-requirements-controller.service';
+import {UnitSizeResponse} from '../../../../../../services/models/unit-size-response';
 
 @Component({
   selector: 'app-add-game-modal',
@@ -42,6 +46,7 @@ export class AddGameModalComponent implements OnInit {
   languageResponse: LanguageResponse[] = [];
   subtitleResponses: SubtitleResponse[] = [];
   ageRatingResponse: AgeRatingResponse[] = [];
+  unitSizeResponse: UnitSizeResponse[] = [];
   isGameToggleFree: boolean = true;
 
   isBasicInfoOpen: boolean = true;
@@ -66,8 +71,9 @@ export class AddGameModalComponent implements OnInit {
     price: 0,
     cpu: '',
     gpu: '',
-    ram: '',
-    storage: '',
+    ram: 0,
+    storage: 0,
+    gameUnitSize: 'MB',
     platformIds: [],
     languageIds: [],
     subtitleIds: [],
@@ -77,6 +83,7 @@ export class AddGameModalComponent implements OnInit {
   constructor(
     private gameService: StoreControllerService,
     private adminService: AdminControllerService,
+    private systemReqService: SystemRequirementsControllerService,
     private http: HttpClient) {
   }
 
@@ -108,6 +115,12 @@ export class AddGameModalComponent implements OnInit {
     this.gameService.getAgeRating().subscribe({
       next: (ageRating) => {
         this.ageRatingResponse = ageRating;
+      }
+    })
+    this.systemReqService.getUnitSizes().subscribe({
+      next: (unitSize) => {
+        this.unitSizeResponse = unitSize;
+        console.log(unitSize);
       }
     })
   }
@@ -190,8 +203,6 @@ export class AddGameModalComponent implements OnInit {
     this.gameRequest.languageIds = [...this.selectedLanguages]
     this.gameRequest.subtitleIds = [...this.selectedSubtitles]
     this.gameRequest.ageRatingId = this.selectedAgeRating
-    console.log(this.gameRequest)
-    console.log(this.coverPhoto)
     this.adminService.addGame({
       body: this.gameRequest
     }).subscribe({
@@ -241,9 +252,6 @@ export class AddGameModalComponent implements OnInit {
       subtitleIds,
       ageRatingId} = this.gameRequest
 
-    const ramValue = Number(ram)
-    const storageValue = Number(storage)
-
     if (!title?.trim() &&
       !genresIds?.length &&
       !description?.trim() &&
@@ -253,8 +261,8 @@ export class AddGameModalComponent implements OnInit {
       !this.coverPhoto &&
       !cpu?.trim() &&
       !gpu?.trim() &&
-      !ram?.trim() &&
-      !storage?.trim() &&
+      ram != null &&
+      storage != null &&
       !platformIds?.length &&
       !languageIds?.length &&
       !subtitleIds?.length &&
@@ -289,12 +297,13 @@ export class AddGameModalComponent implements OnInit {
 
     if (!cpu?.trim() &&
       !gpu?.trim() &&
-      !ram?.trim() && !storage?.trim()) {
+      ram != null &&
+      storage != null) {
       this.errorMessage = 'System requirements must be filled in!';
       return false;
     }
 
-    if (ramValue <= 0 || storageValue <= 0) {
+    if (ram <= 0 || storage <= 0) {
       this.errorMessage = 'RAM or Storage cannot be negative or empty.';
       return false;
     }

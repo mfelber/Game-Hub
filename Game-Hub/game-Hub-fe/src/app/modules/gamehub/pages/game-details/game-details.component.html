@@ -46,7 +46,7 @@
 
         <div>
           <span>Release Date</span>
-          <b>{{ game.releaseYear }}</b>
+          <b>{{ game.releaseYear | date:'dd.MM.yyyy'}}</b>
         </div>
       </div>
 
@@ -65,7 +65,7 @@
 
       <div class="price" *ngIf="!game.discountPercent || game.discountPercent <= 0">
 
-        <h1 style="font-size: 30px">{{ game.price }} €</h1>
+        <h1 style="font-size: 30px" [ngClass]="{'free-price' : game.price === 0}">{{ game.price === 0 ? 'Free' : game.price + ' €' }}</h1>
 
       </div>
 
@@ -77,7 +77,7 @@
             *ngIf="!gameIsOwned"
             (click)="buyGame(game.gameId)"
             class="buy">
-            Buy Now
+            Buy Now || Add to library
             <i class="fa-solid fa-cart-shopping"></i>
           </button>
 
@@ -133,14 +133,14 @@
       <div>
         <span>RAM</span>
         <p>
-          {{ game.systemRequirements.ram }}
+          {{ game.systemRequirements.ram }} GB
         </p>
       </div>
 
       <div>
         <span>Storage</span>
         <p>
-          {{ game.systemRequirements.storage }}
+          {{ game.systemRequirements.storage }} {{game.systemRequirements.gameUnitSize}}
         </p>
       </div>
     </div>

@@ -36,16 +36,18 @@ public record GameRequest(
     @NotNull(message = "108")
     String gpu,
     @NotNull(message = "109")
-    String ram,
+    Integer ram,
     @NotNull(message = "110")
-    String storage,
+    Integer storage,
     @NotNull(message = "111")
-    Set<Long> platformIds,
+    String gameUnitSize,
     @NotNull(message = "112")
-    Set<Long> languageIds,
+    Set<Long> platformIds,
     @NotNull(message = "113")
-    Set<Long> subtitleIds,
+    Set<Long> languageIds,
     @NotNull(message = "114")
+    Set<Long> subtitleIds,
+    @NotNull(message = "115")
     Long ageRatingId
 
 ) {

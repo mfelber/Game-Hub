@@ -1,6 +1,6 @@
 package gamehub.game_Hub.Response;
 
-import gamehub.game_Hub.Module.User.Status;
+import gamehub.game_Hub.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

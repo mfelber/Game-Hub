@@ -1,7 +1,7 @@
 package gamehub.game_Hub.Request;
 
 
-import gamehub.game_Hub.Module.User.Location;
+import gamehub.game_Hub.enums.Location;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

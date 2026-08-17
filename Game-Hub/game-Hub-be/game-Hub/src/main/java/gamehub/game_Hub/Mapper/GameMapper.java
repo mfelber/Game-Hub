@@ -27,6 +27,7 @@ import gamehub.game_Hub.Response.GenreResponse;
 import gamehub.game_Hub.Response.LanguageResponse;
 import gamehub.game_Hub.Response.PlatformResponse;
 import gamehub.game_Hub.Response.SubtitleResponse;
+import gamehub.game_Hub.enums.GameUnitSize;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
@@ -60,6 +61,7 @@ public class GameMapper {
         .gpu(gameRequest.gpu())
         .ram(gameRequest.ram())
         .storage(gameRequest.storage())
+        .gameUnitSize(GameUnitSize.valueOf(gameRequest.gameUnitSize()))
         .build();
 
     boolean free = gameRequest.price() == 0;

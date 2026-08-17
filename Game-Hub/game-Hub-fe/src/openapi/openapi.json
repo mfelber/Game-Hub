@@ -1014,6 +1014,29 @@
         }
       }
     },
+    "/system-requirements/unit-sizes": {
+      "get": {
+        "tags": [
+          "system-requirements-controller"
+        ],
+        "operationId": "getUnitSizes",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UnitSizeResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/store/subtitles": {
       "get": {
         "tags": [
@@ -2130,6 +2153,7 @@
           "cpu",
           "description",
           "developer",
+          "gameUnitSize",
           "genresIds",
           "gpu",
           "languageIds",
@@ -2175,9 +2199,14 @@
             "type": "string"
           },
           "ram": {
-            "type": "string"
+            "type": "integer",
+            "format": "int32"
           },
           "storage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "gameUnitSize": {
             "type": "string"
           },
           "platformIds": {
@@ -2420,6 +2449,7 @@
           "cpu",
           "description",
           "developer",
+          "gameUnitSize",
           "genresIds",
           "gpu",
           "languageIds",
@@ -2472,9 +2502,14 @@
             "type": "string"
           },
           "ram": {
-            "type": "string"
+            "type": "integer",
+            "format": "int32"
           },
           "storage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "gameUnitSize": {
             "type": "string"
           },
           "platformIds": {
@@ -2645,6 +2680,14 @@
           }
         }
       },
+      "UnitSizeResponse": {
+        "type": "object",
+        "properties": {
+          "unitSizeName": {
+            "type": "string"
+          }
+        }
+      },
       "SubtitleResponse": {
         "required": [
           "id",
@@ -2807,13 +2850,20 @@
             "type": "string"
           },
           "ram": {
-            "type": "string"
+            "type": "integer",
+            "format": "int32"
           },
           "storage": {
-            "type": "string"
+            "type": "integer",
+            "format": "int32"
           },
-          "os": {
-            "type": "string"
+          "gameUnitSize": {
+            "type": "string",
+            "enum": [
+              "MB",
+              "GB",
+              "TB"
+            ]
           }
         }
       },

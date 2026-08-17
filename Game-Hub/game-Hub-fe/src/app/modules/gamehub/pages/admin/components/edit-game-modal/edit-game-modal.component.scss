@@ -44,7 +44,7 @@
 
 label {
   display: block;
-  color: #9ca3af;
+  color: #9ca3af!important;
   margin-bottom: 5px;
 }
 
@@ -137,7 +137,6 @@ textarea {
   font-size: .7rem;
 }
 
-
 .free-message{
   margin-top: 10px;
   color: #46d160;
@@ -145,6 +144,29 @@ textarea {
 
 .error{
   color: red;
+}
+
+.dropdown{
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown option{
+  background: #0f141f;
+  font-size: 14px;
+}
+
+.dropdown select{
+  border: 1px solid #333d52;
+  border-radius: 8px;
+  color: #ddd;
+  cursor: pointer;
+  padding: 9px 30px 12px 15px;
+  background: #0f141f;
+}
+
+.dropdown select:hover{
+  background: #0f141f;
 }
 
 .buttons {

@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -20,6 +19,10 @@ import gamehub.game_Hub.Module.CardColor;
 import gamehub.game_Hub.Module.Game;
 import gamehub.game_Hub.Module.Genre;
 import gamehub.game_Hub.Module.Level;
+import gamehub.game_Hub.enums.AccountType;
+import gamehub.game_Hub.enums.Location;
+import gamehub.game_Hub.enums.Role;
+import gamehub.game_Hub.enums.Status;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

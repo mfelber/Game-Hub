@@ -12,6 +12,10 @@ import {AdminControllerService} from '../../../../../../services/services/admin-
 import {HttpClient} from '@angular/common/http';
 import {GameUpdateRequest} from '../../../../../../services/models/game-update-request';
 import {GameRequest} from '../../../../../../services/models/game-request';
+import {UnitSizeResponse} from '../../../../../../services/models/unit-size-response';
+import {
+  SystemRequirementsControllerService
+} from '../../../../../../services/services/system-requirements-controller.service';
 
 @Component({
   selector: 'app-edit-game-modal',
@@ -54,8 +58,9 @@ export class EditGameModalComponent implements OnInit {
     discountPercent: null,
     cpu: '',
     gpu: '',
-    ram: '',
-    storage: '',
+    ram: 0,
+    storage: 0,
+    gameUnitSize: '',
     platformIds: [],
     languageIds: [],
     subtitleIds: [],
@@ -70,6 +75,7 @@ export class EditGameModalComponent implements OnInit {
   languageResponse: LanguageResponse[] = [];
   subtitleResponses: SubtitleResponse[] = [];
   ageRatingResponse: AgeRatingResponse[] = [];
+  unitSizeResponse: UnitSizeResponse[] = [];
 
   gameHasGenresIds: number[] = []
   selectedGenresIds: Set<number> = new Set<number>();
@@ -106,8 +112,9 @@ export class EditGameModalComponent implements OnInit {
       discountPercent: this.game.discountPercent ?? null,
       cpu: this.game.systemRequirements?.cpu ?? '',
       gpu: this.game.systemRequirements?.gpu ?? '',
-      ram: this.game.systemRequirements?.ram ?? '',
-      storage: this.game.systemRequirements?.storage ?? '',
+      ram: this.game.systemRequirements?.ram ?? 0,
+      storage: this.game.systemRequirements?.storage ?? 0,
+      gameUnitSize: this.game.systemRequirements?.gameUnitSize ?? '',
       platformIds: this.game.platforms?.map(os => os.id!) || [],
       languageIds: this.game.languages?.map(l => l.id!) || [],
       subtitleIds: this.game.subtitles?.map(sub => sub.id!) || [],
@@ -122,6 +129,7 @@ export class EditGameModalComponent implements OnInit {
   constructor(
     private gameService: StoreControllerService,
     private adminService: AdminControllerService,
+    private systemReqService: SystemRequirementsControllerService,
     private http: HttpClient) {
   }
 
@@ -149,6 +157,12 @@ export class EditGameModalComponent implements OnInit {
     this.gameService.getAgeRating().subscribe({
       next: (ageRating) => {
         this.ageRatingResponse = ageRating;
+      }
+    })
+    this.systemReqService.getUnitSizes().subscribe({
+      next: (unitSize) => {
+        this.unitSizeResponse = unitSize;
+        console.log(unitSize);
       }
     })
   }
@@ -305,9 +319,6 @@ export class EditGameModalComponent implements OnInit {
       storage
     } = this.updateGameRequest;
 
-    const ramValue = Number(ram)
-    const storageValue = Number(storage)
-
     if (!title?.trim() ||
       !publisher?.trim() ||
       !developer?.trim() ||
@@ -321,14 +332,15 @@ export class EditGameModalComponent implements OnInit {
       return false;
     }
 
-    if (ramValue <= 0 || storageValue <= 0) {
+    if (ram <= 0 || storage <= 0) {
       this.errorMessage = 'RAM or Storage cannot be negative or empty.';
       return false;
     }
 
     if (!cpu?.trim() &&
       !gpu?.trim() &&
-      !ram?.trim() && !storage?.trim()) {
+      ram != null &&
+      storage != null) {
       this.errorMessage = 'System requirements must be filled in!';
       return false;
     }
@@ -358,7 +370,7 @@ export class EditGameModalComponent implements OnInit {
       return false;
     }
 
-    if (price <= 0) {
+    if (price < 0) {
       this.errorMessage = 'Price must be greater than 0 for paid games.';
       return false;
     }

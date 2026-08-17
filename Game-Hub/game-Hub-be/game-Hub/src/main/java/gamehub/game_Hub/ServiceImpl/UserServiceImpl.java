@@ -1,6 +1,6 @@
 package gamehub.game_Hub.ServiceImpl;
 
-import static gamehub.game_Hub.Module.User.Status.*;
+import static gamehub.game_Hub.enums.Status.*;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -12,13 +12,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import gamehub.game_Hub.File.FileStorageService;
 import gamehub.game_Hub.Module.CardColor;
-import gamehub.game_Hub.Module.Flags.CommunityFlagType;
 import gamehub.game_Hub.Module.Genre;
-import gamehub.game_Hub.Module.Level;
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Repository.CardColorRepository;
-import gamehub.game_Hub.Repository.CommunityFlagTypeRepository;
-import gamehub.game_Hub.Repository.LevelRepository;
 import gamehub.game_Hub.Repository.genre.GenreRepository;
 import gamehub.game_Hub.Repository.user.UserRepository;
 import gamehub.game_Hub.Mapper.UserMapper;
