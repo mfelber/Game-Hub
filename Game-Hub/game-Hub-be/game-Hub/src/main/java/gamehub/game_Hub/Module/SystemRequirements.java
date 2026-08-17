@@ -1,7 +1,11 @@
 package gamehub.game_Hub.Module;
 
 
+import gamehub.game_Hub.enums.GameUnitSize;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -27,10 +31,12 @@ public class SystemRequirements {
 
   private String gpu;
 
-  private String ram;
+  private Integer ram;
 
-  private String storage;
+  private Integer storage;
 
-  private String os;
+  @Enumerated(EnumType.STRING)
+  @Column(name = "game_unit_size")
+  private GameUnitSize gameUnitSize;
 
 }

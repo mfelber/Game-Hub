@@ -4,9 +4,9 @@
 
 export interface SystemRequirements {
   cpu?: string;
+  gameUnitSize?: 'MB' | 'GB' | 'TB';
   gpu?: string;
   id?: number;
-  os?: string;
-  ram?: string;
-  storage?: string;
+  ram?: number;
+  storage?: number;
 }

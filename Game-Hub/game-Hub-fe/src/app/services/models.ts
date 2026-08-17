@@ -39,6 +39,7 @@ export type { StoreFlagsResponse } from './models/store-flags-response';
 export type { SubtitleResponse } from './models/subtitle-response';
 export type { SystemRequirements } from './models/system-requirements';
 export type { TokenExpiredResponse } from './models/token-expired-response';
+export type { UnitSizeResponse } from './models/unit-size-response';
 export type { UserCommunityResponse } from './models/user-community-response';
 export type { UserLibraryResponse } from './models/user-library-response';
 export type { UserPrivateResponse } from './models/user-private-response';

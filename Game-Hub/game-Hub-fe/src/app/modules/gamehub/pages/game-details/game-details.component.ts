@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {StoreControllerService} from '../../../../services/services';
-import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
+import {DatePipe, NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {GameResponse} from '../../../../services/models/game-response';
 
 @Component({
@@ -10,7 +10,8 @@ import {GameResponse} from '../../../../services/models/game-response';
     NgIf,
     NgForOf,
     NgStyle,
-    NgClass
+    NgClass,
+    DatePipe
   ],
   templateUrl: './game-details.component.html',
   styleUrl: './game-details.component.scss'

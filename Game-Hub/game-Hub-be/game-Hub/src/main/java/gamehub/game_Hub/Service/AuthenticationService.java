@@ -1,11 +1,10 @@
 package gamehub.game_Hub.Service;
 
-import static gamehub.game_Hub.Module.User.AccountType.ADULT;
-import static gamehub.game_Hub.Module.User.AccountType.CHILD;
+import static gamehub.game_Hub.enums.AccountType.ADULT;
+import static gamehub.game_Hub.enums.AccountType.CHILD;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -21,9 +20,9 @@ import gamehub.game_Hub.Module.Flags.StoreFlagType;
 import gamehub.game_Hub.Module.Flags.UserCommunityFlag;
 import gamehub.game_Hub.Module.Flags.UserStoreFlag;
 import gamehub.game_Hub.Module.Level;
-import gamehub.game_Hub.Module.User.Location;
-import gamehub.game_Hub.Module.User.Role;
-import gamehub.game_Hub.Module.User.Status;
+import gamehub.game_Hub.enums.Location;
+import gamehub.game_Hub.enums.Role;
+import gamehub.game_Hub.enums.Status;
 import gamehub.game_Hub.Repository.CardColorRepository;
 import gamehub.game_Hub.Repository.CommunityFlagTypeRepository;
 import gamehub.game_Hub.Repository.LevelRepository;

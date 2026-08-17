@@ -4,5 +4,6 @@
     <file url="file://$PROJECT_DIR$/game-Hub/src/main/resources/db/migration/V11__Age_rating.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/game-Hub/src/main/resources/db/migration/V15__Create_User_Library_table.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/game-Hub/src/main/resources/db/migration/V1__Initial_tables.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/game-Hub/src/main/resources/db/migration/V21__Add_game_untit_size_refactor_game_data.sql" dialect="PostgreSQL" />
   </component>
 </project>

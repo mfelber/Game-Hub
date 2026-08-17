@@ -15,6 +15,7 @@ import { CommunityControllerService } from './services/community-controller.serv
 import { AuthenticationService } from './services/authentication.service';
 import { WishlistControllerService } from './services/wishlist-controller.service';
 import { UserLevelControllerService } from './services/user-level-controller.service';
+import { SystemRequirementsControllerService } from './services/system-requirements-controller.service';
 import { LocationControllerService } from './services/location-controller.service';
 import { FlagsControllerService } from './services/flags-controller.service';
 import { CardColorControllerService } from './services/card-color-controller.service';
@@ -36,6 +37,7 @@ import { CardColorControllerService } from './services/card-color-controller.ser
     AuthenticationService,
     WishlistControllerService,
     UserLevelControllerService,
+    SystemRequirementsControllerService,
     LocationControllerService,
     FlagsControllerService,
     CardColorControllerService,

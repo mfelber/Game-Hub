@@ -8,15 +8,16 @@ export interface GameRequest {
   description: string;
   developer: string;
   gameId?: number;
+  gameUnitSize: string;
   genresIds: Array<number>;
   gpu: string;
   languageIds: Array<number>;
   platformIds: Array<number>;
   price: number;
   publisher: string;
-  ram: string;
+  ram: number;
   releaseYear: string;
-  storage: string;
+  storage: number;
   subtitleIds: Array<number>;
   title: string;
 }

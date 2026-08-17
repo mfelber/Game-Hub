@@ -30,9 +30,11 @@ public record GameUpdateRequest (
   @NotNull
   String gpu,
   @NotNull
-  String ram,
+  Integer ram,
   @NotNull
-  String storage,
+  Integer storage,
+  @NotNull
+  String gameUnitSize,
   @NotNull
   Set<Long> platformIds,
   @NotNull

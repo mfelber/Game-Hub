@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import gamehub.game_Hub.Module.User.Location;
+import gamehub.game_Hub.enums.Location;
 import gamehub.game_Hub.Response.LocationResponse;
 import gamehub.game_Hub.Service.LocationService;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +17,10 @@ public class LocationServiceImpl implements LocationService {
 
   @Override
   public List<LocationResponse> findAllLocations() {
-    return Arrays.stream(Location.values()).map(location -> new LocationResponse(location.name(), location.getLocationIcon())).collect(
-        Collectors.toList());
+    return Arrays.stream(Location.values())
+        .map(location -> new LocationResponse(location.name(), location.getLocationIcon()))
+        .collect(
+            Collectors.toList());
   }
 
 }

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {NgForOf, NgIf, NgStyle} from '@angular/common';
+import {DatePipe, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {ActivatedRoute} from '@angular/router';
 import {StoreControllerService} from '../../../../services/services';
 import {GameResponse} from '../../../../services/models/game-response';
@@ -11,7 +11,8 @@ import {UserPublicProfileComponent} from '../user-public-profile/user-public-pro
   imports: [
     NgForOf,
     NgIf,
-    NgStyle
+    NgStyle,
+    DatePipe
   ],
   templateUrl: './game-details-library.component.html',
   styleUrl: './game-details-library.component.scss'

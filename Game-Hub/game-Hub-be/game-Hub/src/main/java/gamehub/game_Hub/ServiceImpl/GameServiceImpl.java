@@ -1,6 +1,6 @@
 package gamehub.game_Hub.ServiceImpl;
 
-import static gamehub.game_Hub.Module.User.AccountType.CHILD;
+import static gamehub.game_Hub.enums.AccountType.CHILD;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -50,6 +50,7 @@ import gamehub.game_Hub.Request.GameRequest;
 import gamehub.game_Hub.Request.GameUpdateRequest;
 import gamehub.game_Hub.Response.GameResponse;
 import gamehub.game_Hub.Service.GameService;
+import gamehub.game_Hub.enums.GameUnitSize;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
@@ -307,8 +308,6 @@ public class GameServiceImpl implements GameService {
     AgeRating ageRating = ageRatingRepository.findById(gameUpdateRequest.ageRatingId())
         .orElseThrow(() -> new EntityNotFoundException("Age rating not found"));
 
-    // discounted price and set isInDiscount, set free game when discount is 100%
-    // boolean free = gameRequest.price() == 0;
     boolean freeGame = gameUpdateRequest.price() == 0 ||  (gameUpdateRequest.discountPercent() != null && gameUpdateRequest.discountPercent() == 100);
     boolean gameHasDiscount = gameUpdateRequest.discountPercent() != null;
 
@@ -328,7 +327,6 @@ public class GameServiceImpl implements GameService {
     game.setPublisher(gameUpdateRequest.publisher());
     game.setDeveloper(gameUpdateRequest.developer());
     game.setReleaseYear(gameUpdateRequest.releaseYear());
-
     game.setDiscountPercent(gameUpdateRequest.discountPercent());
     game.setDiscountPrice(discountedPrice);
     game.setHasDiscount(gameHasDiscount);
@@ -338,15 +336,19 @@ public class GameServiceImpl implements GameService {
     game.setLanguages(languages);
     game.setSubtitles(subtitles);
     game.setAgeRating(ageRating);
-    
-    SystemRequirements systemRequirements = SystemRequirements.builder()
-        .cpu(gameUpdateRequest.cpu())
-        .gpu(gameUpdateRequest.gpu())
-        .ram(gameUpdateRequest.ram())
-        .storage(gameUpdateRequest.storage())
-        .build();
 
-    game.setSystemRequirements(systemRequirements);
+    SystemRequirements systemRequirements = game.getSystemRequirements();
+    if (systemRequirements == null) {
+      systemRequirements = new SystemRequirements();
+      game.setSystemRequirements(systemRequirements);
+    }
+
+    systemRequirements.setCpu(gameUpdateRequest.cpu());
+    systemRequirements.setGpu(gameUpdateRequest.gpu());
+    systemRequirements.setRam(gameUpdateRequest.ram());
+    systemRequirements.setStorage(gameUpdateRequest.storage());
+    systemRequirements.setGameUnitSize(GameUnitSize.valueOf(gameUpdateRequest.gameUnitSize()));
+
     return gameRepository.save(game).getId();
   }
 

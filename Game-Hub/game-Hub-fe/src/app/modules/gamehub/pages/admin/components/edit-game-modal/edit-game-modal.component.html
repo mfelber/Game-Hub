@@ -151,11 +151,20 @@
         </div>
         <div class="section">
           <label>RAM</label>
-          <input [(ngModel)]="updateGameRequest.ram" type="text">
+          <input [(ngModel)]="updateGameRequest.ram" type="number">
         </div>
-        <div class="section">
-          <label>Storage</label>
-          <input [(ngModel)]="updateGameRequest.storage" type="text">
+        <div class="form-grid" style="margin-top: 25px;">
+          <div>
+            <label>Storage</label>
+            <input [(ngModel)]="updateGameRequest.storage" type="number">
+          </div>
+          <div class="dropdown">
+            <label>Unit size</label>
+            <select [(ngModel)]="updateGameRequest.gameUnitSize">
+              <option *ngFor="let unitSize of unitSizeResponse" [ngValue]="unitSize.unitSizeName">{{unitSize.unitSizeName}}</option>
+            </select>
+          </div>
+
         </div>
 
       </div>
