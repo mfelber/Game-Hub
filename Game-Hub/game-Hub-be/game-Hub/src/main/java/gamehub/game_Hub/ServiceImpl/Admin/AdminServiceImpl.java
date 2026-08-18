@@ -1,6 +1,8 @@
 package gamehub.game_Hub.ServiceImpl.Admin;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,7 +18,10 @@ import gamehub.game_Hub.Mapper.ReportMapper;
 import gamehub.game_Hub.Mapper.UserMapper;
 import gamehub.game_Hub.Module.Game;
 import gamehub.game_Hub.Module.User.User;
+import gamehub.game_Hub.Response.Admin.AccountStatusResponse;
 import gamehub.game_Hub.Response.Admin.AdminUserResponse;
+import gamehub.game_Hub.Response.Admin.RoleResponse;
+import gamehub.game_Hub.enums.AccountStatus;
 import gamehub.game_Hub.enums.Role;
 import gamehub.game_Hub.Repository.ReportRepository;
 import gamehub.game_Hub.Repository.UserLibraryRepository;
@@ -32,7 +37,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class DashboardServiceImpl implements AdminService {
+public class AdminServiceImpl implements AdminService {
 
   private final GameRepository gameRepository;
 
@@ -59,8 +64,12 @@ public class DashboardServiceImpl implements AdminService {
         .totalUsers(userRepository.countByRole(Role.USER))
         .pendingReports(reportRepository.countReportsByStatus_Id(1L))
         .totalReviews(100L)
-        .recentUsers(userRepository.findTop5ByRoleNotOrderByCreatedAtDesc(Role.ADMIN).stream().map(userMapper::toRecentUserResponse).toList())
-        .latestReports(reportRepository.findTop5ByOrderByCreatedAtDesc().stream().map(reportMapper::toReportResponse).toList())
+        .recentUsers(userRepository.findTop5ByRoleNotOrderByCreatedAtDesc(Role.ADMIN)
+            .stream()
+            .map(userMapper::toRecentUserResponse)
+            .toList())
+        .latestReports(
+            reportRepository.findTop5ByOrderByCreatedAtDesc().stream().map(reportMapper::toReportResponse).toList())
         .build();
   }
 
@@ -84,14 +93,16 @@ public class DashboardServiceImpl implements AdminService {
 
   @Override
   public GameResponse getGameInfo(final Long gameId) {
-    Game game = gameRepository.findById(gameId).orElseThrow(() -> new EntityNotFoundException("Game with id " + gameId + " was not found"));
+    Game game = gameRepository.findById(gameId)
+        .orElseThrow(() -> new EntityNotFoundException("Game with id " + gameId + " was not found"));
     return gameMapper.toGameResponse(game);
   }
 
   @Override
   @Transactional
   public void deleteGame(final Long gameId) {
-    Game game = gameRepository.findById(gameId).orElseThrow(() -> new EntityNotFoundException("Game with id " + gameId + " was not found"));
+    Game game = gameRepository.findById(gameId)
+        .orElseThrow(() -> new EntityNotFoundException("Game with id " + gameId + " was not found"));
     wishlistRepository.deleteAllByGame(game);
     userLibraryRepository.deleteAllByGame(game);
     gameRepository.delete(game);
@@ -112,6 +123,26 @@ public class DashboardServiceImpl implements AdminService {
         users.isFirst(),
         users.isLast()
     );
+  }
+
+  @Override
+  public List<RoleResponse> getAllRoles() {
+    return Arrays.stream(Role.values()).map(role -> new RoleResponse(role.name())).collect(Collectors.toList());
+  }
+
+  @Override
+  public List<AccountStatusResponse> getAllAccountStatuses() {
+    return Arrays.stream(AccountStatus.values())
+        .map(accountStatus -> new AccountStatusResponse(accountStatus.name()))
+        .collect(
+            Collectors.toList());
+  }
+
+  @Override
+  public AdminUserResponse getUserInfo(final Long userId) {
+    User user = userRepository.findById(userId)
+        .orElseThrow(() -> new EntityNotFoundException("User with id: " + userId + " was not found"));
+    return userMapper.toAdminUserResponse(user);
   }
 
 }

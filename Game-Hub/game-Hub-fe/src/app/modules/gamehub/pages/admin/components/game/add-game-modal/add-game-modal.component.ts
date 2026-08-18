@@ -1,20 +1,20 @@
 import {Component, ElementRef, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {GameRequest} from '../../../../../../services/models/game-request';
-import {GenreResponse} from '../../../../../../services/models/genre-response';
-import {PlatformResponse} from '../../../../../../services/models/platform-response';
-import {LanguageResponse} from '../../../../../../services/models/language-response';
-import {SubtitleResponse} from '../../../../../../services/models/subtitle-response';
+import {GameRequest} from '../../../../../../../services/models/game-request';
+import {GenreResponse} from '../../../../../../../services/models/genre-response';
+import {PlatformResponse} from '../../../../../../../services/models/platform-response';
+import {LanguageResponse} from '../../../../../../../services/models/language-response';
+import {SubtitleResponse} from '../../../../../../../services/models/subtitle-response';
 import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
-import {StoreControllerService} from '../../../../../../services/services/store-controller.service';
+import {StoreControllerService} from '../../../../../../../services/services/store-controller.service';
 import {MatSlideToggle} from '@angular/material/slide-toggle';
-import {AgeRatingResponse} from '../../../../../../services/models/age-rating-response';
-import {AdminControllerService} from '../../../../../../services/services/admin-controller.service';
+import {AgeRatingResponse} from '../../../../../../../services/models/age-rating-response';
+import {AdminControllerService} from '../../../../../../../services/services/admin-controller.service';
 import {HttpClient} from '@angular/common/http';
 import {
   SystemRequirementsControllerService
-} from '../../../../../../services/services/system-requirements-controller.service';
-import {UnitSizeResponse} from '../../../../../../services/models/unit-size-response';
+} from '../../../../../../../services/services/system-requirements-controller.service';
+import {UnitSizeResponse} from '../../../../../../../services/models/unit-size-response';
 
 @Component({
   selector: 'app-add-game-modal',

@@ -1989,6 +1989,60 @@
         }
       }
     },
+    "/admin/user/info/{userId}": {
+      "get": {
+        "tags": [
+          "admin-controller"
+        ],
+        "operationId": "getUserInfo",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminUserResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/roles": {
+      "get": {
+        "tags": [
+          "admin-controller"
+        ],
+        "operationId": "getAllRoles",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RoleResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/admin/game/info/{gameId}": {
       "get": {
         "tags": [
@@ -2097,6 +2151,29 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/PageResponseGamePreviewResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/account-statuses": {
+      "get": {
+        "tags": [
+          "admin-controller"
+        ],
+        "operationId": "getAllAccountStatuses",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AccountStatusResponse"
+                  }
                 }
               }
             }
@@ -3439,12 +3516,32 @@
               "format": "byte"
             }
           },
+          "profileColor": {
+            "type": "string"
+          },
+          "bio": {
+            "type": "string"
+          },
           "role": {
             "type": "string",
             "enum": [
               "USER",
               "ADMIN"
             ]
+          },
+          "accountType": {
+            "type": "string",
+            "enum": [
+              "ADULT",
+              "CHILD"
+            ]
+          },
+          "accountLevel": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "location": {
+            "$ref": "#/components/schemas/LocationResponse"
           },
           "accountStatus": {
             "type": "string",
@@ -3459,6 +3556,10 @@
             "format": "date-time"
           },
           "lastLogin": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastModifiedAt": {
             "type": "string",
             "format": "date-time"
           }
@@ -3494,6 +3595,14 @@
           },
           "last": {
             "type": "boolean"
+          }
+        }
+      },
+      "RoleResponse": {
+        "type": "object",
+        "properties": {
+          "roleName": {
+            "type": "string"
           }
         }
       },
@@ -3604,6 +3713,14 @@
           },
           "last": {
             "type": "boolean"
+          }
+        }
+      },
+      "AccountStatusResponse": {
+        "type": "object",
+        "properties": {
+          "accountStatus": {
+            "type": "string"
           }
         }
       }

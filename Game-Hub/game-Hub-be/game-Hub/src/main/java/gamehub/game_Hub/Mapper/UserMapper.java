@@ -201,10 +201,19 @@ public class UserMapper {
         .userName(user.getName())
         .email(user.getEmail())
         .profilePicture(FileUtils.readCoverFromLocation(user.getUserProfilePicture()))
+        .profileColor(user.getProfileColor())
+        .bio(user.getBio())
         .role(user.getRole())
+        .accountType(user.getAccountType())
+        .accountLevel(user.getLevel().getLevelNumber())
+        .location(new LocationResponse(
+            user.getLocation() != null ? user.getLocation().name() : null,
+            user.getLocation() != null ? "assets/flags/" + user.getLocation().name().toLowerCase() + ".svg" : null
+        ))
         .accountStatus(user.getAccountStatus())
         .registered(user.getCreatedAt())
         .lastLogin(user.getLastLogin())
+        .lastModifiedAt(user.getLastModifiedAt())
         .build();
   }
 

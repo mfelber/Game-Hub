@@ -1,5 +1,7 @@
 package gamehub.game_Hub.Controller.Admin;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,8 +19,10 @@ import org.springframework.web.multipart.MultipartFile;
 import gamehub.game_Hub.Common.PageResponse;
 import gamehub.game_Hub.Request.GameRequest;
 import gamehub.game_Hub.Request.GameUpdateRequest;
+import gamehub.game_Hub.Response.Admin.AccountStatusResponse;
 import gamehub.game_Hub.Response.Admin.AdminUserResponse;
 import gamehub.game_Hub.Response.Admin.DashboardResponse;
+import gamehub.game_Hub.Response.Admin.RoleResponse;
 import gamehub.game_Hub.Response.GamePreviewResponse;
 import gamehub.game_Hub.Response.GameResponse;
 import gamehub.game_Hub.Service.Admin.AdminService;
@@ -99,4 +103,22 @@ public class AdminController {
     return ResponseEntity.ok(gameService.update(gameId, gameUpdateRequest));
   }
 
+
+  @GetMapping("/user/info/{userId}")
+  public AdminUserResponse getUserInfo(@PathVariable Long userId) {
+    return adminService.getUserInfo(userId);
+  }
+
+
+
+
+  @GetMapping("/roles")
+  public ResponseEntity<List<RoleResponse>> getAllRoles() {
+    return ResponseEntity.ok(adminService.getAllRoles());
+  }
+
+  @GetMapping("/account-statuses")
+  public ResponseEntity<List<AccountStatusResponse>> getAllAccountStatuses() {
+    return ResponseEntity.ok(adminService.getAllAccountStatuses());
+  }
 }

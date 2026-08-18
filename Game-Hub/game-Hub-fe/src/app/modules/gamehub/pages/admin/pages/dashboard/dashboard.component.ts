@@ -44,4 +44,11 @@ export class DashboardComponent implements OnInit {
     })
   }
 
+  navigateToGames() {
+    this.router.navigate(['/gamehub/admin/games']);
+  }
+
+  navigateToUsers() {
+    this.router.navigate(['/gamehub/admin/users']);
+  }
 }

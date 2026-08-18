@@ -56,8 +56,9 @@ export class LoginComponent {
           this.setUserToOnline();
           return;
         }
-        this.router.navigate(['/gamehub/admin/dashboard']);
 
+        this.router.navigate(['/gamehub/admin/dashboard']);
+        this.setUserToOnline();
 
       },
       error: (err) => {

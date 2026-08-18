@@ -11,22 +11,31 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { AccountStatusResponse } from '../models/account-status-response';
 import { addGame } from '../fn/admin-controller/add-game';
 import { AddGame$Params } from '../fn/admin-controller/add-game';
+import { AdminUserResponse } from '../models/admin-user-response';
 import { DashboardResponse } from '../models/dashboard-response';
 import { deleteGame } from '../fn/admin-controller/delete-game';
 import { DeleteGame$Params } from '../fn/admin-controller/delete-game';
 import { GameResponse } from '../models/game-response';
+import { getAllAccountStatuses } from '../fn/admin-controller/get-all-account-statuses';
+import { GetAllAccountStatuses$Params } from '../fn/admin-controller/get-all-account-statuses';
 import { getAllGames } from '../fn/admin-controller/get-all-games';
 import { GetAllGames$Params } from '../fn/admin-controller/get-all-games';
+import { getAllRoles } from '../fn/admin-controller/get-all-roles';
+import { GetAllRoles$Params } from '../fn/admin-controller/get-all-roles';
 import { getAllUsers } from '../fn/admin-controller/get-all-users';
 import { GetAllUsers$Params } from '../fn/admin-controller/get-all-users';
 import { getGameInfo } from '../fn/admin-controller/get-game-info';
 import { GetGameInfo$Params } from '../fn/admin-controller/get-game-info';
+import { getUserInfo } from '../fn/admin-controller/get-user-info';
+import { GetUserInfo$Params } from '../fn/admin-controller/get-user-info';
 import { loadDashboardData } from '../fn/admin-controller/load-dashboard-data';
 import { LoadDashboardData$Params } from '../fn/admin-controller/load-dashboard-data';
 import { PageResponseAdminUserResponse } from '../models/page-response-admin-user-response';
 import { PageResponseGamePreviewResponse } from '../models/page-response-game-preview-response';
+import { RoleResponse } from '../models/role-response';
 import { updateGame } from '../fn/admin-controller/update-game';
 import { UpdateGame$Params } from '../fn/admin-controller/update-game';
 import { uploadGameCoverImage } from '../fn/admin-controller/upload-game-cover-image';
@@ -142,6 +151,56 @@ export class AdminControllerService extends BaseService {
     );
   }
 
+  /** Path part for operation `getUserInfo()` */
+  static readonly GetUserInfoPath = '/admin/user/info/{userId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getUserInfo()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getUserInfo$Response(params: GetUserInfo$Params, context?: HttpContext): Observable<StrictHttpResponse<AdminUserResponse>> {
+    return getUserInfo(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getUserInfo$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getUserInfo(params: GetUserInfo$Params, context?: HttpContext): Observable<AdminUserResponse> {
+    return this.getUserInfo$Response(params, context).pipe(
+      map((r: StrictHttpResponse<AdminUserResponse>): AdminUserResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `getAllRoles()` */
+  static readonly GetAllRolesPath = '/admin/roles';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAllRoles()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllRoles$Response(params?: GetAllRoles$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<RoleResponse>>> {
+    return getAllRoles(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getAllRoles$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllRoles(params?: GetAllRoles$Params, context?: HttpContext): Observable<Array<RoleResponse>> {
+    return this.getAllRoles$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<RoleResponse>>): Array<RoleResponse> => r.body)
+    );
+  }
+
   /** Path part for operation `getGameInfo()` */
   static readonly GetGameInfoPath = '/admin/game/info/{gameId}';
 
@@ -214,6 +273,31 @@ export class AdminControllerService extends BaseService {
   getAllGames(params?: GetAllGames$Params, context?: HttpContext): Observable<PageResponseGamePreviewResponse> {
     return this.getAllGames$Response(params, context).pipe(
       map((r: StrictHttpResponse<PageResponseGamePreviewResponse>): PageResponseGamePreviewResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `getAllAccountStatuses()` */
+  static readonly GetAllAccountStatusesPath = '/admin/account-statuses';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAllAccountStatuses()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllAccountStatuses$Response(params?: GetAllAccountStatuses$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<AccountStatusResponse>>> {
+    return getAllAccountStatuses(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getAllAccountStatuses$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllAccountStatuses(params?: GetAllAccountStatuses$Params, context?: HttpContext): Observable<Array<AccountStatusResponse>> {
+    return this.getAllAccountStatuses$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<AccountStatusResponse>>): Array<AccountStatusResponse> => r.body)
     );
   }
 

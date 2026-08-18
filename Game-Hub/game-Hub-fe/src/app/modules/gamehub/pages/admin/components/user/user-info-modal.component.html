@@ -1,0 +1,119 @@
+<div class="modal-backdrop">
+  <div class="user-modal">
+    <button (click)="close.emit()" class="close-btn">&times;</button>
+
+
+  <h2>User Information</h2>
+  <div class="profile-header">
+    <div class="avatar-wrapper">
+
+      <img *ngIf="user.profilePicture" [src]="getProfilePicture(user)" class="avatar">
+
+      <img *ngIf="!user.profilePicture"
+           src="../../../../../assets/profilePicture/default_profile_picture.svg"
+           [ngStyle]="{'background-color': user.profileColor}" class="avatar"/>
+    </div>
+
+    <div class="profile-title">
+      <h3>{{user.userName}}</h3>
+      <span class="status" [ngClass]="{
+      'active': user.accountStatus === 'ACTIVE',
+      'banned': user.accountStatus === 'BANNED',
+      'disabled': user.accountStatus === 'DISABLED',
+      }">{{user.accountStatus}} </span>
+    </div>
+  </div>
+
+<!-- PERSONAL INFORMATION -->
+  <div class="section">
+    <h4>
+      Personal Information
+    </h4>
+
+    <div class="info-grid">
+
+      <div class="info-item">
+        <span>Username</span>
+        <strong>{{ user.userName }}</strong>
+      </div>
+
+      <div class="info-item">
+        <span>Full Name</span>
+        <strong>{{ user.firstName }} {{user.lastName}}</strong>
+      </div>
+
+      <div class="info-item">
+        <span>Email</span>
+        <strong>{{user.email}}</strong>
+      </div>
+
+      <div class="info-item">
+        <span>Role</span>
+        <strong>{{user.role}}</strong>
+      </div>
+    </div>
+  </div>
+
+<!-- ACCOUNT INFORMATION -->
+  <div class="section">
+    <h4> Account Information </h4>
+
+    <div class="info-grid">
+
+      <div class="info-item">
+        <span>Account Status</span>
+        <strong>{{user.accountStatus}}</strong>
+      </div>
+
+      <div class="info-item">
+        <span>Account type</span>
+        <strong>{{user.accountType}}</strong>
+      </div>
+
+      <div class="info-item">
+        <span>Account Level</span>
+        <strong>{{user.accountLevel}}</strong>
+      </div>
+    </div>
+  </div>
+
+<!-- PROFILE INFORMATION -->
+  <div class="section">
+    <h4> Profile </h4>
+
+    <div class="info-grid">
+      <div class="info-item">
+        <span> Location </span>
+        <strong>{{user.location?.name}}</strong>
+      </div>
+
+      <div class="info-item">
+        <span> Registered </span>
+        <strong>{{user.registered | date: 'dd.MM.yyyy'}}</strong>
+      </div>
+
+      <div class="info-item">
+        <span> Last Login </span>
+        <strong>{{user.lastLogin | date: 'dd.MM.yyyy'}}</strong>
+      </div>
+
+      <div class="info-item">
+        <span> Last Modified </span>
+        <strong> {{user.lastModifiedAt | date: 'dd.MM.yyyy'}}</strong>
+      </div>
+
+      <div class="bio">
+        <span> Bio </span>
+        <strong *ngIf="!user.bio">The user hasn't set a bio</strong>
+        <strong>{{user.bio}}</strong>
+      </div>
+
+    </div>
+  </div>
+    <div class="buttons">
+      <button class="cancel" (click)="close.emit()">Close</button>
+    </div>
+  </div>
+
+
+</div>
