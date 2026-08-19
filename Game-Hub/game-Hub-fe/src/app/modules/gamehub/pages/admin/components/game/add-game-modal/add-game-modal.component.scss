@@ -12,7 +12,7 @@
   width: 700px;
   max-height: 90vh;
   overflow-y: auto;
-  background: #161B22;
+  background: #151b27;
   color: white;
   padding: 30px;
   border-radius: 16px;
@@ -166,8 +166,17 @@ textarea {
   color: white;
 }
 
+.cancel:hover {
+  background: #46526b;
+}
+
 .add {
   background: #16a34a;
+  color: white;
+}
+
+.add:hover {
+  background: #15803d;
   color: white;
 }
 

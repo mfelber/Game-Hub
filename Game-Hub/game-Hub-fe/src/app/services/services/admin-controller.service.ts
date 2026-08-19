@@ -15,6 +15,10 @@ import { AccountStatusResponse } from '../models/account-status-response';
 import { addGame } from '../fn/admin-controller/add-game';
 import { AddGame$Params } from '../fn/admin-controller/add-game';
 import { AdminUserResponse } from '../models/admin-user-response';
+import { banUser } from '../fn/admin-controller/ban-user';
+import { BanUser$Params } from '../fn/admin-controller/ban-user';
+import { changeRole } from '../fn/admin-controller/change-role';
+import { ChangeRole$Params } from '../fn/admin-controller/change-role';
 import { DashboardResponse } from '../models/dashboard-response';
 import { deleteGame } from '../fn/admin-controller/delete-game';
 import { DeleteGame$Params } from '../fn/admin-controller/delete-game';
@@ -36,6 +40,8 @@ import { LoadDashboardData$Params } from '../fn/admin-controller/load-dashboard-
 import { PageResponseAdminUserResponse } from '../models/page-response-admin-user-response';
 import { PageResponseGamePreviewResponse } from '../models/page-response-game-preview-response';
 import { RoleResponse } from '../models/role-response';
+import { unBanUser } from '../fn/admin-controller/un-ban-user';
+import { UnBanUser$Params } from '../fn/admin-controller/un-ban-user';
 import { updateGame } from '../fn/admin-controller/update-game';
 import { UpdateGame$Params } from '../fn/admin-controller/update-game';
 import { uploadGameCoverImage } from '../fn/admin-controller/upload-game-cover-image';
@@ -45,6 +51,31 @@ import { UploadGameCoverImage$Params } from '../fn/admin-controller/upload-game-
 export class AdminControllerService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
+  }
+
+  /** Path part for operation `unBanUser()` */
+  static readonly UnBanUserPath = '/admin/unban/{userId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `unBanUser()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  unBanUser$Response(params: UnBanUser$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return unBanUser(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `unBanUser$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  unBanUser(params: UnBanUser$Params, context?: HttpContext): Observable<number> {
+    return this.unBanUser$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
   }
 
   /** Path part for operation `updateGame()` */
@@ -68,6 +99,56 @@ export class AdminControllerService extends BaseService {
    */
   updateGame(params: UpdateGame$Params, context?: HttpContext): Observable<number> {
     return this.updateGame$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `changeRole()` */
+  static readonly ChangeRolePath = '/admin/change-role/{userId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `changeRole()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  changeRole$Response(params: ChangeRole$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return changeRole(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `changeRole$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  changeRole(params: ChangeRole$Params, context?: HttpContext): Observable<number> {
+    return this.changeRole$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `banUser()` */
+  static readonly BanUserPath = '/admin/ban/{userId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `banUser()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  banUser$Response(params: BanUser$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return banUser(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `banUser$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  banUser(params: BanUser$Params, context?: HttpContext): Observable<number> {
+    return this.banUser$Response(params, context).pipe(
       map((r: StrictHttpResponse<number>): number => r.body)
     );
   }

@@ -1,4 +1,4 @@
-.modal-backdrop{
+.modal-backdrop {
   position: fixed;
   inset: 0;
   display: flex;
@@ -8,8 +8,8 @@
   z-index: 9999;
 }
 
-.delete-modal{
-  width: 550px;
+.change-role-modal {
+  width: auto;
   max-width: 95%;
   max-height: 90vh;
   overflow-y: auto;
@@ -20,17 +20,17 @@
   position: relative;
 }
 
-.delete-modal h2 {
+.change-role-modal h2 {
   margin-bottom: 20px;
   font-size: 24px;
 }
 
-.delete-modal p {
+.change-role-modal p {
   color: #a7adbd;
   line-height: 1.5;
 }
 
-.game-name {
+.user-name {
   color: white;
 }
 
@@ -58,11 +58,16 @@
   background: #46526b;
 }
 
-.delete {
-  background: #dc2626;
+.change-role {
+  background: #16a34a;
   color: white;
 }
 
-.delete:hover {
-  background: #ef4444;
+.change-role:hover {
+  background: #15803d;
+  color: white;
+}
+
+.warning {
+  color: #ffc107;
 }

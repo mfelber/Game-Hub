@@ -13,14 +13,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import gamehub.game_Hub.Common.PageResponse;
+import gamehub.game_Hub.Email.EmailService;
+import gamehub.game_Hub.Email.EmailTemplate;
 import gamehub.game_Hub.Mapper.GameMapper;
 import gamehub.game_Hub.Mapper.ReportMapper;
 import gamehub.game_Hub.Mapper.UserMapper;
+import gamehub.game_Hub.Module.BanHistory;
 import gamehub.game_Hub.Module.Game;
+import gamehub.game_Hub.Module.Report.ReportReason;
 import gamehub.game_Hub.Module.User.User;
+import gamehub.game_Hub.Repository.BanHistoryRepository;
+import gamehub.game_Hub.Repository.ReportReasonRepository;
+import gamehub.game_Hub.Request.BanUserRequest;
 import gamehub.game_Hub.Response.Admin.AccountStatusResponse;
 import gamehub.game_Hub.Response.Admin.AdminUserResponse;
 import gamehub.game_Hub.Response.Admin.RoleResponse;
+import gamehub.game_Hub.Response.ReportReasonResponse;
 import gamehub.game_Hub.enums.AccountStatus;
 import gamehub.game_Hub.enums.Role;
 import gamehub.game_Hub.Repository.ReportRepository;
@@ -32,6 +40,7 @@ import gamehub.game_Hub.Response.Admin.DashboardResponse;
 import gamehub.game_Hub.Response.GamePreviewResponse;
 import gamehub.game_Hub.Response.GameResponse;
 import gamehub.game_Hub.Service.Admin.AdminService;
+import jakarta.mail.MessagingException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
@@ -54,6 +63,12 @@ public class AdminServiceImpl implements AdminService {
   private final WishlistRepository wishlistRepository;
 
   private final UserLibraryRepository userLibraryRepository;
+
+  private final ReportReasonRepository reportReasonRepository;
+
+  private final BanHistoryRepository banHistoryRepository;
+
+  private final EmailService emailService;
 
   @Override
   public DashboardResponse loadDashboardData(final Authentication connectedUser, final int page,
@@ -143,6 +158,70 @@ public class AdminServiceImpl implements AdminService {
     User user = userRepository.findById(userId)
         .orElseThrow(() -> new EntityNotFoundException("User with id: " + userId + " was not found"));
     return userMapper.toAdminUserResponse(user);
+  }
+
+  @Override
+  public Long changeRole(final Long userId) {
+    User user = userRepository.findById(userId)
+        .orElseThrow(() -> new EntityNotFoundException("User with id: " + userId + " was not found"));
+
+    if (user.getRole() == Role.ADMIN) {
+      user.setRole(Role.USER);
+    } else {
+      user.setRole(Role.ADMIN);
+    }
+
+    return userRepository.save(user).getId();
+  }
+
+  @Override
+  public Long banUser(final Long userId, BanUserRequest banUserRequest) throws MessagingException {
+
+    User user = userRepository.findById(userId)
+        .orElseThrow(() -> new EntityNotFoundException("User with id: " + userId + " was not found"));
+
+    ReportReason banReason = reportReasonRepository.findById(banUserRequest.getBanReason())
+        .orElseThrow(() -> new EntityNotFoundException("No reason found with id: " + banUserRequest.getBanReason()));
+
+    // TODO increment counter bannedTimes++
+
+    var banUser = BanHistory.builder()
+        .user(user)
+        .reason(banReason)
+        .customMsg(banUserRequest.getCustomMessage())
+        .build();
+
+    user.setBanned(true);
+    user.setAccountStatus(AccountStatus.BANNED);
+    banHistoryRepository.save(banUser);
+
+    sendBannedUserEmail(user);
+    return userRepository.save(user).getId();
+  }
+
+  @Override
+  public Long unBanUser(final Long userId) {
+    User user = userRepository.findById(userId)
+        .orElseThrow(() -> new EntityNotFoundException("User with id: " + userId + " was not found"));
+
+    user.setBanned(false);
+    user.setAccountStatus(AccountStatus.ACTIVE);
+    // send email that user was unbanned with apology
+    return userRepository.save(user).getId();
+  }
+
+  private void sendBannedUserEmail(final User user) throws MessagingException {
+    String reason = banHistoryRepository.findByUserId(user.getId())
+        .stream()
+        .findFirst()
+        .map(banHistory -> banHistory.getReason().getReason())
+        .orElse(null);
+
+    // TODO dont send user.getId() but send id of ban when implementing chat between user and admin
+    String appealUrl = "http://localhost:4200/send-appeal?appeal=" + user.getId();
+    emailService.sendBannedUserEmail(user.getEmail(), user.getName(), reason, EmailTemplate.USER_BANNED_EMAIL,
+        appealUrl,
+        "Your GameHub account has been banned — Appeal available");
   }
 
 }

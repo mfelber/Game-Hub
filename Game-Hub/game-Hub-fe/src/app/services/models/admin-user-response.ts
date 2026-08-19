@@ -5,7 +5,7 @@
 import { LocationResponse } from '../models/location-response';
 export interface AdminUserResponse {
   accountLevel?: number;
-  accountStatus?: 'ACTIVE' | 'BANNED' | 'DISABLED';
+  accountStatus?: 'ACTIVE' | 'BANNED' | 'DISABLED' | 'DELETING' | 'DELETED';
   accountType?: 'ADULT' | 'CHILD';
   bio?: string;
   email?: string;

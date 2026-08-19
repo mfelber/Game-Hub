@@ -9,6 +9,7 @@ export type { AuthenticationRequest } from './models/authentication-request';
 export type { AuthenticationResponse } from './models/authentication-response';
 export type { BadgeResponse } from './models/badge-response';
 export type { BannerRequest } from './models/banner-request';
+export type { BanUserRequest } from './models/ban-user-request';
 export type { CardColorResponse } from './models/card-color-response';
 export type { CommunityFlagsResponse } from './models/community-flags-response';
 export type { DashboardReportResponse } from './models/dashboard-report-response';

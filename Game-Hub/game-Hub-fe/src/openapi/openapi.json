@@ -31,6 +31,38 @@
     }
   ],
   "paths": {
+    "/admin/unban/{userId}": {
+      "put": {
+        "tags": [
+          "admin-controller"
+        ],
+        "operationId": "unBanUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/admin/edit-game/{gameId}": {
       "put": {
         "tags": [
@@ -53,6 +85,80 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/GameUpdateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/change-role/{userId}": {
+      "put": {
+        "tags": [
+          "admin-controller"
+        ],
+        "operationId": "changeRole",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/ban/{userId}": {
+      "put": {
+        "tags": [
+          "admin-controller"
+        ],
+        "operationId": "banUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BanUserRequest"
               }
             }
           },
@@ -2356,6 +2462,21 @@
           }
         }
       },
+      "BanUserRequest": {
+        "required": [
+          "banReason"
+        ],
+        "type": "object",
+        "properties": {
+          "banReason": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "customMessage": {
+            "type": "string"
+          }
+        }
+      },
       "ReportRequest": {
         "type": "object",
         "properties": {
@@ -3548,7 +3669,9 @@
             "enum": [
               "ACTIVE",
               "BANNED",
-              "DISABLED"
+              "DISABLED",
+              "DELETING",
+              "DELETED"
             ]
           },
           "registered": {

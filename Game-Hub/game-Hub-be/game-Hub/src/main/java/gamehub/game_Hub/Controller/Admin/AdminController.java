@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import gamehub.game_Hub.Common.PageResponse;
+import gamehub.game_Hub.Request.BanUserRequest;
 import gamehub.game_Hub.Request.GameRequest;
 import gamehub.game_Hub.Request.GameUpdateRequest;
 import gamehub.game_Hub.Response.Admin.AccountStatusResponse;
@@ -28,6 +29,7 @@ import gamehub.game_Hub.Response.GameResponse;
 import gamehub.game_Hub.Service.Admin.AdminService;
 import gamehub.game_Hub.Service.GameService;
 import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -103,10 +105,25 @@ public class AdminController {
     return ResponseEntity.ok(gameService.update(gameId, gameUpdateRequest));
   }
 
-
   @GetMapping("/user/info/{userId}")
   public AdminUserResponse getUserInfo(@PathVariable Long userId) {
     return adminService.getUserInfo(userId);
+  }
+
+  @PutMapping("/change-role/{userId}")
+  public ResponseEntity<Long> changeRole(@PathVariable Long userId) {
+    return ResponseEntity.ok(adminService.changeRole(userId));
+  }
+
+  @PutMapping("/ban/{userId}")
+  public ResponseEntity<Long> banUser(@PathVariable Long userId, @RequestBody @Valid BanUserRequest banUserRequest)
+      throws MessagingException {
+    return ResponseEntity.ok(adminService.banUser(userId, banUserRequest));
+  }
+
+  @PutMapping("/unban/{userId}")
+  public ResponseEntity<Long> unBanUser(@PathVariable Long userId) {
+    return ResponseEntity.ok(adminService.unBanUser(userId));
   }
 
 

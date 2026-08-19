@@ -24,14 +24,12 @@ import lombok.RequiredArgsConstructor;
 public class EmailService {
 
   private final JavaMailSender mailSender;
+
   private final SpringTemplateEngine templateEngine;
 
   @Async
-  public void sendWelcomeEmail(final String to,
-      final String username,
-      final EmailTemplate emailTemplate,
-      final String loginUrl,
-      final String subject) throws MessagingException {
+  public void sendWelcomeEmail(final String to, final String username, final EmailTemplate emailTemplate,
+      final String loginUrl, final String subject) throws MessagingException {
     String templateName;
     if (emailTemplate == null) {
       templateName = "welcome-email";
@@ -40,9 +38,7 @@ public class EmailService {
     }
 
     MimeMessage mimeMessage = mailSender.createMimeMessage();
-    MimeMessageHelper helper = new MimeMessageHelper(mimeMessage,
-        MULTIPART_MODE_MIXED,
-        UTF_8.name());
+    MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, MULTIPART_MODE_MIXED, UTF_8.name());
     Map<String, Object> properties = new HashMap<>();
     properties.put("username", username);
     properties.put("loginUrl", loginUrl);
@@ -61,16 +57,12 @@ public class EmailService {
     Resource image = new ClassPathResource("images/joystick.png");
     helper.addInline("joystickImage", image);
 
-
     mailSender.send(mimeMessage);
   }
 
   @Async
-  public void sendResetPasswordEmail(final String to,
-      final String username,
-      final EmailTemplate emailTemplate,
-      final String resetPasswordUrl,
-      final String subject) throws MessagingException {
+  public void sendResetPasswordEmail(final String to, final String username, final EmailTemplate emailTemplate,
+      final String resetPasswordUrl, final String subject) throws MessagingException {
     String templateName;
     if (emailTemplate == null) {
       templateName = "reset-password-mail";
@@ -79,9 +71,7 @@ public class EmailService {
     }
 
     MimeMessage mimeMessage = mailSender.createMimeMessage();
-    MimeMessageHelper helper = new MimeMessageHelper(mimeMessage,
-        MULTIPART_MODE_MIXED,
-        UTF_8.name());
+    MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, MULTIPART_MODE_MIXED, UTF_8.name());
     Map<String, Object> properties = new HashMap<>();
     properties.put("username", username);
     properties.put("resetPasswordUrl", resetPasswordUrl);
@@ -101,6 +91,41 @@ public class EmailService {
     helper.setText(template, true);
 
     mailSender.send(mimeMessage);
+  }
+
+  public void sendBannedUserEmail(final String to, final String userName, final String banReason, final EmailTemplate emailTemplate,
+      final String appealUrl, final String subject) throws MessagingException {
+
+    String templateName;
+    if (emailTemplate == null) {
+      templateName = "user-banned-email";
+    } else {
+      templateName = emailTemplate.getName();
+    }
+
+    MimeMessage mimeMessage = mailSender.createMimeMessage();
+    MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, MULTIPART_MODE_MIXED, UTF_8.name());
+    Map<String, Object> properties = new HashMap<>();
+    properties.put("username", userName);
+    properties.put("banReason", banReason);
+    properties.put("appealUrl", appealUrl);
+
+    Context context = new Context();
+    context.setVariables(properties);
+
+    helper.setFrom("admin.gamehub@gamehub.com");
+    helper.setTo(to);
+    helper.setSubject(subject);
+
+    String template = templateEngine.process(templateName, context);
+
+    Resource image = new ClassPathResource("images/joystick.png");
+    helper.addInline("joystickImage", image);
+
+    helper.setText(template, true);
+
+    mailSender.send(mimeMessage);
+
   }
 
 }

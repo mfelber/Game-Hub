@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {AdminUserResponse} from '../../../../../../services/models/admin-user-response';
+import {AdminUserResponse} from '../../../../../../../services/models/admin-user-response';
 import {DatePipe, NgClass, NgIf, NgStyle} from '@angular/common';
 
 @Component({

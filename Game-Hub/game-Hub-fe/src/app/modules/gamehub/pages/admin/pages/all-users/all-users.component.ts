@@ -7,7 +7,10 @@ import {AccountStatusResponse} from '../../../../../../services/models/account-s
 import {RoleResponse} from '../../../../../../services/models/role-response';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AdminUserResponse} from '../../../../../../services/models/admin-user-response';
-import {UserInfoModalComponent} from '../../components/user/user-info-modal.component';
+import {UserInfoModalComponent} from '../../components/user/user-info/user-info-modal.component';
+import {ChangeUserRoleModalComponent} from '../../components/user/change-user-role/change-user-role-modal.component';
+import {BanModalComponent} from '../../components/ban/ban-modal/ban-modal.component';
+import {UnbanModalComponent} from '../../components/ban/unban-modal/unban-modal.component';
 
 @Component({
   selector: 'app-all-users',
@@ -19,7 +22,10 @@ import {UserInfoModalComponent} from '../../components/user/user-info-modal.comp
     NgIf,
     ReactiveFormsModule,
     FormsModule,
-    UserInfoModalComponent
+    UserInfoModalComponent,
+    ChangeUserRoleModalComponent,
+    BanModalComponent,
+    UnbanModalComponent
   ],
   templateUrl: './all-users.component.html',
   styleUrl: './all-users.component.scss',
@@ -45,6 +51,9 @@ export class AllUsersComponent implements OnInit {
   isBanUserModalOpen = false;
   isUnbanUserModalOpen = false;
   isDeleteUserModalOpen = false;
+
+  successMessage: string | null = null;
+  toastVisible = false;
 
 
   constructor(
@@ -99,23 +108,23 @@ export class AllUsersComponent implements OnInit {
   }
 
   resetFilters() {
-    // this.filters = {
-    //   genre: '',
-    //   platform: '',
-    //   maxPrice: ''
-    // };
-    // this.filteredGames = [...(this.gamePageResponse.content || [])]
-
     this.filters = {
       role: '',
       accountStatus: ''
     };
 
     this.filteredUsers = [...(this.usersResponse.content || [])]
-
   }
 
-  banOrUnbanUser(userId: number | undefined) {
+  banOrUnbanUser(user: AdminUserResponse) {
+    this.selectedUser = {};
+    if (user.accountStatus !== 'BANNED') {
+      this.selectedUser = user;
+      this.isBanUserModalOpen = true;
+    }
+
+    this.selectedUser = user;
+    this.isUnbanUserModalOpen = true;
     //   if user is banned popup unban open
     //   if user is not banned and admin want to ban user open ban popup with reason msg
 
@@ -134,6 +143,29 @@ export class AllUsersComponent implements OnInit {
       }
     })
 
+  }
+
+  changeRole(user: AdminUserResponse) {
+    this.selectedUser = {};
+    this.selectedUser = user;
+    this.isChangeRoleModalOpen = true;
+    console.log(this.selectedUser.userId);
+  }
+
+  showSuccess(message: string) {
+    this.loadUsers();
+    this.successMessage = message;
+
+    setTimeout(() => this.toastVisible = true, 10);
+
+    setTimeout(() => this.hideToast(), 3000);
+
+  }
+
+  hideToast() {
+    this.toastVisible = false;
+
+    setTimeout(() => this.successMessage = null, 500);
   }
 
   closeModal() {

@@ -20,6 +20,8 @@
       'active': user.accountStatus === 'ACTIVE',
       'banned': user.accountStatus === 'BANNED',
       'disabled': user.accountStatus === 'DISABLED',
+      'deleting': user.accountStatus === 'DELETING',
+      'deleted': user.accountStatus === 'DELETED',
       }">{{user.accountStatus}} </span>
     </div>
   </div>

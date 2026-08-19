@@ -1,0 +1,32 @@
+<div class="modal-backdrop">
+  <div class="change-role-modal">
+    <h2>Change Role</h2>
+    <p *ngIf="user.role === 'USER'">
+      Are you sure you want to change
+      <strong class="user-name">{{ user.userName }}</strong>'s role from
+      <strong class="user-name">USER</strong> to
+      <strong class="user-name">ADMIN</strong>?
+      <br />
+      <strong class="warning">Warning:</strong> This user will gain access to the admin interface.
+      Please make sure you trust this user with administrative privileges.
+    </p>
+    <p *ngIf="user.role === 'ADMIN'">
+      Are you sure you want to change
+      <strong class="user-name">{{ user.userName }}</strong>'s role from
+      <strong class="user-name">ADMIN</strong> to
+      <strong class="user-name">USER</strong>?
+      <br />
+      <strong class="warning">Warning:</strong> This user will no longer be able to access the admin interface,
+      and this action cannot be undone.
+    </p>
+    <div class="buttons">
+      <button class="cancel" (click)="close.emit()">
+        Cancel
+      </button>
+
+      <button class="change-role" (click)="changeRole(user.userId)">
+        Change Role
+      </button>
+    </div>
+  </div>
+</div>

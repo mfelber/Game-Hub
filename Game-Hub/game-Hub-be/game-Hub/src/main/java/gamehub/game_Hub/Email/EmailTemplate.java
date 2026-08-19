@@ -8,7 +8,8 @@ public enum EmailTemplate {
 
   WELCOME_EMAIL_ADULT("welcome-email-adult"),
   WELCOME_EMAIL_CHILD("welcome-email-child"),
-  RESET_PASSWORD_MAIL("reset-password-mail");
+  RESET_PASSWORD_MAIL("reset-password-mail"),
+  USER_BANNED_EMAIL("user-banned-email");
 
   public final String name;
 

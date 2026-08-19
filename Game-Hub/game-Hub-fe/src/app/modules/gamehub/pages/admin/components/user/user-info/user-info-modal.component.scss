@@ -91,6 +91,16 @@
   color: #eab308;
 }
 
+.status.deleting {
+  color: #F97316;
+  background: rgba(249, 115, 22, 0.12);
+}
+
+.status.deleted {
+  color: #F87171;
+  background: rgba(153, 27, 27, 0.35);
+}
+
 .section {
   margin-bottom: 25px;
 }

@@ -5,6 +5,37 @@
   (close)="closeModal()">
 </app-user-info-modal>
 
+<app-change-user-role-modal
+  *ngIf="isChangeRoleModalOpen && selectedUser"
+  [user]="selectedUser"
+  (roleChanged)="showSuccess($event)"
+  (close)="closeModal()">
+</app-change-user-role-modal>
+
+<app-ban-modal
+  *ngIf="isBanUserModalOpen && selectedUser"
+  [user]="selectedUser"
+  (bannedUser)="showSuccess($event)"
+  (close)="closeModal()">
+
+</app-ban-modal>
+
+<app-unban-modal
+  [user]="selectedUser"
+  (unBanUser)="showSuccess($event)"
+  (close)="closeModal()">
+
+</app-unban-modal>
+
+<div class="fixed top-4 right-4 flex flex-col gap-2 z-50">
+  <div *ngIf="successMessage"
+       class="bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg min-w-[250px]
+              transform transition-transform duration-500 ease-in-out opacity-0"
+       [ngClass]="{'translate-x-0 opacity-100': toastVisible, 'translate-x-24 opacity-0': !toastVisible}">
+    {{ successMessage }}
+  </div>
+</div>
+
 <main [class.hidden]="!isLoaded">
 
   <section class="users-page">
@@ -89,21 +120,22 @@
             <td><span class="status-active" [ngClass]="{
             'status-active': user.accountStatus === 'ACTIVE',
             'status-banned': user.accountStatus === 'BANNED',
-            'status-disabled': user.accountStatus === 'DISABLED'
+            'status-disabled': user.accountStatus === 'DISABLED',
+            'status-deleting': user.accountStatus === 'DELETING',
+            'status-deleted': user.accountStatus === 'DELETED'
             }">{{user.accountStatus}} </span></td>
             <td>{{user.registered | date: 'dd.MM.yyyy'}}</td>
             <td>{{user.lastLogin | date: 'dd.MM.yyyy'}}</td>
             <td>
               <button class="action view" (click)="getUserInfo(user.userId)"><i class="fa-solid fa-eye"></i></button>
-              <button class="action change-role"><i class="fa-solid fa-user-shield"></i></button>
-              <button class="action ban" *ngIf="user.role !== 'ADMIN'" (click)="banOrUnbanUser(user.userId)"><i
+              <button class="action change-role" (click)="changeRole(user)"><i class="fa-solid fa-user-shield"></i></button>
+              <button class="action ban" *ngIf="user.role !== 'ADMIN'" (click)="banOrUnbanUser(user)"><i
                 [ngClass]="{
                   'fa-ban': user.accountStatus !== 'BANNED',
                   'fa-lock-open': user.accountStatus === 'BANNED'
                 }"
                 class="fa-solid">
               </i></button>
-              <button class="action delete" *ngIf="user.role !== 'ADMIN'"><i class="fa-solid fa-trash"></i></button>
             </td>
           </tr>
           </tbody>

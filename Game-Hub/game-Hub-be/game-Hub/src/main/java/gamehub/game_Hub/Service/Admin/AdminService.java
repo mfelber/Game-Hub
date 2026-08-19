@@ -5,12 +5,14 @@ import java.util.List;
 import org.springframework.security.core.Authentication;
 
 import gamehub.game_Hub.Common.PageResponse;
+import gamehub.game_Hub.Request.BanUserRequest;
 import gamehub.game_Hub.Response.Admin.AccountStatusResponse;
 import gamehub.game_Hub.Response.Admin.AdminUserResponse;
 import gamehub.game_Hub.Response.Admin.DashboardResponse;
 import gamehub.game_Hub.Response.Admin.RoleResponse;
 import gamehub.game_Hub.Response.GamePreviewResponse;
 import gamehub.game_Hub.Response.GameResponse;
+import jakarta.mail.MessagingException;
 
 public interface AdminService {
 
@@ -29,5 +31,11 @@ public interface AdminService {
   List<AccountStatusResponse> getAllAccountStatuses();
 
   AdminUserResponse getUserInfo(Long userId);
+
+  Long changeRole(Long userId);
+
+  Long banUser(Long userId, BanUserRequest banUserRequest) throws MessagingException;
+
+  Long unBanUser(Long userId);
 
 }
