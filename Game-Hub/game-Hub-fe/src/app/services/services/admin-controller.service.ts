@@ -27,6 +27,8 @@ import { getAllAccountStatuses } from '../fn/admin-controller/get-all-account-st
 import { GetAllAccountStatuses$Params } from '../fn/admin-controller/get-all-account-statuses';
 import { getAllGames } from '../fn/admin-controller/get-all-games';
 import { GetAllGames$Params } from '../fn/admin-controller/get-all-games';
+import { getAllReports } from '../fn/admin-controller/get-all-reports';
+import { GetAllReports$Params } from '../fn/admin-controller/get-all-reports';
 import { getAllRoles } from '../fn/admin-controller/get-all-roles';
 import { GetAllRoles$Params } from '../fn/admin-controller/get-all-roles';
 import { getAllUsers } from '../fn/admin-controller/get-all-users';
@@ -37,6 +39,7 @@ import { getUserInfo } from '../fn/admin-controller/get-user-info';
 import { GetUserInfo$Params } from '../fn/admin-controller/get-user-info';
 import { loadDashboardData } from '../fn/admin-controller/load-dashboard-data';
 import { LoadDashboardData$Params } from '../fn/admin-controller/load-dashboard-data';
+import { PageResponseAdminReportsResponse } from '../models/page-response-admin-reports-response';
 import { PageResponseAdminUserResponse } from '../models/page-response-admin-user-response';
 import { PageResponseGamePreviewResponse } from '../models/page-response-game-preview-response';
 import { RoleResponse } from '../models/role-response';
@@ -279,6 +282,31 @@ export class AdminControllerService extends BaseService {
   getAllRoles(params?: GetAllRoles$Params, context?: HttpContext): Observable<Array<RoleResponse>> {
     return this.getAllRoles$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<RoleResponse>>): Array<RoleResponse> => r.body)
+    );
+  }
+
+  /** Path part for operation `getAllReports()` */
+  static readonly GetAllReportsPath = '/admin/reports';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAllReports()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllReports$Response(params?: GetAllReports$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseAdminReportsResponse>> {
+    return getAllReports(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getAllReports$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllReports(params?: GetAllReports$Params, context?: HttpContext): Observable<PageResponseAdminReportsResponse> {
+    return this.getAllReports$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PageResponseAdminReportsResponse>): PageResponseAdminReportsResponse => r.body)
     );
   }
 

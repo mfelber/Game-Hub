@@ -21,6 +21,7 @@ import gamehub.game_Hub.Request.BanUserRequest;
 import gamehub.game_Hub.Request.GameRequest;
 import gamehub.game_Hub.Request.GameUpdateRequest;
 import gamehub.game_Hub.Response.Admin.AccountStatusResponse;
+import gamehub.game_Hub.Response.Admin.AdminReportsResponse;
 import gamehub.game_Hub.Response.Admin.AdminUserResponse;
 import gamehub.game_Hub.Response.Admin.DashboardResponse;
 import gamehub.game_Hub.Response.Admin.RoleResponse;
@@ -66,6 +67,14 @@ public class AdminController {
       @RequestParam(name = "page", defaultValue = "50", required = false) int size
   ) {
     return ResponseEntity.ok(adminService.getAllUsers(page, size));
+  }
+
+  @GetMapping("/reports")
+  public ResponseEntity<PageResponse<AdminReportsResponse>> getAllReports(
+      @RequestParam(name = "page", defaultValue = "0", required = false) int page,
+      @RequestParam(name = "page", defaultValue = "50", required = false) int size
+  ) {
+    return ResponseEntity.ok(adminService.getAllReports(page, size));
   }
   // fetch all reports
   // fetch all genres , possibility to add new genres (not duplicated)

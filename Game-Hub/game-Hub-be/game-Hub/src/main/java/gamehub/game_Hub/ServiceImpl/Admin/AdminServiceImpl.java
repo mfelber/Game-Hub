@@ -21,16 +21,19 @@ import gamehub.game_Hub.Mapper.ReportMapper;
 import gamehub.game_Hub.Mapper.UserMapper;
 import gamehub.game_Hub.Module.BanHistory;
 import gamehub.game_Hub.Module.Game;
+import gamehub.game_Hub.Module.Report.Report;
 import gamehub.game_Hub.Module.Report.ReportReason;
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Repository.BanHistoryRepository;
 import gamehub.game_Hub.Repository.ReportReasonRepository;
 import gamehub.game_Hub.Request.BanUserRequest;
 import gamehub.game_Hub.Response.Admin.AccountStatusResponse;
+import gamehub.game_Hub.Response.Admin.AdminReportsResponse;
 import gamehub.game_Hub.Response.Admin.AdminUserResponse;
 import gamehub.game_Hub.Response.Admin.RoleResponse;
 import gamehub.game_Hub.Response.ReportReasonResponse;
 import gamehub.game_Hub.enums.AccountStatus;
+import gamehub.game_Hub.enums.ReportStatus;
 import gamehub.game_Hub.enums.Role;
 import gamehub.game_Hub.Repository.ReportRepository;
 import gamehub.game_Hub.Repository.UserLibraryRepository;
@@ -77,11 +80,14 @@ public class AdminServiceImpl implements AdminService {
   @Override
   public DashboardResponse loadDashboardData(final Authentication connectedUser, final int page,
       final int size) {
+
+     Long reportCounts = reportRepository.countReportsByStatusIn(List.of(ReportStatus.NEW, ReportStatus.IN_REVIEW));
+
     // TODO change total reviews while implementing reviews
     return DashboardResponse.builder()
         .totalGames(gameRepository.count())
         .totalUsers(userRepository.countByRole(Role.USER))
-        .pendingReports(reportRepository.countReportsByStatus_Id(1L))
+        .pendingReports(reportCounts)
         .totalReviews(100L)
         .recentUsers(userRepository.findTop5ByRoleNotOrderByCreatedAtDesc(Role.ADMIN)
             .stream()
@@ -214,6 +220,23 @@ public class AdminServiceImpl implements AdminService {
     return userRepository.save(user).getId();
   }
 
+  @Override
+  public PageResponse<AdminReportsResponse> getAllReports(final int page, final int size) {
+    Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
+    Page<Report> reports = reportRepository.findAll(pageable);
+    List<AdminReportsResponse> reportResponse = reports.stream().map(reportMapper::toAdminReportResponse).toList();
+
+    return new PageResponse<>(
+        reportResponse,
+        reports.getNumber(),
+        reports.getSize(),
+        reports.getTotalElements(),
+        reports.getTotalPages(),
+        reports.isFirst(),
+        reports.isLast()
+    );
+  }
+
   private void sendAccountRestored(final User user) throws MessagingException {
     emailService.sendAccountRestored(user.getEmail(), user.getName(), EmailTemplate.USER_ACCOUNT_RESTORED_EMAIL, logInUrl,
         "Your GameHub account has been successfully restored");
@@ -233,6 +256,7 @@ public class AdminServiceImpl implements AdminService {
         .orElse(null);
 
     // TODO dont send user.getId() but send id of ban when implementing chat between user and admin
+    // on fe show report id with # report.getId()
     String appealUrl = "http://localhost:4200/send-appeal?appeal=" + user.getId();
     emailService.sendBannedUserEmail(user.getEmail(), user.getName(), reason, customMsg,
         EmailTemplate.USER_BANNED_EMAIL,

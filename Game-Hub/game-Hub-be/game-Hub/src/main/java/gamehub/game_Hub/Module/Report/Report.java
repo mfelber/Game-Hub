@@ -5,8 +5,11 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
 
 import gamehub.game_Hub.Module.User.User;
+import gamehub.game_Hub.enums.ReportStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -47,8 +50,8 @@ public class Report {
 
   private String message;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "status_id")
+  @Enumerated(EnumType.STRING)
+  @Column(name = "report_status")
   private ReportStatus status;
 
   @Column(name = "created_at")

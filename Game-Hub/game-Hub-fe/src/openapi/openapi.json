@@ -2149,6 +2149,38 @@
         }
       }
     },
+    "/admin/reports": {
+      "get": {
+        "tags": [
+          "admin-controller"
+        ],
+        "operationId": "getAllReports",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseAdminReportsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/admin/game/info/{gameId}": {
       "get": {
         "tags": [
@@ -3727,6 +3759,81 @@
         "properties": {
           "roleName": {
             "type": "string"
+          }
+        }
+      },
+      "AdminReportsResponse": {
+        "type": "object",
+        "properties": {
+          "reportId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "reporterId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "reporterUserName": {
+            "type": "string"
+          },
+          "reportedUserId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "reportedUserName": {
+            "type": "string"
+          },
+          "reportedUserEmail": {
+            "type": "string"
+          },
+          "reportReason": {
+            "type": "string"
+          },
+          "reportStatus": {
+            "type": "string",
+            "enum": [
+              "NEW",
+              "IN_REVIEW",
+              "RESOLVED",
+              "REJECTED"
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "PageResponseAdminReportsResponse": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdminReportsResponse"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
           }
         }
       },

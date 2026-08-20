@@ -1,0 +1,83 @@
+<!-- report detail modal-->
+
+<main [class.hidden]="!isLoaded">
+
+  <section class="reports-page">
+
+    <div class="page-header">
+      <div>
+        <h1>Reports</h1>
+        <p>Review and manage all submitted reports in one place.</p>
+      </div>
+    </div>
+
+<!--  SEARCH  -->
+    <section>
+      <div class="top">
+        <app-search-bar
+        placeholder="Search reports...">
+        </app-search-bar>
+      </div>
+    </section>
+
+<!--  FILTERS  -->
+    <section>
+      <div class="filter-bar">
+        <div class="filter-header">
+          <span>Filter</span>
+          <button>Reset</button>
+        </div>
+
+        <div class="filter-options">
+          <div class="dropdown">
+            <label>Report Status</label>
+            <select>
+              <option>All Report Statuses</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </section>
+
+<!--  TABLE  -->
+
+    <section class="empty-users">
+
+      <div>
+        <i class="fa-solid fa-user-slash"></i>
+        <h2>No users found</h2>
+        <p>There are no users matching the selected filters.</p>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+          <tr>
+            <th>ID</th>
+            <th>Reported User</th>
+            <th>Email</th>
+            <th>Reason</th>
+            <th>Report Status</th>
+            <th>Created</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let report of reportResponse.content">
+            <td>{{report.reportId}}</td>
+            <td>{{report.reportedUserName}}</td>
+            <td>{{report.reportedUserEmail}}</td>
+            <td>{{report.reportReason}}</td>
+            <td>{{report.reportStatus}}</td>
+            <td>{{report.createdAt | date: 'dd.MM.yyyy'}}</td>
+            <td><button class="action view"><i class="fa-solid fa-eye"></i></button></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+  </section>
+
+</main>
