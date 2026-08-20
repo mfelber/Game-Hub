@@ -15,6 +15,7 @@ import {authGuard} from '../../services/guard/auth.guard';
 import {DashboardComponent} from './pages/admin/pages/dashboard/dashboard.component';
 import {MainAdminComponent} from './pages/admin/main/main.component';
 import {AllGamesComponent} from './pages/admin/pages/all-games/all-games.component';
+import {AllUsersComponent} from './pages/admin/pages/all-users/all-users.component';
 
 const routes: Routes = [
   {
@@ -83,6 +84,10 @@ const routes: Routes = [
       {
         path: 'games',
         component: AllGamesComponent,
+      },
+      {
+        path: 'users',
+        component: AllUsersComponent,
       }
     ]
   }

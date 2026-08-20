@@ -1,0 +1,68 @@
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0,0,0,.6);
+  z-index: 9999;
+}
+
+.unban-modal {
+  width: auto;
+  max-width: 95%;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #151B27;
+  border-radius: 14px;
+  padding: 30px;
+  color: white;
+  position: relative;
+}
+
+.unban-modal p {
+  color: #a7adbd;
+  line-height: 1.5;
+}
+
+.user-name {
+  color: white;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 30px;
+}
+
+.buttons button {
+  padding: 10px 22px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.cancel {
+  background: #333d52;
+  color: white;
+}
+
+.cancel:hover {
+  background: #46526b;
+}
+
+.unban {
+  background: #16a34a;
+  color: white;
+}
+
+.unban:hover {
+  background: #15803d;
+  color: white;
+}
+
+.warning {
+  color: #ffc107;
+}

@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {GameResponse} from '../../../../../../services/models/game-response';
-import {AdminControllerService} from '../../../../../../services/services/admin-controller.service';
+import {GameResponse} from '../../../../../../../services/models/game-response';
+import {AdminControllerService} from '../../../../../../../services/services/admin-controller.service';
 
 @Component({
   selector: 'app-delete-game-modal',

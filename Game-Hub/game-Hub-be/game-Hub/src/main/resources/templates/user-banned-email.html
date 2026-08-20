@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account Banned - Game Hub</title>
+
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background-color: #f7f8fa;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      background-color: #ffffff;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    }
+
+    .header {
+      text-align: center;
+      border-bottom: 2px solid #dc2626;
+      padding-bottom: 15px;
+      margin-bottom: 25px;
+    }
+
+    .header h1 {
+      color: #dc2626;
+      margin: 0;
+      font-size: 26px;
+      letter-spacing: 0.5px;
+    }
+
+    .content {
+      color: #444444;
+      line-height: 1.6;
+      font-size: 15px;
+    }
+
+    .content p {
+      margin: 0 0 15px;
+    }
+
+    .ban-info {
+      background-color: #fef2f2;
+      border: 1px solid #fecaca;
+      border-left: 4px solid #dc2626;
+      border-radius: 6px;
+      padding: 15px;
+      margin: 25px 0;
+      color: #7f1d1d;
+    }
+
+    .ban-info strong {
+      color: #991b1b;
+    }
+
+    .custom-msg {
+      background-color:#eff6ff;
+      border:1px solid #bfdbfe;
+      border-left:4px solid #2563eb;
+      border-radius: 6px;
+      padding: 15px;
+      margin: 25px 0;
+      color:#1e3a8a;
+    }
+
+    .appeal-info {
+      background-color: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 18px;
+      margin: 25px 0;
+    }
+
+    .appeal-info h3 {
+      margin: 0 0 8px;
+      color: #333333;
+      font-size: 16px;
+    }
+
+    .button-container {
+      text-align: center;
+      margin-top: 25px;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 13px 24px;
+      color: #ffffff !important;
+      background-color: #dc2626;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    .button:hover {
+      background-color: #b91c1c;
+    }
+
+    .footer {
+      margin-top: 35px;
+      font-size: 12px;
+      text-align: center;
+      color: #aaaaaa;
+      border-top: 1px solid #eeeeee;
+      padding-top: 15px;
+    }
+
+    .footer p {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <img src="cid:joystickImage" alt="Game Hub" class="logo" style="display:block;margin:0 auto 20px;width:70px;">
+    <h1>Account Banned</h1>
+  </div>
+
+  <div class="content">
+
+    <p>
+      Hello <strong th:text="${username}"></strong>,
+    </p>
+
+    <p>
+      We are writing to inform you that your
+      <strong>Game-Hub</strong> account has been banned.
+    </p>
+
+    <div class="ban-info">
+      <strong>Reason for the ban:</strong>
+      <span th:text="${banReason}"></span>
+    </div>
+
+    <div class="custom-msg" th:if="${customMsg != null and !#strings.isEmpty(#strings.trim(customMsg))}">
+      <strong>Message from admin:</strong>
+      <span th:text="${customMsg}"></span>
+    </div>
+
+    <p>
+      As a result of this ban, you are currently unable to access
+      your Game-Hub account and its services.
+    </p>
+
+    <div class="appeal-info">
+      <h3>Do you believe this ban was incorrect?</h3>
+
+      <p>
+        If you believe your account was banned by mistake or you would
+        like to explain the situation, you may submit an appeal for
+        review by our administration team.
+      </p>
+
+      <p>
+        Please note that you can submit <strong>only one appeal</strong>
+        regarding this ban. Make sure your explanation is complete
+        before submitting it.
+      </p>
+    </div>
+
+    <div class="button-container">
+      <a
+          th:href="${appealUrl}"
+          href="#"
+          class="button">
+        View Appeal Options
+      </a>
+    </div>
+
+    <p style="margin-top:25px;">
+      Our administration team will review your appeal and you will be
+      notified once a decision has been made.
+    </p>
+
+  </div>
+
+  <div class="footer">
+    <p>&copy; 2026 Game-Hub. All rights reserved.</p>
+    <p>This is an automated message, please do not reply.</p>
+  </div>
+
+</div>
+
+</body>
+</html>

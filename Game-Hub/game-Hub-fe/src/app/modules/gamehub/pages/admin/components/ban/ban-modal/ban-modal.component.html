@@ -1,0 +1,54 @@
+<div class="modal-backdrop">
+
+  <div class="ban-modal">
+    <button class="close-btn" (click)="close.emit()">
+      &times;
+    </button>
+
+    <h2>Ban User</h2>
+
+    <p class="username">Baning User:
+      <span>{{user.userName}}</span>
+    </p>
+
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+
+    <div class="section">
+      <label>Ban Reason</label>
+
+      <div class="reason-list">
+        <label *ngFor="let reason of allBanReasons" class="reason-item">
+          <input type="radio"
+                 name="reportReason"
+                 [value]="reason.id"
+                 [(ngModel)]="banRequest.banReason">
+          <span>{{reason.reason}}</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="section">
+      <label>Additional comments</label>
+      <textarea [(ngModel)]="banRequest.customMessage" placeholder="Write custom message to user">
+      </textarea>
+    </div>
+
+    <div class="buttons">
+      <button
+        class="cancel"
+        (click)="close.emit()">
+        Cancel
+      </button>
+
+      <button
+        class="report"
+        (click)="banUser(user.userId)">
+        Submit Ban
+      </button>
+    </div>
+
+  </div>
+
+</div>

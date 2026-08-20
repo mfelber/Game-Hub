@@ -1,21 +1,21 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {GameResponse} from '../../../../../../services/models/game-response';
+import {GameResponse} from '../../../../../../../services/models/game-response';
 import {DecimalPipe, NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {GenreResponse} from '../../../../../../services/models/genre-response';
-import {PlatformResponse} from '../../../../../../services/models/platform-response';
-import {LanguageResponse} from '../../../../../../services/models/language-response';
-import {SubtitleResponse} from '../../../../../../services/models/subtitle-response';
-import {AgeRatingResponse} from '../../../../../../services/models/age-rating-response';
-import {StoreControllerService} from '../../../../../../services/services/store-controller.service';
-import {AdminControllerService} from '../../../../../../services/services/admin-controller.service';
+import {GenreResponse} from '../../../../../../../services/models/genre-response';
+import {PlatformResponse} from '../../../../../../../services/models/platform-response';
+import {LanguageResponse} from '../../../../../../../services/models/language-response';
+import {SubtitleResponse} from '../../../../../../../services/models/subtitle-response';
+import {AgeRatingResponse} from '../../../../../../../services/models/age-rating-response';
+import {StoreControllerService} from '../../../../../../../services/services/store-controller.service';
+import {AdminControllerService} from '../../../../../../../services/services/admin-controller.service';
 import {HttpClient} from '@angular/common/http';
-import {GameUpdateRequest} from '../../../../../../services/models/game-update-request';
-import {GameRequest} from '../../../../../../services/models/game-request';
-import {UnitSizeResponse} from '../../../../../../services/models/unit-size-response';
+import {GameUpdateRequest} from '../../../../../../../services/models/game-update-request';
+import {GameRequest} from '../../../../../../../services/models/game-request';
+import {UnitSizeResponse} from '../../../../../../../services/models/unit-size-response';
 import {
   SystemRequirementsControllerService
-} from '../../../../../../services/services/system-requirements-controller.service';
+} from '../../../../../../../services/services/system-requirements-controller.service';
 
 @Component({
   selector: 'app-edit-game-modal',

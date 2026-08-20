@@ -1,6 +1,7 @@
 package gamehub.game_Hub.Module.User;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
@@ -19,6 +20,7 @@ import gamehub.game_Hub.Module.CardColor;
 import gamehub.game_Hub.Module.Game;
 import gamehub.game_Hub.Module.Genre;
 import gamehub.game_Hub.Module.Level;
+import gamehub.game_Hub.enums.AccountStatus;
 import gamehub.game_Hub.enums.AccountType;
 import gamehub.game_Hub.enums.Location;
 import gamehub.game_Hub.enums.Role;
@@ -114,6 +116,13 @@ public class User implements UserDetails, Principal {
   @CreatedDate
   @Column(nullable = false, updatable = false, name = "created_at")
   private LocalDateTime createdAt;
+
+  @Column(name = "last_login")
+  private LocalDateTime lastLogin;
+
+  @Enumerated(EnumType.STRING)
+  @Column(name = "account_status")
+  private AccountStatus accountStatus;
 
   @LastModifiedDate
   @Column(insertable = false, name = "last_modified_at")

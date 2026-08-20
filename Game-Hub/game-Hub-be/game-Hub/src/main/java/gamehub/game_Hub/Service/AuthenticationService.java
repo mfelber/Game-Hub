@@ -20,6 +20,7 @@ import gamehub.game_Hub.Module.Flags.StoreFlagType;
 import gamehub.game_Hub.Module.Flags.UserCommunityFlag;
 import gamehub.game_Hub.Module.Flags.UserStoreFlag;
 import gamehub.game_Hub.Module.Level;
+import gamehub.game_Hub.enums.AccountStatus;
 import gamehub.game_Hub.enums.Location;
 import gamehub.game_Hub.enums.Role;
 import gamehub.game_Hub.enums.Status;
@@ -100,6 +101,7 @@ public class AuthenticationService {
           .password(passwordEncoder.encode(request.getPassword()))
           .role(Role.USER)
           .status(Status.OFFLINE)
+          .accountStatus(AccountStatus.ACTIVE)
           .location(Location.UNKNOWN)
           .profileColor(getRandomColor())
           .bannerType("PREDEFINED")

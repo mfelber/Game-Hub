@@ -9,6 +9,7 @@ import gamehub.game_Hub.Module.Level;
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Repository.LevelRepository;
 import gamehub.game_Hub.Request.UserUpdateRequest;
+import gamehub.game_Hub.Response.Admin.AdminUserResponse;
 import gamehub.game_Hub.Response.BadgeResponse;
 import gamehub.game_Hub.Response.CardColorResponse;
 import gamehub.game_Hub.Response.GameResponseShort;
@@ -189,6 +190,30 @@ public class UserMapper {
         .lastName(user.getLastName())
         .email(user.getEmail())
         .createdAt(user.getCreatedAt())
+        .build();
+  }
+
+  public AdminUserResponse toAdminUserResponse(User user) {
+    return AdminUserResponse.builder()
+        .userId(user.getId())
+        .firstName(user.getFirstName())
+        .lastName(user.getLastName())
+        .userName(user.getName())
+        .email(user.getEmail())
+        .profilePicture(FileUtils.readCoverFromLocation(user.getUserProfilePicture()))
+        .profileColor(user.getProfileColor())
+        .bio(user.getBio())
+        .role(user.getRole())
+        .accountType(user.getAccountType())
+        .accountLevel(user.getLevel().getLevelNumber())
+        .location(new LocationResponse(
+            user.getLocation() != null ? user.getLocation().name() : null,
+            user.getLocation() != null ? "assets/flags/" + user.getLocation().name().toLowerCase() + ".svg" : null
+        ))
+        .accountStatus(user.getAccountStatus())
+        .registered(user.getCreatedAt())
+        .lastLogin(user.getLastLogin())
+        .lastModifiedAt(user.getLastModifiedAt())
         .build();
   }
 

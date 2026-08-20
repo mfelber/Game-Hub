@@ -64,9 +64,7 @@ public class ReportServiceImpl implements ReportService {
         .message(request.getMessage())
         .build();
 
-    Report saved = reportRepository.save(report);
-
-    return report.getId();
+    return reportRepository.save(report).getId();
   }
 
 }
