@@ -4,5 +4,5 @@
 
 export interface BanUserRequest {
   banReason: number;
-  customMessage?: string;
+  customMessage?: string | null;
 }

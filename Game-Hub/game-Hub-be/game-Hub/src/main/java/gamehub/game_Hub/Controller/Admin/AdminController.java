@@ -122,12 +122,9 @@ public class AdminController {
   }
 
   @PutMapping("/unban/{userId}")
-  public ResponseEntity<Long> unBanUser(@PathVariable Long userId) {
+  public ResponseEntity<Long> unBanUser(@PathVariable Long userId) throws MessagingException {
     return ResponseEntity.ok(adminService.unBanUser(userId));
   }
-
-
-
 
   @GetMapping("/roles")
   public ResponseEntity<List<RoleResponse>> getAllRoles() {

@@ -21,6 +21,7 @@
 </app-ban-modal>
 
 <app-unban-modal
+  *ngIf="isUnbanUserModalOpen && selectedUser"
   [user]="selectedUser"
   (unBanUser)="showSuccess($event)"
   (close)="closeModal()">

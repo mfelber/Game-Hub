@@ -36,6 +36,6 @@ public interface AdminService {
 
   Long banUser(Long userId, BanUserRequest banUserRequest) throws MessagingException;
 
-  Long unBanUser(Long userId);
+  Long unBanUser(Long userId) throws MessagingException;
 
 }

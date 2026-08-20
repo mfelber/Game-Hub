@@ -1,1 +1,23 @@
-<p>unban-modal works!</p>
+<div class="modal-backdrop">
+  <div class="unban-modal">
+    <h2>Unban User</h2>
+    <p>
+      Are you sure you want to unban user
+      <strong class="user-name">{{ user.userName }}</strong>?
+      <br />
+      <strong class="warning">Warning:</strong>
+      This user will regain access to their Game-Hub account and will be able
+      to use the platform normally again.
+    </p>
+    <p>Please make sure you want to restore this user's access.</p>
+    <div class="buttons">
+      <button class="cancel" (click)="close.emit()">
+        Cancel
+      </button>
+
+      <button class="unban" (click)="unbanUser(user.userId)">
+        Unban User
+      </button>
+    </div>
+  </div>
+</div>

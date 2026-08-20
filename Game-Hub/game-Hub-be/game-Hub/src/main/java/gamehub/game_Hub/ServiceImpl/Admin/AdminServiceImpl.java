@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -69,6 +70,9 @@ public class AdminServiceImpl implements AdminService {
   private final BanHistoryRepository banHistoryRepository;
 
   private final EmailService emailService;
+
+  @Value("${application.mailing.frontend.login-url}")
+  private String logInUrl;
 
   @Override
   public DashboardResponse loadDashboardData(final Authentication connectedUser, final int page,
@@ -183,7 +187,7 @@ public class AdminServiceImpl implements AdminService {
     ReportReason banReason = reportReasonRepository.findById(banUserRequest.getBanReason())
         .orElseThrow(() -> new EntityNotFoundException("No reason found with id: " + banUserRequest.getBanReason()));
 
-    // TODO increment counter bannedTimes++
+    // TODO GH-182 increment counter bannedTimes++
 
     var banUser = BanHistory.builder()
         .user(user)
@@ -200,14 +204,19 @@ public class AdminServiceImpl implements AdminService {
   }
 
   @Override
-  public Long unBanUser(final Long userId) {
+  public Long unBanUser(final Long userId) throws MessagingException {
     User user = userRepository.findById(userId)
         .orElseThrow(() -> new EntityNotFoundException("User with id: " + userId + " was not found"));
 
     user.setBanned(false);
     user.setAccountStatus(AccountStatus.ACTIVE);
-    // send email that user was unbanned with apology
+    sendAccountRestored(user);
     return userRepository.save(user).getId();
+  }
+
+  private void sendAccountRestored(final User user) throws MessagingException {
+    emailService.sendAccountRestored(user.getEmail(), user.getName(), EmailTemplate.USER_ACCOUNT_RESTORED_EMAIL, logInUrl,
+        "Your GameHub account has been successfully restored");
   }
 
   private void sendBannedUserEmail(final User user) throws MessagingException {
@@ -217,9 +226,16 @@ public class AdminServiceImpl implements AdminService {
         .map(banHistory -> banHistory.getReason().getReason())
         .orElse(null);
 
+    String customMsg = banHistoryRepository.findByUserId(user.getId())
+        .stream()
+        .findFirst()
+        .map(banHistory -> banHistory.getCustomMsg())
+        .orElse(null);
+
     // TODO dont send user.getId() but send id of ban when implementing chat between user and admin
     String appealUrl = "http://localhost:4200/send-appeal?appeal=" + user.getId();
-    emailService.sendBannedUserEmail(user.getEmail(), user.getName(), reason, EmailTemplate.USER_BANNED_EMAIL,
+    emailService.sendBannedUserEmail(user.getEmail(), user.getName(), reason, customMsg,
+        EmailTemplate.USER_BANNED_EMAIL,
         appealUrl,
         "Your GameHub account has been banned — Appeal available");
   }

@@ -125,9 +125,6 @@ export class AllUsersComponent implements OnInit {
 
     this.selectedUser = user;
     this.isUnbanUserModalOpen = true;
-    //   if user is banned popup unban open
-    //   if user is not banned and admin want to ban user open ban popup with reason msg
-
   }
 
 

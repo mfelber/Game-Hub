@@ -60,6 +60,16 @@
       color: #991b1b;
     }
 
+    .custom-msg {
+      background-color:#eff6ff;
+      border:1px solid #bfdbfe;
+      border-left:4px solid #2563eb;
+      border-radius: 6px;
+      padding: 15px;
+      margin: 25px 0;
+      color:#1e3a8a;
+    }
+
     .appeal-info {
       background-color: #f9fafb;
       border: 1px solid #e5e7eb;
@@ -132,6 +142,11 @@
     <div class="ban-info">
       <strong>Reason for the ban:</strong>
       <span th:text="${banReason}"></span>
+    </div>
+
+    <div class="custom-msg" th:if="${customMsg != null and !#strings.isEmpty(#strings.trim(customMsg))}">
+      <strong>Message from admin:</strong>
+      <span th:text="${customMsg}"></span>
     </div>
 
     <p>

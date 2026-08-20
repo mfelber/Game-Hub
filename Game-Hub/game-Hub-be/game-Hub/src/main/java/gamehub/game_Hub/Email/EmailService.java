@@ -93,7 +93,7 @@ public class EmailService {
     mailSender.send(mimeMessage);
   }
 
-  public void sendBannedUserEmail(final String to, final String userName, final String banReason, final EmailTemplate emailTemplate,
+  public void sendBannedUserEmail(final String to, final String userName, final String banReason, final String customMsg, final EmailTemplate emailTemplate,
       final String appealUrl, final String subject) throws MessagingException {
 
     String templateName;
@@ -108,6 +108,7 @@ public class EmailService {
     Map<String, Object> properties = new HashMap<>();
     properties.put("username", userName);
     properties.put("banReason", banReason);
+    properties.put("customMsg", customMsg);
     properties.put("appealUrl", appealUrl);
 
     Context context = new Context();
@@ -126,6 +127,40 @@ public class EmailService {
 
     mailSender.send(mimeMessage);
 
+  }
+
+  public void sendAccountRestored(final String to, final String userName, final EmailTemplate emailTemplate,
+      final String loginUrl, final String subject)
+      throws MessagingException {
+
+    String templateName;
+    if (emailTemplate == null) {
+      templateName = "user-account-restored-email";
+    } else {
+      templateName = emailTemplate.getName();
+    }
+
+    MimeMessage mimeMessage = mailSender.createMimeMessage();
+    MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, MULTIPART_MODE_MIXED, UTF_8.name());
+    Map<String, Object> properties = new HashMap<>();
+    properties.put("username", userName);
+    properties.put("loginUrl", loginUrl);
+
+    Context context = new Context();
+    context.setVariables(properties);
+
+    helper.setFrom("admin.gamehub@gamehub.com");
+    helper.setTo(to);
+    helper.setSubject(subject);
+
+    String template = templateEngine.process(templateName, context);
+
+    Resource image = new ClassPathResource("images/joystick.png");
+    helper.addInline("joystickImage", image);
+
+    helper.setText(template, true);
+
+    mailSender.send(mimeMessage);
   }
 
 }

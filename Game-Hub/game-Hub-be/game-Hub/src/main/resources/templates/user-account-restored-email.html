@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account Restored - Game Hub</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background-color: #f7f8fa;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      background-color: #ffffff;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    }
+
+    .header {
+      text-align: center;
+      border-bottom: 2px solid #007bff;
+      padding-bottom: 15px;
+      margin-bottom: 25px;
+    }
+
+    .header h1 {
+      color: #007bff;
+      margin: 0;
+      font-size: 26px;
+      letter-spacing: 0.5px;
+    }
+
+    .content {
+      color: #444444;
+      line-height: 1.6;
+      font-size: 15px;
+    }
+
+    .content p {
+      margin: 0 0 15px;
+    }
+
+    .success-box {
+      background-color: #f1faf3;
+      border-left: 4px solid #28a745;
+      padding: 15px 18px;
+      margin: 25px 0;
+      border-radius: 5px;
+      color: #3d4d42;
+    }
+
+    .success-box strong {
+      color: #218838;
+    }
+
+    .button {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 14px 24px;
+      color: #ffffff !important;
+      background-color: #007bff;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .button:hover {
+      background-color: #0056b3;
+    }
+
+    .footer {
+      margin-top: 35px;
+      font-size: 12px;
+      text-align: center;
+      color: #aaaaaa;
+      border-top: 1px solid #eeeeee;
+      padding-top: 15px;
+    }
+
+    .logo {
+      display: block;
+      margin: 0 auto 20px;
+      width: 70px;
+    }
+  </style>
+</head>
+
+<body>
+<div class="container">
+
+  <div class="header">
+    <img src="cid:joystickImage" alt="Game Hub" class="logo">
+    <h1>Account Restored</h1>
+  </div>
+
+  <div class="content">
+    <p>Hello <strong th:text="${username}">User</strong>,</p>
+
+    <p>
+      We’re happy to let you know that your <strong>Game-Hub</strong> account
+      has been successfully restored.
+    </p>
+
+    <div class="success-box">
+      <strong>Your account is active again!</strong>
+      <br>
+      You can now log in and continue using Game-Hub normally.
+    </div>
+
+    <p>
+      Thank you for being part of the Game-Hub community. 🎮
+    </p>
+
+    <div style="text-align:center;">
+      <a th:href="${loginUrl}" href="#" class="button">
+        Go to Your Account
+      </a>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <p>&copy; 2026 Game-Hub. All rights reserved.</p>
+    <p>This is an automated message, please do not reply.</p>
+  </div>
+
+</div>
+</body>
+</html>

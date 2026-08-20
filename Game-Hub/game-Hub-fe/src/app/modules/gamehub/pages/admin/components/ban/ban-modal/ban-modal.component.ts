@@ -23,7 +23,7 @@ export class BanModalComponent implements OnInit {
   @Output() bannedUser = new EventEmitter<string>();
 
   allBanReasons: { id: number; reason: string }[] = [];
-  banRequest: BanUserRequest = { banReason: null!, customMessage: ''};
+  banRequest: BanUserRequest = { banReason: null!, customMessage: null};
   errorMessage: string = '';
 
   constructor(private reportService: ReportControllerService, private adminService: AdminControllerService) {
@@ -53,11 +53,17 @@ export class BanModalComponent implements OnInit {
       return;
     }
     if (this.banRequest.banReason !== null) {
-      this.adminService.banUser({userId, body: this.banRequest}).subscribe({
+
+      const request: BanUserRequest = {
+        banReason: this.banRequest.banReason,
+        customMessage: this.banRequest.customMessage?.trim() || null,
+      }
+
+      this.adminService.banUser({userId, body: request}).subscribe({
         next: () => {
           this.banRequest = {
-            banReason: undefined!,
-            customMessage: '',
+            banReason: null!,
+            customMessage: null,
           };
           this.bannedUser.emit("User was banned successfully!");
           this.close.emit();

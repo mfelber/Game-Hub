@@ -2473,7 +2473,8 @@
             "format": "int64"
           },
           "customMessage": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           }
         }
       },
