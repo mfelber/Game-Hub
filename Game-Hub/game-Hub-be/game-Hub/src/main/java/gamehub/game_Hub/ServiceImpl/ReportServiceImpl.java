@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import gamehub.game_Hub.Module.Report.CommunityGuidelines;
 import gamehub.game_Hub.Module.Report.Report;
-import gamehub.game_Hub.Module.Report.ReportReason;
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Repository.ReportReasonRepository;
 import gamehub.game_Hub.Repository.ReportRepository;
@@ -32,7 +32,7 @@ public class ReportServiceImpl implements ReportService {
   public List<ReportReasonResponse> getAllReportReasons() {
     return reportReasonRepository.findAll()
         .stream()
-        .map(reportReason -> new ReportReasonResponse(reportReason.getId(), reportReason.getReason(),
+        .map(reportReason -> new ReportReasonResponse(reportReason.getId(), reportReason.getCommunityGuideline(),
             reportReason.getDescription())).toList();
   }
 
@@ -45,7 +45,7 @@ public class ReportServiceImpl implements ReportService {
     User reportedUserId = userRepository.findById(userId)
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + userId));
 
-    ReportReason reason = reportReasonRepository.findById(request.getReason())
+    CommunityGuidelines reason = reportReasonRepository.findById(request.getReason())
         .orElseThrow(() -> new EntityNotFoundException("No reason found with id: " + request.getReason()));
 
     var report = Report.builder()

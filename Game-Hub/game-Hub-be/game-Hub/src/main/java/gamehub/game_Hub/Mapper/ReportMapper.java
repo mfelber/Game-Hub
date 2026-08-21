@@ -13,7 +13,7 @@ public class ReportMapper {
     return DashboardReportResponse.builder()
         .id(report.getId())
         .reportedUser(report.getReportedUserId().getName())
-        .reason(report.getReason().getReason())
+        .reason(report.getReason().getCommunityGuideline())
         .createdAt(report.getCreatedAt())
         .build();
   }
@@ -26,7 +26,7 @@ public class ReportMapper {
         .reportedUserId(report.getReportedUserId().getId())
         .reportedUserName(report.getReportedUserId().getName())
         .reportedUserEmail(report.getReportedUserId().getEmail())
-        .reportReason(report.getReason().getReason())
+        .reportReason(report.getReason().getCommunityGuideline())
         .reportMsg(report.getMessage())
         .reportStatus(report.getStatus())
         .createdAt(report.getCreatedAt())

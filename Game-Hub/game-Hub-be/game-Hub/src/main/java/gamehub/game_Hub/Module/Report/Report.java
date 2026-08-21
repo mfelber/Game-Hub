@@ -46,7 +46,7 @@ public class Report {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "reason_id")
-  private ReportReason reason;
+  private CommunityGuidelines reason;
 
   private String message;
 

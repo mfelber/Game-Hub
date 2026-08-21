@@ -21,8 +21,8 @@ import gamehub.game_Hub.Mapper.ReportMapper;
 import gamehub.game_Hub.Mapper.UserMapper;
 import gamehub.game_Hub.Module.BanHistory;
 import gamehub.game_Hub.Module.Game;
+import gamehub.game_Hub.Module.Report.CommunityGuidelines;
 import gamehub.game_Hub.Module.Report.Report;
-import gamehub.game_Hub.Module.Report.ReportReason;
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Repository.BanHistoryRepository;
 import gamehub.game_Hub.Repository.ReportReasonRepository;
@@ -32,7 +32,6 @@ import gamehub.game_Hub.Response.Admin.AdminReportsResponse;
 import gamehub.game_Hub.Response.Admin.AdminUserResponse;
 import gamehub.game_Hub.Response.Admin.ReportStatusResponse;
 import gamehub.game_Hub.Response.Admin.RoleResponse;
-import gamehub.game_Hub.Response.ReportReasonResponse;
 import gamehub.game_Hub.enums.AccountStatus;
 import gamehub.game_Hub.enums.ReportStatus;
 import gamehub.game_Hub.enums.Role;
@@ -175,7 +174,7 @@ public class AdminServiceImpl implements AdminService {
     User user = userRepository.findById(userId)
         .orElseThrow(() -> new EntityNotFoundException("User with id: " + userId + " was not found"));
 
-    ReportReason banReason = reportReasonRepository.findById(banUserRequest.getBanReason())
+    CommunityGuidelines banReason = reportReasonRepository.findById(banUserRequest.getBanReason())
         .orElseThrow(() -> new EntityNotFoundException("No reason found with id: " + banUserRequest.getBanReason()));
 
     // TODO GH-182 increment counter bannedTimes++
@@ -231,7 +230,7 @@ public class AdminServiceImpl implements AdminService {
     String reason = banHistoryRepository.findByUserId(user.getId())
         .stream()
         .findFirst()
-        .map(banHistory -> banHistory.getReason().getReason())
+        .map(banHistory -> banHistory.getReason().getCommunityGuideline())
         .orElse(null);
 
     String customMsg = banHistoryRepository.findByUserId(user.getId())

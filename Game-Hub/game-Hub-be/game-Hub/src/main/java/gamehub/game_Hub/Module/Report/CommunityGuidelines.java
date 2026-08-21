@@ -1,5 +1,6 @@
 package gamehub.game_Hub.Module.Report;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,14 +18,15 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "report_reason", schema = "game_hub")
-public class ReportReason {
+@Table(name = "community_guidelines", schema = "game_hub")
+public class CommunityGuidelines {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private String reason;
+  @Column(name = "community_guideline")
+  private String communityGuideline;
 
   private String description;
 

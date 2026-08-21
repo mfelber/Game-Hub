@@ -2,8 +2,8 @@ package gamehub.game_Hub.Repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import gamehub.game_Hub.Module.Report.ReportReason;
+import gamehub.game_Hub.Module.Report.CommunityGuidelines;
 
-public interface ReportReasonRepository extends JpaRepository<ReportReason, Long> {
+public interface ReportReasonRepository extends JpaRepository<CommunityGuidelines, Long> {
 
 }

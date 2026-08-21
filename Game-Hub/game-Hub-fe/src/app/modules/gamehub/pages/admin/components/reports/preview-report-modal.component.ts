@@ -47,7 +47,6 @@ export class PreviewReportModalComponent {
         break;
     }
 
-    console.log(this.selectedAction);
   }
 
   formatStatus(status?: string) {
