@@ -40,6 +40,7 @@ export type { RecentUserResponse } from './models/recent-user-response';
 export type { RegistrationRequest } from './models/registration-request';
 export type { ReportReasonResponse } from './models/report-reason-response';
 export type { ReportRequest } from './models/report-request';
+export type { ReportStatusResponse } from './models/report-status-response';
 export type { RoleResponse } from './models/role-response';
 export type { StatusResponse } from './models/status-response';
 export type { StoreFlagsResponse } from './models/store-flags-response';

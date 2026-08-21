@@ -10,9 +10,11 @@ import gamehub.game_Hub.Response.Admin.AccountStatusResponse;
 import gamehub.game_Hub.Response.Admin.AdminReportsResponse;
 import gamehub.game_Hub.Response.Admin.AdminUserResponse;
 import gamehub.game_Hub.Response.Admin.DashboardResponse;
+import gamehub.game_Hub.Response.Admin.ReportStatusResponse;
 import gamehub.game_Hub.Response.Admin.RoleResponse;
 import gamehub.game_Hub.Response.GamePreviewResponse;
 import gamehub.game_Hub.Response.GameResponse;
+import gamehub.game_Hub.enums.ReportStatus;
 import jakarta.mail.MessagingException;
 
 public interface AdminService {
@@ -40,5 +42,7 @@ public interface AdminService {
   Long unBanUser(Long userId) throws MessagingException;
 
   PageResponse<AdminReportsResponse> getAllReports(int page, int size);
+
+  List<ReportStatusResponse> getAllReportStatuses();
 
 }

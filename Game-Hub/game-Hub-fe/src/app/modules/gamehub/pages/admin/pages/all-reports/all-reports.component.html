@@ -1,5 +1,22 @@
 <!-- report detail modal-->
 
+<app-preview-report-modal
+  *ngIf="selectedReport && isPreviewModalOpen"
+  [report]="selectedReport"
+  (close)="closeModal()"
+  (resolveReport)="showSuccess($event)">
+
+</app-preview-report-modal>
+
+<div class="fixed top-4 right-4 flex flex-col gap-2 z-50">
+  <div *ngIf="successMessage"
+       class="bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg min-w-[250px]
+              transform transition-transform duration-500 ease-in-out opacity-0"
+       [ngClass]="{'translate-x-0 opacity-100': toastVisible, 'translate-x-24 opacity-0': !toastVisible}">
+    {{ successMessage }}
+  </div>
+</div>
+
 <main [class.hidden]="!isLoaded">
 
   <section class="reports-page">
@@ -11,16 +28,16 @@
       </div>
     </div>
 
-<!--  SEARCH  -->
+    <!--  SEARCH  -->
     <section>
       <div class="top">
         <app-search-bar
-        placeholder="Search reports...">
+          placeholder="Search reports...">
         </app-search-bar>
       </div>
     </section>
 
-<!--  FILTERS  -->
+    <!--  FILTERS  -->
     <section>
       <div class="filter-bar">
         <div class="filter-header">
@@ -31,25 +48,28 @@
         <div class="filter-options">
           <div class="dropdown">
             <label>Report Status</label>
-            <select>
-              <option>All Report Statuses</option>
+            <select [(ngModel)]="filters.reportStatus" (change)="filterReportedUsers()">
+              <option value="">All Report Statuses</option>
+              <option *ngFor="let reportStatus of reportStatusesResponse"
+                      [value]="reportStatus.reportStatus">{{ formatStatus(reportStatus.reportStatus) }}
+              </option>
             </select>
           </div>
         </div>
       </div>
     </section>
 
-<!--  TABLE  -->
+    <!--  TABLE  -->
 
-    <section class="empty-users">
+    <section>
 
-      <div>
+      <div *ngIf="filteredReportedUsers.length === 0" class="empty-users">
         <i class="fa-solid fa-user-slash"></i>
         <h2>No users found</h2>
         <p>There are no users matching the selected filters.</p>
       </div>
 
-      <div class="table-container">
+      <div class="table-container" *ngIf="filteredReportedUsers.length > 0">
         <table>
           <thead>
           <tr>
@@ -63,14 +83,21 @@
           </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let report of reportResponse.content">
-            <td>{{report.reportId}}</td>
-            <td>{{report.reportedUserName}}</td>
-            <td>{{report.reportedUserEmail}}</td>
-            <td>{{report.reportReason}}</td>
-            <td>{{report.reportStatus}}</td>
-            <td>{{report.createdAt | date: 'dd.MM.yyyy'}}</td>
-            <td><button class="action view"><i class="fa-solid fa-eye"></i></button></td>
+          <tr *ngFor="let report of filteredReportedUsers">
+            <td>#{{ report.reportId }}</td>
+            <td>{{ report.reportedUserName }}</td>
+            <td>{{ report.reportedUserEmail }}</td>
+            <td>{{ report.reportReason }}</td>
+            <td> <span class="status" [ngClass]="{
+            'new': report.reportStatus === 'NEW',
+            'in-review': report.reportStatus === 'IN_REVIEW',
+            'resolved': report.reportStatus === 'RESOLVED',
+            'rejected': report.reportStatus === 'REJECTED',
+            }">{{ formatStatus(report.reportStatus) }}</span></td>
+            <td>{{ report.createdAt | date: 'dd.MM.yyyy' }}</td>
+            <td>
+              <button class="action view" (click)="openReportPreview(report)"><i class="fa-solid fa-eye"></i></button>
+            </td>
           </tr>
           </tbody>
         </table>

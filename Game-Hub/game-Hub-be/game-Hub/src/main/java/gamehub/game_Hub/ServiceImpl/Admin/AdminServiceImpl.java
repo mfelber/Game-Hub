@@ -30,6 +30,7 @@ import gamehub.game_Hub.Request.BanUserRequest;
 import gamehub.game_Hub.Response.Admin.AccountStatusResponse;
 import gamehub.game_Hub.Response.Admin.AdminReportsResponse;
 import gamehub.game_Hub.Response.Admin.AdminUserResponse;
+import gamehub.game_Hub.Response.Admin.ReportStatusResponse;
 import gamehub.game_Hub.Response.Admin.RoleResponse;
 import gamehub.game_Hub.Response.ReportReasonResponse;
 import gamehub.game_Hub.enums.AccountStatus;
@@ -78,10 +79,9 @@ public class AdminServiceImpl implements AdminService {
   private String logInUrl;
 
   @Override
-  public DashboardResponse loadDashboardData(final Authentication connectedUser, final int page,
-      final int size) {
+  public DashboardResponse loadDashboardData(final Authentication connectedUser, final int page, final int size) {
 
-     Long reportCounts = reportRepository.countReportsByStatusIn(List.of(ReportStatus.NEW, ReportStatus.IN_REVIEW));
+    Long reportCounts = reportRepository.countReportsByStatusIn(List.of(ReportStatus.NEW, ReportStatus.IN_REVIEW));
 
     // TODO change total reviews while implementing reviews
     return DashboardResponse.builder()
@@ -105,15 +105,8 @@ public class AdminServiceImpl implements AdminService {
     Page<Game> games = gameRepository.findAll(pageable);
     List<GamePreviewResponse> gamesResponse = games.stream().map(gameMapper::toGamePreviewResponse).toList();
 
-    return new PageResponse<>(
-        gamesResponse,
-        games.getNumber(),
-        games.getSize(),
-        games.getTotalElements(),
-        games.getTotalPages(),
-        games.isFirst(),
-        games.isLast()
-    );
+    return new PageResponse<>(gamesResponse, games.getNumber(), games.getSize(), games.getTotalElements(),
+        games.getTotalPages(), games.isFirst(), games.isLast());
   }
 
   @Override
@@ -139,15 +132,8 @@ public class AdminServiceImpl implements AdminService {
     Page<User> users = userRepository.findAll(pageable);
     List<AdminUserResponse> userResponse = users.stream().map(userMapper::toAdminUserResponse).toList();
 
-    return new PageResponse<>(
-        userResponse,
-        users.getNumber(),
-        users.getSize(),
-        users.getTotalElements(),
-        users.getTotalPages(),
-        users.isFirst(),
-        users.isLast()
-    );
+    return new PageResponse<>(userResponse, users.getNumber(), users.getSize(), users.getTotalElements(),
+        users.getTotalPages(), users.isFirst(), users.isLast());
   }
 
   @Override
@@ -159,8 +145,7 @@ public class AdminServiceImpl implements AdminService {
   public List<AccountStatusResponse> getAllAccountStatuses() {
     return Arrays.stream(AccountStatus.values())
         .map(accountStatus -> new AccountStatusResponse(accountStatus.name()))
-        .collect(
-            Collectors.toList());
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -222,24 +207,24 @@ public class AdminServiceImpl implements AdminService {
 
   @Override
   public PageResponse<AdminReportsResponse> getAllReports(final int page, final int size) {
-    Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
+    Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
     Page<Report> reports = reportRepository.findAll(pageable);
     List<AdminReportsResponse> reportResponse = reports.stream().map(reportMapper::toAdminReportResponse).toList();
 
-    return new PageResponse<>(
-        reportResponse,
-        reports.getNumber(),
-        reports.getSize(),
-        reports.getTotalElements(),
-        reports.getTotalPages(),
-        reports.isFirst(),
-        reports.isLast()
-    );
+    return new PageResponse<>(reportResponse, reports.getNumber(), reports.getSize(), reports.getTotalElements(),
+        reports.getTotalPages(), reports.isFirst(), reports.isLast());
+  }
+
+  @Override
+  public List<ReportStatusResponse> getAllReportStatuses() {
+    return Arrays.stream(ReportStatus.values())
+        .map(status -> new ReportStatusResponse(status.name()))
+        .toList();
   }
 
   private void sendAccountRestored(final User user) throws MessagingException {
-    emailService.sendAccountRestored(user.getEmail(), user.getName(), EmailTemplate.USER_ACCOUNT_RESTORED_EMAIL, logInUrl,
-        "Your GameHub account has been successfully restored");
+    emailService.sendAccountRestored(user.getEmail(), user.getName(), EmailTemplate.USER_ACCOUNT_RESTORED_EMAIL,
+        logInUrl, "Your GameHub account has been successfully restored");
   }
 
   private void sendBannedUserEmail(final User user) throws MessagingException {
@@ -259,9 +244,7 @@ public class AdminServiceImpl implements AdminService {
     // on fe show report id with # report.getId()
     String appealUrl = "http://localhost:4200/send-appeal?appeal=" + user.getId();
     emailService.sendBannedUserEmail(user.getEmail(), user.getName(), reason, customMsg,
-        EmailTemplate.USER_BANNED_EMAIL,
-        appealUrl,
-        "Your GameHub account has been banned — Appeal available");
+        EmailTemplate.USER_BANNED_EMAIL, appealUrl, "Your GameHub account has been banned — Appeal available");
   }
 
 }

@@ -27,6 +27,7 @@ public class ReportMapper {
         .reportedUserName(report.getReportedUserId().getName())
         .reportedUserEmail(report.getReportedUserId().getEmail())
         .reportReason(report.getReason().getReason())
+        .reportMsg(report.getMessage())
         .reportStatus(report.getStatus())
         .createdAt(report.getCreatedAt())
         .build();

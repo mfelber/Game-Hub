@@ -2181,6 +2181,29 @@
         }
       }
     },
+    "/admin/report-statuses": {
+      "get": {
+        "tags": [
+          "admin-controller"
+        ],
+        "operationId": "getAllReportStatuses",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReportStatusResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/admin/game/info/{gameId}": {
       "get": {
         "tags": [
@@ -3789,6 +3812,9 @@
           "reportReason": {
             "type": "string"
           },
+          "reportMsg": {
+            "type": "string"
+          },
           "reportStatus": {
             "type": "string",
             "enum": [
@@ -3834,6 +3860,14 @@
           },
           "last": {
             "type": "boolean"
+          }
+        }
+      },
+      "ReportStatusResponse": {
+        "type": "object",
+        "properties": {
+          "reportStatus": {
+            "type": "string"
           }
         }
       },

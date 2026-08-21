@@ -1,0 +1,291 @@
+.modal-backdrop{
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0,0,0,.6);
+  z-index: 9999;
+}
+
+.report-modal{
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  //overflow: hidden;
+  background: #151B27;
+  border-radius: 14px;
+  color: white;
+  position: relative;
+}
+
+.modal-header {
+  padding: 22px 24px 18px;
+  border-bottom: 1px solid #293244;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.modal-subtitle {
+  display: block;
+  margin-top: 5px;
+  color: #9ca3af;
+  font-size: 15px;
+}
+
+.close-btn{
+  position: absolute;
+  right: 18px;
+  top: 15px;
+  border: none;
+  background: none;
+  color: #999;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.close-btn:hover{
+  color: white;
+}
+
+.report-content {
+  padding: 24px;
+}
+
+.info-block {
+  margin-bottom: 22px;
+}
+
+.info-block:last-child {
+  margin-bottom: 0;
+}
+
+.label {
+  display: block;
+  margin-bottom: 8px;
+  color: #9ca3af;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #e5e7eb;
+}
+
+.user-info i {
+  color: #8B5CF6;
+}
+
+.reason {
+  color: #F3F4F6;
+}
+
+.report-message {
+  padding: 13px 15px;
+  background: #0f141f;
+  border: 1px solid #333d52;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+.status.new {
+  color: #1D4ED8;
+}
+
+.status.new .status-dot {
+  background: #1D4ED8;
+}
+
+.status.review {
+  color: #FEF3C7;
+}
+
+.status.review .status-dot {
+  background: #B45309;
+}
+
+.status.resolved {
+  color: #15803D;
+}
+
+.status.resolved .status-dot {
+  background: #15803D;
+}
+
+.status.rejected {
+  color: #B91C1C;
+}
+
+.status.rejected .status-dot {
+  background: #B91C1C;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  padding: 16px 24px;
+  border-top: 1px solid #293244;
+}
+
+.modal-actions button {
+  border: none;
+  border-radius: 8px;
+  padding: 9px 16px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.reject-btn {
+  background: #dc2626;
+}
+
+.reject-btn:hover {
+  background: #b91c1c;
+}
+
+.resolve-btn {
+  background: #16a34a;
+  color: white;
+  padding: 9px 16px;
+}
+
+.resolve-btn:hover {
+  background: #15803d;
+  padding: 9px 16px;
+}
+
+.resolve-btn:disabled {
+  background-color: #4b5563;
+  color: #d1d5db;
+  cursor: not-allowed!important;
+  padding: 9px 16px;
+}
+
+.resolve-content {
+  padding: 24px;
+}
+
+.report-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.report-summary strong {
+  color: #f3f4f6;
+}
+
+.report-summary span {
+  color: #9ca3af;
+}
+
+.divider {
+  height: 1px;
+  margin: 20px 0;
+  background: #293244;
+}
+
+.section-label {
+  display: block;
+  margin-bottom: 14px;
+  color: #d1d5db;
+  font-weight: 600;
+}
+
+.action-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.action-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 13px;
+  background: #0f141f;
+  border: 1px solid #333d52;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.action-option:hover {
+  background: #1b2330;
+  border-color: #3b4658;
+}
+
+.action-option:has(input:checked) {
+  border-color: #16a34a!important;
+  background: rgba(22, 163, 74, 0.08);
+}
+
+.action-option input {
+  margin-top: 3px;
+  accent-color: #16a34a;
+}
+
+.action-option strong {
+  display: block;
+  margin-bottom: 3px;
+  color: #e5e7eb;
+  font-size: 14px;
+}
+
+.action-option p {
+  margin: 0;
+  color: #8f99a8;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.modal-actions-resolve {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 16px 24px;
+  border-top: 1px solid #293244;
+}
+
+.modal-actions-resolve button {
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.back-btn {
+  background: #252d3b;
+  color: #d1d5db;
+  padding: 9px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.back-btn:hover {
+  background: #303a4b;
+}

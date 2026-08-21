@@ -1,0 +1,158 @@
+<div class="modal-backdrop">
+
+  <div class="report-modal">
+    <button (click)="close.emit()" class="close-btn">
+      &times;
+    </button>
+
+    <ng-container *ngIf="!isResolving">
+      <div class="modal-header">
+        <h2>Report #{{report.reportId}}</h2>
+        <span class="modal-subtitle">Review report</span>
+      </div>
+
+      <div class="report-content">
+
+        <div class="info-block">
+        <span class="label">Reported user</span>
+        <div class="user-info">
+          <i class="fa-solid fa-user"></i>
+          <strong>{{report.reportedUserName}}</strong>
+        </div>
+        </div>
+
+        <div class="info-block">
+          <span class="label">Reporter</span>
+          <div class="user-info">
+            <i class="fa-solid fa-user"></i>
+            <strong>{{report.reporterUserName}}</strong>
+          </div>
+        </div>
+
+        <div class="info-block">
+          <span class="label">Reason</span>
+          <strong class="reason">{{report.reportReason}}</strong>
+        </div>
+
+        <div class="info-block">
+          <span class="label">Message</span>
+          <div class="report-message" *ngIf="report.reportMsg">
+            {{report.reportMsg}}
+          </div>
+          <div class="report-message" *ngIf="!report.reportMsg">
+            The user did not provide any additional information.
+          </div>
+        </div>
+
+        <div class="info-block">
+          <span class="label">Status</span>
+          <span class="status" [ngClass]="{
+            'new': report.reportStatus === 'NEW',
+            'review': report.reportStatus === 'IN_REVIEW',
+            'resolved': report.reportStatus === 'RESOLVED',
+            'rejected': report.reportStatus === 'REJECTED',
+            }">
+            <span class="status-dot"></span>
+            {{ formatStatus(report.reportStatus) }}
+          </span>
+        </div>
+      </div>
+      <div class="modal-actions" *ngIf="!['REJECTED', 'RESOLVED'].includes(report.reportStatus!)">
+        <button class="reject-btn" (click)="rejectReport()">Reject</button>
+        <button class="resolve-btn" (click)="openResolve()">Resolve</button>
+      </div>
+    </ng-container>
+
+<!-- =========================   -->
+<!--      RESOLVE REPORT         -->
+<!-- =========================   -->
+
+
+    <ng-container *ngIf="isResolving">
+      <div class="modal-header">
+        <h2>Resolve Report</h2>
+        <span class="modal-subtitle">
+          Choose ac action for {{ report.reportedUserName }}
+        </span>
+      </div>
+
+      <div class="resolve-content">
+        <div class="report-summary">
+          <strong>Report #{{report.reportId}}</strong>
+          <span>Reason: {{report.reportReason}}</span>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="action-section">
+          <span class="section-label">Moderation Action</span>
+
+          <label class="action-option">
+            <input
+              type="radio"
+              name="moderationAction"
+              value="NONE"
+              [(ngModel)]="selectedAction"
+            />
+            <div>
+              <strong>No Action</strong>
+              <p> Resolve the report without punishing the user.</p>
+            </div>
+          </label>
+
+          <label class="action-option">
+            <input
+              type="radio"
+              name="moderationAction"
+              value="WARNING"
+              [(ngModel)]="selectedAction"
+            />
+            <div>
+              <strong>Warning</strong>
+              <p> Issue an official warning to the user via email. </p>
+            </div>
+          </label>
+
+          <label class="action-option">
+            <input
+              type="radio"
+              name="moderationAction"
+              value="SUSPEND"
+              [(ngModel)]="selectedAction"
+            />
+            <div>
+              <strong>Suspend account</strong>
+              <p> Temporarily prevent the user from accessing their account. </p>
+            </div>
+          </label>
+
+          <label class="action-option">
+            <input
+              type="radio"
+              name="moderationAction"
+              value="BAN"
+              [(ngModel)]="selectedAction"
+            />
+            <div>
+              <strong>Ban account</strong>
+              <p> Permanently ban the user. </p>
+            </div>
+          </label>
+
+        </div>
+      </div>
+
+      <div class="modal-actions-resolve">
+        <button class="back-btn" (click)="closeResolve()">
+          <i class="fa-solid fa-arrow-left"></i>
+          Back
+        </button>
+        <button class="resolve-btn" [disabled]="!selectedAction" (click)="confirmResolution()">
+          Resolve
+        </button>
+
+      </div>
+    </ng-container>
+  </div>
+
+</div>

@@ -5,6 +5,7 @@
 export interface AdminReportsResponse {
   createdAt?: string;
   reportId?: number;
+  reportMsg?: string;
   reportReason?: string;
   reportStatus?: 'NEW' | 'IN_REVIEW' | 'RESOLVED' | 'REJECTED';
   reportedUserEmail?: string;

@@ -24,11 +24,13 @@ import gamehub.game_Hub.Response.Admin.AccountStatusResponse;
 import gamehub.game_Hub.Response.Admin.AdminReportsResponse;
 import gamehub.game_Hub.Response.Admin.AdminUserResponse;
 import gamehub.game_Hub.Response.Admin.DashboardResponse;
+import gamehub.game_Hub.Response.Admin.ReportStatusResponse;
 import gamehub.game_Hub.Response.Admin.RoleResponse;
 import gamehub.game_Hub.Response.GamePreviewResponse;
 import gamehub.game_Hub.Response.GameResponse;
 import gamehub.game_Hub.Service.Admin.AdminService;
 import gamehub.game_Hub.Service.GameService;
+import gamehub.game_Hub.enums.ReportStatus;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
@@ -138,6 +140,11 @@ public class AdminController {
   @GetMapping("/roles")
   public ResponseEntity<List<RoleResponse>> getAllRoles() {
     return ResponseEntity.ok(adminService.getAllRoles());
+  }
+
+  @GetMapping("/report-statuses")
+  public ResponseEntity<List<ReportStatusResponse>> getAllReportStatuses() {
+    return ResponseEntity.ok(adminService.getAllReportStatuses());
   }
 
   @GetMapping("/account-statuses")

@@ -118,7 +118,7 @@
             'role-user': user.role === 'USER',
             'role-admin': user.role === 'ADMIN'
             }">{{user.role}}</span></td>
-            <td><span class="status-active" [ngClass]="{
+            <td><span [ngClass]="{
             'status-active': user.accountStatus === 'ACTIVE',
             'status-banned': user.accountStatus === 'BANNED',
             'status-disabled': user.accountStatus === 'DISABLED',

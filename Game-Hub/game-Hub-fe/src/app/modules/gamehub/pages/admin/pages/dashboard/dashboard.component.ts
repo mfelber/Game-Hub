@@ -51,4 +51,8 @@ export class DashboardComponent implements OnInit {
   navigateToUsers() {
     this.router.navigate(['/gamehub/admin/users']);
   }
+
+  navigateToReports() {
+    this.router.navigate(['/gamehub/admin/reports']);
+  }
 }
