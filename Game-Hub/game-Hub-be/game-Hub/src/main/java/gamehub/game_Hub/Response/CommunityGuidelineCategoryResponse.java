@@ -13,10 +13,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReportReasonResponse {
+public class CommunityGuidelineCategoryResponse {
 
   private Long id;
-  private String reason;
-  private String description;
+  private String categoryName;
 
 }

@@ -8,14 +8,15 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { ReportReasonResponse } from '../../models/report-reason-response';
 
-export interface GetAllReportReasons$Params {
+export interface ChangeStatusInReview$Params {
+  reportId: number;
 }
 
-export function getAllReportReasons(http: HttpClient, rootUrl: string, params?: GetAllReportReasons$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ReportReasonResponse>>> {
-  const rb = new RequestBuilder(rootUrl, getAllReportReasons.PATH, 'get');
+export function changeStatusInReview(http: HttpClient, rootUrl: string, params: ChangeStatusInReview$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+  const rb = new RequestBuilder(rootUrl, changeStatusInReview.PATH, 'put');
   if (params) {
+    rb.path('reportId', params.reportId, {});
   }
 
   return http.request(
@@ -23,9 +24,9 @@ export function getAllReportReasons(http: HttpClient, rootUrl: string, params?: 
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<ReportReasonResponse>>;
+      return (r as HttpResponse<any>).clone({ body: parseFloat(String((r as HttpResponse<any>).body)) }) as StrictHttpResponse<number>;
     })
   );
 }
 
-getAllReportReasons.PATH = '/report/get/reasons';
+changeStatusInReview.PATH = '/admin/change-report-status/review/{reportId}';

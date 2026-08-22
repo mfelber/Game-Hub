@@ -137,6 +137,38 @@
         }
       }
     },
+    "/admin/change-report-status/review/{reportId}": {
+      "put": {
+        "tags": [
+          "admin-controller"
+        ],
+        "operationId": "changeStatusInReview",
+        "parameters": [
+          {
+            "name": "reportId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/admin/ban/{userId}": {
       "put": {
         "tags": [
@@ -978,6 +1010,48 @@
         }
       }
     },
+    "/admin/suspend-account/{userId}": {
+      "post": {
+        "tags": [
+          "admin-controller"
+        ],
+        "operationId": "suspendAccount",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SuspendAccountRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/admin/cover/{gameId}": {
       "post": {
         "tags": [
@@ -1393,12 +1467,12 @@
         }
       }
     },
-    "/report/get/reasons": {
+    "/report/get/community-guidelines": {
       "get": {
         "tags": [
           "report-controller"
         ],
-        "operationId": "getAllReportReasons",
+        "operationId": "getAllCommunityGuidelines",
         "responses": {
           "200": {
             "description": "OK",
@@ -1407,7 +1481,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ReportReasonResponse"
+                    "$ref": "#/components/schemas/CommunityGuidelinesResponse"
                   }
                 }
               }
@@ -2729,6 +2803,26 @@
           }
         }
       },
+      "SuspendAccountRequest": {
+        "required": [
+          "customMessage",
+          "expiresAt",
+          "suspendReason"
+        ],
+        "type": "object",
+        "properties": {
+          "suspendReason": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "customMessage": {
+            "type": "string"
+          },
+          "expiresAt": {
+            "type": "string"
+          }
+        }
+      },
       "GameRequest": {
         "required": [
           "ageRatingId",
@@ -3186,15 +3280,30 @@
           }
         }
       },
-      "ReportReasonResponse": {
+      "CommunityGuidelineCategoryResponse": {
         "type": "object",
         "properties": {
           "id": {
             "type": "integer",
             "format": "int64"
           },
-          "reason": {
+          "categoryName": {
             "type": "string"
+          }
+        }
+      },
+      "CommunityGuidelinesResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "communityGuideline": {
+            "type": "string"
+          },
+          "category": {
+            "$ref": "#/components/schemas/CommunityGuidelineCategoryResponse"
           },
           "description": {
             "type": "string"
@@ -3726,6 +3835,7 @@
               "ACTIVE",
               "BANNED",
               "DISABLED",
+              "SUSPENDED",
               "DELETING",
               "DELETED"
             ]

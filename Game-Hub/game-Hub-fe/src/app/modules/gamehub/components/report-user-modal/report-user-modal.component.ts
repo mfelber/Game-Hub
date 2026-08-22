@@ -2,7 +2,6 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {NgForOf, NgIf} from '@angular/common';
 import {UserCommunityResponse} from '../../../../services/models/user-community-response';
-import {ReportReasonResponse} from '../../../../services/models/report-reason-response';
 import {ReportRequest} from '../../../../services/models/report-request';
 import {ReportControllerService} from '../../../../services/services/report-controller.service';
 
@@ -26,21 +25,21 @@ export class ReportUserModalComponent implements OnInit{
 
   reportRequest: ReportRequest = { reason: null!, message: '' };
   errorMessage: string = '';
-  allReportReasons: { id: number; reason: string }[] = [];
+  allCommunityGuidelines: { id: number; reason: string }[] = [];
 
   constructor(private reportService: ReportControllerService) {
   }
 
   ngOnInit(): void {
-    this.loadReportReasons();
+    this.loadCommunityGuidelines();
     }
 
-  private loadReportReasons() {
-    this.reportService.getAllReportReasons().subscribe({
-      next: (reasons) => {
-        this.allReportReasons = reasons.map(r => ({
+  private loadCommunityGuidelines() {
+    this.reportService.getAllCommunityGuidelines().subscribe({
+      next: (communityGuidelines) => {
+        this.allCommunityGuidelines = communityGuidelines.map(r => ({
           id: r.id!,
-          reason: r.reason!
+          reason: r.communityGuideline!
         }));
       }
     })
@@ -55,7 +54,7 @@ export class ReportUserModalComponent implements OnInit{
 
   reportUser(userId: number) {
     this.errorMessage = '';
-    if (this.reportRequest.reason === 6 && this.reportRequest.message === '') {
+    if (this.reportRequest.reason === 15 && !this.reportRequest.message?.trim()) {
       this.errorMessage = 'Please write a reason for reporting';
       return;
     }

@@ -7,37 +7,37 @@
 
     <ng-container *ngIf="!isResolving">
       <div class="modal-header">
-        <h2>Report #{{report.reportId}}</h2>
+        <h2>Report #{{ report.reportId }}</h2>
         <span class="modal-subtitle">Review report</span>
       </div>
 
       <div class="report-content">
 
         <div class="info-block">
-        <span class="label">Reported user</span>
-        <div class="user-info">
-          <i class="fa-solid fa-user"></i>
-          <strong>{{report.reportedUserName}}</strong>
-        </div>
+          <span class="label">Reported user</span>
+          <div class="user-info">
+            <i class="fa-solid fa-user"></i>
+            <strong>{{ report.reportedUserName }}</strong>
+          </div>
         </div>
 
         <div class="info-block">
           <span class="label">Reporter</span>
           <div class="user-info">
             <i class="fa-solid fa-user"></i>
-            <strong>{{report.reporterUserName}}</strong>
+            <strong>{{ report.reporterUserName }}</strong>
           </div>
         </div>
 
         <div class="info-block">
           <span class="label">Reason</span>
-          <strong class="reason">{{report.reportReason}}</strong>
+          <strong class="reason">{{ report.reportReason }}</strong>
         </div>
 
         <div class="info-block">
           <span class="label">Message</span>
           <div class="report-message" *ngIf="report.reportMsg">
-            {{report.reportMsg}}
+            {{ report.reportMsg }}
           </div>
           <div class="report-message" *ngIf="!report.reportMsg">
             The user did not provide any additional information.
@@ -63,9 +63,9 @@
       </div>
     </ng-container>
 
-<!-- =========================   -->
-<!--      RESOLVE REPORT         -->
-<!-- =========================   -->
+    <!-- =========================   -->
+    <!--      RESOLVE REPORT         -->
+    <!-- =========================   -->
 
 
     <ng-container *ngIf="isResolving">
@@ -78,13 +78,13 @@
 
       <div class="resolve-content">
         <div class="report-summary">
-          <strong>Report #{{report.reportId}}</strong>
-          <span>Reason: {{report.reportReason}}</span>
+          <strong>Report #{{ report.reportId }}</strong>
+          <span>Report Reason: {{ report.reportReason }}</span>
         </div>
 
         <div class="divider"></div>
 
-        <div class="action-section">
+        <div class="action-section" *ngIf="!suspending">
           <span class="section-label">Moderation Action</span>
 
           <label class="action-option">
@@ -126,6 +126,44 @@
             </div>
           </label>
 
+          <div *ngIf="selectedAction === 'SUSPEND'" >
+
+            <div *ngIf="!suspending" class="suspend-section">
+
+            <h2>Suspension reason</h2>
+            <p class="section-description"> Select the community guideline that was violated.</p>
+
+
+            <div class="community-guidelines">
+              <div *ngFor="let category of categories" class="category">
+
+                <div class="category-title" [class.active]="selectedCategory === category"
+                     (click)="selectCategory(category)">
+                  <h3>{{ category }}</h3>
+
+                  <i class="fa-solid"
+                     [ngClass]="selectedCategory === category ? 'fa-chevron=up' : 'fa-chevron-down'"></i>
+                </div>
+
+                <div
+                  *ngIf="selectedCategory === category" class="guideline">
+                  <label *ngFor="let guideline of getGuidelineByCategory(category)" class="guideline-option">
+
+                    <input type="radio" [value]="guideline.id"
+                           [(ngModel)]="suspendRequest.suspendReason"
+                            (change)="selectedSuspendReason = guideline.reason">
+                    <span>{{ guideline.reason }}</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            </div>
+
+            <!--       when suspend account next button and open modal with custom msg if
+            admin wan and summary of suspended account with reason, when user can log in into account  and in there set suspension duration   -->
+
+          </div>
+
           <label class="action-option">
             <input
               type="radio"
@@ -140,6 +178,43 @@
           </label>
 
         </div>
+
+        <div *ngIf="suspending">
+          <h2>Suspending account </h2>
+
+          <div class="suspension-reason">
+            <span class="section-label">Suspension reason</span>
+            <p>{{ selectedSuspendReason }}</p>
+          </div>
+
+          <div class="suspension-duration">
+            <h2>Suspension duration *</h2>
+            <p class="section-description">Choose how long the user should be suspended.</p>
+          </div>
+
+          <div class="dropdown">
+            <select [(ngModel)]="selectedActionDrop" (ngModelChange)="setDuration()">
+              <option [ngValue]="undefined">Select duration</option>
+              <option value="7">7 days</option>
+              <option value="15">15 days</option>
+              <option value="30">30 days</option>
+              <option value="custom">Custom duration</option>
+            </select>
+
+          </div>
+
+          <div *ngIf="selectedActionDrop === 'custom'">
+            <input
+              [(ngModel)]="suspendRequest.expiresAt"
+              type="date"
+              id="start"
+              [min]="minDate"
+            />
+          </div>
+
+          <h2>Custom message *</h2>
+          <textarea [(ngModel)]="suspendRequest.customMessage" rows="5"></textarea>
+        </div>
       </div>
 
       <div class="modal-actions-resolve">
@@ -147,8 +222,14 @@
           <i class="fa-solid fa-arrow-left"></i>
           Back
         </button>
-        <button class="resolve-btn" [disabled]="!selectedAction" (click)="confirmResolution()">
-          Resolve
+        <button *ngIf="selectedAction !== 'SUSPEND'" class="resolve-btn" [disabled]="!selectedAction" (click)="confirmResolution(report.reportedUserId)">
+          Confirm resolution
+        </button>
+        <button *ngIf="selectedAction === 'SUSPEND' && suspending" class="resolve-btn" [disabled]="!selectedAction" (click)="confirmResolution(report.reportedUserId)">
+          Confirm resolution
+        </button>
+        <button *ngIf="selectedAction === 'SUSPEND' && !suspending" class="resolve-btn" [disabled]="!selectedAction || suspendRequest.suspendReason === 0" (click)="next()">
+          Next
         </button>
 
       </div>

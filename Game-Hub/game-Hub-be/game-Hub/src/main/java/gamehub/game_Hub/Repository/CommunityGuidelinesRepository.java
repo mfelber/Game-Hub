@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import gamehub.game_Hub.Module.Report.CommunityGuidelines;
 
-public interface ReportReasonRepository extends JpaRepository<CommunityGuidelines, Long> {
+public interface CommunityGuidelinesRepository extends JpaRepository<CommunityGuidelines, Long> {
 
 }

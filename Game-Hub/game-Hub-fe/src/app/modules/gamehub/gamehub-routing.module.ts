@@ -17,6 +17,7 @@ import {MainAdminComponent} from './pages/admin/main/main.component';
 import {AllGamesComponent} from './pages/admin/pages/all-games/all-games.component';
 import {AllUsersComponent} from './pages/admin/pages/all-users/all-users.component';
 import {AllReportsComponent} from './pages/admin/pages/all-reports/all-reports.component';
+import {SuspendedAccountsComponent} from './pages/admin/pages/suspended-accounts/suspended-accounts.component';
 
 const routes: Routes = [
   {
@@ -93,6 +94,10 @@ const routes: Routes = [
       {
         path: 'reports',
         component: AllReportsComponent,
+      },
+      {
+        path: 'suspended-accounts',
+        component: SuspendedAccountsComponent,
       }
     ]
   }

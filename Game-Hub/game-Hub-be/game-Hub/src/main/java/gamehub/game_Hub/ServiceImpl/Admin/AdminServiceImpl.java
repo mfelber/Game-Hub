@@ -25,8 +25,9 @@ import gamehub.game_Hub.Module.Report.CommunityGuidelines;
 import gamehub.game_Hub.Module.Report.Report;
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Repository.BanHistoryRepository;
-import gamehub.game_Hub.Repository.ReportReasonRepository;
+import gamehub.game_Hub.Repository.CommunityGuidelinesRepository;
 import gamehub.game_Hub.Request.BanUserRequest;
+import gamehub.game_Hub.Request.SuspendAccountRequest;
 import gamehub.game_Hub.Response.Admin.AccountStatusResponse;
 import gamehub.game_Hub.Response.Admin.AdminReportsResponse;
 import gamehub.game_Hub.Response.Admin.AdminUserResponse;
@@ -68,7 +69,7 @@ public class AdminServiceImpl implements AdminService {
 
   private final UserLibraryRepository userLibraryRepository;
 
-  private final ReportReasonRepository reportReasonRepository;
+  private final CommunityGuidelinesRepository communityGuidelinesRepository;
 
   private final BanHistoryRepository banHistoryRepository;
 
@@ -174,10 +175,8 @@ public class AdminServiceImpl implements AdminService {
     User user = userRepository.findById(userId)
         .orElseThrow(() -> new EntityNotFoundException("User with id: " + userId + " was not found"));
 
-    CommunityGuidelines banReason = reportReasonRepository.findById(banUserRequest.getBanReason())
+    CommunityGuidelines banReason = communityGuidelinesRepository.findById(banUserRequest.getBanReason())
         .orElseThrow(() -> new EntityNotFoundException("No reason found with id: " + banUserRequest.getBanReason()));
-
-    // TODO GH-182 increment counter bannedTimes++
 
     var banUser = BanHistory.builder()
         .user(user)
@@ -216,9 +215,58 @@ public class AdminServiceImpl implements AdminService {
 
   @Override
   public List<ReportStatusResponse> getAllReportStatuses() {
-    return Arrays.stream(ReportStatus.values())
-        .map(status -> new ReportStatusResponse(status.name()))
-        .toList();
+    return Arrays.stream(ReportStatus.values()).map(status -> new ReportStatusResponse(status.name())).toList();
+  }
+
+  @Override
+  public Long changeStatusInReview(final Long reportId) {
+    Report report = reportRepository.findById(reportId)
+        .orElseThrow(() -> new EntityNotFoundException("report with id: " + reportId + " was not found"));
+
+    report.setStatus(ReportStatus.IN_REVIEW);
+    return reportRepository.save(report).getId();
+  }
+
+
+
+  @Override
+  public Long suspendAccount(final Long userId, final SuspendAccountRequest suspendAccountRequest) {
+
+    User user = userRepository.findById(userId)
+        .orElseThrow(() -> new EntityNotFoundException("User with id: " + userId + " was not found"));
+
+    CommunityGuidelines suspendedReason = communityGuidelinesRepository.findById(suspendAccountRequest.getSuspendReason())
+        .orElseThrow(() -> new EntityNotFoundException("No reason found with id: " + suspendAccountRequest.getSuspendReason()));
+
+    System.out.println("suspending user: " + user.getName());
+    System.out.println("with reason : " + suspendedReason.getCommunityGuideline());
+    System.out.println("with msg : " + suspendAccountRequest.getCustomMessage());
+    System.out.println("with expired suspension : " + suspendAccountRequest.getExpiresAt());
+
+    // send suspended account mail
+
+
+    // get how many days plus request.getHowManyDays, converted as long and check if custom than somehow parse it as date
+    // good format is comming from date picker just parse string into date
+    // String days = "30";
+    // Long plusDays = Long.parseLong(days);
+    // LocalDate now = LocalDate.now().plusDays(plusDays);
+    // System.out.println(now);
+    //
+    //
+
+    //
+
+
+    // var suspended = UserSuspensions.builder()
+    //     .userId(user)
+    //     .suspensionReason(suspendedReason)
+    //     .customMessage(suspendAccountRequest.getCustomMessage())
+    //     .
+    return 0L;
+    //   try to get from fe for how long user will be suspended, get today
+    //   + how long user will be suspended save it to column expiredAt
+    //
   }
 
   private void sendAccountRestored(final User user) throws MessagingException {

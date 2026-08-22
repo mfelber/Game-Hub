@@ -19,6 +19,8 @@ import { banUser } from '../fn/admin-controller/ban-user';
 import { BanUser$Params } from '../fn/admin-controller/ban-user';
 import { changeRole } from '../fn/admin-controller/change-role';
 import { ChangeRole$Params } from '../fn/admin-controller/change-role';
+import { changeStatusInReview } from '../fn/admin-controller/change-status-in-review';
+import { ChangeStatusInReview$Params } from '../fn/admin-controller/change-status-in-review';
 import { DashboardResponse } from '../models/dashboard-response';
 import { deleteGame } from '../fn/admin-controller/delete-game';
 import { DeleteGame$Params } from '../fn/admin-controller/delete-game';
@@ -46,6 +48,8 @@ import { PageResponseAdminUserResponse } from '../models/page-response-admin-use
 import { PageResponseGamePreviewResponse } from '../models/page-response-game-preview-response';
 import { ReportStatusResponse } from '../models/report-status-response';
 import { RoleResponse } from '../models/role-response';
+import { suspendAccount } from '../fn/admin-controller/suspend-account';
+import { SuspendAccount$Params } from '../fn/admin-controller/suspend-account';
 import { unBanUser } from '../fn/admin-controller/un-ban-user';
 import { UnBanUser$Params } from '../fn/admin-controller/un-ban-user';
 import { updateGame } from '../fn/admin-controller/update-game';
@@ -134,6 +138,31 @@ export class AdminControllerService extends BaseService {
     );
   }
 
+  /** Path part for operation `changeStatusInReview()` */
+  static readonly ChangeStatusInReviewPath = '/admin/change-report-status/review/{reportId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `changeStatusInReview()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  changeStatusInReview$Response(params: ChangeStatusInReview$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return changeStatusInReview(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `changeStatusInReview$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  changeStatusInReview(params: ChangeStatusInReview$Params, context?: HttpContext): Observable<number> {
+    return this.changeStatusInReview$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
   /** Path part for operation `banUser()` */
   static readonly BanUserPath = '/admin/ban/{userId}';
 
@@ -155,6 +184,31 @@ export class AdminControllerService extends BaseService {
    */
   banUser(params: BanUser$Params, context?: HttpContext): Observable<number> {
     return this.banUser$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `suspendAccount()` */
+  static readonly SuspendAccountPath = '/admin/suspend-account/{userId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `suspendAccount()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  suspendAccount$Response(params: SuspendAccount$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return suspendAccount(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `suspendAccount$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  suspendAccount(params: SuspendAccount$Params, context?: HttpContext): Observable<number> {
+    return this.suspendAccount$Response(params, context).pipe(
       map((r: StrictHttpResponse<number>): number => r.body)
     );
   }

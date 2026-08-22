@@ -34,10 +34,10 @@ export class BanModalComponent implements OnInit {
   }
 
   loadBanReasons() {
-    this.reportService.getAllReportReasons().subscribe({next: (reason) => {
+    this.reportService.getAllCommunityGuidelines().subscribe({next: (reason) => {
       this.allBanReasons = reason.map(r => ({
         id: r.id!,
-        reason: r.reason!
+        reason: r.communityGuideline!
       }));
       },
       error: (err) => {
@@ -48,7 +48,7 @@ export class BanModalComponent implements OnInit {
 
   banUser(userId: any) {
     this.errorMessage = '';
-    if (this.banRequest.banReason === 6 && this.banRequest.customMessage === '') {
+    if (this.banRequest.banReason === 15 && !this.banRequest.customMessage?.trim()) {
       this.errorMessage = 'Please write a reason for ban.'
       return;
     }

@@ -78,9 +78,14 @@ export class AllReportsComponent implements OnInit {
   }
 
   openReportPreview(reportedUser: AdminReportsResponse) {
-    this.isPreviewModalOpen = true;
     this.selectedReport = {};
+
+    if (reportedUser.reportStatus === 'NEW') {
+      this.adminService.changeStatusInReview({reportId: reportedUser.reportId!}).subscribe()
+    }
+
     this.selectedReport = reportedUser;
+    this.isPreviewModalOpen = true;
   }
 
   closeModal() {

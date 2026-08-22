@@ -11,9 +11,9 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { getAllReportReasons } from '../fn/report-controller/get-all-report-reasons';
-import { GetAllReportReasons$Params } from '../fn/report-controller/get-all-report-reasons';
-import { ReportReasonResponse } from '../models/report-reason-response';
+import { CommunityGuidelinesResponse } from '../models/community-guidelines-response';
+import { getAllCommunityGuidelines } from '../fn/report-controller/get-all-community-guidelines';
+import { GetAllCommunityGuidelines$Params } from '../fn/report-controller/get-all-community-guidelines';
 import { reportUser } from '../fn/report-controller/report-user';
 import { ReportUser$Params } from '../fn/report-controller/report-user';
 
@@ -48,28 +48,28 @@ export class ReportControllerService extends BaseService {
     );
   }
 
-  /** Path part for operation `getAllReportReasons()` */
-  static readonly GetAllReportReasonsPath = '/report/get/reasons';
+  /** Path part for operation `getAllCommunityGuidelines()` */
+  static readonly GetAllCommunityGuidelinesPath = '/report/get/community-guidelines';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getAllReportReasons()` instead.
+   * To access only the response body, use `getAllCommunityGuidelines()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAllReportReasons$Response(params?: GetAllReportReasons$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ReportReasonResponse>>> {
-    return getAllReportReasons(this.http, this.rootUrl, params, context);
+  getAllCommunityGuidelines$Response(params?: GetAllCommunityGuidelines$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CommunityGuidelinesResponse>>> {
+    return getAllCommunityGuidelines(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getAllReportReasons$Response()` instead.
+   * To access the full response (for headers, for example), `getAllCommunityGuidelines$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getAllReportReasons(params?: GetAllReportReasons$Params, context?: HttpContext): Observable<Array<ReportReasonResponse>> {
-    return this.getAllReportReasons$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<ReportReasonResponse>>): Array<ReportReasonResponse> => r.body)
+  getAllCommunityGuidelines(params?: GetAllCommunityGuidelines$Params, context?: HttpContext): Observable<Array<CommunityGuidelinesResponse>> {
+    return this.getAllCommunityGuidelines$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<CommunityGuidelinesResponse>>): Array<CommunityGuidelinesResponse> => r.body)
     );
   }
 

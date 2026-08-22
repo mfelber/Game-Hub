@@ -8,11 +8,12 @@ import org.springframework.stereotype.Service;
 import gamehub.game_Hub.Module.Report.CommunityGuidelines;
 import gamehub.game_Hub.Module.Report.Report;
 import gamehub.game_Hub.Module.User.User;
-import gamehub.game_Hub.Repository.ReportReasonRepository;
+import gamehub.game_Hub.Repository.CommunityGuidelinesRepository;
 import gamehub.game_Hub.Repository.ReportRepository;
 import gamehub.game_Hub.Repository.user.UserRepository;
 import gamehub.game_Hub.Request.ReportRequest;
-import gamehub.game_Hub.Response.ReportReasonResponse;
+import gamehub.game_Hub.Response.CommunityGuidelineCategoryResponse;
+import gamehub.game_Hub.Response.CommunityGuidelinesResponse;
 import gamehub.game_Hub.Service.ReportService;
 import gamehub.game_Hub.enums.ReportStatus;
 import jakarta.persistence.EntityNotFoundException;
@@ -26,14 +27,16 @@ public class ReportServiceImpl implements ReportService {
 
   private final UserRepository userRepository;
 
-  private final ReportReasonRepository reportReasonRepository;
+  private final CommunityGuidelinesRepository communityGuidelinesRepository;
 
   @Override
-  public List<ReportReasonResponse> getAllReportReasons() {
-    return reportReasonRepository.findAll()
+  public List<CommunityGuidelinesResponse> getAllCommunityGuidelines() {
+    return communityGuidelinesRepository.findAll()
         .stream()
-        .map(reportReason -> new ReportReasonResponse(reportReason.getId(), reportReason.getCommunityGuideline(),
-            reportReason.getDescription())).toList();
+        .map(reportReason -> new CommunityGuidelinesResponse(reportReason.getId(), reportReason.getCommunityGuideline(),
+            new CommunityGuidelineCategoryResponse(reportReason.getCategory().getId(),
+                reportReason.getCategory().getCategoryName()), reportReason.getDescription()))
+        .toList();
   }
 
   @Override
@@ -45,7 +48,7 @@ public class ReportServiceImpl implements ReportService {
     User reportedUserId = userRepository.findById(userId)
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + userId));
 
-    CommunityGuidelines reason = reportReasonRepository.findById(request.getReason())
+    CommunityGuidelines reason = communityGuidelinesRepository.findById(request.getReason())
         .orElseThrow(() -> new EntityNotFoundException("No reason found with id: " + request.getReason()));
 
     var report = Report.builder()

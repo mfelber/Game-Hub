@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import gamehub.game_Hub.Request.ReportRequest;
-import gamehub.game_Hub.Response.ReportReasonResponse;
+import gamehub.game_Hub.Response.CommunityGuidelinesResponse;
 import gamehub.game_Hub.Service.ReportService;
 
 import jakarta.validation.Valid;
@@ -25,9 +25,9 @@ public class ReportController {
 
   private final ReportService reportService;
 
-  @GetMapping("/get/reasons")
-  public List<ReportReasonResponse> getAllReportReasons() {
-    return reportService.getAllReportReasons();
+  @GetMapping("/get/community-guidelines")
+  public List<CommunityGuidelinesResponse> getAllCommunityGuidelines() {
+    return reportService.getAllCommunityGuidelines();
   }
 
   @PostMapping("/user/{userId}")
