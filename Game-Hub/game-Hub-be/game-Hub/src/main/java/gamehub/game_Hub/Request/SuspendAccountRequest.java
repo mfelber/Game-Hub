@@ -17,4 +17,7 @@ public class SuspendAccountRequest {
   @NotNull
   private String expiresAt;
 
+  @NotNull
+  private Long reportId;
+
 }

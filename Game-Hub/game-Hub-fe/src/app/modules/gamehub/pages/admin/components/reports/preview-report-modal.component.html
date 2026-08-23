@@ -126,41 +126,38 @@
             </div>
           </label>
 
-          <div *ngIf="selectedAction === 'SUSPEND'" >
+          <div *ngIf="selectedAction === 'SUSPEND'">
 
             <div *ngIf="!suspending" class="suspend-section">
 
-            <h2>Suspension reason</h2>
-            <p class="section-description"> Select the community guideline that was violated.</p>
+              <h2>Suspension reason</h2>
+              <p class="section-description"> Select the community guideline that was violated.</p>
 
 
-            <div class="community-guidelines">
-              <div *ngFor="let category of categories" class="category">
+              <div class="community-guidelines">
+                <div *ngFor="let category of categories" class="category">
 
-                <div class="category-title" [class.active]="selectedCategory === category"
-                     (click)="selectCategory(category)">
-                  <h3>{{ category }}</h3>
+                  <div class="category-title" [class.active]="selectedCategory === category"
+                       (click)="selectCategory(category)">
+                    <h3>{{ category }}</h3>
 
-                  <i class="fa-solid"
-                     [ngClass]="selectedCategory === category ? 'fa-chevron=up' : 'fa-chevron-down'"></i>
-                </div>
+                    <i class="fa-solid"
+                       [ngClass]="selectedCategory === category ? 'fa-chevron=up' : 'fa-chevron-down'"></i>
+                  </div>
 
-                <div
-                  *ngIf="selectedCategory === category" class="guideline">
-                  <label *ngFor="let guideline of getGuidelineByCategory(category)" class="guideline-option">
+                  <div
+                    *ngIf="selectedCategory === category" class="guideline">
+                    <label *ngFor="let guideline of getGuidelineByCategory(category)" class="guideline-option">
 
-                    <input type="radio" [value]="guideline.id"
-                           [(ngModel)]="suspendRequest.suspendReason"
-                            (change)="selectedSuspendReason = guideline.reason">
-                    <span>{{ guideline.reason }}</span>
-                  </label>
+                      <input type="radio" [value]="guideline.id"
+                             [(ngModel)]="suspendRequest.suspendReason"
+                             (change)="selectedSuspendReason = guideline.reason">
+                      <span>{{ guideline.reason }}</span>
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>
-            </div>
-
-            <!--       when suspend account next button and open modal with custom msg if
-            admin wan and summary of suspended account with reason, when user can log in into account  and in there set suspension duration   -->
 
           </div>
 
@@ -222,13 +219,17 @@
           <i class="fa-solid fa-arrow-left"></i>
           Back
         </button>
-        <button *ngIf="selectedAction !== 'SUSPEND'" class="resolve-btn" [disabled]="!selectedAction" (click)="confirmResolution(report.reportedUserId)">
+        <button *ngIf="selectedAction !== 'SUSPEND'" class="resolve-btn" [disabled]="!selectedAction"
+                (click)="confirmResolution(report.reportedUserId)">
           Confirm resolution
         </button>
-        <button *ngIf="selectedAction === 'SUSPEND' && suspending" class="resolve-btn" [disabled]="!selectedAction" (click)="confirmResolution(report.reportedUserId)">
+        <button *ngIf="selectedAction === 'SUSPEND' && suspending" class="resolve-btn"
+                [disabled]="(suspendRequest.expiresAt === '' || selectedActionDrop === undefined) || suspendRequest.customMessage === ''"
+                (click)="confirmResolution(report.reportedUserId)">
           Confirm resolution
         </button>
-        <button *ngIf="selectedAction === 'SUSPEND' && !suspending" class="resolve-btn" [disabled]="!selectedAction || suspendRequest.suspendReason === 0" (click)="next()">
+        <button *ngIf="selectedAction === 'SUSPEND' && !suspending" class="resolve-btn"
+                [disabled]="!selectedAction || suspendRequest.suspendReason === 0" (click)="next()">
           Next
         </button>
 

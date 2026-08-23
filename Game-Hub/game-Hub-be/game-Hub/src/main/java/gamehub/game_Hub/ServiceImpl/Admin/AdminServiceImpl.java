@@ -1,10 +1,16 @@
 package gamehub.game_Hub.ServiceImpl.Admin;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,8 +30,10 @@ import gamehub.game_Hub.Module.Game;
 import gamehub.game_Hub.Module.Report.CommunityGuidelines;
 import gamehub.game_Hub.Module.Report.Report;
 import gamehub.game_Hub.Module.User.User;
+import gamehub.game_Hub.Module.UserSuspensions;
 import gamehub.game_Hub.Repository.BanHistoryRepository;
 import gamehub.game_Hub.Repository.CommunityGuidelinesRepository;
+import gamehub.game_Hub.Repository.UserSuspensionRepository;
 import gamehub.game_Hub.Request.BanUserRequest;
 import gamehub.game_Hub.Request.SuspendAccountRequest;
 import gamehub.game_Hub.Response.Admin.AccountStatusResponse;
@@ -74,6 +82,8 @@ public class AdminServiceImpl implements AdminService {
   private final BanHistoryRepository banHistoryRepository;
 
   private final EmailService emailService;
+
+  private final UserSuspensionRepository userSuspensionRepository;
 
   @Value("${application.mailing.frontend.login-url}")
   private String logInUrl;
@@ -188,7 +198,10 @@ public class AdminServiceImpl implements AdminService {
     user.setAccountStatus(AccountStatus.BANNED);
     banHistoryRepository.save(banUser);
 
-    sendBannedUserEmail(user);
+    // TODO GH-200 create method to change status for other reports related to user
+
+    sendBannedUserEmail(user, banUserRequest.getCustomMessage(), banReason.getCommunityGuideline(),
+        banReason.getDescription());
     return userRepository.save(user).getId();
   }
 
@@ -199,7 +212,7 @@ public class AdminServiceImpl implements AdminService {
 
     user.setBanned(false);
     user.setAccountStatus(AccountStatus.ACTIVE);
-    sendAccountRestored(user);
+    sendAccountRestoredEmail(user);
     return userRepository.save(user).getId();
   }
 
@@ -227,71 +240,90 @@ public class AdminServiceImpl implements AdminService {
     return reportRepository.save(report).getId();
   }
 
-
-
   @Override
-  public Long suspendAccount(final Long userId, final SuspendAccountRequest suspendAccountRequest) {
+  public Long suspendAccount(final Long userId, final SuspendAccountRequest suspendAccountRequest)
+      throws MessagingException {
 
     User user = userRepository.findById(userId)
         .orElseThrow(() -> new EntityNotFoundException("User with id: " + userId + " was not found"));
 
-    CommunityGuidelines suspendedReason = communityGuidelinesRepository.findById(suspendAccountRequest.getSuspendReason())
-        .orElseThrow(() -> new EntityNotFoundException("No reason found with id: " + suspendAccountRequest.getSuspendReason()));
+    CommunityGuidelines suspendedReason = communityGuidelinesRepository.findById(
+            suspendAccountRequest.getSuspendReason())
+        .orElseThrow(
+            () -> new EntityNotFoundException("No reason found with id: " + suspendAccountRequest.getSuspendReason()));
 
-    System.out.println("suspending user: " + user.getName());
-    System.out.println("with reason : " + suspendedReason.getCommunityGuideline());
-    System.out.println("with msg : " + suspendAccountRequest.getCustomMessage());
-    System.out.println("with expired suspension : " + suspendAccountRequest.getExpiresAt());
+    Report report = reportRepository.findById(suspendAccountRequest.getReportId())
+        .orElseThrow(() -> new EntityNotFoundException(
+            "Report with with id: " + suspendAccountRequest.getReportId() + " was not found"));
 
-    // send suspended account mail
+    boolean isExpiresAtCustom = isExpiresAtCustom(suspendAccountRequest.getExpiresAt());
 
+    var suspended = UserSuspensions.builder()
+        .userId(user)
+        .suspensionReason(suspendedReason)
+        .customMessage(suspendAccountRequest.getCustomMessage())
+        .report(report)
+        .build();
 
-    // get how many days plus request.getHowManyDays, converted as long and check if custom than somehow parse it as date
-    // good format is comming from date picker just parse string into date
-    // String days = "30";
-    // Long plusDays = Long.parseLong(days);
-    // LocalDate now = LocalDate.now().plusDays(plusDays);
-    // System.out.println(now);
-    //
-    //
+    if (isExpiresAtCustom) {
+      LocalDate customExpiresAt = LocalDate.parse(suspendAccountRequest.getExpiresAt());
+      suspended.setExpiresAt(customExpiresAt.atStartOfDay());
+    } else {
+      Long plusDays = Long.parseLong(suspendAccountRequest.getExpiresAt());
+      LocalDateTime expiresAt = LocalDate.now().plusDays(plusDays).atStartOfDay();
+      suspended.setExpiresAt(expiresAt);
+    }
 
-    //
+    user.setAccountStatus(AccountStatus.SUSPENDED);
+    report.setStatus(ReportStatus.RESOLVED);
+    userRepository.save(user);
 
+    // TODO GH-200 create method to change status for other reports related to user
 
-    // var suspended = UserSuspensions.builder()
-    //     .userId(user)
-    //     .suspensionReason(suspendedReason)
-    //     .customMessage(suspendAccountRequest.getCustomMessage())
-    //     .
-    return 0L;
-    //   try to get from fe for how long user will be suspended, get today
-    //   + how long user will be suspended save it to column expiredAt
-    //
+    userSuspensionRepository.save(suspended);
+    String violatedGuideline = suspendedReason.getCommunityGuideline();
+    String customMsg = suspendAccountRequest.getCustomMessage();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    sendSuspendedAccountEmail(user, violatedGuideline, customMsg, suspended.getExpiresAt().format(formatter));
+    return suspended.getId();
+
   }
 
-  private void sendAccountRestored(final User user) throws MessagingException {
-    emailService.sendAccountRestored(user.getEmail(), user.getName(), EmailTemplate.USER_ACCOUNT_RESTORED_EMAIL,
-        logInUrl, "Your GameHub account has been successfully restored");
+  private boolean isExpiresAtCustom(String date) {
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    dateFormat.setLenient(false);
+    try {
+      dateFormat.parse(date);
+    } catch (ParseException e) {
+      return false;
+    }
+    return true;
   }
 
-  private void sendBannedUserEmail(final User user) throws MessagingException {
+  private void sendSuspendedAccountEmail(final User user, final String violatedGuideline, final String customMsg,
+      final String suspensionEndDate) throws MessagingException {
+    emailService.sendSuspendedAccountEmail(user.getEmail(), user.getName(), violatedGuideline, customMsg,
+        suspensionEndDate, EmailTemplate.USER_SUSPENDED_EMAIL, "Your GameHub has been suspended");
+  }
+
+  private void sendBannedUserEmail(final User user, final String customMsg, String banReason, String description)
+      throws MessagingException {
     String reason = banHistoryRepository.findByUserId(user.getId())
         .stream()
         .findFirst()
         .map(banHistory -> banHistory.getReason().getCommunityGuideline())
         .orElse(null);
 
-    String customMsg = banHistoryRepository.findByUserId(user.getId())
-        .stream()
-        .findFirst()
-        .map(banHistory -> banHistory.getCustomMsg())
-        .orElse(null);
-
     // TODO dont send user.getId() but send id of ban when implementing chat between user and admin
     // on fe show report id with # report.getId()
     String appealUrl = "http://localhost:4200/send-appeal?appeal=" + user.getId();
-    emailService.sendBannedUserEmail(user.getEmail(), user.getName(), reason, customMsg,
+    emailService.sendBannedUserEmail(user.getEmail(), user.getName(), banReason, customMsg, description,
         EmailTemplate.USER_BANNED_EMAIL, appealUrl, "Your GameHub account has been banned — Appeal available");
+  }
+
+  private void sendAccountRestoredEmail(final User user) throws MessagingException {
+    emailService.sendAccountRestored(user.getEmail(), user.getName(), EmailTemplate.USER_ACCOUNT_RESTORED_EMAIL,
+        logInUrl, "Your GameHub account has been successfully restored");
   }
 
 }

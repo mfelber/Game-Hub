@@ -93,7 +93,8 @@ public class EmailService {
     mailSender.send(mimeMessage);
   }
 
-  public void sendBannedUserEmail(final String to, final String userName, final String banReason, final String customMsg, final EmailTemplate emailTemplate,
+  public void sendBannedUserEmail(final String to, final String userName, final String banReason,
+      final String customMsg, final String communityGuidelineDescription, final EmailTemplate emailTemplate,
       final String appealUrl, final String subject) throws MessagingException {
 
     String templateName;
@@ -109,6 +110,7 @@ public class EmailService {
     properties.put("username", userName);
     properties.put("banReason", banReason);
     properties.put("customMsg", customMsg);
+    properties.put("banDescription", communityGuidelineDescription);
     properties.put("appealUrl", appealUrl);
 
     Context context = new Context();
@@ -145,6 +147,42 @@ public class EmailService {
     Map<String, Object> properties = new HashMap<>();
     properties.put("username", userName);
     properties.put("loginUrl", loginUrl);
+
+    Context context = new Context();
+    context.setVariables(properties);
+
+    helper.setFrom("admin.gamehub@gamehub.com");
+    helper.setTo(to);
+    helper.setSubject(subject);
+
+    String template = templateEngine.process(templateName, context);
+
+    Resource image = new ClassPathResource("images/joystick.png");
+    helper.addInline("joystickImage", image);
+
+    helper.setText(template, true);
+
+    mailSender.send(mimeMessage);
+  }
+
+  public void sendSuspendedAccountEmail(final String to, final String userName, final String violatedGuideline,
+      final String customMsg, final String suspensionEndDate, final EmailTemplate emailTemplate,
+      final String subject) throws MessagingException {
+
+    String templateName;
+    if (emailTemplate == null) {
+      templateName = "user-suspended-email";
+    } else {
+      templateName = emailTemplate.getName();
+    }
+
+    MimeMessage mimeMessage = mailSender.createMimeMessage();
+    MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, MULTIPART_MODE_MIXED, UTF_8.name());
+    Map<String, Object> properties = new HashMap<>();
+    properties.put("username", userName);
+    properties.put("violatedGuideline", violatedGuideline);
+    properties.put("customMsg", customMsg);
+    properties.put("suspensionEndDate", suspensionEndDate);
 
     Context context = new Context();
     context.setVariables(properties);

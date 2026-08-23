@@ -46,7 +46,7 @@ public interface AdminService {
 
   List<ReportStatusResponse> getAllReportStatuses();
 
-  Long suspendAccount(Long userId, SuspendAccountRequest suspendAccountRequest);
+  Long suspendAccount(Long userId, SuspendAccountRequest suspendAccountRequest) throws MessagingException;
 
   Long changeStatusInReview(Long reportId);
 

@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
 
 import gamehub.game_Hub.Module.Report.CommunityGuidelines;
+import gamehub.game_Hub.Module.Report.Report;
 import gamehub.game_Hub.Module.User.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -41,6 +42,10 @@ public class UserSuspensions {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "reason_id")
   private CommunityGuidelines suspensionReason;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "report_id")
+  private Report report;
 
   @Column(name = "custom_msg")
   private String customMessage;

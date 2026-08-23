@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account Suspended - Game Hub</title>
+
+  <style>
+    body {
+      font-family:      "Segoe UI", Arial, sans-serif;
+      background-color: #f7f8fa;
+      margin:           0;
+      padding:          0;
+    }
+
+    .container {
+      background-color: #ffffff;
+      max-width:        600px;
+      margin:           40px auto;
+      padding:          30px;
+      border-radius:    10px;
+      box-shadow:       0 4px 10px rgba(0, 0, 0, 0.08);
+    }
+
+    .header {
+      text-align:     center;
+      border-bottom:  2px solid #f59e0b;
+      padding-bottom: 15px;
+      margin-bottom:  25px;
+    }
+
+    .header h1 {
+      color:          #d97706;
+      margin:         0;
+      font-size:      26px;
+      letter-spacing: 0.5px;
+    }
+
+    .content {
+      color:       #444444;
+      line-height: 1.6;
+      font-size:   15px;
+    }
+
+    .content p {
+      margin: 0 0 15px;
+    }
+
+    .suspension-info {
+      background-color: #fffbeb;
+      border:           1px solid #fde68a;
+      border-left:      4px solid #f59e0b;
+      border-radius:    6px;
+      padding:          15px;
+      margin:           25px 0;
+      color:            #78350f;
+    }
+
+    .suspension-info strong {
+      color: #92400e;
+    }
+
+    .date-info {
+      background-color: #eff6ff;
+      border:           1px solid #bfdbfe;
+      border-left:      4px solid #2563eb;
+      border-radius:    6px;
+      padding:          15px;
+      margin:           25px 0;
+      color:            #1e3a8a;
+    }
+
+    .date-info strong {
+      color: #1e40af;
+    }
+
+    .custom-msg {
+      background-color: #f9fafb;
+      border:           1px solid #e5e7eb;
+      border-left:      4px solid #6b7280;
+      border-radius:    6px;
+      padding:          15px;
+      margin:           25px 0;
+      color:            #374151;
+    }
+
+    .custom-msg strong {
+      color: #1f2937;
+    }
+
+    .footer {
+      margin-top:  35px;
+      font-size:   12px;
+      text-align:  center;
+      color:       #aaaaaa;
+      border-top:  1px solid #eeeeee;
+      padding-top: 15px;
+    }
+
+    .footer p {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <img
+        src="cid:joystickImage"
+        alt="Game Hub"
+        class="logo"
+        style="display:block;margin:0 auto 20px;width:70px;"
+    >
+
+    <h1>Account Suspended</h1>
+  </div>
+
+  <div class="content">
+
+    <p>
+      Hello <strong th:text="${username}"></strong>,
+    </p>
+
+    <p>
+      We are writing to inform you that your
+      <strong>Game-Hub</strong> account has been temporarily suspended.
+    </p>
+
+    <div class="suspension-info">
+
+      <p th:if="${violatedGuideline != 'Other'}">
+        <strong>Violated guideline:</strong>
+        <span th:text="${violatedGuideline}"></span>
+      </p>
+
+      <div
+          th:if="${customMsg != null and !#strings.isEmpty(#strings.trim(customMsg))}"
+          style="margin-top:12px;"
+      >
+        <strong>Message from Admin:</strong>
+        <p
+            th:text="${customMsg}"
+            style="margin:6px 0 0;"
+        ></p>
+      </div>
+
+    </div>
+
+    <div class="date-info">
+      <strong>Suspension ends:</strong>
+      <span th:text="${suspensionEndDate}"></span>
+    </div>
+
+    <p>
+      During this suspension, you will be unable to access your
+      Game-Hub account and its services.
+    </p>
+
+    <p>
+      Once the suspension period has ended, your account access will be restored automatically, and you will be
+      notified.
+    </p>
+
+  </div>
+
+  <div class="footer">
+    <p>&copy; 2026 Game-Hub. All rights reserved.</p>
+    <p>This is an automated message, please do not reply.</p>
+  </div>
+
+</div>
+
+</body>
+</html>

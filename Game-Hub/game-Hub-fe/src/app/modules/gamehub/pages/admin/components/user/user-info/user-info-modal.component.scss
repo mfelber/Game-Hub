@@ -101,6 +101,13 @@
   background: rgba(153, 27, 27, 0.35);
 }
 
+.status.suspended {
+  color: #A78BFA;
+  background: rgba(139, 92, 246, 0.14);
+  border-radius: 10px;
+  padding: 12px;
+}
+
 .section {
   margin-bottom: 25px;
 }

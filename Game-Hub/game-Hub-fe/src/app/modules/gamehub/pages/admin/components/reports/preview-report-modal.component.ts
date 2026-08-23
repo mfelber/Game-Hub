@@ -27,7 +27,7 @@ export class PreviewReportModalComponent implements OnInit {
   suspending: boolean = false;
   selectedAction: 'NONE' | 'WARNING' | 'SUSPEND' | 'BAN' | undefined;
   selectedActionDrop: '7' | '15' | '30' | 'custom' | undefined;
-  suspendRequest: SuspendAccountRequest = {customMessage: '', expiresAt: '', suspendReason: 0};
+  suspendRequest: SuspendAccountRequest = {customMessage: '', expiresAt: '', suspendReason: 0, reportId: 0};
 
   allCommunityGuidelines: { id: number; reason: string; category: { id: number; categoryName: string } }[] = [];
   categories = [
@@ -107,12 +107,15 @@ export class PreviewReportModalComponent implements OnInit {
     switch (this.selectedAction) {
       case 'NONE':
         console.log('no action');
+        // reject report
         break;
       case 'WARNING':
         console.log('warning action');
+        // create warning for user
         break;
       case 'SUSPEND':
         if (this.validateSuspendAccount()) {
+          this.suspendRequest.reportId = this.report.reportId!;
           this.adminService.suspendAccount({
             userId: userId,
             body: this.suspendRequest
@@ -125,6 +128,7 @@ export class PreviewReportModalComponent implements OnInit {
         break;
       case 'BAN':
         console.log('ban action');
+        // ban user
         break;
     }
 

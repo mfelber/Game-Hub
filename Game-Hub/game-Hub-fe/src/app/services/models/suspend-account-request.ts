@@ -5,5 +5,6 @@
 export interface SuspendAccountRequest {
   customMessage: string;
   expiresAt: string;
+  reportId: number;
   suspendReason: number;
 }

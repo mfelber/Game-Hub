@@ -86,7 +86,8 @@ public class AdminController {
   }
 
   @PostMapping("/suspend-account/{userId}")
-  public ResponseEntity<Long> suspendAccount(@PathVariable Long userId, @Valid @RequestBody SuspendAccountRequest suspendAccountRequest) {
+  public ResponseEntity<Long> suspendAccount(@PathVariable Long userId, @Valid @RequestBody SuspendAccountRequest suspendAccountRequest)
+      throws MessagingException {
     return ResponseEntity.ok(adminService.suspendAccount(userId, suspendAccountRequest));
   }
 

@@ -123,14 +123,15 @@
             'status-banned': user.accountStatus === 'BANNED',
             'status-disabled': user.accountStatus === 'DISABLED',
             'status-deleting': user.accountStatus === 'DELETING',
-            'status-deleted': user.accountStatus === 'DELETED'
+            'status-deleted': user.accountStatus === 'DELETED',
+            'status-suspended': user.accountStatus === 'SUSPENDED',
             }">{{user.accountStatus}} </span></td>
             <td>{{user.registered | date: 'dd.MM.yyyy'}}</td>
             <td>{{user.lastLogin | date: 'dd.MM.yyyy'}}</td>
             <td>
               <button class="action view" (click)="getUserInfo(user.userId)"><i class="fa-solid fa-eye"></i></button>
               <button class="action change-role" (click)="changeRole(user)"><i class="fa-solid fa-user-shield"></i></button>
-              <button class="action ban" *ngIf="user.role !== 'ADMIN'" (click)="banOrUnbanUser(user)"><i
+              <button class="action ban" *ngIf="user.role !== 'ADMIN' && user.accountStatus !== 'SUSPENDED'" (click)="banOrUnbanUser(user)"><i
                 [ngClass]="{
                   'fa-ban': user.accountStatus !== 'BANNED',
                   'fa-lock-open': user.accountStatus === 'BANNED'

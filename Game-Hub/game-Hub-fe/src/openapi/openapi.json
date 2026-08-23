@@ -2807,6 +2807,7 @@
         "required": [
           "customMessage",
           "expiresAt",
+          "reportId",
           "suspendReason"
         ],
         "type": "object",
@@ -2820,6 +2821,10 @@
           },
           "expiresAt": {
             "type": "string"
+          },
+          "reportId": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       },
