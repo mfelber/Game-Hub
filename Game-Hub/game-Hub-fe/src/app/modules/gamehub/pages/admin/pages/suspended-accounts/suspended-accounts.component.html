@@ -1,1 +1,79 @@
-<p>suspended-accounts works!</p>
+<main>
+  <section class="suspended-accounts-page">
+    <div class="page-header">
+      <div>
+      <h1>Suspended Account</h1>
+      <p>View all currently suspended accounts in one place.</p>
+      </div>
+    </div>
+
+    <section>
+      <div class="top">
+        <app-search-bar
+        placeholder="Search suspended accounts...">
+        </app-search-bar>
+      </div>
+    </section>
+
+    <section>
+      <div class="filter-bar">
+        <div class="filter-header">
+          <span>Filter</span>
+          <button>Reset</button>
+        </div>
+
+        <div class="filter-options">
+          <div class="dropdown">
+            <label>Suspended Account</label>
+            <select>
+              <option value="">All Suspende Accouts</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="table-container">
+        <table>
+          <thead>
+          <tr>
+            <th>Suspension ID</th>
+            <th>Username</th>
+            <th>Reason</th>
+            <th>Status</th>
+            <th>Expires At</th>
+            <th>Suspended Times</th>
+            <th>Days Since Last Suspension</th>
+            <th>Admin message</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let suspendedUser of suspendedAccountsResponse.content">
+            <td>{{suspendedUser.suspensionId}}</td>
+            <td>{{suspendedUser.userName}}</td>
+            <td>{{suspendedUser.suspensionReason}}</td>
+            <td> <span class="status" [ngClass]="{
+            'ongoing': suspendedUser.suspensionStatus === 'ONGOING',
+            'expired': suspendedUser.suspensionStatus === 'EXPIRED'
+            }">{{suspendedUser.suspensionStatus}} </span>
+              </td>
+            <td>{{suspendedUser.expireAt | date:'dd-MM-yyyy'}}</td>
+            <td>{{suspendedUser.suspendedTimes}}</td>
+            <td>
+              {{ suspendedUser.suspensionStatus === 'ONGOING'
+              ? ''
+              : suspendedUser.daysSinceLastSuspension }}
+            </td>
+            <td>{{suspendedUser.messageFromAdmin}}</td>
+            <td>
+              <button class="action view"><i class="fa-solid fa-eye"></i></button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </section>
+</main>

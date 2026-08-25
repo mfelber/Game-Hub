@@ -4,6 +4,7 @@
 
 export type { AccountStatusResponse } from './models/account-status-response';
 export type { AdminReportsResponse } from './models/admin-reports-response';
+export type { AdminSuspendedAccountsResponse } from './models/admin-suspended-accounts-response';
 export type { AdminUserResponse } from './models/admin-user-response';
 export type { AgeRatingResponse } from './models/age-rating-response';
 export type { AuthenticationRequest } from './models/authentication-request';
@@ -30,6 +31,7 @@ export type { LevelProgressResponse } from './models/level-progress-response';
 export type { LevelResponse } from './models/level-response';
 export type { LocationResponse } from './models/location-response';
 export type { PageResponseAdminReportsResponse } from './models/page-response-admin-reports-response';
+export type { PageResponseAdminSuspendedAccountsResponse } from './models/page-response-admin-suspended-accounts-response';
 export type { PageResponseAdminUserResponse } from './models/page-response-admin-user-response';
 export type { PageResponseFriendRequestResponse } from './models/page-response-friend-request-response';
 export type { PageResponseGamePreviewResponse } from './models/page-response-game-preview-response';

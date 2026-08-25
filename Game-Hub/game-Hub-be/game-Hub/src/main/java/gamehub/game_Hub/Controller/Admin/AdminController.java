@@ -23,6 +23,7 @@ import gamehub.game_Hub.Request.GameUpdateRequest;
 import gamehub.game_Hub.Request.SuspendAccountRequest;
 import gamehub.game_Hub.Response.Admin.AccountStatusResponse;
 import gamehub.game_Hub.Response.Admin.AdminReportsResponse;
+import gamehub.game_Hub.Response.Admin.AdminSuspendedAccountsResponse;
 import gamehub.game_Hub.Response.Admin.AdminUserResponse;
 import gamehub.game_Hub.Response.Admin.DashboardResponse;
 import gamehub.game_Hub.Response.Admin.ReportStatusResponse;
@@ -80,6 +81,14 @@ public class AdminController {
     return ResponseEntity.ok(adminService.getAllReports(page, size));
   }
 
+  @GetMapping("/suspended-accounts")
+  public ResponseEntity<PageResponse<AdminSuspendedAccountsResponse>> getSuspendedAccount(
+      @RequestParam(name = "page", defaultValue = "0", required = false) int page,
+      @RequestParam(name = "page", defaultValue = "50", required = false) int size
+  ){
+    return ResponseEntity.ok(adminService.getAllSuspendedAccounts(page,size));
+  }
+
   @PutMapping("/change-report-status/review/{reportId}")
   public ResponseEntity<Long> changeStatusInReview(@PathVariable Long reportId) {
     return ResponseEntity.ok(adminService.changeStatusInReview(reportId));
@@ -90,6 +99,8 @@ public class AdminController {
       throws MessagingException {
     return ResponseEntity.ok(adminService.suspendAccount(userId, suspendAccountRequest));
   }
+
+
 
   // fetch all genres , possibility to add new genres (not duplicated)
   // fetch all reviews

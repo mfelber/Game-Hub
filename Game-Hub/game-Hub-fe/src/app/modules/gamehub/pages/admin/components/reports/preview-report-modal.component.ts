@@ -122,6 +122,8 @@ export class PreviewReportModalComponent implements OnInit {
           }).subscribe({
             next: () => {
               console.log('suspend successfully!');
+              this.close.emit();
+              this.resolveReport.emit("User was successfully suspended!");
             }
           })
         }

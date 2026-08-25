@@ -7,8 +7,12 @@ import org.hibernate.annotations.CreationTimestamp;
 import gamehub.game_Hub.Module.Report.CommunityGuidelines;
 import gamehub.game_Hub.Module.Report.Report;
 import gamehub.game_Hub.Module.User.User;
+import gamehub.game_Hub.enums.ReportStatus;
+import gamehub.game_Hub.enums.SuspensionStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -49,6 +53,10 @@ public class UserSuspensions {
 
   @Column(name = "custom_msg")
   private String customMessage;
+
+  @Enumerated(EnumType.STRING)
+  @Column(name = "suspension_status")
+  private SuspensionStatus suspensionStatus;
 
   @Column(name = "created_at")
   @CreationTimestamp

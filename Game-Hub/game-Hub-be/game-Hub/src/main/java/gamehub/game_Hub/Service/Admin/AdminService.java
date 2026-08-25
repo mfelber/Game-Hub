@@ -9,6 +9,7 @@ import gamehub.game_Hub.Request.BanUserRequest;
 import gamehub.game_Hub.Request.SuspendAccountRequest;
 import gamehub.game_Hub.Response.Admin.AccountStatusResponse;
 import gamehub.game_Hub.Response.Admin.AdminReportsResponse;
+import gamehub.game_Hub.Response.Admin.AdminSuspendedAccountsResponse;
 import gamehub.game_Hub.Response.Admin.AdminUserResponse;
 import gamehub.game_Hub.Response.Admin.DashboardResponse;
 import gamehub.game_Hub.Response.Admin.ReportStatusResponse;
@@ -49,5 +50,7 @@ public interface AdminService {
   Long suspendAccount(Long userId, SuspendAccountRequest suspendAccountRequest) throws MessagingException;
 
   Long changeStatusInReview(Long reportId);
+
+  PageResponse<AdminSuspendedAccountsResponse> getAllSuspendedAccounts(int page, int size);
 
 }

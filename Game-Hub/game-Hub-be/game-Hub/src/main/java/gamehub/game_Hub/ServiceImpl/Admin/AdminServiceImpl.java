@@ -25,6 +25,7 @@ import gamehub.game_Hub.Email.EmailTemplate;
 import gamehub.game_Hub.Mapper.GameMapper;
 import gamehub.game_Hub.Mapper.ReportMapper;
 import gamehub.game_Hub.Mapper.UserMapper;
+import gamehub.game_Hub.Mapper.UserSuspensionsMapper;
 import gamehub.game_Hub.Module.BanHistory;
 import gamehub.game_Hub.Module.Game;
 import gamehub.game_Hub.Module.Report.CommunityGuidelines;
@@ -38,6 +39,7 @@ import gamehub.game_Hub.Request.BanUserRequest;
 import gamehub.game_Hub.Request.SuspendAccountRequest;
 import gamehub.game_Hub.Response.Admin.AccountStatusResponse;
 import gamehub.game_Hub.Response.Admin.AdminReportsResponse;
+import gamehub.game_Hub.Response.Admin.AdminSuspendedAccountsResponse;
 import gamehub.game_Hub.Response.Admin.AdminUserResponse;
 import gamehub.game_Hub.Response.Admin.ReportStatusResponse;
 import gamehub.game_Hub.Response.Admin.RoleResponse;
@@ -53,6 +55,7 @@ import gamehub.game_Hub.Response.Admin.DashboardResponse;
 import gamehub.game_Hub.Response.GamePreviewResponse;
 import gamehub.game_Hub.Response.GameResponse;
 import gamehub.game_Hub.Service.Admin.AdminService;
+import gamehub.game_Hub.enums.SuspensionStatus;
 import jakarta.mail.MessagingException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -84,6 +87,8 @@ public class AdminServiceImpl implements AdminService {
   private final EmailService emailService;
 
   private final UserSuspensionRepository userSuspensionRepository;
+
+  private final UserSuspensionsMapper userSuspensionsMapper;
 
   @Value("${application.mailing.frontend.login-url}")
   private String logInUrl;
@@ -241,6 +246,25 @@ public class AdminServiceImpl implements AdminService {
   }
 
   @Override
+  public PageResponse<AdminSuspendedAccountsResponse> getAllSuspendedAccounts(final int page, final int size) {
+    Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+    Page<UserSuspensions> userSuspension = userSuspensionRepository.findOnePerUser(pageable);
+    List<AdminSuspendedAccountsResponse> suspendedAccountsResponse = userSuspension.stream()
+        .map(userSuspensionsMapper::toUserSuspensionResponse)
+        .toList();
+
+    return new PageResponse<>(
+        suspendedAccountsResponse,
+        userSuspension.getNumber(),
+        userSuspension.getSize(),
+        userSuspension.getTotalElements(),
+        userSuspension.getTotalPages(),
+        userSuspension.isFirst(),
+        userSuspension.isLast()
+    );
+  }
+
+  @Override
   public Long suspendAccount(final Long userId, final SuspendAccountRequest suspendAccountRequest)
       throws MessagingException {
 
@@ -263,6 +287,7 @@ public class AdminServiceImpl implements AdminService {
         .suspensionReason(suspendedReason)
         .customMessage(suspendAccountRequest.getCustomMessage())
         .report(report)
+        .suspensionStatus(SuspensionStatus.ONGOING)
         .build();
 
     if (isExpiresAtCustom) {
