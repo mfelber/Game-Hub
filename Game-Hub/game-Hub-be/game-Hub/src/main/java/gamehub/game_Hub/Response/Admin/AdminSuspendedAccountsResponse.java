@@ -26,4 +26,5 @@ public class AdminSuspendedAccountsResponse {
   private Long daysSinceLastSuspension;
   private SuspensionStatus suspensionStatus;
   private String expireAt;
+//   userSuspensionHistoryResponse
 }

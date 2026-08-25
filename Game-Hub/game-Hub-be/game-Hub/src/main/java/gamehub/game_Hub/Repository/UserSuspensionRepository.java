@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import gamehub.game_Hub.Module.User.User;
-import gamehub.game_Hub.Module.UserSuspensions;
+import gamehub.game_Hub.Module.User.UserSuspensions;
 
 public interface UserSuspensionRepository extends JpaRepository<UserSuspensions, Long> {
 

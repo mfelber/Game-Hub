@@ -5,6 +5,8 @@ import {FormsModule} from '@angular/forms';
 import {AdminControllerService} from '../../../../../../services/services/admin-controller.service';
 import {ReportControllerService} from '../../../../../../services/services/report-controller.service';
 import {SuspendAccountRequest} from '../../../../../../services/models/suspend-account-request';
+import {WarnUserRequest} from '../../../../../../services/models/warn-user-request';
+import {BanUserRequest} from '../../../../../../services/models/ban-user-request';
 
 @Component({
   selector: 'app-preview-report-modal',
@@ -25,9 +27,13 @@ export class PreviewReportModalComponent implements OnInit {
 
   isResolving = false;
   suspending: boolean = false;
+  banning: boolean = false;
   selectedAction: 'NONE' | 'WARNING' | 'SUSPEND' | 'BAN' | undefined;
   selectedActionDrop: '7' | '15' | '30' | 'custom' | undefined;
+
   suspendRequest: SuspendAccountRequest = {customMessage: '', expiresAt: '', suspendReason: 0, reportId: 0};
+  warningRequest: WarnUserRequest = {customMsg: '', reportId: 0};
+  banRequest: BanUserRequest = {banReason: null!, reportId: 0, customMessage: null};
 
   allCommunityGuidelines: { id: number; reason: string; category: { id: number; categoryName: string } }[] = [];
   categories = [
@@ -39,7 +45,7 @@ export class PreviewReportModalComponent implements OnInit {
     'Other'
   ]
   selectedCategory: string | null = null;
-  selectedSuspendReason: string = '';
+  selectedGuidelineReason: string = '';
   minDate: string = '';
 
   constructor(
@@ -93,25 +99,40 @@ export class PreviewReportModalComponent implements OnInit {
   closeResolve() {
     if (this.isResolving && this.suspending) {
       this.suspending = false;
-      this.isResolving = true;
-    } else {
-      this.isResolving = false;
-      this.selectedAction = undefined;
+      return;
     }
+
+    if (this.isResolving && this.banning) {
+      this.banning = false;
+      return;
+    }
+
+    this.isResolving = false;
+    this.selectedAction = undefined;
 
   }
 
-
   confirmResolution(userId: any) {
-    console.log(this.suspendRequest);
     switch (this.selectedAction) {
       case 'NONE':
-        console.log('no action');
-        // reject report
+        this.adminService.noActionOnReportedUser({reportId: this.report.reportId!}).subscribe({
+          next: () => {
+            this.close.emit();
+            this.resolveReport.emit("Report was resolved!");
+          }
+        });
         break;
       case 'WARNING':
-        console.log('warning action');
-        // create warning for user
+        this.warningRequest.reportId = this.report.reportId!;
+        this.adminService.warnUser({
+          userId: userId,
+          body: this.warningRequest,
+        }).subscribe({
+          next: () => {
+            this.close.emit();
+            this.resolveReport.emit("User was successfully warned!");
+          }
+        })
         break;
       case 'SUSPEND':
         if (this.validateSuspendAccount()) {
@@ -130,10 +151,39 @@ export class PreviewReportModalComponent implements OnInit {
         break;
       case 'BAN':
         console.log('ban action');
-        // ban user
-        break;
+        if (this.validateBanAccount()) {
+
+          const request: BanUserRequest = {
+            reportId: this.report.reportId!,
+            banReason: this.banRequest.banReason,
+            customMessage: this.banRequest.customMessage?.trim() || null,
+          }
+
+          this.adminService.banUser({
+            userId: userId,
+            body: request
+          }).subscribe({
+            next: () => {
+              this.banRequest = {
+                reportId: 0,
+                banReason: null!,
+                customMessage: null!,
+              };
+              this.resolveReport.emit("User was successfully banned!");
+              this.close.emit();
+            }
+          })
+        }
     }
 
+  }
+
+  validateBanAccount(): boolean {
+    const {banReason, customMessage} = this.banRequest;
+    if (banReason === 15 && !customMessage?.trim()) {
+      return false;
+    }
+    return true
   }
 
   validateSuspendAccount(): boolean {
@@ -157,25 +207,93 @@ export class PreviewReportModalComponent implements OnInit {
   }
 
   rejectReport() {
-    console.log('Reject Report');
+    this.adminService.rejectReport({reportId: this.report.reportId!}).subscribe({
+      next: () => {
+        this.close.emit();
+        this.resolveReport.emit("Report was rejected!");
+      }
+    })
   }
-
-//   when close modal and status was change to reject/resolved/inreview reload table
-
+  
   next() {
-    console.log(this.suspendRequest.suspendReason);
-    this.suspending = true;
+    if (this.selectedAction === 'SUSPEND') {
+      this.suspending = true;
+    }
+    if (this.selectedAction === 'BAN') {
+      this.banning = true;
+    }
   }
 
   setDuration() {
-    if (this.selectedActionDrop == '7'||
+    if (this.selectedActionDrop == '7' ||
       this.selectedActionDrop == '15' ||
-      this.selectedActionDrop === '30'||
+      this.selectedActionDrop === '30' ||
       this.selectedActionDrop == 'custom') {
       this.suspendRequest.expiresAt = this.selectedActionDrop;
     }
     if (this.selectedActionDrop == 'custom') {
       this.suspendRequest.expiresAt = '';
     }
+  }
+
+  onActionChange() {
+    if (this.selectedAction !== "WARNING") {
+      this.warningRequest = {
+        customMsg: '',
+        reportId: 0
+      }
+    }
+    if (this.selectedAction !== "SUSPEND") {
+      this.selectedGuidelineReason = '';
+      this.selectedActionDrop = undefined;
+      this.selectedCategory = null;
+      this.suspendRequest = {
+        customMessage: '',
+        expiresAt: '',
+        suspendReason: 0,
+        reportId: 0
+      }
+    }
+    if (this.selectedAction !== "BAN") {
+      this.selectedGuidelineReason = '';
+      this.selectedCategory = null;
+      this.banRequest = {
+        banReason: null!,
+        reportId: 0,
+        customMessage: null
+      }
+    }
+  }
+
+  get isNextDisabled(): boolean {
+    if (this.selectedAction === 'SUSPEND') {
+      return (this.suspendRequest.suspendReason === 0)
+    }
+
+    if (this.selectedAction === 'BAN') {
+      return (this.banRequest.banReason === null)
+    }
+    return false;
+  }
+
+  get isConfirmDisabled(): boolean {
+
+    if (this.selectedAction === 'NONE') {
+      return false;
+    }
+
+    if (this.selectedAction === 'WARNING') {
+      return !this.warningRequest.customMsg?.trim();
+    }
+
+    if (this.selectedAction === 'SUSPEND') {
+      return (!this.suspendRequest.expiresAt || this.selectedActionDrop === undefined || !this.suspendRequest.customMessage?.trim());
+    }
+
+    if (this.selectedAction === 'BAN') {
+      return !this.validateBanAccount();
+    }
+
+    return true;
   }
 }

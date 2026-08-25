@@ -5,4 +5,5 @@
 export interface BanUserRequest {
   banReason: number;
   customMessage?: string | null;
+  reportId?: number | null;
 }

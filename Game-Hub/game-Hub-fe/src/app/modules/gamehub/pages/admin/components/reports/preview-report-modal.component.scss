@@ -292,13 +292,13 @@
 
 // SUSPEND ACCOUNT SECTION
 
-.suspend-section{
+.section{
   display: flex;
   flex-direction: column;
   gap: 18px;
 }
 
-.suspend-section h2{
+.section h2{
   color: #fff;
   font-size: 18px;
   font-weight: 600;
@@ -417,7 +417,6 @@
   display:flex;
   flex-direction:column;
   gap:12px;
-  margin-top:8px;
   padding-top:20px;
 }
 
@@ -496,6 +495,28 @@ textarea {
   background: #0f141f;
   border: 1px solid #333d52;
   border-radius: 10px;
+}
+
+.ban-reason {
+  margin-top: 15px;
+  margin-bottom: 10px;
+  padding: 12px 14px;
+  background: #0f141f;
+  border: 1px solid #333d52;
+  border-radius: 10px;
+}
+
+.ban-reason  .section-label {
+  display: block;
+  margin-bottom: 5px;
+  color: #9ca3af;
+  font-size: 12px;
+}
+
+.ban-reason  p {
+  margin: 0;
+  color: #fff;
+  font-size: 14px;
 }
 
 .suspension-reason .section-label {

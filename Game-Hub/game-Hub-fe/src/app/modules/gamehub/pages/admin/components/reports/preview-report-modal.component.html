@@ -84,7 +84,7 @@
 
         <div class="divider"></div>
 
-        <div class="action-section" *ngIf="!suspending">
+        <div class="action-section" *ngIf="!suspending && !banning">
           <span class="section-label">Moderation Action</span>
 
           <label class="action-option">
@@ -93,6 +93,7 @@
               name="moderationAction"
               value="NONE"
               [(ngModel)]="selectedAction"
+              (change)="onActionChange()"
             />
             <div>
               <strong>No Action</strong>
@@ -106,6 +107,7 @@
               name="moderationAction"
               value="WARNING"
               [(ngModel)]="selectedAction"
+              (change)="onActionChange()"
             />
             <div>
               <strong>Warning</strong>
@@ -113,12 +115,20 @@
             </div>
           </label>
 
+          <div *ngIf="selectedAction === 'WARNING'">
+            <div class="section">
+              <h2>Custom message *</h2>
+              <textarea [(ngModel)]="warningRequest.customMsg" rows="5"></textarea>
+            </div>
+          </div>
+
           <label class="action-option">
             <input
               type="radio"
               name="moderationAction"
               value="SUSPEND"
               [(ngModel)]="selectedAction"
+              (change)="onActionChange()"
             />
             <div>
               <strong>Suspend account</strong>
@@ -128,7 +138,7 @@
 
           <div *ngIf="selectedAction === 'SUSPEND'">
 
-            <div *ngIf="!suspending" class="suspend-section">
+            <div *ngIf="!suspending" class="section">
 
               <h2>Suspension reason</h2>
               <p class="section-description"> Select the community guideline that was violated.</p>
@@ -151,7 +161,7 @@
 
                       <input type="radio" [value]="guideline.id"
                              [(ngModel)]="suspendRequest.suspendReason"
-                             (change)="selectedSuspendReason = guideline.reason">
+                             (change)="selectedGuidelineReason = guideline.reason">
                       <span>{{ guideline.reason }}</span>
                     </label>
                   </div>
@@ -167,6 +177,7 @@
               name="moderationAction"
               value="BAN"
               [(ngModel)]="selectedAction"
+              (change)="onActionChange()"
             />
             <div>
               <strong>Ban account</strong>
@@ -174,6 +185,49 @@
             </div>
           </label>
 
+          <div *ngIf="selectedAction === 'BAN'">
+
+            <div *ngIf="!banning" class="section">
+
+              <h2>Ban reason</h2>
+              <p class="section-description"> Select the community guideline that was violated.</p>
+
+
+              <div class="community-guidelines">
+                <div *ngFor="let category of categories" class="category">
+
+                  <div class="category-title" [class.active]="selectedCategory === category"
+                       (click)="selectCategory(category)">
+                    <h3>{{ category }}</h3>
+
+                    <i class="fa-solid"
+                       [ngClass]="selectedCategory === category ? 'fa-chevron=up' : 'fa-chevron-down'"></i>
+                  </div>
+
+                  <div
+                    *ngIf="selectedCategory === category" class="guideline">
+                    <label *ngFor="let guideline of getGuidelineByCategory(category)" class="guideline-option">
+
+                      <input type="radio" [value]="guideline.id"
+                             [(ngModel)]="banRequest.banReason"
+                             (change)="selectedGuidelineReason = guideline.reason">
+                      <span>{{ guideline.reason }}</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="banning">
+          <h2>Banning account </h2>
+          <div class="ban-reason">
+            <span class="section-label">Ban reason</span>
+            <p>{{ selectedGuidelineReason }}</p>
+          </div>
+          Custom message {{ banRequest.banReason === 15 ? '*' : '' }}
+          <textarea [(ngModel)]="banRequest.customMessage" rows="5"></textarea>
         </div>
 
         <div *ngIf="suspending">
@@ -181,7 +235,7 @@
 
           <div class="suspension-reason">
             <span class="section-label">Suspension reason</span>
-            <p>{{ selectedSuspendReason }}</p>
+            <p>{{ selectedGuidelineReason }}</p>
           </div>
 
           <div class="suspension-duration">
@@ -219,17 +273,24 @@
           <i class="fa-solid fa-arrow-left"></i>
           Back
         </button>
-        <button *ngIf="selectedAction !== 'SUSPEND'" class="resolve-btn" [disabled]="!selectedAction"
+
+        <button *ngIf="(selectedAction !== 'SUSPEND' && selectedAction!== 'BAN') || suspending || banning"
+                class="resolve-btn"
+                [disabled]="isConfirmDisabled"
                 (click)="confirmResolution(report.reportedUserId)">
           Confirm resolution
         </button>
-        <button *ngIf="selectedAction === 'SUSPEND' && suspending" class="resolve-btn"
-                [disabled]="(suspendRequest.expiresAt === '' || selectedActionDrop === undefined) || suspendRequest.customMessage === ''"
-                (click)="confirmResolution(report.reportedUserId)">
-          Confirm resolution
-        </button>
-        <button *ngIf="selectedAction === 'SUSPEND' && !suspending" class="resolve-btn"
-                [disabled]="!selectedAction || suspendRequest.suspendReason === 0" (click)="next()">
+
+<!--        <button *ngIf="selectedAction === 'SUSPEND' && suspending"-->
+<!--                class="resolve-btn"-->
+<!--                [disabled]="isConfirmDisabled"-->
+<!--                (click)="confirmResolution(report.reportedUserId)">-->
+<!--          Confirm resolution-->
+<!--        </button>-->
+
+        <button *ngIf="(selectedAction === 'SUSPEND' && !suspending) || (selectedAction === 'BAN' && !banning)"
+                class="resolve-btn"
+                [disabled]="isNextDisabled" (click)="next()">
           Next
         </button>
 

@@ -9,12 +9,12 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 
-export interface ChangeStatusInReview$Params {
+export interface NoActionOnReportedUser$Params {
   reportId: number;
 }
 
-export function changeStatusInReview(http: HttpClient, rootUrl: string, params: ChangeStatusInReview$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
-  const rb = new RequestBuilder(rootUrl, changeStatusInReview.PATH, 'put');
+export function noActionOnReportedUser(http: HttpClient, rootUrl: string, params: NoActionOnReportedUser$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+  const rb = new RequestBuilder(rootUrl, noActionOnReportedUser.PATH, 'put');
   if (params) {
     rb.path('reportId', params.reportId, {});
   }
@@ -29,4 +29,4 @@ export function changeStatusInReview(http: HttpClient, rootUrl: string, params: 
   );
 }
 
-changeStatusInReview.PATH = '/admin/change-report-status/in-review/{reportId}';
+noActionOnReportedUser.PATH = '/admin/change-report-status/no-action/{reportId}';

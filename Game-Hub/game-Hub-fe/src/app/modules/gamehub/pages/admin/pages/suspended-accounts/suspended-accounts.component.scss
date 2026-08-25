@@ -152,3 +152,35 @@ tbody tr:hover{
 .view:hover{
   background: #4B5563;
 }
+
+.warning-icon {
+  color: #facc15;
+  margin-left: 5px;
+}
+
+.warning-tooltip {
+  position: relative;
+  display: inline-block;
+  margin-left: 5px;
+}
+
+.tooltip-text {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #151923;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  transition: opacity 0.2s;
+}
+
+.warning-tooltip:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}

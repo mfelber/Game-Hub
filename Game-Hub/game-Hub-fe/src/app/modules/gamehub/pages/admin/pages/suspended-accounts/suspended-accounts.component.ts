@@ -14,7 +14,8 @@ import {DatePipe, NgClass, NgForOf, NgIf} from '@angular/common';
     SearchBar,
     NgForOf,
     DatePipe,
-    NgClass
+    NgClass,
+    NgIf
   ],
   templateUrl: './suspended-accounts.component.html',
   styleUrl: './suspended-accounts.component.scss',

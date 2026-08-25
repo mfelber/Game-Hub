@@ -8,15 +8,18 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { WarnUserRequest } from '../../models/warn-user-request';
 
-export interface ChangeStatusInReview$Params {
-  reportId: number;
+export interface WarnUser$Params {
+  userId: number;
+      body: WarnUserRequest
 }
 
-export function changeStatusInReview(http: HttpClient, rootUrl: string, params: ChangeStatusInReview$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
-  const rb = new RequestBuilder(rootUrl, changeStatusInReview.PATH, 'put');
+export function warnUser(http: HttpClient, rootUrl: string, params: WarnUser$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+  const rb = new RequestBuilder(rootUrl, warnUser.PATH, 'post');
   if (params) {
-    rb.path('reportId', params.reportId, {});
+    rb.path('userId', params.userId, {});
+    rb.body(params.body, 'application/json');
   }
 
   return http.request(
@@ -29,4 +32,4 @@ export function changeStatusInReview(http: HttpClient, rootUrl: string, params: 
   );
 }
 
-changeStatusInReview.PATH = '/admin/change-report-status/in-review/{reportId}';
+warnUser.PATH = '/admin/warn-user/{userId}';

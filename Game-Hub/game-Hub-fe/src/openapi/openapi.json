@@ -63,6 +63,38 @@
         }
       }
     },
+    "/admin/reject-report/{reportId}": {
+      "put": {
+        "tags": [
+          "admin-controller"
+        ],
+        "operationId": "rejectReport",
+        "parameters": [
+          {
+            "name": "reportId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/admin/edit-game/{gameId}": {
       "put": {
         "tags": [
@@ -137,7 +169,39 @@
         }
       }
     },
-    "/admin/change-report-status/review/{reportId}": {
+    "/admin/change-report-status/no-action/{reportId}": {
+      "put": {
+        "tags": [
+          "admin-controller"
+        ],
+        "operationId": "noActionOnReportedUser",
+        "parameters": [
+          {
+            "name": "reportId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/change-report-status/in-review/{reportId}": {
       "put": {
         "tags": [
           "admin-controller"
@@ -1003,6 +1067,48 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/AuthenticationResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/warn-user/{userId}": {
+      "post": {
+        "tags": [
+          "admin-controller"
+        ],
+        "operationId": "warnUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WarnUserRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
                 }
               }
             }
@@ -2633,6 +2739,11 @@
             "type": "integer",
             "format": "int64"
           },
+          "reportId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
           "customMessage": {
             "type": "string",
             "nullable": true
@@ -2832,6 +2943,22 @@
           },
           "token": {
             "type": "string"
+          }
+        }
+      },
+      "WarnUserRequest": {
+        "required": [
+          "customMsg",
+          "reportId"
+        ],
+        "type": "object",
+        "properties": {
+          "customMsg": {
+            "type": "string"
+          },
+          "reportId": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       },

@@ -1,14 +1,13 @@
 package gamehub.game_Hub.Mapper;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
 
 import org.springframework.stereotype.Service;
 
-import gamehub.game_Hub.Module.UserSuspensions;
+import gamehub.game_Hub.Module.User.UserSuspensions;
 import gamehub.game_Hub.Repository.UserSuspensionRepository;
 import gamehub.game_Hub.Response.Admin.AdminSuspendedAccountsResponse;
 

@@ -2,15 +2,15 @@
   <section class="suspended-accounts-page">
     <div class="page-header">
       <div>
-      <h1>Suspended Account</h1>
-      <p>View all currently suspended accounts in one place.</p>
+        <h1>Suspended Account</h1>
+        <p>View all currently suspended accounts in one place.</p>
       </div>
     </div>
 
     <section>
       <div class="top">
         <app-search-bar
-        placeholder="Search suspended accounts...">
+          placeholder="Search suspended accounts...">
         </app-search-bar>
       </div>
     </section>
@@ -38,7 +38,6 @@
         <table>
           <thead>
           <tr>
-            <th>Suspension ID</th>
             <th>Username</th>
             <th>Reason</th>
             <th>Status</th>
@@ -51,22 +50,31 @@
           </thead>
           <tbody>
           <tr *ngFor="let suspendedUser of suspendedAccountsResponse.content">
-            <td>{{suspendedUser.suspensionId}}</td>
-            <td>{{suspendedUser.userName}}</td>
-            <td>{{suspendedUser.suspensionReason}}</td>
+            <td>{{ suspendedUser.userName }}</td>
+            <td>{{ suspendedUser.suspensionReason }}</td>
             <td> <span class="status" [ngClass]="{
             'ongoing': suspendedUser.suspensionStatus === 'ONGOING',
             'expired': suspendedUser.suspensionStatus === 'EXPIRED'
-            }">{{suspendedUser.suspensionStatus}} </span>
-              </td>
-            <td>{{suspendedUser.expireAt | date:'dd-MM-yyyy'}}</td>
-            <td>{{suspendedUser.suspendedTimes}}</td>
-            <td>
-              {{ suspendedUser.suspensionStatus === 'ONGOING'
-              ? ''
-              : suspendedUser.daysSinceLastSuspension }}
+            }">{{ suspendedUser.suspensionStatus }} </span>
             </td>
-            <td>{{suspendedUser.messageFromAdmin}}</td>
+            <td>{{ suspendedUser.expireAt | date:'dd-MM-yyyy' }}</td>
+            <td>{{ suspendedUser.suspendedTimes }} <span
+              *ngIf="suspendedUser.suspendedTimes! >= 3"
+              class="warning-tooltip">
+              <i class="fa-solid fa-triangle-exclamation warning-icon"></i>
+              <span class="tooltip-text">
+                This user has been suspended 3 or more times. You may want to review their profile activity.
+              </span>
+            </span>
+            </td>
+            <td>
+              {{
+                suspendedUser.suspensionStatus === 'ONGOING'
+                  ? ''
+                  : suspendedUser.daysSinceLastSuspension
+              }}
+            </td>
+            <td>{{ suspendedUser.messageFromAdmin }}</td>
             <td>
               <button class="action view"><i class="fa-solid fa-eye"></i></button>
             </td>

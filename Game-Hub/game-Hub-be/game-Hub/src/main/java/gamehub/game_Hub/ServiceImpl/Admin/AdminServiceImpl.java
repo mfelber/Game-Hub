@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -31,12 +30,15 @@ import gamehub.game_Hub.Module.Game;
 import gamehub.game_Hub.Module.Report.CommunityGuidelines;
 import gamehub.game_Hub.Module.Report.Report;
 import gamehub.game_Hub.Module.User.User;
-import gamehub.game_Hub.Module.UserSuspensions;
+import gamehub.game_Hub.Module.User.UserSuspensions;
+import gamehub.game_Hub.Module.User.UserWarnings;
 import gamehub.game_Hub.Repository.BanHistoryRepository;
 import gamehub.game_Hub.Repository.CommunityGuidelinesRepository;
 import gamehub.game_Hub.Repository.UserSuspensionRepository;
+import gamehub.game_Hub.Repository.UserWarningsRepository;
 import gamehub.game_Hub.Request.BanUserRequest;
 import gamehub.game_Hub.Request.SuspendAccountRequest;
+import gamehub.game_Hub.Request.WarnUserRequest;
 import gamehub.game_Hub.Response.Admin.AccountStatusResponse;
 import gamehub.game_Hub.Response.Admin.AdminReportsResponse;
 import gamehub.game_Hub.Response.Admin.AdminSuspendedAccountsResponse;
@@ -89,6 +91,8 @@ public class AdminServiceImpl implements AdminService {
   private final UserSuspensionRepository userSuspensionRepository;
 
   private final UserSuspensionsMapper userSuspensionsMapper;
+
+  private final UserWarningsRepository userWarningsRepository;
 
   @Value("${application.mailing.frontend.login-url}")
   private String logInUrl;
@@ -193,14 +197,29 @@ public class AdminServiceImpl implements AdminService {
     CommunityGuidelines banReason = communityGuidelinesRepository.findById(banUserRequest.getBanReason())
         .orElseThrow(() -> new EntityNotFoundException("No reason found with id: " + banUserRequest.getBanReason()));
 
+    Report report = null;
+
+    if (banUserRequest.getReportId() != null) {
+      report = reportRepository.findById(banUserRequest.getReportId())
+          .orElseThrow(
+              () -> new EntityNotFoundException("Report with id: " + banUserRequest.getReportId() + " was not found"));
+    }
+
     var banUser = BanHistory.builder()
         .user(user)
         .reason(banReason)
+        .report(report)
         .customMsg(banUserRequest.getCustomMessage())
         .build();
 
     user.setBanned(true);
     user.setAccountStatus(AccountStatus.BANNED);
+
+    if (report != null) {
+      report.setStatus(ReportStatus.RESOLVED);
+      reportRepository.save(report);
+    }
+
     banHistoryRepository.save(banUser);
 
     // TODO GH-200 create method to change status for other reports related to user
@@ -262,6 +281,46 @@ public class AdminServiceImpl implements AdminService {
         userSuspension.isFirst(),
         userSuspension.isLast()
     );
+  }
+
+  @Override
+  public Long noActionOnReportedUser(final Long reportId) {
+    Report report = reportRepository.findById(reportId)
+        .orElseThrow(() -> new EntityNotFoundException("Report with id: " + reportId + " was not found"));
+
+    report.setStatus(ReportStatus.RESOLVED);
+    return reportRepository.save(report).getId();
+  }
+
+  @Override
+  public Long warnUser(final Long userId, final WarnUserRequest warnUserRequest) {
+
+    User user = userRepository.findById(userId)
+        .orElseThrow(() -> new EntityNotFoundException("User with id: " + userId + " was not found"));
+
+    Report report = reportRepository.findById(warnUserRequest.getReportId())
+        .orElseThrow(
+            () -> new EntityNotFoundException("Report with id: " + warnUserRequest.getReportId() + " was not found"));
+
+    var warnUser = UserWarnings.builder()
+        .userId(user)
+        .msgFromAdmin(warnUserRequest.getCustomMsg())
+        .reportId(report)
+        .build();
+
+    report.setStatus(ReportStatus.RESOLVED);
+    reportRepository.save(report);
+
+    return userWarningsRepository.save(warnUser).getId();
+  }
+
+  @Override
+  public Long rejectReport(final Long reportId) {
+    Report report = reportRepository.findById(reportId).orElseThrow(
+        () -> new EntityNotFoundException("Report with id: " + reportId + " was not found"));
+
+    report.setStatus(ReportStatus.REJECTED);
+    return reportRepository.save(report).getId();
   }
 
   @Override

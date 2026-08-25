@@ -21,6 +21,7 @@ import gamehub.game_Hub.Request.BanUserRequest;
 import gamehub.game_Hub.Request.GameRequest;
 import gamehub.game_Hub.Request.GameUpdateRequest;
 import gamehub.game_Hub.Request.SuspendAccountRequest;
+import gamehub.game_Hub.Request.WarnUserRequest;
 import gamehub.game_Hub.Response.Admin.AccountStatusResponse;
 import gamehub.game_Hub.Response.Admin.AdminReportsResponse;
 import gamehub.game_Hub.Response.Admin.AdminSuspendedAccountsResponse;
@@ -89,23 +90,19 @@ public class AdminController {
     return ResponseEntity.ok(adminService.getAllSuspendedAccounts(page,size));
   }
 
-  @PutMapping("/change-report-status/review/{reportId}")
-  public ResponseEntity<Long> changeStatusInReview(@PathVariable Long reportId) {
-    return ResponseEntity.ok(adminService.changeStatusInReview(reportId));
-  }
-
   @PostMapping("/suspend-account/{userId}")
   public ResponseEntity<Long> suspendAccount(@PathVariable Long userId, @Valid @RequestBody SuspendAccountRequest suspendAccountRequest)
       throws MessagingException {
     return ResponseEntity.ok(adminService.suspendAccount(userId, suspendAccountRequest));
   }
 
-
+  @PostMapping("/warn-user/{userId}")
+  public ResponseEntity<Long> warnUser(@PathVariable Long userId, @Valid @RequestBody WarnUserRequest warnUserRequest) {
+    return ResponseEntity.ok(adminService.warnUser(userId, warnUserRequest));
+  }
 
   // fetch all genres , possibility to add new genres (not duplicated)
   // fetch all reviews
-
-
 
   @GetMapping("/game/info/{gameId}")
   public GameResponse getGameInfo(@PathVariable Long gameId) {
@@ -175,5 +172,20 @@ public class AdminController {
   @GetMapping("/account-statuses")
   public ResponseEntity<List<AccountStatusResponse>> getAllAccountStatuses() {
     return ResponseEntity.ok(adminService.getAllAccountStatuses());
+  }
+
+  @PutMapping("/change-report-status/in-review/{reportId}")
+  public ResponseEntity<Long> changeStatusInReview(@PathVariable Long reportId) {
+    return ResponseEntity.ok(adminService.changeStatusInReview(reportId));
+  }
+
+  @PutMapping("/change-report-status/no-action/{reportId}")
+  public ResponseEntity<Long> noActionOnReportedUser(@PathVariable Long reportId) {
+    return ResponseEntity.ok(adminService.noActionOnReportedUser(reportId));
+  }
+
+  @PutMapping("/reject-report/{reportId}")
+  public ResponseEntity<Long> rejectReport(@PathVariable Long reportId) {
+    return ResponseEntity.ok(adminService.rejectReport(reportId));
   }
 }

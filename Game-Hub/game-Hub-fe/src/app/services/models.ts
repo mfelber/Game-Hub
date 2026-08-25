@@ -57,4 +57,5 @@ export type { UserLibraryResponse } from './models/user-library-response';
 export type { UserPrivateResponse } from './models/user-private-response';
 export type { UserPublicResponse } from './models/user-public-response';
 export type { UserUpdateRequest } from './models/user-update-request';
+export type { WarnUserRequest } from './models/warn-user-request';
 export type { WishlistResponse } from './models/wishlist-response';

@@ -1,4 +1,4 @@
-package gamehub.game_Hub.Module;
+package gamehub.game_Hub.Module.User;
 
 import java.time.LocalDateTime;
 
@@ -6,9 +6,11 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import gamehub.game_Hub.Module.Report.CommunityGuidelines;
 import gamehub.game_Hub.Module.Report.Report;
-import gamehub.game_Hub.Module.User.User;
+import gamehub.game_Hub.enums.SuspensionStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -28,30 +30,37 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "ban_history", schema = "game_hub")
-public class BanHistory {
+@Table(name = "user_suspensions", schema = "game_hub")
+public class UserSuspensions {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  @JoinColumn(name = "user_id", nullable = false)
-  private User user;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id")
+  private User userId;
 
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  @JoinColumn(name = "reason_id", nullable = false)
-  private CommunityGuidelines reason;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "reason_id")
+  private CommunityGuidelines suspensionReason;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "report_id")
   private Report report;
 
   @Column(name = "custom_msg")
-  private String customMsg;
+  private String customMessage;
 
-  @Column(nullable = false, updatable = false, name = "banned_at")
+  @Enumerated(EnumType.STRING)
+  @Column(name = "suspension_status")
+  private SuspensionStatus suspensionStatus;
+
+  @Column(name = "created_at")
   @CreationTimestamp
-  private LocalDateTime bannedAt;
+  private LocalDateTime createdAt;
+
+  @Column(name = "expires_at")
+  private LocalDateTime expiresAt;
 
 }

@@ -45,10 +45,14 @@ import { getUserInfo } from '../fn/admin-controller/get-user-info';
 import { GetUserInfo$Params } from '../fn/admin-controller/get-user-info';
 import { loadDashboardData } from '../fn/admin-controller/load-dashboard-data';
 import { LoadDashboardData$Params } from '../fn/admin-controller/load-dashboard-data';
+import { noActionOnReportedUser } from '../fn/admin-controller/no-action-on-reported-user';
+import { NoActionOnReportedUser$Params } from '../fn/admin-controller/no-action-on-reported-user';
 import { PageResponseAdminReportsResponse } from '../models/page-response-admin-reports-response';
 import { PageResponseAdminSuspendedAccountsResponse } from '../models/page-response-admin-suspended-accounts-response';
 import { PageResponseAdminUserResponse } from '../models/page-response-admin-user-response';
 import { PageResponseGamePreviewResponse } from '../models/page-response-game-preview-response';
+import { rejectReport } from '../fn/admin-controller/reject-report';
+import { RejectReport$Params } from '../fn/admin-controller/reject-report';
 import { ReportStatusResponse } from '../models/report-status-response';
 import { RoleResponse } from '../models/role-response';
 import { suspendAccount } from '../fn/admin-controller/suspend-account';
@@ -59,6 +63,8 @@ import { updateGame } from '../fn/admin-controller/update-game';
 import { UpdateGame$Params } from '../fn/admin-controller/update-game';
 import { uploadGameCoverImage } from '../fn/admin-controller/upload-game-cover-image';
 import { UploadGameCoverImage$Params } from '../fn/admin-controller/upload-game-cover-image';
+import { warnUser } from '../fn/admin-controller/warn-user';
+import { WarnUser$Params } from '../fn/admin-controller/warn-user';
 
 @Injectable({ providedIn: 'root' })
 export class AdminControllerService extends BaseService {
@@ -87,6 +93,31 @@ export class AdminControllerService extends BaseService {
    */
   unBanUser(params: UnBanUser$Params, context?: HttpContext): Observable<number> {
     return this.unBanUser$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `rejectReport()` */
+  static readonly RejectReportPath = '/admin/reject-report/{reportId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `rejectReport()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  rejectReport$Response(params: RejectReport$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return rejectReport(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `rejectReport$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  rejectReport(params: RejectReport$Params, context?: HttpContext): Observable<number> {
+    return this.rejectReport$Response(params, context).pipe(
       map((r: StrictHttpResponse<number>): number => r.body)
     );
   }
@@ -141,8 +172,33 @@ export class AdminControllerService extends BaseService {
     );
   }
 
+  /** Path part for operation `noActionOnReportedUser()` */
+  static readonly NoActionOnReportedUserPath = '/admin/change-report-status/no-action/{reportId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `noActionOnReportedUser()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  noActionOnReportedUser$Response(params: NoActionOnReportedUser$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return noActionOnReportedUser(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `noActionOnReportedUser$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  noActionOnReportedUser(params: NoActionOnReportedUser$Params, context?: HttpContext): Observable<number> {
+    return this.noActionOnReportedUser$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
   /** Path part for operation `changeStatusInReview()` */
-  static readonly ChangeStatusInReviewPath = '/admin/change-report-status/review/{reportId}';
+  static readonly ChangeStatusInReviewPath = '/admin/change-report-status/in-review/{reportId}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
@@ -187,6 +243,31 @@ export class AdminControllerService extends BaseService {
    */
   banUser(params: BanUser$Params, context?: HttpContext): Observable<number> {
     return this.banUser$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `warnUser()` */
+  static readonly WarnUserPath = '/admin/warn-user/{userId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `warnUser()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  warnUser$Response(params: WarnUser$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return warnUser(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `warnUser$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  warnUser(params: WarnUser$Params, context?: HttpContext): Observable<number> {
+    return this.warnUser$Response(params, context).pipe(
       map((r: StrictHttpResponse<number>): number => r.body)
     );
   }
