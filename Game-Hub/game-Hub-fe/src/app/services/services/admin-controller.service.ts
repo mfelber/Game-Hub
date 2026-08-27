@@ -14,6 +14,7 @@ import { StrictHttpResponse } from '../strict-http-response';
 import { AccountStatusResponse } from '../models/account-status-response';
 import { addGame } from '../fn/admin-controller/add-game';
 import { AddGame$Params } from '../fn/admin-controller/add-game';
+import { AdminUserModerationResponse } from '../models/admin-user-moderation-response';
 import { AdminUserResponse } from '../models/admin-user-response';
 import { banUser } from '../fn/admin-controller/ban-user';
 import { BanUser$Params } from '../fn/admin-controller/ban-user';
@@ -41,6 +42,8 @@ import { getGameInfo } from '../fn/admin-controller/get-game-info';
 import { GetGameInfo$Params } from '../fn/admin-controller/get-game-info';
 import { getSuspendedAccount } from '../fn/admin-controller/get-suspended-account';
 import { GetSuspendedAccount$Params } from '../fn/admin-controller/get-suspended-account';
+import { getSuspendedUserDetails } from '../fn/admin-controller/get-suspended-user-details';
+import { GetSuspendedUserDetails$Params } from '../fn/admin-controller/get-suspended-user-details';
 import { getUserInfo } from '../fn/admin-controller/get-user-info';
 import { GetUserInfo$Params } from '../fn/admin-controller/get-user-info';
 import { loadDashboardData } from '../fn/admin-controller/load-dashboard-data';
@@ -398,6 +401,31 @@ export class AdminControllerService extends BaseService {
   getUserInfo(params: GetUserInfo$Params, context?: HttpContext): Observable<AdminUserResponse> {
     return this.getUserInfo$Response(params, context).pipe(
       map((r: StrictHttpResponse<AdminUserResponse>): AdminUserResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `getSuspendedUserDetails()` */
+  static readonly GetSuspendedUserDetailsPath = '/admin/suspended-user/details/{userId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getSuspendedUserDetails()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getSuspendedUserDetails$Response(params: GetSuspendedUserDetails$Params, context?: HttpContext): Observable<StrictHttpResponse<AdminUserModerationResponse>> {
+    return getSuspendedUserDetails(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getSuspendedUserDetails$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getSuspendedUserDetails(params: GetSuspendedUserDetails$Params, context?: HttpContext): Observable<AdminUserModerationResponse> {
+    return this.getSuspendedUserDetails$Response(params, context).pipe(
+      map((r: StrictHttpResponse<AdminUserModerationResponse>): AdminUserModerationResponse => r.body)
     );
   }
 

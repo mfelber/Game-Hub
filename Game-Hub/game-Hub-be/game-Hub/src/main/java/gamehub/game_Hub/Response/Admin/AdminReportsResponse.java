@@ -2,6 +2,7 @@ package gamehub.game_Hub.Response.Admin;
 
 import java.time.LocalDateTime;
 
+import gamehub.game_Hub.enums.ModerationAction;
 import gamehub.game_Hub.enums.ReportStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,6 +26,7 @@ public class AdminReportsResponse {
   private String reportReason;
   private String reportMsg;
   private ReportStatus reportStatus;
+  private ModerationAction moderationAction;
   private LocalDateTime createdAt;
 
 }

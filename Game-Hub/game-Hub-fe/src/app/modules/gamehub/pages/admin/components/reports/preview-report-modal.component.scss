@@ -68,7 +68,6 @@
 .label {
   display: block;
   margin-bottom: 8px;
-  color: #9ca3af;
 }
 
 .user-info {
@@ -532,4 +531,53 @@ textarea {
   font-size: 14px;
 }
 
+.moderation-action {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 8px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.action-none {
+  color: #9ca3af;
+  background: rgba(156, 163, 175, 0.12);
+}
+
+.action-warning {
+  color: #eab308;
+  background: rgba(234, 179, 8, 0.12);
+}
+
+.action-suspend {
+  color: #A78BFA;
+  background: rgba(139, 92, 246, 0.14);
+}
+
+.action-ban {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.12);
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 13px 15px;
+  background: #1d2533;
+  border-radius: 8px;
+}
+
+.info-item span {
+  font-size: 14px;
+  color: #8b95a5;
+}
+
+.info-item strong {
+  font-size: 14px;
+  color: #e5e7eb;
+  word-break: break-word;
+}
 

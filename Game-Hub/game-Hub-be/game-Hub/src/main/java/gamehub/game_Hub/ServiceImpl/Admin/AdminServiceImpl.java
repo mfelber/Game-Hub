@@ -14,11 +14,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import gamehub.game_Hub.Common.PageResponse;
+import gamehub.game_Hub.Email.AdminEmailService;
 import gamehub.game_Hub.Email.EmailService;
 import gamehub.game_Hub.Email.EmailTemplate;
 import gamehub.game_Hub.Mapper.GameMapper;
@@ -42,10 +44,12 @@ import gamehub.game_Hub.Request.WarnUserRequest;
 import gamehub.game_Hub.Response.Admin.AccountStatusResponse;
 import gamehub.game_Hub.Response.Admin.AdminReportsResponse;
 import gamehub.game_Hub.Response.Admin.AdminSuspendedAccountsResponse;
+import gamehub.game_Hub.Response.Admin.AdminUserModerationResponse;
 import gamehub.game_Hub.Response.Admin.AdminUserResponse;
 import gamehub.game_Hub.Response.Admin.ReportStatusResponse;
 import gamehub.game_Hub.Response.Admin.RoleResponse;
 import gamehub.game_Hub.enums.AccountStatus;
+import gamehub.game_Hub.enums.ModerationAction;
 import gamehub.game_Hub.enums.ReportStatus;
 import gamehub.game_Hub.enums.Role;
 import gamehub.game_Hub.Repository.ReportRepository;
@@ -94,8 +98,7 @@ public class AdminServiceImpl implements AdminService {
 
   private final UserWarningsRepository userWarningsRepository;
 
-  @Value("${application.mailing.frontend.login-url}")
-  private String logInUrl;
+  private final AdminEmailService adminEmailService;
 
   @Override
   public DashboardResponse loadDashboardData(final Authentication connectedUser, final int page, final int size) {
@@ -217,16 +220,18 @@ public class AdminServiceImpl implements AdminService {
 
     if (report != null) {
       report.setStatus(ReportStatus.RESOLVED);
+      report.setModerationAction(ModerationAction.BAN);
       reportRepository.save(report);
     }
 
     banHistoryRepository.save(banUser);
-
+    userRepository.save(user);
     // TODO GH-200 create method to change status for other reports related to user
 
-    sendBannedUserEmail(user, banUserRequest.getCustomMessage(), banReason.getCommunityGuideline(),
+     adminEmailService.sendBannedUserEmail(user, banUserRequest.getCustomMessage(), banReason.getCommunityGuideline(),
         banReason.getDescription());
-    return userRepository.save(user).getId();
+
+    return user.getId();
   }
 
   @Override
@@ -236,8 +241,9 @@ public class AdminServiceImpl implements AdminService {
 
     user.setBanned(false);
     user.setAccountStatus(AccountStatus.ACTIVE);
-    sendAccountRestoredEmail(user);
-    return userRepository.save(user).getId();
+    userRepository.save(user);
+    adminEmailService.sendAccountRestoredEmail(user);
+    return user.getId();
   }
 
   @Override
@@ -289,6 +295,7 @@ public class AdminServiceImpl implements AdminService {
         .orElseThrow(() -> new EntityNotFoundException("Report with id: " + reportId + " was not found"));
 
     report.setStatus(ReportStatus.RESOLVED);
+    report.setModerationAction(ModerationAction.NONE);
     return reportRepository.save(report).getId();
   }
 
@@ -303,12 +310,13 @@ public class AdminServiceImpl implements AdminService {
             () -> new EntityNotFoundException("Report with id: " + warnUserRequest.getReportId() + " was not found"));
 
     var warnUser = UserWarnings.builder()
-        .userId(user)
+        .user(user)
         .msgFromAdmin(warnUserRequest.getCustomMsg())
         .reportId(report)
         .build();
 
     report.setStatus(ReportStatus.RESOLVED);
+    report.setModerationAction(ModerationAction.WARNING);
     reportRepository.save(report);
 
     return userWarningsRepository.save(warnUser).getId();
@@ -321,6 +329,19 @@ public class AdminServiceImpl implements AdminService {
 
     report.setStatus(ReportStatus.REJECTED);
     return reportRepository.save(report).getId();
+  }
+
+  @Override
+  public AdminUserModerationResponse getSuspendedUserDetails(final Long userId) {
+    User user = userRepository.findById(userId)
+        .orElseThrow(() -> new EntityNotFoundException("User with id " + userId + " was not found"));
+
+    List<Report> reports = reportRepository.findByReportedUserId(user);
+    List<UserSuspensions> suspensions = userSuspensionRepository.findByUserId(user.getId());
+    List<UserWarnings> warnings = userWarningsRepository.findByUserId(user.getId());
+    List<BanHistory> bans = banHistoryRepository.findByUserId(user.getId());
+
+    return userSuspensionsMapper.toAdminUserModerationResponse(user, reports, suspensions, warnings, bans);
   }
 
   @Override
@@ -342,7 +363,7 @@ public class AdminServiceImpl implements AdminService {
     boolean isExpiresAtCustom = isExpiresAtCustom(suspendAccountRequest.getExpiresAt());
 
     var suspended = UserSuspensions.builder()
-        .userId(user)
+        .user(user)
         .suspensionReason(suspendedReason)
         .customMessage(suspendAccountRequest.getCustomMessage())
         .report(report)
@@ -360,6 +381,7 @@ public class AdminServiceImpl implements AdminService {
 
     user.setAccountStatus(AccountStatus.SUSPENDED);
     report.setStatus(ReportStatus.RESOLVED);
+    report.setModerationAction(ModerationAction.SUSPEND);
     userRepository.save(user);
 
     // TODO GH-200 create method to change status for other reports related to user
@@ -368,7 +390,7 @@ public class AdminServiceImpl implements AdminService {
     String violatedGuideline = suspendedReason.getCommunityGuideline();
     String customMsg = suspendAccountRequest.getCustomMessage();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-    sendSuspendedAccountEmail(user, violatedGuideline, customMsg, suspended.getExpiresAt().format(formatter));
+    adminEmailService.sendSuspendedAccountEmail(user, violatedGuideline, customMsg, suspended.getExpiresAt().format(formatter));
     return suspended.getId();
 
   }
@@ -384,30 +406,8 @@ public class AdminServiceImpl implements AdminService {
     return true;
   }
 
-  private void sendSuspendedAccountEmail(final User user, final String violatedGuideline, final String customMsg,
-      final String suspensionEndDate) throws MessagingException {
-    emailService.sendSuspendedAccountEmail(user.getEmail(), user.getName(), violatedGuideline, customMsg,
-        suspensionEndDate, EmailTemplate.USER_SUSPENDED_EMAIL, "Your GameHub has been suspended");
-  }
 
-  private void sendBannedUserEmail(final User user, final String customMsg, String banReason, String description)
-      throws MessagingException {
-    String reason = banHistoryRepository.findByUserId(user.getId())
-        .stream()
-        .findFirst()
-        .map(banHistory -> banHistory.getReason().getCommunityGuideline())
-        .orElse(null);
 
-    // TODO dont send user.getId() but send id of ban when implementing chat between user and admin
-    // on fe show report id with # report.getId()
-    String appealUrl = "http://localhost:4200/send-appeal?appeal=" + user.getId();
-    emailService.sendBannedUserEmail(user.getEmail(), user.getName(), banReason, customMsg, description,
-        EmailTemplate.USER_BANNED_EMAIL, appealUrl, "Your GameHub account has been banned — Appeal available");
-  }
 
-  private void sendAccountRestoredEmail(final User user) throws MessagingException {
-    emailService.sendAccountRestored(user.getEmail(), user.getName(), EmailTemplate.USER_ACCOUNT_RESTORED_EMAIL,
-        logInUrl, "Your GameHub account has been successfully restored");
-  }
 
 }

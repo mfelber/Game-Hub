@@ -35,7 +35,7 @@ public class UserWarnings {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id")
-  private User userId;
+  private User user;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "report_id")

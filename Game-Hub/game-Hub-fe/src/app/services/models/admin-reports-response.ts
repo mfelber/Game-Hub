@@ -4,6 +4,7 @@
 
 export interface AdminReportsResponse {
   createdAt?: string;
+  moderationAction?: 'NONE' | 'WARNING' | 'SUSPEND' | 'BAN';
   reportId?: number;
   reportMsg?: string;
   reportReason?: string;

@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
 
 import gamehub.game_Hub.Module.User.User;
+import gamehub.game_Hub.enums.ModerationAction;
 import gamehub.game_Hub.enums.ReportStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -53,6 +54,10 @@ public class Report {
   @Enumerated(EnumType.STRING)
   @Column(name = "report_status")
   private ReportStatus status;
+
+  @Enumerated(EnumType.STRING)
+  @Column(name = "moderation_action")
+  private ModerationAction moderationAction;
 
   @Column(name = "created_at")
   @CreationTimestamp

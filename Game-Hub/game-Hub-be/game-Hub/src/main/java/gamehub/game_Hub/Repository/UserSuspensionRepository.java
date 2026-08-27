@@ -1,5 +1,6 @@
 package gamehub.game_Hub.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -18,13 +19,17 @@ public interface UserSuspensionRepository extends JpaRepository<UserSuspensions,
     WHERE suspension.id IN (
         SELECT MAX(s.id)
         FROM UserSuspensions s
-        GROUP BY s.userId
+        GROUP BY s.user
     )
     """)
   Page<UserSuspensions> findOnePerUser(Pageable pageable);
 
-  Long countByUserId(User userId);
+  Optional<UserSuspensions> findFirstByUserIdAndIdLessThanOrderByIdDesc(Long userId, Long idIsLessThan);
 
-  Optional<UserSuspensions> findFirstByUserIdAndIdLessThanOrderByIdDesc(User userId, Long idIsLessThan);
+  Long countByUser(User user);
+
+  List<UserSuspensions> findByUser(User user);
+
+  List<UserSuspensions> findByUserId(Long userId);
 
 }

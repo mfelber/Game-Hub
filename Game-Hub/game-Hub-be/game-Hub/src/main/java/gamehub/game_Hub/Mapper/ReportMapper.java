@@ -29,6 +29,7 @@ public class ReportMapper {
         .reportReason(report.getReason().getCommunityGuideline())
         .reportMsg(report.getMessage())
         .reportStatus(report.getStatus())
+        .moderationAction(report.getModerationAction())
         .createdAt(report.getCreatedAt())
         .build();
   }

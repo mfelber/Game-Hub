@@ -206,6 +206,21 @@ export class PreviewReportModalComponent implements OnInit {
     return status?.replace('_', ' ') ?? '';
   }
 
+  formatModerationAction(action: string) {
+    switch (action) {
+      case 'NONE':
+        return 'None';
+      case 'WARNING':
+        return 'User was warned';
+      case 'SUSPEND':
+        return 'User was suspend';
+      case 'BAN':
+        return 'User was permanently banned';
+      default:
+        return action;
+    }
+  }
+
   rejectReport() {
     this.adminService.rejectReport({reportId: this.report.reportId!}).subscribe({
       next: () => {
@@ -214,7 +229,7 @@ export class PreviewReportModalComponent implements OnInit {
       }
     })
   }
-  
+
   next() {
     if (this.selectedAction === 'SUSPEND') {
       this.suspending = true;
@@ -296,4 +311,5 @@ export class PreviewReportModalComponent implements OnInit {
 
     return true;
   }
+
 }

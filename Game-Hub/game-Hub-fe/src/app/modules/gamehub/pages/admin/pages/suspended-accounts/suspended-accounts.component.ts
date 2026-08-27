@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {AdminControllerService} from '../../../../../../services/services/admin-controller.service';
 import {PageResponseAdminReportsResponse} from '../../../../../../services/models/page-response-admin-reports-response';
 import {
@@ -6,6 +6,10 @@ import {
 } from '../../../../../../services/models/page-response-admin-suspended-accounts-response';
 import {SearchBar} from '../../../../components/search-bar/search-bar';
 import {DatePipe, NgClass, NgForOf, NgIf} from '@angular/common';
+import {
+  PreviewSuspendedUserModalComponent
+} from '../../components/suspended-accounts/preview-suspended-user-modal.component';
+import {AdminSuspendedAccountsResponse} from '../../../../../../services/models/admin-suspended-accounts-response';
 
 
 @Component({
@@ -15,7 +19,8 @@ import {DatePipe, NgClass, NgForOf, NgIf} from '@angular/common';
     NgForOf,
     DatePipe,
     NgClass,
-    NgIf
+    NgIf,
+    PreviewSuspendedUserModalComponent
   ],
   templateUrl: './suspended-accounts.component.html',
   styleUrl: './suspended-accounts.component.scss',
@@ -23,6 +28,8 @@ import {DatePipe, NgClass, NgForOf, NgIf} from '@angular/common';
 export class SuspendedAccountsComponent implements OnInit {
 
   suspendedAccountsResponse: PageResponseAdminSuspendedAccountsResponse = {};
+  selectedUser: AdminSuspendedAccountsResponse = {};
+  isPreviewModalOpen = false;
 
   constructor(
     private adminService: AdminControllerService
@@ -42,5 +49,16 @@ export class SuspendedAccountsComponent implements OnInit {
         console.log(data);
       }
     })
+  }
+
+  closeModal() {
+    this.loadSuspendedUsers();
+    this.isPreviewModalOpen = false;
+  }
+
+  openModal(suspendedUser: AdminSuspendedAccountsResponse) {
+    this.selectedUser = {};
+    this.selectedUser = suspendedUser;
+    this.isPreviewModalOpen = true;
   }
 }

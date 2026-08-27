@@ -14,24 +14,24 @@
       <div class="report-content">
 
         <div class="info-block">
-          <span class="label">Reported user</span>
-          <div class="user-info">
-            <i class="fa-solid fa-user"></i>
-            <strong>{{ report.reportedUserName }}</strong>
+          <div class="info-item">
+            <span class="label">Reported user</span>
+            <strong>{{report.reportedUserName}}</strong>
           </div>
         </div>
 
         <div class="info-block">
-          <span class="label">Reporter</span>
-          <div class="user-info">
-            <i class="fa-solid fa-user"></i>
-            <strong>{{ report.reporterUserName }}</strong>
+          <div class="info-item">
+            <span>Reporter</span>
+            <strong>{{report.reporterUserName}}</strong>
           </div>
         </div>
 
         <div class="info-block">
-          <span class="label">Reason</span>
-          <strong class="reason">{{ report.reportReason }}</strong>
+          <div class="info-item">
+            <span>Reason</span>
+            <strong>{{report.reportReason}}</strong>
+          </div>
         </div>
 
         <div class="info-block">
@@ -54,6 +54,17 @@
             }">
             <span class="status-dot"></span>
             {{ formatStatus(report.reportStatus) }}
+          </span>
+          <span
+            *ngIf="report.reportStatus === 'RESOLVED' && report.moderationAction"
+            class="moderation-action"
+            [ngClass]="{
+            'action-ban': report.moderationAction === 'BAN',
+            'action-suspend': report.moderationAction === 'SUSPEND',
+            'action-warning': report.moderationAction === 'WARNING',
+            'action-none': report.moderationAction === 'NONE',
+            }">
+            {{formatModerationAction(report.moderationAction)}}
           </span>
         </div>
       </div>

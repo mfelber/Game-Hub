@@ -11,6 +11,7 @@ import gamehub.game_Hub.Request.WarnUserRequest;
 import gamehub.game_Hub.Response.Admin.AccountStatusResponse;
 import gamehub.game_Hub.Response.Admin.AdminReportsResponse;
 import gamehub.game_Hub.Response.Admin.AdminSuspendedAccountsResponse;
+import gamehub.game_Hub.Response.Admin.AdminUserModerationResponse;
 import gamehub.game_Hub.Response.Admin.AdminUserResponse;
 import gamehub.game_Hub.Response.Admin.DashboardResponse;
 import gamehub.game_Hub.Response.Admin.ReportStatusResponse;
@@ -60,5 +61,7 @@ public interface AdminService {
   Long warnUser(Long userId, @Valid WarnUserRequest warnUserRequest);
 
   Long rejectReport(Long reportId);
+
+  AdminUserModerationResponse getSuspendedUserDetails(Long userId);
 
 }

@@ -2306,6 +2306,37 @@
         }
       }
     },
+    "/admin/suspended-user/details/{userId}": {
+      "get": {
+        "tags": [
+          "admin-controller"
+        ],
+        "operationId": "getSuspendedUserDetails",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminUserModerationResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/admin/suspended-accounts": {
       "get": {
         "tags": [
@@ -4051,14 +4082,10 @@
           }
         }
       },
-      "AdminSuspendedAccountsResponse": {
+      "AdminBanResponse": {
         "type": "object",
         "properties": {
-          "suspensionId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "reportId": {
+          "id": {
             "type": "integer",
             "format": "int64"
           },
@@ -4066,73 +4093,23 @@
             "type": "integer",
             "format": "int64"
           },
-          "userName": {
-            "type": "string"
-          },
-          "suspensionReason": {
-            "type": "string"
-          },
-          "messageFromAdmin": {
-            "type": "string"
-          },
-          "suspendedTimes": {
+          "reasonId": {
             "type": "integer",
             "format": "int64"
           },
-          "daysSinceLastSuspension": {
+          "banReason": {
+            "type": "string"
+          },
+          "reportId": {
             "type": "integer",
             "format": "int64"
           },
-          "suspensionStatus": {
+          "customMsg": {
+            "type": "string"
+          },
+          "bannedAt": {
             "type": "string",
-            "enum": [
-              "ONGOING",
-              "EXPIRED"
-            ]
-          },
-          "expireAt": {
-            "type": "string"
-          }
-        }
-      },
-      "PageResponseAdminSuspendedAccountsResponse": {
-        "type": "object",
-        "properties": {
-          "content": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/AdminSuspendedAccountsResponse"
-            }
-          },
-          "number": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "size": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "totalElements": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "totalPages": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "first": {
-            "type": "boolean"
-          },
-          "last": {
-            "type": "boolean"
-          }
-        }
-      },
-      "RoleResponse": {
-        "type": "object",
-        "properties": {
-          "roleName": {
-            "type": "string"
+            "format": "date-time"
           }
         }
       },
@@ -4175,9 +4152,197 @@
               "REJECTED"
             ]
           },
+          "moderationAction": {
+            "type": "string",
+            "enum": [
+              "NONE",
+              "WARNING",
+              "SUSPEND",
+              "BAN"
+            ]
+          },
           "createdAt": {
             "type": "string",
             "format": "date-time"
+          }
+        }
+      },
+      "AdminSuspendedAccountsResponse": {
+        "type": "object",
+        "properties": {
+          "suspensionId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "reportId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "userName": {
+            "type": "string"
+          },
+          "suspensionReason": {
+            "type": "string"
+          },
+          "messageFromAdmin": {
+            "type": "string"
+          },
+          "suspendedTimes": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "daysSinceLastSuspension": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "suspensionStatus": {
+            "type": "string",
+            "enum": [
+              "ONGOING",
+              "EXPIRED"
+            ]
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "expiresAt": {
+            "type": "string"
+          }
+        }
+      },
+      "AdminUserModerationResponse": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "userName": {
+            "type": "string"
+          },
+          "accountStatus": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "BANNED",
+              "DISABLED",
+              "SUSPENDED",
+              "DELETING",
+              "DELETED"
+            ]
+          },
+          "registeredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "reportCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "warningCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "suspensionCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "banCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "reports": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdminReportsResponse"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdminWarningResponse"
+            }
+          },
+          "suspensions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdminSuspendedAccountsResponse"
+            }
+          },
+          "bans": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdminBanResponse"
+            }
+          }
+        }
+      },
+      "AdminWarningResponse": {
+        "type": "object",
+        "properties": {
+          "warningId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "reportId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "adminMsg": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "PageResponseAdminSuspendedAccountsResponse": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdminSuspendedAccountsResponse"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          }
+        }
+      },
+      "RoleResponse": {
+        "type": "object",
+        "properties": {
+          "roleName": {
+            "type": "string"
           }
         }
       },

@@ -1,3 +1,10 @@
+<app-preview-suspended-user-modal
+  *ngIf="selectedUser && isPreviewModalOpen"
+  [suspendedUser]="selectedUser"
+  (close)="closeModal()">
+
+</app-preview-suspended-user-modal>
+
 <main>
   <section class="suspended-accounts-page">
     <div class="page-header">
@@ -41,7 +48,8 @@
             <th>Username</th>
             <th>Reason</th>
             <th>Status</th>
-            <th>Expires At</th>
+            <th>Suspended from</th>
+            <th>Suspended until</th>
             <th>Suspended Times</th>
             <th>Days Since Last Suspension</th>
             <th>Admin message</th>
@@ -57,7 +65,8 @@
             'expired': suspendedUser.suspensionStatus === 'EXPIRED'
             }">{{ suspendedUser.suspensionStatus }} </span>
             </td>
-            <td>{{ suspendedUser.expireAt | date:'dd-MM-yyyy' }}</td>
+            <td>{{ suspendedUser.createdAt | date:'dd.MM.yyyy' }}</td>
+            <td>{{ suspendedUser.expiresAt | date:'dd.MM.yyyy' }}</td>
             <td>{{ suspendedUser.suspendedTimes }} <span
               *ngIf="suspendedUser.suspendedTimes! >= 3"
               class="warning-tooltip">
@@ -76,7 +85,7 @@
             </td>
             <td>{{ suspendedUser.messageFromAdmin }}</td>
             <td>
-              <button class="action view"><i class="fa-solid fa-eye"></i></button>
+              <button class="action view" (click)="openModal(suspendedUser)"><i class="fa-solid fa-eye"></i></button>
             </td>
           </tr>
           </tbody>

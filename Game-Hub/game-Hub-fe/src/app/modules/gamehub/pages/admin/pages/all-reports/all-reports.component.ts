@@ -46,10 +46,10 @@ export class AllReportsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loadReports();
+    this.loadData();
   }
 
-  loadReports() {
+  loadData() {
     this.adminService.getAllReports().subscribe({
       next: data => {
         this.filteredReportedUsers = [...(data.content || [])];
@@ -89,12 +89,12 @@ export class AllReportsComponent implements OnInit {
   }
 
   closeModal() {
-    this.loadReports();
+    this.loadData();
     this.isPreviewModalOpen = false;
   }
 
   showSuccess(message: string) {
-    this.loadReports();
+    this.loadData();
     this.successMessage = message;
 
     setTimeout(() => this.toastVisible = true, 10);

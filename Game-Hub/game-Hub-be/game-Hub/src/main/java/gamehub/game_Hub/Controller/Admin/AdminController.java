@@ -25,6 +25,7 @@ import gamehub.game_Hub.Request.WarnUserRequest;
 import gamehub.game_Hub.Response.Admin.AccountStatusResponse;
 import gamehub.game_Hub.Response.Admin.AdminReportsResponse;
 import gamehub.game_Hub.Response.Admin.AdminSuspendedAccountsResponse;
+import gamehub.game_Hub.Response.Admin.AdminUserModerationResponse;
 import gamehub.game_Hub.Response.Admin.AdminUserResponse;
 import gamehub.game_Hub.Response.Admin.DashboardResponse;
 import gamehub.game_Hub.Response.Admin.ReportStatusResponse;
@@ -172,6 +173,11 @@ public class AdminController {
   @GetMapping("/account-statuses")
   public ResponseEntity<List<AccountStatusResponse>> getAllAccountStatuses() {
     return ResponseEntity.ok(adminService.getAllAccountStatuses());
+  }
+
+  @GetMapping("/suspended-user/details/{userId}")
+  public AdminUserModerationResponse getSuspendedUserDetails(@PathVariable Long userId) {
+    return adminService.getSuspendedUserDetails(userId);
   }
 
   @PutMapping("/change-report-status/in-review/{reportId}")
