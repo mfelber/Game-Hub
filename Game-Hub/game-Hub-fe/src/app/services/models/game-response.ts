@@ -14,7 +14,7 @@ export interface GameResponse {
   developer?: string;
   discountPercent?: number;
   discountPrice?: number;
-  gameCoverImage?: Array<string>;
+  gameCoverImage?: string;
   gameId?: number;
   genres?: Array<GenreResponse>;
   hasDiscount?: boolean;

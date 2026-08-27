@@ -1627,6 +1627,26 @@
         }
       }
     },
+    "/profile/user/notifications": {
+      "get": {
+        "tags": [
+          "user-profile-controller"
+        ],
+        "operationId": "getUserNotifications",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserNotificationsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/profile/user/me": {
       "get": {
         "tags": [
@@ -2883,11 +2903,8 @@
             "type": "string"
           },
           "gameCoverImage": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "byte"
-            }
+            "type": "string",
+            "format": "byte"
           },
           "installed": {
             "type": "boolean"
@@ -3128,11 +3145,8 @@
             "type": "string"
           },
           "gameCoverImage": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "byte"
-            }
+            "type": "string",
+            "format": "byte"
           },
           "price": {
             "type": "number",
@@ -3379,11 +3393,8 @@
             "$ref": "#/components/schemas/AgeRatingResponse"
           },
           "gameCoverImage": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "byte"
-            }
+            "type": "string",
+            "format": "byte"
           },
           "systemRequirements": {
             "$ref": "#/components/schemas/SystemRequirements"
@@ -3549,11 +3560,8 @@
             "type": "string"
           },
           "gameCoverImage": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "byte"
-            }
+            "type": "string",
+            "format": "byte"
           }
         }
       },
@@ -3646,18 +3654,12 @@
             }
           },
           "userProfilePicture": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "byte"
-            }
+            "type": "string",
+            "format": "byte"
           },
           "bannerImage": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "byte"
-            }
+            "type": "string",
+            "format": "byte"
           },
           "bannerType": {
             "type": "string"
@@ -3670,6 +3672,21 @@
           },
           "cardColor": {
             "$ref": "#/components/schemas/CardColorResponse"
+          }
+        }
+      },
+      "UserNotificationsResponse": {
+        "type": "object",
+        "properties": {
+          "warningCount": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "suspendedCount": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
           }
         }
       },
@@ -3760,18 +3777,12 @@
             }
           },
           "userProfilePicture": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "byte"
-            }
+            "type": "string",
+            "format": "byte"
           },
           "bannerImage": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "byte"
-            }
+            "type": "string",
+            "format": "byte"
           },
           "bannerType": {
             "type": "string"
@@ -3880,11 +3891,8 @@
             ]
           },
           "userProfilePicture": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "byte"
-            }
+            "type": "string",
+            "format": "byte"
           },
           "profileColor": {
             "type": "string"
@@ -3913,11 +3921,8 @@
             ]
           },
           "userProfilePicture": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "byte"
-            }
+            "type": "string",
+            "format": "byte"
           },
           "profileColor": {
             "type": "string"
@@ -3991,11 +3996,8 @@
             "type": "string"
           },
           "profilePicture": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "byte"
-            }
+            "type": "string",
+            "format": "byte"
           },
           "profileColor": {
             "type": "string"

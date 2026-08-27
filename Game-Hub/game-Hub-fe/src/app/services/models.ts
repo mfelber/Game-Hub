@@ -57,6 +57,7 @@ export type { TokenExpiredResponse } from './models/token-expired-response';
 export type { UnitSizeResponse } from './models/unit-size-response';
 export type { UserCommunityResponse } from './models/user-community-response';
 export type { UserLibraryResponse } from './models/user-library-response';
+export type { UserNotificationsResponse } from './models/user-notifications-response';
 export type { UserPrivateResponse } from './models/user-private-response';
 export type { UserPublicResponse } from './models/user-public-response';
 export type { UserUpdateRequest } from './models/user-update-request';

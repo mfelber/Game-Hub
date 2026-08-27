@@ -21,6 +21,7 @@ import gamehub.game_Hub.Repository.user.UserRepository;
 import gamehub.game_Hub.Mapper.UserMapper;
 import gamehub.game_Hub.Request.BannerRequest;
 import gamehub.game_Hub.Response.StatusResponse;
+import gamehub.game_Hub.Response.UserNotificationsResponse;
 import gamehub.game_Hub.Response.UserPrivateResponse;
 import gamehub.game_Hub.Response.UserPublicResponse;
 import gamehub.game_Hub.Service.UserService;
@@ -107,6 +108,14 @@ public class UserServiceImpl implements UserService {
     // user = user.toBuilder().predefinedBanner(bannerId).banner(null).build();
     user = user.toBuilder().banner(bannerRequest.getBannerPath()).bannerType("PREDEFINED").build();
     return userRepository.save(user).getId();
+  }
+
+  @Override
+  public UserNotificationsResponse getUserNotifications(final Authentication connectedUser) {
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+    return userMapper.toUserNotificationResponse(user);
   }
 
   @Override

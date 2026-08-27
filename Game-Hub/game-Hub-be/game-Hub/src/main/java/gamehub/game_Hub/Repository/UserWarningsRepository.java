@@ -11,4 +11,6 @@ public interface UserWarningsRepository extends JpaRepository<UserWarnings, Long
 
   List<UserWarnings> findByUserId(final Long user_id);
 
+  Long countByUser(User user);
+
 }

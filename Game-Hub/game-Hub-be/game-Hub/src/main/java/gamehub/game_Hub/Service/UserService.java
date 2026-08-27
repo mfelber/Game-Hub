@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import gamehub.game_Hub.Request.BannerRequest;
 import gamehub.game_Hub.Request.UserUpdateRequest;
 import gamehub.game_Hub.Response.StatusResponse;
+import gamehub.game_Hub.Response.UserNotificationsResponse;
 import gamehub.game_Hub.Response.UserPrivateResponse;
 import gamehub.game_Hub.Response.UserPublicResponse;
 
@@ -40,5 +41,7 @@ public interface UserService {
   UserPrivateResponse getBio(Authentication connectedUser);
 
   Long setPredefinedBanner(BannerRequest bannerRequest, Authentication connectedUser);
+
+  UserNotificationsResponse getUserNotifications(Authentication connectedUser);
 
 }

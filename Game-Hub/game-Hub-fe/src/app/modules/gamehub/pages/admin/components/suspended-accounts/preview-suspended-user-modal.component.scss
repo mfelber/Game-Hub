@@ -379,16 +379,17 @@
 }
 
 .status{
-  border-radius: 10px;
-  padding: 12px;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 11px;
 }
 
-.report-status.expired {
+.status.expired {
   background: rgba(107, 114, 128, 0.12);
   color: #9CA3AF!important;
 }
 
-.report-status.ongoing {
+.status.ongoing {
   background: rgba(34, 197, 94, 0.12);
   color: #22c55e!important;
 }

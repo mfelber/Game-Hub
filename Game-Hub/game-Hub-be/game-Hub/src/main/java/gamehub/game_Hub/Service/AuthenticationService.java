@@ -3,6 +3,7 @@ package gamehub.game_Hub.Service;
 import static gamehub.game_Hub.enums.AccountType.ADULT;
 import static gamehub.game_Hub.enums.AccountType.CHILD;
 
+import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Random;
@@ -10,10 +11,13 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import gamehub.game_Hub.Email.SendEmailUserService;
 import gamehub.game_Hub.Module.CardColor;
 import gamehub.game_Hub.Module.Flags.CommunityFlagType;
 import gamehub.game_Hub.Module.Flags.StoreFlagType;
@@ -42,6 +46,9 @@ import gamehub.game_Hub.Repository.role.RoleRepository;
 import gamehub.game_Hub.Repository.user.PasswordResetTokenRepository;
 import gamehub.game_Hub.Repository.user.UserRepository;
 import gamehub.game_Hub.Security.JwtService;
+import gamehub.game_Hub.exception.AccountBannedException;
+import gamehub.game_Hub.exception.AccountSuspendedException;
+import gamehub.game_Hub.exception.InvalidCredentials;
 import jakarta.mail.MessagingException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -59,7 +66,7 @@ public class AuthenticationService {
 
   private final UserRepository userRepository;
 
-  private final EmailService emailService;
+  private final SendEmailUserService emailUserService;
 
   private final AuthenticationManager authenticationManager;
 
@@ -90,7 +97,7 @@ public class AuthenticationService {
     Level defaultLevel = levelRepository.findById(1L)
         .orElseThrow(() -> new EntityNotFoundException("Level was not initialized"));
 
-    if (request.isChildAccount()){
+    if (request.isChildAccount()) {
       registerChildUser(request);
     } else {
       var user = User.builder()
@@ -114,7 +121,7 @@ public class AuthenticationService {
 
       userRepository.save(user);
       setAdultAccountFlags(user);
-      sendWelcomeEmail(user);
+      emailUserService.sendWelcomeEmail(user);
     }
   }
 
@@ -149,7 +156,7 @@ public class AuthenticationService {
 
     userRepository.save(user);
     setChildAccountFlags(user);
-    sendWelcomeEmail(user);
+    emailUserService.sendWelcomeEmail(user);
   }
 
   private void setChildAccountFlags(final User user) {
@@ -165,11 +172,12 @@ public class AuthenticationService {
       UserCommunityFlag communityFlag = new UserCommunityFlag();
       communityFlag.setUser(user);
       communityFlag.setUserFlagType(flagType);
-      switch (flagType.getFlagCode()){
+      switch (flagType.getFlagCode()) {
         case "FRIEND_REQUEST", "GROUP_INVITES", "PLAY_TOGETHER_INVITES", "PROFILE_VISIBILITY", "SEND_MESSAGES":
           communityFlag.setValue("No one");
           break;
-        default: throw new IllegalArgumentException("Unknown flag code: " + flagType.getFlagCode());
+        default:
+          throw new IllegalArgumentException("Unknown flag code: " + flagType.getFlagCode());
       }
       userCommunityFlagRepository.save(communityFlag);
     }
@@ -215,11 +223,21 @@ public class AuthenticationService {
   }
 
   public AuthenticationResponse authenticate(final @Valid AuthenticationRequest request) {
-    final var authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-        request.getEmail(), request.getPassword()
-    ));
+    Authentication authentication;
+
+    try {
+      authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+          request.getEmail(), request.getPassword()
+      ));
+    } catch (BadCredentialsException e) {
+      throw new InvalidCredentials("Invalid email or password");
+    }
+
     var claims = new HashMap<String, Object>();
     var user = (User) authentication.getPrincipal();
+
+    canUserLogIn(user);
+
     claims.put("fullName", user.getFullName());
     var jwtToken = jwtService.generateToken(claims, user);
     return AuthenticationResponse.builder().token(jwtToken).role(user.getRole().name()).build();
@@ -232,7 +250,7 @@ public class AuthenticationService {
         ));
 
     String resetLink = generateResetToken(user);
-    sendResetPasswordEmail(user, resetLink);
+    emailUserService.sendResetPasswordEmail(user, resetLink);
   }
 
   public String generateResetToken(User user) {
@@ -256,24 +274,14 @@ public class AuthenticationService {
 
   }
 
-  private void sendWelcomeEmail(final User user) throws MessagingException {
-
-    if (user.getAccountType() == CHILD){
-      emailService.sendWelcomeEmail(user.getParentEmail(),
-          user.getName(),
-          EmailTemplate.WELCOME_EMAIL_CHILD,
-          logInUrl, "Welcome to GameHub!");
+  private void canUserLogIn(User user) {
+    if (user.getAccountStatus() == AccountStatus.SUSPENDED){
+      throw new AccountSuspendedException("Your account is currently suspended");
     }
 
-    emailService.sendWelcomeEmail(user.getEmail(),
-        user.getName(),
-        EmailTemplate.WELCOME_EMAIL_ADULT,
-        logInUrl, "Welcome to GameHub!");
-  }
-
-  private void sendResetPasswordEmail(final User user, String resetPasswordUrl) throws MessagingException {
-    emailService.sendResetPasswordEmail(user.getEmail(), user.getName(), EmailTemplate.RESET_PASSWORD_MAIL,
-        resetPasswordUrl, "Reset Password");
+    if (user.getAccountStatus() == AccountStatus.BANNED){
+      throw new AccountBannedException("Your account is permanently banned");
+    }
   }
 
   public void resetPassword(final PasswordResetToken token, final String newPassword) {

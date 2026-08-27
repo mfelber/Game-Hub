@@ -9,20 +9,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import gamehub.game_Hub.Common.PageResponse;
-import gamehub.game_Hub.Email.AdminEmailService;
+import gamehub.game_Hub.Email.SendEmailUserService;
 import gamehub.game_Hub.Email.EmailService;
-import gamehub.game_Hub.Email.EmailTemplate;
 import gamehub.game_Hub.Mapper.GameMapper;
 import gamehub.game_Hub.Mapper.ReportMapper;
 import gamehub.game_Hub.Mapper.UserMapper;
@@ -98,7 +95,7 @@ public class AdminServiceImpl implements AdminService {
 
   private final UserWarningsRepository userWarningsRepository;
 
-  private final AdminEmailService adminEmailService;
+  private final SendEmailUserService sendEmailUserService;
 
   @Override
   public DashboardResponse loadDashboardData(final Authentication connectedUser, final int page, final int size) {
@@ -228,7 +225,7 @@ public class AdminServiceImpl implements AdminService {
     userRepository.save(user);
     // TODO GH-200 create method to change status for other reports related to user
 
-     adminEmailService.sendBannedUserEmail(user, banUserRequest.getCustomMessage(), banReason.getCommunityGuideline(),
+     sendEmailUserService.sendBannedUserEmail(user, banUserRequest.getCustomMessage(), banReason.getCommunityGuideline(),
         banReason.getDescription());
 
     return user.getId();
@@ -242,7 +239,7 @@ public class AdminServiceImpl implements AdminService {
     user.setBanned(false);
     user.setAccountStatus(AccountStatus.ACTIVE);
     userRepository.save(user);
-    adminEmailService.sendAccountRestoredEmail(user);
+    sendEmailUserService.sendAccountRestoredEmail(user);
     return user.getId();
   }
 
@@ -390,7 +387,7 @@ public class AdminServiceImpl implements AdminService {
     String violatedGuideline = suspendedReason.getCommunityGuideline();
     String customMsg = suspendAccountRequest.getCustomMessage();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-    adminEmailService.sendSuspendedAccountEmail(user, violatedGuideline, customMsg, suspended.getExpiresAt().format(formatter));
+    sendEmailUserService.sendSuspendedAccountEmail(user, violatedGuideline, customMsg, suspended.getExpiresAt().format(formatter));
     return suspended.getId();
 
   }

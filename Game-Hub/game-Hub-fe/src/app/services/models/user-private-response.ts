@@ -10,7 +10,7 @@ import { LevelResponse } from '../models/level-response';
 import { LocationResponse } from '../models/location-response';
 export interface UserPrivateResponse {
   badges?: Array<BadgeResponse>;
-  bannerImage?: Array<string>;
+  bannerImage?: string;
   bannerType?: string;
   bio?: string;
   cardColor?: CardColorResponse;
@@ -30,7 +30,7 @@ export interface UserPrivateResponse {
   recommendedGames?: Array<GameResponseShort>;
   status?: 'ONLINE' | 'OFFLINE' | 'AWAY';
   userId?: number;
-  userProfilePicture?: Array<string>;
+  userProfilePicture?: string;
   username?: string;
   wishlistCount?: number;
 }

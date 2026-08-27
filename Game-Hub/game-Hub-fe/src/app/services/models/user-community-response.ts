@@ -8,6 +8,6 @@ export interface UserCommunityResponse {
   profileColor?: string;
   status?: 'ONLINE' | 'OFFLINE' | 'AWAY';
   userId?: number;
-  userProfilePicture?: Array<string>;
+  userProfilePicture?: string;
   username?: string;
 }

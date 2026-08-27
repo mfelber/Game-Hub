@@ -15,7 +15,7 @@ export interface AdminUserResponse {
   lastName?: string;
   location?: LocationResponse;
   profileColor?: string;
-  profilePicture?: Array<string>;
+  profilePicture?: string;
   registered?: string;
   role?: 'USER' | 'ADMIN';
   userId?: number;
