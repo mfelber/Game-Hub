@@ -1,15 +1,13 @@
-.top{
+.top {
   display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   justify-content: space-between;
 }
 
-.top button{
-  background: #171d29;
-  border: none;
-  color: white;
-  padding: 15px;
-  border-radius: 10px;
-}
 
 .filter-bar{
   background: #151923;

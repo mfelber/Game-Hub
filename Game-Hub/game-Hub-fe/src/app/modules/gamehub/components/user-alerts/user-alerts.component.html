@@ -1,0 +1,26 @@
+<div class="notification-actions">
+
+  <button class="warning-btn" *ngIf="userNotificationsResponse.suspendedCount! >= 3"><span
+    class="warning-tooltip">
+              <i class="fa-solid fa-triangle-exclamation warning-icon"></i>
+              <span class="tooltip-text">
+                Your account has been suspended 3 or more times. Further violations may result in a permanent ban.
+              </span>
+            </span>
+  </button>
+
+  <button class="warning-btn" *ngIf="userNotificationsResponse.warningCount! >= 3"><span
+    class="warning-tooltip">
+              <i class="fa-solid fa-triangle-exclamation warning-icon"></i>
+              <span class="tooltip-text">
+                Your account has received 3 or more warnings. Further violations may result in a suspension or ban.
+              </span>
+            </span>
+  </button>
+
+  <button class="notification-btn">
+    🔔
+    <span class="notification-badge">1</span>
+  </button>
+
+</div>

@@ -139,9 +139,22 @@
       <strong>Game-Hub</strong> account has been banned.
     </p>
 
-    <div class="ban-info">
+    <div class="ban-info" th:if="${banReason != 'Other'}">
+      <p>
       <strong>Reason for the ban:</strong>
       <span th:text="${banReason}"></span>
+      </p>
+
+      <div
+          th:if="${banDescription != null and !#strings.isEmpty(#strings.trim(banDescription))}"
+          style="margin-top:12px;"
+      >
+        <strong>Description:</strong>
+        <p
+            th:text="${banDescription}"
+            style="margin:6px 0 0;"
+        ></p>
+      </div>
     </div>
 
     <div class="custom-msg" th:if="${customMsg != null and !#strings.isEmpty(#strings.trim(customMsg))}">

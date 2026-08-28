@@ -6,6 +6,7 @@ import {PageResponseGameResponse} from '../../../../services/models/page-respons
 import {GameResponse} from '../../../../services/models/game-response';
 import {FormsModule} from '@angular/forms';
 import {SearchBar} from '../../components/search-bar/search-bar';
+import {UserAlertsComponent} from '../../components/user-alerts/user-alerts.component';
 
 
 @Component({
@@ -15,7 +16,8 @@ import {SearchBar} from '../../components/search-bar/search-bar';
     NgIf,
     FormsModule,
     SearchBar,
-    NgClass
+    NgClass,
+    UserAlertsComponent
   ],
   templateUrl: './store.component.html',
   styleUrl: './store.component.scss'

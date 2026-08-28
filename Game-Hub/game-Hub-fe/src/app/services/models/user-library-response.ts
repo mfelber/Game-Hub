@@ -4,7 +4,7 @@
 
 export interface UserLibraryResponse {
   favorite?: boolean;
-  gameCoverImage?: Array<string>;
+  gameCoverImage?: string;
   gameId?: number;
   installed?: boolean;
   lastPlayed?: string;

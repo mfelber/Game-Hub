@@ -13,6 +13,8 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { getBio } from '../fn/user-profile-controller/get-bio';
 import { GetBio$Params } from '../fn/user-profile-controller/get-bio';
+import { getUserNotifications } from '../fn/user-profile-controller/get-user-notifications';
+import { GetUserNotifications$Params } from '../fn/user-profile-controller/get-user-notifications';
 import { getUserPrivate } from '../fn/user-profile-controller/get-user-private';
 import { GetUserPrivate$Params } from '../fn/user-profile-controller/get-user-private';
 import { getUserPrivateShort } from '../fn/user-profile-controller/get-user-private-short';
@@ -40,6 +42,7 @@ import { uploadBannerImage } from '../fn/user-profile-controller/upload-banner-i
 import { UploadBannerImage$Params } from '../fn/user-profile-controller/upload-banner-image';
 import { uploadProfileImage } from '../fn/user-profile-controller/upload-profile-image';
 import { UploadProfileImage$Params } from '../fn/user-profile-controller/upload-profile-image';
+import { UserNotificationsResponse } from '../models/user-notifications-response';
 import { UserPrivateResponse } from '../models/user-private-response';
 import { UserPublicResponse } from '../models/user-public-response';
 
@@ -308,6 +311,31 @@ export class UserProfileControllerService extends BaseService {
   getUserPublic(params: GetUserPublic$Params, context?: HttpContext): Observable<UserPublicResponse> {
     return this.getUserPublic$Response(params, context).pipe(
       map((r: StrictHttpResponse<UserPublicResponse>): UserPublicResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `getUserNotifications()` */
+  static readonly GetUserNotificationsPath = '/profile/user/notifications';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getUserNotifications()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getUserNotifications$Response(params?: GetUserNotifications$Params, context?: HttpContext): Observable<StrictHttpResponse<UserNotificationsResponse>> {
+    return getUserNotifications(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getUserNotifications$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getUserNotifications(params?: GetUserNotifications$Params, context?: HttpContext): Observable<UserNotificationsResponse> {
+    return this.getUserNotifications$Response(params, context).pipe(
+      map((r: StrictHttpResponse<UserNotificationsResponse>): UserNotificationsResponse => r.body)
     );
   }
 

@@ -20,14 +20,21 @@ import gamehub.game_Hub.Common.PageResponse;
 import gamehub.game_Hub.Request.BanUserRequest;
 import gamehub.game_Hub.Request.GameRequest;
 import gamehub.game_Hub.Request.GameUpdateRequest;
+import gamehub.game_Hub.Request.SuspendAccountRequest;
+import gamehub.game_Hub.Request.WarnUserRequest;
 import gamehub.game_Hub.Response.Admin.AccountStatusResponse;
+import gamehub.game_Hub.Response.Admin.AdminReportsResponse;
+import gamehub.game_Hub.Response.Admin.AdminSuspendedAccountsResponse;
+import gamehub.game_Hub.Response.Admin.AdminUserModerationResponse;
 import gamehub.game_Hub.Response.Admin.AdminUserResponse;
 import gamehub.game_Hub.Response.Admin.DashboardResponse;
+import gamehub.game_Hub.Response.Admin.ReportStatusResponse;
 import gamehub.game_Hub.Response.Admin.RoleResponse;
 import gamehub.game_Hub.Response.GamePreviewResponse;
 import gamehub.game_Hub.Response.GameResponse;
 import gamehub.game_Hub.Service.Admin.AdminService;
 import gamehub.game_Hub.Service.GameService;
+import gamehub.game_Hub.enums.ReportStatus;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
@@ -67,7 +74,34 @@ public class AdminController {
   ) {
     return ResponseEntity.ok(adminService.getAllUsers(page, size));
   }
-  // fetch all reports
+
+  @GetMapping("/reports")
+  public ResponseEntity<PageResponse<AdminReportsResponse>> getAllReports(
+      @RequestParam(name = "page", defaultValue = "0", required = false) int page,
+      @RequestParam(name = "page", defaultValue = "50", required = false) int size
+  ) {
+    return ResponseEntity.ok(adminService.getAllReports(page, size));
+  }
+
+  @GetMapping("/suspended-accounts")
+  public ResponseEntity<PageResponse<AdminSuspendedAccountsResponse>> getSuspendedAccount(
+      @RequestParam(name = "page", defaultValue = "0", required = false) int page,
+      @RequestParam(name = "page", defaultValue = "50", required = false) int size
+  ){
+    return ResponseEntity.ok(adminService.getAllSuspendedAccounts(page,size));
+  }
+
+  @PostMapping("/suspend-account/{userId}")
+  public ResponseEntity<Long> suspendAccount(@PathVariable Long userId, @Valid @RequestBody SuspendAccountRequest suspendAccountRequest)
+      throws MessagingException {
+    return ResponseEntity.ok(adminService.suspendAccount(userId, suspendAccountRequest));
+  }
+
+  @PostMapping("/warn-user/{userId}")
+  public ResponseEntity<Long> warnUser(@PathVariable Long userId, @Valid @RequestBody WarnUserRequest warnUserRequest) {
+    return ResponseEntity.ok(adminService.warnUser(userId, warnUserRequest));
+  }
+
   // fetch all genres , possibility to add new genres (not duplicated)
   // fetch all reviews
 
@@ -131,8 +165,33 @@ public class AdminController {
     return ResponseEntity.ok(adminService.getAllRoles());
   }
 
+  @GetMapping("/report-statuses")
+  public ResponseEntity<List<ReportStatusResponse>> getAllReportStatuses() {
+    return ResponseEntity.ok(adminService.getAllReportStatuses());
+  }
+
   @GetMapping("/account-statuses")
   public ResponseEntity<List<AccountStatusResponse>> getAllAccountStatuses() {
     return ResponseEntity.ok(adminService.getAllAccountStatuses());
+  }
+
+  @GetMapping("/suspended-user/details/{userId}")
+  public AdminUserModerationResponse getSuspendedUserDetails(@PathVariable Long userId) {
+    return adminService.getSuspendedUserDetails(userId);
+  }
+
+  @PutMapping("/change-report-status/in-review/{reportId}")
+  public ResponseEntity<Long> changeStatusInReview(@PathVariable Long reportId) {
+    return ResponseEntity.ok(adminService.changeStatusInReview(reportId));
+  }
+
+  @PutMapping("/change-report-status/no-action/{reportId}")
+  public ResponseEntity<Long> noActionOnReportedUser(@PathVariable Long reportId) {
+    return ResponseEntity.ok(adminService.noActionOnReportedUser(reportId));
+  }
+
+  @PutMapping("/reject-report/{reportId}")
+  public ResponseEntity<Long> rejectReport(@PathVariable Long reportId) {
+    return ResponseEntity.ok(adminService.rejectReport(reportId));
   }
 }

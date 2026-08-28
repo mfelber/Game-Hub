@@ -194,6 +194,11 @@ textarea {
   color: white;
 }
 
+.save:hover {
+  background: #15803d!important;
+  transition: 0.2s;
+}
+
 .cannot-save {
   background-color: #4b5563;
   color: #d1d5db;

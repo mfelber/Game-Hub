@@ -83,7 +83,6 @@ export class MenuComponent implements OnInit {
     this.userService.getUserPrivateShort().subscribe({
       next: (user) => {
         this.userResponse = user;
-        console.log(user)
         if (user.userProfilePicture) {
           this.userHasProfilePicture = true;
         } else {

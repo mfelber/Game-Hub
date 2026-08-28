@@ -11,11 +11,8 @@
         placeholder="Search games..."
         (search)="searchGames($event)">
       </app-search-bar>
-      <button class="relative cursor-pointer">
-        🔔
-        <span class="absolute -top-1 -right-2 bg-red-600 text-white text-xs font-bold
-        rounded-full w-5 h-5 flex items-center justify-center"> 1 </span>
-      </button>
+      <app-user-alerts>
+      </app-user-alerts>
     </div>
 
   </section>

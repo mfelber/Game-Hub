@@ -122,9 +122,11 @@ export class AllUsersComponent implements OnInit {
       this.selectedUser = user;
       this.isBanUserModalOpen = true;
     }
+    if (user.accountStatus === 'BANNED') {
+      this.selectedUser = user;
+      this.isUnbanUserModalOpen = true;
+    }
 
-    this.selectedUser = user;
-    this.isUnbanUserModalOpen = true;
   }
 
 

@@ -41,11 +41,11 @@ export class UserPublicProfileComponent implements OnInit {
     bio: '',
     badges: [],
     favoriteGenres: [],
-    userProfilePicture: [],
+    userProfilePicture: '',
     playRecently: [],
     recommendedGames: [],
     favoriteGames: [],
-    bannerImage: [],
+    bannerImage: '',
     wishlistCount: 0,
     libraryCount: 0,
     bannerType: ''

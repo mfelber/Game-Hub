@@ -1,0 +1,96 @@
+<app-preview-suspended-user-modal
+  *ngIf="selectedUser && isPreviewModalOpen"
+  [suspendedUser]="selectedUser"
+  (close)="closeModal()">
+
+</app-preview-suspended-user-modal>
+
+<main>
+  <section class="suspended-accounts-page">
+    <div class="page-header">
+      <div>
+        <h1>Suspended Account</h1>
+        <p>View all currently suspended accounts in one place.</p>
+      </div>
+    </div>
+
+    <section>
+      <div class="top">
+        <app-search-bar
+          placeholder="Search suspended accounts...">
+        </app-search-bar>
+      </div>
+    </section>
+
+    <section>
+      <div class="filter-bar">
+        <div class="filter-header">
+          <span>Filter</span>
+          <button>Reset</button>
+        </div>
+
+        <div class="filter-options">
+          <div class="dropdown">
+            <label>Suspended Account</label>
+            <select>
+              <option value="">All Suspende Accouts</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="table-container">
+        <table>
+          <thead>
+          <tr>
+            <th>Username</th>
+            <th>Reason</th>
+            <th>Status</th>
+            <th>Suspended from</th>
+            <th>Suspended until</th>
+            <th>Suspended Times</th>
+            <th>Days Since Last Suspension</th>
+            <th>Admin message</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let suspendedUser of suspendedAccountsResponse.content">
+            <td>{{ suspendedUser.userName }}</td>
+            <td>{{ suspendedUser.suspensionReason }}</td>
+            <td> <span class="status" [ngClass]="{
+            'ongoing': suspendedUser.suspensionStatus === 'ONGOING',
+            'expired': suspendedUser.suspensionStatus === 'EXPIRED'
+            }">{{ suspendedUser.suspensionStatus }} </span>
+            </td>
+            <td>{{ suspendedUser.createdAt | date:'dd.MM.yyyy' }}</td>
+            <td>{{ suspendedUser.expiresAt | date:'dd.MM.yyyy' }}</td>
+            <td>{{ suspendedUser.suspendedTimes }} <span
+              *ngIf="suspendedUser.suspendedTimes! >= 3"
+              class="warning-tooltip">
+              <i class="fa-solid fa-triangle-exclamation warning-icon"></i>
+              <span class="tooltip-text">
+                This user has been suspended 3 or more times. You may want to review their profile activity.
+              </span>
+            </span>
+            </td>
+            <td>
+              {{
+                suspendedUser.suspensionStatus === 'ONGOING'
+                  ? ''
+                  : suspendedUser.daysSinceLastSuspension
+              }}
+            </td>
+            <td>{{ suspendedUser.messageFromAdmin }}</td>
+            <td>
+              <button class="action view" (click)="openModal(suspendedUser)"><i class="fa-solid fa-eye"></i></button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </section>
+</main>

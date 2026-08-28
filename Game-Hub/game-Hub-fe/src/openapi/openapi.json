@@ -63,6 +63,38 @@
         }
       }
     },
+    "/admin/reject-report/{reportId}": {
+      "put": {
+        "tags": [
+          "admin-controller"
+        ],
+        "operationId": "rejectReport",
+        "parameters": [
+          {
+            "name": "reportId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/admin/edit-game/{gameId}": {
       "put": {
         "tags": [
@@ -114,6 +146,70 @@
         "parameters": [
           {
             "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/change-report-status/no-action/{reportId}": {
+      "put": {
+        "tags": [
+          "admin-controller"
+        ],
+        "operationId": "noActionOnReportedUser",
+        "parameters": [
+          {
+            "name": "reportId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/change-report-status/in-review/{reportId}": {
+      "put": {
+        "tags": [
+          "admin-controller"
+        ],
+        "operationId": "changeStatusInReview",
+        "parameters": [
+          {
+            "name": "reportId",
             "in": "path",
             "required": true,
             "schema": {
@@ -978,6 +1074,90 @@
         }
       }
     },
+    "/admin/warn-user/{userId}": {
+      "post": {
+        "tags": [
+          "admin-controller"
+        ],
+        "operationId": "warnUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WarnUserRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/suspend-account/{userId}": {
+      "post": {
+        "tags": [
+          "admin-controller"
+        ],
+        "operationId": "suspendAccount",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SuspendAccountRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/admin/cover/{gameId}": {
       "post": {
         "tags": [
@@ -1393,12 +1573,12 @@
         }
       }
     },
-    "/report/get/reasons": {
+    "/report/get/community-guidelines": {
       "get": {
         "tags": [
           "report-controller"
         ],
-        "operationId": "getAllReportReasons",
+        "operationId": "getAllCommunityGuidelines",
         "responses": {
           "200": {
             "description": "OK",
@@ -1407,7 +1587,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ReportReasonResponse"
+                    "$ref": "#/components/schemas/CommunityGuidelinesResponse"
                   }
                 }
               }
@@ -1440,6 +1620,26 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UserPublicResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/profile/user/notifications": {
+      "get": {
+        "tags": [
+          "user-profile-controller"
+        ],
+        "operationId": "getUserNotifications",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserNotificationsResponse"
                 }
               }
             }
@@ -2126,6 +2326,69 @@
         }
       }
     },
+    "/admin/suspended-user/details/{userId}": {
+      "get": {
+        "tags": [
+          "admin-controller"
+        ],
+        "operationId": "getSuspendedUserDetails",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminUserModerationResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/suspended-accounts": {
+      "get": {
+        "tags": [
+          "admin-controller"
+        ],
+        "operationId": "getSuspendedAccount",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseAdminSuspendedAccountsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/admin/roles": {
       "get": {
         "tags": [
@@ -2141,6 +2404,61 @@
                   "type": "array",
                   "items": {
                     "$ref": "#/components/schemas/RoleResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/reports": {
+      "get": {
+        "tags": [
+          "admin-controller"
+        ],
+        "operationId": "getAllReports",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseAdminReportsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/report-statuses": {
+      "get": {
+        "tags": [
+          "admin-controller"
+        ],
+        "operationId": "getAllReportStatuses",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReportStatusResponse"
                   }
                 }
               }
@@ -2472,6 +2790,11 @@
             "type": "integer",
             "format": "int64"
           },
+          "reportId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
           "customMessage": {
             "type": "string",
             "nullable": true
@@ -2580,11 +2903,8 @@
             "type": "string"
           },
           "gameCoverImage": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "byte"
-            }
+            "type": "string",
+            "format": "byte"
           },
           "installed": {
             "type": "boolean"
@@ -2671,6 +2991,47 @@
           },
           "token": {
             "type": "string"
+          }
+        }
+      },
+      "WarnUserRequest": {
+        "required": [
+          "customMsg",
+          "reportId"
+        ],
+        "type": "object",
+        "properties": {
+          "customMsg": {
+            "type": "string"
+          },
+          "reportId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "SuspendAccountRequest": {
+        "required": [
+          "customMessage",
+          "expiresAt",
+          "reportId",
+          "suspendReason"
+        ],
+        "type": "object",
+        "properties": {
+          "suspendReason": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "customMessage": {
+            "type": "string"
+          },
+          "expiresAt": {
+            "type": "string"
+          },
+          "reportId": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       },
@@ -2784,11 +3145,8 @@
             "type": "string"
           },
           "gameCoverImage": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "byte"
-            }
+            "type": "string",
+            "format": "byte"
           },
           "price": {
             "type": "number",
@@ -3035,11 +3393,8 @@
             "$ref": "#/components/schemas/AgeRatingResponse"
           },
           "gameCoverImage": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "byte"
-            }
+            "type": "string",
+            "format": "byte"
           },
           "systemRequirements": {
             "$ref": "#/components/schemas/SystemRequirements"
@@ -3131,15 +3486,30 @@
           }
         }
       },
-      "ReportReasonResponse": {
+      "CommunityGuidelineCategoryResponse": {
         "type": "object",
         "properties": {
           "id": {
             "type": "integer",
             "format": "int64"
           },
-          "reason": {
+          "categoryName": {
             "type": "string"
+          }
+        }
+      },
+      "CommunityGuidelinesResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "communityGuideline": {
+            "type": "string"
+          },
+          "category": {
+            "$ref": "#/components/schemas/CommunityGuidelineCategoryResponse"
           },
           "description": {
             "type": "string"
@@ -3190,11 +3560,8 @@
             "type": "string"
           },
           "gameCoverImage": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "byte"
-            }
+            "type": "string",
+            "format": "byte"
           }
         }
       },
@@ -3287,18 +3654,12 @@
             }
           },
           "userProfilePicture": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "byte"
-            }
+            "type": "string",
+            "format": "byte"
           },
           "bannerImage": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "byte"
-            }
+            "type": "string",
+            "format": "byte"
           },
           "bannerType": {
             "type": "string"
@@ -3311,6 +3672,21 @@
           },
           "cardColor": {
             "$ref": "#/components/schemas/CardColorResponse"
+          }
+        }
+      },
+      "UserNotificationsResponse": {
+        "type": "object",
+        "properties": {
+          "warningCount": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "suspendedCount": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
           }
         }
       },
@@ -3401,18 +3777,12 @@
             }
           },
           "userProfilePicture": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "byte"
-            }
+            "type": "string",
+            "format": "byte"
           },
           "bannerImage": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "byte"
-            }
+            "type": "string",
+            "format": "byte"
           },
           "bannerType": {
             "type": "string"
@@ -3521,11 +3891,8 @@
             ]
           },
           "userProfilePicture": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "byte"
-            }
+            "type": "string",
+            "format": "byte"
           },
           "profileColor": {
             "type": "string"
@@ -3554,11 +3921,8 @@
             ]
           },
           "userProfilePicture": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "byte"
-            }
+            "type": "string",
+            "format": "byte"
           },
           "profileColor": {
             "type": "string"
@@ -3632,11 +3996,8 @@
             "type": "string"
           },
           "profilePicture": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "byte"
-            }
+            "type": "string",
+            "format": "byte"
           },
           "profileColor": {
             "type": "string"
@@ -3671,6 +4032,7 @@
               "ACTIVE",
               "BANNED",
               "DISABLED",
+              "SUSPENDED",
               "DELETING",
               "DELETED"
             ]
@@ -3722,10 +4084,316 @@
           }
         }
       },
+      "AdminBanResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "reasonId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "banReason": {
+            "type": "string"
+          },
+          "reportId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "customMsg": {
+            "type": "string"
+          },
+          "bannedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "AdminReportsResponse": {
+        "type": "object",
+        "properties": {
+          "reportId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "reporterId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "reporterUserName": {
+            "type": "string"
+          },
+          "reportedUserId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "reportedUserName": {
+            "type": "string"
+          },
+          "reportedUserEmail": {
+            "type": "string"
+          },
+          "reportReason": {
+            "type": "string"
+          },
+          "reportMsg": {
+            "type": "string"
+          },
+          "reportStatus": {
+            "type": "string",
+            "enum": [
+              "NEW",
+              "IN_REVIEW",
+              "RESOLVED",
+              "REJECTED",
+              "DISMISSED"
+            ]
+          },
+          "moderationAction": {
+            "type": "string",
+            "enum": [
+              "NONE",
+              "WARNING",
+              "SUSPEND",
+              "BAN"
+            ]
+          },
+          "closedByReport": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "closedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "AdminSuspendedAccountsResponse": {
+        "type": "object",
+        "properties": {
+          "suspensionId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "reportId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "userName": {
+            "type": "string"
+          },
+          "suspensionReason": {
+            "type": "string"
+          },
+          "messageFromAdmin": {
+            "type": "string"
+          },
+          "suspendedTimes": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "daysSinceLastSuspension": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "suspensionStatus": {
+            "type": "string",
+            "enum": [
+              "ONGOING",
+              "EXPIRED"
+            ]
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "expiresAt": {
+            "type": "string"
+          }
+        }
+      },
+      "AdminUserModerationResponse": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "userName": {
+            "type": "string"
+          },
+          "accountStatus": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "BANNED",
+              "DISABLED",
+              "SUSPENDED",
+              "DELETING",
+              "DELETED"
+            ]
+          },
+          "registeredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "reportCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "warningCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "suspensionCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "banCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "reports": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdminReportsResponse"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdminWarningResponse"
+            }
+          },
+          "suspensions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdminSuspendedAccountsResponse"
+            }
+          },
+          "bans": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdminBanResponse"
+            }
+          }
+        }
+      },
+      "AdminWarningResponse": {
+        "type": "object",
+        "properties": {
+          "warningId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "reportId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "adminMsg": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "PageResponseAdminSuspendedAccountsResponse": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdminSuspendedAccountsResponse"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          }
+        }
+      },
       "RoleResponse": {
         "type": "object",
         "properties": {
           "roleName": {
+            "type": "string"
+          }
+        }
+      },
+      "PageResponseAdminReportsResponse": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdminReportsResponse"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ReportStatusResponse": {
+        "type": "object",
+        "properties": {
+          "reportStatus": {
             "type": "string"
           }
         }

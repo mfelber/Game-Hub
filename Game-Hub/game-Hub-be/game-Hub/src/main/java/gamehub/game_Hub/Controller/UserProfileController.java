@@ -20,6 +20,7 @@ import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Repository.user.UserRepository;
 import gamehub.game_Hub.Request.BannerRequest;
 import gamehub.game_Hub.Response.StatusResponse;
+import gamehub.game_Hub.Response.UserNotificationsResponse;
 import gamehub.game_Hub.Response.UserPrivateResponse;
 import gamehub.game_Hub.Response.UserPublicResponse;
 import gamehub.game_Hub.Service.UserService;
@@ -95,6 +96,11 @@ public class UserProfileController {
   public ResponseEntity<UserPrivateResponse> getUserPrivate(final Authentication connectedUser) {
     UserPrivateResponse userPrivateResponse = userService.getPrivateProfile(connectedUser);
     return ResponseEntity.ok(userPrivateResponse);
+  }
+
+  @GetMapping("/user/notifications")
+  public ResponseEntity<UserNotificationsResponse> getUserNotifications(final Authentication connectedUser) {
+    return ResponseEntity.ok(userService.getUserNotifications(connectedUser));
   }
 
   // Retrieve the private profile information of the currently authenticated user for menu

@@ -10,6 +10,7 @@ public enum EmailTemplate {
   WELCOME_EMAIL_CHILD("welcome-email-child"),
   RESET_PASSWORD_MAIL("reset-password-mail"),
   USER_BANNED_EMAIL("user-banned-email"),
+  USER_SUSPENDED_EMAIL("user-suspended-email"),
   USER_ACCOUNT_RESTORED_EMAIL("user-account-restored-email");
 
   public final String name;

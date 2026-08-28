@@ -7,7 +7,11 @@ import org.springframework.stereotype.Service;
 import gamehub.game_Hub.File.FileUtils;
 import gamehub.game_Hub.Module.Level;
 import gamehub.game_Hub.Module.User.User;
+import gamehub.game_Hub.Module.User.UserSuspensions;
+import gamehub.game_Hub.Module.User.UserWarnings;
 import gamehub.game_Hub.Repository.LevelRepository;
+import gamehub.game_Hub.Repository.UserSuspensionRepository;
+import gamehub.game_Hub.Repository.UserWarningsRepository;
 import gamehub.game_Hub.Request.UserUpdateRequest;
 import gamehub.game_Hub.Response.Admin.AdminUserResponse;
 import gamehub.game_Hub.Response.BadgeResponse;
@@ -19,18 +23,21 @@ import gamehub.game_Hub.Response.LevelResponse;
 import gamehub.game_Hub.Response.LocationResponse;
 import gamehub.game_Hub.Response.RecentUserResponse;
 import gamehub.game_Hub.Response.StatusResponse;
+import gamehub.game_Hub.Response.UserNotificationsResponse;
 import gamehub.game_Hub.Response.UserPrivateResponse;
 import gamehub.game_Hub.Response.UserPublicResponse;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class UserMapper {
 
   private final LevelRepository levelRepository;
 
-  public UserMapper(final LevelRepository levelRepository) {
-    this.levelRepository = levelRepository;
-  }
+  private final UserWarningsRepository userWarningsRepository;
+
+  private final UserSuspensionRepository userSuspensionRepository;
 
   public User toUser(UserUpdateRequest userUpdateRequest) {
     return User.builder()
@@ -214,6 +221,17 @@ public class UserMapper {
         .registered(user.getCreatedAt())
         .lastLogin(user.getLastLogin())
         .lastModifiedAt(user.getLastModifiedAt())
+        .build();
+  }
+
+  public UserNotificationsResponse toUserNotificationResponse(final User user) {
+
+    Long warnings = userWarningsRepository.countByUser(user);
+    Long suspensions = userSuspensionRepository.countByUser(user);
+
+    return UserNotificationsResponse.builder()
+        .warningCount(warnings !=null ? warnings : null)
+        .suspendedCount(suspensions !=null ? suspensions : null)
         .build();
   }
 

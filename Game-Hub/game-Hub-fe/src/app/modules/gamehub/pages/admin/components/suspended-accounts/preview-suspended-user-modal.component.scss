@@ -1,0 +1,420 @@
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, .6);
+  z-index: 9999;
+}
+
+.user-modal {
+  width: 700px;
+  max-width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #151b27;
+  border-radius: 12px;
+  padding: 30px;
+  color: #fff;
+  position: relative;
+}
+
+.close-btn{
+  position: absolute;
+  right: 18px;
+  top: 15px;
+  border: none;
+  background: none;
+  color: #999;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.close-btn:hover{
+  color: white;
+}
+
+.user-modal h2{
+  font-size: 30px;
+  margin-bottom: 20px;
+}
+
+.overview {
+  background: #1b2333;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 28px;
+}
+
+.overview-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.overview-main h3 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.overview-info {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.overview-info div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.overview-info span {
+  color: #8b95a5;
+  font-size: 12px;
+}
+
+.overview-info strong {
+  color: #e5e7eb;
+  font-size: 14px;
+}
+
+.status {
+  display: inline-block;
+
+  padding: 5px 10px;
+  border-radius: 6px;
+
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.status.active {
+  color: #22c55e;
+  background: rgba(34, 197, 94, .12);
+}
+
+.status.banned {
+  color: #ef4444;
+  background: rgba(239, 68, 68, .12);
+}
+
+.status.disabled {
+  color: #eab308;
+  background: rgba(234, 179, 8, .15);
+}
+
+.status.deleting {
+  color: #f97316;
+  background: rgba(249, 115, 22, .12);
+}
+
+.status.deleted {
+  color: #f87171;
+  background: rgba(153, 27, 27, .35);
+}
+
+.status.suspended {
+  color: #a78bfa;
+  background: rgba(139, 92, 246, .14);
+}
+
+.section {
+  margin-bottom: 28px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.section h4 {
+  margin-bottom: 15px;
+  color: #e5e7eb;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.moderation-panel {
+  background: #19202c;
+  border-radius: 10px;
+  margin-bottom: 14px;
+  overflow: hidden;
+  border: 1px solid #263044;
+}
+
+.moderation-panel-header {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 17px 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  color: #e5e7eb;
+  cursor: pointer;
+  text-align: left;
+}
+
+.panel-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.moderation-panel-content {
+  padding: 0 18px 18px;
+}
+
+.toggle-icon {
+  color: #8b95a5;
+  font-size: 22px;
+  transition: transform 0.2s ease;
+}
+
+.toggle-icon.open {
+  transform: rotate(180deg);
+}
+
+.empty-state {
+  padding: 18px;
+  text-align: center;
+  color: #8b95a5;
+  font-size: 13px;
+}
+
+.count {
+  min-width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 7px;
+  background: #252e3e;
+  border-radius: 6px;
+  color: #aeb7c5;
+  font-size: 12px;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.summary-card {
+  padding: 17px;
+  background: #1d2533;
+  border-radius: 9px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.summary-card span {
+  font-size: 12px;
+}
+
+.summary-card strong {
+  color: #e5e7eb;
+  font-size: 24px;
+}
+
+.summary-card.reports {
+  background: rgba(96, 165, 250, .40);
+}
+
+.summary-card.warnings {
+  background: rgba(234, 179, 8, .40);
+}
+
+.summary-card.suspensions {
+  background: rgba(139, 92, 246, .40);
+}
+
+.summary-card.bans {
+  background: rgba(239, 68, 68, .40);
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.history-item {
+  padding: 15px;
+  background: #1d2533;
+  border-radius: 8px;
+  border: 1px solid transparent;
+}
+
+.history-item:hover {
+  border-color: #303b4e;
+}
+
+.history-content {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.history-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.history-title strong {
+  color: #e5e7eb;
+  font-size: 14px;
+}
+
+.history-title span {
+  color: #7f8999;
+  font-size: 11px;
+}
+
+.history-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  color: #8993a4;
+  font-size: 12px;
+}
+
+.history-details strong {
+  color: #cbd5e1;
+}
+
+.history-content p {
+  margin: 3px 0 0;
+  color: #aeb7c5;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.report-item {
+  padding: 16px;
+  background: #1d2533;
+  border-radius: 8px;
+}
+
+.report-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.report-header strong {
+  font-size: 14px;
+  color: #e5e7eb;
+}
+
+.report-status {
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 11px;
+}
+
+.report-details {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-bottom: 12px;
+}
+
+.report-details div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.report-details span {
+  color: #7f8999;
+  font-size: 11px;
+}
+
+.report-details strong {
+  color: #d1d5db;
+  font-size: 13px;
+}
+
+.report-item p {
+  margin: 10px 0 0;
+  color: #aeb7c5;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.moderation-action {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #2b3444;
+  color: #8993a4;
+  font-size: 12px;
+}
+
+.moderation-action strong {
+  color: #d1d5db;
+}
+
+.empty-state {
+  padding: 20px;
+  background: #1d2533;
+  border-radius: 8px;
+  text-align: center;
+  color: #737e90;
+  font-size: 13px;
+}
+
+.status{
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 11px;
+}
+
+.status.expired {
+  background: rgba(107, 114, 128, 0.12);
+  color: #9CA3AF!important;
+}
+
+.status.ongoing {
+  background: rgba(34, 197, 94, 0.12);
+  color: #22c55e!important;
+}
+
+.report-status.new {
+  background: rgba(29, 78, 216, 0.12);
+  color: #3B82F6!important;
+}
+
+.report-status.in-review {
+  background: rgba(180, 83, 9, 0.12);
+  color: #F59E0B!important;
+}
+
+.report-status.resolved {
+  background: rgba(34, 197, 94, 0.12);
+  color: #22c55e!important;
+}
+
+.report-status.rejected {
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444!important;
+}
+
+.report-status.dismissed {
+  background: rgba(107, 114, 128, 0.12);
+  color: #9CA3AF;
+}

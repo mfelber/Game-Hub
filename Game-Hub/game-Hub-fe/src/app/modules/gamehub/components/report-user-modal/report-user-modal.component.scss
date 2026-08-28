@@ -10,6 +10,8 @@
 
 .report-modal{
   width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
   background: #151b27;
   border: 1px solid rgba(255,255,255,.08);
   border-radius: 20px;
@@ -74,6 +76,22 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  max-height: 280px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+.reason-list::-webkit-scrollbar{
+  width: 6px;
+}
+
+.reason-list::-webkit-scrollbar-track{
+  background: transparent;
+}
+
+.reason-list::-webkit-scrollbar-thumb{
+  background: #374151;
+  border-radius: 10px;
 }
 
 .reason-item{

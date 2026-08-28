@@ -63,15 +63,25 @@ export class LoginComponent {
       },
       error: (err) => {
         if (err.status === 403) {
-          this.errorMessage = 'Incorrect email or password';
-        } else {
-          this.errorMessage = 'An error occurred. Please try again later';
+          switch (err.error?.code) {
+            case 'INVALID_CREDENTIALS':
+              this.errorMessage = 'Incorrect email or password';
+              break;
+            case 'ACCOUNT_SUSPENDED':
+              this.errorMessage = 'Your account is currently suspended';
+              break;
+            case 'ACCOUNT_BANNED':
+              this.errorMessage = 'Your account is permanently banned';
+              break;
+            default:
+              this.errorMessage = 'An error occurred. Please try again later';
+          }
         }
       }
     })
   }
 
-  setUserToOnline(){
+  setUserToOnline() {
     this.userService.setStatusToOnline().subscribe({
       next: () => {
       }

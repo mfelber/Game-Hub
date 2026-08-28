@@ -3,10 +3,15 @@ package gamehub.game_Hub.Module.Report;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import gamehub.game_Hub.Module.User.User;
+import gamehub.game_Hub.enums.ModerationAction;
+import gamehub.game_Hub.enums.ReportStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -43,13 +48,24 @@ public class Report {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "reason_id")
-  private ReportReason reason;
+  private CommunityGuidelines reason;
 
   private String message;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "status_id")
+  @Enumerated(EnumType.STRING)
+  @Column(name = "report_status")
   private ReportStatus status;
+
+  @Enumerated(EnumType.STRING)
+  @Column(name = "moderation_action")
+  private ModerationAction moderationAction;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "closed_by_report")
+  private Report closedByReport;
+
+  @Column(name = "closed_at")
+  private LocalDateTime closedAt;
 
   @Column(name = "created_at")
   @CreationTimestamp

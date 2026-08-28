@@ -13,6 +13,9 @@ public class BanUserRequest {
   private Long banReason;
 
   @Schema(nullable = true)
+  private Long reportId;
+
+  @Schema(nullable = true)
   private String customMessage;
 
 }

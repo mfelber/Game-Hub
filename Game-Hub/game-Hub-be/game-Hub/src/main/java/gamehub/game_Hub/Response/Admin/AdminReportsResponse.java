@@ -1,0 +1,34 @@
+package gamehub.game_Hub.Response.Admin;
+
+import java.time.LocalDateTime;
+
+import gamehub.game_Hub.enums.ModerationAction;
+import gamehub.game_Hub.enums.ReportStatus;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class AdminReportsResponse {
+
+  private Long reportId;
+  private Long reporterId;
+  private String reporterUserName;
+  private Long reportedUserId;
+  private String reportedUserName;
+  private String reportedUserEmail;
+  private String reportReason;
+  private String reportMsg;
+  private ReportStatus reportStatus;
+  private ModerationAction moderationAction;
+  private Long closedByReport;
+  private LocalDateTime createdAt;
+  private LocalDateTime closedAt;
+
+}

@@ -59,7 +59,7 @@ export class FindPlayersComponent implements OnInit {
   userCommunityResponse: PageResponseUserCommunityResponse = {};
   reportRequest: ReportRequest = {reason: null!, message: ''};
 
-  allReportReasons: { id: number; reason: string }[] = [];
+  allCommunityGuidelines: { id: number; reason: string }[] = [];
   friendRequestMapFromSender: { [key: number]: boolean } = {};
   friendRequestMapForReceiver: { [key: number]: boolean } = {};
   friendsMap: { [key: number]: boolean } = {};
@@ -140,29 +140,6 @@ export class FindPlayersComponent implements OnInit {
     this.router.navigate(['gamehub/user', userId]);
   }
 
-  reportUser(userId: number) {
-    this.errorMessage = '';
-    if (this.reportRequest.reason === 6 && this.reportRequest.message === '') {
-      this.errorMessage = 'Please write a reason for reporting';
-      return;
-    }
-    if (this.reportRequest.reason !== null) {
-      this.reportService.reportUser({userId, body: this.reportRequest}).subscribe({
-        next: () => {
-          this.isReportUserModalOpen = false;
-          this.reportRequest = {
-            reason: undefined,
-            message: ''
-          };
-          this.showSuccess('User has been reported successfully');
-        }
-      })
-    } else {
-      this.errorMessage = 'Please select a reason before submitting';
-    }
-
-  }
-
   searchByUsername(value: string) {
     this.page = 0;
     this.userCommunityResponse = {}
@@ -193,7 +170,7 @@ export class FindPlayersComponent implements OnInit {
   openReportUserModal(user: UserCommunityResponse) {
     this.selectedUserToReport = user;
     this.isReportUserModalOpen = true;
-    this.loadReportReasons();
+    this.loadCommunityGuidelines();
   }
 
   closeReportModal() {
@@ -206,12 +183,12 @@ export class FindPlayersComponent implements OnInit {
     };
   }
 
-  private loadReportReasons() {
-    this.reportService.getAllReportReasons().subscribe({
-      next: (reasons) => {
-        this.allReportReasons = reasons.map(r => ({
+  private loadCommunityGuidelines() {
+    this.reportService.getAllCommunityGuidelines().subscribe({
+      next: (communityGuidelines) => {
+        this.allCommunityGuidelines = communityGuidelines.map(r => ({
           id: r.id!,
-          reason: r.reason!
+          reason: r.communityGuideline!
         }));
       }
     })

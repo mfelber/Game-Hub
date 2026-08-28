@@ -14,11 +14,14 @@ import { StrictHttpResponse } from '../strict-http-response';
 import { AccountStatusResponse } from '../models/account-status-response';
 import { addGame } from '../fn/admin-controller/add-game';
 import { AddGame$Params } from '../fn/admin-controller/add-game';
+import { AdminUserModerationResponse } from '../models/admin-user-moderation-response';
 import { AdminUserResponse } from '../models/admin-user-response';
 import { banUser } from '../fn/admin-controller/ban-user';
 import { BanUser$Params } from '../fn/admin-controller/ban-user';
 import { changeRole } from '../fn/admin-controller/change-role';
 import { ChangeRole$Params } from '../fn/admin-controller/change-role';
+import { changeStatusInReview } from '../fn/admin-controller/change-status-in-review';
+import { ChangeStatusInReview$Params } from '../fn/admin-controller/change-status-in-review';
 import { DashboardResponse } from '../models/dashboard-response';
 import { deleteGame } from '../fn/admin-controller/delete-game';
 import { DeleteGame$Params } from '../fn/admin-controller/delete-game';
@@ -27,25 +30,44 @@ import { getAllAccountStatuses } from '../fn/admin-controller/get-all-account-st
 import { GetAllAccountStatuses$Params } from '../fn/admin-controller/get-all-account-statuses';
 import { getAllGames } from '../fn/admin-controller/get-all-games';
 import { GetAllGames$Params } from '../fn/admin-controller/get-all-games';
+import { getAllReports } from '../fn/admin-controller/get-all-reports';
+import { GetAllReports$Params } from '../fn/admin-controller/get-all-reports';
+import { getAllReportStatuses } from '../fn/admin-controller/get-all-report-statuses';
+import { GetAllReportStatuses$Params } from '../fn/admin-controller/get-all-report-statuses';
 import { getAllRoles } from '../fn/admin-controller/get-all-roles';
 import { GetAllRoles$Params } from '../fn/admin-controller/get-all-roles';
 import { getAllUsers } from '../fn/admin-controller/get-all-users';
 import { GetAllUsers$Params } from '../fn/admin-controller/get-all-users';
 import { getGameInfo } from '../fn/admin-controller/get-game-info';
 import { GetGameInfo$Params } from '../fn/admin-controller/get-game-info';
+import { getSuspendedAccount } from '../fn/admin-controller/get-suspended-account';
+import { GetSuspendedAccount$Params } from '../fn/admin-controller/get-suspended-account';
+import { getSuspendedUserDetails } from '../fn/admin-controller/get-suspended-user-details';
+import { GetSuspendedUserDetails$Params } from '../fn/admin-controller/get-suspended-user-details';
 import { getUserInfo } from '../fn/admin-controller/get-user-info';
 import { GetUserInfo$Params } from '../fn/admin-controller/get-user-info';
 import { loadDashboardData } from '../fn/admin-controller/load-dashboard-data';
 import { LoadDashboardData$Params } from '../fn/admin-controller/load-dashboard-data';
+import { noActionOnReportedUser } from '../fn/admin-controller/no-action-on-reported-user';
+import { NoActionOnReportedUser$Params } from '../fn/admin-controller/no-action-on-reported-user';
+import { PageResponseAdminReportsResponse } from '../models/page-response-admin-reports-response';
+import { PageResponseAdminSuspendedAccountsResponse } from '../models/page-response-admin-suspended-accounts-response';
 import { PageResponseAdminUserResponse } from '../models/page-response-admin-user-response';
 import { PageResponseGamePreviewResponse } from '../models/page-response-game-preview-response';
+import { rejectReport } from '../fn/admin-controller/reject-report';
+import { RejectReport$Params } from '../fn/admin-controller/reject-report';
+import { ReportStatusResponse } from '../models/report-status-response';
 import { RoleResponse } from '../models/role-response';
+import { suspendAccount } from '../fn/admin-controller/suspend-account';
+import { SuspendAccount$Params } from '../fn/admin-controller/suspend-account';
 import { unBanUser } from '../fn/admin-controller/un-ban-user';
 import { UnBanUser$Params } from '../fn/admin-controller/un-ban-user';
 import { updateGame } from '../fn/admin-controller/update-game';
 import { UpdateGame$Params } from '../fn/admin-controller/update-game';
 import { uploadGameCoverImage } from '../fn/admin-controller/upload-game-cover-image';
 import { UploadGameCoverImage$Params } from '../fn/admin-controller/upload-game-cover-image';
+import { warnUser } from '../fn/admin-controller/warn-user';
+import { WarnUser$Params } from '../fn/admin-controller/warn-user';
 
 @Injectable({ providedIn: 'root' })
 export class AdminControllerService extends BaseService {
@@ -74,6 +96,31 @@ export class AdminControllerService extends BaseService {
    */
   unBanUser(params: UnBanUser$Params, context?: HttpContext): Observable<number> {
     return this.unBanUser$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `rejectReport()` */
+  static readonly RejectReportPath = '/admin/reject-report/{reportId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `rejectReport()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  rejectReport$Response(params: RejectReport$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return rejectReport(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `rejectReport$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  rejectReport(params: RejectReport$Params, context?: HttpContext): Observable<number> {
+    return this.rejectReport$Response(params, context).pipe(
       map((r: StrictHttpResponse<number>): number => r.body)
     );
   }
@@ -128,6 +175,56 @@ export class AdminControllerService extends BaseService {
     );
   }
 
+  /** Path part for operation `noActionOnReportedUser()` */
+  static readonly NoActionOnReportedUserPath = '/admin/change-report-status/no-action/{reportId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `noActionOnReportedUser()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  noActionOnReportedUser$Response(params: NoActionOnReportedUser$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return noActionOnReportedUser(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `noActionOnReportedUser$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  noActionOnReportedUser(params: NoActionOnReportedUser$Params, context?: HttpContext): Observable<number> {
+    return this.noActionOnReportedUser$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `changeStatusInReview()` */
+  static readonly ChangeStatusInReviewPath = '/admin/change-report-status/in-review/{reportId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `changeStatusInReview()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  changeStatusInReview$Response(params: ChangeStatusInReview$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return changeStatusInReview(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `changeStatusInReview$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  changeStatusInReview(params: ChangeStatusInReview$Params, context?: HttpContext): Observable<number> {
+    return this.changeStatusInReview$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
   /** Path part for operation `banUser()` */
   static readonly BanUserPath = '/admin/ban/{userId}';
 
@@ -149,6 +246,56 @@ export class AdminControllerService extends BaseService {
    */
   banUser(params: BanUser$Params, context?: HttpContext): Observable<number> {
     return this.banUser$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `warnUser()` */
+  static readonly WarnUserPath = '/admin/warn-user/{userId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `warnUser()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  warnUser$Response(params: WarnUser$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return warnUser(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `warnUser$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  warnUser(params: WarnUser$Params, context?: HttpContext): Observable<number> {
+    return this.warnUser$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `suspendAccount()` */
+  static readonly SuspendAccountPath = '/admin/suspend-account/{userId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `suspendAccount()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  suspendAccount$Response(params: SuspendAccount$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return suspendAccount(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `suspendAccount$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  suspendAccount(params: SuspendAccount$Params, context?: HttpContext): Observable<number> {
+    return this.suspendAccount$Response(params, context).pipe(
       map((r: StrictHttpResponse<number>): number => r.body)
     );
   }
@@ -257,6 +404,56 @@ export class AdminControllerService extends BaseService {
     );
   }
 
+  /** Path part for operation `getSuspendedUserDetails()` */
+  static readonly GetSuspendedUserDetailsPath = '/admin/suspended-user/details/{userId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getSuspendedUserDetails()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getSuspendedUserDetails$Response(params: GetSuspendedUserDetails$Params, context?: HttpContext): Observable<StrictHttpResponse<AdminUserModerationResponse>> {
+    return getSuspendedUserDetails(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getSuspendedUserDetails$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getSuspendedUserDetails(params: GetSuspendedUserDetails$Params, context?: HttpContext): Observable<AdminUserModerationResponse> {
+    return this.getSuspendedUserDetails$Response(params, context).pipe(
+      map((r: StrictHttpResponse<AdminUserModerationResponse>): AdminUserModerationResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `getSuspendedAccount()` */
+  static readonly GetSuspendedAccountPath = '/admin/suspended-accounts';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getSuspendedAccount()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getSuspendedAccount$Response(params?: GetSuspendedAccount$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseAdminSuspendedAccountsResponse>> {
+    return getSuspendedAccount(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getSuspendedAccount$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getSuspendedAccount(params?: GetSuspendedAccount$Params, context?: HttpContext): Observable<PageResponseAdminSuspendedAccountsResponse> {
+    return this.getSuspendedAccount$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PageResponseAdminSuspendedAccountsResponse>): PageResponseAdminSuspendedAccountsResponse => r.body)
+    );
+  }
+
   /** Path part for operation `getAllRoles()` */
   static readonly GetAllRolesPath = '/admin/roles';
 
@@ -279,6 +476,56 @@ export class AdminControllerService extends BaseService {
   getAllRoles(params?: GetAllRoles$Params, context?: HttpContext): Observable<Array<RoleResponse>> {
     return this.getAllRoles$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<RoleResponse>>): Array<RoleResponse> => r.body)
+    );
+  }
+
+  /** Path part for operation `getAllReports()` */
+  static readonly GetAllReportsPath = '/admin/reports';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAllReports()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllReports$Response(params?: GetAllReports$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseAdminReportsResponse>> {
+    return getAllReports(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getAllReports$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllReports(params?: GetAllReports$Params, context?: HttpContext): Observable<PageResponseAdminReportsResponse> {
+    return this.getAllReports$Response(params, context).pipe(
+      map((r: StrictHttpResponse<PageResponseAdminReportsResponse>): PageResponseAdminReportsResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `getAllReportStatuses()` */
+  static readonly GetAllReportStatusesPath = '/admin/report-statuses';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAllReportStatuses()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllReportStatuses$Response(params?: GetAllReportStatuses$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<ReportStatusResponse>>> {
+    return getAllReportStatuses(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getAllReportStatuses$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllReportStatuses(params?: GetAllReportStatuses$Params, context?: HttpContext): Observable<Array<ReportStatusResponse>> {
+    return this.getAllReportStatuses$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<ReportStatusResponse>>): Array<ReportStatusResponse> => r.body)
     );
   }
 
