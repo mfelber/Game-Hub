@@ -24,7 +24,9 @@ public class AdminUserModerationMapper {
         .reportMsg(report.getMessage())
         .reportStatus(report.getStatus())
         .moderationAction(report.getModerationAction())
+        .closedByReport(report.getClosedByReport() != null ? report.getClosedByReport().getId() : null)
         .createdAt(report.getCreatedAt())
+        .closedAt(report.getClosedAt())
         .build();
   }
 

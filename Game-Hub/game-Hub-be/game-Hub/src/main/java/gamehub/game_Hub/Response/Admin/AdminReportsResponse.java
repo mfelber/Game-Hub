@@ -27,6 +27,8 @@ public class AdminReportsResponse {
   private String reportMsg;
   private ReportStatus reportStatus;
   private ModerationAction moderationAction;
+  private Long closedByReport;
   private LocalDateTime createdAt;
+  private LocalDateTime closedAt;
 
 }

@@ -210,6 +210,7 @@
             'in-review': report.reportStatus === 'IN_REVIEW',
             'resolved': report.reportStatus === 'RESOLVED',
             'rejected': report.reportStatus === 'REJECTED',
+            'dismissed': report.reportStatus === 'DISMISSED',
             }">{{ formatStatus(report.reportStatus) }}</span>
           </div>
           <div class="report-details">
@@ -221,9 +222,13 @@
               <span>Reason</span>
               <strong>{{report.reportReason}}</strong>
             </div>
-            <div>
+            <div *ngIf="!report.closedByReport">
               <span>Created</span>
               <strong>{{report.createdAt | date: 'dd.MM.yyyy'}}</strong>
+            </div>
+            <div *ngIf="report.closedByReport">
+              <span>Closed by report</span>
+              <strong>#{{report.closedByReport}}</strong>
             </div>
           </div>
           <p *ngIf="report.reportMsg">

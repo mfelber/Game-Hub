@@ -65,6 +65,19 @@
   margin-bottom: 0;
 }
 
+.info-block-status{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.closed-by {
+  color: #8b93a7;
+  font-size: 13px;
+  margin-left: 2px;
+  margin-bottom: 0;
+}
+
 .label {
   display: block;
   margin-bottom: 8px;
@@ -117,7 +130,7 @@
 }
 
 .status.review {
-  color: #FEF3C7;
+  color: #F59E0B;
 }
 
 .status.review .status-dot {
@@ -138,6 +151,14 @@
 
 .status.rejected .status-dot {
   background: #B91C1C;
+}
+
+.status.dismissed {
+  color: #9CA3AF;
+}
+
+.status.dismissed .status-dot {
+  background: #9CA3AF;
 }
 
 .modal-actions {

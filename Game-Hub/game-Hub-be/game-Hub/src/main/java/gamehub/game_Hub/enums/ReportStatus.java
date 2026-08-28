@@ -4,5 +4,6 @@ public enum ReportStatus {
   NEW,
   IN_REVIEW,
   RESOLVED,
-  REJECTED
+  REJECTED,
+  DISMISSED
 }

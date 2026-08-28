@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import gamehub.game_Hub.Module.Report.Report;
 import gamehub.game_Hub.Module.User.User;
+import gamehub.game_Hub.enums.ModerationAction;
 import gamehub.game_Hub.enums.ReportStatus;
 
 public interface ReportRepository extends JpaRepository<Report, Long> {
@@ -18,5 +19,7 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
   Long countReportsByStatusIn(Collection<ReportStatus> statuses);
 
   List<Report> findByReportedUserId(User reportedUserId);
+
+  List<Report> findByReportedUserIdAndModerationActionIsNull(User reportedUserId);
 
 }

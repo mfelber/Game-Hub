@@ -59,6 +59,8 @@ export class ReportUserModalComponent implements OnInit{
       return;
     }
     if (this.reportRequest.reason !== null) {
+      // TODO when user opened report and admin ban/suspended reported suer check it if yes close modal ->
+      //  show msg to user : this is banned/suspended you cant report
       this.reportService.reportUser({userId, body: this.reportRequest}).subscribe({
         next: () => {
           this.reportRequest = {

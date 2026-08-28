@@ -53,6 +53,11 @@
               </option>
             </select>
           </div>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox"> Not closed
+            </label>
+          </div>
         </div>
       </div>
     </section>
@@ -77,6 +82,7 @@
             <th>Reason</th>
             <th>Report Status</th>
             <th>Created</th>
+            <th>Closed</th>
             <th>Actions</th>
           </tr>
           </thead>
@@ -91,8 +97,10 @@
             'in-review': report.reportStatus === 'IN_REVIEW',
             'resolved': report.reportStatus === 'RESOLVED',
             'rejected': report.reportStatus === 'REJECTED',
+            'dismissed': report.reportStatus === 'DISMISSED',
             }">{{ formatStatus(report.reportStatus) }}</span></td>
             <td>{{ report.createdAt | date: 'dd.MM.yyyy' }}</td>
+            <td>{{ report.closedAt | date: 'dd.MM.yyyy' }}</td>
             <td>
               <button class="action view" (click)="openReportPreview(report)"><i class="fa-solid fa-eye"></i></button>
             </td>

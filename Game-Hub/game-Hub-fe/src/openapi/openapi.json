@@ -4151,7 +4151,8 @@
               "NEW",
               "IN_REVIEW",
               "RESOLVED",
-              "REJECTED"
+              "REJECTED",
+              "DISMISSED"
             ]
           },
           "moderationAction": {
@@ -4163,7 +4164,15 @@
               "BAN"
             ]
           },
+          "closedByReport": {
+            "type": "integer",
+            "format": "int64"
+          },
           "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "closedAt": {
             "type": "string",
             "format": "date-time"
           }

@@ -16,21 +16,21 @@
         <div class="info-block">
           <div class="info-item">
             <span class="label">Reported user</span>
-            <strong>{{report.reportedUserName}}</strong>
+            <strong>{{ report.reportedUserName }}</strong>
           </div>
         </div>
 
         <div class="info-block">
           <div class="info-item">
             <span>Reporter</span>
-            <strong>{{report.reporterUserName}}</strong>
+            <strong>{{ report.reporterUserName }}</strong>
           </div>
         </div>
 
         <div class="info-block">
           <div class="info-item">
             <span>Reason</span>
-            <strong>{{report.reportReason}}</strong>
+            <strong>{{ report.reportReason }}</strong>
           </div>
         </div>
 
@@ -46,29 +46,40 @@
 
         <div class="info-block">
           <span class="label">Status</span>
-          <span class="status" [ngClass]="{
+          <div>
+            <span class="status" [ngClass]="{
             'new': report.reportStatus === 'NEW',
             'review': report.reportStatus === 'IN_REVIEW',
             'resolved': report.reportStatus === 'RESOLVED',
             'rejected': report.reportStatus === 'REJECTED',
+            'dismissed': report.reportStatus === 'DISMISSED',
             }">
             <span class="status-dot"></span>
-            {{ formatStatus(report.reportStatus) }}
+              {{ formatStatus(report.reportStatus) }}
           </span>
-          <span
-            *ngIf="report.reportStatus === 'RESOLVED' && report.moderationAction"
-            class="moderation-action"
-            [ngClass]="{
+            <span
+              *ngIf="(report.reportStatus === 'RESOLVED' || report.reportStatus === 'DISMISSED') && report.moderationAction"
+              class="moderation-action"
+              [ngClass]="{
             'action-ban': report.moderationAction === 'BAN',
             'action-suspend': report.moderationAction === 'SUSPEND',
             'action-warning': report.moderationAction === 'WARNING',
             'action-none': report.moderationAction === 'NONE',
             }">
-            {{formatModerationAction(report.moderationAction)}}
+            {{ formatModerationAction(report.moderationAction) }}
           </span>
+                      <span
+                        *ngIf="report.closedByReport"
+                        class="closed-by">
+                        • Closed by Report <strong>#{{ report.closedByReport }} </strong>
+                      </span>
+          </div>
+
+
+
         </div>
       </div>
-      <div class="modal-actions" *ngIf="!['REJECTED', 'RESOLVED'].includes(report.reportStatus!)">
+      <div class="modal-actions" *ngIf="!['REJECTED', 'RESOLVED', 'DISMISSED'].includes(report.reportStatus!)">
         <button class="reject-btn" (click)="rejectReport()">Reject</button>
         <button class="resolve-btn" (click)="openResolve()">Resolve</button>
       </div>
@@ -292,12 +303,12 @@
           Confirm resolution
         </button>
 
-<!--        <button *ngIf="selectedAction === 'SUSPEND' && suspending"-->
-<!--                class="resolve-btn"-->
-<!--                [disabled]="isConfirmDisabled"-->
-<!--                (click)="confirmResolution(report.reportedUserId)">-->
-<!--          Confirm resolution-->
-<!--        </button>-->
+        <!--        <button *ngIf="selectedAction === 'SUSPEND' && suspending"-->
+        <!--                class="resolve-btn"-->
+        <!--                [disabled]="isConfirmDisabled"-->
+        <!--                (click)="confirmResolution(report.reportedUserId)">-->
+        <!--          Confirm resolution-->
+        <!--        </button>-->
 
         <button *ngIf="(selectedAction === 'SUSPEND' && !suspending) || (selectedAction === 'BAN' && !banning)"
                 class="resolve-btn"

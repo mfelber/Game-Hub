@@ -53,6 +53,7 @@
 .filter-options{
   display: flex;
   gap: 20px;
+  align-items:flex-end;
 }
 
 .dropdown{
@@ -192,4 +193,33 @@ tbody tr:hover{
 .status.rejected {
   background: rgba(239, 68, 68, 0.12);
   color: #ef4444;
+}
+
+.status.dismissed {
+  background: rgba(107, 114, 128, 0.12);
+  color: #9CA3AF;
+}
+
+.checkbox{
+  display: flex;
+  align-items: center;
+  background:#1b2230;
+  border-radius: 10px;
+  padding: 12px 15px;
+  height: 47px;
+}
+
+.checkbox label{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ddd;
+  cursor: pointer;
+}
+
+.checkbox input{
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #155dfc;
 }

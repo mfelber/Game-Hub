@@ -197,12 +197,14 @@ public class AdminServiceImpl implements AdminService {
     CommunityGuidelines banReason = communityGuidelinesRepository.findById(banUserRequest.getBanReason())
         .orElseThrow(() -> new EntityNotFoundException("No reason found with id: " + banUserRequest.getBanReason()));
 
-    Report report = null;
+    Report report;
 
     if (banUserRequest.getReportId() != null) {
       report = reportRepository.findById(banUserRequest.getReportId())
           .orElseThrow(
               () -> new EntityNotFoundException("Report with id: " + banUserRequest.getReportId() + " was not found"));
+    } else {
+      report = null;
     }
 
     var banUser = BanHistory.builder()
@@ -217,13 +219,22 @@ public class AdminServiceImpl implements AdminService {
 
     if (report != null) {
       report.setStatus(ReportStatus.RESOLVED);
+      report.setClosedAt(LocalDateTime.now());
       report.setModerationAction(ModerationAction.BAN);
       reportRepository.save(report);
     }
 
+    List<Report> otherReports = reportRepository.findByReportedUserIdAndModerationActionIsNull(user);
+    otherReports.forEach(nextReport -> {
+      nextReport.setStatus(ReportStatus.DISMISSED);
+      nextReport.setModerationAction(ModerationAction.BAN);
+      nextReport.setClosedAt(LocalDateTime.now());
+      nextReport.setClosedByReport(report);
+      reportRepository.save(nextReport);
+    });
+
     banHistoryRepository.save(banUser);
     userRepository.save(user);
-    // TODO GH-200 create method to change status for other reports related to user
 
      sendEmailUserService.sendBannedUserEmail(user, banUserRequest.getCustomMessage(), banReason.getCommunityGuideline(),
         banReason.getDescription());
@@ -292,6 +303,7 @@ public class AdminServiceImpl implements AdminService {
         .orElseThrow(() -> new EntityNotFoundException("Report with id: " + reportId + " was not found"));
 
     report.setStatus(ReportStatus.RESOLVED);
+    report.setClosedAt(LocalDateTime.now());
     report.setModerationAction(ModerationAction.NONE);
     return reportRepository.save(report).getId();
   }
@@ -313,6 +325,7 @@ public class AdminServiceImpl implements AdminService {
         .build();
 
     report.setStatus(ReportStatus.RESOLVED);
+    report.setClosedAt(LocalDateTime.now());
     report.setModerationAction(ModerationAction.WARNING);
     reportRepository.save(report);
 
@@ -325,6 +338,7 @@ public class AdminServiceImpl implements AdminService {
         () -> new EntityNotFoundException("Report with id: " + reportId + " was not found"));
 
     report.setStatus(ReportStatus.REJECTED);
+    report.setClosedAt(LocalDateTime.now());
     return reportRepository.save(report).getId();
   }
 
@@ -378,10 +392,18 @@ public class AdminServiceImpl implements AdminService {
 
     user.setAccountStatus(AccountStatus.SUSPENDED);
     report.setStatus(ReportStatus.RESOLVED);
+    report.setClosedAt(LocalDateTime.now());
     report.setModerationAction(ModerationAction.SUSPEND);
     userRepository.save(user);
 
-    // TODO GH-200 create method to change status for other reports related to user
+    List<Report> otherReports = reportRepository.findByReportedUserIdAndModerationActionIsNull(user);
+    otherReports.forEach(nextReport -> {
+      nextReport.setStatus(ReportStatus.DISMISSED);
+      nextReport.setModerationAction(ModerationAction.SUSPEND);
+      nextReport.setClosedAt(LocalDateTime.now());
+      nextReport.setClosedByReport(report);
+      reportRepository.save(nextReport);
+    });
 
     userSuspensionRepository.save(suspended);
     String violatedGuideline = suspendedReason.getCommunityGuideline();

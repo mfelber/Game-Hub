@@ -3,6 +3,7 @@ package gamehub.game_Hub.Module.Report;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.enums.ModerationAction;
@@ -58,6 +59,13 @@ public class Report {
   @Enumerated(EnumType.STRING)
   @Column(name = "moderation_action")
   private ModerationAction moderationAction;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "closed_by_report")
+  private Report closedByReport;
+
+  @Column(name = "closed_at")
+  private LocalDateTime closedAt;
 
   @Column(name = "created_at")
   @CreationTimestamp
