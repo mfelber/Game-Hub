@@ -1,87 +1,161 @@
-# Game-Hub 🎮
+# GameHub 🎮
 
-GameHub is a web application built that serves as a hub for managing games.  
-It allows users to register, log in, browse games, and "buy" games and much more.
+GameHub is a full-stack web application designed as a central hub for discovering, managing, and building a personal game collection.
 
---- 
-## 🎮 Game Hub in Action
+Users can browse games, add them to their library or wishlist, customize their profiles, and manage their accounts. The application also includes administration and moderation tools for managing users and platform content.
 
-**Home Page**
-<img width="1912" height="944" alt="image" src="https://github.com/user-attachments/assets/26fd6746-0345-4ee4-9945-0fd49cd9e416" />
-
-### 🎮 Game Detail Views
-
-**Before purchase:**  
-Game Detail in store
-<img width="1918" height="952" alt="image" src="https://github.com/user-attachments/assets/dcb8ff9b-0ad9-4cdd-a8f0-9ccf710b41ff" />
-
-**After purchase:**  
-Game Detail in store
-<img width="1907" height="947" alt="image" src="https://github.com/user-attachments/assets/05446a5c-fd20-490e-bd82-4d8aa5c6023f" />
-*View when the user already owns the game*
-
-**Library**
-<img width="1913" height="951" alt="image" src="https://github.com/user-attachments/assets/12444ebf-a980-4d39-9f76-31f6049451dd" />
-
-**In Library:** 
-<img width="1916" height="948" alt="image" src="https://github.com/user-attachments/assets/3e6e1d26-00ca-4cb4-b662-803d98931495" />
+<p align="center">
+  <img width="100%" alt="GameHub Home Page" src="./assets/store.png" />
+</p>
 
 ---
 
-## 🔧 Application Features
-- 👤 User registration and login
-- 🎲 Game list browsing in store, library, wishlist
-- 🎮 Detailed game pages
-- 🛒 "Buying" games, adding games to the wishlist
-- 🖼️ Profile customization (banners, profile pictures, card colors)
-- 🔑 Password reset functionality
-- 📧 Email notifications upon registration
+## ✨ Features
 
+### 👤 User Features
 
-## 🧩 Planned Features
-- 💬 Chat and friends system
-- 🧑‍🤝‍🧑 Find other users
-- 👥 Creating groups
-- 🛠️ Admin tools
-- 📱 Mobile responsive design – currently being worked on
-- 👥 Adding/blocking people
-- 🔔 In-app notifications
-- 📧💸 Email notification when a game is on sale
-- And much more 🚀
+* User registration and authentication
+* Browse and search for games
+* Detailed game pages
+* "Purchase" games and add them to a personal library
+* Wishlist management
+* Profile customization, including banners, profile pictures, and card colors
+* Password reset functionality
+* Email notifications upon registration, account bans, and suspensions
+* And much more
 
-## 🚀 Project Features
-- 🗂️ Data storage in a database (PostgreSQL)
-- 🌐 REST API endpoints for data management
+### 🛠️ Administration & Moderation
+
+* Administrative dashboard
+* User management
+* Report management
+* User moderation tools
+* Account bans and suspensions
+* Moderation history and account status tracking
+
+---
+
+## 📸 GameHub in Action
+
+### 🎮 Game details in Store
+
+<p align="center">
+<img width="100%" alt="Game details in the store" src="./assets/game-details.png" />
+</p>
+
+### 📚 Game Library
+
+<p align="center">
+<img width="100%" alt="User game library" src="./assets/library.png" />
+</p>
+
+### 🎨 Profile Customization
+
+<p align="center">
+<img width="100%" alt="User game library" src="./assets/Profile-customization.png" />
+</p>
+
+---
+
+## 🛠️ Administration
+
+### 📈 Admin Dashboard
+
+<p align="center">
+<img width="100%" alt="Dashboard" src="./assets/dashboard.png" />
+</p>
+
+### 🚨 Reports
+
+<p align="center">
+<img width="100%" alt="Reports" src="./assets/reports-page.png" />
+</p>
+
+---
+
+## 🧩 Technical Features
+
+* Persistent data storage using PostgreSQL
+* REST API for communication between the frontend and backend
+* Authentication and authorization
+* Database migrations
+* Email service integration
+* Containerized development environment using Docker
 
 ---
 
 ## 🛠 Technologies Used
-- **Java 21**
-- **Spring Boot 3.5.5**
-- **Spring Data JPA**
-- **Maven** (build tool)
-- **PostgreSQL** (database)
-- **Angular** (frontend)
-- **Lombok** for simplified entities and DTOs
+
+### Backend
+
+* **Java 21**
+* **Spring Boot**
+* **Spring Data JPA**
+* **PostgreSQL**
+* **Maven**
+* **Lombok**
+
+### Frontend
+
+* **Angular**
+* **Tailwind CSS**
+
+### Infrastructure
+
+* **Docker**
+* **Docker Compose**
 
 ---
 
 ## ▶️ Running the Application
 
-# Prerequisites
-- Docker installed on your machine
-- (Optional) Docker Compose if you plan to use multiple containers
+### Prerequisites
 
-## 🐳 Running with Docker Compose
+Before running the application, make sure you have the following installed:
 
-1. Go to the Docker folder:
+* Docker
+* Docker Compose
 
-```bash```
-cd Game-Hub/game-Hub-be/docker 
+### 🐳 Running with Docker Compose
 
-2. Start the backend, database and mail sender using Docker Compose:
-   
-```bash```
+1. Clone the repository and navigate to the Docker directory:
+
+```bash
+cd Game-Hub/game-Hub-be/docker
+```
+
+2. Start the application and its services:
+
+```bash
 docker-compose up
+```
 
-> The backend will be available at `http://localhost:8088` and frontend will be available at `http://localhost:4200/login`
+Once the containers are running, the application will be available at:
+
+* **Frontend:** `http://localhost:4200/login`
+* **Backend API:** `http://localhost:8088`
+
+---
+
+## 👥 Demo Accounts
+
+Demo accounts are automatically created for development and testing purposes.
+
+| Role              | Email               | Password   |
+| ----------------- |---------------------|------------|
+| 👤 User           | `marcel@marcel.com` | `heslo123` |
+| 🛠️ Administrator | `admin@admin.com`   | `admin`    |
+
+
+
+---
+
+## 🚀 Planned Features
+
+* 💬 Chat between system
+* 👥 User-created groups
+* 📱 Improved mobile responsive design
+* 🚫 Blocking users
+* 🔔 In-app notifications
+* 📧💸 New Email notifications for example when games go on sale, banned reported user
+* And much more 🚀
