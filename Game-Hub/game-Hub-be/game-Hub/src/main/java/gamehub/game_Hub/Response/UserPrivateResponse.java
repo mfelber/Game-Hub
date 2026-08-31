@@ -20,6 +20,8 @@ public class UserPrivateResponse {
   private String email;
   private String username;
   private String bio;
+  private Integer playTime;
+  private Long reviews;
   private LocationResponse location;
   private Status status;
   private String joinedDate;

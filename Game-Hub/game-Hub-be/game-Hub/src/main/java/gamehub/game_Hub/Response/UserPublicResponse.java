@@ -2,6 +2,7 @@ package gamehub.game_Hub.Response;
 
 import java.util.Set;
 
+import gamehub.game_Hub.enums.AccountStatus;
 import gamehub.game_Hub.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,6 +18,9 @@ public class UserPublicResponse {
   private Long userId;
   private String username;
   private String bio;
+  private Integer playTime;
+  private Long reviews;
+  private AccountStatus accountStatus;
   private LocationResponse location;
   private Status status;
   private String joinedDate;

@@ -14,10 +14,21 @@ import gamehub.game_Hub.Response.UserCommunityResponse;
 public class CommunityMapper {
 
   public UserCommunityResponse toUserCommunityResponse(User user) {
+
+    String joinedDate = user.getCreatedAt().getMonth().name().charAt(0) + user.getCreatedAt()
+        .getMonth()
+        .name()
+        .substring(1)
+        .toLowerCase() + " " + user.getCreatedAt().getYear();
+
     return UserCommunityResponse.builder()
         .userId(user.getId())
         .username(user.getName())
+        .joinedDate(joinedDate)
         .status(user.getStatus())
+        .libraryCount(user.getLibrary().size())
+        .friendsCount(user.getFriends().size())
+        .reviewsCount(0)
         .location(new LocationResponse(user.getLocation().name(), user.getLocation().getLocationIcon()))
         .userProfilePicture(FileUtils.readCoverFromLocation(user.getUserProfilePicture()))
         .profileColor(user.getProfileColor())

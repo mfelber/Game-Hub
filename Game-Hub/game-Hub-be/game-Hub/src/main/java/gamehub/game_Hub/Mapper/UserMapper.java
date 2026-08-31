@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import gamehub.game_Hub.File.FileUtils;
 import gamehub.game_Hub.Module.Level;
 import gamehub.game_Hub.Module.User.User;
+import gamehub.game_Hub.Module.User.UserLibrary;
 import gamehub.game_Hub.Module.User.UserSuspensions;
 import gamehub.game_Hub.Module.User.UserWarnings;
 import gamehub.game_Hub.Repository.LevelRepository;
@@ -57,10 +58,13 @@ public class UserMapper {
         .substring(1)
         .toLowerCase() + " " + user.getCreatedAt().getYear();
 
+    // TODO get reviews count when implementing reviews
     return UserPublicResponse.builder()
         .userId(user.getId())
         .username(user.getName())
         .bio(user.getBio())
+        .playTime(user.getLibrary().stream().mapToInt(UserLibrary::getPlaytimeMinutes).sum())
+        .reviews(0L)
         .joinedDate(joinedDate)
         .location(
             new LocationResponse(
@@ -69,6 +73,7 @@ public class UserMapper {
             )
         )
         .status(user.getStatus())
+        .accountStatus(user.getAccountStatus())
         .friendsCount(user.getFriends().size())
         .libraryCount(user.getLibrary().size())
         .wishlistCount(user.getWishlist().size())
@@ -106,12 +111,16 @@ public class UserMapper {
         .substring(1)
         .toLowerCase() + " " + user.getCreatedAt().getYear();
 
+
+    // TODO get reviews count when implementing reviews
     return UserPrivateResponse.builder()
         .userId(user.getId())
         .firstName(user.getFirstName())
         .lastName(user.getLastName())
         .email(user.getEmail())
         .username(user.getName())
+        .playTime(user.getLibrary().stream().mapToInt(UserLibrary::getPlaytimeMinutes).sum())
+        .reviews(0L)
         .bio(user.getBio())
         .joinedDate(joinedDate)
         .location(

@@ -1,9 +1,16 @@
+
+
 <div *ngIf="!isLoaded" class="text-center justify-center text-gray-400">
   Loading...
 </div>
 
+<div *ngIf="isUserUnavailable" class="empty-users">
+  <i class="fa-solid fa-user-slash"></i>
+  <h2>No user found</h2>
+</div>
 
-<main [class.hidden]="!isLoaded">
+
+<main [class.hidden]="!isLoaded" *ngIf="!isUserUnavailable && isLoaded">
 
   <!--  BANNER  -->
   <section>
@@ -72,12 +79,12 @@
       </div>
 
       <div>
-        <h3>320</h3>
-        <p>Playtime</p>
+        <h3>{{ userResponse.playTime }}</h3>
+        <p>Playtime in min</p>
       </div>
 
       <div>
-        <h3>15</h3>
+        <h3>{{ userResponse.reviews }}</h3>
         <p>reviews</p>
       </div>
 

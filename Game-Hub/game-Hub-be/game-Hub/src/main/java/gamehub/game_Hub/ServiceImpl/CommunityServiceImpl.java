@@ -20,6 +20,8 @@ import gamehub.game_Hub.Repository.user.UserRepository;
 import gamehub.game_Hub.Response.FriendRequestResponse;
 import gamehub.game_Hub.Response.UserCommunityResponse;
 import gamehub.game_Hub.Service.CommunityService;
+import gamehub.game_Hub.enums.AccountStatus;
+import gamehub.game_Hub.enums.Role;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
@@ -33,6 +35,10 @@ public class CommunityServiceImpl implements CommunityService {
 
   private final FriendRequestRepository friendRequestRepository;
 
+  private static final List<AccountStatus> FINDABLE_STATUSES = List.of(
+      AccountStatus.ACTIVE
+  );
+
   @Override
   public PageResponse<UserCommunityResponse> findAllUsers(final Authentication connectedUser, String query,
       final int page,
@@ -45,7 +51,8 @@ public class CommunityServiceImpl implements CommunityService {
     Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
 
     if (query.isEmpty()) {
-      Page<User> users = userRepository.findAllByEmailIsNot(user.getEmail(), pageable);
+
+      Page<User> users = userRepository.findAllByEmailIsNotAndRoleAndAccountStatusIn(user.getEmail(), Role.USER, FINDABLE_STATUSES ,pageable);
 
       List<UserCommunityResponse> communityResponse = users.stream()
           .map(communityMapper::toUserCommunityResponse)

@@ -4,8 +4,12 @@
 
 import { LocationResponse } from '../models/location-response';
 export interface UserCommunityResponse {
+  friendsCount?: number;
+  joinedDate?: string;
+  libraryCount?: number;
   location?: LocationResponse;
   profileColor?: string;
+  reviewsCount?: number;
   status?: 'ONLINE' | 'OFFLINE' | 'AWAY';
   userId?: number;
   userProfilePicture?: string;

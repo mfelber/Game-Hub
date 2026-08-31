@@ -109,7 +109,8 @@
         </div>
       </div>
       <button *ngIf="!gamesOwnedMap[game.gameId!]" (click)="buyGame(game.gameId) ; $event.stopPropagation()">
-        Buy now <i class="fa-solid fa-cart-shopping"></i> redirect to form page
+        {{ game.price === 0 ? 'Add to Library' : 'Buy Now -> redirect to form page' }}
+        <i class="fa-solid fa-cart-shopping"></i>
       </button>
       <button *ngIf="gamesOwnedMap[game.gameId!]" class="in-library" (click)=" $event.stopPropagation() ">
         In Library 🎮

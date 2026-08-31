@@ -57,6 +57,11 @@ export class UserPublicProfileComponent implements OnInit {
   friendRequestExistsFromSender: boolean | null = null;
   userIsMyFriend: boolean | null = null;
 
+  get isUserUnavailable(): boolean {
+    return this.userResponse.accountStatus === 'BANNED'
+      || this.userResponse.accountStatus === 'SUSPENDED';
+  }
+
 
   private loadUserPublicProfile() {
     const userId: any = this.router.snapshot.paramMap.get('id')

@@ -96,10 +96,10 @@
           'text-yellow-400': user.status === 'AWAY'
           }">• {{ user.status }} </span>
           <div class="stats">
-            <span> 🎮 125 games</span>
-            <span> 👥 34 friends</span>
-            <span> ⭐ 55 reviews</span>
-            <span> 📅 joined july 2026</span>
+            <span> 🎮 {{ user.libraryCount }}</span>
+            <span> 👥 {{ user.friendsCount }}</span>
+            <span> ⭐ {{ user.reviewsCount }}</span>
+            <span> 📅 joined {{user.joinedDate}}</span>
           </div>
         </div>
       </div>

@@ -25,9 +25,11 @@ export interface UserPrivateResponse {
   libraryCount?: number;
   location?: LocationResponse;
   playRecently?: Array<GameResponseShort>;
+  playTime?: number;
   predefinedBannerPath?: string;
   profileColor?: string;
   recommendedGames?: Array<GameResponseShort>;
+  reviews?: number;
   status?: 'ONLINE' | 'OFFLINE' | 'AWAY';
   userId?: number;
   userProfilePicture?: string;
