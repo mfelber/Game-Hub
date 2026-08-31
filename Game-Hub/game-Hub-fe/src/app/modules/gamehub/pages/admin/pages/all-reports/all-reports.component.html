@@ -3,7 +3,6 @@
   [report]="selectedReport"
   (close)="closeModal()"
   (resolveReport)="showSuccess($event)">
-
 </app-preview-report-modal>
 
 <div class="fixed top-4 right-4 flex flex-col gap-2 z-50">
@@ -66,11 +65,18 @@
 
     <section>
 
-      <div *ngIf="filteredReportedUsers.length === 0" class="empty-users">
-        <i class="fa-solid fa-user-slash"></i>
-        <h2>No users found</h2>
-        <p>There are no users matching the selected filters.</p>
-      </div>
+      <app-empty-state
+        *ngIf="filteredReportedUsers.length === 0"
+        icon = 'fa-solid fa-flag'
+        title="No reports found"
+        message="There are no reports matching the selected filters.">
+      </app-empty-state>
+
+      <app-empty-state
+        *ngIf="!reportResponse.content?.length"
+        icon = 'fa-solid fa-flag'
+        title="No reports found">
+      </app-empty-state>
 
       <div class="table-container" *ngIf="filteredReportedUsers.length > 0">
         <table>

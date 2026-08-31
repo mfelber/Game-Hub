@@ -74,6 +74,13 @@
     </div>
   </section>
 
+  <app-empty-state
+    *ngIf="userCommunityResponse.content?.length === 0"
+    icon = 'fa-solid fa-sad-tear'
+    title="No users were founded">
+  </app-empty-state>
+
+  <div *ngIf="userCommunityResponse.content?.length">
   <section class="users" *ngFor="let user of userCommunityResponse.content">
     <div class="user-card" (click)="navigateToUser(user.userId)">
       <div class="left">
@@ -140,11 +147,8 @@
       </div>
     </div>
   </section>
-
-  <div *ngIf="userCommunityResponse.content?.length! === 0" class="flex flex-col items-center justify-center h-60text-gray-400">
-    <i class="fa-solid fa-sad-tear text-4xl mb-4"></i>
-    <p class="text-lg font-semibold">No users were founded</p>
   </div>
+
 
   <app-report-user-modal
     [isOpen]="isReportUserModalOpen"

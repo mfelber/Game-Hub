@@ -56,8 +56,30 @@
     </div>
   </section>
 
+  <app-empty-state
+    *ngIf="emptyLibrary && loadAllGames"
+    icon = 'fa-solid fa-box-open'
+    title="Your library is empty"
+    message="Buy or claim free games to see them here!">
+  </app-empty-state>
+
+  <app-empty-state
+    *ngIf="emptyFavoriteGames && loadFavoriteGames"
+    icon = 'fa-solid fa-heart'
+    title="No favorite games"
+    message="Games you mark as favorite will appear here.">
+  </app-empty-state>
+
+  <app-empty-state
+    *ngIf="emptyDownloadedGames && loadDownloadedGames"
+    icon = 'fa-solid fa-download'
+    title="No downloaded  games"
+    message="Downloaded games will appear here.">
+  </app-empty-state>
+
+
   <!-- GAMES -->
-  <section class="games">
+  <section class="games" *ngIf="gamePageResponse.content?.length">
     <ng-container *ngIf="loadAllGames">
       <div class="card" *ngFor="let game of gamePageResponse.content"
            (click)="goToGame(game.gameId)">
@@ -112,11 +134,5 @@
       </div>
     </ng-container>
   </section>
-
-  <div *ngIf="emptyLibrary" class="flex flex-col items-center justify-center h-60text-gray-400">
-    <i class="fa-solid fa-box-open text-4xl mb-4"></i>
-    <p class="text-lg font-semibold">Your library is empty</p>
-    <p class="text-sm text-gray-400 mt-1">Start adding some games to see them here!</p>
-  </div>
 
 </main>

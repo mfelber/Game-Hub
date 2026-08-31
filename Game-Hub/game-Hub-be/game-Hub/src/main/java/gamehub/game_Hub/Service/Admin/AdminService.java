@@ -18,7 +18,6 @@ import gamehub.game_Hub.Response.Admin.ReportStatusResponse;
 import gamehub.game_Hub.Response.Admin.RoleResponse;
 import gamehub.game_Hub.Response.GamePreviewResponse;
 import gamehub.game_Hub.Response.GameResponse;
-import gamehub.game_Hub.enums.ReportStatus;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 

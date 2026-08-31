@@ -12,6 +12,7 @@ import {RefreshService} from '../../../../services/fn/refresh-service/refresh-se
 import {UserCommunityResponse} from '../../../../services/models/user-community-response';
 import {PageResponseUserCommunityResponse} from '../../../../services/models/page-response-user-community-response';
 import {firstValueFrom} from 'rxjs';
+import {EmptyStateComponent} from '../../components/empty-state/empty-state.component';
 
 @Component({
   selector: 'app-find-players',
@@ -24,7 +25,7 @@ import {firstValueFrom} from 'rxjs';
     FormsModule,
     ReportUserModalComponent,
     SearchBar,
-    DatePipe
+    EmptyStateComponent
   ],
   templateUrl: './find-players.component.html',
   styleUrl: './find-players.component.scss',

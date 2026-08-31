@@ -11,6 +11,7 @@ import {UserInfoModalComponent} from '../../components/user/user-info/user-info-
 import {ChangeUserRoleModalComponent} from '../../components/user/change-user-role/change-user-role-modal.component';
 import {BanModalComponent} from '../../components/ban/ban-modal/ban-modal.component';
 import {UnbanModalComponent} from '../../components/ban/unban-modal/unban-modal.component';
+import {EmptyStateComponent} from '../../../../components/empty-state/empty-state.component';
 
 @Component({
   selector: 'app-all-users',
@@ -25,7 +26,8 @@ import {UnbanModalComponent} from '../../components/ban/unban-modal/unban-modal.
     UserInfoModalComponent,
     ChangeUserRoleModalComponent,
     BanModalComponent,
-    UnbanModalComponent
+    UnbanModalComponent,
+    EmptyStateComponent
   ],
   templateUrl: './all-users.component.html',
   styleUrl: './all-users.component.scss',

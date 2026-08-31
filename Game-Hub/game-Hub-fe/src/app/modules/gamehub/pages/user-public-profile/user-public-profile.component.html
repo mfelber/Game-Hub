@@ -1,14 +1,12 @@
-
-
 <div *ngIf="!isLoaded" class="text-center justify-center text-gray-400">
   Loading...
 </div>
 
-<div *ngIf="isUserUnavailable" class="empty-users">
-  <i class="fa-solid fa-user-slash"></i>
-  <h2>No user found</h2>
-</div>
-
+<app-empty-state
+  *ngIf="isUserUnavailable"
+  icon = 'fa-solid fa-user-slash'
+  title="No user found">
+</app-empty-state>
 
 <main [class.hidden]="!isLoaded" *ngIf="!isUserUnavailable && isLoaded">
 

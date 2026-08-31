@@ -8,6 +8,7 @@ import {DatePipe, NgClass, NgForOf, NgIf} from '@angular/common';
 import {ReportStatusResponse} from '../../../../../../services/models/report-status-response';
 import {FormsModule} from '@angular/forms';
 import {PreviewReportModalComponent} from '../../components/reports/preview-report-modal.component';
+import {EmptyStateComponent} from '../../../../components/empty-state/empty-state.component';
 
 @Component({
   selector: 'app-all-reports',
@@ -18,7 +19,8 @@ import {PreviewReportModalComponent} from '../../components/reports/preview-repo
     FormsModule,
     NgIf,
     NgClass,
-    PreviewReportModalComponent
+    PreviewReportModalComponent,
+    EmptyStateComponent
   ],
   templateUrl: './all-reports.component.html',
   styleUrl: './all-reports.component.scss',

@@ -79,8 +79,15 @@
     </div>
   </section>
 
+  <app-empty-state
+    *ngIf="emptyWishlist"
+    icon = 'fa-solid fa-box-open'
+    title="Your wishlist is empty"
+    message="Start adding some games from store to see them here!">
+  </app-empty-state>
+
   <!-- GAMES -->
-  <section class="games">
+  <section class="games" *ngIf="wishlistPageResponse.content?.length">
     <div class="card relative" *ngFor="let wishlist of wishlistPageResponse.content"
          (click)="goToGame(wishlist.game?.gameId)">
       <img [src]="getGameImageCover(wishlist.game!)" alt="{{wishlist.game?.title}}">
@@ -124,11 +131,4 @@
     </div>
 
   </section>
-
-  <div *ngIf="emptyWishlist" class="flex flex-col items-center justify-center h-60text-gray-400">
-    <i class="fa-solid fa-box-open text-4xl mb-4"></i>
-    <p class="text-lg font-semibold">Your wishlist is empty</p>
-    <p class="text-sm text-gray-400 mt-1">Start adding some games to see them here!</p>
-  </div>
-
 </main>

@@ -8,13 +8,15 @@ import {Router} from '@angular/router';
 import {SearchBar} from '../../components/search-bar/search-bar';
 import {PageResponseUserLibraryResponse} from '../../../../services/models/page-response-user-library-response';
 import {UserLibraryResponse} from '../../../../services/models/user-library-response';
+import {EmptyStateComponent} from '../../components/empty-state/empty-state.component';
 
 @Component({
   selector: 'app-library',
   imports: [
     NgForOf,
     NgIf,
-    SearchBar
+    SearchBar,
+    EmptyStateComponent
   ],
   templateUrl: './library.component.html',
   styleUrl: './library.component.scss'
@@ -26,6 +28,8 @@ export class LibraryComponent implements OnInit{
   public page = 0;
   public size = 15;
   emptyLibrary = false;
+  emptyFavoriteGames = false;
+  emptyDownloadedGames = false;
   loadFavoriteGames = false;
   loadDownloadedGames = false;
   loadAllGames = false;
@@ -50,12 +54,18 @@ export class LibraryComponent implements OnInit{
     }).subscribe({
       next: (games) => {
         this.gamePageResponse = games;
+        this.isLoaded = true;
+        this.loadFavoriteGames = true;
         this.loadAllGames = false;
         this.loadDownloadedGames = false;
-        this.loadFavoriteGames = true;
+        this.emptyFavoriteGames = games.totalElements === 0;
         this.gamePageResponse.content?.forEach(game => {
           this.checkIfGameIsDownload(game.gameId);
         })
+      },
+      error: (e) => {
+        this.isLoaded = false;
+        console.error(e);
       }
     })
   }
@@ -67,9 +77,11 @@ export class LibraryComponent implements OnInit{
     }).subscribe({
       next: (games) => {
         this.gamePageResponse = games;
-        this.loadDownloadedGames = true;
+        this.isLoaded = true;
         this.loadAllGames = false;
         this.loadFavoriteGames = false;
+        this.loadDownloadedGames = true;
+        this.emptyDownloadedGames = games.totalElements === 0;
         this.gamePageResponse.content?.forEach(game => {
           this.checkIfGameIsDownload(game.gameId);
         })
@@ -89,11 +101,7 @@ export class LibraryComponent implements OnInit{
           this.loadAllGames = true
           this.loadDownloadedGames = false;
           this.loadFavoriteGames = false;
-          if (games.totalElements == 0) {
-            this.emptyLibrary = true
-          } else {
-            this.emptyLibrary = false
-          }
+          this.emptyLibrary = games.totalElements === 0;
           this.gamePageResponse.content?.forEach(game => {
             this.checkIfGameIsDownload(game.gameId);
           })

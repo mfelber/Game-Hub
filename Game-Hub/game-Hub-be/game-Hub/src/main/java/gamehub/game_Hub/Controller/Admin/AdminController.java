@@ -34,7 +34,6 @@ import gamehub.game_Hub.Response.GamePreviewResponse;
 import gamehub.game_Hub.Response.GameResponse;
 import gamehub.game_Hub.Service.Admin.AdminService;
 import gamehub.game_Hub.Service.GameService;
-import gamehub.game_Hub.enums.ReportStatus;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;

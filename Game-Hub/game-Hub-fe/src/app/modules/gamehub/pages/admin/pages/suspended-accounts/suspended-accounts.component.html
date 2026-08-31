@@ -23,24 +23,37 @@
     </section>
 
     <section>
-      <div class="filter-bar">
-        <div class="filter-header">
-          <span>Filter</span>
-          <button>Reset</button>
-        </div>
+      <!--      <div class="filter-bar">-->
+      <!--        <div class="filter-header">-->
+      <!--          <span>Filter</span>-->
+      <!--          <button>Reset</button>-->
+      <!--        </div>-->
 
-        <div class="filter-options">
-          <div class="dropdown">
-            <label>Suspended Account</label>
-            <select>
-              <option value="">All Suspende Accouts</option>
-            </select>
-          </div>
+      <div class="status-filter">
+        <div class="status-tabs">
+          <button class="status-tab" [class.active]="activeFilter === 'ALL'" (click)="setFilter('ALL')">All
+            ({{ suspendedAccountsResponse.content?.length ?? 0 }})
+          </button>
+          <button class="status-tab" [class.active]="activeFilter === 'ONGOING'" (click)="setFilter('ONGOING')">Ongoing
+            ({{ ongoingSuspensions }})
+          </button>
+          <button class="status-tab" [class.active]="activeFilter === 'EXPIRED'" (click)="setFilter('EXPIRED')">Expired
+            ({{ expiredSuspensions }})
+          </button>
         </div>
       </div>
+
+      <!--      </div>-->
     </section>
 
-    <section>
+    <app-empty-state
+      *ngIf="suspendedAccountsResponse.content?.length === 0"
+      icon='fa-solid fa-user-slash'
+      title="No suspended accounts were found"
+      message="There are no reports matching the selected filters.">
+    </app-empty-state>
+
+    <section *ngIf="suspendedAccountsResponse.content?.length">
       <div class="table-container">
         <table>
           <thead>
@@ -57,7 +70,7 @@
           </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let suspendedUser of suspendedAccountsResponse.content">
+          <tr *ngFor="let suspendedUser of filteredSuspensions">
             <td>{{ suspendedUser.userName }}</td>
             <td>{{ suspendedUser.suspensionReason }}</td>
             <td> <span class="status" [ngClass]="{

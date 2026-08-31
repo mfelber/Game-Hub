@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {AdminUserResponse} from '../../../../../../../services/models/admin-user-response';
 import {FormsModule} from '@angular/forms';
-import {NgForOf, NgIf} from '@angular/common';
+import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {ReportControllerService} from '../../../../../../../services/services/report-controller.service';
 import {BanUserRequest} from '../../../../../../../services/models/ban-user-request';
 import {AdminControllerService} from '../../../../../../../services/services/admin-controller.service';
@@ -12,6 +12,7 @@ import {AdminControllerService} from '../../../../../../../services/services/adm
     FormsModule,
     NgForOf,
     NgIf,
+    NgClass,
   ],
   templateUrl: './ban-modal.component.html',
   styleUrl: './ban-modal.component.scss',
@@ -22,26 +23,40 @@ export class BanModalComponent implements OnInit {
   @Output() close = new EventEmitter<void>();
   @Output() bannedUser = new EventEmitter<string>();
 
-  allBanReasons: { id: number; reason: string }[] = [];
+  allCommunityGuidelines: { id: number; reason: string; category: { id: number; categoryName: string } }[] = [];
   banRequest: BanUserRequest = { banReason: null!, customMessage: null};
   errorMessage: string = '';
+
+  categories = [
+    'Abuse & Harassment',
+    'Inappropriate Content',
+    'Spam & Scams',
+    'Privacy & Identity',
+    'Rules & Fair Play',
+    'Other'
+  ]
+  selectedCategory: string | null = null;
 
   constructor(private reportService: ReportControllerService, private adminService: AdminControllerService) {
   }
 
   ngOnInit() {
-    this.loadBanReasons()
+    this.loadCommunityGuidelines()
   }
 
-  loadBanReasons() {
-    this.reportService.getAllCommunityGuidelines().subscribe({next: (reason) => {
-      this.allBanReasons = reason.map(r => ({
-        id: r.id!,
-        reason: r.communityGuideline!
-      }));
-      },
-      error: (err) => {
-      console.log(err);
+  loadCommunityGuidelines() {
+    this.reportService.getAllCommunityGuidelines().subscribe({
+      next: (communityGuidelines) => {
+        this.allCommunityGuidelines = communityGuidelines.map(r => ({
+            id: r.id!,
+            reason: r.communityGuideline!,
+            category: {
+              id: r.category?.id!,
+              categoryName: r.category?.categoryName!
+            }
+          })
+        )
+        console.log(this.allCommunityGuidelines);
       }
     })
   }
@@ -74,4 +89,13 @@ export class BanModalComponent implements OnInit {
     }
   }
 
+  selectCategory(categoryName: string) {
+    this.selectedCategory = this.selectedCategory === categoryName ? null : categoryName;
+  }
+
+  getGuidelineByCategory(categoryName: string) {
+    return this.allCommunityGuidelines.filter(
+      guideline => guideline.category.categoryName === categoryName
+    )
+  }
 }

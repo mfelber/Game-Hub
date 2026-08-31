@@ -16,22 +16,15 @@ import gamehub.game_Hub.Module.User.UserWarnings;
 import gamehub.game_Hub.Repository.UserSuspensionRepository;
 import gamehub.game_Hub.Response.Admin.AdminSuspendedAccountsResponse;
 import gamehub.game_Hub.Response.Admin.AdminUserModerationResponse;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class UserSuspensionsMapper {
 
   private final UserSuspensionRepository userSuspensionRepository;
 
-  private final ReportMapper reportMapper;
-
   private final AdminUserModerationMapper adminUserModerationMapper;
-
-  public UserSuspensionsMapper(final UserSuspensionRepository userSuspensionRepository, final ReportMapper reportMapper,
-      final AdminUserModerationMapper adminUserModerationMapper) {
-    this.userSuspensionRepository = userSuspensionRepository;
-    this.reportMapper = reportMapper;
-    this.adminUserModerationMapper = adminUserModerationMapper;
-  }
 
   public AdminSuspendedAccountsResponse toUserSuspensionResponse(UserSuspensions userSuspension) {
 

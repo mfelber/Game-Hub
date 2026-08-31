@@ -61,6 +61,13 @@
     </div>
   </section>
 
+  <app-empty-state
+    *ngIf="filteredGames.length === 0 && isLoaded"
+    icon = 'fa-solid fa-gamepad'
+    title="No games found"
+    message="There are no games matching the selected filters.">
+  </app-empty-state>
+
   <!-- GAMES -->
   <section class="games">
 
