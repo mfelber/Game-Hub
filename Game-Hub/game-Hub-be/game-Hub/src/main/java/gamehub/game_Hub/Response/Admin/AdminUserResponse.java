@@ -35,5 +35,9 @@ public class AdminUserResponse {
   private LocalDateTime registered;
   private LocalDateTime lastLogin;
   private LocalDateTime lastModifiedAt;
+  private String banReason;
+  private LocalDateTime bannedAt;
+  private String suspendedReason;
+  private LocalDateTime suspendedAt;
 
 }

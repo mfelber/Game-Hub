@@ -5,11 +5,13 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import gamehub.game_Hub.File.FileUtils;
+import gamehub.game_Hub.Module.BanHistory;
 import gamehub.game_Hub.Module.Level;
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Module.User.UserLibrary;
 import gamehub.game_Hub.Module.User.UserSuspensions;
 import gamehub.game_Hub.Module.User.UserWarnings;
+import gamehub.game_Hub.Repository.BanHistoryRepository;
 import gamehub.game_Hub.Repository.LevelRepository;
 import gamehub.game_Hub.Repository.UserSuspensionRepository;
 import gamehub.game_Hub.Repository.UserWarningsRepository;
@@ -39,6 +41,8 @@ public class UserMapper {
   private final UserWarningsRepository userWarningsRepository;
 
   private final UserSuspensionRepository userSuspensionRepository;
+
+  private final BanHistoryRepository banHistoryRepository;
 
   public User toUser(UserUpdateRequest userUpdateRequest) {
     return User.builder()
@@ -210,6 +214,13 @@ public class UserMapper {
   }
 
   public AdminUserResponse toAdminUserResponse(User user) {
+
+    BanHistory activeBan =
+        banHistoryRepository.findFirstByUserOrderByBannedAtDesc(user)
+            .orElse(null);
+
+    UserSuspensions activeSuspension = userSuspensionRepository.findFirstByUserOrderByCreatedAtDesc(user);
+
     return AdminUserResponse.builder()
         .userId(user.getId())
         .firstName(user.getFirstName())
@@ -230,6 +241,10 @@ public class UserMapper {
         .registered(user.getCreatedAt())
         .lastLogin(user.getLastLogin())
         .lastModifiedAt(user.getLastModifiedAt())
+        .banReason(activeBan != null ? activeBan.getReason().getCommunityGuideline() : null)
+        .bannedAt(activeBan != null ? activeBan.getBannedAt() : null)
+        .suspendedReason(activeSuspension != null ? activeSuspension.getSuspensionReason().getCommunityGuideline() : null)
+        .suspendedAt(activeSuspension != null ? activeSuspension.getCreatedAt() : null)
         .build();
   }
 

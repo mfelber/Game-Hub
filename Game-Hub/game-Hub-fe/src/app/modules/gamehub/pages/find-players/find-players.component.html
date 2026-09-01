@@ -2,6 +2,13 @@
   Loading...
 </div>
 
+<app-report-user-modal
+  [isOpen]="isReportUserModalOpen"
+  [selectedUser]="selectedUserToReport"
+  (close)="isReportUserModalOpen = false"
+  (submit)="handleReport($event)">
+</app-report-user-modal>
+
 <main [class.hidden]="!isLoaded">
 
   <!-- HEADER -->
@@ -148,14 +155,6 @@
     </div>
   </section>
   </div>
-
-
-  <app-report-user-modal
-    [isOpen]="isReportUserModalOpen"
-    [selectedUser]="selectedUserToReport"
-    (close)="isReportUserModalOpen = false"
-    (submit)="handleReport($event)">
-  </app-report-user-modal>
 
 </main>
 

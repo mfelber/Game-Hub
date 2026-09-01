@@ -4090,6 +4090,20 @@
           "lastModifiedAt": {
             "type": "string",
             "format": "date-time"
+          },
+          "banReason": {
+            "type": "string"
+          },
+          "bannedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "suspendedReason": {
+            "type": "string"
+          },
+          "suspendedAt": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },

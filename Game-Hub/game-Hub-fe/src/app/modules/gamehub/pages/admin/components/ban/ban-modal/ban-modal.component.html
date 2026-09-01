@@ -42,8 +42,7 @@
     </div>
 
     <div class="section additional-comments">
-        <label *ngIf="banRequest.banReason !== 15">Additional comments</label>
-      <label *ngIf="banRequest.banReason === 15">Additional comments *</label>
+      <label>Additional comments {{ banRequest.banReason === 15 ? '*' : '' }}</label>
       <textarea [(ngModel)]="banRequest.customMessage" placeholder="Write custom message to user">
       </textarea>
     </div>

@@ -7,6 +7,8 @@ export interface AdminUserResponse {
   accountLevel?: number;
   accountStatus?: 'ACTIVE' | 'BANNED' | 'DISABLED' | 'SUSPENDED' | 'DELETING' | 'DELETED';
   accountType?: 'ADULT' | 'CHILD';
+  banReason?: string;
+  bannedAt?: string;
   bio?: string;
   email?: string;
   firstName?: string;
@@ -18,6 +20,8 @@ export interface AdminUserResponse {
   profilePicture?: string;
   registered?: string;
   role?: 'USER' | 'ADMIN';
+  suspendedAt?: string;
+  suspendedReason?: string;
   userId?: number;
   userName?: string;
 }

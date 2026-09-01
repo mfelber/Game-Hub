@@ -31,4 +31,7 @@ public interface UserSuspensionRepository extends JpaRepository<UserSuspensions,
   List<UserSuspensions> findByUser(User user);
 
   List<UserSuspensions> findByUserId(Long userId);
+
+  UserSuspensions findFirstByUserOrderByCreatedAtDesc(User user);
+
 }
