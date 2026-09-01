@@ -2,8 +2,13 @@
   Loading...
 </div>
 
+<app-empty-state
+  *ngIf="isUserUnavailable"
+  icon = 'fa-solid fa-user-slash'
+  title="No user found">
+</app-empty-state>
 
-<main [class.hidden]="!isLoaded">
+<main [class.hidden]="!isLoaded" *ngIf="!isUserUnavailable && isLoaded">
 
   <!--  BANNER  -->
   <section>
@@ -72,12 +77,12 @@
       </div>
 
       <div>
-        <h3>320</h3>
-        <p>Playtime</p>
+        <h3>{{ userResponse.playTime }}</h3>
+        <p>Playtime in min</p>
       </div>
 
       <div>
-        <h3>15</h3>
+        <h3>{{ userResponse.reviews }}</h3>
         <p>reviews</p>
       </div>
 

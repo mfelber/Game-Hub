@@ -82,6 +82,32 @@ button{
   margin-top: 12px;
 }
 
+.game-library-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.game-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.game-actions .download-btn,
+.game-actions .play-btn {
+  flex: 1;
+}
+
+.game-actions .favorite,
+.game-actions .favorite-remove {
+  width:60px;
+  flex:none;
+}
+
+hr{
+  border: 1px solid rgba(255,255,255,.15);
+}
+
 .download-btn{
   background: #3B82F6;
   color: white;

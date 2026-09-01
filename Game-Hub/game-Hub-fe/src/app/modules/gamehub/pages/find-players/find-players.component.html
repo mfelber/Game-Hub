@@ -2,6 +2,13 @@
   Loading...
 </div>
 
+<app-report-user-modal
+  [isOpen]="isReportUserModalOpen"
+  [selectedUser]="selectedUserToReport"
+  (close)="isReportUserModalOpen = false"
+  (submit)="handleReport($event)">
+</app-report-user-modal>
+
 <main [class.hidden]="!isLoaded">
 
   <!-- HEADER -->
@@ -74,6 +81,13 @@
     </div>
   </section>
 
+  <app-empty-state
+    *ngIf="userCommunityResponse.content?.length === 0"
+    icon = 'fa-solid fa-sad-tear'
+    title="No users were founded">
+  </app-empty-state>
+
+  <div *ngIf="userCommunityResponse.content?.length">
   <section class="users" *ngFor="let user of userCommunityResponse.content">
     <div class="user-card" (click)="navigateToUser(user.userId)">
       <div class="left">
@@ -96,10 +110,10 @@
           'text-yellow-400': user.status === 'AWAY'
           }">• {{ user.status }} </span>
           <div class="stats">
-            <span> 🎮 125 games</span>
-            <span> 👥 34 friends</span>
-            <span> ⭐ 55 reviews</span>
-            <span> 📅 joined july 2026</span>
+            <span> 🎮 {{ user.libraryCount }}</span>
+            <span> 👥 {{ user.friendsCount }}</span>
+            <span> ⭐ {{ user.reviewsCount }}</span>
+            <span> 📅 joined {{user.joinedDate}}</span>
           </div>
         </div>
       </div>
@@ -140,18 +154,7 @@
       </div>
     </div>
   </section>
-
-  <div *ngIf="userCommunityResponse.content?.length! === 0" class="flex flex-col items-center justify-center h-60text-gray-400">
-    <i class="fa-solid fa-sad-tear text-4xl mb-4"></i>
-    <p class="text-lg font-semibold">No users were founded</p>
   </div>
-
-  <app-report-user-modal
-    [isOpen]="isReportUserModalOpen"
-    [selectedUser]="selectedUserToReport"
-    (close)="isReportUserModalOpen = false"
-    (submit)="handleReport($event)">
-  </app-report-user-modal>
 
 </main>
 

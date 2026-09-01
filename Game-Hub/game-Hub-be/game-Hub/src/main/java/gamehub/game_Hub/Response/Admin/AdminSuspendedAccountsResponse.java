@@ -1,5 +1,6 @@
 package gamehub.game_Hub.Response.Admin;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import gamehub.game_Hub.enums.SuspensionStatus;
@@ -27,4 +28,5 @@ public class AdminSuspendedAccountsResponse {
   private SuspensionStatus suspensionStatus;
   private String createdAt;
   private String expiresAt;
+  private LocalDateTime canceledAt;
 }

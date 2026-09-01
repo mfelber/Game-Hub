@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ReportRequest} from '../../../../services/models/report-request';
-import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
+import {DatePipe, NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ReportUserModalComponent} from '../../components/report-user-modal/report-user-modal.component';
 import {SearchBar} from '../../components/search-bar/search-bar';
@@ -12,6 +12,7 @@ import {RefreshService} from '../../../../services/fn/refresh-service/refresh-se
 import {UserCommunityResponse} from '../../../../services/models/user-community-response';
 import {PageResponseUserCommunityResponse} from '../../../../services/models/page-response-user-community-response';
 import {firstValueFrom} from 'rxjs';
+import {EmptyStateComponent} from '../../components/empty-state/empty-state.component';
 
 @Component({
   selector: 'app-find-players',
@@ -23,7 +24,8 @@ import {firstValueFrom} from 'rxjs';
     ReactiveFormsModule,
     FormsModule,
     ReportUserModalComponent,
-    SearchBar
+    SearchBar,
+    EmptyStateComponent
   ],
   templateUrl: './find-players.component.html',
   styleUrl: './find-players.component.scss',
@@ -152,6 +154,7 @@ export class FindPlayersComponent implements OnInit {
         this.friendsMap[userId!] = true;
         this.friendRequestMapForReceiver[userId!] = false;
         this.refreshService.triggerRefresh();
+        this.loadAllUsers();
       }
     });
   }
@@ -162,6 +165,7 @@ export class FindPlayersComponent implements OnInit {
         this.friendsMap[userId!] = false;
         this.friendRequestMapForReceiver[userId!] = false;
         this.refreshService.triggerRefresh();
+        this.loadAllUsers();
       }
     })
 

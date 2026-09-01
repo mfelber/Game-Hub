@@ -61,6 +61,13 @@
     </div>
   </section>
 
+  <app-empty-state
+    *ngIf="filteredGames.length === 0 && isLoaded"
+    icon = 'fa-solid fa-gamepad'
+    title="No games found"
+    message="There are no games matching the selected filters.">
+  </app-empty-state>
+
   <!-- GAMES -->
   <section class="games">
 
@@ -109,7 +116,8 @@
         </div>
       </div>
       <button *ngIf="!gamesOwnedMap[game.gameId!]" (click)="buyGame(game.gameId) ; $event.stopPropagation()">
-        Buy now <i class="fa-solid fa-cart-shopping"></i> redirect to form page
+        {{ game.price === 0 ? 'Add to Library' : 'Buy Now -> redirect to form page' }}
+        <i class="fa-solid fa-cart-shopping"></i>
       </button>
       <button *ngIf="gamesOwnedMap[game.gameId!]" class="in-library" (click)=" $event.stopPropagation() ">
         In Library 🎮

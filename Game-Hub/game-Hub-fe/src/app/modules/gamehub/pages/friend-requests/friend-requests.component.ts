@@ -6,6 +6,7 @@ import {PageResponseFriendRequestResponse} from '../../../../services/models/pag
 import {RefreshService} from '../../../../services/fn/refresh-service/refresh-service';
 import {Router} from '@angular/router';
 import {SearchBar} from '../../components/search-bar/search-bar';
+import {EmptyStateComponent} from '../../components/empty-state/empty-state.component';
 
 @Component({
   selector: 'app-friend-requests',
@@ -14,7 +15,8 @@ import {SearchBar} from '../../components/search-bar/search-bar';
     NgForOf,
     NgClass,
     NgStyle,
-    SearchBar
+    SearchBar,
+    EmptyStateComponent
   ],
   templateUrl: './friend-requests.component.html',
   styleUrl: './friend-requests.component.scss'
@@ -28,7 +30,7 @@ export class FriendRequestsComponent implements OnInit {
   friendRequestsResponse: PageResponseFriendRequestResponse = {};
 
   isLoaded = false;
-  zeroFriendRequests = false;
+  emptyListOfFriendRequests = false;
 
 
   constructor(
@@ -44,11 +46,7 @@ export class FriendRequestsComponent implements OnInit {
         this.friendRequestsResponse = friendRequests;
         console.log(friendRequests);
         this.isLoaded = true;
-        if (friendRequests.totalElements === 0) {
-          this.zeroFriendRequests = true;
-        } else {
-          this.zeroFriendRequests = false;
-        }
+        this.emptyListOfFriendRequests = friendRequests.totalElements === 0;
       }
     })
   }

@@ -17,6 +17,11 @@ public class UserCommunityResponse {
   private Long userId;
   private String username;
   private LocationResponse location;
+  private String joinedDate;
+  private int friendsCount;
+  private int libraryCount;
+  // TODO when impleneting reviews
+  private int reviewsCount;
   private Status status;
   private byte [] userProfilePicture;
   private String profileColor;

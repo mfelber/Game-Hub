@@ -8,7 +8,7 @@
     <h2>Report User</h2>
 
     <p class="username">Reporting:
-    <span>{{selectedUser?.username}}</span>
+      <span>{{ selectedUser?.username }}</span>
     </p>
 
     <div *ngIf="errorMessage" class="error-message">
@@ -16,21 +16,37 @@
     </div>
 
     <div class="section">
-      <label>Reason</label>
+      <label>Report Reason</label>
+      <p class="section-description"> Select the community guideline that was violated.</p>
 
-      <div class="reason-list">
-        <label *ngFor="let reason of allCommunityGuidelines" class="reason-item">
-          <input type="radio"
-                 name="reportReason"
-                 [value]="reason.id"
-                 [(ngModel)]="reportRequest.reason">
-        <span>{{reason.reason}}</span>
-        </label>
+      <div class="community-guidelines">
+        <div *ngFor="let category of categories" class="category">
+
+          <div class="category-title" [class.active]="selectedCategory === category"
+               (click)="selectCategory(category)">
+            <h3>{{ category }}</h3>
+
+            <i class="fa-solid"
+               [ngClass]="selectedCategory === category ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+          </div>
+
+          <div *ngIf="selectedCategory === category" class="guideline">
+            <label *ngFor="let guideline of getGuidelineByCategory(category)" class="guideline-option">
+
+              <input type="radio"
+                     [value]="guideline.id"
+                     [(ngModel)]="reportRequest.reason"
+                     name="reportReason">
+              <span>{{ guideline.reason }}</span>
+            </label>
+          </div>
+        </div>
       </div>
+
     </div>
 
-    <div class="section">
-      <label>Additional comments</label>
+    <div class="section additional-comments">
+      <label>Additional comments {{ reportRequest.reason === 15 ? '*' : '' }}</label>
       <textarea [(ngModel)]="reportRequest.message" placeholder="Describe the problem...">
       </textarea>
     </div>

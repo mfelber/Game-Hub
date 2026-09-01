@@ -9,6 +9,7 @@ import { GenreResponse } from '../models/genre-response';
 import { LevelResponse } from '../models/level-response';
 import { LocationResponse } from '../models/location-response';
 export interface UserPublicResponse {
+  accountStatus?: 'ACTIVE' | 'BANNED' | 'DISABLED' | 'SUSPENDED' | 'DELETING' | 'DELETED';
   badges?: Array<BadgeResponse>;
   bannerImage?: string;
   bannerType?: string;
@@ -22,9 +23,11 @@ export interface UserPublicResponse {
   libraryCount?: number;
   location?: LocationResponse;
   playRecently?: Array<GameResponseShort>;
+  playTime?: number;
   predefinedBannerPath?: string;
   profileColor?: string;
   recommendedGames?: Array<GameResponseShort>;
+  reviews?: number;
   status?: 'ONLINE' | 'OFFLINE' | 'AWAY';
   userId?: number;
   userProfilePicture?: string;

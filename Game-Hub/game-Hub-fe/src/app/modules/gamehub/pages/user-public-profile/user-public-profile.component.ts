@@ -8,6 +8,7 @@ import {GameResponse} from '../../../../services/models/game-response';
 import {CommunityControllerService} from '../../../../services/services/community-controller.service';
 import {cancelFriendRequest} from '../../../../services/fn/community-controller/cancel-friend-request';
 import {RefreshService} from '../../../../services/fn/refresh-service/refresh-service';
+import {EmptyStateComponent} from '../../components/empty-state/empty-state.component';
 
 @Component({
   selector: 'app-user-public-profile',
@@ -15,7 +16,8 @@ import {RefreshService} from '../../../../services/fn/refresh-service/refresh-se
     NgIf,
     NgClass,
     NgForOf,
-    NgStyle
+    NgStyle,
+    EmptyStateComponent
   ],
   templateUrl: './user-public-profile.component.html',
   styleUrl: './user-public-profile.component.scss'
@@ -56,6 +58,11 @@ export class UserPublicProfileComponent implements OnInit {
   friendRequestFromThisUser: boolean | null = null;
   friendRequestExistsFromSender: boolean | null = null;
   userIsMyFriend: boolean | null = null;
+
+  get isUserUnavailable(): boolean {
+    return this.userResponse.accountStatus === 'BANNED'
+      || this.userResponse.accountStatus === 'SUSPENDED';
+  }
 
 
   private loadUserPublicProfile() {

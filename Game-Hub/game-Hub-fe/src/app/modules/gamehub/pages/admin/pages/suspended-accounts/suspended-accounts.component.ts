@@ -10,6 +10,7 @@ import {
   PreviewSuspendedUserModalComponent
 } from '../../components/suspended-accounts/preview-suspended-user-modal.component';
 import {AdminSuspendedAccountsResponse} from '../../../../../../services/models/admin-suspended-accounts-response';
+import {EmptyStateComponent} from '../../../../components/empty-state/empty-state.component';
 
 
 @Component({
@@ -20,7 +21,8 @@ import {AdminSuspendedAccountsResponse} from '../../../../../../services/models/
     DatePipe,
     NgClass,
     NgIf,
-    PreviewSuspendedUserModalComponent
+    PreviewSuspendedUserModalComponent,
+    EmptyStateComponent
   ],
   templateUrl: './suspended-accounts.component.html',
   styleUrl: './suspended-accounts.component.scss',
@@ -30,6 +32,7 @@ export class SuspendedAccountsComponent implements OnInit {
   suspendedAccountsResponse: PageResponseAdminSuspendedAccountsResponse = {};
   selectedUser: AdminSuspendedAccountsResponse = {};
   isPreviewModalOpen = false;
+  activeFilter: 'ALL' | 'ONGOING' | 'EXPIRED' | 'CANCELED' = 'ALL';
 
   constructor(
     private adminService: AdminControllerService
@@ -40,8 +43,30 @@ export class SuspendedAccountsComponent implements OnInit {
     this.loadSuspendedUsers()
   }
 
+  setFilter(filter: 'ALL' | 'ONGOING' | 'EXPIRED'| 'CANCELED') {
+    this.activeFilter = filter;
+  }
+
+  get ongoingSuspensions(): number {
+    return this.suspendedAccountsResponse.content?.filter(
+      suspension => suspension.suspensionStatus === 'ONGOING'
+    ).length ?? 0;
+  }
+
+  get expiredSuspensions(): number {
+    return this.suspendedAccountsResponse.content?.filter(
+      suspension => suspension.suspensionStatus === 'EXPIRED'
+    ).length ?? 0;
+  }
+
+  get canceledSuspensions(): number {
+    return this.suspendedAccountsResponse.content?.filter(
+      suspension => suspension.suspensionStatus === 'CANCELED'
+    ).length ?? 0;
+  }
 
   loadSuspendedUsers() {
+
     this.adminService.getSuspendedAccount().subscribe({
       next: data => {
         this.suspendedAccountsResponse = data;
@@ -49,6 +74,30 @@ export class SuspendedAccountsComponent implements OnInit {
         console.log(data);
       }
     })
+  }
+
+  get filteredSuspensions() {
+    const suspensions = this.suspendedAccountsResponse.content ?? [];
+
+    if (this.activeFilter === 'ONGOING') {
+      return suspensions.filter(
+        suspension => suspension.suspensionStatus === 'ONGOING'
+      );
+    }
+
+    if (this.activeFilter === 'EXPIRED') {
+      return suspensions.filter(
+        suspension => suspension.suspensionStatus === 'EXPIRED'
+      );
+    }
+
+    if (this.activeFilter === 'CANCELED') {
+      return suspensions.filter(
+        suspension => suspension.suspensionStatus === 'CANCELED'
+      );
+    }
+
+    return suspensions;
   }
 
   closeModal() {

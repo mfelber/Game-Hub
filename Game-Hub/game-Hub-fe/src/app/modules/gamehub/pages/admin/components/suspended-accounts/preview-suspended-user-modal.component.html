@@ -125,7 +125,8 @@
               <strong>Suspension #{{ suspension.suspensionId }}</strong>
               <span class="status" [ngClass]="{
             'ongoing': suspension.suspensionStatus === 'ONGOING',
-            'expired': suspension .suspensionStatus === 'EXPIRED'
+            'expired': suspension .suspensionStatus === 'EXPIRED',
+            'canceled': suspension .suspensionStatus === 'CANCELED'
             }">{{ suspension.suspensionStatus }}</span>
             </div>
 

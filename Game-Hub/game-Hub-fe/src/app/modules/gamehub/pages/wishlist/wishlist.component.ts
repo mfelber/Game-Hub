@@ -11,6 +11,7 @@ import {platform} from 'node:os';
 import {SearchBar} from '../../components/search-bar/search-bar';
 import {WishlistResponse} from '../../../../services/models/wishlist-response';
 import {PageResponseWishlistResponse} from '../../../../services/models/page-response-wishlist-response';
+import {EmptyStateComponent} from '../../components/empty-state/empty-state.component';
 
 @Component({
   selector: 'app-wishlist',
@@ -21,6 +22,7 @@ import {PageResponseWishlistResponse} from '../../../../services/models/page-res
     SearchBar,
     NgClass,
     DatePipe,
+    EmptyStateComponent,
   ],
   templateUrl: './wishlist.component.html',
   styleUrl: './wishlist.component.scss'
@@ -67,11 +69,7 @@ export class WishlistComponent implements OnInit{
           this.wishlistPageResponse = games;
           console.log(games.content);
           this.isLoaded = true;
-          if (games.totalElements == 0) {
-            this.emptyWishlist = true
-          } else {
-            this.emptyWishlist = false
-          }
+          this.emptyWishlist = games.totalElements === 0;
         },
         error: (err) => {
           console.error('Error loading wishlist:', err);

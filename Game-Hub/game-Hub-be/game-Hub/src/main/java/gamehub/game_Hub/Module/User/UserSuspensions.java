@@ -60,6 +60,9 @@ public class UserSuspensions {
   @CreationTimestamp
   private LocalDateTime createdAt;
 
+  @Column(name = "canceled_at")
+  private LocalDateTime canceledAt;
+
   @Column(name = "expires_at")
   private LocalDateTime expiresAt;
 

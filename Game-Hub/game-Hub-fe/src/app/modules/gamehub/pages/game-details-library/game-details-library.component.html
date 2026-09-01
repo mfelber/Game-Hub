@@ -27,97 +27,111 @@
     <div class="description card">
       <h2>About this game</h2>
       <p>
-        {{game.description}}
+        {{ game.description }}
       </p>
     </div>
     <div class="purchase card">
-      <h2>{{game.title}}</h2>
+      <h2>{{ game.title }}</h2>
       <div class="details">
         <div>
           <span>Developer</span>
-          <b>{{game.developer}}</b>
+          <b>{{ game.developer }}</b>
         </div>
 
         <div>
           <span>Publisher</span>
-          <b>{{game.publisher}}</b>
+          <b>{{ game.publisher }}</b>
         </div>
 
         <div>
           <span>Release Date</span>
-          <b>{{game.releaseYear | date:'dd.MM.yyyy'}}</b>
+          <b>{{ game.releaseYear | date:'dd.MM.yyyy' }}</b>
         </div>
       </div>
 
-      <button class="favorite" *ngIf="!inFavorites" (click)="addGameToFavorite(game.gameId)"> Add ass favorite ❤️</button>
-      <button class="favorite-remove" *ngIf="inFavorites" (click)="removeGameFromFavorite(game.gameId)"> Remove from favorites <i class="fa-solid fa-xmark"></i></button>
-      <button class="download-btn" *ngIf="!isDownloaded" (click)="downloadGame(game.gameId)"> Download <i class="fa-solid fa-download"></i> </button>
-      <button class="play-btn" *ngIf="isDownloaded"> Play <i class="fa-solid fa-play"></i></button>
-      <button class="favorite-remove" *ngIf="isDownloaded" (click)="uninstallGame(game.gameId)"> Uninstall <i class="fa-solid fa-trash-can"></i> </button>
+      <div class="game-library-actions">
+        <div class="game-actions">
+
+          <button class="download-btn" *ngIf="!isDownloaded" (click)="downloadGame(game.gameId)"> Download <i
+            class="fa-solid fa-download"></i></button>
+          <button class="play-btn" *ngIf="isDownloaded"> Play <i class="fa-solid fa-play"></i></button>
+          <button class="favorite" *ngIf="!inFavorites" (click)="addGameToFavorite(game.gameId)"><i
+            class="fa-regular fa-heart"></i>
+          </button>
+          <button class="favorite-remove" *ngIf="inFavorites" (click)="removeGameFromFavorite(game.gameId)"><i
+            class="fa-solid fa-heart"></i></button>
+
+        </div>
+
+        <hr *ngIf="isDownloaded">
+        <button class="favorite-remove" *ngIf="isDownloaded" (click)="uninstallGame(game.gameId)"> Uninstall <i
+          class="fa-solid fa-trash-can"></i></button>
+
+      </div>
 
     </div>
 
   </section>
 
-<!--  <section class="card requirements">-->
-<!--    <h2>System Requirements</h2>-->
-<!--    <div class="requirements-grid">-->
-<!--      <div>-->
-<!--        <span>CPU</span>-->
-<!--        <p>{{game.systemRequirements.cpu}}</p>-->
-<!--      </div>-->
+  <!--  <section class="card requirements">-->
+  <!--    <h2>System Requirements</h2>-->
+  <!--    <div class="requirements-grid">-->
+  <!--      <div>-->
+  <!--        <span>CPU</span>-->
+  <!--        <p>{{game.systemRequirements.cpu}}</p>-->
+  <!--      </div>-->
 
-<!--      <div>-->
-<!--        <span>GPU</span>-->
-<!--        <p>{{game.systemRequirements.gpu}}</p>-->
-<!--      </div>-->
+  <!--      <div>-->
+  <!--        <span>GPU</span>-->
+  <!--        <p>{{game.systemRequirements.gpu}}</p>-->
+  <!--      </div>-->
 
-<!--      <div>-->
-<!--        <span>RAM</span>-->
-<!--        <p>-->
-<!--          {{game.systemRequirements.ram}}-->
-<!--        </p>-->
-<!--      </div>-->
+  <!--      <div>-->
+  <!--        <span>RAM</span>-->
+  <!--        <p>-->
+  <!--          {{game.systemRequirements.ram}}-->
+  <!--        </p>-->
+  <!--      </div>-->
 
-<!--      <div>-->
-<!--        <span>Storage</span>-->
-<!--        <p>-->
-<!--          {{game.systemRequirements.storage}}-->
-<!--        </p>-->
-<!--      </div>-->
+  <!--      <div>-->
+  <!--        <span>Storage</span>-->
+  <!--        <p>-->
+  <!--          {{game.systemRequirements.storage}}-->
+  <!--        </p>-->
+  <!--      </div>-->
 
-<!--      <div>-->
-<!--        <span>OS</span>-->
-<!--        <p>-->
-<!--          {{game.systemRequirements.os}}-->
-<!--        </p>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </section>-->
+  <!--      <div>-->
+  <!--        <span>OS</span>-->
+  <!--        <p>-->
+  <!--          {{game.systemRequirements.os}}-->
+  <!--        </p>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--  </section>-->
 
-<!--  <section class="extra">-->
-<!--    <div class="card">-->
-<!--      <h3>Platforms</h3>-->
-<!--      <div class="small-tags">-->
-<!--        <span *ngFor="let platform of game.platforms">{{ platform.platformName }}</span>-->
-<!--      </div>-->
-<!--    </div>-->
+  <!--  <section class="extra">-->
+  <!--    <div class="card">-->
+  <!--      <h3>Platforms</h3>-->
+  <!--      <div class="small-tags">-->
+  <!--        <span *ngFor="let platform of game.platforms">{{ platform.platformName }}</span>-->
+  <!--      </div>-->
+  <!--    </div>-->
 
-<!--    <div class="card">-->
-<!--      <h3>Languages</h3>-->
-<!--      <div class="small-tags">-->
-<!--        <span *ngFor="let language of game.languages">{{ language.languageName }}</span>-->
-<!--      </div>-->
-<!--    </div>-->
+  <!--    <div class="card">-->
+  <!--      <h3>Languages</h3>-->
+  <!--      <div class="small-tags">-->
+  <!--        <span *ngFor="let language of game.languages">{{ language.languageName }}</span>-->
+  <!--      </div>-->
+  <!--    </div>-->
 
-<!--    <div class="card">-->
-<!--      <h3>Subtitles</h3>-->
-<!--      <div class="small-tags">-->
-<!--        <span *ngFor="let subtitles of game.subtitles">{{ subtitles.subtitleName }}</span>-->
-<!--      </div>-->
-<!--    </div>-->
+  <!--    <div class="card">-->
+  <!--      <h3>Subtitles</h3>-->
+  <!--      <div class="small-tags">-->
+  <!--        <span *ngFor="let subtitles of game.subtitles">{{ subtitles.subtitleName }}</span>-->
+  <!--      </div>-->
+  <!--    </div>-->
 
-<!--  </section>-->
+  <!--  </section>-->
 </main>
 
 

@@ -3589,6 +3589,25 @@
           "bio": {
             "type": "string"
           },
+          "playTime": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "reviews": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "accountStatus": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "BANNED",
+              "DISABLED",
+              "SUSPENDED",
+              "DELETING",
+              "DELETED"
+            ]
+          },
           "location": {
             "$ref": "#/components/schemas/LocationResponse"
           },
@@ -3711,6 +3730,14 @@
           },
           "bio": {
             "type": "string"
+          },
+          "playTime": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "reviews": {
+            "type": "integer",
+            "format": "int64"
           },
           "location": {
             "$ref": "#/components/schemas/LocationResponse"
@@ -3882,6 +3909,21 @@
           "location": {
             "$ref": "#/components/schemas/LocationResponse"
           },
+          "joinedDate": {
+            "type": "string"
+          },
+          "friendsCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "libraryCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "reviewsCount": {
+            "type": "integer",
+            "format": "int32"
+          },
           "status": {
             "type": "string",
             "enum": [
@@ -4046,6 +4088,20 @@
             "format": "date-time"
           },
           "lastModifiedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "banReason": {
+            "type": "string"
+          },
+          "bannedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "suspendedReason": {
+            "type": "string"
+          },
+          "suspendedAt": {
             "type": "string",
             "format": "date-time"
           }
@@ -4214,7 +4270,8 @@
             "type": "string",
             "enum": [
               "ONGOING",
-              "EXPIRED"
+              "EXPIRED",
+              "CANCELED"
             ]
           },
           "createdAt": {
@@ -4222,6 +4279,10 @@
           },
           "expiresAt": {
             "type": "string"
+          },
+          "canceledAt": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },

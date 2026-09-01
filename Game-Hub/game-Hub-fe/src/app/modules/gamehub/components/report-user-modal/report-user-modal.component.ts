@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {NgForOf, NgIf} from '@angular/common';
+import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {UserCommunityResponse} from '../../../../services/models/user-community-response';
 import {ReportRequest} from '../../../../services/models/report-request';
 import {ReportControllerService} from '../../../../services/services/report-controller.service';
@@ -10,7 +10,8 @@ import {ReportControllerService} from '../../../../services/services/report-cont
   imports: [
     FormsModule,
     NgForOf,
-    NgIf
+    NgIf,
+    NgClass
   ],
   templateUrl: './report-user-modal.component.html',
   styleUrl: './report-user-modal.component.scss'
@@ -25,7 +26,17 @@ export class ReportUserModalComponent implements OnInit{
 
   reportRequest: ReportRequest = { reason: null!, message: '' };
   errorMessage: string = '';
-  allCommunityGuidelines: { id: number; reason: string }[] = [];
+  allCommunityGuidelines: { id: number; reason: string; category: { id: number; categoryName: string } }[] = [];
+  categories = [
+    'Abuse & Harassment',
+    'Inappropriate Content',
+    'Spam & Scams',
+    'Privacy & Identity',
+    'Rules & Fair Play',
+    'Other'
+  ]
+  selectedCategory: string | null = null;
+
 
   constructor(private reportService: ReportControllerService) {
   }
@@ -38,9 +49,15 @@ export class ReportUserModalComponent implements OnInit{
     this.reportService.getAllCommunityGuidelines().subscribe({
       next: (communityGuidelines) => {
         this.allCommunityGuidelines = communityGuidelines.map(r => ({
-          id: r.id!,
-          reason: r.communityGuideline!
-        }));
+            id: r.id!,
+            reason: r.communityGuideline!,
+            category: {
+              id: r.category?.id!,
+              categoryName: r.category?.categoryName!
+            }
+          })
+        )
+        console.log(this.allCommunityGuidelines);
       }
     })
   }
@@ -49,6 +66,7 @@ export class ReportUserModalComponent implements OnInit{
     this.isOpen = false;
     this.reportRequest = { reason: null!, message: '' };
     this.errorMessage = '';
+    this.selectedCategory = null;
     this.close.emit();
   }
 
@@ -67,6 +85,7 @@ export class ReportUserModalComponent implements OnInit{
             reason: undefined,
             message: ''
           };
+          this.selectedCategory = null;
           this.submit.emit(this.reportRequest);
           this.closeModal();
         }
@@ -76,5 +95,15 @@ export class ReportUserModalComponent implements OnInit{
       this.errorMessage = 'Please select a reason before submitting';
     }
 
+  }
+
+  selectCategory(categoryName: string) {
+    this.selectedCategory = this.selectedCategory === categoryName ? null : categoryName;
+  }
+
+  getGuidelineByCategory(categoryName: string) {
+    return this.allCommunityGuidelines.filter(
+      guideline => guideline.category.categoryName === categoryName
+    )
   }
 }
