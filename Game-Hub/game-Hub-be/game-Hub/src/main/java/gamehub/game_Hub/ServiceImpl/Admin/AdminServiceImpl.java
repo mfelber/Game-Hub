@@ -197,6 +197,13 @@ public class AdminServiceImpl implements AdminService {
     CommunityGuidelines banReason = communityGuidelinesRepository.findById(banUserRequest.getBanReason())
         .orElseThrow(() -> new EntityNotFoundException("No reason found with id: " + banUserRequest.getBanReason()));
 
+    userSuspensionRepository.findFirstByUserAndSuspensionStatusOrderByCreatedAtDesc(
+        user, SuspensionStatus.ONGOING).ifPresent(suspension -> {
+      suspension.setSuspensionStatus(SuspensionStatus.CANCELED);
+      suspension.setCanceledAt(LocalDateTime.now());
+      userSuspensionRepository.save(suspension);
+    });
+
     Report report;
 
     if (banUserRequest.getReportId() != null) {
@@ -236,7 +243,7 @@ public class AdminServiceImpl implements AdminService {
     banHistoryRepository.save(banUser);
     userRepository.save(user);
 
-     sendEmailUserService.sendBannedUserEmail(user, banUserRequest.getCustomMessage(), banReason.getCommunityGuideline(),
+    sendEmailUserService.sendBannedUserEmail(user, banUserRequest.getCustomMessage(), banReason.getCommunityGuideline(),
         banReason.getDescription());
 
     return user.getId();
@@ -409,7 +416,8 @@ public class AdminServiceImpl implements AdminService {
     String violatedGuideline = suspendedReason.getCommunityGuideline();
     String customMsg = suspendAccountRequest.getCustomMessage();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-    sendEmailUserService.sendSuspendedAccountEmail(user, violatedGuideline, customMsg, suspended.getExpiresAt().format(formatter));
+    sendEmailUserService.sendSuspendedAccountEmail(user, violatedGuideline, customMsg,
+        suspended.getExpiresAt().format(formatter));
     return suspended.getId();
 
   }
@@ -424,9 +432,5 @@ public class AdminServiceImpl implements AdminService {
     }
     return true;
   }
-
-
-
-
 
 }

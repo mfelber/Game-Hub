@@ -16,6 +16,7 @@ import gamehub.game_Hub.Module.User.UserWarnings;
 import gamehub.game_Hub.Repository.UserSuspensionRepository;
 import gamehub.game_Hub.Response.Admin.AdminSuspendedAccountsResponse;
 import gamehub.game_Hub.Response.Admin.AdminUserModerationResponse;
+import gamehub.game_Hub.enums.SuspensionStatus;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -37,7 +38,13 @@ public class UserSuspensionsMapper {
 
     UserSuspensions lastSuspension = previousSuspension.orElse(userSuspension);
 
-    LocalDate suspensionEnded = lastSuspension.getExpiresAt().toLocalDate();
+    LocalDate suspensionEnded;
+
+    if (lastSuspension.getSuspensionStatus() == SuspensionStatus.CANCELED) {
+      suspensionEnded = lastSuspension.getCanceledAt().toLocalDate();
+    } else {
+      suspensionEnded = lastSuspension.getExpiresAt().toLocalDate();
+    }
 
     Long elapsedDays = ChronoUnit.DAYS.between(suspensionEnded, today);
 
@@ -53,6 +60,7 @@ public class UserSuspensionsMapper {
         .createdAt(String.valueOf(userSuspension.getCreatedAt()))
         .expiresAt(String.valueOf(userSuspension.getExpiresAt()))
         .suspensionStatus(userSuspension.getSuspensionStatus())
+        .canceledAt(userSuspension.getCanceledAt() != null ? userSuspension.getCanceledAt() : null)
         .build();
   }
 

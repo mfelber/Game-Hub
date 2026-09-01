@@ -416,5 +416,10 @@
 
 .report-status.dismissed {
   background: rgba(107, 114, 128, 0.12);
-  color: #9CA3AF;
+  color: #9CA3AF!important;
+}
+
+.status.canceled {
+  background: rgba(245, 158, 11, 0.12);
+  color: #F59E0B!important;
 }

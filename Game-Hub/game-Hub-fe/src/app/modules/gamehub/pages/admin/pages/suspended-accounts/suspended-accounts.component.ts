@@ -32,7 +32,7 @@ export class SuspendedAccountsComponent implements OnInit {
   suspendedAccountsResponse: PageResponseAdminSuspendedAccountsResponse = {};
   selectedUser: AdminSuspendedAccountsResponse = {};
   isPreviewModalOpen = false;
-  activeFilter: 'ALL' | 'ONGOING' | 'EXPIRED' = 'ALL';
+  activeFilter: 'ALL' | 'ONGOING' | 'EXPIRED' | 'CANCELED' = 'ALL';
 
   constructor(
     private adminService: AdminControllerService
@@ -43,7 +43,7 @@ export class SuspendedAccountsComponent implements OnInit {
     this.loadSuspendedUsers()
   }
 
-  setFilter(filter: 'ALL' | 'ONGOING' | 'EXPIRED') {
+  setFilter(filter: 'ALL' | 'ONGOING' | 'EXPIRED'| 'CANCELED') {
     this.activeFilter = filter;
   }
 
@@ -56,6 +56,12 @@ export class SuspendedAccountsComponent implements OnInit {
   get expiredSuspensions(): number {
     return this.suspendedAccountsResponse.content?.filter(
       suspension => suspension.suspensionStatus === 'EXPIRED'
+    ).length ?? 0;
+  }
+
+  get canceledSuspensions(): number {
+    return this.suspendedAccountsResponse.content?.filter(
+      suspension => suspension.suspensionStatus === 'CANCELED'
     ).length ?? 0;
   }
 
@@ -82,6 +88,12 @@ export class SuspendedAccountsComponent implements OnInit {
     if (this.activeFilter === 'EXPIRED') {
       return suspensions.filter(
         suspension => suspension.suspensionStatus === 'EXPIRED'
+      );
+    }
+
+    if (this.activeFilter === 'CANCELED') {
+      return suspensions.filter(
+        suspension => suspension.suspensionStatus === 'CANCELED'
       );
     }
 

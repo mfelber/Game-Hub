@@ -23,11 +23,6 @@
     </section>
 
     <section>
-      <!--      <div class="filter-bar">-->
-      <!--        <div class="filter-header">-->
-      <!--          <span>Filter</span>-->
-      <!--          <button>Reset</button>-->
-      <!--        </div>-->
 
       <div class="status-filter">
         <div class="status-tabs">
@@ -40,10 +35,12 @@
           <button class="status-tab" [class.active]="activeFilter === 'EXPIRED'" (click)="setFilter('EXPIRED')">Expired
             ({{ expiredSuspensions }})
           </button>
+          <button class="status-tab" [class.active]="activeFilter === 'CANCELED'" (click)="setFilter('CANCELED')">Canceled
+            ({{ canceledSuspensions }})
+          </button>
         </div>
       </div>
 
-      <!--      </div>-->
     </section>
 
     <app-empty-state
@@ -61,8 +58,9 @@
             <th>Username</th>
             <th>Reason</th>
             <th>Status</th>
-            <th>Suspended from</th>
-            <th>Suspended until</th>
+            <th>Suspended From</th>
+            <th>Suspended Until</th>
+            <th>Canceled At</th>
             <th>Suspended Times</th>
             <th>Days Since Last Suspension</th>
             <th>Admin message</th>
@@ -75,11 +73,13 @@
             <td>{{ suspendedUser.suspensionReason }}</td>
             <td> <span class="status" [ngClass]="{
             'ongoing': suspendedUser.suspensionStatus === 'ONGOING',
-            'expired': suspendedUser.suspensionStatus === 'EXPIRED'
+            'expired': suspendedUser.suspensionStatus === 'EXPIRED',
+            'canceled': suspendedUser.suspensionStatus === 'CANCELED'
             }">{{ suspendedUser.suspensionStatus }} </span>
             </td>
             <td>{{ suspendedUser.createdAt | date:'dd.MM.yyyy' }}</td>
             <td>{{ suspendedUser.expiresAt | date:'dd.MM.yyyy' }}</td>
+            <td>{{ suspendedUser.canceledAt | date:'dd.MM.yyyy' }}</td>
             <td>{{ suspendedUser.suspendedTimes }} <span
               *ngIf="suspendedUser.suspendedTimes! >= 3"
               class="warning-tooltip">

@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Module.User.UserSuspensions;
+import gamehub.game_Hub.enums.SuspensionStatus;
 
 public interface UserSuspensionRepository extends JpaRepository<UserSuspensions, Long> {
 
@@ -33,5 +34,7 @@ public interface UserSuspensionRepository extends JpaRepository<UserSuspensions,
   List<UserSuspensions> findByUserId(Long userId);
 
   UserSuspensions findFirstByUserOrderByCreatedAtDesc(User user);
+
+  Optional<UserSuspensions> findFirstByUserAndSuspensionStatusOrderByCreatedAtDesc(User user, SuspensionStatus suspensionStatus);
 
 }

@@ -4270,7 +4270,8 @@
             "type": "string",
             "enum": [
               "ONGOING",
-              "EXPIRED"
+              "EXPIRED",
+              "CANCELED"
             ]
           },
           "createdAt": {
@@ -4278,6 +4279,10 @@
           },
           "expiresAt": {
             "type": "string"
+          },
+          "canceledAt": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },

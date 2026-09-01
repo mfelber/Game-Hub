@@ -36,7 +36,7 @@ public class CommunityServiceImpl implements CommunityService {
   private final FriendRequestRepository friendRequestRepository;
 
   private static final List<AccountStatus> FINDABLE_STATUSES = List.of(
-      AccountStatus.ACTIVE
+      AccountStatus.ACTIVE, AccountStatus.SUSPENDED
   );
 
   @Override
