@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {GameResponse} from '../../../../../../../services/models/game-response';
 import {DecimalPipe, NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -36,6 +36,7 @@ export class EditGameModalComponent implements OnInit {
   @Input() game!: GameResponse
   @Output() close = new EventEmitter<void>();
   @Output() gameEdited = new EventEmitter<string>();
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   isBasicInfoOpen: boolean = true;
   isPricingOpen: boolean = true;
@@ -506,4 +507,8 @@ export class EditGameModalComponent implements OnInit {
     this.isSubtitleOptionOpen = !this.isSubtitleOptionOpen;
   }
 
+  removeCoverPhoto() {
+    this.coverPhoto = null;
+    this.fileInput.nativeElement.value = '';
+  }
 }

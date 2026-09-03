@@ -31,6 +31,45 @@
   margin-top: 25px;
 }
 
+.cover-photo {
+  .file-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .remove-cover {
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 6px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(239, 68, 68, 0.12);
+    color: #ef4444;
+
+    cursor: pointer;
+    transition: 0.2s ease;
+
+    i {
+      font-size: 14px;
+    }
+
+    &:hover {
+      background: rgba(239, 68, 68, 0.2);
+      color: #dc2626;
+    }
+  }
+}
+
+.file-input-wrapper input, input:focus, {
+  cursor: default;
+  outline: none;
+}
+
 .section h4 {
   margin-bottom: 15px;
   color: #8ea7ff;

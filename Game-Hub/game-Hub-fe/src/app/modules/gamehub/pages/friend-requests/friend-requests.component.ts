@@ -7,6 +7,7 @@ import {RefreshService} from '../../../../services/fn/refresh-service/refresh-se
 import {Router} from '@angular/router';
 import {SearchBar} from '../../components/search-bar/search-bar';
 import {EmptyStateComponent} from '../../components/empty-state/empty-state.component';
+import {UserAlertsComponent} from '../../components/user-alerts/user-alerts.component';
 
 @Component({
   selector: 'app-friend-requests',
@@ -16,7 +17,8 @@ import {EmptyStateComponent} from '../../components/empty-state/empty-state.comp
     NgClass,
     NgStyle,
     SearchBar,
-    EmptyStateComponent
+    EmptyStateComponent,
+    UserAlertsComponent
   ],
   templateUrl: './friend-requests.component.html',
   styleUrl: './friend-requests.component.scss'

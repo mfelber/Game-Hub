@@ -8,6 +8,8 @@
   title="No user found">
 </app-empty-state>
 
+<app-user-alerts class="top"/>
+
 <main [class.hidden]="!isLoaded" *ngIf="!isUserUnavailable && isLoaded">
 
   <!--  BANNER  -->

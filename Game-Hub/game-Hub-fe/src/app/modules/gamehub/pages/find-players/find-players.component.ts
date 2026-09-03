@@ -13,6 +13,7 @@ import {UserCommunityResponse} from '../../../../services/models/user-community-
 import {PageResponseUserCommunityResponse} from '../../../../services/models/page-response-user-community-response';
 import {firstValueFrom} from 'rxjs';
 import {EmptyStateComponent} from '../../components/empty-state/empty-state.component';
+import {UserAlertsComponent} from '../../components/user-alerts/user-alerts.component';
 
 @Component({
   selector: 'app-find-players',
@@ -25,7 +26,8 @@ import {EmptyStateComponent} from '../../components/empty-state/empty-state.comp
     FormsModule,
     ReportUserModalComponent,
     SearchBar,
-    EmptyStateComponent
+    EmptyStateComponent,
+    UserAlertsComponent
   ],
   templateUrl: './find-players.component.html',
   styleUrl: './find-players.component.scss',

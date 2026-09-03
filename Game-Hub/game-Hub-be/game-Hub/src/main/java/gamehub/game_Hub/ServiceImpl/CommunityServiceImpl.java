@@ -52,7 +52,8 @@ public class CommunityServiceImpl implements CommunityService {
 
     if (query.isEmpty()) {
 
-      Page<User> users = userRepository.findAllByEmailIsNotAndRoleAndAccountStatusIn(user.getEmail(), Role.USER, FINDABLE_STATUSES ,pageable);
+      Page<User> users = userRepository.findAllByEmailIsNotAndRoleAndAccountStatusIn(user.getEmail(), Role.USER,
+          FINDABLE_STATUSES, pageable);
 
       List<UserCommunityResponse> communityResponse = users.stream()
           .map(communityMapper::toUserCommunityResponse)
@@ -68,7 +69,8 @@ public class CommunityServiceImpl implements CommunityService {
           users.isLast()
       );
     } else {
-      Page<User> users = userRepository.findAllByEmailIsNotAndUsernameContainingIgnoreCase(user.getEmail(), query, pageable);
+      Page<User> users = userRepository.findAllByEmailIsNotAndUsernameContainingIgnoreCaseAndRoleAndAccountStatusIn(
+          user.getEmail(), query, Role.USER, FINDABLE_STATUSES, pageable);
 
       List<UserCommunityResponse> communityResponse = users.stream()
           .map(communityMapper::toUserCommunityResponse)
@@ -172,11 +174,13 @@ public class CommunityServiceImpl implements CommunityService {
     User user = userRepository.findById(authUser.getId())
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
 
-    Pageable pageable = PageRequest.of(page, size,Sort.by("createdAt").descending());
+    Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
 
-    Page<FriendRequest> requests = friendRequestRepository.findAllByReceiver_Id(user.getId(),pageable);
+    Page<FriendRequest> requests = friendRequestRepository.findAllByReceiver_Id(user.getId(), pageable);
 
-    List<FriendRequestResponse> friendRequests = requests.stream().map(communityMapper::toFriendRequestResponse).toList();
+    List<FriendRequestResponse> friendRequests = requests.stream()
+        .map(communityMapper::toFriendRequestResponse)
+        .toList();
 
     return new PageResponse<>(
         friendRequests,
@@ -188,7 +192,5 @@ public class CommunityServiceImpl implements CommunityService {
         requests.isLast()
     );
   }
-
-
 
 }

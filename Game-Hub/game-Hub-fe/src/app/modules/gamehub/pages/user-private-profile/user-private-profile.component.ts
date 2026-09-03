@@ -19,6 +19,7 @@ import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {FlagsControllerService} from '../../../../services/services/flags-controller.service';
 import {ProfileInfoComponent} from '../../components/profile-info/profile-info.component';
 import {EditProfileInfoComponent} from '../../components/edit-profile-info/edit-profile-info.component';
+import {UserAlertsComponent} from '../../components/user-alerts/user-alerts.component';
 
 @Component({
   selector: 'app-user-profile',
@@ -31,6 +32,7 @@ import {EditProfileInfoComponent} from '../../components/edit-profile-info/edit-
     CardPreviewComponent,
     ProfileInfoComponent,
     EditProfileInfoComponent,
+    UserAlertsComponent,
   ],
   templateUrl: './user-private-profile.component.html',
   styleUrl: './user-private-profile.component.scss'

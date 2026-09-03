@@ -1,4 +1,15 @@
+.top {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  justify-content: end;
+}
+
 .banner{
+  margin-top: 20px;
   height: 260px;
   overflow: hidden;
   border-radius: 20px 20px 0 0;

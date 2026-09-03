@@ -9,6 +9,7 @@ import {SearchBar} from '../../components/search-bar/search-bar';
 import {PageResponseUserLibraryResponse} from '../../../../services/models/page-response-user-library-response';
 import {UserLibraryResponse} from '../../../../services/models/user-library-response';
 import {EmptyStateComponent} from '../../components/empty-state/empty-state.component';
+import {UserAlertsComponent} from '../../components/user-alerts/user-alerts.component';
 
 @Component({
   selector: 'app-library',
@@ -16,7 +17,8 @@ import {EmptyStateComponent} from '../../components/empty-state/empty-state.comp
     NgForOf,
     NgIf,
     SearchBar,
-    EmptyStateComponent
+    EmptyStateComponent,
+    UserAlertsComponent
   ],
   templateUrl: './library.component.html',
   styleUrl: './library.component.scss'

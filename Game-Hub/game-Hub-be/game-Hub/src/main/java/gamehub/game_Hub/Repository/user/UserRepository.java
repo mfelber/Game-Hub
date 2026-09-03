@@ -28,4 +28,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
   Page<User> findAllByEmailIsNotAndRoleAndAccountStatusIn(String email, Role role, Collection<AccountStatus> accountStatuses, Pageable pageable);
 
+  Page<User> findAllByEmailIsNotAndUsernameContainingIgnoreCaseAndRoleAndAccountStatusIn(String email, String username, Role role,
+      Collection<AccountStatus> accountStatuses, Pageable pageable);
+
 }

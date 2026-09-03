@@ -41,22 +41,43 @@
         />
       </div>
 
-      <div class="section">
+      <div class="section cover-photo">
         <h4 (click)="openCoverPhoto()" style="cursor: pointer;">
           <i class="fa-solid" [ngClass]="{
       'fa-chevron-right': !isCoverPhotoOpen,
-      'fa-chevron-down': isCoverPhotoOpen
-      }"></i> Cover Photo </h4>
+      'fa-chevron-down': isCoverPhotoOpen }"></i>
+          Cover Photo </h4>
+
         <div *ngIf="isCoverPhotoOpen">
           <label>Cover Photo</label>
-          <input
-            (change)="onFileSelected($event)"
-            type="file"
-            accept="image/jpeg, image/png"
-          />
-        </div>
 
+          <div *ngIf="!coverPhoto">
+            <input
+              #fileInput
+              (change)="onFileSelected($event)"
+              type="file"
+              accept="image/jpeg, image/png"
+            />
+          </div>
+
+          <div class="file-input-wrapper" *ngIf="coverPhoto">
+            <input
+              type="text"
+              [value]="coverPhoto.name"
+              readonly
+            />
+
+            <button
+              type="button"
+              class="remove-cover"
+              (click)="removeCoverPhoto()"
+              title="Remove selected cover">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+        </div>
       </div>
+
     </div>
 
     <div class="section">
@@ -130,7 +151,7 @@
       }"></i>
         Description <span class="required">*</span></h4>
 
-      <textarea [(ngModel)]="game.description" rows="5" *ngIf="isDescriptionOpen"></textarea>
+      <textarea [(ngModel)]="updateGameRequest.description" rows="5" *ngIf="isDescriptionOpen"></textarea>
     </div>
 
     <div class="section">
@@ -161,7 +182,9 @@
           <div class="dropdown">
             <label>Unit size</label>
             <select [(ngModel)]="updateGameRequest.gameUnitSize">
-              <option *ngFor="let unitSize of unitSizeResponse" [ngValue]="unitSize.unitSizeName">{{unitSize.unitSizeName}}</option>
+              <option *ngFor="let unitSize of unitSizeResponse"
+                      [ngValue]="unitSize.unitSizeName">{{ unitSize.unitSizeName }}
+              </option>
             </select>
           </div>
 

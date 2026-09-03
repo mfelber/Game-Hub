@@ -9,6 +9,7 @@ import {CommunityControllerService} from '../../../../services/services/communit
 import {cancelFriendRequest} from '../../../../services/fn/community-controller/cancel-friend-request';
 import {RefreshService} from '../../../../services/fn/refresh-service/refresh-service';
 import {EmptyStateComponent} from '../../components/empty-state/empty-state.component';
+import {UserAlertsComponent} from '../../components/user-alerts/user-alerts.component';
 
 @Component({
   selector: 'app-user-public-profile',
@@ -17,7 +18,8 @@ import {EmptyStateComponent} from '../../components/empty-state/empty-state.comp
     NgClass,
     NgForOf,
     NgStyle,
-    EmptyStateComponent
+    EmptyStateComponent,
+    UserAlertsComponent
   ],
   templateUrl: './user-public-profile.component.html',
   styleUrl: './user-public-profile.component.scss'
@@ -60,8 +62,7 @@ export class UserPublicProfileComponent implements OnInit {
   userIsMyFriend: boolean | null = null;
 
   get isUserUnavailable(): boolean {
-    return this.userResponse.accountStatus === 'BANNED'
-      || this.userResponse.accountStatus === 'SUSPENDED';
+    return this.userResponse.accountStatus === 'BANNED';
   }
 
 
