@@ -52,7 +52,7 @@ export class LoginComponent {
         this.tokenService.role = res.role as string;
         console.log(this.tokenService.role);
         if (this.tokenService.role === 'USER') {
-          this.router.navigate(['gamehub']);
+          this.router.navigate(['gamehub/store']);
           this.setUserToOnline();
           return;
         }

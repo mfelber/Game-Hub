@@ -25,7 +25,7 @@ export class GameDetailsComponent implements OnInit {
 
   constructor(
     private router: ActivatedRoute,
-    private gameService: StoreControllerService,
+    private storeService: StoreControllerService,
   ) {
   }
 
@@ -38,12 +38,11 @@ export class GameDetailsComponent implements OnInit {
   private getInfoGame() {
     const gameId: any = this.router.snapshot.paramMap.get('id')
     if (gameId) {
-      this.gameService.getGameById({gameId}).subscribe({
+      this.storeService.getGameById({gameId}).subscribe({
           next: (data) => {
             this.game = data;
             console.log(this.game);
           },
-
           error: (err) => console.error('Error with loading details of this game', err)
         },
       )
@@ -53,7 +52,7 @@ export class GameDetailsComponent implements OnInit {
 
   private checkIfGameIsOwned() {
     const gameId: any = this.router.snapshot.paramMap.get('id')
-    this.gameService.checkGameOwned({gameId})
+    this.storeService.checkGameOwned({gameId})
       .subscribe({
         next: (owned) => {
           if (owned) {
@@ -68,7 +67,7 @@ export class GameDetailsComponent implements OnInit {
 
   private checkIfGameIsInWishlist() {
     const gameId: any = this.router.snapshot.paramMap.get('id')
-    this.gameService.checkGameInWishlist({gameId})
+    this.storeService.checkGameInWishlist({gameId})
       .subscribe({
         next: (inWishList) => {
           if (inWishList){
@@ -82,7 +81,7 @@ export class GameDetailsComponent implements OnInit {
 
 
   buyGame(gameId: any) {
-    this.gameService.buyGame({gameId})
+    this.storeService.buyGame({gameId})
       .subscribe({
         next: () => {
           this.checkIfGameIsOwned();
@@ -102,7 +101,7 @@ export class GameDetailsComponent implements OnInit {
   }
 
   addGameToWishList(gameId: any) {
-    this.gameService.addGameToWishlist({gameId})
+    this.storeService.addGameToWishlist({gameId})
       .subscribe({
         next: () => {
           this.checkIfGameIsInWishlist();
@@ -115,7 +114,7 @@ export class GameDetailsComponent implements OnInit {
 
   removeGameFromWishList(gameId: any) {
     console.log(gameId);
-    this.gameService.removeGameFromWishlist({gameId})
+    this.storeService.removeGameFromWishlist({gameId})
       .subscribe({
         next: () => {
           this.gameInWishList = false;

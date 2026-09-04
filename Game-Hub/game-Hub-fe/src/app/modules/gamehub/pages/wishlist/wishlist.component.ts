@@ -83,7 +83,7 @@ export class WishlistComponent implements OnInit{
   goToGame(gameId: any) {
     this.gameService.getGameById({gameId}).subscribe({
       next: (game) => {
-        this.router.navigate(['gamehub/game', gameId]);
+        this.router.navigate(['gamehub/store/game', gameId]);
       },
       error: (err) => {
         console.error('Error with loading game:', err);
