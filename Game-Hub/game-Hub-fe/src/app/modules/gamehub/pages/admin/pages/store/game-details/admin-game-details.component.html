@@ -51,7 +51,7 @@
       <div class="price" *ngIf="game.discountPercent! > 0">
 
         <h1 class="old-price" style="font-size: 30px">{{ game.price }} €</h1>
-        <div class="badge owned-badge">
+        <div class="badge discount-badge">
           -{{ game.discountPercent }}%
         </div>
         <h1 style="margin-left: 10px;font-size: 30px" [ngClass]="{'free-price' : game.discountPercent === 100}"> {{
