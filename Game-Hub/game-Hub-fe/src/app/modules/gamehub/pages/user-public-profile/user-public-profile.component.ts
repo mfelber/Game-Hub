@@ -9,7 +9,7 @@ import {CommunityControllerService} from '../../../../services/services/communit
 import {cancelFriendRequest} from '../../../../services/fn/community-controller/cancel-friend-request';
 import {RefreshService} from '../../../../services/fn/refresh-service/refresh-service';
 import {EmptyStateComponent} from '../../components/empty-state/empty-state.component';
-import {UserAlertsComponent} from '../../components/user-alerts/user-alerts.component';
+import {UserActionsComponent} from '../../components/user-actions/user-actions.component';
 
 @Component({
   selector: 'app-user-public-profile',
@@ -19,7 +19,7 @@ import {UserAlertsComponent} from '../../components/user-alerts/user-alerts.comp
     NgForOf,
     NgStyle,
     EmptyStateComponent,
-    UserAlertsComponent
+    UserActionsComponent
   ],
   templateUrl: './user-public-profile.component.html',
   styleUrl: './user-public-profile.component.scss'

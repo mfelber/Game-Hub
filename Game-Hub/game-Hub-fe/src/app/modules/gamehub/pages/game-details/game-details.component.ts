@@ -3,6 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {StoreControllerService} from '../../../../services/services';
 import {DatePipe, NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {GameResponse} from '../../../../services/models/game-response';
+import {UserActionsComponent} from '../../components/user-actions/user-actions.component';
 
 @Component({
   selector: 'app-game-details',
@@ -11,7 +12,8 @@ import {GameResponse} from '../../../../services/models/game-response';
     NgForOf,
     NgStyle,
     NgClass,
-    DatePipe
+    DatePipe,
+    UserActionsComponent
   ],
   templateUrl: './game-details.component.html',
   styleUrl: './game-details.component.scss'

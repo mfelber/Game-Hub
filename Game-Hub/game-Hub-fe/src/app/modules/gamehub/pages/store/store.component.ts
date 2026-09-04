@@ -6,7 +6,7 @@ import {PageResponseGameResponse} from '../../../../services/models/page-respons
 import {GameResponse} from '../../../../services/models/game-response';
 import {FormsModule} from '@angular/forms';
 import {SearchBar} from '../../components/search-bar/search-bar';
-import {UserAlertsComponent} from '../../components/user-alerts/user-alerts.component';
+import {UserActionsComponent} from '../../components/user-actions/user-actions.component';
 import {EmptyStateComponent} from '../../components/empty-state/empty-state.component';
 
 
@@ -18,7 +18,7 @@ import {EmptyStateComponent} from '../../components/empty-state/empty-state.comp
     FormsModule,
     SearchBar,
     NgClass,
-    UserAlertsComponent,
+    UserActionsComponent,
     EmptyStateComponent
   ],
   templateUrl: './store.component.html',

@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {NgClass, NgForOf, NgIf} from "@angular/common";
 import {SearchBar} from '../../../../components/search-bar/search-bar';
-import {UserAlertsComponent} from '../../../../components/user-alerts/user-alerts.component';
 import {StoreControllerService} from '../../../../../../services/services/store-controller.service';
 import {PageResponseGameResponse} from '../../../../../../services/models/page-response-game-response';
 import {GameResponse} from '../../../../../../services/models/game-response';
@@ -12,7 +11,6 @@ import {Router} from '@angular/router';
   imports: [
     NgIf,
     SearchBar,
-    UserAlertsComponent,
     NgForOf,
     NgClass
   ],

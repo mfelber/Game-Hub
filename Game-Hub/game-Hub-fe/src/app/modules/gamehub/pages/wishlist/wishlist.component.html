@@ -7,8 +7,8 @@
 
   <section>
     <div class="header">
-      <h1>My Wishlist</h1>
-      <app-user-alerts/>
+      <h1>Wishlist <i class="fa-solid fa-bookmark"></i></h1>
+      <app-user-actions/>
     </div>
   </section>
 
@@ -121,7 +121,7 @@
           Buy <i class="fa-solid fa-cart-shopping"></i> -> redirect user to fill invoice form
         </button>
         <button class="remove" (click)="removeGameFromWishList(wishlist.game?.gameId); $event.stopPropagation()">
-          Remove <i class="fa-solid fa-heart-broken"></i>
+          Remove <i class="fa-solid fa-bookmark"></i>
         </button>
       </div>
     </div>

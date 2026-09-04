@@ -5,6 +5,7 @@ import {StoreControllerService} from '../../../../services/services';
 import {GameResponse} from '../../../../services/models/game-response';
 import {LibraryControllerService} from '../../../../services/services/library-controller.service';
 import {UserPublicProfileComponent} from '../user-public-profile/user-public-profile.component';
+import {UserActionsComponent} from '../../components/user-actions/user-actions.component';
 
 @Component({
   selector: 'app-game-details-library',
@@ -12,7 +13,8 @@ import {UserPublicProfileComponent} from '../user-public-profile/user-public-pro
     NgForOf,
     NgIf,
     NgStyle,
-    DatePipe
+    DatePipe,
+    UserActionsComponent
   ],
   templateUrl: './game-details-library.component.html',
   styleUrl: './game-details-library.component.scss'

@@ -4,6 +4,10 @@
 
 <main *ngIf="game">
 
+  <div class="top">
+    <app-user-actions/>
+  </div>
+
   <section class="hero">
     <img
       [src]="getGameImageCover(game)"

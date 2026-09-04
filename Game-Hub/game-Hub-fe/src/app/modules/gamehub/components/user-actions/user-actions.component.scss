@@ -18,8 +18,24 @@ button:hover {
   background: #1d2533;
 }
 
+.balance-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 15px 12px;
+}
+
+.balance-btn i {
+  color: #a78bfa;
+}
+
+.balance-btn span {
+  font-size: 14px;
+  font-weight: 600;
+  color: #e5e7eb;
+}
+
 .notification-btn {
-  font-size: 20px;
   color: #f59e0b;
 }
 
@@ -40,7 +56,6 @@ button:hover {
 }
 
 .warning-btn {
-  font-size: 18px;
   background: rgba(251, 146, 60, 0.12) !important;
   color: #fb923c !important;
 }

@@ -1,4 +1,15 @@
+.top {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  justify-content: end;
+}
+
 .hero{
+  margin-top: 20px;
   height: 550px;
   position: relative;
   border-radius: 25px;

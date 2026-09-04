@@ -8,7 +8,6 @@
   justify-content: space-between;
 }
 
-
 .filter-bar{
   background: #151923;
   border-radius: 16px;
@@ -136,8 +135,12 @@
 }
 
 .in-library{
-  background: #374151!important;
+  background: #0F766E !important;
   cursor: default!important;
+}
+
+.in-library i{
+  font-size: 15px;
 }
 
 .price {
@@ -191,7 +194,7 @@
 }
 
 .owned-badge {
-  background: #374151;
+  background: #0F766E  ;
 }
 
 .discount-badge {
