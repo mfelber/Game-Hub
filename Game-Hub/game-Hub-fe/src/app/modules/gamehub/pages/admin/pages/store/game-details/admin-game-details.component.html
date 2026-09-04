@@ -2,9 +2,7 @@
   Loading...
 </div>
 
-
 <main *ngIf="game">
-
   <section class="hero">
     <img
       [src]="getGameImageCover(game)"
@@ -46,7 +44,7 @@
 
         <div>
           <span>Release Date</span>
-          <b>{{ game.releaseYear | date:'dd.MM.yyyy'}}</b>
+          <b>{{ game.releaseYear | date:'dd.MM.yyyy' }}</b>
         </div>
       </div>
 
@@ -64,57 +62,11 @@
       </div>
 
       <div class="price" *ngIf="!game.discountPercent || game.discountPercent <= 0">
-
-        <h1 style="font-size: 30px" [ngClass]="{'free-price' : game.price === 0}">{{ game.price === 0 ? 'Free' : game.price + ' €' }}</h1>
-
+        <h1 style="font-size: 30px" [ngClass]="{'free-price' : game.price === 0}">{{
+            game.price === 0 ? 'Free' : game.price + ' €'
+          }}</h1>
       </div>
-
-      <div class="purchase-actions">
-
-        <div class="purchase-row">
-
-          <button
-            *ngIf="!gameIsOwned"
-            (click)="buyGame(game.gameId)"
-            class="buy">
-            {{ game.price === 0 ? 'Add to Library' : 'Buy Now' }}
-            <i class="fa-solid fa-cart-shopping"></i>
-          </button>
-
-          <button
-            *ngIf="!gameIsOwned && !gameInWishList"
-            (click)="addGameToWishList(game.gameId)"
-            class="wishlist">
-            <i class="fa-regular fa-bookmark"></i>
-          </button>
-
-          <button
-            *ngIf="gameInWishList && !gameIsOwned"
-            (click)="removeGameFromWishList(game.gameId)"
-            class="remove">
-            <i class="fa-solid fa-bookmark"></i>
-          </button>
-
-          <button
-            *ngIf="gameIsOwned"
-            class="in-library">
-            In Library 🎮
-          </button>
-
-        </div>
-
-
-        <hr>
-
-        <button class="gift">
-          Gift this Game
-          <i class="fa-solid fa-gift"></i>
-        </button>
-
-      </div>
-
     </div>
-
   </section>
 
   <section class="card requirements">
@@ -172,16 +124,9 @@
 
   <section class="card reviews">
 
-    <button>View All Reviews on other side from reviews (in reviews page filter based on positive/negative reviews)
-    </button>
     <div class="card-header">
       <h2>Reviews</h2>
-      <button class="review-button">
-        <i class="fa-solid fa-pen"></i>
-        Write a review
-      </button>
     </div>
-
 
     <div class="rating-summary">
 
@@ -192,7 +137,6 @@
         </div>
         <span>235 reviews</span>
       </div>
-
 
       <div class="rating-info">
 
@@ -236,28 +180,6 @@
 
     </div>
 
-
-  </section>
-
-  <section class="card recommended-games">
-
-    <h2>More like this (based on previewing game)</h2>
-    <div class="recommended-grid">
-      <div class="recommended-card relative">
-        <div class="badges">
-          <div class="badge discount-badge">
-            -get%
-          </div>
-
-        </div>
-        <img src="assets/profilePicture/default_profile_picture.svg">
-        <div>
-          <h3>Title</h3>
-          <span class="old-price">Price €</span>
-          <span>29.99 € set discount price </span>
-        </div>
-      </div>
-    </div>
   </section>
 
 </main>

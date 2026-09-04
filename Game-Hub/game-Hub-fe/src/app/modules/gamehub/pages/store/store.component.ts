@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {NgClass, NgForOf, NgIf, NgOptimizedImage} from '@angular/common';
 import {StoreControllerService} from '../../../../services/services';
-import {Router, RouterOutlet} from '@angular/router';
+import {Router} from '@angular/router';
 import {PageResponseGameResponse} from '../../../../services/models/page-response-game-response';
 import {GameResponse} from '../../../../services/models/game-response';
 import {FormsModule} from '@angular/forms';
@@ -26,8 +26,6 @@ import {EmptyStateComponent} from '../../components/empty-state/empty-state.comp
 })
 export class StoreComponent implements OnInit{
   gamePageResponse: PageResponseGameResponse = {}
-  gameResponse: GameResponse = {}
-  platformResponse: {} = {}
   allPlatforms: string[] = [] ;
   allGenres: string[] = [] ;
   private _gameImageCover: string | undefined
@@ -47,21 +45,21 @@ export class StoreComponent implements OnInit{
 
 
   constructor(
-    private gameService: StoreControllerService,
+    private storeService: StoreControllerService,
     private router: Router
   ) {
   }
 
   ngOnInit() {
-    this.getAllGames()
+    this.getAllGames();
     this.getPlatforms();
     this.getGenres();
   }
 
   filterGames() {
     const maxPrice = Number(this.filters.maxPrice);
-    const selectedPlatform = this.filters.platform
-    const selectedGenre = this.filters.genre
+    const selectedPlatform = this.filters.platform;
+    const selectedGenre = this.filters.genre;
     this.filteredGames = (this.gamePageResponse.content || []).filter(game  => {
       const priceMatch = !maxPrice
         || (maxPrice === 101 && game.price! >= 100)
@@ -81,7 +79,7 @@ export class StoreComponent implements OnInit{
   }
 
   private getAllGames() {
-    this.gameService.findAllGames({
+    this.storeService.findAllGames({
       page:this.page,
       size:this.size
     }).subscribe({
@@ -102,7 +100,7 @@ export class StoreComponent implements OnInit{
   }
 
   private checkIfGameIsInWishlist(gameId: any) {
-    this.gameService.checkGameInWishlist({gameId})
+    this.storeService.checkGameInWishlist({gameId})
       .subscribe({
         next: (inWishList: boolean) => {
           this.gameWishListMap[gameId] = inWishList;
@@ -111,7 +109,7 @@ export class StoreComponent implements OnInit{
   }
 
   private checkIfGameIsOwned(gameId: any) {
-    this.gameService.checkGameOwned({gameId})
+    this.storeService.checkGameOwned({gameId})
       .subscribe({
         next: (owned: boolean) => {
           this.gamesOwnedMap[gameId] = owned;
@@ -120,9 +118,9 @@ export class StoreComponent implements OnInit{
   }
 
   goToGame(gameId:any) {
-    this.gameService.getGameById({gameId}).subscribe({
+    this.storeService.getGameById({gameId}).subscribe({
       next: (game) => {
-        this.router.navigate(['gamehub/game', gameId]);
+        this.router.navigate(['gamehub/store/game', gameId]);
       },
       error: (err) => {
         console.error('Error with loading game:', err);
@@ -138,7 +136,7 @@ export class StoreComponent implements OnInit{
   }
 
   private getPlatforms() {
-    this.gameService.getAllPlatforms().subscribe({
+    this.storeService.getAllPlatforms().subscribe({
       next: (platforms) => {
         this.allPlatforms = platforms.map(p => p.platformName!);
       }
@@ -146,7 +144,7 @@ export class StoreComponent implements OnInit{
   }
 
   private getGenres() {
-    this.gameService.getAllGenres().subscribe({
+    this.storeService.getAllGenres().subscribe({
       next: (genres) => {
         this.allGenres = genres.map(g => g.name!);
       }

@@ -19,6 +19,8 @@ import {AllUsersComponent} from './pages/admin/pages/all-users/all-users.compone
 import {AllReportsComponent} from './pages/admin/pages/all-reports/all-reports.component';
 import {SuspendedAccountsComponent} from './pages/admin/pages/suspended-accounts/suspended-accounts.component';
 import {userProfileGuard} from '../../services/guard/user-profile-guard';
+import {AdminStoreComponent} from './pages/admin/pages/store/admin-store.component';
+import {AdminGameDetailsComponent} from './pages/admin/pages/store/game-details/admin-game-details.component';
 
 const routes: Routes = [
   {
@@ -26,13 +28,31 @@ const routes: Routes = [
     component: MainComponent,
     children: [
       {
-        path:'',
-        component: StoreComponent,
+        path:'store',
+        children:[
+          {
+            path:'',
+            component: StoreComponent
+          },
+          { path: 'game/:id',
+            component: GameDetailsComponent,
+            canActivate: [authGuard]
+          },
+        ],
         canActivate: [authGuard]
       },
       {
         path: 'library',
-        component: LibraryComponent,
+        children:[
+          {
+            path:'',
+            component: LibraryComponent
+          },
+          { path: 'game/:id',
+            component: GameDetailsLibraryComponent,
+            canActivate: [authGuard]
+          },
+        ],
         canActivate: [authGuard]
       },
       {
@@ -53,14 +73,6 @@ const routes: Routes = [
       {
         path: 'friends',
         component: FriendsComponent,
-        canActivate: [authGuard]
-      },
-      { path: 'game/:id',
-        component: GameDetailsComponent,
-        canActivate: [authGuard]
-      },
-      { path: 'library/game/:id',
-        component: GameDetailsLibraryComponent,
         canActivate: [authGuard]
       },
       {
@@ -99,6 +111,19 @@ const routes: Routes = [
       {
         path: 'suspended-accounts',
         component: SuspendedAccountsComponent,
+      },
+      {
+        path: 'admin-store',
+        children: [
+          {
+          path:'',
+          component: AdminStoreComponent,
+        },
+          {
+            path:'game/:id',
+            component: AdminGameDetailsComponent,
+          }
+        ],
       }
     ]
   }

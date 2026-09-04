@@ -1,0 +1,56 @@
+<div *ngIf="!isLoaded" class="text-center justify-center text-gray-400">
+  Loading...
+</div>
+
+<main [class.hidden]="!isLoaded">
+
+  <!--  SEARCH -->
+  <section>
+    <div class="top">
+      <app-search-bar
+        placeholder="Search games..."
+        (search)="searchGames($event)">
+      </app-search-bar>
+    </div>
+  </section>
+
+  <section class="games">
+
+    <div class="card relative" *ngFor="let game of storeResponse.content" (click)="goToGame(game.gameId)">
+      <img [src]="getGameImageCover(game)" alt="{{game.title}}}">
+      <div class="badges">
+        <div *ngIf="game.discountPercent! > 0"
+             class="badge discount-badge">- {{ game.discountPercent }} %
+        </div>
+      </div>
+      <h3>{{ game.title }}</h3>
+      <p>
+      <span *ngFor="let genre of game.genres?.slice(0, 2); let last = last">
+        {{ genre.name }}<span *ngIf="!last">&nbsp; • &nbsp;</span>
+      </span>
+      </p>
+      <div class="info">
+        <div>
+          123K <i class="fa-regular fa-thumbs-up text-white"></i>
+        </div>
+        <div class="price" *ngIf="game.discountPercent! > 0">
+          <span class="current-price" [ngClass]="{'free-price' : game.discountPercent === 100}">{{
+              game.discountPercent === 100
+                ? 'Free'
+                : game.discountPrice + ' €'
+            }}</span>
+
+          <div class="price-info">
+            <span class="old-price"> {{ game.price }} €</span>
+          </div>
+        </div>
+        <div class="price" *ngIf="!game.discountPercent || game.discountPercent <= 0">
+          <span class="current-price" [ngClass]="{'free-price' : game.price === 0}">{{
+              game.price! > 0 ? (game.price + ' €') : 'Free'
+            }} </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>

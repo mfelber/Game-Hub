@@ -33,6 +33,7 @@
   gap: 12px;
 }
 
+
 .tags span{
   background: rgba(255,255,255,.2);
   padding: 10px 18px;
@@ -84,63 +85,6 @@
   color: #777;
   text-decoration: line-through;
   margin-right: 10px;
-}
-
-button{
-  width: 100%;
-  padding: 15px;
-  border: none;
-  border-radius: 12px;
-  font-size: 16px;
-  cursor: pointer;
-  margin-top: 12px;
-}
-
-.wishlist{
-  background: #333d52;
-  color: white;
-}
-
-.wishlist:hover{
-  background: #3F4B63;
-}
-
-.buy{
-  background: #155dfc;
-  color: white;
-}
-
-.buy:hover {
-  background: #1447e6;
-}
-
-.in-library{
-  background: #374151!important;
-  cursor: default!important;
-}
-
-.remove{
-  background: #dc2626;
-  color: white;
-}
-
-.remove:hover{
-  background: #b91c1c;
-}
-
-.purchase-row{
-  display:flex;
-  gap:10px;
-}
-
-.purchase-row .buy{
-  flex:1;
-}
-
-.purchase-row .wishlist,
-.purchase-row .remove{
-  width:60px;
-  flex:none;
 }
 
 .requirements{
@@ -208,20 +152,6 @@ button{
 .reviews,
 .recommended-games{
   margin-top: 20px;
-}
-
-
-.review-button{
-  background: #2563eb;
-  color: white;
-  border:none;
-  padding:10px 15px;
-  border-radius:10px;
-  cursor:pointer;
-}
-
-.review-button:hover{
-  background: #1447e6;
 }
 
 .rating-summary{
@@ -301,39 +231,6 @@ button{
 .recommended-card h3{
   margin: 0;
   overflow-wrap: anywhere;
-}
-
-.purchase-actions{
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.gift{
-  background:#202938;
-  color: white;
-  border: 1px solid #394355;
-  border-radius: 10px;
-  padding: 14px;
-  cursor: pointer;
-  transition: .2s;
-}
-
-.gift:hover{
-  background: #2b3648;
-}
-
-hr{
-  border: 1px solid rgba(255,255,255,.15);
-}
-
-.badges{
-  position: absolute;
-  left: 115px;
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  justify-content: flex-end;
 }
 
 .badge {
