@@ -12,7 +12,7 @@ import {SearchBar} from '../../components/search-bar/search-bar';
 import {WishlistResponse} from '../../../../services/models/wishlist-response';
 import {PageResponseWishlistResponse} from '../../../../services/models/page-response-wishlist-response';
 import {EmptyStateComponent} from '../../components/empty-state/empty-state.component';
-import {UserAlertsComponent} from '../../components/user-alerts/user-alerts.component';
+import {UserActionsComponent} from '../../components/user-actions/user-actions.component';
 
 @Component({
   selector: 'app-wishlist',
@@ -24,7 +24,7 @@ import {UserAlertsComponent} from '../../components/user-alerts/user-alerts.comp
     NgClass,
     DatePipe,
     EmptyStateComponent,
-    UserAlertsComponent,
+    UserActionsComponent,
   ],
   templateUrl: './wishlist.component.html',
   styleUrl: './wishlist.component.scss'

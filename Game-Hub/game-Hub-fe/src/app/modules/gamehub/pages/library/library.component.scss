@@ -15,24 +15,44 @@
   font-size: 1.9rem;
 }
 
-.tabs{
+.game-status-filter {
+  margin-bottom: 20px;
+  margin-top: 20px;
   display: flex;
-  gap: 15px;
-  margin: 20px 0;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 14px;
 }
 
-.tabs button{
-  background: #1b2230;
-  color: #aaa;
-  padding: 10px 15px;
+.game-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px;
+  background: #151923;
   border-radius: 10px;
-  border: solid 1px #1b2230;
-  cursor: pointer;
-  transition:.2s;
 }
 
-.tabs button:hover{
-  color: white;
+.game-filter-button{
+  background: transparent;
+  border: none;
+  color: #9CA3AF;
+  padding: 8px 15px;
+  border-radius: 7px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.game-filter-button:hover {
+  color: #E5E7EB;
+  background: #232B3D;
+}
+
+.game-filter-button.active {
+  background: #2A3347;
+  color: #FFFFFF;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .tabs .selected{

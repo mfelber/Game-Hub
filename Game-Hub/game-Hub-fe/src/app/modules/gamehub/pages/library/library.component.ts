@@ -9,7 +9,7 @@ import {SearchBar} from '../../components/search-bar/search-bar';
 import {PageResponseUserLibraryResponse} from '../../../../services/models/page-response-user-library-response';
 import {UserLibraryResponse} from '../../../../services/models/user-library-response';
 import {EmptyStateComponent} from '../../components/empty-state/empty-state.component';
-import {UserAlertsComponent} from '../../components/user-alerts/user-alerts.component';
+import {UserActionsComponent} from '../../components/user-actions/user-actions.component';
 
 @Component({
   selector: 'app-library',
@@ -18,12 +18,12 @@ import {UserAlertsComponent} from '../../components/user-alerts/user-alerts.comp
     NgIf,
     SearchBar,
     EmptyStateComponent,
-    UserAlertsComponent
+    UserActionsComponent
   ],
   templateUrl: './library.component.html',
   styleUrl: './library.component.scss'
 })
-export class LibraryComponent implements OnInit{
+export class LibraryComponent implements OnInit {
 
   gamePageResponse: PageResponseUserLibraryResponse = {};
   libraryResponse: UserLibraryResponse = {};
@@ -37,6 +37,7 @@ export class LibraryComponent implements OnInit{
   loadAllGames = false;
   isLoaded = false;
   gamesDownloadedMap: { [key: number]: boolean } = {};
+  activeFilter = 'ALL';
 
   ngOnInit() {
     this.getOwnedGame()
@@ -47,6 +48,22 @@ export class LibraryComponent implements OnInit{
     private storeService: StoreControllerService,
     private router: Router
   ) {
+  }
+
+  setFilter(filter: string) {
+    this.activeFilter = filter;
+
+    switch (filter) {
+      case 'ALL':
+        this.getOwnedGame();
+        break;
+      case 'FAVORITE':
+        this.getFavoriteGames();
+        break;
+      case 'DOWNLOADED':
+        this.getDownloadedGames();
+        break;
+    }
   }
 
   getFavoriteGames() {
@@ -115,7 +132,7 @@ export class LibraryComponent implements OnInit{
     )
   }
 
-  goToGame(gameId:any) {
+  goToGame(gameId: any) {
     this.storeService.getGameById({gameId}).subscribe({
       next: (game) => {
         this.router.navigate(['gamehub/library/game', gameId]);
@@ -137,7 +154,7 @@ export class LibraryComponent implements OnInit{
     console.log('searchYourGames');
   }
 
-  downloadGame(gameId:any) {
+  downloadGame(gameId: any) {
     console.log(gameId);
     this.libraryService.downloadGame({gameId}).subscribe({
       next: res => {
@@ -147,7 +164,7 @@ export class LibraryComponent implements OnInit{
     })
   }
 
-  checkIfGameIsDownload(gameId:any) {
+  checkIfGameIsDownload(gameId: any) {
     this.libraryService.checkDownloadedGame({gameId}).subscribe({
       next: (downloaded: boolean) => {
         this.gamesDownloadedMap[gameId] = downloaded;

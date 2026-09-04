@@ -7,7 +7,7 @@ import {RefreshService} from '../../../../services/fn/refresh-service/refresh-se
 import {Router} from '@angular/router';
 import {SearchBar} from '../../components/search-bar/search-bar';
 import {EmptyStateComponent} from '../../components/empty-state/empty-state.component';
-import {UserAlertsComponent} from '../../components/user-alerts/user-alerts.component';
+import {UserActionsComponent} from '../../components/user-actions/user-actions.component';
 
 @Component({
   selector: 'app-friend-requests',
@@ -18,28 +18,38 @@ import {UserAlertsComponent} from '../../components/user-alerts/user-alerts.comp
     NgStyle,
     SearchBar,
     EmptyStateComponent,
-    UserAlertsComponent
+    UserActionsComponent
   ],
   templateUrl: './friend-requests.component.html',
   styleUrl: './friend-requests.component.scss'
 })
 export class FriendRequestsComponent implements OnInit {
 
-  ngOnInit(): void {
-    this.getAllMyFriendRequests();
-  }
-
   friendRequestsResponse: PageResponseFriendRequestResponse = {};
 
   isLoaded = false;
   emptyListOfFriendRequests = false;
+  activeFilter = 'RECEIVED';
 
+  ngOnInit(): void {
+    this.getAllMyFriendRequests();
+  }
 
   constructor(
     private communityService: CommunityControllerService,
     private refreshService: RefreshService,
     private router: Router
   ) {
+  }
+
+  setFilter(filter: string) {
+    this.activeFilter = filter;
+
+    switch (filter) {
+      case 'RECEIVED':
+        this.getAllMyFriendRequests();
+        break;
+    }
   }
 
   private getAllMyFriendRequests() {

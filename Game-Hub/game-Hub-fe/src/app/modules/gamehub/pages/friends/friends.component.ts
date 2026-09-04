@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import {UserAlertsComponent} from '../../components/user-alerts/user-alerts.component';
+import {UserActionsComponent} from '../../components/user-actions/user-actions.component';
 
 @Component({
   selector: 'app-friends',
   imports: [
-    UserAlertsComponent
+    UserActionsComponent
   ],
   templateUrl: './friends.component.html',
   styleUrl: './friends.component.scss'

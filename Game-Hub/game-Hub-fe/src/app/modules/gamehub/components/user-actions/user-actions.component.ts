@@ -4,14 +4,14 @@ import {UserProfileControllerService} from '../../../../services/services/user-p
 import {UserNotificationsResponse} from '../../../../services/models/user-notifications-response';
 
 @Component({
-  selector: 'app-user-alerts',
+  selector: 'app-user-actions',
   imports: [
     NgIf
   ],
-  templateUrl: './user-alerts.component.html',
-  styleUrl: './user-alerts.component.scss',
+  templateUrl: './user-actions.component.html',
+  styleUrl: './user-actions.component.scss',
 })
-export class UserAlertsComponent implements OnInit {
+export class UserActionsComponent implements OnInit {
 
   userNotificationsResponse: UserNotificationsResponse = {}
 

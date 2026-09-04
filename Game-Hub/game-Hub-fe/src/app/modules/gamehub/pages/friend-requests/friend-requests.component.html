@@ -4,72 +4,82 @@
 
 <main [class.hidden]="!isLoaded">
 
-<!-- HEADER -->
+  <!-- HEADER -->
   <section>
-  <div class="header">
-    <div class="header-content">
-      <h1>Friend Requests</h1>
-      <app-user-alerts/>
-    </div>
+    <div class="header">
+      <div class="header-content">
+        <h1>Friend Requests <i class="fa-solid fa-user-plus"></i></h1>
+        <app-user-actions/>
+      </div>
       <p>Manage your incoming friend requests</p>
-  </div>
+    </div>
   </section>
 
-<!-- SEARCH -->
+  <!-- SEARCH -->
   <section>
-  <div class="search">
-    <app-search-bar
-    placeholder="Search friend requests..."
-    (search)="searchFriendRequests()">
-    </app-search-bar>
-  </div>
+    <div class="search">
+      <app-search-bar
+        placeholder="Search friend requests..."
+        (search)="searchFriendRequests()">
+      </app-search-bar>
+    </div>
   </section>
 
-<!-- BUTTONS -->
+  <!-- BUTTONS -->
   <section>
-    <div class="tabs">
-      <button class="selected">Recieved</button>
-      <button class="commingsoon">Pending Requests <span class="text-[10px] bg-gray-700/60 px-2 py-0.5 rounded-md">Coming soon</span>
-      </button>
+    <div class="friend-request-filter">
+      <div class="request-filter">
+        <button class="request-filter-button" [class.active]="activeFilter === 'RECEIVED'"
+                (click)="setFilter('RECEIVED')">Received
+        </button>
+        <button class="commingsoon request-filter-button" [class.active]="activeFilter === 'PENDING'"
+                (click)="setFilter('PENDING')">Pending Requests <span
+          class="text-[10px] bg-gray-700/60 px-2 py-0.5 rounded-md">Coming soon</span>
+        </button>
+      </div>
     </div>
   </section>
 
   <app-empty-state
     *ngIf="emptyListOfFriendRequests"
-    icon = 'fa-solid fa-envelope'
+    icon='fa-solid fa-envelope'
     title="You don't have any friend requests">
   </app-empty-state>
 
-<!-- FRIEND REQUESTS -->
+  <!-- FRIEND REQUESTS -->
   <div *ngIf="friendRequestsResponse.content?.length">
 
-  <section class="requests" *ngFor="let friendRequest of friendRequestsResponse.content">
-    <div class="request-card" (click)="navigateToUser(friendRequest.userId!)">
-      <img *ngIf="friendRequest.userProfilePicture"
-           [src]="getProfilePicture(friendRequest)"/>
+    <section class="requests" *ngFor="let friendRequest of friendRequestsResponse.content">
+      <div class="request-card" (click)="navigateToUser(friendRequest.userId!)">
+        <img *ngIf="friendRequest.userProfilePicture"
+             [src]="getProfilePicture(friendRequest)"/>
 
-      <img *ngIf="!friendRequest.userProfilePicture"
-           src="../../../../../assets/profilePicture/default_profile_picture.svg"
-           [ngStyle]="{'background-color': friendRequest.profileColor}"/>
+        <img *ngIf="!friendRequest.userProfilePicture"
+             src="../../../../../assets/profilePicture/default_profile_picture.svg"
+             [ngStyle]="{'background-color': friendRequest.profileColor}"/>
 
-      <div class="user-info">
-        <h3>{{ friendRequest.username }}</h3>
-        <p> Sent {{ friendRequest.createdAt }}</p>
-        <div class="details">
+        <div class="user-info">
+          <h3>{{ friendRequest.username }}</h3>
+          <p> Sent {{ friendRequest.createdAt }}</p>
+          <div class="details">
           <span [ngClass]="{
           'text-green-500': friendRequest.status === 'ONLINE',
           'text-gray-400': friendRequest.status === 'OFFLINE',
           'text-yellow-400': friendRequest.status === 'AWAY'
           }">• {{ friendRequest.status }} </span>
-          <span>• {{ friendRequest.location?.name}}</span>
-          <span [ngStyle]="{'color': friendRequest.level?.levelColor}"> • Lvl.{{friendRequest.level?.level}} </span>
+            <span>• {{ friendRequest.location?.name }}</span>
+            <span [ngStyle]="{'color': friendRequest.level?.levelColor}"> • Lvl.{{ friendRequest.level?.level }} </span>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="accept" (click)=" acceptFriendRequest(friendRequest.userId!) ; $event.stopPropagation()">
+            Accept
+          </button>
+          <button class="decline" (click)=" rejectFriendRequest(friendRequest.userId!) ; $event.stopPropagation()">
+            Decline
+          </button>
         </div>
       </div>
-      <div class="actions">
-        <button class="accept" (click)=" acceptFriendRequest(friendRequest.userId!) ; $event.stopPropagation()">Accept</button>
-        <button class="decline" (click)=" rejectFriendRequest(friendRequest.userId!) ; $event.stopPropagation()">Decline</button>
-      </div>
-    </div>
-  </section>
+    </section>
   </div>
 </main>

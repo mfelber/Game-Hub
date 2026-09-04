@@ -5,6 +5,10 @@
 
 <main *ngIf="game">
 
+  <div class="top">
+    <app-user-actions/>
+  </div>
+
   <section class="hero">
     <img
       [src]="getGameImageCover(game)"
@@ -98,7 +102,7 @@
           <button
             *ngIf="gameIsOwned"
             class="in-library">
-            In Library 🎮
+            In Library <i class="fa-solid fa-gamepad"></i>
           </button>
 
         </div>
@@ -107,7 +111,7 @@
         <hr>
 
         <button class="gift">
-          Gift this Game
+          Gift Game
           <i class="fa-solid fa-gift"></i>
         </button>
 
