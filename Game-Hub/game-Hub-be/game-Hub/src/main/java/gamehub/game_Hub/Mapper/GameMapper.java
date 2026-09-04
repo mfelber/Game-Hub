@@ -1,5 +1,6 @@
 package gamehub.game_Hub.Mapper;
 
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -89,9 +90,9 @@ public class GameMapper {
     return GameResponse.builder()
         .gameId(game.getId())
         .title(game.getTitle())
-        .genres(game.getGenres().stream()
+        .genres(game.getGenres().stream().sorted(Comparator.comparing(Genre::getName))
             .map(g -> new GenreResponse(g.getId(), g.getName()))
-            .collect(Collectors.toSet()))
+            .collect(Collectors.toList()))
         .releaseYear(game.getReleaseYear())
         .description(game.getDescription())
         .developer(game.getDeveloper())

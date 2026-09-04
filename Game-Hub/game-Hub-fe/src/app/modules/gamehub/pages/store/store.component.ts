@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {NgClass, NgForOf, NgIf, NgOptimizedImage} from '@angular/common';
 import {StoreControllerService} from '../../../../services/services';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {PageResponseGameResponse} from '../../../../services/models/page-response-game-response';
 import {GameResponse} from '../../../../services/models/game-response';
 import {FormsModule} from '@angular/forms';
@@ -24,13 +24,12 @@ import {EmptyStateComponent} from '../../components/empty-state/empty-state.comp
   templateUrl: './store.component.html',
   styleUrl: './store.component.scss'
 })
-export class StoreComponent implements OnInit{
+export class StoreComponent implements OnInit {
   gamePageResponse: PageResponseGameResponse = {}
-  allPlatforms: string[] = [] ;
-  allGenres: string[] = [] ;
-  private _gameImageCover: string | undefined
+  allPlatforms: string[] = [];
+  allGenres: string[] = [];
   public page = 0;
-  public size = 30;
+  public size = 5;
   gameWishListMap: { [key: number]: boolean } = {};
   gamesOwnedMap: { [key: number]: boolean } = {};
 
@@ -41,17 +40,24 @@ export class StoreComponent implements OnInit{
     platform: '',
     maxPrice: ''
   };
+
   isLoaded = false
+  isLoading = false;
 
 
   constructor(
     private storeService: StoreControllerService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute,
   ) {
   }
 
   ngOnInit() {
-    this.getAllGames();
+    this.route.queryParams.subscribe(params => {
+      this.page = Number(params['page'] ?? 1) - 1;
+      this.getAllGames();
+    })
+
     this.getPlatforms();
     this.getGenres();
   }
@@ -60,10 +66,10 @@ export class StoreComponent implements OnInit{
     const maxPrice = Number(this.filters.maxPrice);
     const selectedPlatform = this.filters.platform;
     const selectedGenre = this.filters.genre;
-    this.filteredGames = (this.gamePageResponse.content || []).filter(game  => {
-      const priceMatch = !maxPrice
-        || (maxPrice === 101 && game.price! >= 100)
-        || (maxPrice !== 101 && game.price! <= maxPrice);
+    this.filteredGames = (this.gamePageResponse.content || []).filter(game => {
+        const priceMatch = !maxPrice
+          || (maxPrice === 101 && game.price! >= 100)
+          || (maxPrice !== 101 && game.price! <= maxPrice);
 
         const platformMatch =
           !selectedPlatform ||
@@ -72,29 +78,28 @@ export class StoreComponent implements OnInit{
         const genreMatch = !selectedGenre || game.genres!.some(genre => genre.name === selectedGenre)
 
         return priceMatch && platformMatch && genreMatch;
-    }
-
-
+      }
     );
   }
 
   private getAllGames() {
+    this.isLoading = true;
     this.storeService.findAllGames({
-      page:this.page,
-      size:this.size
+      page: this.page,
+      size: this.size
     }).subscribe({
       next: (games) => {
         this.gamePageResponse = games;
-        console.log(this.gamePageResponse);
-        this.isLoaded = true;
-        this.gamePageResponse.content?.forEach(game => {
-          this.checkIfGameIsInWishlist(game.gameId);
-          this.filteredGames = [...(games.content || [])];
+        this.filteredGames = [...(games.content || [])];
 
-        });
-        this.gamePageResponse.content?.forEach(game => {
+        games.content?.forEach(game => {
+          this.checkIfGameIsInWishlist(game.gameId);
           this.checkIfGameIsOwned(game.gameId);
         });
+        this.isLoading = false;
+      },
+      error: err => {
+        this.isLoading = false;
       }
     })
   }
@@ -117,7 +122,7 @@ export class StoreComponent implements OnInit{
       })
   }
 
-  goToGame(gameId:any) {
+  goToGame(gameId: any) {
     this.storeService.getGameById({gameId}).subscribe({
       next: (game) => {
         this.router.navigate(['gamehub/store/game', gameId]);
@@ -160,7 +165,7 @@ export class StoreComponent implements OnInit{
     this.filteredGames = [...(this.gamePageResponse.content || [])]
   }
 
-  buyGame(gameId:any) {
+  buyGame(gameId: any) {
     console.log(gameId);
   }
 
@@ -168,9 +173,41 @@ export class StoreComponent implements OnInit{
     console.log(query);
   }
 
-  // protected readonly buyGame = buyGame;
+  goToFirstPage() {
+    this.changePage(0)
+  }
 
+  goToPreviousPage() {
+    this.changePage(this.page - 1)
+  }
 
+  goToPage(page: number) {
+    this.changePage(page)
+  }
 
+  goToNextPage() {
+    this.changePage(this.page + 1)
+  }
+
+  goToLastPage() {
+    this.changePage(this.gamePageResponse.totalPages! - 1);
+  }
+
+  get isLastPage(): boolean {
+    return this.page === this.gamePageResponse.totalPages as number - 1;
+  }
+
+  changePage(page: number) {
+    this.page = page;
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        page: page + 1
+      },
+      queryParamsHandling: 'merge'
+    });
+
+    this.getAllGames();
+  }
 }
 
