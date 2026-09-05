@@ -1,6 +1,6 @@
 package gamehub.game_Hub.Response;
 
-import java.util.Set;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,6 +21,6 @@ public class GamePreviewResponse {
   private Double discountPrice;
   private Integer discountPercent;
   private boolean hasDiscount;
-  private Set<GenreResponse> genres;
+  private List<GenreResponse> genres;
 
 }

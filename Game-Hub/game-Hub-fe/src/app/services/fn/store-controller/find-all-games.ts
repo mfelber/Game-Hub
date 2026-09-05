@@ -13,6 +13,10 @@ import { PageResponseGameResponse } from '../../models/page-response-game-respon
 export interface FindAllGames$Params {
   page?: number;
   size?: number;
+  genre?: string;
+  operationSystem?: string;
+  maxPrice?: number;
+  discount?: boolean;
 }
 
 export function findAllGames(http: HttpClient, rootUrl: string, params?: FindAllGames$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseGameResponse>> {
@@ -20,6 +24,10 @@ export function findAllGames(http: HttpClient, rootUrl: string, params?: FindAll
   if (params) {
     rb.query('page', params.page, {});
     rb.query('size', params.size, {});
+    rb.query('genre', params.genre, {});
+    rb.query('operationSystem', params.operationSystem, {});
+    rb.query('maxPrice', params.maxPrice, {});
+    rb.query('discount', params.discount, {});
   }
 
   return http.request(

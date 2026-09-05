@@ -1,8 +1,4 @@
-<div *ngIf="!isLoaded" class="text-center justify-center text-gray-400">
-  Loading...
-</div>
-
-<main [class.hidden]="!isLoaded">
+<main>
 
   <section>
     <div class="header">
@@ -65,6 +61,11 @@
 
   <!-- GAMES -->
   <section class="games" *ngIf="gamePageResponse.content?.length">
+
+    <div class="loading-overlay" *ngIf="isLoading">
+      <i class="fa-solid fa-spinner fa-spin"></i>
+    </div>
+
     <ng-container *ngIf="loadAllGames">
       <div class="card" *ngFor="let game of gamePageResponse.content"
            (click)="goToGame(game.gameId)">
@@ -120,5 +121,13 @@
       </div>
     </ng-container>
   </section>
+
+  <app-pagination
+    *ngIf="gamePageResponse.totalPages! > 1"
+  [currentPage]="page"
+  [totalPages]="gamePageResponse.totalPages!"
+  (pageChange)="changePage($event)">
+
+  </app-pagination>
 
 </main>

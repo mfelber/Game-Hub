@@ -1,9 +1,4 @@
-<div *ngIf="!isLoaded" class="text-center justify-center text-gray-400">
-  Loading...
-</div>
-
-
-<main [class.hidden]="!isLoaded">
+<main>
 
   <section>
     <div class="header">
@@ -32,43 +27,37 @@
     <div class="filter-options">
       <div class="dropdown">
         <label>Genre</label>
-        <select [(ngModel)]="filters.genre" (change)="filterGames()">
+        <select [(ngModel)]="filters.genre" (change)="changeFilter()">
           <option value="">All Genres</option>
           <option *ngFor="let genre of allGenres" [value]="genre">{{ genre }}</option>
         </select>
       </div>
 
       <div class="dropdown">
-        <label>Platform</label>
-        <select [(ngModel)]="filters.platform" (change)="filterGames()">
-          <option value="">All Platforms</option>
-          <option *ngFor="let platform of allPlatforms" [value]="platform">{{ platform }}
+        <label>Operation System</label>
+        <select [(ngModel)]="filters.operationSystem" (change)="changeFilter()">
+          <option value="">All Operation Systems</option>
+          <option *ngFor="let platform of allOperationSystems" [value]="platform">{{ platform }}
           </option>
         </select>
       </div>
 
       <div class="checkbox">
         <label>
-          <input type="checkbox"> Discount
+          <input type="checkbox"
+                 [(ngModel)]="filters.discount"
+                 (change)="changeFilter()"> Discount
         </label>
       </div>
 
-      <!--      TODO ON SALE CHECKBOX-->
-      <!--      <div class="checkbox">-->
-      <!--        <label>-->
-      <!--          <input type="checkbox"-->
-      <!--           [(ngModel)]="filters.onSale"-->
-      <!--           (change)="filterGames()"-->
-      <!--          > Discount-->
-      <!--        </label>-->
-      <!--      </div>-->
-
       <div class="dropdown push-right">
         <label>Sort by</label>
-        <select>
-          <option value="">Recently Added</option>
-          <option value="price low to high"> Price low</option>
-          <option value="price high to low"> Price high</option>
+        <select [(ngModel)]="sortBy" (change)="changeSort()">
+          <option value="recentlyAdded">Recently Added</option>
+          <option value="priceAsc">Price: Low to High</option>
+          <option value="priceDesc">Price: High to Low</option>
+          <option value="nameAsc">Name: A to Z</option>
+          <option value="nameDesc">Name: Z to A</option>
         </select>
       </div>
 
@@ -76,15 +65,22 @@
   </section>
 
   <app-empty-state
-    *ngIf="emptyWishlist"
+    *ngIf="wishlistPageResponse.totalElements === 0 && !isLoading"
     icon = 'fa-solid fa-box-open'
-    title="Your wishlist is empty"
-    message="Start adding some games from store to see them here!">
+    [title]="hasActiveFilters ? 'No games found' : 'No games available'"
+    [message]="hasActiveFilters
+    ? 'There are no games matching the selected filters. Try changing or resetting your filters.'
+    : 'There are currently no games in the store.'">
   </app-empty-state>
 
   <!-- GAMES -->
-  <section class="games" *ngIf="wishlistPageResponse.content?.length">
-    <div class="card relative" *ngFor="let wishlist of wishlistPageResponse.content"
+  <section class="games">
+
+    <div class="loading-overlay" *ngIf="isLoading">
+      <i class="fa-solid fa-spinner fa-spin"></i>
+    </div>
+
+    <div class="card relative" *ngFor="let wishlist of filteredGames"
          (click)="goToGame(wishlist.game?.gameId)">
       <img [src]="getGameImageCover(wishlist.game!)" alt="{{wishlist.game?.title}}">
       <div class="card-content">
@@ -127,4 +123,11 @@
     </div>
 
   </section>
+
+  <app-pagination
+  *ngIf="filteredGames.length && wishlistPageResponse.totalPages! > 1"
+  [currentPage]="page"
+  [totalPages]="wishlistPageResponse.totalPages!"
+  (pageChange)="changePage($event)">
+  </app-pagination>
 </main>

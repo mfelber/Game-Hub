@@ -23,42 +23,44 @@
     <div class="filter-options">
       <div class="dropdown">
         <label>Genre</label>
-        <select [(ngModel)]="filters.genre" (change)="filterGames()">
+        <select [(ngModel)]="filters.genre" (change)="changeFilter()">
           <option value="">All Genres</option>
           <option *ngFor="let genre of allGenres" [value]="genre">{{ genre }}</option>
         </select>
       </div>
 
       <div class="dropdown">
-        <label>Platform</label>
-        <select [(ngModel)]="filters.platform" (change)="filterGames()">
-          <option value="">All Platforms</option>
-          <option *ngFor="let platform of allPlatforms" [value]="platform">{{ platform }}
+        <label>Operation System</label>
+        <select [(ngModel)]="filters.operationSystem" (change)="changeFilter()">
+          <option value="">All Operation Systems</option>
+          <option *ngFor="let platform of allOperationSystems" [value]="platform">{{ platform }}
           </option>
         </select>
       </div>
 
       <div class="dropdown">
         <label>Price</label>
-        <select [(ngModel)]="filters.maxPrice" (change)="filterGames()">
-          <option value="">Any Price</option>
-          <option [value]="20">≤ 20 €</option>
-          <option [value]="50">≤ $50 €</option>
-          <option [value]="100">≤ $100 €</option>
-          <option [value]="101">≥ 100 €</option>
+        <select [(ngModel)]="filters.maxPrice" (change)="changeFilter()">
+          <option value="">Any price</option>
+          <option value="10">Up to 10 €</option>
+          <option value="20">Up to 20 €</option>
+          <option value="50">Up to 50 €</option>
+          <option value="100">Up to 100 €</option>
         </select>
       </div>
 
       <div class="checkbox">
         <label>
-          <input type="checkbox"> Discount
+          <input type="checkbox"
+          [(ngModel)]="filters.discount"
+          (change)="changeFilter()"> Discount
         </label>
       </div>
     </div>
   </section>
 
   <app-empty-state
-    *ngIf="filteredGames.length === 0 && isLoaded"
+    *ngIf="filteredGames.length === 0 && !isLoading"
     icon='fa-solid fa-gamepad'
     title="No games found"
     message="There are no games matching the selected filters.">
@@ -67,130 +69,69 @@
   <!-- GAMES -->
   <section class="games">
 
-      <div class="loading-overlay" *ngIf="isLoading">
-        <i class="fa-solid fa-spinner fa-spin"></i>
-      </div>
+    <div class="loading-overlay" *ngIf="isLoading">
+      <i class="fa-solid fa-spinner fa-spin"></i>
+    </div>
 
-      <div class="card relative" *ngFor="let game of filteredGames" (click)="goToGame(game.gameId)">
-        <img [src]="getGameImageCover(game)" alt="{{game.title}}}">
-        <div class="badges">
-          <div
-            *ngIf="gamesOwnedMap?.[game.gameId!]"
-            class="badge owned-badge">
-            Owned <i class="fa-solid fa-check mr-1"></i>
-          </div>
-          <div *ngIf="game.discountPercent! > 0"
-               class="badge discount-badge">- {{ game.discountPercent }} %
-          </div>
-          <div
-            *ngIf="gameWishListMap?.[game.gameId!] && !gamesOwnedMap?.[game.gameId!]"
-            class="badge wishlist-badge">
-            Wishlisted <i class="fa-solid fa-heart mr-1"></i>
-          </div>
+    <div class="card relative" *ngFor="let game of filteredGames" (click)="goToGame(game.gameId)">
+      <img [src]="getGameImageCover(game)" alt="{{game.title}}}">
+      <div class="badges">
+        <div
+          *ngIf="gamesOwnedMap?.[game.gameId!]"
+          class="badge owned-badge">
+          Owned <i class="fa-solid fa-check mr-1"></i>
         </div>
-        <h3>{{ game.title }}</h3>
-        <p>
+        <div *ngIf="game.discountPercent! > 0"
+             class="badge discount-badge">- {{ game.discountPercent }} %
+        </div>
+        <div
+          *ngIf="gameWishListMap?.[game.gameId!] && !gamesOwnedMap?.[game.gameId!]"
+          class="badge wishlist-badge">
+          Wishlisted <i class="fa-solid fa-heart mr-1"></i>
+        </div>
+      </div>
+      <h3>{{ game.title }}</h3>
+      <p>
       <span *ngFor="let genre of game.genres?.slice(0, 2); let last = last">
         {{ genre.name }}<span *ngIf="!last">&nbsp; • &nbsp;</span>
       </span>
-        </p>
-        <div class="info">
-          <div>
-            123K <i class="fa-regular fa-thumbs-up text-white"></i>
-          </div>
-          <div class="price" *ngIf="game.discountPercent! > 0">
+      </p>
+      <div class="info">
+        <div>
+          123K <i class="fa-regular fa-thumbs-up text-white"></i>
+        </div>
+        <div class="price" *ngIf="game.discountPercent! > 0">
           <span class="current-price" [ngClass]="{'free-price' : game.discountPercent === 100}">{{
               game.discountPercent === 100
                 ? 'Free'
                 : game.discountPrice + ' €'
             }}</span>
 
-            <div class="price-info">
-              <span class="old-price"> {{ game.price }} €</span>
-            </div>
+          <div class="price-info">
+            <span class="old-price"> {{ game.price }} €</span>
           </div>
-          <div class="price" *ngIf="!game.discountPercent || game.discountPercent <= 0">
+        </div>
+        <div class="price" *ngIf="!game.discountPercent || game.discountPercent <= 0">
           <span class="current-price" [ngClass]="{'free-price' : game.price === 0}">{{
               game.price! > 0 ? (game.price + ' €') : 'Free'
             }} </span>
-          </div>
         </div>
-        <button *ngIf="!gamesOwnedMap[game.gameId!]" (click)="buyGame(game.gameId) ; $event.stopPropagation()">
-          {{ game.price === 0 ? 'Add to Library' : 'Buy Now' }}
-          <i class="fa-solid fa-cart-shopping"></i>
-        </button>
-        <button *ngIf="gamesOwnedMap[game.gameId!]" class="in-library" (click)=" $event.stopPropagation() ">
-          In Library <i class="fa-solid fa-gamepad"></i>
-        </button>
       </div>
-  </section>
-
-  <section *ngIf="filteredGames.length">
-    <div class="pagination">
-      <nav aria-label="Page navigation">
-        <ul class="pagination-items">
-          <li class="page-item">
-            <a
-              (click)="goToFirstPage()"
-              class="page-link"
-              href="javascript:void(0)"
-              aria-label="Previous"
-              [class.disabled]="page == 0"
-            >
-              <i class="fa-solid fa-angles-left"></i>
-            </a>
-          </li>
-          <li class="page-item">
-            <a
-              (click)="goToPreviousPage()"
-              class="page-link"
-              href="javascript:void(0)"
-              aria-label="Previous"
-              [class.disabled]="page == 0"
-            >
-              <i class="fa-solid fa-angle-left"></i>
-            </a>
-          </li>
-          <li class="page-item"
-              *ngFor="let _ of [].constructor(this.gamePageResponse.totalPages); let pageIndex = index">
-            <a
-              (click)="goToPage(pageIndex)"
-              class="page-link"
-              href="javascript:void(0)"
-              aria-label="Previous"
-              [class.active]="page == pageIndex"
-            >
-              {{ pageIndex + 1 }}
-            </a>
-          </li>
-
-          <li class="page-item">
-            <a
-              (click)="goToNextPage()"
-              class="page-link"
-              href="javascript:void(0)"
-              aria-label="Next"
-              [class.disabled]="isLastPage"
-            >
-              <i class="fa-solid fa-chevron-right"></i>
-            </a>
-          </li>
-          <li class="page-item">
-            <a
-              (click)="goToLastPage()"
-              class="page-link"
-              href="javascript:void(0)"
-              aria-label="Previous"
-              [class.disabled]="isLastPage"
-            >
-              <i class="fa-solid fa-angles-right"></i>
-            </a>
-          </li>
-
-
-        </ul>
-      </nav>
+      <button *ngIf="!gamesOwnedMap[game.gameId!]" (click)="buyGame(game.gameId) ; $event.stopPropagation()">
+        {{ game.price === 0 ? 'Add to Library' : 'Buy Now' }}
+        <i class="fa-solid fa-cart-shopping"></i>
+      </button>
+      <button *ngIf="gamesOwnedMap[game.gameId!]" class="in-library" (click)=" $event.stopPropagation() ">
+        In Library <i class="fa-solid fa-gamepad"></i>
+      </button>
     </div>
   </section>
+
+  <app-pagination
+    *ngIf="filteredGames.length && gamePageResponse.totalPages! > 1"
+    [currentPage]="page"
+    [totalPages]="gamePageResponse.totalPages!"
+    (pageChange)="changePage($event)">
+  </app-pagination>
 
 </main>

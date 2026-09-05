@@ -8,6 +8,7 @@ import {FormsModule} from '@angular/forms';
 import {SearchBar} from '../../components/search-bar/search-bar';
 import {UserActionsComponent} from '../../components/user-actions/user-actions.component';
 import {EmptyStateComponent} from '../../components/empty-state/empty-state.component';
+import {PaginationComponent} from '../../components/pagination/pagination.component';
 
 
 @Component({
@@ -19,17 +20,18 @@ import {EmptyStateComponent} from '../../components/empty-state/empty-state.comp
     SearchBar,
     NgClass,
     UserActionsComponent,
-    EmptyStateComponent
+    EmptyStateComponent,
+    PaginationComponent
   ],
   templateUrl: './store.component.html',
   styleUrl: './store.component.scss'
 })
 export class StoreComponent implements OnInit {
   gamePageResponse: PageResponseGameResponse = {}
-  allPlatforms: string[] = [];
+  allOperationSystems: string[] = [];
   allGenres: string[] = [];
   public page = 0;
-  public size = 5;
+  public size = 12;
   gameWishListMap: { [key: number]: boolean } = {};
   gamesOwnedMap: { [key: number]: boolean } = {};
 
@@ -37,11 +39,11 @@ export class StoreComponent implements OnInit {
 
   filters = {
     genre: '',
-    platform: '',
-    maxPrice: ''
+    operationSystem: '',
+    maxPrice: '',
+    discount: false
   };
 
-  isLoaded = false
   isLoading = false;
 
 
@@ -55,6 +57,12 @@ export class StoreComponent implements OnInit {
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.page = Number(params['page'] ?? 1) - 1;
+
+      this.filters.genre = params['genre'] ?? '';
+      this.filters.operationSystem = params['operationSystem'] ?? '';
+      this.filters.maxPrice = params['maxPrice'] ?? '';
+      this.filters.discount = params['discount'] === 'true';
+
       this.getAllGames();
     })
 
@@ -62,31 +70,18 @@ export class StoreComponent implements OnInit {
     this.getGenres();
   }
 
-  filterGames() {
-    const maxPrice = Number(this.filters.maxPrice);
-    const selectedPlatform = this.filters.platform;
-    const selectedGenre = this.filters.genre;
-    this.filteredGames = (this.gamePageResponse.content || []).filter(game => {
-        const priceMatch = !maxPrice
-          || (maxPrice === 101 && game.price! >= 100)
-          || (maxPrice !== 101 && game.price! <= maxPrice);
-
-        const platformMatch =
-          !selectedPlatform ||
-          game.platforms!.some(platform => platform.platformName === selectedPlatform);
-
-        const genreMatch = !selectedGenre || game.genres!.some(genre => genre.name === selectedGenre)
-
-        return priceMatch && platformMatch && genreMatch;
-      }
-    );
-  }
-
   private getAllGames() {
     this.isLoading = true;
+
+    const maxPrice = this.filters.maxPrice ? Number(this.filters.maxPrice) : undefined;
+
     this.storeService.findAllGames({
       page: this.page,
-      size: this.size
+      size: this.size,
+      genre: this.filters.genre || undefined,
+      operationSystem: this.filters.operationSystem || undefined,
+      maxPrice,
+      discount: this.filters.discount || undefined,
     }).subscribe({
       next: (games) => {
         this.gamePageResponse = games;
@@ -143,7 +138,7 @@ export class StoreComponent implements OnInit {
   private getPlatforms() {
     this.storeService.getAllPlatforms().subscribe({
       next: (platforms) => {
-        this.allPlatforms = platforms.map(p => p.platformName!);
+        this.allOperationSystems = platforms.map(p => p.platformName!);
       }
     })
   }
@@ -159,10 +154,21 @@ export class StoreComponent implements OnInit {
   resetFilters() {
     this.filters = {
       genre: '',
-      platform: '',
-      maxPrice: ''
+      operationSystem: '',
+      maxPrice: '',
+      discount: false
     };
-    this.filteredGames = [...(this.gamePageResponse.content || [])]
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        page: 1,
+        genre: null,
+        operationSystem: null,
+        maxPrice: null,
+        discount: false
+      },
+      queryParamsHandling: 'merge'
+    })
   }
 
   buyGame(gameId: any) {
@@ -171,30 +177,6 @@ export class StoreComponent implements OnInit {
 
   searchGames(query: string) {
     console.log(query);
-  }
-
-  goToFirstPage() {
-    this.changePage(0)
-  }
-
-  goToPreviousPage() {
-    this.changePage(this.page - 1)
-  }
-
-  goToPage(page: number) {
-    this.changePage(page)
-  }
-
-  goToNextPage() {
-    this.changePage(this.page + 1)
-  }
-
-  goToLastPage() {
-    this.changePage(this.gamePageResponse.totalPages! - 1);
-  }
-
-  get isLastPage(): boolean {
-    return this.page === this.gamePageResponse.totalPages as number - 1;
   }
 
   changePage(page: number) {
@@ -206,8 +188,19 @@ export class StoreComponent implements OnInit {
       },
       queryParamsHandling: 'merge'
     });
+  }
 
-    this.getAllGames();
+  changeFilter() {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        page: 1,
+        genre: this.filters.genre || null,
+        operationSystem: this.filters.operationSystem || null,
+        maxPrice: this.filters.maxPrice || undefined,
+        discount: this.filters.discount ? true : null
+      }
+    })
   }
 }
 

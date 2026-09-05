@@ -11,7 +11,8 @@ import gamehub.game_Hub.Response.WishlistResponse;
 
 public interface WishlistService {
 
-  PageResponse<WishlistResponse> getUserWishlist(int page, int size, Authentication connectedUser)
+  PageResponse<WishlistResponse> getUserWishlist(Authentication connectedUser, int page, int size, String genre,
+      String operationSystem, Boolean discount, String sortBy)
       throws AccessDeniedException;
 
 }

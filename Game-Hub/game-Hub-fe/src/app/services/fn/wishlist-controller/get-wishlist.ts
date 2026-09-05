@@ -13,6 +13,10 @@ import { PageResponseWishlistResponse } from '../../models/page-response-wishlis
 export interface GetWishlist$Params {
   page?: number;
   size?: number;
+  genre?: string;
+  operationSystem?: string;
+  discount?: boolean;
+  sortBy?: string;
 }
 
 export function getWishlist(http: HttpClient, rootUrl: string, params?: GetWishlist$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseWishlistResponse>> {
@@ -20,6 +24,10 @@ export function getWishlist(http: HttpClient, rootUrl: string, params?: GetWishl
   if (params) {
     rb.query('page', params.page, {});
     rb.query('size', params.size, {});
+    rb.query('genre', params.genre, {});
+    rb.query('operationSystem', params.operationSystem, {});
+    rb.query('discount', params.discount, {});
+    rb.query('sortBy', params.sortBy, {});
   }
 
   return http.request(
