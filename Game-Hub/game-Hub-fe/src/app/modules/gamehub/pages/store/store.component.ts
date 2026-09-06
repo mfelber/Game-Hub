@@ -94,6 +94,7 @@ export class StoreComponent implements OnInit {
         this.isLoading = false;
       },
       error: err => {
+        console.log(err);
         this.isLoading = false;
       }
     })

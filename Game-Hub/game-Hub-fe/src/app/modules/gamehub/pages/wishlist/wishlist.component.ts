@@ -53,7 +53,7 @@ export class WishlistComponent implements OnInit{
   }
 
   public page = 0;
-  public size = 1;
+  public size = 12;
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {

@@ -4001,6 +4001,15 @@
           },
           "profileColor": {
             "type": "string"
+          },
+          "isFriend": {
+            "type": "boolean"
+          },
+          "friendRequestSent": {
+            "type": "boolean"
+          },
+          "friendRequestReceived": {
+            "type": "boolean"
           }
         }
       },

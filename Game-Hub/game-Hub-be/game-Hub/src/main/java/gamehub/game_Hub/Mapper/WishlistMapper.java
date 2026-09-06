@@ -18,7 +18,6 @@ public class WishlistMapper {
 
   public WishlistResponse toWishlistResponse(Wishlist wishlist) {
     Game game = wishlist.getGame();
-    System.out.printf(game.getTitle());
 
     return WishlistResponse.builder()
         .addedAt(wishlist.getAddedAt())

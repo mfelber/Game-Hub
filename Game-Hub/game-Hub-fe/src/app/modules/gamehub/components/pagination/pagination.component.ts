@@ -4,8 +4,7 @@ import {NgForOf, NgIf} from "@angular/common";
 @Component({
   selector: 'app-pagination',
   imports: [
-    NgForOf,
-    NgIf
+    NgForOf
   ],
   templateUrl: './pagination.component.html',
   styleUrl: './pagination.component.scss',
