@@ -42,6 +42,4 @@ public class Wishlist {
   @Column(name = "added_at")
   private LocalDateTime addedAt;
 
-
-
 }

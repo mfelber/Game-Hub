@@ -1,18 +1,16 @@
 import {Component, OnInit} from '@angular/core';
 import {WishlistControllerService} from '../../../../services/services/wishlist-controller.service';
 import {StoreControllerService} from '../../../../services/services/store-controller.service';
-import {PageResponseGameResponse} from '../../../../services/models/page-response-game-response';
 import {DatePipe, NgClass, NgForOf, NgIf} from '@angular/common';
 import {GameResponse} from '../../../../services/models/game-response';
-import {Router} from '@angular/router';
-import {MatCheckbox} from '@angular/material/checkbox';
+import {ActivatedRoute, Router} from '@angular/router';
 import {FormsModule} from '@angular/forms';
-import {platform} from 'node:os';
 import {SearchBar} from '../../components/search-bar/search-bar';
 import {WishlistResponse} from '../../../../services/models/wishlist-response';
 import {PageResponseWishlistResponse} from '../../../../services/models/page-response-wishlist-response';
 import {EmptyStateComponent} from '../../components/empty-state/empty-state.component';
 import {UserActionsComponent} from '../../components/user-actions/user-actions.component';
+import {PaginationComponent} from '../../components/pagination/pagination.component';
 
 @Component({
   selector: 'app-wishlist',
@@ -25,6 +23,7 @@ import {UserActionsComponent} from '../../components/user-actions/user-actions.c
     DatePipe,
     EmptyStateComponent,
     UserActionsComponent,
+    PaginationComponent,
   ],
   templateUrl: './wishlist.component.html',
   styleUrl: './wishlist.component.scss'
@@ -33,48 +32,74 @@ export class WishlistComponent implements OnInit{
 
   wishlistPageResponse: PageResponseWishlistResponse = {};
   filteredGames: WishlistResponse[] = [];
-  allPlatforms: string[] = [];
+  allOperationSystems: string[] = [];
   allGenres: string[] = [];
-  emptyWishlist = false;
-  isLoaded = false;
-
+  isLoading = false;
 
   filters = {
     genre: '',
-    platform: '',
-    onSale: false
+    operationSystem: '',
+    discount: false
   }
+
+  sortBy = 'recentlyAdded'
 
   constructor(
     private wishListService: WishlistControllerService,
     private gameService: StoreControllerService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute,
   ) {
   }
 
   public page = 0;
-  public size = 15;
+  public size = 12;
 
   ngOnInit() {
-    this.getAllGamesInWishlist();
+    this.route.queryParams.subscribe(params => {
+      this.page = Number(params['page'] ?? 1) - 1;
+
+      this.filters.genre = params['genre'] ?? '';
+      this.filters.operationSystem = params['operationSystem'] ?? '';
+      this.filters.discount = params['discount'] === 'true';
+
+      this.sortBy = params['sortBy'] ?? 'recentlyAdded';
+
+      this.getAllGamesInWishlist();
+    })
+
     this.getPlatforms();
     this.getGenres();
   }
 
+  get hasActiveFilters(): boolean {
+    return !!(
+      this.filters.genre ||
+      this.filters.operationSystem ||
+      this.filters.discount
+    );
+  }
+
   getAllGamesInWishlist(){
+    this.isLoading = true;
+    this.filteredGames = [];
     this.wishListService.getWishlist({
       page: this.page,
-      size: this.size
+      size: this.size,
+      genre: this.filters.genre || undefined,
+      operationSystem: this.filters.operationSystem || undefined,
+      discount: this.filters.discount || undefined,
+      sortBy: this.sortBy
     }).subscribe(
       {
         next: (games) => {
           this.wishlistPageResponse = games;
-          console.log(games.content);
-          this.isLoaded = true;
-          this.emptyWishlist = games.totalElements === 0;
+          this.filteredGames = [...(games.content || [])];
+          this.isLoading = false;
         },
         error: (err) => {
           console.error('Error loading wishlist:', err);
+          this.isLoading = false;
         }
       }
     )
@@ -99,34 +124,53 @@ export class WishlistComponent implements OnInit{
     return 'https://images.pexels.com/photos/1054655/pexels-photo-1054655.jpeg';
   }
 
-  filterGames() {
-    const selectedPlatform = this.filters.platform;
-    const selectedGenre = this.filters.genre;
-    const onSale = this.filters.onSale;
-    this.filteredGames = (this.wishlistPageResponse.content || []).filter(game => {
-      // const platformMatch = !selectedPlatform || game.platforms!.some(platform => platform.platformName === selectedPlatform);
-      const genreMatch = !selectedGenre || game.game!.genres!.some(genre => genre.name === selectedGenre);
-      // TODO
-      // const saleMatch = !onSale || game.onSale;
-      // return platformMatch && genreMatch && onSale;
-      // return platformMatch && genreMatch;
-      return genreMatch;
+  changeFilter() {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        page: 1,
+        genre: this.filters.genre || null,
+        operationSystem: this.filters.operationSystem || null,
+        discount: this.filters.discount ? true : null
+      }
+    })
+  }
+
+  changeSort() {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        page: 1,
+        sortBy: this.sortBy,
+      },
+      queryParamsHandling: 'merge',
     })
   }
 
   resetFilters() {
     this.filters = {
       genre: '',
-      platform: '',
-      onSale: false
+      operationSystem: '',
+      discount: false
     };
-    this.filteredGames = [...(this.wishlistPageResponse.content || [])];
+    this.sortBy = 'recentlyAdded';
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        page: 1,
+        genre: null,
+        operationSystem: null,
+        discount: null,
+        sortBy: null,
+      },
+      queryParamsHandling: 'merge'
+    })
   }
 
   private getPlatforms() {
     this.gameService.getAllPlatforms().subscribe({
       next: (platforms) => {
-        this.allPlatforms = platforms.map(p => p.platformName!)
+        this.allOperationSystems = platforms.map(p => p.platformName!)
       }
     })
   }
@@ -154,5 +198,16 @@ export class WishlistComponent implements OnInit{
           console.error('Error with buying game:', err);
         }
       })
+  }
+
+  changePage(page: number) {
+    this.page = page;
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        page: page + 1
+      },
+      queryParamsHandling: 'merge'
+    });
   }
 }

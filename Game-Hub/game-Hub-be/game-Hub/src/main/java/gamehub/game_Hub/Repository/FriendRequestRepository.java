@@ -1,5 +1,7 @@
 package gamehub.game_Hub.Repository;
 
+import java.util.Set;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,5 +24,9 @@ public interface FriendRequestRepository extends JpaRepository<FriendRequest, Lo
   int findAllByReceiver_Id(Long receiverId);
 
   int countByReceiver_Id(Long receiverId);
+
+  Set<Long> findReceiverIdsBySender_Id(Long senderId);
+
+  Set<Long> findSenderIdsByReceiver_Id(Long senderId);
 
 }

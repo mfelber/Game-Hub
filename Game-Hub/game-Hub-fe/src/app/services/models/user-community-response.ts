@@ -4,7 +4,10 @@
 
 import { LocationResponse } from '../models/location-response';
 export interface UserCommunityResponse {
+  friendRequestReceived?: boolean;
+  friendRequestSent?: boolean;
   friendsCount?: number;
+  isFriend?: boolean;
   joinedDate?: string;
   libraryCount?: number;
   location?: LocationResponse;

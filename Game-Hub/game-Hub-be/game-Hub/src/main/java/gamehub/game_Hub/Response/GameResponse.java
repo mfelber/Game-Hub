@@ -1,5 +1,6 @@
 package gamehub.game_Hub.Response;
 
+import java.util.List;
 import java.util.Set;
 
 import gamehub.game_Hub.Module.SystemRequirements;
@@ -18,7 +19,7 @@ public class GameResponse {
 
   private Long gameId;
   private String title;
-  private Set<GenreResponse> genres;
+  private List<GenreResponse> genres;
   private String description;
   private String developer;
   private String publisher;

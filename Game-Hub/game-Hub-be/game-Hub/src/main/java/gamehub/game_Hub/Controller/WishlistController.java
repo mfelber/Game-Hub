@@ -27,8 +27,12 @@ public class WishlistController {
   public ResponseEntity<PageResponse<WishlistResponse>> getWishlist(
       @RequestParam(name = "page", defaultValue = "0", required = false) int page,
       @RequestParam(name = "size", defaultValue = "10", required = false) int size,
+      @RequestParam(name = "genre", required = false) String genre,
+      @RequestParam(name = "operationSystem", required = false) String operationSystem,
+      @RequestParam(name = "discount", required = false) Boolean discount,
+      @RequestParam(name = "sortBy", required = false) String sortBy,
       final Authentication connectedUser) throws AccessDeniedException {
-    return ResponseEntity.ok(wishlistService.getUserWishlist(page, size, connectedUser));
+    return ResponseEntity.ok(wishlistService.getUserWishlist(connectedUser, page, size, genre, operationSystem, discount, sortBy));
   }
 
 }

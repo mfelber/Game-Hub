@@ -102,8 +102,13 @@ public class StoreController {
   @GetMapping("/all-games")
   public ResponseEntity<PageResponse<GameResponse>> findAllGames(
       @RequestParam(name = "page", defaultValue = "0", required = false) int page,
-      @RequestParam(name = "size", defaultValue = "10", required = false) int size, Authentication connectedUser) {
-    return ResponseEntity.ok(gameService.findAllGames(connectedUser,page,size));
+      @RequestParam(name = "size", defaultValue = "10", required = false) int size,
+      @RequestParam(name = "genre", required = false) String genre,
+      @RequestParam(name = "operationSystem", required = false) String operationSystem,
+      @RequestParam(name = "maxPrice", required = false) Double maxPrice,
+      @RequestParam(name = "discount", required = false) Boolean discount,
+      Authentication connectedUser) {
+    return ResponseEntity.ok(gameService.findAllGames(connectedUser,page,size, genre, operationSystem, maxPrice, discount));
   }
 
   // Check if user owned game

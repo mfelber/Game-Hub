@@ -4,12 +4,13 @@ import {PageResponseGameResponse} from '../../../../services/models/page-respons
 import {LibraryControllerService} from '../../../../services/services/library-controller.service';
 import {GameResponse} from '../../../../services/models/game-response';
 import {StoreControllerService} from '../../../../services/services';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {SearchBar} from '../../components/search-bar/search-bar';
 import {PageResponseUserLibraryResponse} from '../../../../services/models/page-response-user-library-response';
 import {UserLibraryResponse} from '../../../../services/models/user-library-response';
 import {EmptyStateComponent} from '../../components/empty-state/empty-state.component';
 import {UserActionsComponent} from '../../components/user-actions/user-actions.component';
+import {PaginationComponent} from '../../components/pagination/pagination.component';
 
 @Component({
   selector: 'app-library',
@@ -18,7 +19,8 @@ import {UserActionsComponent} from '../../components/user-actions/user-actions.c
     NgIf,
     SearchBar,
     EmptyStateComponent,
-    UserActionsComponent
+    UserActionsComponent,
+    PaginationComponent
   ],
   templateUrl: './library.component.html',
   styleUrl: './library.component.scss'
@@ -28,7 +30,7 @@ export class LibraryComponent implements OnInit {
   gamePageResponse: PageResponseUserLibraryResponse = {};
   libraryResponse: UserLibraryResponse = {};
   public page = 0;
-  public size = 15;
+  public size = 12;
   emptyLibrary = false;
   emptyFavoriteGames = false;
   emptyDownloadedGames = false;
@@ -36,24 +38,29 @@ export class LibraryComponent implements OnInit {
   loadDownloadedGames = false;
   loadAllGames = false;
   isLoaded = false;
+  isLoading = false;
   gamesDownloadedMap: { [key: number]: boolean } = {};
   activeFilter = 'ALL';
-
-  ngOnInit() {
-    this.getOwnedGame()
-  }
 
   constructor(
     private libraryService: LibraryControllerService,
     private storeService: StoreControllerService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute,
   ) {
   }
 
-  setFilter(filter: string) {
-    this.activeFilter = filter;
+  ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      this.page = Number(params['page'] ?? 1) - 1;
+      this.activeFilter = params['filter'] ?? 'ALL';
+      this.loadCurrentGames();
+    });
+  }
 
-    switch (filter) {
+  loadCurrentGames() {
+    this.isLoading = true;
+    switch (this.activeFilter) {
       case 'ALL':
         this.getOwnedGame();
         break;
@@ -64,6 +71,18 @@ export class LibraryComponent implements OnInit {
         this.getDownloadedGames();
         break;
     }
+  }
+
+  setFilter(filter: string) {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        page: 1,
+        filter: filter
+      },
+      queryParamsHandling: 'merge'
+    });
+
   }
 
   getFavoriteGames() {
@@ -81,8 +100,11 @@ export class LibraryComponent implements OnInit {
         this.gamePageResponse.content?.forEach(game => {
           this.checkIfGameIsDownload(game.gameId);
         })
+        this.isLoaded = true;
+        this.isLoading = false;
       },
       error: (e) => {
+        this.isLoading = false;
         this.isLoaded = false;
         console.error(e);
       }
@@ -104,6 +126,12 @@ export class LibraryComponent implements OnInit {
         this.gamePageResponse.content?.forEach(game => {
           this.checkIfGameIsDownload(game.gameId);
         })
+        this.isLoaded = true;
+        this.isLoading = false;
+      },
+      error: (e) => {
+        this.isLoaded = false;
+        this.isLoading = false;
       }
     })
   }
@@ -124,9 +152,13 @@ export class LibraryComponent implements OnInit {
           this.gamePageResponse.content?.forEach(game => {
             this.checkIfGameIsDownload(game.gameId);
           })
+          this.isLoaded = true;
+          this.isLoading = false;
         },
         error: (err) => {
           console.error('Error loading library:', err);
+          this.isLoading = false;
+          this.isLoaded = false;
         }
       }
     )
@@ -170,5 +202,15 @@ export class LibraryComponent implements OnInit {
         this.gamesDownloadedMap[gameId] = downloaded;
       }
     })
+  }
+
+  changePage(page: number) {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        page: page + 1
+      },
+      queryParamsHandling: 'merge'
+    });
   }
 }

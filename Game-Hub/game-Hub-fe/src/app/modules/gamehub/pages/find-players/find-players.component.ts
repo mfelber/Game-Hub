@@ -7,13 +7,14 @@ import {SearchBar} from '../../components/search-bar/search-bar';
 import {initFlowbite} from 'flowbite';
 import {CommunityControllerService} from '../../../../services/services/community-controller.service';
 import {ReportControllerService} from '../../../../services/services/report-controller.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {RefreshService} from '../../../../services/fn/refresh-service/refresh-service';
 import {UserCommunityResponse} from '../../../../services/models/user-community-response';
 import {PageResponseUserCommunityResponse} from '../../../../services/models/page-response-user-community-response';
 import {firstValueFrom} from 'rxjs';
 import {EmptyStateComponent} from '../../components/empty-state/empty-state.component';
 import {UserActionsComponent} from '../../components/user-actions/user-actions.component';
+import {PaginationComponent} from '../../components/pagination/pagination.component';
 
 @Component({
   selector: 'app-find-players',
@@ -27,7 +28,8 @@ import {UserActionsComponent} from '../../components/user-actions/user-actions.c
     ReportUserModalComponent,
     SearchBar,
     EmptyStateComponent,
-    UserActionsComponent
+    UserActionsComponent,
+    PaginationComponent
   ],
   templateUrl: './find-players.component.html',
   styleUrl: './find-players.component.scss',
@@ -35,22 +37,27 @@ import {UserActionsComponent} from '../../components/user-actions/user-actions.c
 export class FindPlayersComponent implements OnInit {
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      this.page = Number(params['page'] ?? 1) - 1;
+
+      this.loadAllUsers();
+    });
     initFlowbite();
-    this.loadAllUsers();
   }
 
   public page = 0;
   public size = 10;
+  searchQuery = '';
 
   userHasProfilePicture = true;
-  loadUsers = false;
-  isLoaded = false;
+  isLoading = true;
   isReportUserModalOpen = false;
 
   constructor(
     private communityService: CommunityControllerService,
     private reportService: ReportControllerService,
     private router: Router,
+    private route: ActivatedRoute,
     private refreshService: RefreshService
   ) {
   }
@@ -64,56 +71,26 @@ export class FindPlayersComponent implements OnInit {
   reportRequest: ReportRequest = {reason: null!, message: ''};
 
   allCommunityGuidelines: { id: number; reason: string }[] = [];
-  friendRequestMapFromSender: { [key: number]: boolean } = {};
-  friendRequestMapForReceiver: { [key: number]: boolean } = {};
-  friendsMap: { [key: number]: boolean } = {};
+
+  filteredUsers: UserCommunityResponse[] = [];
 
   private loadAllUsers(query: string = "") {
+    this.communityService.findAllUsers({
+      page: this.page,
+      size: this.size,
+      query: query}).subscribe({
+        next: (users) => {
+          this.userCommunityResponse = users;
+          this.filteredUsers = [...(users.content || [])];
+          this.isLoading = false;
 
-    this.communityService.findAllUsers({query: query}).subscribe({
-      next: (users) => {
-        console.log(users.content?.length!)
-
-        console.log(this.friendRequestMapFromSender)
-        this.userCommunityResponse = users;
-        this.userCommunityResponse.content?.forEach(user => {
-          this.friendRequestExistsForSender(user.userId)
-        })
-
-        this.userCommunityResponse.content?.forEach(user => {
-          this.friendRequestExistsForReceiver(user.userId!)
-        })
-
-        this.userCommunityResponse.content?.forEach(user => {
-          this.areFriends(user.userId!)
-        })
-
-        this.isLoaded = true;
-
-        this.loadUsers = true;
+        }, error: error => {
+          console.log(error);
+          this.isLoading = false;
       }
-    })
+      }
+    )
 
-  }
-
-  private async areFriends(userId: number) {
-    const exists = await firstValueFrom(this.communityService.friendExistsForUser({userId}))
-    this.friendsMap[userId] = exists;
-    this.isLoaded = true;
-    return exists;
-  }
-
-  private async friendRequestExistsForSender(userId: any) {
-    const exists = await firstValueFrom(this.communityService.friendRequestExistsFromSender({userId}));
-    this.friendRequestMapFromSender[userId] = exists;
-    console.log(this.friendRequestMapFromSender);
-    return exists;
-  }
-
-  private async friendRequestExistsForReceiver(userId: number) {
-    const exists = await firstValueFrom(this.communityService.friendRequestExistsForReceiver({userId}))
-    this.friendRequestMapForReceiver[userId] = exists;
-    return exists;
   }
 
   getProfilePicture(user: UserCommunityResponse) {
@@ -126,8 +103,8 @@ export class FindPlayersComponent implements OnInit {
   sendFriendRequest(userId: number) {
     this.communityService.sendFriendRequest({userId}).subscribe({
       next: () => {
-        console.log('friend request send')
-        this.friendRequestMapFromSender[userId] = true;
+        this.isLoading = false;
+        this.loadAllUsers(this.searchQuery);
       }
     })
   }
@@ -135,7 +112,8 @@ export class FindPlayersComponent implements OnInit {
   cancelFriendRequest(userId: number) {
     this.communityService.cancelFriendRequest({userId}).subscribe({
       next: () => {
-        this.friendRequestMapFromSender[userId] = false;
+        this.isLoading = false;
+        this.loadAllUsers(this.searchQuery);
       }
     })
   }
@@ -146,6 +124,7 @@ export class FindPlayersComponent implements OnInit {
 
   searchByUsername(value: string) {
     this.page = 0;
+    this.searchQuery = value;
     this.userCommunityResponse = {}
     this.loadAllUsers(value);
   }
@@ -153,10 +132,8 @@ export class FindPlayersComponent implements OnInit {
   acceptFriendRequest(userId: number) {
     this.communityService.acceptFriendRequest({userId}).subscribe({
       next: () => {
-        this.friendsMap[userId!] = true;
-        this.friendRequestMapForReceiver[userId!] = false;
         this.refreshService.triggerRefresh();
-        this.loadAllUsers();
+        this.loadAllUsers(this.searchQuery);
       }
     });
   }
@@ -164,10 +141,8 @@ export class FindPlayersComponent implements OnInit {
   rejectFriendRequest(userId: number) {
     this.communityService.rejectFriendRequest({userId}).subscribe({
       next: () => {
-        this.friendsMap[userId!] = false;
-        this.friendRequestMapForReceiver[userId!] = false;
         this.refreshService.triggerRefresh();
-        this.loadAllUsers();
+        this.loadAllUsers(this.searchQuery);
       }
     })
 
@@ -220,5 +195,16 @@ export class FindPlayersComponent implements OnInit {
 
   resetFilters() {
 
+  }
+
+  changePage(page: number) {
+    this.page = page;
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        page: page + 1
+      },
+      queryParamsHandling: 'merge'
+    });
   }
 }

@@ -3,13 +3,14 @@ package gamehub.game_Hub.Repository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import gamehub.game_Hub.Module.Game;
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Module.User.UserWishlistId;
 import gamehub.game_Hub.Module.User.Wishlist;
 
-public interface WishlistRepository extends JpaRepository<Wishlist, UserWishlistId> {
+public interface WishlistRepository extends JpaRepository<Wishlist, UserWishlistId>, JpaSpecificationExecutor {
 
   Page<Wishlist> findWishlistByUser(User user, Pageable pageable);
 

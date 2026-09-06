@@ -25,6 +25,8 @@ public class UserCommunityResponse {
   private Status status;
   private byte [] userProfilePicture;
   private String profileColor;
-
+  private Boolean isFriend;
+  private Boolean friendRequestSent;
+  private Boolean friendRequestReceived;
 
 }

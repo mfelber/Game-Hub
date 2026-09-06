@@ -67,11 +67,6 @@ export class AllGamesComponent implements OnInit {
   deleteGame(game: any) {
     this.isGameDeleteModalOpen = true;
     this.selectedGame = game;
-    // this.adminControllerService.deleteGame(gameId).subscribe({
-    //   next: (data) => {
-    //     console.log(data);
-    //   }
-    // })
   }
 
   addGame() {

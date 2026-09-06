@@ -1,6 +1,5 @@
 package gamehub.game_Hub.Service;
 
-
 import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,7 +15,8 @@ public interface GameService {
 
   GameResponse findById(Long gameId);
 
-  PageResponse<GameResponse> findAllGames(Authentication connectedUser, int page, int size);
+  PageResponse<GameResponse> findAllGames(Authentication connectedUser, int page, int size, String genre,
+      String operationSystem, Double maxPrice, Boolean discount);
 
   Long buyGame(Long gameId, Authentication connectedUser);
 

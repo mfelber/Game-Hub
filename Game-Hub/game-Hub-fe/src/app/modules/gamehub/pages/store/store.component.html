@@ -1,8 +1,4 @@
-<div *ngIf="!isLoaded" class="text-center justify-center text-gray-400">
-  Loading...
-</div>
-
-<main [class.hidden]="!isLoaded">
+<main>
 
   <!--  SEARCH -->
   <section>
@@ -27,49 +23,55 @@
     <div class="filter-options">
       <div class="dropdown">
         <label>Genre</label>
-        <select [(ngModel)]="filters.genre" (change)="filterGames()">
+        <select [(ngModel)]="filters.genre" (change)="changeFilter()">
           <option value="">All Genres</option>
           <option *ngFor="let genre of allGenres" [value]="genre">{{ genre }}</option>
         </select>
       </div>
 
       <div class="dropdown">
-        <label>Platform</label>
-        <select [(ngModel)]="filters.platform" (change)="filterGames()">
-          <option value="">All Platforms</option>
-          <option *ngFor="let platform of allPlatforms" [value]="platform">{{ platform }}
+        <label>Operation System</label>
+        <select [(ngModel)]="filters.operationSystem" (change)="changeFilter()">
+          <option value="">All Operation Systems</option>
+          <option *ngFor="let platform of allOperationSystems" [value]="platform">{{ platform }}
           </option>
         </select>
       </div>
 
       <div class="dropdown">
         <label>Price</label>
-        <select [(ngModel)]="filters.maxPrice" (change)="filterGames()">
-          <option value="">Any Price</option>
-          <option [value]="20">≤ 20 €</option>
-          <option [value]="50">≤ $50 €</option>
-          <option [value]="100">≤ $100 €</option>
-          <option [value]="101">≥ 100 €</option>
+        <select [(ngModel)]="filters.maxPrice" (change)="changeFilter()">
+          <option value="">Any price</option>
+          <option value="10">Up to 10 €</option>
+          <option value="20">Up to 20 €</option>
+          <option value="50">Up to 50 €</option>
+          <option value="100">Up to 100 €</option>
         </select>
       </div>
 
       <div class="checkbox">
         <label>
-          <input type="checkbox"> Discount
+          <input type="checkbox"
+          [(ngModel)]="filters.discount"
+          (change)="changeFilter()"> Discount
         </label>
       </div>
     </div>
   </section>
 
   <app-empty-state
-    *ngIf="filteredGames.length === 0 && isLoaded"
-    icon = 'fa-solid fa-gamepad'
+    *ngIf="filteredGames.length === 0 && !isLoading"
+    icon='fa-solid fa-gamepad'
     title="No games found"
     message="There are no games matching the selected filters.">
   </app-empty-state>
 
   <!-- GAMES -->
   <section class="games">
+
+    <div class="loading-overlay" *ngIf="isLoading">
+      <i class="fa-solid fa-spinner fa-spin"></i>
+    </div>
 
     <div class="card relative" *ngFor="let game of filteredGames" (click)="goToGame(game.gameId)">
       <img [src]="getGameImageCover(game)" alt="{{game.title}}}">
@@ -124,5 +126,12 @@
       </button>
     </div>
   </section>
+
+  <app-pagination
+    *ngIf="filteredGames.length && gamePageResponse.totalPages! > 1"
+    [currentPage]="page"
+    [totalPages]="gamePageResponse.totalPages!"
+    (pageChange)="changePage($event)">
+  </app-pagination>
 
 </main>

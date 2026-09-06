@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import gamehub.game_Hub.Module.Badge;
 import gamehub.game_Hub.Module.CardColor;
+import gamehub.game_Hub.Module.Friendship;
 import gamehub.game_Hub.Module.Game;
 import gamehub.game_Hub.Module.Genre;
 import gamehub.game_Hub.Module.Level;
@@ -139,14 +140,11 @@ public class User implements UserDetails, Principal {
   @OneToMany(mappedBy = "user")
   private Set<UserLibrary> library;
 
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Friendship> friends = new HashSet<>();
+
   @OneToMany(mappedBy = "user")
   private Set<Wishlist> wishlist;
-
-  @ManyToMany
-  @JoinTable(name = "user_friends", schema = "game_hub",
-      inverseJoinColumns = @JoinColumn(name = "user_id"),
-      joinColumns = @JoinColumn(name = "friend_id"))
-  private Set<User> friends = new HashSet<>();
 
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(name = "user_play_recently", schema = "game_hub",
@@ -193,11 +191,6 @@ public class User implements UserDetails, Principal {
 
   public String getFullName() {
     return firstName + " " + lastName;
-  }
-
-  public void addFriend(User user) {
-    this.friends.add(user);
-    user.getFriends().add(this);
   }
 
 }

@@ -1,11 +1,8 @@
 package gamehub.game_Hub.ServiceImpl;
 
-import static gamehub.game_Hub.enums.AccountType.CHILD;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -14,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,6 +49,7 @@ import gamehub.game_Hub.Request.GameUpdateRequest;
 import gamehub.game_Hub.Response.GameResponse;
 import gamehub.game_Hub.Service.GameService;
 import gamehub.game_Hub.enums.GameUnitSize;
+import gamehub.game_Hub.specification.StoreSpecification;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
@@ -111,33 +110,52 @@ public class GameServiceImpl implements GameService {
   }
 
   @Override
-  public PageResponse<GameResponse> findAllGames(Authentication connectedUser, final int page, final int size) {
+  public PageResponse<GameResponse> findAllGames(Authentication connectedUser, final int page, final int size,
+      String genre, String operationSystem, Double maxPrice, Boolean discount) {
     Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
 
     User authUser = (User) connectedUser.getPrincipal();
     User user = userRepository.findById(authUser.getId())
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
 
-    List<String> excludeRatings = new ArrayList<>();
-    if (user.getAccountType() == CHILD) {
-      excludeRatings.add("PEGI 16");
-      excludeRatings.add("PEGI 18");
-    } else {
-      if (userStoreFlagRepository.existsByUser_IdAndUserFlagType_FlagCodeAndValueTrue(user.getId(), "PEGI_16")) {
-        excludeRatings.add("PEGI 16");
-      }
+    // List<String> excludeRatings = new ArrayList<>();
+    // if (user.getAccountType() == CHILD) {
+    //   excludeRatings.add("PEGI 16");
+    //   excludeRatings.add("PEGI 18");
+    // } else {
+    //   if (userStoreFlagRepository.existsByUser_IdAndUserFlagType_FlagCodeAndValueTrue(user.getId(), "PEGI_16")) {
+    //     excludeRatings.add("PEGI 16");
+    //   }
+    //
+    //   if (userStoreFlagRepository.existsByUser_IdAndUserFlagType_FlagCodeAndValueTrue(user.getId(), "PEGI_18")) {
+    //     excludeRatings.add("PEGI 18");
+    //   }
+    // }
 
-      if (userStoreFlagRepository.existsByUser_IdAndUserFlagType_FlagCodeAndValueTrue(user.getId(), "PEGI_18")) {
-        excludeRatings.add("PEGI 18");
-      }
+    Specification<Game> specification = Specification.allOf();
+
+    if (genre != null && !genre.isBlank()) {
+      specification = specification.and(StoreSpecification.hasGenre(genre));
     }
 
-    Page<Game> games;
-    if (excludeRatings.isEmpty()) {
-      games = gameRepository.findAll(pageable);
-    } else {
-      games = gameRepository.findAllByAgeRating_AgeRatingNotIn(excludeRatings, pageable);
+    if (operationSystem != null && !operationSystem.isBlank()) {
+      specification = specification.and(StoreSpecification.hasOperationSystem(operationSystem));
     }
+
+    if (maxPrice != null) {
+      specification = specification.and(StoreSpecification.priceLessThanOrEqual(maxPrice));
+    }
+
+    if (Boolean.TRUE.equals(discount)) {
+      specification = specification.and(StoreSpecification.hasDiscount());
+    }
+
+    Page<Game> games = gameRepository.findAll(specification, pageable);
+    // if (excludeRatings.isEmpty()) {
+    //   games = gameRepository.findAll(pageable);
+    // } else {
+    //   games = gameRepository.findAllByAgeRating_AgeRatingNotIn(excludeRatings, pageable);
+    // }
 
     List<GameResponse> gameResponse = games.stream().map(gameMapper::toGameResponse).toList();
 
@@ -308,7 +326,8 @@ public class GameServiceImpl implements GameService {
     AgeRating ageRating = ageRatingRepository.findById(gameUpdateRequest.ageRatingId())
         .orElseThrow(() -> new EntityNotFoundException("Age rating not found"));
 
-    boolean freeGame = gameUpdateRequest.price() == 0 ||  (gameUpdateRequest.discountPercent() != null && gameUpdateRequest.discountPercent() == 100);
+    boolean freeGame = gameUpdateRequest.price() == 0 || (gameUpdateRequest.discountPercent() != null
+                                                              && gameUpdateRequest.discountPercent() == 100);
     boolean gameHasDiscount = gameUpdateRequest.discountPercent() != null;
 
     Double discountedPrice = null;
@@ -316,7 +335,7 @@ public class GameServiceImpl implements GameService {
     game.setPrice(gameUpdateRequest.price());
 
     if (gameUpdateRequest.discountPercent() != null) {
-       discountedPrice = BigDecimal.valueOf(
+      discountedPrice = BigDecimal.valueOf(
               game.getPrice() * (1 - (double) gameUpdateRequest.discountPercent() / 100))
           .setScale(2, RoundingMode.DOWN)
           .doubleValue();

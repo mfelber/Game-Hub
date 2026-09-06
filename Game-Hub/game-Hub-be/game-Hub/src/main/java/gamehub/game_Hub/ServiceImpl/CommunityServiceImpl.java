@@ -2,6 +2,8 @@ package gamehub.game_Hub.ServiceImpl;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,8 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 import gamehub.game_Hub.Common.PageResponse;
 import gamehub.game_Hub.Mapper.CommunityMapper;
 import gamehub.game_Hub.Module.FriendRequest;
+import gamehub.game_Hub.Module.Friendship;
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Repository.FriendRequestRepository;
+import gamehub.game_Hub.Repository.FriendshipRepository;
 import gamehub.game_Hub.Repository.user.UserRepository;
 import gamehub.game_Hub.Response.FriendRequestResponse;
 import gamehub.game_Hub.Response.UserCommunityResponse;
@@ -39,6 +43,8 @@ public class CommunityServiceImpl implements CommunityService {
       AccountStatus.ACTIVE, AccountStatus.SUSPENDED
   );
 
+  private final FriendshipRepository friendshipRepository;
+
   @Override
   public PageResponse<UserCommunityResponse> findAllUsers(final Authentication connectedUser, String query,
       final int page,
@@ -50,13 +56,16 @@ public class CommunityServiceImpl implements CommunityService {
 
     Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
 
+    Set<Long> friendIds = user.getFriends().stream().map(friendship -> friendship.getFriend().getId()).collect(
+        Collectors.toSet());
+
     if (query.isEmpty()) {
 
       Page<User> users = userRepository.findAllByEmailIsNotAndRoleAndAccountStatusIn(user.getEmail(), Role.USER,
           FINDABLE_STATUSES, pageable);
 
       List<UserCommunityResponse> communityResponse = users.stream()
-          .map(communityMapper::toUserCommunityResponse)
+          .map(foundUser  -> communityMapper.toUserCommunityResponse(foundUser, user, friendIds))
           .toList();
 
       return new PageResponse<>(
@@ -73,7 +82,7 @@ public class CommunityServiceImpl implements CommunityService {
           user.getEmail(), query, Role.USER, FINDABLE_STATUSES, pageable);
 
       List<UserCommunityResponse> communityResponse = users.stream()
-          .map(communityMapper::toUserCommunityResponse)
+          .map(foundUser  -> communityMapper.toUserCommunityResponse(foundUser, user, friendIds))
           .toList();
 
       return new PageResponse<>(
@@ -151,15 +160,25 @@ public class CommunityServiceImpl implements CommunityService {
   @Transactional
   public Long acceptFriendRequest(final Authentication connectedUser, final Long userId) {
     User authUser = (User) connectedUser.getPrincipal();
+
     User receiver = userRepository.findById(authUser.getId())
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
 
     User sender = userRepository.findById(userId)
         .orElseThrow(() -> new EntityNotFoundException("Receiver not found with id: " + userId));
 
-    receiver.addFriend(sender);
+    Friendship receiverToSender = Friendship.builder()
+        .user(receiver)
+        .friend(sender)
+        .build();
 
-    userRepository.save(receiver);
+    Friendship senderToReceiver = Friendship.builder()
+        .user(sender)
+        .friend(receiver)
+        .build();
+
+    friendshipRepository.save(receiverToSender);
+    friendshipRepository.save(senderToReceiver);
 
     friendRequestRepository.deleteBySender_IdAndReceiver_Id(sender.getId(), receiver.getId());
 
