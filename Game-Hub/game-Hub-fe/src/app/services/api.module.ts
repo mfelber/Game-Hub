@@ -12,6 +12,7 @@ import { ReportControllerService } from './services/report-controller.service';
 import { UserProfileControllerService } from './services/user-profile-controller.service';
 import { LibraryControllerService } from './services/library-controller.service';
 import { CommunityControllerService } from './services/community-controller.service';
+import { CartControllerService } from './services/cart-controller.service';
 import { AuthenticationService } from './services/authentication.service';
 import { WishlistControllerService } from './services/wishlist-controller.service';
 import { UserLevelControllerService } from './services/user-level-controller.service';
@@ -34,6 +35,7 @@ import { CardColorControllerService } from './services/card-color-controller.ser
     UserProfileControllerService,
     LibraryControllerService,
     CommunityControllerService,
+    CartControllerService,
     AuthenticationService,
     WishlistControllerService,
     UserLevelControllerService,

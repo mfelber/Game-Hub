@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {NgClass, NgForOf, NgIf, NgOptimizedImage} from '@angular/common';
-import {StoreControllerService} from '../../../../services/services';
+import {CartControllerService, StoreControllerService} from '../../../../services/services';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PageResponseGameResponse} from '../../../../services/models/page-response-game-response';
 import {GameResponse} from '../../../../services/models/game-response';
@@ -9,6 +9,7 @@ import {SearchBar} from '../../components/search-bar/search-bar';
 import {UserActionsComponent} from '../../components/user-actions/user-actions.component';
 import {EmptyStateComponent} from '../../components/empty-state/empty-state.component';
 import {PaginationComponent} from '../../components/pagination/pagination.component';
+import {subscribe} from 'node:diagnostics_channel';
 
 
 @Component({
@@ -32,8 +33,6 @@ export class StoreComponent implements OnInit {
   allGenres: string[] = [];
   public page = 0;
   public size = 12;
-  gameWishListMap: { [key: number]: boolean } = {};
-  gamesOwnedMap: { [key: number]: boolean } = {};
 
   filteredGames: GameResponse[] = [];
 
@@ -46,9 +45,9 @@ export class StoreComponent implements OnInit {
 
   isLoading = false;
 
-
   constructor(
     private storeService: StoreControllerService,
+    private cartService: CartControllerService,
     private router: Router,
     private route: ActivatedRoute,
   ) {
@@ -86,11 +85,7 @@ export class StoreComponent implements OnInit {
       next: (games) => {
         this.gamePageResponse = games;
         this.filteredGames = [...(games.content || [])];
-
-        games.content?.forEach(game => {
-          this.checkIfGameIsInWishlist(game.gameId);
-          this.checkIfGameIsOwned(game.gameId);
-        });
+        console.log(this.gamePageResponse);
         this.isLoading = false;
       },
       error: err => {
@@ -98,24 +93,6 @@ export class StoreComponent implements OnInit {
         this.isLoading = false;
       }
     })
-  }
-
-  private checkIfGameIsInWishlist(gameId: any) {
-    this.storeService.checkGameInWishlist({gameId})
-      .subscribe({
-        next: (inWishList: boolean) => {
-          this.gameWishListMap[gameId] = inWishList;
-        }
-      })
-  }
-
-  private checkIfGameIsOwned(gameId: any) {
-    this.storeService.checkGameOwned({gameId})
-      .subscribe({
-        next: (owned: boolean) => {
-          this.gamesOwnedMap[gameId] = owned;
-        }
-      })
   }
 
   goToGame(gameId: any) {
@@ -172,8 +149,23 @@ export class StoreComponent implements OnInit {
     })
   }
 
-  buyGame(gameId: any) {
-    console.log(gameId);
+  addToCart(gameId: any) {
+    if (!gameId) {
+      return;
+    }
+    this.cartService.addGameToCart({body: {
+      gameId: gameId,
+      }}).subscribe({
+      next: () => {
+        const game = this.filteredGames.find(g => g.gameId === gameId);
+        if (game) {
+          game.inCart = true;
+        }
+        console.log('Added to cart: ', game);
+      }, error: err => {
+        console.log(err);
+      }
+    })
   }
 
   searchGames(query: string) {

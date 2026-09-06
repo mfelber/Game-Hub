@@ -8,6 +8,7 @@ import gamehub.game_Hub.File.FileUtils;
 import gamehub.game_Hub.Module.BanHistory;
 import gamehub.game_Hub.Module.Level;
 import gamehub.game_Hub.Module.User.User;
+import gamehub.game_Hub.Module.User.UserCart;
 import gamehub.game_Hub.Module.User.UserLibrary;
 import gamehub.game_Hub.Module.User.UserSuspensions;
 import gamehub.game_Hub.Module.User.UserWarnings;
@@ -15,6 +16,8 @@ import gamehub.game_Hub.Repository.BanHistoryRepository;
 import gamehub.game_Hub.Repository.LevelRepository;
 import gamehub.game_Hub.Repository.UserSuspensionRepository;
 import gamehub.game_Hub.Repository.UserWarningsRepository;
+import gamehub.game_Hub.Repository.cart.CartItemRepository;
+import gamehub.game_Hub.Repository.cart.UserCartRepository;
 import gamehub.game_Hub.Request.UserUpdateRequest;
 import gamehub.game_Hub.Response.Admin.AdminUserResponse;
 import gamehub.game_Hub.Response.BadgeResponse;
@@ -43,6 +46,10 @@ public class UserMapper {
   private final UserSuspensionRepository userSuspensionRepository;
 
   private final BanHistoryRepository banHistoryRepository;
+
+  private final UserCartRepository userCartRepository;
+
+  private final CartItemRepository cartItemRepository;
 
   public User toUser(UserUpdateRequest userUpdateRequest) {
     return User.builder()
@@ -252,10 +259,12 @@ public class UserMapper {
 
     Long warnings = userWarningsRepository.countByUser(user);
     Long suspensions = userSuspensionRepository.countByUser(user);
+    Long cartItems = cartItemRepository.countByCart_User_Id(user.getId());
 
     return UserNotificationsResponse.builder()
         .warningCount(warnings !=null ? warnings : null)
         .suspendedCount(suspensions !=null ? suspensions : null)
+        .cartCount(cartItems != null ? cartItems : null)
         .build();
   }
 

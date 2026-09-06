@@ -21,6 +21,7 @@ import {SuspendedAccountsComponent} from './pages/admin/pages/suspended-accounts
 import {userProfileGuard} from '../../services/guard/user-profile-guard';
 import {AdminStoreComponent} from './pages/admin/pages/store/admin-store.component';
 import {AdminGameDetailsComponent} from './pages/admin/pages/store/game-details/admin-game-details.component';
+import {CartComponent} from './pages/cart/cart.component';
 
 const routes: Routes = [
   {
@@ -84,6 +85,11 @@ const routes: Routes = [
         path: 'user/:id',
         component: UserPublicProfileComponent,
         canActivate: [authGuard, userProfileGuard]
+      },
+      {
+        path: 'cart',
+        component: CartComponent,
+        canActivate: [authGuard]
       }
     ]
   },

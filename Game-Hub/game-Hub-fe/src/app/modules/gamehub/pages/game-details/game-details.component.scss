@@ -134,6 +134,12 @@ button{
   font-size: 15px;
 }
 
+.in-cart {
+  background: #172554!important;
+  color: #ffffff;
+  cursor: default!important;
+}
+
 .remove{
   background: #dc2626;
   color: white;
@@ -364,5 +370,9 @@ hr{
 }
 
 .discount-badge {
+  width:         fit-content;
+  padding:       3px 15px;
+  border-radius: 5px;
+  font-size: 15px;
   background: #16a34a;
 }

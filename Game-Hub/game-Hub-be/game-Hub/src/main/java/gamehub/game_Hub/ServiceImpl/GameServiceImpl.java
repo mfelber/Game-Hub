@@ -103,9 +103,16 @@ public class GameServiceImpl implements GameService {
   }
 
   @Override
-  public GameResponse findById(final Long gameId) {
+  public GameResponse findById(Authentication connectedUser, final Long gameId) {
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+    Game game = gameRepository.findById(gameId)
+        .orElseThrow(() -> new EntityNotFoundException("Game not found with id: " + gameId));
+
     return gameRepository.findById(gameId)
-        .map(gameMapper::toGameResponse)
+        .map(foundGame -> gameMapper.toGameResponse(user, game))
         .orElseThrow(() -> new EntityNotFoundException("No game found with id: " + gameId));
   }
 
@@ -157,7 +164,7 @@ public class GameServiceImpl implements GameService {
     //   games = gameRepository.findAllByAgeRating_AgeRatingNotIn(excludeRatings, pageable);
     // }
 
-    List<GameResponse> gameResponse = games.stream().map(gameMapper::toGameResponse).toList();
+    List<GameResponse> gameResponse = games.stream().map(game -> gameMapper.toGameResponse(user, game)).toList();
 
     return new PageResponse<>(
         gameResponse,
@@ -274,28 +281,6 @@ public class GameServiceImpl implements GameService {
     }
 
     return game.getId();
-  }
-
-  @Transactional
-  public Boolean checkGameOwned(final Long gameId, final Authentication connectedUser) {
-    Game game = gameRepository.findById(gameId)
-        .orElseThrow(() -> new EntityNotFoundException("No game found with id: " + gameId));
-    User authUser = (User) connectedUser.getPrincipal();
-    User user = userRepository.findById(authUser.getId())
-        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
-
-    return libraryRepository.existsUserLibrariesByUserAndGame(user, game);
-  }
-
-  @Override
-  public Boolean checkGameInWishlist(final Long gameId, final Authentication connectedUser) {
-    Game game = gameRepository.findById(gameId)
-        .orElseThrow(() -> new EntityNotFoundException("No game found with id: " + gameId));
-    User authUser = (User) connectedUser.getPrincipal();
-    User user = userRepository.findById(authUser.getId())
-        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
-
-    return wishlistRepository.existsByUserAndGame(user, game);
   }
 
   @Override

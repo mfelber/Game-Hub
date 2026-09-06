@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {StoreControllerService} from '../../../../services/services';
+import {CartControllerService, StoreControllerService} from '../../../../services/services';
 import {DatePipe, NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {GameResponse} from '../../../../services/models/game-response';
 import {UserActionsComponent} from '../../components/user-actions/user-actions.component';
@@ -21,20 +21,17 @@ import {UserActionsComponent} from '../../components/user-actions/user-actions.c
 export class GameDetailsComponent implements OnInit {
 
   game: any;
-  gameIsOwned = false;
-  gameInWishList = false;
   activeTab: 'details' | 'system' | 'dlc'| 'friends' = 'details';
 
   constructor(
     private router: ActivatedRoute,
     private storeService: StoreControllerService,
+    private cartService: CartControllerService
   ) {
   }
 
   ngOnInit(): void {
     this.getInfoGame();
-    this.checkIfGameIsOwned();
-    this.checkIfGameIsInWishlist();
   }
 
   private getInfoGame() {
@@ -52,47 +49,30 @@ export class GameDetailsComponent implements OnInit {
 
   }
 
-  private checkIfGameIsOwned() {
-    const gameId: any = this.router.snapshot.paramMap.get('id')
-    this.storeService.checkGameOwned({gameId})
-      .subscribe({
-        next: (owned) => {
-          if (owned) {
-            this.gameIsOwned = true;
-          } else {
-            this.gameIsOwned = false;
-          }
+  // buyGame(gameId: any) {
+  //   this.storeService.buyGame({gameId})
+  //     .subscribe({
+  //       next: () => {
+  //         this.game.inLibrary = true;
+  //       },
+  //       error: (err) => {
+  //         console.error('Error with buying game:', err);
+  //       }
+  //     });
 
-        }
-      })
-  }
+  // }
 
-  private checkIfGameIsInWishlist() {
-    const gameId: any = this.router.snapshot.paramMap.get('id')
-    this.storeService.checkGameInWishlist({gameId})
-      .subscribe({
-        next: (inWishList) => {
-          if (inWishList){
-            this.gameInWishList = true
-          } else {
-            this.gameInWishList = false
-          }
-        }
-      })
-  }
-
-
-  buyGame(gameId: any) {
-    this.storeService.buyGame({gameId})
-      .subscribe({
-        next: () => {
-          this.checkIfGameIsOwned();
-        },
-        error: (err) => {
-          console.error('Error with buying game:', err);
-        }
-      });
-
+  addToCart(gameId: any) {
+    this.cartService.addGameToCart({body: {
+        gameId: gameId,
+      }}).subscribe({
+      next: (game) => {
+        console.log('Added to cart: ', game);
+        this.game.inCart = true;
+      }, error: err => {
+        console.log(err);
+      }
+    })
   }
 
   getGameImageCover(game: GameResponse): string {
@@ -106,7 +86,8 @@ export class GameDetailsComponent implements OnInit {
     this.storeService.addGameToWishlist({gameId})
       .subscribe({
         next: () => {
-          this.checkIfGameIsInWishlist();
+          console.log("added to wishlist");
+          this.game.inWishList = true;
         },
         error: (err) => {
           console.error('Error with adding game to wishlist:', err);
@@ -119,7 +100,7 @@ export class GameDetailsComponent implements OnInit {
     this.storeService.removeGameFromWishlist({gameId})
       .subscribe({
         next: () => {
-          this.gameInWishList = false;
+          this.game.inWishList = false;
         },
         error: (err) => {
           console.error('Error with removing game from wishlist:', err);

@@ -13,22 +13,18 @@ public interface GameService {
 
   Long save(GameRequest gameRequest);
 
-  GameResponse findById(Long gameId);
+  GameResponse findById(Authentication connectedUser, Long gameId);
 
   PageResponse<GameResponse> findAllGames(Authentication connectedUser, int page, int size, String genre,
       String operationSystem, Double maxPrice, Boolean discount);
 
   Long buyGame(Long gameId, Authentication connectedUser);
 
-  Boolean checkGameOwned(Long gameId, Authentication connectedUser);
-
   void uploadGameCoverImage(Long gameId, MultipartFile file);
 
   Long addGameToWishList(Long gameId, Authentication connectedUser);
 
   Long removeGameFromWishList(Long gameId, Authentication connectedUser);
-
-  Boolean checkGameInWishlist(Long gameId, Authentication connectedUser);
 
   Long update(Long gameId, @Valid GameUpdateRequest gameUpdateRequest);
 

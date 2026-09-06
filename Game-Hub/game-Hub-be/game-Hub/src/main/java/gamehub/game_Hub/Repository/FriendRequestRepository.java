@@ -1,13 +1,11 @@
 package gamehub.game_Hub.Repository;
 
-import java.util.Set;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import gamehub.game_Hub.Module.FriendRequest;
-import gamehub.game_Hub.Module.User.User;
 
 public interface FriendRequestRepository extends JpaRepository<FriendRequest, Long> {
 
@@ -21,12 +19,6 @@ public interface FriendRequestRepository extends JpaRepository<FriendRequest, Lo
 
   Page<FriendRequest> findAllByReceiver_Id(Long receiverId, Pageable pageable);
 
-  int findAllByReceiver_Id(Long receiverId);
-
   int countByReceiver_Id(Long receiverId);
-
-  Set<Long> findReceiverIdsBySender_Id(Long senderId);
-
-  Set<Long> findSenderIdsByReceiver_Id(Long senderId);
 
 }

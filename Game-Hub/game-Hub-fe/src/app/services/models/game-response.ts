@@ -18,6 +18,9 @@ export interface GameResponse {
   gameId?: number;
   genres?: Array<GenreResponse>;
   hasDiscount?: boolean;
+  inCart?: boolean;
+  inLibrary?: boolean;
+  inWishList?: boolean;
   languages?: Array<LanguageResponse>;
   platforms?: Array<PlatformResponse>;
   price?: number;

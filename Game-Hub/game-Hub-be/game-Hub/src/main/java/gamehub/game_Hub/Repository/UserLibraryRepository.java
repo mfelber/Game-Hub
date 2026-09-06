@@ -29,4 +29,6 @@ public interface UserLibraryRepository extends JpaRepository<UserLibrary, UserGa
 
   void deleteAllByGame(Game game);
 
+  Boolean existsByUser_IdAndGame_Id(Long userId, Long gameId);
+
 }

@@ -15,10 +15,15 @@ import gamehub.game_Hub.Module.Language;
 import gamehub.game_Hub.Module.Platform;
 import gamehub.game_Hub.Module.Subtitles;
 import gamehub.game_Hub.Module.SystemRequirements;
+import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Repository.AgeRatingRepository;
 import gamehub.game_Hub.Repository.LanguageRepository;
 import gamehub.game_Hub.Repository.PlatformRepository;
 import gamehub.game_Hub.Repository.SubtitleRepository;
+import gamehub.game_Hub.Repository.UserLibraryRepository;
+import gamehub.game_Hub.Repository.WishlistRepository;
+import gamehub.game_Hub.Repository.cart.CartItemRepository;
+import gamehub.game_Hub.Repository.cart.UserCartRepository;
 import gamehub.game_Hub.Repository.genre.GenreRepository;
 import gamehub.game_Hub.Request.GameRequest;
 import gamehub.game_Hub.Response.AgeRatingResponse;
@@ -45,6 +50,14 @@ public class GameMapper {
   private final LanguageRepository languageRepository;
 
   private final SubtitleRepository subtitleRepository;
+
+  private final UserCartRepository userCartRepository;
+
+  private final CartItemRepository cartItemRepository;
+
+  private final UserLibraryRepository userLibraryRepository;
+
+  private final WishlistRepository wishlistRepository;
 
   public Game toGame(final GameRequest gameRequest) {
 
@@ -101,6 +114,44 @@ public class GameMapper {
         .discountPrice(game.getDiscountPrice())
         .discountPercent(game.getDiscountPercent())
         .hasDiscount(game.isHasDiscount())
+        .ageRating(new AgeRatingResponse(game.getAgeRating().getId(), game.getAgeRating().getAgeRating(), game.getAgeRating().getAgeRatingColor()))
+        .gameCoverImage(FileUtils.readCoverFromLocation(game.getGameCoverImage()))
+        .systemRequirements(game.getSystemRequirements())
+        .platforms(game.getPlatforms().stream()
+            .map(g -> new PlatformResponse(g.getId(), g.getName()))
+            .collect(Collectors.toSet()))
+        .languages(game.getLanguages().stream()
+            .map(g -> new LanguageResponse(g.getId(), g.getName()))
+            .collect(Collectors.toSet()))
+        .subtitles(game.getSubtitles().stream()
+            .map(g -> new SubtitleResponse(g.getId(), g.getName()))
+            .collect(Collectors.toSet()))
+        .build();
+  }
+
+  public GameResponse toGameResponse(User user, Game game) {
+
+    Boolean isInCart = cartItemRepository.existsByCart_User_IdAndGame_Id(user.getId(), game.getId());
+    Boolean isInLibrary = userLibraryRepository.existsByUser_IdAndGame_Id(user.getId(), game.getId());
+    Boolean isInWishList = wishlistRepository.existsByUserAndGame(user, game);
+
+    return GameResponse.builder()
+        .gameId(game.getId())
+        .title(game.getTitle())
+        .genres(game.getGenres().stream().sorted(Comparator.comparing(Genre::getName))
+            .map(g -> new GenreResponse(g.getId(), g.getName()))
+            .collect(Collectors.toList()))
+        .releaseYear(game.getReleaseYear())
+        .description(game.getDescription())
+        .developer(game.getDeveloper())
+        .publisher(game.getPublisher())
+        .price(game.getPrice())
+        .discountPrice(game.getDiscountPrice())
+        .discountPercent(game.getDiscountPercent())
+        .hasDiscount(game.isHasDiscount())
+        .isInCart(isInCart)
+        .isInLibrary(isInLibrary)
+        .isInWishList(isInWishList)
         .ageRating(new AgeRatingResponse(game.getAgeRating().getId(), game.getAgeRating().getAgeRating(), game.getAgeRating().getAgeRatingColor()))
         .gameCoverImage(FileUtils.readCoverFromLocation(game.getGameCoverImage()))
         .systemRequirements(game.getSystemRequirements())

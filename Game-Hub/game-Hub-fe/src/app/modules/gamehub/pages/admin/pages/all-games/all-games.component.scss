@@ -82,11 +82,12 @@ td img{
 }
 
 .discount{
+  width:         fit-content;
+  padding:       3px 7px;
+  border-radius: 5px;
+  font-size: 15px;
   background: #00a63e;
   color: white;
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-size: .8rem;
   font-weight: 600;
 }
 

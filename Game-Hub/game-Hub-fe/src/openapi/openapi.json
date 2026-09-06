@@ -946,6 +946,37 @@
         }
       }
     },
+    "/cart/add-to-cart": {
+      "post": {
+        "tags": [
+          "cart-controller"
+        ],
+        "operationId": "addGameToCart",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserCartRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/auth/reset-password": {
       "post": {
         "tags": [
@@ -2268,6 +2299,26 @@
         }
       }
     },
+    "/cart/user": {
+      "get": {
+        "tags": [
+          "cart-controller"
+        ],
+        "operationId": "getCart",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CartResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/auth/reset-token-info": {
       "get": {
         "tags": [
@@ -2718,6 +2769,38 @@
         }
       }
     },
+    "/cart/remove-from-cart/{gameId}": {
+      "delete": {
+        "tags": [
+          "cart-controller"
+        ],
+        "operationId": "removeFromCart",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/admin/game/delete/{gameId}": {
       "delete": {
         "tags": [
@@ -2984,6 +3067,18 @@
           "lastPlayed": {
             "type": "string",
             "format": "date-time"
+          }
+        }
+      },
+      "UserCartRequest": {
+        "required": [
+          "gameId"
+        ],
+        "type": "object",
+        "properties": {
+          "gameId": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       },
@@ -3482,6 +3577,15 @@
             "items": {
               "$ref": "#/components/schemas/SubtitleResponse"
             }
+          },
+          "inLibrary": {
+            "type": "boolean"
+          },
+          "inWishList": {
+            "type": "boolean"
+          },
+          "inCart": {
+            "type": "boolean"
           }
         }
       },
@@ -3766,6 +3870,11 @@
             "nullable": true
           },
           "suspendedCount": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "cartCount": {
             "type": "integer",
             "format": "int64",
             "nullable": true
@@ -4079,6 +4188,21 @@
           },
           "last": {
             "type": "boolean"
+          }
+        }
+      },
+      "CartResponse": {
+        "type": "object",
+        "properties": {
+          "cartId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "games": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GameResponse"
+            }
           }
         }
       },

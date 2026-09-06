@@ -28,6 +28,9 @@ public class GameResponse {
   private Double discountPrice;
   private Integer discountPercent;
   private boolean hasDiscount;
+  private boolean isInCart;
+  private boolean isInLibrary;
+  private boolean isInWishList;
   private AgeRatingResponse ageRating;
   private byte [] gameCoverImage;
   private SystemRequirements systemRequirements;

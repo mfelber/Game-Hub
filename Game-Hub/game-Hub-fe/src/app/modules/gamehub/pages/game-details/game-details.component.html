@@ -78,29 +78,33 @@
         <div class="purchase-row">
 
           <button
-            *ngIf="!gameIsOwned"
-            (click)="buyGame(game.gameId)"
+            *ngIf="!game.inLibrary && !game.inCart"
+            (click)="addToCart(game.gameId)"
             class="buy">
-            {{ game.price === 0 ? 'Add to Library' : 'Buy Now' }}
+            {{ game.price === 0 ? 'Add to Library' : 'Add to Cart' }}
             <i class="fa-solid fa-cart-shopping"></i>
           </button>
 
+          <button *ngIf="game.inCart" class="in-cart" (click)=" $event.stopPropagation() ">
+            In Cart <i class="fa-solid fa-check"></i>
+          </button>
+
           <button
-            *ngIf="!gameIsOwned && !gameInWishList"
+            *ngIf="!game.inLibrary && !game.inWishList"
             (click)="addGameToWishList(game.gameId)"
             class="wishlist">
             <i class="fa-regular fa-bookmark"></i>
           </button>
 
           <button
-            *ngIf="gameInWishList && !gameIsOwned"
+            *ngIf="game.inWishList && !game.inLibrary"
             (click)="removeGameFromWishList(game.gameId)"
             class="remove">
             <i class="fa-solid fa-bookmark"></i>
           </button>
 
           <button
-            *ngIf="gameIsOwned"
+            *ngIf="game.inLibrary"
             class="in-library">
             In Library <i class="fa-solid fa-gamepad"></i>
           </button>
