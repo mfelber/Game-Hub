@@ -10,6 +10,8 @@ export interface GamePreviewResponse {
   gameId?: number;
   genres?: Array<GenreResponse>;
   hasDiscount?: boolean;
+  inCart?: boolean;
+  inWishList?: boolean;
   price?: number;
   title?: string;
 }

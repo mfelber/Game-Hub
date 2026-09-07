@@ -1509,68 +1509,6 @@
         }
       }
     },
-    "/store/check/game/{gameId}/owned/": {
-      "get": {
-        "tags": [
-          "store-controller"
-        ],
-        "operationId": "checkGameOwned",
-        "parameters": [
-          {
-            "name": "gameId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "boolean"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/store/check/game/wishlist/{gameId}": {
-      "get": {
-        "tags": [
-          "store-controller"
-        ],
-        "operationId": "checkGameInWishlist",
-        "parameters": [
-          {
-            "name": "gameId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "boolean"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/store/all-games": {
       "get": {
         "tags": [
@@ -3321,6 +3259,12 @@
             "format": "int32"
           },
           "hasDiscount": {
+            "type": "boolean"
+          },
+          "inCart": {
+            "type": "boolean"
+          },
+          "inWishList": {
             "type": "boolean"
           },
           "genres": {

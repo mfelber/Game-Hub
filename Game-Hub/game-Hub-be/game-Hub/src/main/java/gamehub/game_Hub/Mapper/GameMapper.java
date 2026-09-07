@@ -180,5 +180,26 @@ public class GameMapper {
         .build();
   }
 
+  public GamePreviewResponse toGamePreviewResponse(User user, Game game) {
+
+    Boolean isInCart = cartItemRepository.existsByCart_User_IdAndGame_Id(user.getId(), game.getId());
+    Boolean isInWishList = wishlistRepository.existsByUserAndGame(user, game);
+
+    return GamePreviewResponse.builder()
+        .gameId(game.getId())
+        .title(game.getTitle())
+        .gameCoverImage(FileUtils.readCoverFromLocation(game.getGameCoverImage()))
+        .price(game.getPrice())
+        .discountPrice(game.getDiscountPrice())
+        .discountPercent(game.getDiscountPercent())
+        .hasDiscount(game.isHasDiscount())
+        .inCart(isInCart)
+        .inWishList(isInWishList)
+        .genres(game.getGenres().stream().sorted(Comparator.comparing(Genre::getName)).map(genre -> new GenreResponse(
+            genre.getId(), genre.getName())).collect(Collectors.toList()))
+        .build();
+
+  }
+
 
 }

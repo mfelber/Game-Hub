@@ -16,10 +16,6 @@ import { AddGameToWishlist$Params } from '../fn/store-controller/add-game-to-wis
 import { AgeRatingResponse } from '../models/age-rating-response';
 import { buyGame } from '../fn/store-controller/buy-game';
 import { BuyGame$Params } from '../fn/store-controller/buy-game';
-import { checkGameInWishlist } from '../fn/store-controller/check-game-in-wishlist';
-import { CheckGameInWishlist$Params } from '../fn/store-controller/check-game-in-wishlist';
-import { checkGameOwned } from '../fn/store-controller/check-game-owned';
-import { CheckGameOwned$Params } from '../fn/store-controller/check-game-owned';
 import { findAllGames } from '../fn/store-controller/find-all-games';
 import { FindAllGames$Params } from '../fn/store-controller/find-all-games';
 import { GameResponse } from '../models/game-response';
@@ -246,56 +242,6 @@ export class StoreControllerService extends BaseService {
   getGameById(params: GetGameById$Params, context?: HttpContext): Observable<GameResponse> {
     return this.getGameById$Response(params, context).pipe(
       map((r: StrictHttpResponse<GameResponse>): GameResponse => r.body)
-    );
-  }
-
-  /** Path part for operation `checkGameOwned()` */
-  static readonly CheckGameOwnedPath = '/store/check/game/{gameId}/owned/';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `checkGameOwned()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  checkGameOwned$Response(params: CheckGameOwned$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
-    return checkGameOwned(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `checkGameOwned$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  checkGameOwned(params: CheckGameOwned$Params, context?: HttpContext): Observable<boolean> {
-    return this.checkGameOwned$Response(params, context).pipe(
-      map((r: StrictHttpResponse<boolean>): boolean => r.body)
-    );
-  }
-
-  /** Path part for operation `checkGameInWishlist()` */
-  static readonly CheckGameInWishlistPath = '/store/check/game/wishlist/{gameId}';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `checkGameInWishlist()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  checkGameInWishlist$Response(params: CheckGameInWishlist$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
-    return checkGameInWishlist(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `checkGameInWishlist$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  checkGameInWishlist(params: CheckGameInWishlist$Params, context?: HttpContext): Observable<boolean> {
-    return this.checkGameInWishlist$Response(params, context).pipe(
-      map((r: StrictHttpResponse<boolean>): boolean => r.body)
     );
   }
 
