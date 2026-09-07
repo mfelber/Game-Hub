@@ -76,18 +76,18 @@
     <div class="card relative" *ngFor="let game of filteredGames" (click)="goToGame(game.gameId)">
       <img [src]="getGameImageCover(game)" alt="{{game.title}}}">
       <div class="badges">
-        <div
-          *ngIf="game.inLibrary"
-          class="badge owned-badge">
-          Owned <i class="fa-solid fa-check mr-1"></i>
-        </div>
         <div *ngIf="game.discountPercent! > 0"
              class="badge discount-badge">-{{ game.discountPercent }} %
         </div>
         <div
+          *ngIf="game.inLibrary"
+          class="badge owned-badge">
+          In Library <i class="fa-solid fa-gamepad mr-1"></i>
+        </div>
+        <div
           *ngIf="game.inWishList && !game.inLibrary"
           class="badge wishlist-badge">
-          Wishlisted <i class="fa-solid fa-heart mr-1"></i>
+          In Wishlist <i class="fa-solid fa-bookmark mr-1"></i>
         </div>
       </div>
       <h3>{{ game.title }}</h3>
