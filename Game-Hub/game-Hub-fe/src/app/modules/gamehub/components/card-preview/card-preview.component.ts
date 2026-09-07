@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {UserPrivateResponse} from '../../../../services/models/user-private-response';
 import {FormsModule} from '@angular/forms';
 import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
+import {UserActionsComponent} from '../user-actions/user-actions.component';
 
 @Component({
   selector: 'app-card-preview',
@@ -10,7 +11,8 @@ import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
     NgIf,
     NgClass,
     NgStyle,
-    NgForOf
+    NgForOf,
+    UserActionsComponent
   ],
   templateUrl: './card-preview.component.html',
   styleUrl: './card-preview.component.scss'

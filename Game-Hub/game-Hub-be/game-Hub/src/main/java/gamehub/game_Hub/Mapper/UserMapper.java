@@ -13,6 +13,8 @@ import gamehub.game_Hub.Module.User.UserLibrary;
 import gamehub.game_Hub.Module.User.UserSuspensions;
 import gamehub.game_Hub.Module.User.UserWarnings;
 import gamehub.game_Hub.Repository.BanHistoryRepository;
+import gamehub.game_Hub.Repository.FriendRequestRepository;
+import gamehub.game_Hub.Repository.FriendshipRepository;
 import gamehub.game_Hub.Repository.LevelRepository;
 import gamehub.game_Hub.Repository.UserSuspensionRepository;
 import gamehub.game_Hub.Repository.UserWarningsRepository;
@@ -51,6 +53,10 @@ public class UserMapper {
 
   private final CartItemRepository cartItemRepository;
 
+  private final FriendRequestRepository friendRequestRepository;
+
+  private final FriendshipRepository friendshipRepository;
+
   public User toUser(UserUpdateRequest userUpdateRequest) {
     return User.builder()
         .firstName(userUpdateRequest.getFirstName())
@@ -61,56 +67,67 @@ public class UserMapper {
         .build();
   }
 
-  public UserPublicResponse toUserPublicResponse(User user) {
+  public UserPublicResponse toUserPublicResponse(User profileUser, User authenticatedUser) {
 
-    String joinedDate = user.getCreatedAt().getMonth().name().charAt(0) + user.getCreatedAt()
+    String joinedDate = profileUser.getCreatedAt().getMonth().name().charAt(0) + profileUser.getCreatedAt()
         .getMonth()
         .name()
         .substring(1)
-        .toLowerCase() + " " + user.getCreatedAt().getYear();
+        .toLowerCase() + " " + profileUser.getCreatedAt().getYear();
+
+    Boolean isFriend = friendshipRepository.existsByUser_IdAndFriend_Id(profileUser.getId(), authenticatedUser.getId());
+
+    Boolean friendReqSent = friendRequestRepository.existsBySender_IdAndReceiver_Id(authenticatedUser.getId(),
+        profileUser.getId());
+
+    Boolean friendReqReceived = friendRequestRepository.existsByReceiver_IdAndSender_Id(authenticatedUser.getId(),
+        profileUser.getId());
 
     // TODO get reviews count when implementing reviews
     return UserPublicResponse.builder()
-        .userId(user.getId())
-        .username(user.getName())
-        .bio(user.getBio())
-        .playTime(user.getLibrary().stream().mapToInt(UserLibrary::getPlaytimeMinutes).sum())
+        .userId(profileUser.getId())
+        .username(profileUser.getName())
+        .bio(profileUser.getBio())
+        .playTime(profileUser.getLibrary().stream().mapToInt(UserLibrary::getPlaytimeMinutes).sum())
         .reviews(0L)
         .joinedDate(joinedDate)
+        .isFriend(isFriend)
+        .friendRequestSent(friendReqSent)
+        .friendRequestReceived(friendReqReceived)
         .location(
             new LocationResponse(
-                user.getLocation() != null ? user.getLocation().name() : null,
-                user.getLocation() != null ? "/assets/flags/" + user.getLocation().name().toLowerCase() + ".svg" : null
+                profileUser.getLocation() != null ? profileUser.getLocation().name() : null,
+                profileUser.getLocation() != null ? "/assets/flags/" + profileUser.getLocation().name().toLowerCase() + ".svg" : null
             )
         )
-        .status(user.getStatus())
-        .accountStatus(user.getAccountStatus())
-        .friendsCount(user.getFriends().size())
-        .libraryCount(user.getLibrary().size())
-        .wishlistCount(user.getWishlist().size())
-        .level(new LevelResponse(user.getLevel().getId(), user.getLevel().getLevelNumber(), user.getLevel().getLevelColor()))
-        .badges(user.getBadges().stream().map(badge -> new BadgeResponse(badge.getId(), badge.getName(),
+        .status(profileUser.getStatus())
+        .accountStatus(profileUser.getAccountStatus())
+        .friendsCount(profileUser.getFriends().size())
+        .libraryCount(profileUser.getLibrary().size())
+        .wishlistCount(profileUser.getWishlist().size())
+        .level(new LevelResponse(profileUser.getLevel().getId(), profileUser.getLevel().getLevelNumber(), profileUser.getLevel().getLevelColor()))
+        .badges(profileUser.getBadges().stream().map(badge -> new BadgeResponse(badge.getId(), badge.getName(),
             badge.getDescription(), badge.getIconPath())).collect(Collectors.toSet()))
-        .playRecently(user.getPlayRecently().stream().limit(5)
+        .playRecently(profileUser.getPlayRecently().stream().limit(5)
             .map(g -> new GameResponseShort(
                 g.getId(), g.getTitle(), FileUtils.readCoverFromLocation(g.getGameCoverImage())))
             .collect(Collectors.toSet()))
-        .favoriteGenres(user.getFavoriteGenres().stream()
+        .favoriteGenres(profileUser.getFavoriteGenres().stream()
             .map(g -> new GenreResponse(g.getId(), g.getName()))
             .collect(Collectors.toSet()))
-        .recommendedGames(user.getRecommendationGames()
+        .recommendedGames(profileUser.getRecommendationGames()
             .stream()
             .map(g -> new GameResponseShort(g.getId(), g.getTitle(),
                 FileUtils.readCoverFromLocation(g.getGameCoverImage())))
             .collect(Collectors.toSet()))
-        .userProfilePicture(FileUtils.readCoverFromLocation(user.getUserProfilePicture()))
-        .bannerImage(FileUtils.readCoverFromLocation(user.getBanner()))
-        .profileColor(user.getProfileColor())
-        .bannerType(user.getBannerType())
-        .predefinedBannerPath(user.getBanner())
-        .cardColor(new CardColorResponse(user.getCardColor().getId(),
-            user.getCardColor().getColorName(),
-            user.getCardColor().getColorCode()))
+        .userProfilePicture(FileUtils.readCoverFromLocation(profileUser.getUserProfilePicture()))
+        .bannerImage(FileUtils.readCoverFromLocation(profileUser.getBanner()))
+        .profileColor(profileUser.getProfileColor())
+        .bannerType(profileUser.getBannerType())
+        .predefinedBannerPath(profileUser.getBanner())
+        .cardColor(new CardColorResponse(profileUser.getCardColor().getId(),
+            profileUser.getCardColor().getColorName(),
+            profileUser.getCardColor().getColorCode()))
         .build();
   }
 

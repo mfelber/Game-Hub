@@ -286,10 +286,18 @@ input{
   color:white;
 }
 
+.cancel:hover {
+  background: #6e7988;
+}
+
 
 .save{
-  background:linear-gradient(90deg,#2563eb,#6366f1);
+  background: #155dfc;
   color:white;
+}
+
+.save:hover {
+  background: #1447e6
 }
 
 .show-banners{
