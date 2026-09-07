@@ -160,6 +160,12 @@
   font-size: 15px;
 }
 
+.in-cart {
+  background: #172554!important;
+  color: #60a5fa;
+  cursor: default!important;
+}
+
 .price {
   display: flex;
   align-items: center;
@@ -211,15 +217,24 @@
 }
 
 .owned-badge {
-  background: #0F766E  ;
+  width:         fit-content;
+  padding:       3px 7px;
+  border-radius: 5px;
+  background: #0F766E;
 }
 
 .discount-badge {
+  width:         fit-content;
+  padding:       3px 7px;
+  border-radius: 5px;
   background: #00a63e;
 }
 
 .wishlist-badge {
-  background: rgba(219, 39, 119, 0.9);
+  width:         fit-content;
+  padding:       3px 7px;
+  border-radius: 5px;
+  background: #dc2626;
 }
 
 .checkbox{

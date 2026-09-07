@@ -18,5 +18,7 @@ public class UserNotificationsResponse {
   private Long warningCount;
   @Schema(nullable = true)
   private Long suspendedCount;
+  @Schema(nullable = true)
+  private Long cartCount;
 
 }

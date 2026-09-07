@@ -65,8 +65,8 @@ public class StoreController {
 
   // Get gameId
   @GetMapping("/game/{gameId}")
-  public ResponseEntity<GameResponse> getGameById(@PathVariable final Long gameId) {
-    return ResponseEntity.ok(gameService.findById(gameId));
+  public ResponseEntity<GameResponse> getGameById(final Authentication connectedUser, @PathVariable final Long gameId) {
+    return ResponseEntity.ok(gameService.findById(connectedUser, gameId));
   }
 
   // Get all platforms
@@ -110,19 +110,5 @@ public class StoreController {
       Authentication connectedUser) {
     return ResponseEntity.ok(gameService.findAllGames(connectedUser,page,size, genre, operationSystem, maxPrice, discount));
   }
-
-  // Check if user owned game
-  @GetMapping("/check/game/{gameId}/owned/")
-  public ResponseEntity<Boolean> checkGameOwned(@PathVariable final Long gameId, final Authentication connectedUser) {
-    return ResponseEntity.ok(gameService.checkGameOwned(gameId, connectedUser));
-  }
-
-  // Check if user has game in wishlist
-  @GetMapping("/check/game/wishlist/{gameId}")
-  public ResponseEntity<Boolean> checkGameInWishlist(@PathVariable final Long gameId, final Authentication connectedUser) {
-    return ResponseEntity.ok(gameService.checkGameInWishlist(gameId, connectedUser));
-  }
-
-
 
 }

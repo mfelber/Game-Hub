@@ -14,19 +14,13 @@ import gamehub.game_Hub.Response.FriendRequestResponse;
 import gamehub.game_Hub.Response.LevelResponse;
 import gamehub.game_Hub.Response.LocationResponse;
 import gamehub.game_Hub.Response.UserCommunityResponse;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class CommunityMapper {
 
-  private final FriendshipRepository friendshipRepository;
-
   private final FriendRequestRepository friendRequestRepository;
-
-  public CommunityMapper(final FriendshipRepository friendshipRepository,
-      final FriendRequestRepository friendRequestRepository) {
-    this.friendshipRepository = friendshipRepository;
-    this.friendRequestRepository = friendRequestRepository;
-  }
 
   public UserCommunityResponse toUserCommunityResponse(User foundUser, User connetedUser, Set<Long> friendIds) {
 

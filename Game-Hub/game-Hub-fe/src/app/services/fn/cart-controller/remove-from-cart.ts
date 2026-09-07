@@ -9,12 +9,12 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 
-export interface CheckGameOwned$Params {
+export interface RemoveFromCart$Params {
   gameId: number;
 }
 
-export function checkGameOwned(http: HttpClient, rootUrl: string, params: CheckGameOwned$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
-  const rb = new RequestBuilder(rootUrl, checkGameOwned.PATH, 'get');
+export function removeFromCart(http: HttpClient, rootUrl: string, params: RemoveFromCart$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+  const rb = new RequestBuilder(rootUrl, removeFromCart.PATH, 'delete');
   if (params) {
     rb.path('gameId', params.gameId, {});
   }
@@ -24,9 +24,9 @@ export function checkGameOwned(http: HttpClient, rootUrl: string, params: CheckG
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: String((r as HttpResponse<any>).body) === 'true' }) as StrictHttpResponse<boolean>;
+      return (r as HttpResponse<any>).clone({ body: parseFloat(String((r as HttpResponse<any>).body)) }) as StrictHttpResponse<number>;
     })
   );
 }
 
-checkGameOwned.PATH = '/store/check/game/{gameId}/owned/';
+removeFromCart.PATH = '/cart/remove-from-cart/{gameId}';

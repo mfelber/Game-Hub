@@ -8,15 +8,16 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { UserCartRequest } from '../../models/user-cart-request';
 
-export interface CheckGameInWishlist$Params {
-  gameId: number;
+export interface AddGameToCart$Params {
+      body: UserCartRequest
 }
 
-export function checkGameInWishlist(http: HttpClient, rootUrl: string, params: CheckGameInWishlist$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
-  const rb = new RequestBuilder(rootUrl, checkGameInWishlist.PATH, 'get');
+export function addGameToCart(http: HttpClient, rootUrl: string, params: AddGameToCart$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+  const rb = new RequestBuilder(rootUrl, addGameToCart.PATH, 'post');
   if (params) {
-    rb.path('gameId', params.gameId, {});
+    rb.body(params.body, 'application/json');
   }
 
   return http.request(
@@ -24,9 +25,9 @@ export function checkGameInWishlist(http: HttpClient, rootUrl: string, params: C
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: String((r as HttpResponse<any>).body) === 'true' }) as StrictHttpResponse<boolean>;
+      return (r as HttpResponse<any>).clone({ body: parseFloat(String((r as HttpResponse<any>).body)) }) as StrictHttpResponse<number>;
     })
   );
 }
 
-checkGameInWishlist.PATH = '/store/check/game/wishlist/{gameId}';
+addGameToCart.PATH = '/cart/add-to-cart';

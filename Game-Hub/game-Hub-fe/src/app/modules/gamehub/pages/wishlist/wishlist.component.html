@@ -113,8 +113,11 @@
         <span class="current-price">{{ wishlist.game?.price }} €</span>
       </div>
       <div class="buttons">
-        <button class="buy">
-          Buy <i class="fa-solid fa-cart-shopping"></i> -> redirect user to fill invoice form
+        <button class="buy" *ngIf="!wishlist.game?.inCart" (click)="addToCart(wishlist.game?.gameId) ; $event.stopPropagation()">
+          Add to Cart <i class="fa-solid fa-cart-shopping"></i>
+        </button>
+        <button class="in-cart" *ngIf="wishlist.game?.inCart">
+          In Cart <i class="fa-solid fa-check"></i>
         </button>
         <button class="remove" (click)="removeGameFromWishList(wishlist.game?.gameId); $event.stopPropagation()">
           Remove <i class="fa-solid fa-bookmark"></i>

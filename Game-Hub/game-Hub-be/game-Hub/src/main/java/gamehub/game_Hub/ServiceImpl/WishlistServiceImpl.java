@@ -17,9 +17,11 @@ import gamehub.game_Hub.Mapper.WishlistMapper;
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Module.User.Wishlist;
 import gamehub.game_Hub.Repository.WishlistRepository;
+import gamehub.game_Hub.Repository.user.UserRepository;
 import gamehub.game_Hub.Response.WishlistResponse;
 import gamehub.game_Hub.Service.WishlistService;
 import gamehub.game_Hub.specification.WishlistSpecification;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -30,6 +32,8 @@ public class WishlistServiceImpl implements WishlistService {
 
   private final WishlistMapper wishlistMapper;
 
+  private final UserRepository userRepository;
+
   @Override
   @PreAuthorize("isAuthenticated()")
   public PageResponse<WishlistResponse> getUserWishlist(final Authentication connectedUser, final int page,
@@ -38,6 +42,8 @@ public class WishlistServiceImpl implements WishlistService {
       throws AccessDeniedException {
 
     User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
 
     Sort sort = switch (sortBy) {
       case "nameAsc" -> Sort.by("game.title").ascending();
@@ -50,7 +56,7 @@ public class WishlistServiceImpl implements WishlistService {
 
     Specification<Wishlist> specification = Specification.allOf();
 
-    specification = specification.and(WishlistSpecification.belongsToUser(authUser));
+    specification = specification.and(WishlistSpecification.belongsToUser(user));
 
     if (genre != null && !genre.isBlank()) {
       specification = specification.and(WishlistSpecification.hasGenre(genre));
@@ -74,7 +80,7 @@ public class WishlistServiceImpl implements WishlistService {
 
     Page<Wishlist> wishlist = wishlistRepository.findAll(specification, pageable);
 
-    List<WishlistResponse> wishlistResponse = wishlist.stream().map(wishlistMapper::toWishlistResponse).toList();
+    List<WishlistResponse> wishlistResponse = wishlist.stream().map(userWishlistResponse -> wishlistMapper.toWishlistResponse(user, userWishlistResponse)).toList();
 
     return new PageResponse<>(
         wishlistResponse,

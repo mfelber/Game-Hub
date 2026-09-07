@@ -23,8 +23,9 @@
     <span>3123 €</span>
   </button>
 
-  <button>
+  <button routerLink="/gamehub/cart">
     <i class="fa-solid fa-basket-shopping"></i>
+      <span class="notification-badge" *ngIf="userNotificationsResponse.cartCount! > 0">{{userNotificationsResponse.cartCount}}</span>
   </button>
 
   <button class="notification-btn">

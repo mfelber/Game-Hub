@@ -1,0 +1,105 @@
+<main>
+
+<!-- CART HEADER -->
+  <section>
+    <div class="cart-header">
+      <div class="top">
+        <div>
+          <h1>Shopping Cart</h1>
+          <p>{{cartResponse.games?.length}} games in your cart</p>
+        </div>
+        <div>
+          <app-user-actions/>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+<!-- EMPTY CART -->
+  <section *ngIf="cartResponse.games?.length === 0">
+    <app-empty-state
+    icon = 'fa-solid fa-cart-shopping'
+    title="Your carst is empty"
+    message="Looks like you haven't added any games yet.">
+    </app-empty-state>
+    <button class="browse-button" routerLink="/gamehub/store">Browse Games</button>
+  </section>
+
+<!-- CART -->
+  <section class="cart">
+
+    <div class="loading-overlay" *ngIf="isLoading">
+      <i class="fa-solid fa-spinner fa-spin"></i>
+    </div>
+
+    <div class="cart-content">
+      <div class="cart-items">
+        <div class="cart-item" *ngFor="let cartItem of cartResponse.games" (click)="goToGame(cartItem.gameId)">
+
+          <div class="game-cover">
+            <img [src]="getGameImageCover(cartItem)" alt="{{cartItem.title}}}">
+          </div>
+
+          <div class="game-info">
+            <h3>{{cartItem.title}}</h3>
+            <span class="publisher">{{cartItem.publisher}}</span>
+            <span class="discount-badge" *ngIf="cartItem.hasDiscount">-{{cartItem.discountPercent}}%</span>
+          </div>
+
+          <div class="game-price">
+            <span class="old-price" *ngIf="cartItem.hasDiscount">{{cartItem.price}} €</span>
+            <span class="current-price">            {{
+                cartItem.hasDiscount
+                  ? cartItem.discountPrice
+                  : cartItem.price
+              }} €</span>
+          </div>
+
+          <button class="remove-button" (click)="removeFromCart(cartItem.gameId); $event.stopPropagation()">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+
+        </div>
+      </div>
+
+      <section *ngIf="cartResponse.games?.length">
+        <div class="cart-summary">
+          <div class="summary-header">
+            <h2>Order Summary</h2>
+          </div>
+
+          <div class="summary-row">
+            <span>Items</span>
+            <span>{{ cartResponse.games?.length }}</span>
+          </div>
+
+          <div class="summary-divider"></div>
+
+          <div class="total-row">
+            <span>Total</span>
+            <strong>{{ total | number:'1.2-2' }} €</strong>
+          </div>
+
+          <button class="checkout-button" (click)="checkout()">
+            Proceed to Checkout
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+
+          <button
+            class="continue-button"
+            routerLink="/gamehub/store"
+          >
+            Continue Shopping
+          </button>
+        </div>
+      </section>
+
+    </div>
+
+  </section>
+
+
+
+</main>

@@ -21,6 +21,8 @@ public class GamePreviewResponse {
   private Double discountPrice;
   private Integer discountPercent;
   private boolean hasDiscount;
+  private boolean inCart;
+  private boolean inWishList;
   private List<GenreResponse> genres;
 
 }

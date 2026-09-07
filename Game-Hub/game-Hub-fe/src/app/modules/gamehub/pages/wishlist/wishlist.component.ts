@@ -11,6 +11,7 @@ import {PageResponseWishlistResponse} from '../../../../services/models/page-res
 import {EmptyStateComponent} from '../../components/empty-state/empty-state.component';
 import {UserActionsComponent} from '../../components/user-actions/user-actions.component';
 import {PaginationComponent} from '../../components/pagination/pagination.component';
+import {CartControllerService} from '../../../../services/services/cart-controller.service';
 
 @Component({
   selector: 'app-wishlist',
@@ -47,6 +48,7 @@ export class WishlistComponent implements OnInit{
   constructor(
     private wishListService: WishlistControllerService,
     private gameService: StoreControllerService,
+    private cartService: CartControllerService,
     private router: Router,
     private route: ActivatedRoute,
   ) {
@@ -95,6 +97,7 @@ export class WishlistComponent implements OnInit{
         next: (games) => {
           this.wishlistPageResponse = games;
           this.filteredGames = [...(games.content || [])];
+          console.log(this.filteredGames);
           this.isLoading = false;
         },
         error: (err) => {
@@ -209,5 +212,29 @@ export class WishlistComponent implements OnInit{
       },
       queryParamsHandling: 'merge'
     });
+  }
+
+  addToCart(gameId: any) {
+    if (!gameId) {
+      return;
+    }
+    this.cartService.addGameToCart({
+      body: {
+        gameId: gameId,
+      }
+    }).subscribe({
+      next: () => {
+        const wishlistGame = this.filteredGames.find(
+          g => g.game?.gameId === gameId
+        );
+        if (wishlistGame?.game) {
+          wishlistGame.game.inCart = true;
+        }
+        console.log('Added to cart: ', wishlistGame);
+      },
+      error: (err) => {
+        console.error('Error with adding game:', err);
+      }
+    })
   }
 }
