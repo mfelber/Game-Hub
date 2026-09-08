@@ -184,4 +184,25 @@ export class UserPublicProfileComponent implements OnInit {
 
   }
 
+  removeFriend() {
+
+  }
+
+  reportUser() {
+
+  }
+
+  profileMenuOpen = false;
+
+  toggleProfileMenu() {
+    this.profileMenuOpen = !this.profileMenuOpen;
+  }
+
+  blockUser() {
+
+  }
+
+  goToUserWishList() {
+
+  }
 }

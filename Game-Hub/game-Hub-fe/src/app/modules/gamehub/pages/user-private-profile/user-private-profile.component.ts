@@ -461,4 +461,8 @@ export class UserPrivateProfileComponent implements OnInit {
       }
     )
   }
+
+  goToWishList() {
+    this.router.navigate(['gamehub/wishlist']);
+  }
 }

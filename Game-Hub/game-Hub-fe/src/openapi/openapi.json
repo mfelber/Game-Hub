@@ -3522,13 +3522,13 @@
               "$ref": "#/components/schemas/SubtitleResponse"
             }
           },
+          "inCart": {
+            "type": "boolean"
+          },
           "inLibrary": {
             "type": "boolean"
           },
           "inWishList": {
-            "type": "boolean"
-          },
-          "inCart": {
             "type": "boolean"
           }
         }
@@ -3802,6 +3802,15 @@
           },
           "cardColor": {
             "$ref": "#/components/schemas/CardColorResponse"
+          },
+          "isFriend": {
+            "type": "boolean"
+          },
+          "friendRequestSent": {
+            "type": "boolean"
+          },
+          "friendRequestReceived": {
+            "type": "boolean"
           }
         }
       },

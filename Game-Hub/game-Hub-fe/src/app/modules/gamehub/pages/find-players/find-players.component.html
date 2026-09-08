@@ -119,30 +119,30 @@
 
         <button *ngIf="user.isFriend" (click)="$event.stopPropagation()"
                 class="action-btn friend">
-          <i class="fa-solid fa-user-check"></i>
+          <i class="fa-solid fa-user-group"></i>
         </button>
 
         <button *ngIf="user.friendRequestReceived"
                 (click)=" acceptFriendRequest(user.userId!) ; $event.stopPropagation()"
                 class="action-btn accept">
-          <i class="fa-solid fa-check"></i></button>
+          <i class="fa-solid fa-user-check"></i></button>
 
         <button *ngIf="user.friendRequestReceived"
                 (click)=" rejectFriendRequest(user.userId!) ; $event.stopPropagation()"
                 class="action-btn reject">
-          <i class="fa-solid fa-xmark"></i></button>
+          <i class="fa-solid fa-user-xmark"></i></button>
 
         <button
           *ngIf="user.friendRequestSent === false && user.isFriend === false && user.friendRequestReceived === false"
           (click)="sendFriendRequest(user.userId!) ; $event.stopPropagation()"
           class="add-friend-btn">
-          Add Friend<i class="fa-solid fa-user-plus"></i>
+          <i class="fa-solid fa-user-plus"></i>
         </button>
 
         <button *ngIf="user.friendRequestSent"
                 (click)="cancelFriendRequest(user.userId!) ; $event.stopPropagation()"
                 class="cancel-btn">
-          Cancel invite <i class="fa-solid fa-user-minus"></i>
+           <i class="fa-solid fa-user-clock"></i>
         </button>
 
         <button (click)="openReportUserModal(user) ; $event.stopPropagation()"

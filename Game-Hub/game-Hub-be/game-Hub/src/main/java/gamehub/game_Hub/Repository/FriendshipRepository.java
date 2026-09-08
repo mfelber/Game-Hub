@@ -6,4 +6,6 @@ import gamehub.game_Hub.Module.Friendship;
 
 public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
 
+  Boolean existsByUser_IdAndFriend_Id(Long userId, Long friendId);
+
 }

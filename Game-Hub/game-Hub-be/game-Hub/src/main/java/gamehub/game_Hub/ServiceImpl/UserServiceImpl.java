@@ -70,9 +70,13 @@ public class UserServiceImpl implements UserService {
 
   @Transactional
   public UserPublicResponse getPublicProfile(final Long userId, final Authentication connectedUser) {
-    User user = userRepository.findById(userId)
+    User profileUser = userRepository.findById(userId)
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + userId));
-    return userMapper.toUserPublicResponse(user);
+
+    User authUser = (User) connectedUser.getPrincipal();
+    User authenticatedUser = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + userId));
+    return userMapper.toUserPublicResponse(profileUser, authenticatedUser);
   }
 
   @Override

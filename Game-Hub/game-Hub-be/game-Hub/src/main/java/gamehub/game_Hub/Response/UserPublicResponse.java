@@ -39,4 +39,7 @@ public class UserPublicResponse {
   private String predefinedBannerPath;
   private String profileColor;
   private CardColorResponse cardColor;
+  private Boolean isFriend;
+  private Boolean friendRequestSent;
+  private Boolean friendRequestReceived;
 }

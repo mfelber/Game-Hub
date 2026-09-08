@@ -35,8 +35,8 @@ public class CommunityMapper {
     Boolean friendReqSent = friendRequestRepository.existsBySender_IdAndReceiver_Id(connetedUser.getId(),
         foundUser.getId());
 
-    Boolean friendReqReceived = friendRequestRepository.existsBySender_IdAndReceiver_Id(foundUser.getId(),
-        connetedUser.getId());
+    Boolean friendReqReceived = friendRequestRepository.existsByReceiver_IdAndSender_Id(connetedUser.getId(),
+        foundUser.getId());
 
     return UserCommunityResponse.builder()
         .userId(foundUser.getId())
