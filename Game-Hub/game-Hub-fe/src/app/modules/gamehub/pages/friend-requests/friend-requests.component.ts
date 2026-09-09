@@ -53,7 +53,7 @@ export class FriendRequestsComponent implements OnInit {
   }
 
   private getAllMyFriendRequests() {
-    this.communityService.getFriendRequests().subscribe({
+    this.communityService.getAllMyFriendRequests().subscribe({
       next: (friendRequests) => {
         this.friendRequestsResponse = friendRequests;
         console.log(friendRequests);

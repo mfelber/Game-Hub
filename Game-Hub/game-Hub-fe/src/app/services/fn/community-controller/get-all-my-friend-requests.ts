@@ -10,13 +10,13 @@ import { RequestBuilder } from '../../request-builder';
 
 import { PageResponseFriendRequestResponse } from '../../models/page-response-friend-request-response';
 
-export interface GetFriendRequests$Params {
+export interface GetAllMyFriendRequests$Params {
   page?: number;
   size?: number;
 }
 
-export function getFriendRequests(http: HttpClient, rootUrl: string, params?: GetFriendRequests$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseFriendRequestResponse>> {
-  const rb = new RequestBuilder(rootUrl, getFriendRequests.PATH, 'get');
+export function getAllMyFriendRequests(http: HttpClient, rootUrl: string, params?: GetAllMyFriendRequests$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseFriendRequestResponse>> {
+  const rb = new RequestBuilder(rootUrl, getAllMyFriendRequests.PATH, 'get');
   if (params) {
     rb.query('page', params.page, {});
     rb.query('size', params.size, {});
@@ -32,4 +32,4 @@ export function getFriendRequests(http: HttpClient, rootUrl: string, params?: Ge
   );
 }
 
-getFriendRequests.PATH = '/find-players/friend-requests';
+getAllMyFriendRequests.PATH = '/find-players/friend-requests';

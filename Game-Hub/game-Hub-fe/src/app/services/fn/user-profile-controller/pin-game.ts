@@ -9,14 +9,14 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 
-export interface FriendRequestExistsFromSender$Params {
-  userId: number;
+export interface PinGame$Params {
+  gameId: number;
 }
 
-export function friendRequestExistsFromSender(http: HttpClient, rootUrl: string, params: FriendRequestExistsFromSender$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
-  const rb = new RequestBuilder(rootUrl, friendRequestExistsFromSender.PATH, 'get');
+export function pinGame(http: HttpClient, rootUrl: string, params: PinGame$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+  const rb = new RequestBuilder(rootUrl, pinGame.PATH, 'post');
   if (params) {
-    rb.path('userId', params.userId, {});
+    rb.path('gameId', params.gameId, {});
   }
 
   return http.request(
@@ -24,9 +24,9 @@ export function friendRequestExistsFromSender(http: HttpClient, rootUrl: string,
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: String((r as HttpResponse<any>).body) === 'true' }) as StrictHttpResponse<boolean>;
+      return (r as HttpResponse<any>).clone({ body: parseFloat(String((r as HttpResponse<any>).body)) }) as StrictHttpResponse<number>;
     })
   );
 }
 
-friendRequestExistsFromSender.PATH = '/find-players/friend-request/status/sender/{userId}';
+pinGame.PATH = '/profile/pin-game/{gameId}';

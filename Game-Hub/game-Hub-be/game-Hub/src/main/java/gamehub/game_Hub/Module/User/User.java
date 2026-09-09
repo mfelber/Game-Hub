@@ -167,6 +167,10 @@ public class User implements UserDetails, Principal {
       inverseJoinColumns = @JoinColumn(name = "badge_id"))
   private Set<Badge> badges;
 
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "favorite_game_id")
+  private Game favoriteGame;
+
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return List.of(new SimpleGrantedAuthority(

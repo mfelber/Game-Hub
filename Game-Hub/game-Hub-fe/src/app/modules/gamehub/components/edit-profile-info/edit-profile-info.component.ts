@@ -5,6 +5,10 @@ import {CardColorResponse} from '../../../../services/models/card-color-response
 import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {initFlowbite} from 'flowbite';
+import {SearchBar} from '../search-bar/search-bar';
+import {UserProfileControllerService} from '../../../../services/services/user-profile-controller.service';
+import {UserLibraryResponse} from '../../../../services/models/user-library-response';
+import {GameResponse} from '../../../../services/models/game-response';
 
 @Component({
   selector: 'app-edit-profile-info',
@@ -13,7 +17,8 @@ import {initFlowbite} from 'flowbite';
     FormsModule,
     NgForOf,
     NgStyle,
-    NgClass
+    NgClass,
+    SearchBar
   ],
   templateUrl: './edit-profile-info.component.html',
   styleUrl: './edit-profile-info.component.scss',
@@ -36,7 +41,8 @@ export class EditProfileInfoComponent implements OnInit {
   @Output() save = new EventEmitter<{
     profilePicture: File | null,
     profileBanner: File | null,
-    selectedBannerId: number | null
+    selectedBannerId: number | null,
+    favoriteGameId: number | null,
   }>();
   @Output() close = new EventEmitter<void>();
   @Output() updated = new EventEmitter<void>();
@@ -47,7 +53,8 @@ export class EditProfileInfoComponent implements OnInit {
     previewImage: String | undefined;
   }>();
 
-  activeTab: 'basic' | 'profile' | 'security' = 'basic';
+  activeTab: 'basic' | 'profile' | 'gaming' = 'basic';
+  userLibraryResponse: UserLibraryResponse[] = [];
 
   selectedColorCode: string = '';
   selectedColorId: number | null = null;
@@ -58,6 +65,8 @@ export class EditProfileInfoComponent implements OnInit {
   profileBanner: File | null = null;
   selectedBannerId: number | null = null;
 
+  selectedFavoriteGame: UserLibraryResponse | null = null;
+
   showPredefinedBanners = false;
   isPreviewImageInserted = false;
   isPreviewBannerInserted = false;
@@ -65,6 +74,14 @@ export class EditProfileInfoComponent implements OnInit {
   userHasProfilePicture = true
 
   predefinedBanners = [1, 2, 3, 4];
+
+
+  searchedQuery = '';
+
+  constructor(
+    private userService: UserProfileControllerService
+  ) {
+  }
 
   getBanner(user: UserPrivateResponse) {
     if (user.bannerImage) {
@@ -162,7 +179,8 @@ export class EditProfileInfoComponent implements OnInit {
     this.save.emit({
       profilePicture: this.profilePicture,
       profileBanner: this.profileBanner,
-      selectedBannerId: this.selectedBannerId
+      selectedBannerId: this.selectedBannerId,
+      favoriteGameId: this.selectedFavoriteGame?.gameId ?? null,
     });
 
   }
@@ -178,5 +196,46 @@ export class EditProfileInfoComponent implements OnInit {
       isPreviewImageInserted: this.isPreviewImageInserted,
       previewImage: this.previewImage
     });
+  }
+
+
+  searchLibrary(query: string) {
+    this.searchedQuery = query;
+    this.getLibraryGames(this.searchedQuery);
+  }
+
+  getLibraryGames(query: string) {
+    this.userService.getLibraryGames({
+      query: query
+    }).subscribe({
+      next: (result) => {
+        this.userLibraryResponse = result;
+        console.log(this.userLibraryResponse);
+      }
+    })
+  }
+
+  getGameImageCover(game: UserLibraryResponse): string {
+    if (game.gameCoverImage) {
+      return 'data:image/jpeg;base64,' + game.gameCoverImage;
+    }
+    return 'https://images.pexels.com/photos/1054655/pexels-photo-1054655.jpeg';
+  }
+
+  selectFavoriteGame(game: UserLibraryResponse) {
+    this.searchedQuery = '';
+    this.selectedFavoriteGame = game;
+    this.userLibraryResponse = [];
+  }
+
+  removeSelectedGame() {
+    this.selectedFavoriteGame = null;
+    this.searchedQuery = '';
+  }
+
+  showGameSearch = false;
+
+  changeFavoriteGame() {
+    this.showGameSearch = true;
   }
 }

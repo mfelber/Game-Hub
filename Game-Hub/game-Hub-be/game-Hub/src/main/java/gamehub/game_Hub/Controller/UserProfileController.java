@@ -1,6 +1,7 @@
 package gamehub.game_Hub.Controller;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,9 +22,11 @@ import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Repository.user.UserRepository;
 import gamehub.game_Hub.Request.BannerRequest;
 import gamehub.game_Hub.Response.StatusResponse;
+import gamehub.game_Hub.Response.UserLibraryResponse;
 import gamehub.game_Hub.Response.UserNotificationsResponse;
 import gamehub.game_Hub.Response.UserPrivateResponse;
 import gamehub.game_Hub.Response.UserPublicResponse;
+import gamehub.game_Hub.Service.LibraryService;
 import gamehub.game_Hub.Service.UserService;
 import gamehub.game_Hub.Request.UserUpdateRequest;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -37,6 +41,8 @@ public class UserProfileController {
   private final UserService userService;
 
   private final UserRepository userRepository;
+
+  private final LibraryService libraryService;
 
   // Allows a user to update their profile information: first name, last name, username, email, location, and card color
   @PostMapping("/update-profile")
@@ -160,6 +166,16 @@ public class UserProfileController {
   public ResponseEntity<Void> setStatusToAway(final Authentication connectedUser) {
     userService.setStatusToAway(connectedUser);
     return ResponseEntity.accepted().build();
+  }
+
+  @GetMapping("/search-library-games")
+  public ResponseEntity<List<UserLibraryResponse>> getLibraryGames(@RequestParam String query, Authentication connectedUser) {
+    return ResponseEntity.ok(libraryService.searchLibraryGames(query, connectedUser));
+  }
+
+  @PostMapping("/pin-game/{gameId}")
+  public ResponseEntity<Long> pinGame(Authentication connectedUser, @PathVariable Long gameId) {
+    return ResponseEntity.ok(userService.pinGame(connectedUser, gameId));
   }
 
 }

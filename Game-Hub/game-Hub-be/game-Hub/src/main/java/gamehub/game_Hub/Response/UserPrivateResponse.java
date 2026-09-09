@@ -28,17 +28,17 @@ public class UserPrivateResponse {
   private int friendsCount;
   private int libraryCount;
   private int wishlistCount;
+  private int friendReqCount;
   private LevelResponse level;
   private Set<BadgeResponse> badges;
   private Set<GameResponseShort> playRecently;
-  private Set<GameResponseShort> favoriteGames;
   private Set<GenreResponse> favoriteGenres;
   private Set<GameResponseShort> recommendedGames;
+  private UserLibraryResponse favoriteGame;
   private byte [] userProfilePicture;
   private byte [] bannerImage;
   private String bannerType;
   private String predefinedBannerPath;
   private String profileColor;
   private CardColorResponse cardColor;
-
 }

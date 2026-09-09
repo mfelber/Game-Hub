@@ -1,6 +1,7 @@
 <div class="relative w-full">
 
   <input
+    [value]="value"
     #searchQuery
     (keyup)="onSearch(searchQuery.value)"
     type="text"

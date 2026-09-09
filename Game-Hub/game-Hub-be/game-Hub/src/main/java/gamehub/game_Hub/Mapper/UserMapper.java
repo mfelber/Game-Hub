@@ -1,11 +1,13 @@
 package gamehub.game_Hub.Mapper;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import gamehub.game_Hub.File.FileUtils;
 import gamehub.game_Hub.Module.BanHistory;
+import gamehub.game_Hub.Module.Game;
 import gamehub.game_Hub.Module.Level;
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Module.User.UserCart;
@@ -16,6 +18,7 @@ import gamehub.game_Hub.Repository.BanHistoryRepository;
 import gamehub.game_Hub.Repository.FriendRequestRepository;
 import gamehub.game_Hub.Repository.FriendshipRepository;
 import gamehub.game_Hub.Repository.LevelRepository;
+import gamehub.game_Hub.Repository.UserLibraryRepository;
 import gamehub.game_Hub.Repository.UserSuspensionRepository;
 import gamehub.game_Hub.Repository.UserWarningsRepository;
 import gamehub.game_Hub.Repository.cart.CartItemRepository;
@@ -57,6 +60,10 @@ public class UserMapper {
 
   private final FriendshipRepository friendshipRepository;
 
+  private final UserLibraryRepository userLibraryRepository;
+
+  private final LibraryMapper libraryMapper;
+
   public User toUser(UserUpdateRequest userUpdateRequest) {
     return User.builder()
         .firstName(userUpdateRequest.getFirstName())
@@ -94,6 +101,7 @@ public class UserMapper {
         .isFriend(isFriend)
         .friendRequestSent(friendReqSent)
         .friendRequestReceived(friendReqReceived)
+        .favoriteGame(libraryMapper.toFavoriteGame(profileUser))
         .location(
             new LocationResponse(
                 profileUser.getLocation() != null ? profileUser.getLocation().name() : null,
@@ -139,7 +147,6 @@ public class UserMapper {
         .substring(1)
         .toLowerCase() + " " + user.getCreatedAt().getYear();
 
-
     // TODO get reviews count when implementing reviews
     return UserPrivateResponse.builder()
         .userId(user.getId())
@@ -151,6 +158,7 @@ public class UserMapper {
         .reviews(0L)
         .bio(user.getBio())
         .joinedDate(joinedDate)
+        .favoriteGame(libraryMapper.toFavoriteGame(user))
         .location(
             new LocationResponse(
                 user.getLocation() != null ? user.getLocation().name() : null,
@@ -195,6 +203,9 @@ public class UserMapper {
   }
 
   public UserPrivateResponse toUserPrivateResponseShort(User user) {
+
+    int friendRequestCount = friendRequestRepository.countByReceiver_Id(user.getId());
+
     return UserPrivateResponse.builder()
         .userId(user.getId())
         .firstName(user.getFirstName())
@@ -204,6 +215,7 @@ public class UserMapper {
         .status(user.getStatus())
         .userProfilePicture(FileUtils.readCoverFromLocation(user.getUserProfilePicture()))
         .profileColor(user.getProfileColor())
+        .friendReqCount(friendRequestCount)
         .build();
   }
 

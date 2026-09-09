@@ -3,6 +3,7 @@ package gamehub.game_Hub.ServiceImpl;
 import static gamehub.game_Hub.enums.Status.*;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -12,15 +13,21 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import gamehub.game_Hub.File.FileStorageService;
+import gamehub.game_Hub.File.FileUtils;
 import gamehub.game_Hub.Module.CardColor;
+import gamehub.game_Hub.Module.Game;
 import gamehub.game_Hub.Module.Genre;
 import gamehub.game_Hub.Module.User.User;
+import gamehub.game_Hub.Module.User.UserLibrary;
 import gamehub.game_Hub.Repository.CardColorRepository;
+import gamehub.game_Hub.Repository.UserLibraryRepository;
+import gamehub.game_Hub.Repository.game.GameRepository;
 import gamehub.game_Hub.Repository.genre.GenreRepository;
 import gamehub.game_Hub.Repository.user.UserRepository;
 import gamehub.game_Hub.Mapper.UserMapper;
 import gamehub.game_Hub.Request.BannerRequest;
 import gamehub.game_Hub.Response.StatusResponse;
+import gamehub.game_Hub.Response.UserLibraryResponse;
 import gamehub.game_Hub.Response.UserNotificationsResponse;
 import gamehub.game_Hub.Response.UserPrivateResponse;
 import gamehub.game_Hub.Response.UserPublicResponse;
@@ -42,6 +49,10 @@ public class UserServiceImpl implements UserService {
   private final FileStorageService fileStorageService;
 
   private final CardColorRepository cardColorRepository;
+
+  private final GameRepository gameRepository;
+
+  private final UserLibraryRepository userLibraryRepository;
 
   @Override
   public Long updateUserProfile(final Authentication connectedUser,
@@ -120,6 +131,22 @@ public class UserServiceImpl implements UserService {
     User user = userRepository.findById(authUser.getId())
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
     return userMapper.toUserNotificationResponse(user);
+  }
+
+  @Override
+  public Long pinGame(final Authentication connectedUser, final Long gameId) {
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+    Game game = gameRepository.findById(gameId)
+        .orElseThrow(() -> new EntityNotFoundException("No game found with id: " + gameId));
+
+    user.setFavoriteGame(game);
+
+    userRepository.save(user);
+
+    return user.getId();
   }
 
   @Override

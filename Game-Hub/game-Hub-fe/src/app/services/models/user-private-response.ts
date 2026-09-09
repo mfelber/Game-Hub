@@ -8,6 +8,7 @@ import { GameResponseShort } from '../models/game-response-short';
 import { GenreResponse } from '../models/genre-response';
 import { LevelResponse } from '../models/level-response';
 import { LocationResponse } from '../models/location-response';
+import { UserLibraryResponse } from '../models/user-library-response';
 export interface UserPrivateResponse {
   badges?: Array<BadgeResponse>;
   bannerImage?: string;
@@ -15,9 +16,10 @@ export interface UserPrivateResponse {
   bio?: string;
   cardColor?: CardColorResponse;
   email?: string;
-  favoriteGames?: Array<GameResponseShort>;
+  favoriteGame?: UserLibraryResponse;
   favoriteGenres?: Array<GenreResponse>;
   firstName?: string;
+  friendReqCount?: number;
   friendsCount?: number;
   joinedDate?: string;
   lastName?: string;

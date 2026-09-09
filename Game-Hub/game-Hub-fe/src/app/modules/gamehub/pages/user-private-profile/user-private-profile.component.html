@@ -30,47 +30,53 @@
 
 <app-user-actions class="top"/>
 
-<main [class.hidden]="!isLoaded" *ngIf="!showPreviewColors">
+<main *ngIf="!showPreviewColors">
 
-  <!--  BANNER  -->
-  <section class="banner-section">
-    <div class="banner">
+  <section>
 
-      <img *ngIf="userResponse.bannerType === 'PREDEFINED'"
-           [src]="userResponse.predefinedBannerPath"
-           alt="Banner cover"
-      />
-
-      <img *ngIf="userResponse.bannerType === 'CUSTOM'"
-           [src]=getBanner(userResponse)
-           alt="Banner cover"
-      />
-
-
+    <div class="loading-overlay" *ngIf="isLoading">
+      <i class="fa-solid fa-spinner fa-spin"></i>
     </div>
-  </section>
 
-  <section class="profile-header-section">
-    <div class="profile-header" [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
+    <!--  BANNER  -->
+    <section class="banner-section">
+      <div class="banner">
 
-      <div class="profile-main">
-        <div class="avatar-wrapper">
-          <img *ngIf="userHasProfilePicture"
-               [src]="getProfilePicture(userResponse)"
-               class="avatar"
-          />
+        <img *ngIf="userResponse.bannerType === 'PREDEFINED'"
+             [src]="userResponse.predefinedBannerPath"
+             alt="Banner cover"
+        />
 
-          <img *ngIf="!userHasProfilePicture"
-               src="../../../../../assets/profilePicture/default_profile_picture.svg"
-               class="avatar"
-               [ngStyle]="{'background-color': userResponse.profileColor}"
-          />
-        </div>
+        <img *ngIf="userResponse.bannerType === 'CUSTOM'"
+             [src]=getBanner(userResponse)
+             alt="Banner cover"
+        />
 
-        <div class="user-info">
-          <div class="username-row">
-            <h1>{{ userResponse.username }}</h1>
-            <span class="status" [ngClass]="{
+
+      </div>
+    </section>
+
+    <section class="profile-header-section">
+      <div class="profile-header" [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
+
+        <div class="profile-main">
+          <div class="avatar-wrapper">
+            <img *ngIf="userHasProfilePicture"
+                 [src]="getProfilePicture(userResponse)"
+                 class="avatar"
+            />
+
+            <img *ngIf="!userHasProfilePicture"
+                 src="../../../../../assets/profilePicture/default_profile_picture.svg"
+                 class="avatar"
+                 [ngStyle]="{'background-color': userResponse.profileColor}"
+            />
+          </div>
+
+          <div class="user-info">
+            <div class="username-row">
+              <h1>{{ userResponse.username }}</h1>
+              <span class="status" [ngClass]="{
             'text-green-500': userResponse.status === 'ONLINE',
             'text-gray-400': userResponse.status === 'OFFLINE',
             'text-yellow-400': userResponse.status === 'AWAY'
@@ -80,351 +86,357 @@
             'offline': userResponse.status === 'OFFLINE',
             'away': userResponse.status === 'AWAY'
             }"></span>
-              {{ userResponse.status }}
+                {{ userResponse.status }}
             </span>
-          </div>
+            </div>
 
-          <div class="member-info">
+            <div class="member-info">
 
-            <span>Member since {{ userResponse.joinedDate }}</span>
+              <span>Member since {{ userResponse.joinedDate }}</span>
 
-            <span class="location">
+              <span class="location">
               <img [src]="userResponse.location?.iconPath"/>
             </span>
+            </div>
+          </div>
+
+          <div class="profile-actions">
+            <button class="edit-profile-btn" (click)="isProfileModalOpen = true">
+              <i class="fa-solid fa-pencil"></i>
+              Edit Profile
+            </button>
           </div>
         </div>
-
-        <div class="profile-actions">
-          <button class="edit-profile-btn" (click)="isProfileModalOpen = true">
-            <i class="fa-solid fa-pencil"></i>
-            Edit Profile
-          </button>
-        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="stats-section">
+    <section class="stats-section">
 
-    <div class="stats" [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
+      <div class="stats" [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
 
-      <div class="stat">
+        <div class="stat">
         <span class="stat-value">
           {{ userResponse.libraryCount }}
         </span>
-        <span class="stat-label">
+          <span class="stat-label">
           Games
         </span>
-      </div>
+        </div>
 
-      <div class="stat">
+        <div class="stat">
         <span class="stat-value">
           {{ userResponse.friendsCount }}
         </span>
-        <span class="stat-label">
+          <span class="stat-label">
           Friends
         </span>
-      </div>
+        </div>
 
-      <div class="stat">
+        <div class="stat">
         <span class="stat-value">
           {{ userResponse.playTime }}
         </span>
-        <span class="stat-label">
+          <span class="stat-label">
           Hours played
         </span>
-      </div>
+        </div>
 
-      <div class="stat">
+        <div class="stat">
         <span class="stat-value">
           {{ userResponse.reviews }}
         </span>
-        <span class="stat-label">
+          <span class="stat-label">
           Reviews
         </span>
-      </div>
+        </div>
 
-      <div class="stat level-stat" [ngStyle]="{'color': userResponse.level?.levelColor}">
+        <div class="stat level-stat" [ngStyle]="{'color': userResponse.level?.levelColor}">
         <span class="stat-value">
           {{ userResponse.level?.level }}
         </span>
-        <span class="stat-label" [ngStyle]="{'color': userResponse.level?.levelColor}">
+          <span class="stat-label" [ngStyle]="{'color': userResponse.level?.levelColor}">
           Level
         </span>
-      </div>
-    </div>
-  </section>
-
-  <section class="profile-content">
-
-    <div class="profile-left">
-
-      <div class="profile-card about-card" [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
-        <div class="card-header">
-          <div>
-            <span class="section-label">PROFILE</span>
-            <h2 class="about-icon">
-              <i class="fa-solid fa-user"></i>
-              About
-            </h2>
-          </div>
-          <button class="view-all-btn" (click)="isEditBioModalOpen = true">
-            Edit bio
-            <i class="fa-solid fa-pencil"></i>
-          </button>
         </div>
-        <div class="card-divider"></div>
-
-        <p *ngIf="!userResponse.bio?.length" class="empty-text">
-          You haven't written anything about yourself
-        </p>
-
-        <p *ngIf="userResponse.bio?.length" class="bio-text">
-          {{ userResponse.bio }}
-        </p>
       </div>
+    </section>
 
-      <div class="profile-card recently-played" [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
-        <div class="card-header">
-          <div>
-            <span class="section-label"> ACTIVITY </span>
-            <h2 class="recently-played-icon"><i class="fa-solid fa-clock-rotate-left"></i> Recently Played </h2>
+    <section class="profile-content">
+
+      <div class="profile-left">
+
+        <div class="profile-card about-card" [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
+          <div class="card-header">
+            <div>
+              <span class="section-label">PROFILE</span>
+              <h2 class="about-icon">
+                <i class="fa-solid fa-user"></i>
+                About
+              </h2>
+            </div>
+            <button class="view-all-btn" (click)="isEditBioModalOpen = true">
+              Edit bio
+              <i class="fa-solid fa-pencil"></i>
+            </button>
           </div>
+          <div class="card-divider"></div>
 
-          <button class="view-all-btn">
-            View Library
-            <i class="fa-solid fa-arrow-right"></i>
-          </button>
+          <p *ngIf="!userResponse.bio?.length" class="empty-text">
+            You haven't written anything about yourself
+          </p>
+
+          <p *ngIf="userResponse.bio?.length" class="bio-text">
+            {{ userResponse.bio }}
+          </p>
         </div>
 
-        <div class="card-divider"></div>
-        <div class="recent-games">
-          <div class="recent-game" (click)="goToGame(12)">
+        <div class="profile-card recently-played" [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
+          <div class="card-header">
+            <div>
+              <span class="section-label"> ACTIVITY </span>
+              <h2 class="recently-played-icon"><i class="fa-solid fa-clock-rotate-left"></i> Recently Played </h2>
+            </div>
+
+            <button class="view-all-btn">
+              View Library
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+
+          <div class="card-divider"></div>
+          <div class="recent-games">
+            <div class="recent-game" (click)="goToGame(12)">
+              <img
+                src="https://images.immediate.co.uk/production/volatile/sites/3/2022/12/Star-Wars-Jedi-Survivor-release-date-0cbfc04.jpg?quality=90&webp=true&resize=1000,667">
+              <div class="game-info">
+                <h3>Jedi Survivor</h3>
+                <p>Recently played</p>
+              </div>
+              <i class="fa-solid fa-chevron-right game-arrow"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="profile-card favorite-game" [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
+          <div class="card-header">
+            <div>
+              <span class="section-label">FAVORITE</span>
+              <h2 class="favorite-game-icon"><i class="fa-solid fa-star"></i> Favorite Game </h2>
+            </div>
+          </div>
+
+          <div class="card-divider"></div>
+
+          <div class="favorite-game-content" *ngIf="userResponse.favoriteGame"
+               (click)="goToGame(userResponse.favoriteGame?.gameId)">
             <img
-              src="https://images.immediate.co.uk/production/volatile/sites/3/2022/12/Star-Wars-Jedi-Survivor-release-date-0cbfc04.jpg?quality=90&webp=true&resize=1000,667">
-            <div class="game-info">
-              <h3>Jedi Survivor</h3>
-              <p>Recently played</p>
+              [src]="getGameImageCover(userResponse.favoriteGame)">
+            <div class="favorite-game-info">
+              <h3>{{ userResponse.favoriteGame.title }}</h3>
+              <p>{{ userResponse.favoriteGame.playtimeMinutes }} Hours played</p>
             </div>
             <i class="fa-solid fa-chevron-right game-arrow"></i>
           </div>
-        </div>
-      </div>
 
-      <div class="profile-card favorite-game" [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
-        <div class="card-header">
-          <div>
-            <span class="section-label">FAVORITE</span>
-            <h2 class="favorite-game-icon"><i class="fa-solid fa-star"></i> Favorite Game </h2>
+          <div class="favorite-game-content" *ngIf="!userResponse.favoriteGame">
+            <h2 class="nothing-to-show">No favorite game set</h2>
           </div>
         </div>
 
-        <div class="card-divider"></div>
-
-        <div class="favorite-game-content" (click)="goToGame(12)">
-          <img
-            src="https://images.immediate.co.uk/production/volatile/sites/3/2022/12/Star-Wars-Jedi-Survivor-release-date-0cbfc04.jpg?quality=90&webp=true&resize=1000,667">
-          <div class="favorite-game-info">
-            <h3>Jedi Survivor</h3>
-            <p>120 Hours played</p>
-          </div>
-        </div>
       </div>
 
-    </div>
+      <div class="profile-card profile-sidebar" [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
 
-    <div class="profile-card profile-sidebar" [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
-
-      <div class="sidebar-section">
-        <div class="sidebar-header">
-          <div>
-            <h3 class="badges-icon">
-              <i class="fa-solid fa-medal"></i>
-              Badges
-              <span>
+        <div class="sidebar-section">
+          <div class="sidebar-header">
+            <div>
+              <h3 class="badges-icon">
+                <i class="fa-solid fa-medal"></i>
+                Badges
+                <span>
                 {{ userResponse.badges?.length || 0 }}
               </span>
-            </h3>
+              </h3>
+            </div>
+            <button class="view-all-btn">
+              View All
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
           </div>
-          <button class="view-all-btn">
-            View All
-            <i class="fa-solid fa-arrow-right"></i>
-          </button>
+
+          <div class="badges">
+            <div *ngFor="let badge of userResponse.badges" class="badge">
+              <img [src]="badge.iconPath" alt="{{badge.name}}">
+            </div>
+          </div>
+          <p
+            *ngIf="!userResponse.badges?.length"
+            class="empty-text">
+            You haven't earned any badges
+          </p>
         </div>
 
-        <div class="badges">
-          <div *ngFor="let badge of userResponse.badges" class="badge">
-            <img [src]="badge.iconPath" alt="{{badge.name}}">
-          </div>
-        </div>
-        <p
-          *ngIf="!userResponse.badges?.length"
-          class="empty-text">
-          You haven't earned any badges
-        </p>
-      </div>
+        <div class="sidebar-divider"></div>
 
-      <div class="sidebar-divider"></div>
+        <div class="sidebar-section">
 
-      <div class="sidebar-section">
-
-        <div class="sidebar-header">
-          <div>
-            <h3 class="genres-icon">
-              <i class="fa-solid fa-masks-theater"></i>
-              Favorite Genres
-              <span>
+          <div class="sidebar-header">
+            <div>
+              <h3 class="genres-icon">
+                <i class="fa-solid fa-masks-theater"></i>
+                Favorite Genres
+                <span>
                 {{ userResponse.favoriteGenres?.length || 0 }}
               </span>
-            </h3>
+              </h3>
+            </div>
+            <button class="view-all-btn" (click)="isEditGenresModalOpen = true">
+              Edit
+              <i class="fa-solid fa-pencil"></i>
+            </button>
           </div>
-          <button class="view-all-btn" (click)="isEditGenresModalOpen = true">
-            Edit
-            <i class="fa-solid fa-pencil"></i>
-          </button>
-        </div>
 
-        <div class="genre-list">
+          <div class="genre-list">
           <span *ngFor="let genre of userResponse.favoriteGenres" class="genre">
             {{ genre.name }}
           </span>
-        </div>
-        <p
-          *ngIf="!userResponse.favoriteGenres?.length"
-          class="empty-text">
-          No favorite genres set
-        </p>
-      </div>
-
-      <div class="sidebar-divider"></div>
-
-      <div class="sidebar-section">
-
-        <div class="sidebar-header">
-          <div>
-            <h3 class="looking-for-icon">
-              <i class="fa-solid fa-gamepad"></i>
-              Looking For
-            </h3>
           </div>
+          <p
+            *ngIf="!userResponse.favoriteGenres?.length"
+            class="empty-text">
+            No favorite genres set
+          </p>
         </div>
 
-        <div class="looking-for-list">
-<!--          TODO FETCH LOOKING FOR ITEMS-->
-          <div></div>
+        <div class="sidebar-divider"></div>
+
+        <div class="sidebar-section">
+
+          <div class="sidebar-header">
+            <div>
+              <h3 class="looking-for-icon">
+                <i class="fa-solid fa-gamepad"></i>
+                Looking For
+              </h3>
+            </div>
+          </div>
+
+          <div class="looking-for-list">
+            <!--          TODO FETCH LOOKING FOR ITEMS-->
+            <div></div>
+          </div>
+
+          <p
+            class="empty-text">
+            No preferences set
+          </p>
         </div>
 
-        <p
-          class="empty-text">
-          No preferences set
-        </p>
-      </div>
+        <div class="sidebar-divider"></div>
 
-      <div class="sidebar-divider"></div>
+        <div class="sidebar-section">
 
-      <div class="sidebar-section">
-
-        <div class="sidebar-header">
-          <div>
-            <h3 class="wishlist-icon">
-              <i class="fa-solid fa-bookmark"></i>
-              Wishlist
-              <span>
+          <div class="sidebar-header">
+            <div>
+              <h3 class="wishlist-icon">
+                <i class="fa-solid fa-bookmark"></i>
+                Wishlist
+                <span>
                 {{ userResponse.wishlistCount }}
               </span>
-            </h3>
-          </div>
-          <button class="view-all-btn" (click)="goToWishList()">
-            View all
-            <i class="fa-solid fa-arrow-right"></i>
-          </button>
-        </div>
-
-        <div class="wishlist-list">
-          <!--          TODO FETCH 3 games from wishlist image and title FOR ITEMS-->
-          <div></div>
-        </div>
-
-        <p
-          class="empty-text">
-          Nothing in wishlist
-        </p>
-      </div>
-
-      <div class="sidebar-divider"></div>
-
-      <div class="sidebar-section">
-        <div class="sidebar-header">
-          <div>
-            <h3 class="friends-icon">
-              <i class="fa-solid fa-user-group"></i>
-              Friends
-
-              <span>{{ userResponse.friendsCount || 0 }}</span>
-            </h3>
-          </div>
-
-          <button class="view-all-btn">
-            View all
-            <i class="fa-solid fa-arrow-right"></i>
-          </button>
-        </div>
-
-        <div class="friends-list">
-          <div class="friend">
-            <div class="friend-avatar">
-              <img
-                src="https://images.immediate.co.uk/production/volatile/sites/3/2022/12/Star-Wars-Jedi-Survivor-release-date-0cbfc04.jpg?quality=90&webp=true&resize=1000,667">
+              </h3>
             </div>
-            <div class="friend-info">
-              <h4>Matus</h4>
-              <span class="friend-status">
+            <button class="view-all-btn" (click)="goToWishList()">
+              View all
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+
+          <div class="wishlist-list">
+            <!--          TODO FETCH 3 games from wishlist image and title FOR ITEMS-->
+            <div></div>
+          </div>
+
+          <p
+            class="empty-text">
+            Nothing in wishlist
+          </p>
+        </div>
+
+        <div class="sidebar-divider"></div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-header">
+            <div>
+              <h3 class="friends-icon">
+                <i class="fa-solid fa-user-group"></i>
+                Friends
+
+                <span>{{ userResponse.friendsCount || 0 }}</span>
+              </h3>
+            </div>
+
+            <button class="view-all-btn">
+              View all
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+
+          <div class="friends-list">
+            <div class="friend">
+              <div class="friend-avatar">
+                <img
+                  src="https://images.immediate.co.uk/production/volatile/sites/3/2022/12/Star-Wars-Jedi-Survivor-release-date-0cbfc04.jpg?quality=90&webp=true&resize=1000,667">
+              </div>
+              <div class="friend-info">
+                <h4>Matus</h4>
+                <span class="friend-status">
                 <span class="status-dot online"></span>
                 Online
               </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-divider"></div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-header">
+            <div>
+              <h3 class="groups-icon">
+                <i class="fa-solid fa-users"></i>
+                Groups
+                <span>12</span>
+              </h3>
+            </div>
+
+            <button class="view-all-btn">
+              View all
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+
+          <div class="group-list">
+            <div class="group-item">
+              <div class="group-icon">
+                <img
+                  src="https://images.immediate.co.uk/production/volatile/sites/3/2022/12/Star-Wars-Jedi-Survivor-release-date-0cbfc04.jpg?quality=90&webp=true&resize=1000,667">
+              </div>
+
+              <div class="group-info">
+                <h4>
+                  RPG
+                </h4>
+                <p>120 members</p>
+              </div>
+              <i class="fa-solid fa-chevron-right group-arrow"></i>
             </div>
           </div>
         </div>
       </div>
-
-      <div class="sidebar-divider"></div>
-
-      <div class="sidebar-section">
-        <div class="sidebar-header">
-          <div>
-            <h3 class="groups-icon">
-              <i class="fa-solid fa-users"></i>
-              Groups
-              <span>12</span>
-            </h3>
-          </div>
-
-          <button class="view-all-btn">
-            View all
-            <i class="fa-solid fa-arrow-right"></i>
-          </button>
-        </div>
-
-        <div class="group-list">
-          <div class="group-item">
-            <div class="group-icon">
-              <img
-                src="https://images.immediate.co.uk/production/volatile/sites/3/2022/12/Star-Wars-Jedi-Survivor-release-date-0cbfc04.jpg?quality=90&webp=true&resize=1000,667">
-            </div>
-
-            <div class="group-info">
-              <h4>
-                RPG
-              </h4>
-              <p>120 members</p>
-            </div>
-            <i class="fa-solid fa-chevron-right group-arrow"></i>
-          </div>
-        </div>
-      </div>
-    </div>
+    </section>
   </section>
-
 </main>
 
 
@@ -497,7 +509,7 @@
         Select the genres that best describe your gaming preferences.
       </p>
 
-      <div *ngIf="isLoaded" class="genres-list">
+      <div *ngIf="isLoading" class="genres-list">
 
         <div
           *ngFor="let genre of genreResponse"
@@ -565,7 +577,7 @@
 </div>
 
 
-<div *ngIf="!isLoaded" class="text-center justify-center text-gray-400">
+<div *ngIf="!isLoading" class="text-center justify-center text-gray-400">
   Loading...
 </div>
 

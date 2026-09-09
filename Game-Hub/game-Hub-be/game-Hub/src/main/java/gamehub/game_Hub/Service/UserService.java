@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import gamehub.game_Hub.Request.BannerRequest;
 import gamehub.game_Hub.Request.UserUpdateRequest;
 import gamehub.game_Hub.Response.StatusResponse;
+import gamehub.game_Hub.Response.UserLibraryResponse;
 import gamehub.game_Hub.Response.UserNotificationsResponse;
 import gamehub.game_Hub.Response.UserPrivateResponse;
 import gamehub.game_Hub.Response.UserPublicResponse;
@@ -44,4 +45,5 @@ public interface UserService {
 
   UserNotificationsResponse getUserNotifications(Authentication connectedUser);
 
+  Long pinGame(Authentication connectedUser, Long gameId);
 }

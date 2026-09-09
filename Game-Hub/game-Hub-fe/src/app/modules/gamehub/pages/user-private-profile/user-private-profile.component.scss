@@ -420,11 +420,21 @@
 /* =========================================================
    FAVORITE GAME
    ========================================================= */
-
 .favorite-game-content {
   display: flex;
   align-items: center;
   gap: 20px;
+  padding: 10px 5px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s ease;
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+}
+
+.favorite-game-content .game-arrow {
+  margin-left: auto;
 }
 
 .favorite-game-content img {
@@ -975,3 +985,24 @@
 .wishlist-icon {
   color: #F87171;
 }
+
+.nothing-to-show {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.loading-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 18, 26, 0.65);
+  backdrop-filter: blur(2px);
+  border-radius: 12px;
+}
+
+.loading-overlay i {
+  font-size: 28px;
+}
+

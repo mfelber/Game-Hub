@@ -6,7 +6,7 @@
 
     <h2>Edit Profile</h2>
 
-<!--  TABS  -->
+    <!--  TABS  -->
     <div class="tabs">
       <button
         (click)="activeTab='basic'"
@@ -21,16 +21,16 @@
       </button>
 
       <button
-        (click)="activeTab='security'"
-        [class.active]="activeTab==='security'">
-        Security
+        (click)="activeTab='gaming'"
+        [class.active]="activeTab==='gaming'">
+        Gaming
       </button>
     </div>
 
-<!--  CONTENT  -->
+    <!--  CONTENT  -->
     <div class="modal-content">
 
-<!--  TAB BASIC INFO   -->
+      <!--  TAB BASIC INFO   -->
       <div *ngIf="activeTab==='basic'" class="section">
         <h3>Personal Information</h3>
 
@@ -70,7 +70,7 @@
 
       </div>
 
-<!--   PROFILE TAB   -->
+      <!--   PROFILE TAB   -->
 
       <div *ngIf="activeTab==='profile'" class="section">
         <h3>Profile Banner</h3>
@@ -101,9 +101,9 @@
 
         <div class="show-banners" (click)="showBanners()">
           <span>Show predefined banners</span><i
-            class="fa-solid"
-            [ngClass]="showPredefinedBanners ? 'fa-angle-up' : 'fa-angle-down'">
-          </i>
+          class="fa-solid"
+          [ngClass]="showPredefinedBanners ? 'fa-angle-up' : 'fa-angle-down'">
+        </i>
         </div>
 
         <div *ngIf="showPredefinedBanners" class="banners">
@@ -179,32 +179,100 @@
                 </button>
               </div>
 
-              <label>{{color.colorName}}</label>
+              <label>{{ color.colorName }}</label>
 
             </div>
 
           </div>
         </div>
       </div>
+      
+      <div *ngIf="activeTab==='gaming'" class="section">
 
-      <div *ngIf="activeTab==='security'" class="section">
-        <h3>Privacy & Security</h3>
-        <div class="settings">
-          Friend Request
-          <input type="radio">
+        <div class="pinned-game" *ngIf="user.favoriteGame && !showGameSearch" >
+          <div class="pinned-game-cover">
+            <img [src]="getGameImageCover(user.favoriteGame)" alt="{{user.favoriteGame.title}}}">
+          </div>
+
+          <div class="pinned-game-info">
+            <span class="pinned-game-label"> Pinned Game <i class="fa-solid fa-thumbtack"></i></span>
+            <h1>{{user.favoriteGame.title}}</h1>
+            <span class="pinned-game-description">This game is displayed on yout profile</span>
+          </div>
+
+          <div class="pinned-game-actions">
+
+            <div class="pinned-game-status">
+              <i class="fa-solid fa-check"></i>
+            </div>
+
+            <button class="change-game-btn" (click)="changeFavoriteGame()">
+              <i class="fa-solid fa-pen"></i>
+              Change
+            </button>
+
+          </div>
+
         </div>
 
-        <div class="settings">
-          Send Messages
-          <input type="radio">
+
+        <div class="pin-favorite-game" *ngIf="showGameSearch">
+          <h3>Pin Game on your profile <i class="fa-solid fa-thumb-tack"></i></h3>
+
+          <div class="game-search-wrapper">
+            <app-search-bar
+              [value]="searchedQuery"
+              [placeholder]="'Search your games...'"
+              (search)="searchLibrary($event)">
+            </app-search-bar>
+
+            <div class="search-results" *ngIf="searchedQuery !== '' && userLibraryResponse.length">
+
+              <div class="game-result"
+                   *ngFor="let game of userLibraryResponse"
+                   (click)="selectFavoriteGame(game)">
+
+                <img [src]="getGameImageCover(game)" alt="{{game.title}}}">
+
+                <div class="game-result-info">
+                  <strong>{{ game.title }}</strong>
+                  <span>{{ game.playtimeMinutes }}</span>
+                </div>
+
+              </div>
+            </div>
+
+            <div *ngIf="selectedFavoriteGame" class="selected-game">
+
+              <img
+                [src]="getGameImageCover(selectedFavoriteGame)"
+                [alt]="selectedFavoriteGame.title"
+              >
+
+              <div class="selected-game-info">
+                <strong>{{ selectedFavoriteGame.title }}</strong>
+                <span>{{ selectedFavoriteGame.playtimeMinutes }} minutes played</span>
+              </div>
+
+              <div style="display: flex; margin-left: auto; gap: 5px">
+                <div class="selected-game-remove" (click)="removeSelectedGame()">
+                  <i class="fa-solid fa-xmark"></i>
+                </div>
+              </div>
+
+            </div>
+
+
+          </div>
         </div>
 
-        <div class="settings">
-          Profile Visibility
-          Friends <input type="radio">
-          No One<input type="radio">
-          Every One<input type="radio">
+        <hr style="border: 1px solid rgba(255,255,255,.08)">
+
+        <div class="looking-for">
+          <h3>Looking for</h3>
         </div>
+
+
       </div>
 
     </div>
@@ -212,11 +280,11 @@
     <div class="buttons" [class.profile-buttons]="activeTab === 'profile'">
 
       <button
-              [title]="changesExist ? 'See how your profile will look' : 'Make at least one change to preview your profile'"
-              [disabled]="!changesExist"
-              (click)="showPreview()"
-              *ngIf="activeTab === 'profile'"
-              [ngClass]="changesExist ? 'bg-gray-600 text-white hover:bg-gray-700 cursor-pointer' : 'bg-gray-600 text-gray-400'">
+        [title]="changesExist ? 'See how your profile will look' : 'Make at least one change to preview your profile'"
+        [disabled]="!changesExist"
+        (click)="showPreview()"
+        *ngIf="activeTab === 'profile'"
+        [ngClass]="changesExist ? 'bg-gray-600 text-white hover:bg-gray-700 cursor-pointer' : 'bg-gray-600 text-gray-400'">
         Try changes
       </button>
 
@@ -235,7 +303,5 @@
     </div>
 
   </div>
-
-
 
 </div>
