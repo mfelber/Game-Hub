@@ -273,4 +273,13 @@ public class LibraryServiceImpl implements LibraryService {
     return user.getRecommendationGames().contains(game);
   }
 
+  @Override
+  public List<UserLibraryResponse> searchLibraryGames(final String query, final Authentication connectedUser) {
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+    return libraryRepository.findAllByUserAndGameTitleContainingIgnoreCase(user, query).stream().map(libraryMapper::toUserLibraryResponse).toList();
+  }
+
 }

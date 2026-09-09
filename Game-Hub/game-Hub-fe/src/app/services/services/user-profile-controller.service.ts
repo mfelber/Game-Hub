@@ -13,6 +13,8 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { getBio } from '../fn/user-profile-controller/get-bio';
 import { GetBio$Params } from '../fn/user-profile-controller/get-bio';
+import { getLibraryGames } from '../fn/user-profile-controller/get-library-games';
+import { GetLibraryGames$Params } from '../fn/user-profile-controller/get-library-games';
 import { getUserNotifications } from '../fn/user-profile-controller/get-user-notifications';
 import { GetUserNotifications$Params } from '../fn/user-profile-controller/get-user-notifications';
 import { getUserPrivate } from '../fn/user-profile-controller/get-user-private';
@@ -23,6 +25,8 @@ import { getUserPublic } from '../fn/user-profile-controller/get-user-public';
 import { GetUserPublic$Params } from '../fn/user-profile-controller/get-user-public';
 import { getUserStatus } from '../fn/user-profile-controller/get-user-status';
 import { GetUserStatus$Params } from '../fn/user-profile-controller/get-user-status';
+import { pinGame } from '../fn/user-profile-controller/pin-game';
+import { PinGame$Params } from '../fn/user-profile-controller/pin-game';
 import { setPredefinedBanner } from '../fn/user-profile-controller/set-predefined-banner';
 import { SetPredefinedBanner$Params } from '../fn/user-profile-controller/set-predefined-banner';
 import { setStatusToAway } from '../fn/user-profile-controller/set-status-to-away';
@@ -42,6 +46,7 @@ import { uploadBannerImage } from '../fn/user-profile-controller/upload-banner-i
 import { UploadBannerImage$Params } from '../fn/user-profile-controller/upload-banner-image';
 import { uploadProfileImage } from '../fn/user-profile-controller/upload-profile-image';
 import { UploadProfileImage$Params } from '../fn/user-profile-controller/upload-profile-image';
+import { UserLibraryResponse } from '../models/user-library-response';
 import { UserNotificationsResponse } from '../models/user-notifications-response';
 import { UserPrivateResponse } from '../models/user-private-response';
 import { UserPublicResponse } from '../models/user-public-response';
@@ -203,6 +208,31 @@ export class UserProfileControllerService extends BaseService {
       map((r: StrictHttpResponse<{
 }>): {
 } => r.body)
+    );
+  }
+
+  /** Path part for operation `pinGame()` */
+  static readonly PinGamePath = '/profile/pin-game/{gameId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `pinGame()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  pinGame$Response(params: PinGame$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return pinGame(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `pinGame$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  pinGame(params: PinGame$Params, context?: HttpContext): Observable<number> {
+    return this.pinGame$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
     );
   }
 
@@ -411,6 +441,31 @@ export class UserProfileControllerService extends BaseService {
   getUserStatus(params?: GetUserStatus$Params, context?: HttpContext): Observable<StatusResponse> {
     return this.getUserStatus$Response(params, context).pipe(
       map((r: StrictHttpResponse<StatusResponse>): StatusResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `getLibraryGames()` */
+  static readonly GetLibraryGamesPath = '/profile/search-library-games';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getLibraryGames()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getLibraryGames$Response(params: GetLibraryGames$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<UserLibraryResponse>>> {
+    return getLibraryGames(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getLibraryGames$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getLibraryGames(params: GetLibraryGames$Params, context?: HttpContext): Observable<Array<UserLibraryResponse>> {
+    return this.getLibraryGames$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<UserLibraryResponse>>): Array<UserLibraryResponse> => r.body)
     );
   }
 

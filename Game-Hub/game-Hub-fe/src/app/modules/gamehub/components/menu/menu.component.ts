@@ -1,8 +1,8 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {NavigationEnd, Router, RouterLink, RouterLinkActive} from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {initFlowbite} from 'flowbite';
 import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
-import {CommunityControllerService, UserProfileControllerService} from '../../../../services/services';
+import {UserProfileControllerService} from '../../../../services/services';
 import {UserPrivateResponse} from '../../../../services/models/user-private-response';
 import {FormsModule} from '@angular/forms';
 import {StatusResponse} from '../../../../services/models/status-response';
@@ -24,65 +24,38 @@ import {RefreshService} from '../../../../services/fn/refresh-service/refresh-se
   styleUrl: './menu.component.scss'
 })
 export class MenuComponent implements OnInit {
-  @ViewChild('dropdownAvatarName') dropdown!: ElementRef<HTMLDivElement>;
-
-  closeDropdown() {
-    this.dropdown.nativeElement.classList.add('hidden');
-  }
 
   ngOnInit(): void {
     initFlowbite();
-    this.loadUserName();
+    this.loadUser();
     this.getStatus();
-    this.getNumberOfFriendRequests();
     this.refreshService.refresh$.subscribe(() => {
-      this.getNumberOfFriendRequests();
+      this.loadUser();
     });
     this.refreshService.refresh$.subscribe(() => {
-      this.loadUserName();
+      this.loadUser();
     });
   }
 
   statusMenuOpen = false;
-  isStoreActive = false;
-  isLibraryActive = false;
-  isCommunityActive = false;
-  _isGameDetailsActive = false;
   userResponse: UserPrivateResponse = {};
   statusResponse: StatusResponse = {};
   statuses = ['ONLINE', 'OFFLINE', 'AWAY'];
   userHasProfilePicture = true;
-  friendRequestCount: number = 0;
 
   constructor(
     private router: Router,
     protected userService: UserProfileControllerService,
-    private communityService: CommunityControllerService,
     private refreshService: RefreshService
   ) {
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        const url = this.router.url;
-        this.updateActiveTabs(url);
-        this.isGameDetailsActive(url)
-      }
-    });
+
   }
 
-
-  getNumberOfFriendRequests() {
-    this.communityService.friendRequestsCount().subscribe({
-      next: (count) => {
-        this.friendRequestCount = count;
-        console.log(this.friendRequestCount)
-      }
-    })
-  }
-
-  private loadUserName() {
+  private loadUser() {
     this.userService.getUserPrivateShort().subscribe({
       next: (user) => {
         this.userResponse = user;
+        console.log(this.userResponse);
         if (user.userProfilePicture) {
           this.userHasProfilePicture = true;
         } else {
@@ -102,28 +75,6 @@ export class MenuComponent implements OnInit {
         console.error('error getting status:', err);
       }
     });
-  }
-
-  updateActiveTabs(url: string) {
-    this.isStoreActive = url === '/gamehub' || url.startsWith('/gamehub/game/');
-    this.isLibraryActive = url === '/gamehub/library' || url.startsWith("/gamehub/library/game/");
-    this.isCommunityActive = url === '/gamehub/find-players';
-  }
-
-  isGameDetailsActive(url: string) {
-    this._isGameDetailsActive =
-      url.startsWith("/gamehub/library/game/")
-      || url.startsWith("/gamehub/game/")
-      || url.startsWith("/gamehub/user/")
-      || url.startsWith("/gamehub/find-players");
-  }
-
-  goToCart() {
-    console.log("Cart clicked!");
-  }
-
-  showNotifications() {
-    console.log("Notifications clicked!");
   }
 
   getProfilePicture(user: UserPrivateResponse) {
@@ -172,7 +123,6 @@ export class MenuComponent implements OnInit {
 
   onStatusChange(newStatus: string) {
 
-
     switch (newStatus) {
       case 'ONLINE':
         this.setUserToOnline()
@@ -185,10 +135,6 @@ export class MenuComponent implements OnInit {
         break
     }
 
-  }
-
-  getAvailableStatuses(): string[] {
-    return this.statuses.filter(s => s !== this.userResponse.status);
   }
 
   toggleStatusMenu(event: MouseEvent) {

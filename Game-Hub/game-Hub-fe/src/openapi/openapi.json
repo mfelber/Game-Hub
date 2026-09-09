@@ -544,6 +544,38 @@
         }
       }
     },
+    "/profile/pin-game/{gameId}": {
+      "post": {
+        "tags": [
+          "user-profile-controller"
+        ],
+        "operationId": "pinGame",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/profile/image": {
       "post": {
         "tags": [
@@ -1741,6 +1773,39 @@
         }
       }
     },
+    "/profile/search-library-games": {
+      "get": {
+        "tags": [
+          "user-profile-controller"
+        ],
+        "operationId": "getLibraryGames",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserLibraryResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/profile/bio": {
       "get": {
         "tags": [
@@ -2058,43 +2123,12 @@
         }
       }
     },
-    "/find-players/friends/{userId}/check": {
-      "get": {
-        "tags": [
-          "community-controller"
-        ],
-        "operationId": "friendExistsForUser",
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "boolean"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/find-players/friend-requests": {
       "get": {
         "tags": [
           "community-controller"
         ],
-        "operationId": "getFriendRequests",
+        "operationId": "getAllMyFriendRequests",
         "parameters": [
           {
             "name": "page",
@@ -2145,68 +2179,6 @@
                 "schema": {
                   "type": "integer",
                   "format": "int32"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/find-players/friend-request/status/sender/{userId}": {
-      "get": {
-        "tags": [
-          "community-controller"
-        ],
-        "operationId": "friendRequestExistsFromSender",
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "boolean"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/find-players/friend-request/status/receiver/{userId}": {
-      "get": {
-        "tags": [
-          "community-controller"
-        ],
-        "operationId": "friendRequestExistsForReceiver",
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "boolean"
                 }
               }
             }
@@ -3525,10 +3497,10 @@
           "inCart": {
             "type": "boolean"
           },
-          "inLibrary": {
+          "inWishList": {
             "type": "boolean"
           },
-          "inWishList": {
+          "inLibrary": {
             "type": "boolean"
           }
         }
@@ -3762,13 +3734,6 @@
               "$ref": "#/components/schemas/GameResponseShort"
             }
           },
-          "favoriteGames": {
-            "uniqueItems": true,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/GameResponseShort"
-            }
-          },
           "favoriteGenres": {
             "uniqueItems": true,
             "type": "array",
@@ -3782,6 +3747,9 @@
             "items": {
               "$ref": "#/components/schemas/GameResponseShort"
             }
+          },
+          "favoriteGame": {
+            "$ref": "#/components/schemas/UserLibraryResponse"
           },
           "userProfilePicture": {
             "type": "string",
@@ -3890,6 +3858,10 @@
             "type": "integer",
             "format": "int32"
           },
+          "friendReqCount": {
+            "type": "integer",
+            "format": "int32"
+          },
           "level": {
             "$ref": "#/components/schemas/LevelResponse"
           },
@@ -3901,13 +3873,6 @@
             }
           },
           "playRecently": {
-            "uniqueItems": true,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/GameResponseShort"
-            }
-          },
-          "favoriteGames": {
             "uniqueItems": true,
             "type": "array",
             "items": {
@@ -3927,6 +3892,9 @@
             "items": {
               "$ref": "#/components/schemas/GameResponseShort"
             }
+          },
+          "favoriteGame": {
+            "$ref": "#/components/schemas/UserLibraryResponse"
           },
           "userProfilePicture": {
             "type": "string",

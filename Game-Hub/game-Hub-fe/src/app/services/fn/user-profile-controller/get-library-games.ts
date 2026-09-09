@@ -8,15 +8,16 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { UserLibraryResponse } from '../../models/user-library-response';
 
-export interface FriendRequestExistsForReceiver$Params {
-  userId: number;
+export interface GetLibraryGames$Params {
+  query: string;
 }
 
-export function friendRequestExistsForReceiver(http: HttpClient, rootUrl: string, params: FriendRequestExistsForReceiver$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
-  const rb = new RequestBuilder(rootUrl, friendRequestExistsForReceiver.PATH, 'get');
+export function getLibraryGames(http: HttpClient, rootUrl: string, params: GetLibraryGames$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<UserLibraryResponse>>> {
+  const rb = new RequestBuilder(rootUrl, getLibraryGames.PATH, 'get');
   if (params) {
-    rb.path('userId', params.userId, {});
+    rb.query('query', params.query, {});
   }
 
   return http.request(
@@ -24,9 +25,9 @@ export function friendRequestExistsForReceiver(http: HttpClient, rootUrl: string
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: String((r as HttpResponse<any>).body) === 'true' }) as StrictHttpResponse<boolean>;
+      return r as StrictHttpResponse<Array<UserLibraryResponse>>;
     })
   );
 }
 
-friendRequestExistsForReceiver.PATH = '/find-players/friend-request/status/receiver/{userId}';
+getLibraryGames.PATH = '/profile/search-library-games';

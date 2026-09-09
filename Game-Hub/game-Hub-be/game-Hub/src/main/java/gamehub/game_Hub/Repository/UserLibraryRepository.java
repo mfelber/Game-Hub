@@ -1,5 +1,6 @@
 package gamehub.game_Hub.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -30,5 +31,7 @@ public interface UserLibraryRepository extends JpaRepository<UserLibrary, UserGa
   void deleteAllByGame(Game game);
 
   Boolean existsByUser_IdAndGame_Id(Long userId, Long gameId);
+
+  List<UserLibrary> findAllByUserAndGameTitleContainingIgnoreCase(User user, String gameTitle);
 
 }

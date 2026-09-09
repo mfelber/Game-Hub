@@ -60,43 +60,8 @@ public class CommunityController {
     communityService.rejectFriendRequest(connectedUser, userId);
   }
 
-  @GetMapping("/friend-request/status/sender/{userId}")
-  public ResponseEntity<Boolean> friendRequestExistsFromSender(Authentication connectedUser,
-      @PathVariable Long userId) {
-    User authUser = (User) connectedUser.getPrincipal();
-    User sender = userRepository.findById(authUser.getId())
-        .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + authUser.getId()));
-    boolean exists = friendRequestRepository.existsBySender_IdAndReceiver_Id(sender.getId(), userId);
-    return ResponseEntity.ok(exists);
-  }
-
-  @GetMapping("/friend-request/status/receiver/{userId}")
-  public ResponseEntity<Boolean> friendRequestExistsForReceiver(Authentication connectedUser,
-      @PathVariable Long userId) {
-    User authUser = (User) connectedUser.getPrincipal();
-    User receiver = userRepository.findById(authUser.getId())
-        .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + authUser.getId()));
-    boolean exists = friendRequestRepository.existsByReceiver_IdAndSender_Id(receiver.getId(), userId);
-    return ResponseEntity.ok(exists);
-  }
-
-  @GetMapping("/friends/{userId}/check")
-  public ResponseEntity<Boolean> friendExistsForUser(Authentication connectedUser, @PathVariable Long userId) {
-    User authUser = (User) connectedUser.getPrincipal();
-    User user = userRepository.findById(authUser.getId())
-        .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + authUser.getId()));
-
-    User friend = userRepository.findById(userId)
-        .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
-
-    boolean areFriends = userRepository.existsByIdAndFriends_Id(user.getId(), friend.getId());
-
-    return ResponseEntity.ok(areFriends);
-
-  }
-
   @GetMapping("/friend-requests")
-  public ResponseEntity<PageResponse<FriendRequestResponse>> getFriendRequests(Authentication connectedUser,
+  public ResponseEntity<PageResponse<FriendRequestResponse>> getAllMyFriendRequests(Authentication connectedUser,
       @RequestParam(name = "page", defaultValue = "0", required = false) int page,
       @RequestParam(name = "size", defaultValue = "10", required = false) int size) {
     return ResponseEntity.ok(communityService.getAllMyFriendRequests(connectedUser, page, size));

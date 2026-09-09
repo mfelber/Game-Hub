@@ -10,6 +10,7 @@ import {cancelFriendRequest} from '../../../../services/fn/community-controller/
 import {RefreshService} from '../../../../services/fn/refresh-service/refresh-service';
 import {EmptyStateComponent} from '../../components/empty-state/empty-state.component';
 import {UserActionsComponent} from '../../components/user-actions/user-actions.component';
+import {UserLibraryResponse} from '../../../../services/models/user-library-response';
 
 @Component({
   selector: 'app-user-public-profile',
@@ -48,7 +49,6 @@ export class UserPublicProfileComponent implements OnInit {
     userProfilePicture: '',
     playRecently: [],
     recommendedGames: [],
-    favoriteGames: [],
     bannerImage: '',
     wishlistCount: 0,
     libraryCount: 0,
@@ -56,7 +56,7 @@ export class UserPublicProfileComponent implements OnInit {
   }
 
   userHasProfilePicture = true
-  isLoaded = false;
+  isLoading = false;
   friendRequestFromThisUser: boolean | null = null;
   friendRequestExistsFromSender: boolean | null = null;
   userIsMyFriend: boolean | null = null;
@@ -67,6 +67,7 @@ export class UserPublicProfileComponent implements OnInit {
 
 
   private loadUserPublicProfile() {
+    this.isLoading = true;
     const userId: any = this.router.snapshot.paramMap.get('id')
     this.userService.getUserPublic({userId}).subscribe({
       next: (user) => {
@@ -80,27 +81,11 @@ export class UserPublicProfileComponent implements OnInit {
         } else {
           this.userHasProfilePicture = false
         }
-        this.communityService.friendRequestExistsFromSender({userId}).subscribe({
-          next: (res) => {
-            this.friendRequestExistsFromSender = res;
-            console.log(this.friendRequestExistsFromSender)
-            // this.isLoaded = true;
-          }
-        })
-        this.communityService.friendRequestExistsForReceiver({userId}).subscribe({
-          next: (res) => {
-            this.friendRequestFromThisUser = res;
-            console.log(this.friendRequestFromThisUser)
-
-          }
-        })
-        this.communityService.friendExistsForUser({userId}).subscribe({
-          next: (res) => {
-            this.userIsMyFriend = res
-            console.log(this.userIsMyFriend)
-            this.isLoaded = true;
-          }
-        })
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.log(err);
+        this.isLoading = true;
       }
     });
   }
@@ -125,7 +110,7 @@ export class UserPublicProfileComponent implements OnInit {
   goToGame(gameId: any) {
     this.gameService.getGameById({gameId}).subscribe({
       next: (game) => {
-        this.route.navigate(['gamehub/game', gameId]);
+        this.route.navigate(['gamehub/store/game', gameId]);
       },
       error: (err) => {
         console.error('Error with loading game:', err);
@@ -133,7 +118,7 @@ export class UserPublicProfileComponent implements OnInit {
     });
   }
 
-  getGameImageCover(game: GameResponse): string {
+  getGameImageCover(game: UserLibraryResponse): string {
     if (game.gameCoverImage) {
       return 'data:image/jpeg;base64,' + game.gameCoverImage;
     }

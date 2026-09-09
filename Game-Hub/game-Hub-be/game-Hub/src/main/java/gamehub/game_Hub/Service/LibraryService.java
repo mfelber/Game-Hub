@@ -1,11 +1,11 @@
 package gamehub.game_Hub.Service;
 
 import java.nio.file.AccessDeniedException;
+import java.util.List;
 
 import org.springframework.security.core.Authentication;
 
 import gamehub.game_Hub.Common.PageResponse;
-import gamehub.game_Hub.Response.GameResponse;
 import gamehub.game_Hub.Response.UserLibraryResponse;
 
 public interface LibraryService {
@@ -34,5 +34,7 @@ public interface LibraryService {
   Long removeRecommendGame(Long gameId, Authentication connectedUser);
 
   Boolean checkGameRecommended(Long gameId, Authentication connectedUser);
+
+  List<UserLibraryResponse> searchLibraryGames(String query, Authentication connectedUser);
 
 }

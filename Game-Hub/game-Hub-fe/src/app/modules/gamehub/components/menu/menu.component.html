@@ -23,17 +23,17 @@
          [routerLinkActiveOptions]="{ exact: true }"> <i class="fa-solid fa-users"></i> Groups </a>
       <!--    TODO groups page filters  -->
       <!--    Country, created by me, free to join, request join   -->
-      <a *ngIf="friendRequestCount === 0" routerLink="/gamehub/friend-requests" routerLinkActive="active"
+      <a *ngIf="userResponse.friendReqCount === 0" routerLink="/gamehub/friend-requests" routerLinkActive="active"
          [routerLinkActiveOptions]="{ exact: true }"> <i class="fa-solid fa-user-plus"></i> Friend Requests </a>
 
-      <a *ngIf="friendRequestCount > 0"
+      <a *ngIf="userResponse.friendReqCount! > 0"
          class="menu-item mt-4 px-4 flex items-center gap-3
                      cursor-pointer transition"
          routerLink="/gamehub/friend-requests" routerLinkActive="active"> <i class="fa-solid fa-user-plus"></i> Friend Requests
 
         <span class="absolute top-0 right-5 bg-red-600 text-white text-xs font-bold
                          rounded-full w-5 h-5 flex items-center justify-center">
-              {{ friendRequestCount }}
+              {{ userResponse.friendReqCount }}
             </span>
       </a>
 

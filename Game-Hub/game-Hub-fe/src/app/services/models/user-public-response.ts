@@ -8,6 +8,7 @@ import { GameResponseShort } from '../models/game-response-short';
 import { GenreResponse } from '../models/genre-response';
 import { LevelResponse } from '../models/level-response';
 import { LocationResponse } from '../models/location-response';
+import { UserLibraryResponse } from '../models/user-library-response';
 export interface UserPublicResponse {
   accountStatus?: 'ACTIVE' | 'BANNED' | 'DISABLED' | 'SUSPENDED' | 'DELETING' | 'DELETED';
   badges?: Array<BadgeResponse>;
@@ -15,7 +16,7 @@ export interface UserPublicResponse {
   bannerType?: string;
   bio?: string;
   cardColor?: CardColorResponse;
-  favoriteGames?: Array<GameResponseShort>;
+  favoriteGame?: UserLibraryResponse;
   favoriteGenres?: Array<GenreResponse>;
   friendRequestReceived?: boolean;
   friendRequestSent?: boolean;

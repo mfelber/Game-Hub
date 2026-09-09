@@ -20,6 +20,7 @@ import {FlagsControllerService} from '../../../../services/services/flags-contro
 import {ProfileInfoComponent} from '../../components/profile-info/profile-info.component';
 import {EditProfileInfoComponent} from '../../components/edit-profile-info/edit-profile-info.component';
 import {UserActionsComponent} from '../../components/user-actions/user-actions.component';
+import {UserLibraryResponse} from '../../../../services/models/user-library-response';
 
 @Component({
   selector: 'app-user-profile',
@@ -71,7 +72,7 @@ export class UserPrivateProfileComponent implements OnInit {
   isEditGenresModalOpen = false;
   isEditProfileModalOpen = false;
   isProfileModalOpen = false;
-  isLoaded = false;
+  isLoading = false;
   isLocationDropdownOpen = false;
   toastVisible = false;
 
@@ -107,7 +108,6 @@ export class UserPrivateProfileComponent implements OnInit {
     userProfilePicture: '',
     playRecently: [],
     recommendedGames: [],
-    favoriteGames: [],
     bannerImage: '',
     wishlistCount: 0,
     libraryCount: 0,
@@ -129,10 +129,11 @@ export class UserPrivateProfileComponent implements OnInit {
   }
 
   loadUserPrivateProfile() {
+    this.isLoading = true;
     this.userService.getUserPrivate().subscribe({
       next: (user) => {
         this.userResponse = user;
-        this.isLoaded = true;
+        console.log(this.userResponse);
         this.bioUpdateRequest.bio = user.bio || '';
         this.getProfilePicture(user)
         this.favoriteGenreIds = user.favoriteGenres?.map(g => g.id!) || [];
@@ -145,14 +146,19 @@ export class UserPrivateProfileComponent implements OnInit {
           lastName: user.lastName,
           username: user.username,
           location: this.userResponse.location?.name as undefined
-
         }
         this.authenticationRequest = {
           email: user.email!,
           password: ''
         }
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.isLoading = true;
+        console.log(err);
       }
-    });
+    }
+    );
   }
 
   showSuccess(message: string) {
@@ -169,7 +175,7 @@ export class UserPrivateProfileComponent implements OnInit {
     setTimeout(() => this.successMessage = null, 500);
   }
   // TODO use this while retrieving game images for currently playing , wishlist,
-  getGameImageCover(game: GameResponse): string {
+  getGameImageCover(game: UserLibraryResponse): string {
     if (game.gameCoverImage) {
       return 'data:image/jpeg;base64,' + game.gameCoverImage;
     }
@@ -197,7 +203,7 @@ export class UserPrivateProfileComponent implements OnInit {
   goToGame(gameId: any) {
     this.gameService.getGameById({gameId}).subscribe({
       next: (game) => {
-        this.router.navigate(['gamehub/game', gameId]);
+        this.router.navigate(['gamehub/store/game', gameId]);
       },
       error: (err) => {
         console.error('Error with loading game:', err);
@@ -289,9 +295,14 @@ export class UserPrivateProfileComponent implements OnInit {
 
   async saveProfile(event:any) {
 
-    console.log("received picture:", event.profilePicture);
-    console.log("received banner:", event.profileBanner);
     try {
+
+      if (event.favoriteGameId !== null) {
+        await this.userService.pinGame({
+          gameId: event.favoriteGameId,
+        }).toPromise()
+        this.showSuccess('You have successfully updated profile')
+      }
 
       if (event.selectedBannerId !== null) {
         const bannerPath = "/assets/banners/banner_" + event.selectedBannerId + ".jpg";
