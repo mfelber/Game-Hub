@@ -51,11 +51,13 @@ export class MenuComponent implements OnInit {
 
   }
 
+
+  friendReqCount: any = 0
   private loadUser() {
     this.userService.getUserPrivateShort().subscribe({
       next: (user) => {
         this.userResponse = user;
-        console.log(this.userResponse);
+        this.friendReqCount = this.userResponse.friendReqCount;
         if (user.userProfilePicture) {
           this.userHasProfilePicture = true;
         } else {

@@ -1,0 +1,19 @@
+<div class="modal-backdrop">
+  <div class="change-role-modal">
+    <h2>You are already playing a game</h2>
+    <p>
+      <strong class="user-name">{{ game.title }}</strong> is currently running.
+      Stop your current game before starting another one.
+      <br />
+    </p>
+    <div class="buttons">
+      <button class="cancel" (click)="close.emit()">
+        Cancel
+      </button>
+
+      <button class="stop-play-btn" (click)="stopPlaying(game.gameId)">
+        Stop playing
+      </button>
+    </div>
+  </div>
+</div>

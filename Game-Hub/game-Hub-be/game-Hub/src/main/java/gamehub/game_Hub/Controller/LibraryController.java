@@ -108,4 +108,24 @@ public class LibraryController {
     return ResponseEntity.ok(libraryService.checkGameRecommended(gameId, connectedUser));
   }
 
+  @PostMapping("/play/{gameId}")
+  public ResponseEntity<Long> playGame(@PathVariable final Long gameId, Authentication connectedUser) {
+    return ResponseEntity.ok(libraryService.playGame(connectedUser, gameId));
+  }
+
+  @PostMapping("/stop/{gameId}")
+  public ResponseEntity<Void> stopPlayingGame(Authentication connectedUser) {
+    libraryService.stopPlayingGame(connectedUser);
+    return ResponseEntity.ok().build();
+  }
+
+  @GetMapping("/currently-playing")
+  public ResponseEntity<UserLibraryResponse> currentlyPlaying(Authentication connectedUser) {
+    UserLibraryResponse response = libraryService.getCurrentlyPlayingGame(connectedUser);
+    if (response == null) {
+      return ResponseEntity.noContent().build();
+    }
+    return ResponseEntity.ok(response);
+  }
+
 }

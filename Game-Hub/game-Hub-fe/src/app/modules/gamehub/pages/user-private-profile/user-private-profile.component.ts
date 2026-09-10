@@ -3,7 +3,7 @@ import {UserPrivateResponse} from '../../../../services/models/user-private-resp
 import {initFlowbite} from 'flowbite';
 import {Router} from '@angular/router';
 import {UserProfileControllerService} from '../../../../services/services/user-profile-controller.service';
-import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
+import {DatePipe, NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {GameResponse} from '../../../../services/models/game-response';
 import {StoreControllerService} from '../../../../services/services';
 import {FormsModule} from '@angular/forms';
@@ -21,6 +21,8 @@ import {ProfileInfoComponent} from '../../components/profile-info/profile-info.c
 import {EditProfileInfoComponent} from '../../components/edit-profile-info/edit-profile-info.component';
 import {UserActionsComponent} from '../../components/user-actions/user-actions.component';
 import {UserLibraryResponse} from '../../../../services/models/user-library-response';
+import {RecentGamesResponse} from '../../../../services/models/recent-games-response';
+import {GameResponseShort} from '../../../../services/models/game-response-short';
 
 @Component({
   selector: 'app-user-profile',
@@ -34,18 +36,12 @@ import {UserLibraryResponse} from '../../../../services/models/user-library-resp
     ProfileInfoComponent,
     EditProfileInfoComponent,
     UserActionsComponent,
+    DatePipe,
   ],
   templateUrl: './user-private-profile.component.html',
   styleUrl: './user-private-profile.component.scss'
 })
 export class UserPrivateProfileComponent implements OnInit {
-
-  ngOnInit(): void {
-    initFlowbite();
-    this.loadUserPrivateProfile();
-    this.getGenres();
-    this.getColorsForCard()
-  }
 
   constructor(
     private router: Router,
@@ -58,6 +54,17 @@ export class UserPrivateProfileComponent implements OnInit {
     private refreshService: RefreshService,
     private storeFlagsService: FlagsControllerService
   ) {
+  }
+
+  ngOnInit(): void {
+    initFlowbite();
+    this.loadUserPrivateProfile();
+    this.getColorsForCard()
+    this.userService.getRecentlyPlayedGames().subscribe({
+      next: data => {
+        console.log(data);
+      }
+    })
   }
 
   activeTab: 'basic' | 'profile' | 'security' = 'basic';
@@ -101,12 +108,13 @@ export class UserPrivateProfileComponent implements OnInit {
   groupInvitesOptions: string[] = [];
   playTogetherInvitesOptions: string[] = [];
 
+  recentGamesResponse: RecentGamesResponse[] = [];
+
   userResponse: UserPrivateResponse = {
     bio: '',
     badges: [],
     favoriteGenres: [],
     userProfilePicture: '',
-    playRecently: [],
     recommendedGames: [],
     bannerImage: '',
     wishlistCount: 0,
@@ -151,7 +159,8 @@ export class UserPrivateProfileComponent implements OnInit {
           email: user.email!,
           password: ''
         }
-        this.isLoading = false;
+        this.loadRecentGames();
+        this.getGenres();
       },
       error: (err) => {
         this.isLoading = true;
@@ -159,6 +168,14 @@ export class UserPrivateProfileComponent implements OnInit {
       }
     }
     );
+  }
+
+  loadRecentGames() {
+    this.userService.getRecentlyPlayedGames().subscribe({
+      next: (recentGames) => {
+        this.recentGamesResponse = recentGames;
+      }
+    })
   }
 
   showSuccess(message: string) {
@@ -181,6 +198,7 @@ export class UserPrivateProfileComponent implements OnInit {
     }
     return 'https://images.pexels.com/photos/1054655/pexels-photo-1054655.jpeg';
   }
+
 
   getProfilePicture(user: UserPrivateResponse) {
     if (user.userProfilePicture) {
@@ -259,6 +277,8 @@ export class UserPrivateProfileComponent implements OnInit {
     this.gameService.getAllGenres().subscribe({
       next: (genres) => {
         this.genreResponse = genres;
+        console.log(this.genreResponse);
+        this.isLoading = false;
       }
     })
   }

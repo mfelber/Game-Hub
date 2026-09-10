@@ -53,12 +53,19 @@
             <div class="username-row">
               <h1>{{ userResponse.username }}</h1>
               <span class="status" [ngClass]="{
-            'text-green-500': userResponse.status === 'ONLINE',
+            'text-green-500': userResponse.status === 'ONLINE' || userResponse.status === 'PLAYING',
             'text-gray-400': userResponse.status === 'OFFLINE',
             'text-yellow-400': userResponse.status === 'AWAY'
             }">
-              <span class="status-dot"></span>
-                {{ userResponse.status }}
+              <span class="status-dot" [ngClass]="{
+            'online': userResponse.status === 'ONLINE' || userResponse.status === 'PLAYING',
+            'offline': userResponse.status === 'OFFLINE',
+            'away': userResponse.status === 'AWAY'
+            }"></span>
+                {{
+                  userResponse.status === 'PLAYING' ? userResponse.status + ' ' + userResponse.currentlyPlaying?.title
+                    : userResponse.status
+                }}
             </span>
             </div>
 
@@ -227,24 +234,35 @@
               <h2 class="recently-played-icon"><i class="fa-solid fa-clock-rotate-left"></i> Recently Played </h2>
             </div>
 
-            <button class="view-all-btn">
+            <button class="view-all-btn" *ngIf="recentGamesResponse.length">
               View Library
               <i class="fa-solid fa-arrow-right"></i>
             </button>
           </div>
 
           <div class="card-divider"></div>
-          <div class="recent-games">
+
+          <div class="recent-games" *ngFor="let game of recentGamesResponse">
             <div class="recent-game" (click)="goToGame(12)">
               <img
-                src="https://images.immediate.co.uk/production/volatile/sites/3/2022/12/Star-Wars-Jedi-Survivor-release-date-0cbfc04.jpg?quality=90&webp=true&resize=1000,667">
+                [src]="getGameImageCover(game.game!)">
               <div class="game-info">
-                <h3>Jedi Survivor</h3>
-                <p>Recently played</p>
+                <h3>{{ game.game?.title }}</h3>
+                <p>{{ game.playTime }} Hours played</p>
+              </div>
+              <div class="last-played">
+                <span>Last played on</span>
+                <p>{{ game.lastPlayed | date: 'dd.MM.yyyy' }}</p>
               </div>
               <i class="fa-solid fa-chevron-right game-arrow"></i>
             </div>
+            <div class="card-divider"></div>
           </div>
+
+          <div class="favorite-game-content" *ngIf="!recentGamesResponse.length">
+            <h2 class="nothing-to-show">No recent games</h2>
+          </div>
+
         </div>
 
         <div class="profile-card favorite-game" [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
@@ -258,7 +276,7 @@
           <div class="card-divider"></div>
 
           <div class="favorite-game-content" *ngIf="userResponse.favoriteGame"
-               (click)="goToGame(userResponse.favoriteGame?.gameId)">
+               (click)="goToGame(userResponse.favoriteGame.gameId)">
             <img
               [src]="getGameImageCover(userResponse.favoriteGame)">
             <div class="favorite-game-info">

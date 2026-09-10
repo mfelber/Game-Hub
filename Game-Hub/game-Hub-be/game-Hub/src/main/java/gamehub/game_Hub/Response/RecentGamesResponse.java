@@ -1,27 +1,25 @@
 package gamehub.game_Hub.Response;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Data
+@Builder
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class UserLibraryResponse {
+@AllArgsConstructor
+public class RecentGamesResponse {
 
-  private Long gameId;
-  private String title;
-  private byte[] gameCoverImage;
-  private boolean installed;
-  private boolean favorite;
-  private Integer playtimeMinutes;
+  private GameResponseShort game;
   private LocalDateTime lastPlayed;
-  private Boolean currentlyPlaying;
+  private int playTime;
 
 }

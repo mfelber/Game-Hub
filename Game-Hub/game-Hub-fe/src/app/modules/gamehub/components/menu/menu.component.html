@@ -23,17 +23,17 @@
          [routerLinkActiveOptions]="{ exact: true }"> <i class="fa-solid fa-users"></i> Groups </a>
       <!--    TODO groups page filters  -->
       <!--    Country, created by me, free to join, request join   -->
-      <a *ngIf="userResponse.friendReqCount === 0" routerLink="/gamehub/friend-requests" routerLinkActive="active"
+      <a *ngIf="friendReqCount === 0" routerLink="/gamehub/friend-requests" routerLinkActive="active"
          [routerLinkActiveOptions]="{ exact: true }"> <i class="fa-solid fa-user-plus"></i> Friend Requests </a>
 
-      <a *ngIf="userResponse.friendReqCount! > 0"
+      <a *ngIf="friendReqCount > 0"
          class="menu-item mt-4 px-4 flex items-center gap-3
                      cursor-pointer transition"
          routerLink="/gamehub/friend-requests" routerLinkActive="active"> <i class="fa-solid fa-user-plus"></i> Friend Requests
 
         <span class="absolute top-0 right-5 bg-red-600 text-white text-xs font-bold
                          rounded-full w-5 h-5 flex items-center justify-center">
-              {{ userResponse.friendReqCount }}
+              {{ friendReqCount }}
             </span>
       </a>
 
@@ -69,19 +69,21 @@
           <span
             class="w-3 h-3 rounded-full"
             [ngClass]="{
-            'bg-green-500': statusResponse.status === 'ONLINE',
+            'bg-green-500': statusResponse.status === 'ONLINE' || statusResponse.status === 'PLAYING',
             'bg-gray-400': statusResponse.status === 'OFFLINE',
             'bg-yellow-400': statusResponse.status === 'AWAY'
            }">
             </span>
             <span
               [ngClass]="{
-                'text-green-500': statusResponse.status === 'ONLINE',
+                'text-green-500': statusResponse.status === 'ONLINE' || statusResponse.status === 'PLAYING',
                 'text-yellow-400': statusResponse.status === 'AWAY',
                 'text-gray-400': statusResponse.status === 'OFFLINE'
             }">
 
-            {{ statusResponse.status }}
+            {{
+                userResponse.status === 'PLAYING' ? 'ONLINE' : userResponse.status
+              }}
 
         </span>
             <i class="fa-solid fa-chevron-down text-xs text-gray-400"></i>

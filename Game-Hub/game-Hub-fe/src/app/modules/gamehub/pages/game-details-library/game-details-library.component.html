@@ -67,6 +67,7 @@
 
         </div>
 
+<!--   cant uninstall game when playing it     -->
         <hr *ngIf="isDownloaded">
         <button class="favorite-remove" *ngIf="isDownloaded" (click)="uninstallGame(game.gameId)"> Uninstall <i
           class="fa-solid fa-trash-can"></i></button>

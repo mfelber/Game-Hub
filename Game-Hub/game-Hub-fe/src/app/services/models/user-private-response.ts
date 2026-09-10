@@ -8,6 +8,7 @@ import { GameResponseShort } from '../models/game-response-short';
 import { GenreResponse } from '../models/genre-response';
 import { LevelResponse } from '../models/level-response';
 import { LocationResponse } from '../models/location-response';
+import { RecentGamesResponse } from '../models/recent-games-response';
 import { UserLibraryResponse } from '../models/user-library-response';
 export interface UserPrivateResponse {
   badges?: Array<BadgeResponse>;
@@ -15,6 +16,7 @@ export interface UserPrivateResponse {
   bannerType?: string;
   bio?: string;
   cardColor?: CardColorResponse;
+  currentlyPlaying?: GameResponseShort;
   email?: string;
   favoriteGame?: UserLibraryResponse;
   favoriteGenres?: Array<GenreResponse>;
@@ -26,13 +28,13 @@ export interface UserPrivateResponse {
   level?: LevelResponse;
   libraryCount?: number;
   location?: LocationResponse;
-  playRecently?: Array<GameResponseShort>;
   playTime?: number;
   predefinedBannerPath?: string;
   profileColor?: string;
+  recentGamesResponse?: Array<RecentGamesResponse>;
   recommendedGames?: Array<GameResponseShort>;
   reviews?: number;
-  status?: 'ONLINE' | 'OFFLINE' | 'AWAY';
+  status?: 'ONLINE' | 'PLAYING' | 'OFFLINE' | 'AWAY';
   userId?: number;
   userProfilePicture?: string;
   username?: string;

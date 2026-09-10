@@ -52,8 +52,6 @@ public class UserServiceImpl implements UserService {
 
   private final GameRepository gameRepository;
 
-  private final UserLibraryRepository userLibraryRepository;
-
   @Override
   public Long updateUserProfile(final Authentication connectedUser,
       final UserUpdateRequest userUpdateRequest) {
@@ -199,6 +197,7 @@ public class UserServiceImpl implements UserService {
     User user = userRepository.findById(authUser.getId())
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
 
+    user.setCurrentlyPlayingGame(null);
     user.setStatus(OFFLINE);
     userRepository.save(user);
   }

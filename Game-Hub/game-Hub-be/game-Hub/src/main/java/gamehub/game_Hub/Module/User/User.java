@@ -171,6 +171,10 @@ public class User implements UserDetails, Principal {
   @JoinColumn(name = "favorite_game_id")
   private Game favoriteGame;
 
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "currently_playing_game_id")
+  private Game currentlyPlayingGame;
+
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return List.of(new SimpleGrantedAuthority(

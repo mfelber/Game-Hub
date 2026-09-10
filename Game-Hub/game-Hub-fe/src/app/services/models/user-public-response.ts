@@ -16,6 +16,7 @@ export interface UserPublicResponse {
   bannerType?: string;
   bio?: string;
   cardColor?: CardColorResponse;
+  currentlyPlaying?: GameResponseShort;
   favoriteGame?: UserLibraryResponse;
   favoriteGenres?: Array<GenreResponse>;
   friendRequestReceived?: boolean;
@@ -26,13 +27,12 @@ export interface UserPublicResponse {
   level?: LevelResponse;
   libraryCount?: number;
   location?: LocationResponse;
-  playRecently?: Array<GameResponseShort>;
   playTime?: number;
   predefinedBannerPath?: string;
   profileColor?: string;
   recommendedGames?: Array<GameResponseShort>;
   reviews?: number;
-  status?: 'ONLINE' | 'OFFLINE' | 'AWAY';
+  status?: 'ONLINE' | 'PLAYING' | 'OFFLINE' | 'AWAY';
   userId?: number;
   userProfilePicture?: string;
   username?: string;

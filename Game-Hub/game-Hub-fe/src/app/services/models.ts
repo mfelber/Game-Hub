@@ -44,6 +44,7 @@ export type { PageResponseUserCommunityResponse } from './models/page-response-u
 export type { PageResponseUserLibraryResponse } from './models/page-response-user-library-response';
 export type { PageResponseWishlistResponse } from './models/page-response-wishlist-response';
 export type { PlatformResponse } from './models/platform-response';
+export type { RecentGamesResponse } from './models/recent-games-response';
 export type { RecentUserResponse } from './models/recent-user-response';
 export type { RegistrationRequest } from './models/registration-request';
 export type { ReportRequest } from './models/report-request';

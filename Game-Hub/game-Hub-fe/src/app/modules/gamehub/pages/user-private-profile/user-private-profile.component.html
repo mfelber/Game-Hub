@@ -32,11 +32,12 @@
 
 <main *ngIf="!showPreviewColors">
 
-  <section>
+  <div class="loading-overlay" *ngIf="isLoading">
+    <i class="fa-solid fa-spinner fa-spin"></i>
+  </div>
 
-    <div class="loading-overlay" *ngIf="isLoading">
-      <i class="fa-solid fa-spinner fa-spin"></i>
-    </div>
+  <section *ngIf="!isLoading">
+
 
     <!--  BANNER  -->
     <section class="banner-section">
@@ -77,16 +78,19 @@
             <div class="username-row">
               <h1>{{ userResponse.username }}</h1>
               <span class="status" [ngClass]="{
-            'text-green-500': userResponse.status === 'ONLINE',
+            'text-green-500': userResponse.status === 'ONLINE' || userResponse.status === 'PLAYING',
             'text-gray-400': userResponse.status === 'OFFLINE',
             'text-yellow-400': userResponse.status === 'AWAY'
             }">
               <span class="status-dot" [ngClass]="{
-            'online': userResponse.status === 'ONLINE',
+            'online': userResponse.status === 'ONLINE' || userResponse.status === 'PLAYING',
             'offline': userResponse.status === 'OFFLINE',
             'away': userResponse.status === 'AWAY'
             }"></span>
-                {{ userResponse.status }}
+                {{
+                  userResponse.status === 'PLAYING' ? userResponse.status + ' ' + userResponse.currentlyPlaying?.title
+                    : userResponse.status
+                }}
             </span>
             </div>
 
@@ -204,17 +208,26 @@
           </div>
 
           <div class="card-divider"></div>
-          <div class="recent-games">
-            <div class="recent-game" (click)="goToGame(12)">
+
+          <div class="recent-games" *ngFor="let game of recentGamesResponse">
+            <div class="recent-game" (click)="goToGame(game.game?.gameId)">
               <img
-                src="https://images.immediate.co.uk/production/volatile/sites/3/2022/12/Star-Wars-Jedi-Survivor-release-date-0cbfc04.jpg?quality=90&webp=true&resize=1000,667">
+                [src]="getGameImageCover(game.game!)">
               <div class="game-info">
-                <h3>Jedi Survivor</h3>
-                <p>Recently played</p>
+                <h3>{{ game.game?.title }}</h3>
+                <p>{{ game.playTime }} Hours played</p>
               </div>
+              <div class="last-played">
+                <span>Last played on</span>
+                <p>{{ game.lastPlayed | date: 'dd.MM.yyyy' }}</p>
+              </div>
+
               <i class="fa-solid fa-chevron-right game-arrow"></i>
             </div>
+            <div class="card-divider"></div>
+
           </div>
+
         </div>
 
         <div class="profile-card favorite-game" [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
@@ -228,7 +241,7 @@
           <div class="card-divider"></div>
 
           <div class="favorite-game-content" *ngIf="userResponse.favoriteGame"
-               (click)="goToGame(userResponse.favoriteGame?.gameId)">
+               (click)="goToGame(userResponse.favoriteGame.gameId)">
             <img
               [src]="getGameImageCover(userResponse.favoriteGame)">
             <div class="favorite-game-info">
@@ -509,7 +522,7 @@
         Select the genres that best describe your gaming preferences.
       </p>
 
-      <div *ngIf="isLoading" class="genres-list">
+      <div *ngIf="!isLoading" class="genres-list">
 
         <div
           *ngFor="let genre of genreResponse"
@@ -574,11 +587,6 @@
        [ngClass]="{'translate-x-0 opacity-100': toastVisible, 'translate-x-24 opacity-0': !toastVisible}">
     {{ successMessage }}
   </div>
-</div>
-
-
-<div *ngIf="!isLoading" class="text-center justify-center text-gray-400">
-  Loading...
 </div>
 
 <div *ngIf="showPreviewColors" class="fixed inset-0 z-50 flex flex-col items-center pointer-events-none">

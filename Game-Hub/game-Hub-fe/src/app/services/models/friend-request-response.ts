@@ -9,7 +9,7 @@ export interface FriendRequestResponse {
   level?: LevelResponse;
   location?: LocationResponse;
   profileColor?: string;
-  status?: 'ONLINE' | 'OFFLINE' | 'AWAY';
+  status?: 'ONLINE' | 'PLAYING' | 'OFFLINE' | 'AWAY';
   userId?: number;
   userProfilePicture?: string;
   username?: string;

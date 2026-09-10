@@ -411,10 +411,29 @@
   }
 }
 
+.last-played {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-left: auto;
+  margin-right: 20px;
+}
+
+.last-played span {
+  font-size: 11px;
+  color: #8b93a7;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.last-played p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #c5cad5;
+}
+
 .game-arrow {
-  margin-right: 8px;
   color: rgba(255, 255, 255, 0.25);
-  font-size: 12px;
 }
 
 /* =========================================================

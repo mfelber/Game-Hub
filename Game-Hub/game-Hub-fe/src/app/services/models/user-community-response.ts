@@ -13,7 +13,7 @@ export interface UserCommunityResponse {
   location?: LocationResponse;
   profileColor?: string;
   reviewsCount?: number;
-  status?: 'ONLINE' | 'OFFLINE' | 'AWAY';
+  status?: 'ONLINE' | 'PLAYING' | 'OFFLINE' | 'AWAY';
   userId?: number;
   userProfilePicture?: string;
   username?: string;

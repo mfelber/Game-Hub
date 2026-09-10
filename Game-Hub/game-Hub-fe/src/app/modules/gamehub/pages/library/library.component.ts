@@ -11,6 +11,7 @@ import {UserLibraryResponse} from '../../../../services/models/user-library-resp
 import {EmptyStateComponent} from '../../components/empty-state/empty-state.component';
 import {UserActionsComponent} from '../../components/user-actions/user-actions.component';
 import {PaginationComponent} from '../../components/pagination/pagination.component';
+import {PlayingWarningModalComponent} from '../../components/playing-warning/playing-warning-modal.component';
 
 @Component({
   selector: 'app-library',
@@ -20,7 +21,8 @@ import {PaginationComponent} from '../../components/pagination/pagination.compon
     SearchBar,
     EmptyStateComponent,
     UserActionsComponent,
-    PaginationComponent
+    PaginationComponent,
+    PlayingWarningModalComponent
   ],
   templateUrl: './library.component.html',
   styleUrl: './library.component.scss'
@@ -37,10 +39,13 @@ export class LibraryComponent implements OnInit {
   loadFavoriteGames = false;
   loadDownloadedGames = false;
   loadAllGames = false;
-  isLoaded = false;
   isLoading = false;
-  gamesDownloadedMap: { [key: number]: boolean } = {};
   activeFilter = 'ALL';
+
+  currentlyPlayingGameId : any = undefined;
+  currentlyPlayingGame: UserLibraryResponse = {};
+
+  userIsPlayingGame = false;
 
   constructor(
     private libraryService: LibraryControllerService,
@@ -51,6 +56,7 @@ export class LibraryComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loadCurrentlyPlayingGame();
     this.route.queryParams.subscribe(params => {
       this.page = Number(params['page'] ?? 1) - 1;
       this.activeFilter = params['filter'] ?? 'ALL';
@@ -59,7 +65,6 @@ export class LibraryComponent implements OnInit {
   }
 
   loadCurrentGames() {
-    this.isLoading = true;
     switch (this.activeFilter) {
       case 'ALL':
         this.getOwnedGame();
@@ -86,57 +91,52 @@ export class LibraryComponent implements OnInit {
   }
 
   getFavoriteGames() {
+    this.isLoading = true;
     this.libraryService.getFavorites({
       page: this.page,
       size: this.size
     }).subscribe({
       next: (games) => {
         this.gamePageResponse = games;
-        this.isLoaded = true;
+        this.emptyFavoriteGames = games.totalElements === 0;
         this.loadFavoriteGames = true;
         this.loadAllGames = false;
         this.loadDownloadedGames = false;
-        this.emptyFavoriteGames = games.totalElements === 0;
-        this.gamePageResponse.content?.forEach(game => {
-          this.checkIfGameIsDownload(game.gameId);
-        })
-        this.isLoaded = true;
+        this.currentlyPlayingGameId = games.content?.find(game => game.currentlyPlaying)?.gameId ?? null
         this.isLoading = false;
+        console.log(this.currentlyPlayingGameId);
+        console.log(this.gamePageResponse);
       },
       error: (e) => {
-        this.isLoading = false;
-        this.isLoaded = false;
+        this.isLoading = true;
         console.error(e);
       }
     })
   }
 
   getDownloadedGames() {
+    this.isLoading = true;
     this.libraryService.getDownloadedGames({
       page: this.page,
       size: this.size
     }).subscribe({
       next: (games) => {
         this.gamePageResponse = games;
-        this.isLoaded = true;
+        this.emptyDownloadedGames = games.totalElements === 0;
+        this.currentlyPlayingGameId = games.content?.find(game => game.currentlyPlaying)?.gameId ?? null
         this.loadAllGames = false;
         this.loadFavoriteGames = false;
         this.loadDownloadedGames = true;
-        this.emptyDownloadedGames = games.totalElements === 0;
-        this.gamePageResponse.content?.forEach(game => {
-          this.checkIfGameIsDownload(game.gameId);
-        })
-        this.isLoaded = true;
         this.isLoading = false;
       },
       error: (e) => {
-        this.isLoaded = false;
-        this.isLoading = false;
+        this.isLoading = true;
       }
     })
   }
 
   getOwnedGame() {
+    this.isLoading = true;
     this.libraryService.getLibrary({
       page: this.page,
       size: this.size
@@ -144,21 +144,17 @@ export class LibraryComponent implements OnInit {
       {
         next: (games) => {
           this.gamePageResponse = games;
-          this.isLoaded = true;
-          this.loadAllGames = true
+          console.log(this.gamePageResponse);
           this.loadDownloadedGames = false;
           this.loadFavoriteGames = false;
           this.emptyLibrary = games.totalElements === 0;
-          this.gamePageResponse.content?.forEach(game => {
-            this.checkIfGameIsDownload(game.gameId);
-          })
-          this.isLoaded = true;
+          this.currentlyPlayingGameId = games.content?.find(game => game.currentlyPlaying)?.gameId ?? null
           this.isLoading = false;
+          this.loadAllGames = true
         },
         error: (err) => {
           console.error('Error loading library:', err);
-          this.isLoading = false;
-          this.isLoaded = false;
+          this.isLoading = true;
         }
       }
     )
@@ -186,20 +182,11 @@ export class LibraryComponent implements OnInit {
     console.log('searchYourGames');
   }
 
-  downloadGame(gameId: any) {
-    console.log(gameId);
-    this.libraryService.downloadGame({gameId}).subscribe({
+  downloadGame(game: UserLibraryResponse) {
+    this.libraryService.downloadGame({gameId: game.gameId!}).subscribe({
       next: res => {
         console.log('game was downloaded');
-        this.checkIfGameIsDownload(gameId);
-      }
-    })
-  }
-
-  checkIfGameIsDownload(gameId: any) {
-    this.libraryService.checkDownloadedGame({gameId}).subscribe({
-      next: (downloaded: boolean) => {
-        this.gamesDownloadedMap[gameId] = downloaded;
+        game.installed = true;
       }
     })
   }
@@ -212,5 +199,51 @@ export class LibraryComponent implements OnInit {
       },
       queryParamsHandling: 'merge'
     });
+  }
+
+  playGame(game: UserLibraryResponse) {
+
+    if (this.currentlyPlayingGameId !== null && this.currentlyPlayingGameId !== game.gameId) {
+      this.userIsPlayingGame = true;
+      return;
+    }
+
+    this.libraryService.playGame({gameId: game.gameId!}).subscribe({
+      next: (gameId: any) => {
+        game.currentlyPlaying = true;
+        this.currentlyPlayingGameId = game.gameId;
+        this.loadCurrentlyPlayingGame();
+      }
+    })
+  }
+
+  stopPlayingGame(game: UserLibraryResponse) {
+    this.libraryService.stopPlayingGame({gameId: game.gameId!}).subscribe({
+      next: (gameId: any) => {
+        this.loadCurrentlyPlayingGame()
+        game.currentlyPlaying = false;
+      }
+    })
+  }
+
+  closeModal() {
+    this.userIsPlayingGame = false;
+  }
+
+  loadCurrentlyPlayingGame() {
+    this.libraryService.currentlyPlaying().subscribe({
+      next: data => {
+        this.currentlyPlayingGame = data;
+        this.currentlyPlayingGameId = data?.gameId ?? null;
+      },
+      error: (e) => {
+        this.currentlyPlayingGame = {};
+        this.currentlyPlayingGameId = null;
+      }
+    })
+  }
+
+  gameStopped() {
+    this.loadCurrentGames();
   }
 }
