@@ -6,6 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import gamehub.game_Hub.Module.FriendRequest;
+import gamehub.game_Hub.Module.Friendship;
+import gamehub.game_Hub.Module.User.User;
 
 public interface FriendRequestRepository extends JpaRepository<FriendRequest, Long> {
 

@@ -34,7 +34,6 @@ import {forkJoin} from 'rxjs';
     NgClass,
     FormsModule,
     NgStyle,
-    CardPreviewComponent,
     ProfileInfoComponent,
     EditProfileInfoComponent,
     UserActionsComponent,
@@ -146,7 +145,7 @@ export class UserPrivateProfileComponent implements OnInit {
         this.userResponse = user;
         console.log(this.userResponse);
         this.bioUpdateRequest.bio = user.bio || '';
-        this.getProfilePicture(user)
+        this.userHasProfilePicture = !!user.userProfilePicture;
         this.favoriteGenreIds = user.favoriteGenres?.map(g => g.id!) || [];
         this.userResponse.favoriteGenres = user.favoriteGenres?.sort((a, b) =>
           a.name!.localeCompare(b.name!)
@@ -207,12 +206,9 @@ export class UserPrivateProfileComponent implements OnInit {
 
   getProfilePicture(user: UserPrivateResponse) {
     if (user.userProfilePicture) {
-      this.userHasProfilePicture = true;
       return 'data:image/jpeg;base64,' + user.userProfilePicture;
-    } else {
-      this.userHasProfilePicture = false;
     }
-    return this.userHasProfilePicture;
+    return '';
   }
 
   getBanner(user: UserPrivateResponse) {
@@ -224,6 +220,9 @@ export class UserPrivateProfileComponent implements OnInit {
 
   // TODO click event for use this while retrieving game images for currently playing , wishlist,
   goToGame(gameId: any) {
+    if (!gameId) {
+      return;
+    }
     this.gameService.getGameById({gameId}).subscribe({
       next: (game) => {
         this.router.navigate(['gamehub/library/game', gameId]);
@@ -499,5 +498,13 @@ export class UserPrivateProfileComponent implements OnInit {
 
   goToWishList() {
     this.router.navigate(['gamehub/wishlist']);
+  }
+
+  goToUser(userId: number | undefined) {
+    this.router.navigate(['gamehub/user', userId])
+  }
+
+  goToFriends() {
+
   }
 }

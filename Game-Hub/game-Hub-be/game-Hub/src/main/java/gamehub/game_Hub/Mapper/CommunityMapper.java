@@ -1,5 +1,6 @@
 package gamehub.game_Hub.Mapper;
 
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.stereotype.Service;
@@ -9,12 +10,11 @@ import gamehub.game_Hub.Module.FriendRequest;
 import gamehub.game_Hub.Module.Friendship;
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Repository.FriendRequestRepository;
-import gamehub.game_Hub.Repository.FriendshipRepository;
+import gamehub.game_Hub.Response.FriendProfileResponse;
 import gamehub.game_Hub.Response.FriendRequestResponse;
 import gamehub.game_Hub.Response.LevelResponse;
 import gamehub.game_Hub.Response.LocationResponse;
 import gamehub.game_Hub.Response.UserCommunityResponse;
-import gamehub.game_Hub.enums.Status;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -55,7 +55,8 @@ public class CommunityMapper {
         .isFriend(isFriend)
         .friendRequestSent(friendReqSent)
         .friendRequestReceived(friendReqReceived)
-        .currentlyPlaying(foundUser.getCurrentlyPlayingGame() != null ? gameMapper.toGameResponseShort(foundUser.getCurrentlyPlayingGame()): null)
+        .currentlyPlaying(foundUser.getCurrentlyPlayingGame() != null ? gameMapper.toGameResponseShort(
+            foundUser.getCurrentlyPlayingGame()) : null)
         .build();
   }
 
@@ -78,6 +79,21 @@ public class CommunityMapper {
         .profileColor(sender.getProfileColor())
         .createdAt(requestSentAt)
         .build();
+  }
+
+  public List<FriendProfileResponse> toUserFriendsResponse(final List<Friendship> friends) {
+
+    return friends.stream().map(friendship -> FriendProfileResponse.builder()
+        .userId(friendship.getFriend().getId())
+        .userName(friendship.getFriend().getName())
+        .level(new LevelResponse(friendship.getFriend().getLevel().getId(),
+            friendship.getFriend().getLevel().getLevelNumber(), friendship.getFriend().getLevel().getLevelColor()))
+        .status(friendship.getFriend().getStatus())
+        .currentlyPlaying(friendship.getFriend().getCurrentlyPlayingGame() != null ? gameMapper.toGameResponseShort(
+            friendship.getFriend().getCurrentlyPlayingGame()) : null)
+        .userProfilePicture(FileUtils.readCoverFromLocation(friendship.getFriend().getUserProfilePicture()))
+        .profileColor(friendship.getFriend().getProfileColor())
+        .build()).toList();
   }
 
 }

@@ -20,4 +20,6 @@ public interface WishlistRepository extends JpaRepository<Wishlist, UserWishlist
 
   void deleteAllByGame(Game game);
 
+  Wishlist findByUser(User user);
+
 }

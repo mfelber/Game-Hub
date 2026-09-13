@@ -113,15 +113,15 @@ app-user-actions.top {
   background: currentColor;
 }
 
-.status-dot.online {
+.online {
   color: #22c55e;
 }
 
-.status-dot.offline {
+.offline {
   color: #9ca3af;
 }
 
-.status-dot.away {
+.away {
   color: #facc15;
 }
 
@@ -579,17 +579,6 @@ app-user-actions.top {
 }
 
 /* =========================================================
-   WISHLIST
-   ========================================================= */
-
-.wishlist-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 14px;
-}
-
-/* =========================================================
    FRIENDS
    ========================================================= */
 
@@ -639,10 +628,6 @@ app-user-actions.top {
   margin-top: 3px;
   color: rgba(255, 255, 255, 0.4);
   font-size: 11px;
-}
-
-.friend-status.online {
-  color: #22c55e;
 }
 
 /* =========================================================
@@ -997,6 +982,18 @@ app-user-actions.top {
 
 .wishlist-icon {
   color: #F87171;
+}
+
+.wishlist {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.friends {
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .nothing-to-show {

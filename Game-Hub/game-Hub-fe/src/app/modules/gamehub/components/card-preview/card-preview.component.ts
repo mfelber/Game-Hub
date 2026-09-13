@@ -14,7 +14,6 @@ import {UserLibraryResponse} from '../../../../services/models/user-library-resp
     NgClass,
     NgStyle,
     NgForOf,
-    UserActionsComponent,
     DatePipe
   ],
   templateUrl: './card-preview.component.html',

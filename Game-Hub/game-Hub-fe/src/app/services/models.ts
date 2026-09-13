@@ -23,6 +23,7 @@ export type { CommunityGuidelinesResponse } from './models/community-guidelines-
 export type { DashboardReportResponse } from './models/dashboard-report-response';
 export type { DashboardResponse } from './models/dashboard-response';
 export type { ForgotPasswordRequest } from './models/forgot-password-request';
+export type { FriendProfileResponse } from './models/friend-profile-response';
 export type { FriendRequestResponse } from './models/friend-request-response';
 export type { GamePreviewResponse } from './models/game-preview-response';
 export type { GameRequest } from './models/game-request';

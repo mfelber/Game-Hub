@@ -40,12 +40,6 @@
             )" alt="Banner cover"
           />
 
-<!--          <img *ngIf="userResponse.bannerType === 'CUSTOM'"-->
-<!--               [src]=getBanner(userResponse)-->
-<!--               alt="Banner cover"-->
-<!--          />-->
-
-
         </div>
       </section>
 
@@ -116,7 +110,8 @@
 
       <section class="stats-section">
 
-        <div class="stats" [ngStyle]="{'background-color': showPreviewColors ? previewSelectedColor : userResponse.cardColor?.colorCode}">
+        <div class="stats"
+             [ngStyle]="{'background-color': showPreviewColors ? previewSelectedColor : userResponse.cardColor?.colorCode}">
 
           <div class="stat">
         <span class="stat-value">
@@ -169,7 +164,8 @@
 
         <div class="profile-left">
 
-          <div class="profile-card about-card" [ngStyle]="{'background-color': showPreviewColors ? previewSelectedColor : userResponse.cardColor?.colorCode}">
+          <div class="profile-card about-card"
+               [ngStyle]="{'background-color': showPreviewColors ? previewSelectedColor : userResponse.cardColor?.colorCode}">
             <div class="card-header">
               <div>
                 <span class="section-label">PROFILE</span>
@@ -194,7 +190,8 @@
             </p>
           </div>
 
-          <div class="profile-card recently-played" [ngStyle]="{'background-color': showPreviewColors ? previewSelectedColor : userResponse.cardColor?.colorCode}">
+          <div class="profile-card recently-played"
+               [ngStyle]="{'background-color': showPreviewColors ? previewSelectedColor : userResponse.cardColor?.colorCode}">
             <div class="card-header">
               <div>
                 <span class="section-label"> ACTIVITY </span>
@@ -234,7 +231,8 @@
 
           </div>
 
-          <div class="profile-card favorite-game" [ngStyle]="{'background-color': showPreviewColors ? previewSelectedColor : userResponse.cardColor?.colorCode}">
+          <div class="profile-card favorite-game"
+               [ngStyle]="{'background-color': showPreviewColors ? previewSelectedColor : userResponse.cardColor?.colorCode}">
             <div class="card-header">
               <div>
                 <span class="section-label">FAVORITE</span>
@@ -245,7 +243,7 @@
             <div class="card-divider"></div>
 
             <div class="favorite-game-content" *ngIf="userResponse.favoriteGame"
-                 (click)="goToGame(userResponse.favoriteGame?.gameId)">
+                 (click)="goToGame(userResponse.favoriteGame.gameId)">
               <img
                 [src]="getGameImageCover(userResponse.favoriteGame)">
               <div class="favorite-game-info">
@@ -262,7 +260,8 @@
 
         </div>
 
-        <div class="profile-card profile-sidebar" [ngStyle]="{'background-color': showPreviewColors ? previewSelectedColor : userResponse.cardColor?.colorCode}">
+        <div class="profile-card profile-sidebar"
+             [ngStyle]="{'background-color': showPreviewColors ? previewSelectedColor : userResponse.cardColor?.colorCode}">
 
           <div class="sidebar-section">
             <div class="sidebar-header">
@@ -354,7 +353,7 @@
           <div class="sidebar-section">
 
             <div class="sidebar-header">
-              <div>
+              <div class="wishlist" (click)="goToWishList()">
                 <h3 class="wishlist-icon">
                   <i class="fa-solid fa-bookmark"></i>
                   Wishlist
@@ -369,48 +368,63 @@
               </button>
             </div>
 
-            <div class="wishlist-list">
-              <!--          TODO FETCH 3 games from wishlist image and title FOR ITEMS-->
-              <div></div>
-            </div>
-
-            <p
-              class="empty-text">
-              Nothing in wishlist
-            </p>
           </div>
 
           <div class="sidebar-divider"></div>
 
           <div class="sidebar-section">
             <div class="sidebar-header">
-              <div>
+              <div class="friends" (click)="goToFriends()">
                 <h3 class="friends-icon">
                   <i class="fa-solid fa-user-group"></i>
                   Friends
-
                   <span>{{ userResponse.friendsCount || 0 }}</span>
                 </h3>
               </div>
 
-              <button class="view-all-btn">
-                View all
+              <button class="view-all-btn" *ngIf="userResponse.friendsCount! > 0" (click)="goToFriends()">
+                View Friends
                 <i class="fa-solid fa-arrow-right"></i>
               </button>
             </div>
 
             <div class="friends-list">
-              <div class="friend">
+              <div class="friend" *ngFor="let friend of userResponse.friends" (click)="goToUser(friend.userId)">
                 <div class="friend-avatar">
-                  <img
-                    src="https://images.immediate.co.uk/production/volatile/sites/3/2022/12/Star-Wars-Jedi-Survivor-release-date-0cbfc04.jpg?quality=90&webp=true&resize=1000,667">
+
+                  <img *ngIf="friend.userProfilePicture"
+                       [src]="getProfilePicture(friend)"
+                       class="left-img"/>
+
+
+                  <img *ngIf="!friend.userProfilePicture"
+                       src="../../../../../assets/profilePicture/default_profile_picture.svg"
+                       class="left-img"
+                       [ngStyle]="{'background-color': friend.profileColor}"/>
+
                 </div>
+                <div style="display: flex; justify-content: space-between; width: 100%; align-items: center">
                 <div class="friend-info">
-                  <h4>Matus</h4>
+                  <h4>{{ friend.userName }}</h4>
                   <span class="friend-status">
-                <span class="status-dot online"></span>
-                Online
+                <span class="status-dot" [ngClass]="{
+            'online': friend.status === 'Online' || friend.status === 'Playing',
+            'offline': friend.status === 'Offline',
+            'away': friend.status === 'Away'
+            }"></span>
+                   <span [ngClass]="{
+            'online': friend.status === 'Online' || friend.status === 'Playing',
+            'offline': friend.status === 'Offline',
+            'away': friend.status === 'Away'
+             }"> {{
+                       friend.status === 'Playing' ? 'In Game ' + friend.currentlyPlaying?.title
+                         : friend.status
+                     }} </span>
               </span>
+                </div>
+                  <div>
+                    <span [ngStyle]="{'color': friend.level?.levelColor}">Lvl. {{friend.level?.level}}</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -429,7 +443,7 @@
               </div>
 
               <button class="view-all-btn">
-                View all
+                View Groups
                 <i class="fa-solid fa-arrow-right"></i>
               </button>
             </div>
