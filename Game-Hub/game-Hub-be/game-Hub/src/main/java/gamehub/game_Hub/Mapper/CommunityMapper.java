@@ -14,6 +14,7 @@ import gamehub.game_Hub.Response.FriendRequestResponse;
 import gamehub.game_Hub.Response.LevelResponse;
 import gamehub.game_Hub.Response.LocationResponse;
 import gamehub.game_Hub.Response.UserCommunityResponse;
+import gamehub.game_Hub.enums.Status;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -21,6 +22,8 @@ import lombok.RequiredArgsConstructor;
 public class CommunityMapper {
 
   private final FriendRequestRepository friendRequestRepository;
+
+  private final GameMapper gameMapper;
 
   public UserCommunityResponse toUserCommunityResponse(User foundUser, User connetedUser, Set<Long> friendIds) {
 
@@ -52,6 +55,7 @@ public class CommunityMapper {
         .isFriend(isFriend)
         .friendRequestSent(friendReqSent)
         .friendRequestReceived(friendReqReceived)
+        .currentlyPlaying(foundUser.getCurrentlyPlayingGame() != null ? gameMapper.toGameResponseShort(foundUser.getCurrentlyPlayingGame()): null)
         .build();
   }
 

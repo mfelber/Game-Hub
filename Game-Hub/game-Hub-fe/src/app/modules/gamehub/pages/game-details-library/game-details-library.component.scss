@@ -109,6 +109,15 @@ button{
   flex: 1;
 }
 
+.stop-play-btn{
+  background: #f59e0b;
+  color: white;
+}
+
+.stop-play-btn:hover{
+  background: #d97706;
+}
+
 .game-actions .favorite,
 .game-actions .favorite-remove {
   width:60px;

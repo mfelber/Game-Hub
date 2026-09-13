@@ -8,15 +8,14 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { UserLibraryResponse } from '../../models/user-library-response';
 
-export interface CheckDownloadedGame$Params {
-  gameId: number;
+export interface CurrentlyPlaying$Params {
 }
 
-export function checkDownloadedGame(http: HttpClient, rootUrl: string, params: CheckDownloadedGame$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
-  const rb = new RequestBuilder(rootUrl, checkDownloadedGame.PATH, 'get');
+export function currentlyPlaying(http: HttpClient, rootUrl: string, params?: CurrentlyPlaying$Params, context?: HttpContext): Observable<StrictHttpResponse<UserLibraryResponse>> {
+  const rb = new RequestBuilder(rootUrl, currentlyPlaying.PATH, 'get');
   if (params) {
-    rb.path('gameId', params.gameId, {});
   }
 
   return http.request(
@@ -24,9 +23,9 @@ export function checkDownloadedGame(http: HttpClient, rootUrl: string, params: C
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: String((r as HttpResponse<any>).body) === 'true' }) as StrictHttpResponse<boolean>;
+      return r as StrictHttpResponse<UserLibraryResponse>;
     })
   );
 }
 
-checkDownloadedGame.PATH = '/library/check/game/{gameId}/downloaded';
+currentlyPlaying.PATH = '/library/currently-playing';

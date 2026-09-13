@@ -69,9 +69,7 @@
   <!-- GAMES -->
   <section class="games">
 
-    <div class="loading-overlay" *ngIf="isLoading">
-      <i class="fa-solid fa-spinner fa-spin"></i>
-    </div>
+  <app-loading *ngIf="isLoading"/>
 
     <div class="card relative" *ngFor="let game of filteredGames" (click)="goToGame(game.gameId)">
       <img [src]="getGameImageCover(game)" alt="{{game.title}}}">

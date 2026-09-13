@@ -34,4 +34,10 @@ public interface UserLibraryRepository extends JpaRepository<UserLibrary, UserGa
 
   List<UserLibrary> findAllByUserAndGameTitleContainingIgnoreCase(User user, String gameTitle);
 
+  List<UserLibrary> findTop3ByUserOrderByPlayedAtDesc(User user);
+
+  List<UserLibrary> findTop3ByUserOrderByPlayedAtAsc(User user);
+
+  List<UserLibrary> findTop3ByUserAndPlayedAtIsNotNullOrderByPlayedAtDesc(User user);
+
 }

@@ -55,4 +55,7 @@ public class UserLibrary {
   @Column(name = "created_at")
   private LocalDateTime createdAt;
 
+  @Column(name = "played_at")
+  private LocalDateTime playedAt;
+
 }

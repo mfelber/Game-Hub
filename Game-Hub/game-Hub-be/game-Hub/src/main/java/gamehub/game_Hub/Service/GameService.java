@@ -13,7 +13,7 @@ public interface GameService {
 
   Long save(GameRequest gameRequest);
 
-  GameResponse findById(Authentication connectedUser, Long gameId);
+  GameResponse getGameById(Authentication connectedUser, Long gameId);
 
   PageResponse<GameResponse> findAllGames(Authentication connectedUser, int page, int size, String genre,
       String operationSystem, Double maxPrice, Boolean discount);

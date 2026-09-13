@@ -57,7 +57,6 @@ export class ReportUserModalComponent implements OnInit{
             }
           })
         )
-        console.log(this.allCommunityGuidelines);
       }
     })
   }

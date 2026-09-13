@@ -15,6 +15,7 @@ import {firstValueFrom} from 'rxjs';
 import {EmptyStateComponent} from '../../components/empty-state/empty-state.component';
 import {UserActionsComponent} from '../../components/user-actions/user-actions.component';
 import {PaginationComponent} from '../../components/pagination/pagination.component';
+import {LoadingComponent} from '../../components/loading/loading.component';
 
 @Component({
   selector: 'app-find-players',
@@ -29,7 +30,8 @@ import {PaginationComponent} from '../../components/pagination/pagination.compon
     SearchBar,
     EmptyStateComponent,
     UserActionsComponent,
-    PaginationComponent
+    PaginationComponent,
+    LoadingComponent
   ],
   templateUrl: './find-players.component.html',
   styleUrl: './find-players.component.scss',

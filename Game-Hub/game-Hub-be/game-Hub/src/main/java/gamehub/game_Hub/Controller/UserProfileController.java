@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Repository.user.UserRepository;
 import gamehub.game_Hub.Request.BannerRequest;
+import gamehub.game_Hub.Response.RecentGamesResponse;
 import gamehub.game_Hub.Response.StatusResponse;
 import gamehub.game_Hub.Response.UserLibraryResponse;
 import gamehub.game_Hub.Response.UserNotificationsResponse;
@@ -176,6 +177,16 @@ public class UserProfileController {
   @PostMapping("/pin-game/{gameId}")
   public ResponseEntity<Long> pinGame(Authentication connectedUser, @PathVariable Long gameId) {
     return ResponseEntity.ok(userService.pinGame(connectedUser, gameId));
+  }
+
+  @GetMapping("/get-recent-games")
+  public ResponseEntity<List<RecentGamesResponse>> getRecentlyPlayedGames(Authentication connectedUser) {
+    return ResponseEntity.ok(libraryService.getLast3PlayedGames(connectedUser));
+  }
+
+  @GetMapping("/get-recent-games/{userId}")
+  public ResponseEntity<List<RecentGamesResponse>> getUsersRecentlyPlayedGames(@PathVariable Long userId) {
+    return ResponseEntity.ok(libraryService.getLast3PlayedGames(userId));
   }
 
 }

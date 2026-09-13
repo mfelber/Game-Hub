@@ -32,15 +32,12 @@ export class MenuComponent implements OnInit {
     this.refreshService.refresh$.subscribe(() => {
       this.loadUser();
     });
-    this.refreshService.refresh$.subscribe(() => {
-      this.loadUser();
-    });
   }
 
   statusMenuOpen = false;
   userResponse: UserPrivateResponse = {};
   statusResponse: StatusResponse = {};
-  statuses = ['ONLINE', 'OFFLINE', 'AWAY'];
+  statuses = ['Online', 'Offline', 'Away'];
   userHasProfilePicture = true;
 
   constructor(
@@ -51,11 +48,13 @@ export class MenuComponent implements OnInit {
 
   }
 
+
+  friendReqCount: any = 0
   private loadUser() {
     this.userService.getUserPrivateShort().subscribe({
       next: (user) => {
         this.userResponse = user;
-        console.log(this.userResponse);
+        this.friendReqCount = this.userResponse.friendReqCount;
         if (user.userProfilePicture) {
           this.userHasProfilePicture = true;
         } else {
@@ -124,13 +123,13 @@ export class MenuComponent implements OnInit {
   onStatusChange(newStatus: string) {
 
     switch (newStatus) {
-      case 'ONLINE':
+      case 'Online':
         this.setUserToOnline()
         break
-      case 'OFFLINE':
+      case 'Offline':
         this.setUserToOffline()
         break
-      case 'AWAY':
+      case 'Away':
         this.setUserToAway()
         break
     }

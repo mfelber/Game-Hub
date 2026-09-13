@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.security.core.Authentication;
 
 import gamehub.game_Hub.Common.PageResponse;
+import gamehub.game_Hub.Response.RecentGamesResponse;
 import gamehub.game_Hub.Response.UserLibraryResponse;
 
 public interface LibraryService {
@@ -21,13 +22,9 @@ public interface LibraryService {
 
   Long removeGameFromFavorites(Long gameId, Authentication connectedUser);
 
-  Boolean checkGameFavorite(Long gameId, Authentication connectedUser);
-
   Long downloadGame(Long gameId, Authentication connectedUser);
 
   Long uninstallGame(Long gameId, Authentication connectedUser);
-
-  Boolean checkDownloadedGame(Long gameId, Authentication connectedUser);
 
   Long recommendGame(Long gameId, Authentication connectedUser);
 
@@ -36,5 +33,17 @@ public interface LibraryService {
   Boolean checkGameRecommended(Long gameId, Authentication connectedUser);
 
   List<UserLibraryResponse> searchLibraryGames(String query, Authentication connectedUser);
+
+  Long playGame(Authentication connectedUser, Long gameId);
+
+  void stopPlayingGame(Authentication connectedUser);
+
+  UserLibraryResponse getCurrentlyPlayingGame(Authentication connectedUser);
+
+  List<RecentGamesResponse> getLast3PlayedGames(Authentication connectedUser);
+
+  List<RecentGamesResponse> getLast3PlayedGames(Long userId);
+
+  UserLibraryResponse getLibraryGameById(Authentication connectedUser, Long gameId);
 
 }

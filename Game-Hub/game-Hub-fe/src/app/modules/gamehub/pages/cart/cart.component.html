@@ -28,11 +28,9 @@
   </section>
 
 <!-- CART -->
-  <section class="cart">
+  <app-loading *ngIf="isLoading"/>
 
-    <div class="loading-overlay" *ngIf="isLoading">
-      <i class="fa-solid fa-spinner fa-spin"></i>
-    </div>
+  <section class="cart">
 
     <div class="cart-content">
       <div class="cart-items">

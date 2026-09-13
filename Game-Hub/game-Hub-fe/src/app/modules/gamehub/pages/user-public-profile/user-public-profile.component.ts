@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {UserProfileControllerService} from '../../../../services/services/user-profile-controller.service';
 import {UserPublicResponse} from '../../../../services/models/user-public-response';
 import {ActivatedRoute, Router} from '@angular/router';
-import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
+import {DatePipe, NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {StoreControllerService} from '../../../../services/services';
 import {GameResponse} from '../../../../services/models/game-response';
 import {CommunityControllerService} from '../../../../services/services/community-controller.service';
@@ -11,6 +11,7 @@ import {RefreshService} from '../../../../services/fn/refresh-service/refresh-se
 import {EmptyStateComponent} from '../../components/empty-state/empty-state.component';
 import {UserActionsComponent} from '../../components/user-actions/user-actions.component';
 import {UserLibraryResponse} from '../../../../services/models/user-library-response';
+import {RecentGamesResponse} from '../../../../services/models/recent-games-response';
 
 @Component({
   selector: 'app-user-public-profile',
@@ -20,7 +21,8 @@ import {UserLibraryResponse} from '../../../../services/models/user-library-resp
     NgForOf,
     NgStyle,
     EmptyStateComponent,
-    UserActionsComponent
+    UserActionsComponent,
+    DatePipe
   ],
   templateUrl: './user-public-profile.component.html',
   styleUrl: './user-public-profile.component.scss'
@@ -47,13 +49,14 @@ export class UserPublicProfileComponent implements OnInit {
     badges: [],
     favoriteGenres: [],
     userProfilePicture: '',
-    playRecently: [],
     recommendedGames: [],
     bannerImage: '',
     wishlistCount: 0,
     libraryCount: 0,
     bannerType: ''
   }
+
+  recentGamesResponse: RecentGamesResponse[] = [];
 
   userHasProfilePicture = true
   isLoading = false;
@@ -81,13 +84,25 @@ export class UserPublicProfileComponent implements OnInit {
         } else {
           this.userHasProfilePicture = false
         }
-        this.isLoading = false;
+        this.loadUsersRecentGames();
+
       },
       error: (err) => {
         console.log(err);
         this.isLoading = true;
       }
     });
+  }
+
+  loadUsersRecentGames() {
+    const userId: any = this.router.snapshot.paramMap.get('id')
+    this.userService.getUsersRecentlyPlayedGames({userId: userId!}).subscribe({
+      next: (recentGames) => {
+        this.recentGamesResponse = recentGames;
+        console.log(this.recentGamesResponse);
+        this.isLoading = false;
+      }
+    })
   }
 
   getProfilePicture(user: UserPublicResponse) {

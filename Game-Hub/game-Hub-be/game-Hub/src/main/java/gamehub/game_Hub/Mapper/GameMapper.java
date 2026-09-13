@@ -29,6 +29,7 @@ import gamehub.game_Hub.Request.GameRequest;
 import gamehub.game_Hub.Response.AgeRatingResponse;
 import gamehub.game_Hub.Response.GamePreviewResponse;
 import gamehub.game_Hub.Response.GameResponse;
+import gamehub.game_Hub.Response.GameResponseShort;
 import gamehub.game_Hub.Response.GenreResponse;
 import gamehub.game_Hub.Response.LanguageResponse;
 import gamehub.game_Hub.Response.PlatformResponse;
@@ -129,7 +130,7 @@ public class GameMapper {
         .build();
   }
 
-  public GameResponse toGameResponse(User user, Game game) {
+  public GameResponse toGameResponseStore(User user, Game game) {
 
     Boolean isInCart = cartItemRepository.existsByCart_User_IdAndGame_Id(user.getId(), game.getId());
     Boolean isInLibrary = userLibraryRepository.existsByUser_IdAndGame_Id(user.getId(), game.getId());
@@ -198,7 +199,14 @@ public class GameMapper {
         .genres(game.getGenres().stream().sorted(Comparator.comparing(Genre::getName)).map(genre -> new GenreResponse(
             genre.getId(), genre.getName())).collect(Collectors.toList()))
         .build();
+  }
 
+  public GameResponseShort toGameResponseShort(Game game) {
+    return GameResponseShort.builder()
+        .gameId(game.getId())
+        .title(game.getTitle())
+        .gameCoverImage(FileUtils.readCoverFromLocation(game.getGameCoverImage()))
+        .build();
   }
 
 

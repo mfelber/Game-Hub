@@ -15,6 +15,8 @@ import { getBio } from '../fn/user-profile-controller/get-bio';
 import { GetBio$Params } from '../fn/user-profile-controller/get-bio';
 import { getLibraryGames } from '../fn/user-profile-controller/get-library-games';
 import { GetLibraryGames$Params } from '../fn/user-profile-controller/get-library-games';
+import { getRecentlyPlayedGames } from '../fn/user-profile-controller/get-recently-played-games';
+import { GetRecentlyPlayedGames$Params } from '../fn/user-profile-controller/get-recently-played-games';
 import { getUserNotifications } from '../fn/user-profile-controller/get-user-notifications';
 import { GetUserNotifications$Params } from '../fn/user-profile-controller/get-user-notifications';
 import { getUserPrivate } from '../fn/user-profile-controller/get-user-private';
@@ -23,10 +25,13 @@ import { getUserPrivateShort } from '../fn/user-profile-controller/get-user-priv
 import { GetUserPrivateShort$Params } from '../fn/user-profile-controller/get-user-private-short';
 import { getUserPublic } from '../fn/user-profile-controller/get-user-public';
 import { GetUserPublic$Params } from '../fn/user-profile-controller/get-user-public';
+import { getUsersRecentlyPlayedGames } from '../fn/user-profile-controller/get-users-recently-played-games';
+import { GetUsersRecentlyPlayedGames$Params } from '../fn/user-profile-controller/get-users-recently-played-games';
 import { getUserStatus } from '../fn/user-profile-controller/get-user-status';
 import { GetUserStatus$Params } from '../fn/user-profile-controller/get-user-status';
 import { pinGame } from '../fn/user-profile-controller/pin-game';
 import { PinGame$Params } from '../fn/user-profile-controller/pin-game';
+import { RecentGamesResponse } from '../models/recent-games-response';
 import { setPredefinedBanner } from '../fn/user-profile-controller/set-predefined-banner';
 import { SetPredefinedBanner$Params } from '../fn/user-profile-controller/set-predefined-banner';
 import { setStatusToAway } from '../fn/user-profile-controller/set-status-to-away';
@@ -466,6 +471,56 @@ export class UserProfileControllerService extends BaseService {
   getLibraryGames(params: GetLibraryGames$Params, context?: HttpContext): Observable<Array<UserLibraryResponse>> {
     return this.getLibraryGames$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<UserLibraryResponse>>): Array<UserLibraryResponse> => r.body)
+    );
+  }
+
+  /** Path part for operation `getRecentlyPlayedGames()` */
+  static readonly GetRecentlyPlayedGamesPath = '/profile/get-recent-games';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getRecentlyPlayedGames()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getRecentlyPlayedGames$Response(params?: GetRecentlyPlayedGames$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<RecentGamesResponse>>> {
+    return getRecentlyPlayedGames(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getRecentlyPlayedGames$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getRecentlyPlayedGames(params?: GetRecentlyPlayedGames$Params, context?: HttpContext): Observable<Array<RecentGamesResponse>> {
+    return this.getRecentlyPlayedGames$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<RecentGamesResponse>>): Array<RecentGamesResponse> => r.body)
+    );
+  }
+
+  /** Path part for operation `getUsersRecentlyPlayedGames()` */
+  static readonly GetUsersRecentlyPlayedGamesPath = '/profile/get-recent-games/{userId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getUsersRecentlyPlayedGames()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getUsersRecentlyPlayedGames$Response(params: GetUsersRecentlyPlayedGames$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<RecentGamesResponse>>> {
+    return getUsersRecentlyPlayedGames(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getUsersRecentlyPlayedGames$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getUsersRecentlyPlayedGames(params: GetUsersRecentlyPlayedGames$Params, context?: HttpContext): Observable<Array<RecentGamesResponse>> {
+    return this.getUsersRecentlyPlayedGames$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<RecentGamesResponse>>): Array<RecentGamesResponse> => r.body)
     );
   }
 

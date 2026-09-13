@@ -139,6 +139,9 @@ export class EditProfileInfoComponent implements OnInit {
   }
 
   getProfilePicture(user: UserPrivateResponse) {
+    if (!this.user.favoriteGame) {
+      this.showGameSearch = true;
+    }
     if (user.userProfilePicture) {
       this.userHasProfilePicture = true;
       return 'data:image/jpeg;base64,' + user.userProfilePicture;

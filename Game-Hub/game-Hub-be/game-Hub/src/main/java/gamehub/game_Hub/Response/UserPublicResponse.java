@@ -28,8 +28,8 @@ public class UserPublicResponse {
   private int libraryCount;
   private int wishlistCount;
   private LevelResponse level;
+  private GameResponseShort currentlyPlaying;
   private Set<BadgeResponse> badges;
-  private Set<GameResponseShort> playRecently;
   private Set<GenreResponse> favoriteGenres;
   private Set<GameResponseShort> recommendedGames;
   private UserLibraryResponse favoriteGame;

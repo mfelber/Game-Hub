@@ -1,19 +1,16 @@
 package gamehub.game_Hub.Mapper;
 
-import java.util.Optional;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import gamehub.game_Hub.File.FileUtils;
 import gamehub.game_Hub.Module.BanHistory;
-import gamehub.game_Hub.Module.Game;
 import gamehub.game_Hub.Module.Level;
 import gamehub.game_Hub.Module.User.User;
-import gamehub.game_Hub.Module.User.UserCart;
 import gamehub.game_Hub.Module.User.UserLibrary;
 import gamehub.game_Hub.Module.User.UserSuspensions;
-import gamehub.game_Hub.Module.User.UserWarnings;
 import gamehub.game_Hub.Repository.BanHistoryRepository;
 import gamehub.game_Hub.Repository.FriendRequestRepository;
 import gamehub.game_Hub.Repository.FriendshipRepository;
@@ -23,6 +20,7 @@ import gamehub.game_Hub.Repository.UserSuspensionRepository;
 import gamehub.game_Hub.Repository.UserWarningsRepository;
 import gamehub.game_Hub.Repository.cart.CartItemRepository;
 import gamehub.game_Hub.Repository.cart.UserCartRepository;
+import gamehub.game_Hub.Repository.user.UserRepository;
 import gamehub.game_Hub.Request.UserUpdateRequest;
 import gamehub.game_Hub.Response.Admin.AdminUserResponse;
 import gamehub.game_Hub.Response.BadgeResponse;
@@ -32,6 +30,7 @@ import gamehub.game_Hub.Response.GenreResponse;
 import gamehub.game_Hub.Response.LevelProgressResponse;
 import gamehub.game_Hub.Response.LevelResponse;
 import gamehub.game_Hub.Response.LocationResponse;
+import gamehub.game_Hub.Response.RecentGamesResponse;
 import gamehub.game_Hub.Response.RecentUserResponse;
 import gamehub.game_Hub.Response.StatusResponse;
 import gamehub.game_Hub.Response.UserNotificationsResponse;
@@ -63,6 +62,10 @@ public class UserMapper {
   private final UserLibraryRepository userLibraryRepository;
 
   private final LibraryMapper libraryMapper;
+
+  private final GameMapper gameMapper;
+
+  private final UserRepository userRepository;
 
   public User toUser(UserUpdateRequest userUpdateRequest) {
     return User.builder()
@@ -101,7 +104,8 @@ public class UserMapper {
         .isFriend(isFriend)
         .friendRequestSent(friendReqSent)
         .friendRequestReceived(friendReqReceived)
-        .favoriteGame(libraryMapper.toFavoriteGame(profileUser))
+        .favoriteGame(libraryMapper.toFavoriteGameResponse(profileUser))
+        .currentlyPlaying(profileUser.getCurrentlyPlayingGame() != null ? gameMapper.toGameResponseShort(profileUser.getCurrentlyPlayingGame()): null)
         .location(
             new LocationResponse(
                 profileUser.getLocation() != null ? profileUser.getLocation().name() : null,
@@ -116,10 +120,6 @@ public class UserMapper {
         .level(new LevelResponse(profileUser.getLevel().getId(), profileUser.getLevel().getLevelNumber(), profileUser.getLevel().getLevelColor()))
         .badges(profileUser.getBadges().stream().map(badge -> new BadgeResponse(badge.getId(), badge.getName(),
             badge.getDescription(), badge.getIconPath())).collect(Collectors.toSet()))
-        .playRecently(profileUser.getPlayRecently().stream().limit(5)
-            .map(g -> new GameResponseShort(
-                g.getId(), g.getTitle(), FileUtils.readCoverFromLocation(g.getGameCoverImage())))
-            .collect(Collectors.toSet()))
         .favoriteGenres(profileUser.getFavoriteGenres().stream()
             .map(g -> new GenreResponse(g.getId(), g.getName()))
             .collect(Collectors.toSet()))
@@ -158,7 +158,8 @@ public class UserMapper {
         .reviews(0L)
         .bio(user.getBio())
         .joinedDate(joinedDate)
-        .favoriteGame(libraryMapper.toFavoriteGame(user))
+        .favoriteGame(libraryMapper.toFavoriteGameResponse(user))
+        .currentlyPlaying(user.getCurrentlyPlayingGame() != null ? gameMapper.toGameResponseShort(user.getCurrentlyPlayingGame()): null)
         .location(
             new LocationResponse(
                 user.getLocation() != null ? user.getLocation().name() : null,
@@ -172,10 +173,6 @@ public class UserMapper {
         .level(new LevelResponse(user.getLevel().getId(), user.getLevel().getLevelNumber(),user.getLevel().getLevelColor()))
         .badges(user.getBadges().stream().map(badge -> new BadgeResponse(badge.getId(), badge.getName(),
             badge.getDescription(), badge.getIconPath())).collect(Collectors.toSet()))
-        .playRecently(user.getPlayRecently().stream().limit(5)
-            .map(g -> new GameResponseShort(
-                g.getId(), g.getTitle(), FileUtils.readCoverFromLocation(g.getGameCoverImage())))
-            .collect(Collectors.toSet()))
         .favoriteGenres(user.getFavoriteGenres()
             .stream()
             .map(genre -> new GenreResponse(genre.getId(), genre.getName()))

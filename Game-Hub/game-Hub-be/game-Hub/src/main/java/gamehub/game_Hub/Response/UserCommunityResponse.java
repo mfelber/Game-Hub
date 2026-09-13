@@ -28,5 +28,5 @@ public class UserCommunityResponse {
   private Boolean isFriend;
   private Boolean friendRequestSent;
   private Boolean friendRequestReceived;
-
+  private GameResponseShort currentlyPlaying;
 }

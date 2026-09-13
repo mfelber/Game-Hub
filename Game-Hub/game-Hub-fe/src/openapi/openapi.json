@@ -712,6 +712,19 @@
         }
       }
     },
+    "/library/stop/{gameId}": {
+      "post": {
+        "tags": [
+          "library-controller"
+        ],
+        "operationId": "stopPlayingGame",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/library/remove/recommend/game/{gameId}": {
       "post": {
         "tags": [
@@ -750,6 +763,38 @@
           "library-controller"
         ],
         "operationId": "recommendGame",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/library/play/{gameId}": {
+      "post": {
+        "tags": [
+          "library-controller"
+        ],
+        "operationId": "playGame",
         "parameters": [
           {
             "name": "gameId",
@@ -1806,6 +1851,63 @@
         }
       }
     },
+    "/profile/get-recent-games": {
+      "get": {
+        "tags": [
+          "user-profile-controller"
+        ],
+        "operationId": "getRecentlyPlayedGames",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RecentGamesResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/profile/get-recent-games/{userId}": {
+      "get": {
+        "tags": [
+          "user-profile-controller"
+        ],
+        "operationId": "getUsersRecentlyPlayedGames",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RecentGamesResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/profile/bio": {
       "get": {
         "tags": [
@@ -1891,6 +1993,37 @@
         }
       }
     },
+    "/library/game/{gameId}": {
+      "get": {
+        "tags": [
+          "library-controller"
+        ],
+        "operationId": "getLibraryGameById",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserLibraryResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/library/favorites": {
       "get": {
         "tags": [
@@ -1933,74 +2066,32 @@
         }
       }
     },
+    "/library/currently-playing": {
+      "get": {
+        "tags": [
+          "library-controller"
+        ],
+        "operationId": "currentlyPlaying",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserLibraryResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/library/check/game/{gameId}/recommended": {
       "get": {
         "tags": [
           "library-controller"
         ],
         "operationId": "checkGameRecommended",
-        "parameters": [
-          {
-            "name": "gameId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "boolean"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/library/check/game/{gameId}/favorite": {
-      "get": {
-        "tags": [
-          "library-controller"
-        ],
-        "operationId": "checkGameFavorite",
-        "parameters": [
-          {
-            "name": "gameId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "boolean"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/library/check/game/{gameId}/downloaded": {
-      "get": {
-        "tags": [
-          "library-controller"
-        ],
-        "operationId": "checkDownloadedGame",
         "parameters": [
           {
             "name": "gameId",
@@ -2917,6 +3008,42 @@
           }
         }
       },
+      "AgeRatingResponse": {
+        "required": [
+          "ageRating",
+          "ageRatingColor",
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "ageRating": {
+            "type": "string"
+          },
+          "ageRatingColor": {
+            "type": "string"
+          }
+        }
+      },
+      "GenreResponse": {
+        "required": [
+          "id",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
       "PageResponseUserLibraryResponse": {
         "type": "object",
         "properties": {
@@ -2960,6 +3087,18 @@
           "title": {
             "type": "string"
           },
+          "developer": {
+            "type": "string"
+          },
+          "publisher": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "releaseYear": {
+            "type": "string"
+          },
           "gameCoverImage": {
             "type": "string",
             "format": "byte"
@@ -2974,9 +3113,17 @@
             "type": "integer",
             "format": "int32"
           },
-          "lastPlayed": {
-            "type": "string",
-            "format": "date-time"
+          "currentlyPlaying": {
+            "type": "boolean"
+          },
+          "genres": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GenreResponse"
+            }
+          },
+          "ageRating": {
+            "$ref": "#/components/schemas/AgeRatingResponse"
           }
         }
       },
@@ -3247,22 +3394,6 @@
           }
         }
       },
-      "GenreResponse": {
-        "required": [
-          "id",
-          "name"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "name": {
-            "type": "string"
-          }
-        }
-      },
       "PageResponseWishlistResponse": {
         "type": "object",
         "properties": {
@@ -3400,26 +3531,6 @@
           }
         }
       },
-      "AgeRatingResponse": {
-        "required": [
-          "ageRating",
-          "ageRatingColor",
-          "id"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "ageRating": {
-            "type": "string"
-          },
-          "ageRatingColor": {
-            "type": "string"
-          }
-        }
-      },
       "GameResponse": {
         "type": "object",
         "properties": {
@@ -3494,13 +3605,13 @@
               "$ref": "#/components/schemas/SubtitleResponse"
             }
           },
-          "inCart": {
+          "inLibrary": {
             "type": "boolean"
           },
           "inWishList": {
             "type": "boolean"
           },
-          "inLibrary": {
+          "inCart": {
             "type": "boolean"
           }
         }
@@ -3697,9 +3808,10 @@
           "status": {
             "type": "string",
             "enum": [
-              "ONLINE",
-              "OFFLINE",
-              "AWAY"
+              "Online",
+              "Playing",
+              "Offline",
+              "Away"
             ]
           },
           "joinedDate": {
@@ -3720,18 +3832,14 @@
           "level": {
             "$ref": "#/components/schemas/LevelResponse"
           },
+          "currentlyPlaying": {
+            "$ref": "#/components/schemas/GameResponseShort"
+          },
           "badges": {
             "uniqueItems": true,
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/BadgeResponse"
-            }
-          },
-          "playRecently": {
-            "uniqueItems": true,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/GameResponseShort"
             }
           },
           "favoriteGenres": {
@@ -3802,6 +3910,22 @@
           }
         }
       },
+      "RecentGamesResponse": {
+        "type": "object",
+        "properties": {
+          "game": {
+            "$ref": "#/components/schemas/GameResponseShort"
+          },
+          "lastPlayed": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "playTime": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "UserPrivateResponse": {
         "type": "object",
         "properties": {
@@ -3838,9 +3962,10 @@
           "status": {
             "type": "string",
             "enum": [
-              "ONLINE",
-              "OFFLINE",
-              "AWAY"
+              "Online",
+              "Playing",
+              "Offline",
+              "Away"
             ]
           },
           "joinedDate": {
@@ -3865,18 +3990,20 @@
           "level": {
             "$ref": "#/components/schemas/LevelResponse"
           },
+          "currentlyPlaying": {
+            "$ref": "#/components/schemas/GameResponseShort"
+          },
+          "recentGamesResponse": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RecentGamesResponse"
+            }
+          },
           "badges": {
             "uniqueItems": true,
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/BadgeResponse"
-            }
-          },
-          "playRecently": {
-            "uniqueItems": true,
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/GameResponseShort"
             }
           },
           "favoriteGenres": {
@@ -3924,9 +4051,10 @@
           "status": {
             "type": "string",
             "enum": [
-              "ONLINE",
-              "OFFLINE",
-              "AWAY"
+              "Online",
+              "Playing",
+              "Offline",
+              "Away"
             ]
           }
         }
@@ -4020,9 +4148,10 @@
           "status": {
             "type": "string",
             "enum": [
-              "ONLINE",
-              "OFFLINE",
-              "AWAY"
+              "Online",
+              "Playing",
+              "Offline",
+              "Away"
             ]
           },
           "userProfilePicture": {
@@ -4040,6 +4169,9 @@
           },
           "friendRequestReceived": {
             "type": "boolean"
+          },
+          "currentlyPlaying": {
+            "$ref": "#/components/schemas/GameResponseShort"
           }
         }
       },
@@ -4059,9 +4191,10 @@
           "status": {
             "type": "string",
             "enum": [
-              "ONLINE",
-              "OFFLINE",
-              "AWAY"
+              "Online",
+              "Playing",
+              "Offline",
+              "Away"
             ]
           },
           "userProfilePicture": {
