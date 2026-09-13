@@ -1,5 +1,3 @@
-<app-user-actions class="top"/>
-
 <main>
   <!--  BANNER  -->
   <section class="banner-section">
@@ -157,16 +155,23 @@
         </div>
 
         <div class="card-divider"></div>
-        <div class="recent-games">
+        <div class="recent-games" *ngFor="let game of recentGames">
           <div class="recent-game">
             <img
-              src="https://images.immediate.co.uk/production/volatile/sites/3/2022/12/Star-Wars-Jedi-Survivor-release-date-0cbfc04.jpg?quality=90&webp=true&resize=1000,667">
+              [src]="getGameImageCover(game.game!)">
             <div class="game-info">
-              <h3>Jedi Survivor</h3>
-              <p>Recently played</p>
+              <h3>{{ game.game?.title }}</h3>
+              <p>{{ game.playTime }} Hours played</p>
             </div>
+            <div class="last-played">
+              <span>Last played on</span>
+              <p>{{ game.lastPlayed | date: 'dd.MM.yyyy' }}</p>
+            </div>
+
             <i class="fa-solid fa-chevron-right game-arrow"></i>
           </div>
+          <div class="card-divider"></div>
+
         </div>
       </div>
 
@@ -181,13 +186,18 @@
 
         <div class="card-divider"></div>
 
-        <div class="favorite-game-content">
+        <div class="favorite-game-content" *ngIf="userResponse.favoriteGame">
           <img
-            src="https://images.immediate.co.uk/production/volatile/sites/3/2022/12/Star-Wars-Jedi-Survivor-release-date-0cbfc04.jpg?quality=90&webp=true&resize=1000,667">
+            [src]="getGameImageCover(userResponse.favoriteGame)">
           <div class="favorite-game-info">
-            <h3>Jedi Survivor</h3>
-            <p>120 Hours played</p>
+            <h3>{{ userResponse.favoriteGame.title }}</h3>
+            <p>{{ userResponse.favoriteGame.playtimeMinutes }} Hours played</p>
           </div>
+          <i class="fa-solid fa-chevron-right game-arrow"></i>
+        </div>
+
+        <div class="favorite-game-content" *ngIf="!userResponse.favoriteGame">
+          <h2 class="nothing-to-show">No favorite game set</h2>
         </div>
       </div>
 

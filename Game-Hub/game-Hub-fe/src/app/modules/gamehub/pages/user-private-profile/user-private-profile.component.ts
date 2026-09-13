@@ -23,6 +23,8 @@ import {UserActionsComponent} from '../../components/user-actions/user-actions.c
 import {UserLibraryResponse} from '../../../../services/models/user-library-response';
 import {RecentGamesResponse} from '../../../../services/models/recent-games-response';
 import {GameResponseShort} from '../../../../services/models/game-response-short';
+import {LoadingComponent} from '../../components/loading/loading.component';
+import {forkJoin} from 'rxjs';
 
 @Component({
   selector: 'app-user-profile',
@@ -37,6 +39,7 @@ import {GameResponseShort} from '../../../../services/models/game-response-short
     EditProfileInfoComponent,
     UserActionsComponent,
     DatePipe,
+    LoadingComponent,
   ],
   templateUrl: './user-private-profile.component.html',
   styleUrl: './user-private-profile.component.scss'
@@ -60,14 +63,9 @@ export class UserPrivateProfileComponent implements OnInit {
     initFlowbite();
     this.loadUserPrivateProfile();
     this.getColorsForCard()
-    this.userService.getRecentlyPlayedGames().subscribe({
-      next: data => {
-        console.log(data);
-      }
-    })
   }
 
-  activeTab: 'basic' | 'profile' | 'security' = 'basic';
+  activeTab: 'basic' | 'profile' | 'gaming' = 'basic';
 
   profilePicture: File | null = null;
   previewImage: string | undefined;
@@ -138,8 +136,13 @@ export class UserPrivateProfileComponent implements OnInit {
 
   loadUserPrivateProfile() {
     this.isLoading = true;
-    this.userService.getUserPrivate().subscribe({
-      next: (user) => {
+
+    forkJoin({
+      user: this.userService.getUserPrivate(),
+      recentGames: this.userService.getRecentlyPlayedGames(),
+      genres: this.gameService.getAllGenres(),
+    }).subscribe({
+      next: ({user, recentGames, genres}) => {
         this.userResponse = user;
         console.log(this.userResponse);
         this.bioUpdateRequest.bio = user.bio || '';
@@ -159,8 +162,10 @@ export class UserPrivateProfileComponent implements OnInit {
           email: user.email!,
           password: ''
         }
-        this.loadRecentGames();
-        this.getGenres();
+
+        this.recentGamesResponse = recentGames;
+        this.genreResponse = genres;
+        this.isLoading = false;
       },
       error: (err) => {
         this.isLoading = true;
@@ -221,7 +226,7 @@ export class UserPrivateProfileComponent implements OnInit {
   goToGame(gameId: any) {
     this.gameService.getGameById({gameId}).subscribe({
       next: (game) => {
-        this.router.navigate(['gamehub/store/game', gameId]);
+        this.router.navigate(['gamehub/library/game', gameId]);
       },
       error: (err) => {
         console.error('Error with loading game:', err);
@@ -278,7 +283,6 @@ export class UserPrivateProfileComponent implements OnInit {
       next: (genres) => {
         this.genreResponse = genres;
         console.log(this.genreResponse);
-        this.isLoading = false;
       }
     })
   }
@@ -287,7 +291,6 @@ export class UserPrivateProfileComponent implements OnInit {
     this.cardColorService.getColors().subscribe({
       next: (colors) => {
         this.cardColorsResponse = colors;
-        console.log(colors)
       }
     })
   }
@@ -453,7 +456,8 @@ export class UserPrivateProfileComponent implements OnInit {
 
   hidePreview() {
     this.showPreviewColors = false;
-    // this.selectedColorCode = '';
+    this.activeTab = 'profile';
+    this.isEditProfileModalOpen = true;
   }
 
   // TODO settings page
