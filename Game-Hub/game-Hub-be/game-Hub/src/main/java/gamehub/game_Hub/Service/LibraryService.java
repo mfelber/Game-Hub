@@ -22,13 +22,9 @@ public interface LibraryService {
 
   Long removeGameFromFavorites(Long gameId, Authentication connectedUser);
 
-  Boolean checkGameFavorite(Long gameId, Authentication connectedUser);
-
   Long downloadGame(Long gameId, Authentication connectedUser);
 
   Long uninstallGame(Long gameId, Authentication connectedUser);
-
-  Boolean checkDownloadedGame(Long gameId, Authentication connectedUser);
 
   Long recommendGame(Long gameId, Authentication connectedUser);
 
@@ -47,5 +43,7 @@ public interface LibraryService {
   List<RecentGamesResponse> getLast3PlayedGames(Authentication connectedUser);
 
   List<RecentGamesResponse> getLast3PlayedGames(Long userId);
+
+  UserLibraryResponse getLibraryGameById(Authentication connectedUser, Long gameId);
 
 }

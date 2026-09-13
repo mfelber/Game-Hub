@@ -40,12 +40,15 @@
           <div class="username-row">
             <h1>{{ userResponse.username }}</h1>
             <span class="status" [ngClass]="{
-            'text-green-500': userResponse.status === 'ONLINE',
-            'text-gray-400': userResponse.status === 'OFFLINE',
-            'text-yellow-400': userResponse.status === 'AWAY'
+            'text-green-500': userResponse.status === 'Online' || userResponse.status === 'Playing',
+            'text-gray-400': userResponse.status === 'Offline',
+            'text-yellow-400': userResponse.status === 'Away'
             }">
               <span class="status-dot"></span>
-              {{ userResponse.status }}
+              {{
+                userResponse.status === 'Playing' ? 'In Game ' + userResponse.currentlyPlaying?.title
+                  : userResponse.status
+              }}
             </span>
           </div>
 

@@ -12,6 +12,7 @@ import {EmptyStateComponent} from '../../components/empty-state/empty-state.comp
 import {UserActionsComponent} from '../../components/user-actions/user-actions.component';
 import {PaginationComponent} from '../../components/pagination/pagination.component';
 import {CartControllerService} from '../../../../services/services/cart-controller.service';
+import {LoadingComponent} from '../../components/loading/loading.component';
 
 @Component({
   selector: 'app-wishlist',
@@ -25,6 +26,7 @@ import {CartControllerService} from '../../../../services/services/cart-controll
     EmptyStateComponent,
     UserActionsComponent,
     PaginationComponent,
+    LoadingComponent,
   ],
   templateUrl: './wishlist.component.html',
   styleUrl: './wishlist.component.scss'

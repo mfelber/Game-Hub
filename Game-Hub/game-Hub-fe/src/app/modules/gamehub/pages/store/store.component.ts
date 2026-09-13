@@ -10,6 +10,7 @@ import {UserActionsComponent} from '../../components/user-actions/user-actions.c
 import {EmptyStateComponent} from '../../components/empty-state/empty-state.component';
 import {PaginationComponent} from '../../components/pagination/pagination.component';
 import {subscribe} from 'node:diagnostics_channel';
+import {LoadingComponent} from '../../components/loading/loading.component';
 
 
 @Component({
@@ -22,7 +23,8 @@ import {subscribe} from 'node:diagnostics_channel';
     NgClass,
     UserActionsComponent,
     EmptyStateComponent,
-    PaginationComponent
+    PaginationComponent,
+    LoadingComponent
   ],
   templateUrl: './store.component.html',
   styleUrl: './store.component.scss'
@@ -90,7 +92,7 @@ export class StoreComponent implements OnInit {
       },
       error: err => {
         console.log(err);
-        this.isLoading = false;
+        this.isLoading = true;
       }
     })
   }

@@ -13,6 +13,8 @@ import {LibraryControllerService} from '../../../../services/services/library-co
 export class PlayingWarningModalComponent implements OnInit {
 
   @Input() game!: UserLibraryResponse
+  @Input() title!: string;
+  @Input() description!: string;
   @Output() close = new EventEmitter<void>()
   @Output() stoppedPlayingGame = new EventEmitter<void>();
 

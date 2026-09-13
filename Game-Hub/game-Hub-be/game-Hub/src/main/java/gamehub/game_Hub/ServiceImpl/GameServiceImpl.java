@@ -103,7 +103,7 @@ public class GameServiceImpl implements GameService {
   }
 
   @Override
-  public GameResponse findById(Authentication connectedUser, final Long gameId) {
+  public GameResponse getGameById(Authentication connectedUser, final Long gameId) {
     User authUser = (User) connectedUser.getPrincipal();
     User user = userRepository.findById(authUser.getId())
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
@@ -112,7 +112,7 @@ public class GameServiceImpl implements GameService {
         .orElseThrow(() -> new EntityNotFoundException("Game not found with id: " + gameId));
 
     return gameRepository.findById(gameId)
-        .map(foundGame -> gameMapper.toGameResponse(user, game))
+        .map(foundGame -> gameMapper.toGameResponseStore(user, game))
         .orElseThrow(() -> new EntityNotFoundException("No game found with id: " + gameId));
   }
 
@@ -164,7 +164,7 @@ public class GameServiceImpl implements GameService {
     //   games = gameRepository.findAllByAgeRating_AgeRatingNotIn(excludeRatings, pageable);
     // }
 
-    List<GameResponse> gameResponse = games.stream().map(game -> gameMapper.toGameResponse(user, game)).toList();
+    List<GameResponse> gameResponse = games.stream().map(game -> gameMapper.toGameResponseStore(user, game)).toList();
 
     return new PageResponse<>(
         gameResponse,

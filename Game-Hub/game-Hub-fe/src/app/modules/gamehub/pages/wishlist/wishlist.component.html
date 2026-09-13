@@ -76,9 +76,7 @@
   <!-- GAMES -->
   <section class="games">
 
-    <div class="loading-overlay" *ngIf="isLoading">
-      <i class="fa-solid fa-spinner fa-spin"></i>
-    </div>
+    <app-loading *ngIf="isLoading"/>
 
     <div class="card relative" *ngFor="let wishlist of filteredGames"
          (click)="goToGame(wishlist.game?.gameId)">

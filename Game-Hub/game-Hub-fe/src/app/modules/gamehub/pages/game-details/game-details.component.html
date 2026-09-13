@@ -22,8 +22,8 @@
          <span *ngFor="let genre of game.genres">
       {{ genre.name }}
         </span>
-        <span [ngStyle]="{'background-color': game.ageRating.ageRatingColor}">
-      {{ game.ageRating.ageRating }} </span>
+        <span [ngStyle]="{'background-color': game.ageRating?.ageRatingColor}">
+      {{ game.ageRating?.ageRating }} </span>
       </div>
     </div>
   </section>

@@ -1,11 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {DatePipe, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {ActivatedRoute} from '@angular/router';
-import {StoreControllerService} from '../../../../services/services';
 import {GameResponse} from '../../../../services/models/game-response';
 import {LibraryControllerService} from '../../../../services/services/library-controller.service';
-import {UserPublicProfileComponent} from '../user-public-profile/user-public-profile.component';
 import {UserActionsComponent} from '../../components/user-actions/user-actions.component';
+import {UserLibraryResponse} from '../../../../services/models/user-library-response';
+import {LoadingComponent} from '../../components/loading/loading.component';
+import {PlayingWarningModalComponent} from '../../components/playing-warning/playing-warning-modal.component';
 
 @Component({
   selector: 'app-game-details-library',
@@ -14,45 +15,66 @@ import {UserActionsComponent} from '../../components/user-actions/user-actions.c
     NgIf,
     NgStyle,
     DatePipe,
-    UserActionsComponent
+    UserActionsComponent,
+    LoadingComponent,
+    PlayingWarningModalComponent
   ],
   templateUrl: './game-details-library.component.html',
   styleUrl: './game-details-library.component.scss'
 })
 export class GameDetailsLibraryComponent implements OnInit {
 
-  game:any
-  inFavorites = false
-  isDownloaded = false;
-  isRecommended = false
+  gameResponse: UserLibraryResponse = {};
+
+  isLoading = false;
+  userIsPlayingGame = false;
+  cannotUninstallModalOpen = false;
+
+  currentlyPlayingGameId: number | null = null;
+  currentlyPlayingGame: UserLibraryResponse | null = null;
+
 
   constructor(
     private router: ActivatedRoute,
-    private gameService: StoreControllerService,
     private libraryService: LibraryControllerService,
   ) {
   }
 
   ngOnInit(): void {
     this.getInfoGame();
-    this.checkGameIsFavorite();
-    this.checkIfGameIsDownload();
-    this.isGameRecommended();
   }
 
-  private getInfoGame() {
+  getInfoGame() {
+    this.isLoading = true;
     const gameId: any = this.router.snapshot.paramMap.get('id')
     if (gameId) {
-      this.gameService.getGameById({gameId}).subscribe({
+      this.libraryService.getLibraryGameById({gameId}).subscribe({
           next: (data) => {
-            this.game = data;
+            this.getCurrentlyPlayingGame();
+            this.gameResponse = data;
+            this.isLoading = false;
           },
-
-          error: (err) => console.error('Error with loading details of this game', err)
+          error: (e) => {
+            this.isLoading = true;
+            console.error(e);
+          }
         },
       )
     }
+  }
 
+  getCurrentlyPlayingGame() {
+    this.libraryService.currentlyPlaying().subscribe({
+      next: data => {
+        this.currentlyPlayingGame = data ?? null;
+        this.currentlyPlayingGameId = data?.gameId ?? null;
+      },
+      error: err => {
+        console.error(err);
+        this.currentlyPlayingGame = null;
+        this.currentlyPlayingGameId = null;
+      }
+    })
   }
 
   getGameImageCover(game: GameResponse): string {
@@ -62,98 +84,90 @@ export class GameDetailsLibraryComponent implements OnInit {
     return 'https://images.pexels.com/photos/1054655/pexels-photo-1054655.jpeg';
   }
 
-
-  addGameToFavorite(gameId: any) {
-    this.libraryService.addGameToFavorites({gameId}).subscribe({
+  downloadGame(game: UserLibraryResponse) {
+    this.libraryService.downloadGame({gameId: game.gameId!}).subscribe({
       next: () => {
-        this.checkGameIsFavorite()
+        game.installed = true;
+      },
+      error: (e) => {
+        game.installed = false;
+        console.error(e);
       }
     })
   }
 
-  removeGameFromFavorite(gameId: any) {
-    this.libraryService.removeGameFromFavorites({gameId}).subscribe({
+  playGame(game: UserLibraryResponse) {
+    if (this.currentlyPlayingGameId !== null && this.currentlyPlayingGameId !== game.gameId) {
+      this.userIsPlayingGame = true;
+      return;
+    }
+    this.libraryService.playGame({gameId: game.gameId!}).subscribe({
       next: () => {
-        this.checkGameIsFavorite()
+        game.currentlyPlaying = true;
+
+        this.currentlyPlayingGameId = game.gameId!;
+        this.currentlyPlayingGame = game;
       }
     })
   }
 
-  private checkGameIsFavorite() {
-    const gameId: any = this.router.snapshot.paramMap.get('id')
-    this.libraryService.checkGameFavorite({gameId}).subscribe({
-      next: (isFavorite) => {
-        if (isFavorite) {
-          this.inFavorites = true
-        } else {
-          this.inFavorites = false
-        }
+  stopPlayingGame(game: UserLibraryResponse) {
+    this.libraryService.stopPlayingGame({gameId: game.gameId!}).subscribe({
+      next: (gameId: any) => {
+        game.currentlyPlaying = false;
+
+        this.currentlyPlayingGameId = null;
+        this.currentlyPlayingGame = game;
       }
     })
   }
 
-  downloadGame(gameId:any) {
-    console.log(gameId);
-    this.libraryService.downloadGame({gameId}).subscribe({
-      next: res => {
-        console.log('game was downloaded');
-        this.checkIfGameIsDownload()
-      }
-    })
-  }
-
-  uninstallGame(gameId:any) {
-    this.libraryService.uninstallGame({gameId}).subscribe({
-      next: res => {
-        console.log('game was uninstalled');
-        this.isDownloaded = false;
-        this.checkIfGameIsDownload()
-      }
-    })
-  }
-
-  checkIfGameIsDownload() {
-    const gameId: any = this.router.snapshot.paramMap.get('id')
-    this.libraryService.checkDownloadedGame({gameId}).subscribe({
-      next: (isDownloaded) => {
-        if (isDownloaded) {
-          this.isDownloaded = true;
-        } else {
-          this.isDownloaded = false
-        }
-      }
-    })
-  }
-
-  recommendGame(gameId: any) {
-    if (!this.isRecommended) {
-      this.libraryService.recommendGame({gameId}).subscribe({
-        next: () => {
-          this.isRecommended = true
-          this.isGameRecommended();
-        },
-        error: (err) => console.error('Failed to recommend game', err),
-      })
-    } else {
-      this.libraryService.removeRecommendGame({gameId}).subscribe({
-        next: () => {
-          this.isRecommended = false
-          this.isGameRecommended();
-        },
-        error: (err) => console.error('Failed to remove game from recommended', err),
-      })
+  uninstallGame(game: UserLibraryResponse) {
+    if (game.currentlyPlaying) {
+      console.log('nemozes odinstalovat ked ju hras')
+      this.cannotUninstallModalOpen = true;
+      return;
     }
+    console.log('mozes odinstalovat ked ju nehras')
 
-  }
-
-  private isGameRecommended() {
-    const gameId: any = this.router.snapshot.paramMap.get('id')
-    this.libraryService.checkGameRecommended({gameId}).subscribe({
-      next: (recommended)=> {
-        this.isRecommended = recommended
-    }
+    this.libraryService.uninstallGame({gameId: game.gameId!}).subscribe({
+      next: () => {
+        game.installed = false;
+      },
+      error: (e) => {
+        console.error(e);
+      }
     })
   }
 
+  addGameToFavorite(game: UserLibraryResponse) {
+    this.libraryService.addGameToFavorites({gameId: game.gameId!}).subscribe({
+      next: () => {
+        game.favorite = true;
+      },
+      error: (e) => {
+        console.error(e);
+      }
+    })
+  }
 
+  removeGameFromFavorite(game: UserLibraryResponse) {
+    this.libraryService.removeGameFromFavorites({gameId: game.gameId!}).subscribe({
+      next: () => {
+        game.favorite = false;
+      },
+      error: (e) => {
+        console.error(e);
+      }
+    })
+  }
+
+  gameStopped() {
+    this.getInfoGame();
+  }
+
+  closeModal() {
+    this.cannotUninstallModalOpen = false;
+    this.userIsPlayingGame = false;
+  }
 }

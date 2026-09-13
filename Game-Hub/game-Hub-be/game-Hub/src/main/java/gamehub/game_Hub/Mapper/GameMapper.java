@@ -130,7 +130,7 @@ public class GameMapper {
         .build();
   }
 
-  public GameResponse toGameResponse(User user, Game game) {
+  public GameResponse toGameResponseStore(User user, Game game) {
 
     Boolean isInCart = cartItemRepository.existsByCart_User_IdAndGame_Id(user.getId(), game.getId());
     Boolean isInLibrary = userLibraryRepository.existsByUser_IdAndGame_Id(user.getId(), game.getId());

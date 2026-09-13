@@ -63,20 +63,22 @@
           <p> Sent {{ friendRequest.createdAt }}</p>
           <div class="details">
           <span [ngClass]="{
-          'text-green-500': friendRequest.status === 'ONLINE',
-          'text-gray-400': friendRequest.status === 'OFFLINE',
-          'text-yellow-400': friendRequest.status === 'AWAY'
-          }">• {{ friendRequest.status }} </span>
+          'text-green-500': friendRequest.status === 'Online' || friendRequest.status === 'Playing',
+          'text-gray-400': friendRequest.status === 'Offline',
+          'text-yellow-400': friendRequest.status === 'Away'
+          }">• {{
+              friendRequest.status === 'Playing' ? 'Online' : friendRequest.status
+            }} </span>
             <span>• {{ friendRequest.location?.name }}</span>
             <span [ngStyle]="{'color': friendRequest.level?.levelColor}"> • Lvl.{{ friendRequest.level?.level }} </span>
           </div>
         </div>
         <div class="actions">
-          <button class="accept" (click)=" acceptFriendRequest(friendRequest.userId!) ; $event.stopPropagation()">
-            Accept
+          <button class=" btn accept" (click)=" acceptFriendRequest(friendRequest.userId!) ; $event.stopPropagation()">
+            Accept <i class="fa-solid fa-user-plus"></i>
           </button>
-          <button class="decline" (click)=" rejectFriendRequest(friendRequest.userId!) ; $event.stopPropagation()">
-            Decline
+          <button class=" btn decline" (click)=" rejectFriendRequest(friendRequest.userId!) ; $event.stopPropagation()">
+            Decline <i class="fa-solid fa-user-xmark"></i>
           </button>
         </div>
       </div>

@@ -12,6 +12,7 @@ import {EmptyStateComponent} from '../../components/empty-state/empty-state.comp
 import {UserActionsComponent} from '../../components/user-actions/user-actions.component';
 import {PaginationComponent} from '../../components/pagination/pagination.component';
 import {PlayingWarningModalComponent} from '../../components/playing-warning/playing-warning-modal.component';
+import {LoadingComponent} from '../../components/loading/loading.component';
 
 @Component({
   selector: 'app-library',
@@ -22,7 +23,8 @@ import {PlayingWarningModalComponent} from '../../components/playing-warning/pla
     EmptyStateComponent,
     UserActionsComponent,
     PaginationComponent,
-    PlayingWarningModalComponent
+    PlayingWarningModalComponent,
+    LoadingComponent
   ],
   templateUrl: './library.component.html',
   styleUrl: './library.component.scss'
@@ -104,8 +106,6 @@ export class LibraryComponent implements OnInit {
         this.loadDownloadedGames = false;
         this.currentlyPlayingGameId = games.content?.find(game => game.currentlyPlaying)?.gameId ?? null
         this.isLoading = false;
-        console.log(this.currentlyPlayingGameId);
-        console.log(this.gamePageResponse);
       },
       error: (e) => {
         this.isLoading = true;

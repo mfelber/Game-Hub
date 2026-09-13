@@ -53,17 +53,17 @@
             <div class="username-row">
               <h1>{{ userResponse.username }}</h1>
               <span class="status" [ngClass]="{
-            'text-green-500': userResponse.status === 'ONLINE' || userResponse.status === 'PLAYING',
-            'text-gray-400': userResponse.status === 'OFFLINE',
-            'text-yellow-400': userResponse.status === 'AWAY'
+            'text-green-500': userResponse.status === 'Online' || userResponse.status === 'Playing',
+            'text-gray-400': userResponse.status === 'Offline',
+            'text-yellow-400': userResponse.status === 'Away'
             }">
               <span class="status-dot" [ngClass]="{
-            'online': userResponse.status === 'ONLINE' || userResponse.status === 'PLAYING',
-            'offline': userResponse.status === 'OFFLINE',
-            'away': userResponse.status === 'AWAY'
+            'online': userResponse.status === 'Online' || userResponse.status === 'Playing',
+            'offline': userResponse.status === 'Offline',
+            'away': userResponse.status === 'Away'
             }"></span>
                 {{
-                  userResponse.status === 'PLAYING' ? userResponse.status + ' ' + userResponse.currentlyPlaying?.title
+                  userResponse.status === 'Playing' ? 'In Game ' + userResponse.currentlyPlaying?.title
                     : userResponse.status
                 }}
             </span>
@@ -392,7 +392,7 @@
               </h3>
             </div>
             <button class="view-all-btn" (click)="goToUserWishList()">
-              View all
+              View Wishlist
               <i class="fa-solid fa-arrow-right"></i>
             </button>
           </div>

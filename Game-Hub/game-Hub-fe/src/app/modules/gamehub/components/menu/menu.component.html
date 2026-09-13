@@ -69,20 +69,20 @@
           <span
             class="w-3 h-3 rounded-full"
             [ngClass]="{
-            'bg-green-500': statusResponse.status === 'ONLINE' || statusResponse.status === 'PLAYING',
-            'bg-gray-400': statusResponse.status === 'OFFLINE',
-            'bg-yellow-400': statusResponse.status === 'AWAY'
+            'bg-green-500': statusResponse.status === 'Online' || statusResponse.status === 'Playing',
+            'bg-gray-400': statusResponse.status === 'Offline',
+            'bg-yellow-400': statusResponse.status === 'Away'
            }">
             </span>
             <span
               [ngClass]="{
-                'text-green-500': statusResponse.status === 'ONLINE' || statusResponse.status === 'PLAYING',
-                'text-yellow-400': statusResponse.status === 'AWAY',
-                'text-gray-400': statusResponse.status === 'OFFLINE'
+                'text-green-500': statusResponse.status === 'Online' || statusResponse.status === 'Playing',
+                'text-yellow-400': statusResponse.status === 'Away',
+                'text-gray-400': statusResponse.status === 'Offline'
             }">
 
             {{
-                userResponse.status === 'PLAYING' ? 'ONLINE' : userResponse.status
+                statusResponse.status === 'Playing' ? 'Online' : statusResponse.status
               }}
 
         </span>
@@ -101,9 +101,9 @@
             <span
               class="w-2.5 h-2.5 rounded-full"
               [ngClass]="{
-                    'bg-green-500': status === 'ONLINE',
-                    'bg-yellow-400': status === 'AWAY',
-                    'bg-gray-400': status === 'OFFLINE'
+                    'bg-green-500': status === 'Online',
+                    'bg-yellow-400': status === 'Away',
+                    'bg-gray-400': status === 'Offline'
                 }">
             </span>
 

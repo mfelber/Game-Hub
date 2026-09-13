@@ -83,9 +83,7 @@
 
   <section class="users" *ngFor="let user of filteredUsers">
 
-    <div class="loading-overlay" *ngIf="isLoading">
-      <i class="fa-solid fa-spinner fa-spin"></i>
-    </div>
+    <app-loading *ngIf="isLoading" />
 
     <div class="user-card" (click)="navigateToUser(user.userId)">
       <div class="left">
@@ -103,10 +101,13 @@
             <img class="flag" [src]="user.location?.iconPath" alt="">
           </div>
           <span class="text-gray-400 text-sm truncate" [ngClass]="{
-          'text-green-500': user.status === 'ONLINE',
-          'text-gray-400': user.status === 'OFFLINE',
-          'text-yellow-400': user.status === 'AWAY'
-          }">• {{ user.status }} </span>
+          'text-green-500': user.status === 'Online' || user.status === 'Playing',
+          'text-gray-400': user.status === 'Offline',
+          'text-yellow-400': user.status === 'Away'
+          }">• {{
+              user.status === 'Playing' ? 'In Game ' + user.currentlyPlaying?.title
+                : user.status
+            }} </span>
           <div class="stats">
             <span> <i class="fa-solid fa-gamepad library-count"></i> {{ user.libraryCount }}</span>
             <span> <i class="fa-solid fa-user-group friends-count"></i> {{ user.friendsCount }}</span>

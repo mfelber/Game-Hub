@@ -7,6 +7,7 @@ import {Router, RouterLink} from '@angular/router';
 import {GameResponse} from '../../../../services/models/game-response';
 import {StoreControllerService} from '../../../../services/services/store-controller.service';
 import {UserActionsComponent} from '../../components/user-actions/user-actions.component';
+import {LoadingComponent} from '../../components/loading/loading.component';
 
 @Component({
   selector: 'app-cart',
@@ -16,7 +17,8 @@ import {UserActionsComponent} from '../../components/user-actions/user-actions.c
     RouterLink,
     NgForOf,
     DecimalPipe,
-    UserActionsComponent
+    UserActionsComponent,
+    LoadingComponent
   ],
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.scss',

@@ -66,7 +66,7 @@ public class StoreController {
   // Get gameId
   @GetMapping("/game/{gameId}")
   public ResponseEntity<GameResponse> getGameById(final Authentication connectedUser, @PathVariable final Long gameId) {
-    return ResponseEntity.ok(gameService.findById(connectedUser, gameId));
+    return ResponseEntity.ok(gameService.getGameById(connectedUser, gameId));
   }
 
   // Get all platforms

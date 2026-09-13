@@ -24,6 +24,7 @@ import gamehub.game_Hub.Module.User.UserLibrary;
 import gamehub.game_Hub.Repository.UserLibraryRepository;
 import gamehub.game_Hub.Repository.game.GameRepository;
 import gamehub.game_Hub.Repository.user.UserRepository;
+import gamehub.game_Hub.Response.GameResponse;
 import gamehub.game_Hub.Response.RecentGamesResponse;
 import gamehub.game_Hub.Response.UserLibraryResponse;
 import gamehub.game_Hub.Service.LibraryService;
@@ -190,18 +191,6 @@ public class LibraryServiceImpl implements LibraryService {
   }
 
   @Override
-  @PreAuthorize("isAuthenticated()")
-  public Boolean checkGameFavorite(final Long gameId, final Authentication connectedUser) {
-    Game game = gameRepository.findById(gameId)
-        .orElseThrow(() -> new EntityNotFoundException("No game found with id: " + gameId));
-    User authUser = (User) connectedUser.getPrincipal();
-    User user = userRepository.findById(authUser.getId())
-        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
-
-    return libraryRepository.existsByUserAndGameAndFavoriteTrue(user, game);
-  }
-
-  @Override
   public Long downloadGame(final Long gameId, final Authentication connectedUser) {
     Game game = gameRepository.findById(gameId)
         .orElseThrow(() -> new EntityNotFoundException("No game found with id: " + gameId));
@@ -239,18 +228,6 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     return game.getId();
-  }
-
-  @Override
-  public Boolean checkDownloadedGame(final Long gameId, final Authentication connectedUser) {
-    Game game = gameRepository.findById(gameId)
-        .orElseThrow(() -> new EntityNotFoundException("No game found with id: " + gameId));
-    User authUser = (User) connectedUser.getPrincipal();
-    User user = userRepository.findById(authUser.getId())
-        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
-
-    // return libraryRepository.existsByUserAndGameAndFavoriteTrue(user, game);
-    return libraryRepository.existsByUserAndGameAndInstalledTrue(user, game);
   }
 
   @Override
@@ -382,6 +359,23 @@ public class LibraryServiceImpl implements LibraryService {
     List<UserLibrary> top3Games = libraryRepository.findTop3ByUserAndPlayedAtIsNotNullOrderByPlayedAtDesc(user);
 
     return top3Games.stream().map(libraryMapper::toRecentGamesResponse).toList();
+  }
+
+  @Override
+  public UserLibraryResponse getLibraryGameById(Authentication connectedUser, final Long gameId) {
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+    Game game = gameRepository.findById(gameId)
+        .orElseThrow(() -> new EntityNotFoundException("Game not found with id: " + gameId));
+
+    UserLibrary library = libraryRepository.findByUserIdAndGameId(user.getId(), game.getId())
+        .orElseThrow(() -> new EntityNotFoundException("library not found"));
+
+    return gameRepository.findById(gameId)
+        .map(foundGame -> libraryMapper.toUserLibraryResponse(user, library))
+        .orElseThrow(() -> new EntityNotFoundException("No game found with id: " + gameId));
   }
 
 }

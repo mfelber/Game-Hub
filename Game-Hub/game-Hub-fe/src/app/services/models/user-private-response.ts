@@ -34,7 +34,7 @@ export interface UserPrivateResponse {
   recentGamesResponse?: Array<RecentGamesResponse>;
   recommendedGames?: Array<GameResponseShort>;
   reviews?: number;
-  status?: 'ONLINE' | 'PLAYING' | 'OFFLINE' | 'AWAY';
+  status?: 'Online' | 'Playing' | 'Offline' | 'Away';
   userId?: number;
   userProfilePicture?: string;
   username?: string;
