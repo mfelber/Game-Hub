@@ -73,7 +73,7 @@ export class StoreComponent implements OnInit {
 
   private getAllGames() {
     this.isLoading = true;
-
+    this.filteredGames = [];
     const maxPrice = this.filters.maxPrice ? Number(this.filters.maxPrice) : undefined;
 
     this.storeService.findAllGames({

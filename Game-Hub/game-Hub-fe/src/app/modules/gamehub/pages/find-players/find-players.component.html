@@ -74,18 +74,16 @@
   </section>
 
   <app-empty-state
-    *ngIf="userCommunityResponse.content?.length === 0"
+    *ngIf="filteredUsers.length === 0 && !isLoading"
     icon = 'fa-solid fa-sad-tear'
     title="No users were founded">
   </app-empty-state>
 
-  <div>
-
-  <section class="users" *ngFor="let user of filteredUsers">
+  <section class="users">
 
     <app-loading *ngIf="isLoading" />
 
-    <div class="user-card" (click)="navigateToUser(user.userId)">
+    <div class="user-card" (click)="navigateToUser(user.userId)" *ngFor="let user of filteredUsers">
       <div class="left">
         <img *ngIf="user.userProfilePicture"
              [src]="getProfilePicture(user)"
@@ -161,7 +159,7 @@
     (pageChange)="changePage($event)">
 
     </app-pagination>
-  </div>
+
 
 </main>
 

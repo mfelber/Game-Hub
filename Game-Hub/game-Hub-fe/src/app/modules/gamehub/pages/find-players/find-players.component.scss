@@ -133,6 +133,9 @@ input:-webkit-autofill:active {
   flex-direction: column;
   gap: 22px;
   margin-top: 20px;
+  min-height: calc(100dvh - 350px);
+  align-items: stretch;
+  position: relative;
 }
 
 .user-card{

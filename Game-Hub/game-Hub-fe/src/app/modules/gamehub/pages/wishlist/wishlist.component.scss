@@ -147,6 +147,8 @@
   grid-template-columns:repeat(4, 1fr);
   gap: 25px;
   position: relative;
+  min-height: calc(100vh - 250px);
+  align-items: start;
 }
 
 .loading-overlay {

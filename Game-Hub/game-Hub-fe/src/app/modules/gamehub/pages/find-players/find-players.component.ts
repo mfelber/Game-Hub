@@ -52,7 +52,7 @@ export class FindPlayersComponent implements OnInit {
   searchQuery = '';
 
   userHasProfilePicture = true;
-  isLoading = true;
+  isLoading = false;
   isReportUserModalOpen = false;
 
   constructor(
@@ -77,6 +77,7 @@ export class FindPlayersComponent implements OnInit {
   filteredUsers: UserCommunityResponse[] = [];
 
   private loadAllUsers(query: string = "") {
+    this.isLoading = true;
     this.communityService.findAllUsers({
       page: this.page,
       size: this.size,
@@ -88,7 +89,7 @@ export class FindPlayersComponent implements OnInit {
 
         }, error: error => {
           console.log(error);
-          this.isLoading = false;
+          this.isLoading = true;
       }
       }
     )
