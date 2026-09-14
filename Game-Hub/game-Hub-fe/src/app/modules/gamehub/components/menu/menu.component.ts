@@ -39,6 +39,7 @@ export class MenuComponent implements OnInit {
   statusResponse: StatusResponse = {};
   statuses = ['Online', 'Offline', 'Away'];
   userHasProfilePicture = true;
+  isLoading = false;
 
   constructor(
     private router: Router,
@@ -51,6 +52,7 @@ export class MenuComponent implements OnInit {
 
   friendReqCount: any = 0
   private loadUser() {
+    this.isLoading = true;
     this.userService.getUserPrivateShort().subscribe({
       next: (user) => {
         this.userResponse = user;
@@ -60,6 +62,7 @@ export class MenuComponent implements OnInit {
         } else {
           this.userHasProfilePicture = false;
         }
+        this.isLoading = false;
       }
     });
 

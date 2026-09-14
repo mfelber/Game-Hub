@@ -3743,6 +3743,40 @@
           }
         }
       },
+      "FriendProfileResponse": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "userName": {
+            "type": "string"
+          },
+          "userProfilePicture": {
+            "type": "string",
+            "format": "byte"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Online",
+              "Playing",
+              "Offline",
+              "Away"
+            ]
+          },
+          "currentlyPlaying": {
+            "$ref": "#/components/schemas/GameResponseShort"
+          },
+          "level": {
+            "$ref": "#/components/schemas/LevelResponse"
+          },
+          "profileColor": {
+            "type": "string"
+          }
+        }
+      },
       "GameResponseShort": {
         "type": "object",
         "properties": {
@@ -3834,6 +3868,12 @@
           },
           "currentlyPlaying": {
             "$ref": "#/components/schemas/GameResponseShort"
+          },
+          "friends": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FriendProfileResponse"
+            }
           },
           "badges": {
             "uniqueItems": true,
@@ -3997,6 +4037,15 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/RecentGamesResponse"
+            }
+          },
+          "wishlist": {
+            "$ref": "#/components/schemas/WishlistResponse"
+          },
+          "friends": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FriendProfileResponse"
             }
           },
           "badges": {

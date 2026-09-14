@@ -1,5 +1,6 @@
 package gamehub.game_Hub.Response;
 
+import java.util.List;
 import java.util.Set;
 
 import gamehub.game_Hub.enums.AccountStatus;
@@ -29,6 +30,7 @@ public class UserPublicResponse {
   private int wishlistCount;
   private LevelResponse level;
   private GameResponseShort currentlyPlaying;
+  private List<FriendProfileResponse> friends;
   private Set<BadgeResponse> badges;
   private Set<GenreResponse> favoriteGenres;
   private Set<GameResponseShort> recommendedGames;

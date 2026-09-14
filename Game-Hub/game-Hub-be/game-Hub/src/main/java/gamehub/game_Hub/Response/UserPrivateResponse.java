@@ -33,6 +33,7 @@ public class UserPrivateResponse {
   private LevelResponse level;
   private GameResponseShort currentlyPlaying;
   private List<RecentGamesResponse> recentGamesResponse;
+  private List<FriendProfileResponse> friends;
   private Set<BadgeResponse> badges;
   private Set<GenreResponse> favoriteGenres;
   private Set<GameResponseShort> recommendedGames;

@@ -4,6 +4,7 @@
 
 import { BadgeResponse } from '../models/badge-response';
 import { CardColorResponse } from '../models/card-color-response';
+import { FriendProfileResponse } from '../models/friend-profile-response';
 import { GameResponseShort } from '../models/game-response-short';
 import { GenreResponse } from '../models/genre-response';
 import { LevelResponse } from '../models/level-response';
@@ -21,6 +22,7 @@ export interface UserPublicResponse {
   favoriteGenres?: Array<GenreResponse>;
   friendRequestReceived?: boolean;
   friendRequestSent?: boolean;
+  friends?: Array<FriendProfileResponse>;
   friendsCount?: number;
   isFriend?: boolean;
   joinedDate?: string;

@@ -98,7 +98,7 @@
             <h3>{{user.username}}</h3>
             <img class="flag" [src]="user.location?.iconPath" alt="">
           </div>
-          <span class="text-gray-400 text-sm truncate" [ngClass]="{
+          <span [ngClass]="{
           'text-green-500': user.status === 'Online' || user.status === 'Playing',
           'text-gray-400': user.status === 'Offline',
           'text-yellow-400': user.status === 'Away'

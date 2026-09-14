@@ -7,10 +7,12 @@ import org.springframework.stereotype.Service;
 
 import gamehub.game_Hub.File.FileUtils;
 import gamehub.game_Hub.Module.BanHistory;
+import gamehub.game_Hub.Module.Friendship;
 import gamehub.game_Hub.Module.Level;
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Module.User.UserLibrary;
 import gamehub.game_Hub.Module.User.UserSuspensions;
+import gamehub.game_Hub.Module.User.Wishlist;
 import gamehub.game_Hub.Repository.BanHistoryRepository;
 import gamehub.game_Hub.Repository.FriendRequestRepository;
 import gamehub.game_Hub.Repository.FriendshipRepository;
@@ -18,6 +20,7 @@ import gamehub.game_Hub.Repository.LevelRepository;
 import gamehub.game_Hub.Repository.UserLibraryRepository;
 import gamehub.game_Hub.Repository.UserSuspensionRepository;
 import gamehub.game_Hub.Repository.UserWarningsRepository;
+import gamehub.game_Hub.Repository.WishlistRepository;
 import gamehub.game_Hub.Repository.cart.CartItemRepository;
 import gamehub.game_Hub.Repository.cart.UserCartRepository;
 import gamehub.game_Hub.Repository.user.UserRepository;
@@ -30,7 +33,6 @@ import gamehub.game_Hub.Response.GenreResponse;
 import gamehub.game_Hub.Response.LevelProgressResponse;
 import gamehub.game_Hub.Response.LevelResponse;
 import gamehub.game_Hub.Response.LocationResponse;
-import gamehub.game_Hub.Response.RecentGamesResponse;
 import gamehub.game_Hub.Response.RecentUserResponse;
 import gamehub.game_Hub.Response.StatusResponse;
 import gamehub.game_Hub.Response.UserNotificationsResponse;
@@ -67,6 +69,12 @@ public class UserMapper {
 
   private final UserRepository userRepository;
 
+  private final CommunityMapper communityMapper;
+
+  private final WishlistRepository wishlistRepository;
+
+  private final WishlistMapper wishlistMapper;
+
   public User toUser(UserUpdateRequest userUpdateRequest) {
     return User.builder()
         .firstName(userUpdateRequest.getFirstName())
@@ -93,6 +101,9 @@ public class UserMapper {
     Boolean friendReqReceived = friendRequestRepository.existsByReceiver_IdAndSender_Id(authenticatedUser.getId(),
         profileUser.getId());
 
+    List<Friendship> friends = friendshipRepository.findTop5ByUserOrderByFriend_LevelDesc(profileUser);
+
+
     // TODO get reviews count when implementing reviews
     return UserPublicResponse.builder()
         .userId(profileUser.getId())
@@ -103,6 +114,7 @@ public class UserMapper {
         .joinedDate(joinedDate)
         .isFriend(isFriend)
         .friendRequestSent(friendReqSent)
+        .friends(communityMapper.toUserFriendsResponse(friends))
         .friendRequestReceived(friendReqReceived)
         .favoriteGame(libraryMapper.toFavoriteGameResponse(profileUser))
         .currentlyPlaying(profileUser.getCurrentlyPlayingGame() != null ? gameMapper.toGameResponseShort(profileUser.getCurrentlyPlayingGame()): null)
@@ -147,6 +159,8 @@ public class UserMapper {
         .substring(1)
         .toLowerCase() + " " + user.getCreatedAt().getYear();
 
+    List<Friendship> friends = friendshipRepository.findTop5ByUserOrderByFriend_LevelDesc(user);
+
     // TODO get reviews count when implementing reviews
     return UserPrivateResponse.builder()
         .userId(user.getId())
@@ -158,6 +172,7 @@ public class UserMapper {
         .reviews(0L)
         .bio(user.getBio())
         .joinedDate(joinedDate)
+        .friends(communityMapper.toUserFriendsResponse(friends))
         .favoriteGame(libraryMapper.toFavoriteGameResponse(user))
         .currentlyPlaying(user.getCurrentlyPlayingGame() != null ? gameMapper.toGameResponseShort(user.getCurrentlyPlayingGame()): null)
         .location(

@@ -8,6 +8,12 @@
   justify-content: end;
 }
 
+.user {
+  position: relative;
+  min-height: calc(120vh - 250px);
+  align-items: start;
+}
+
 /* =========================================================
    BANNER
    ========================================================= */
@@ -663,17 +669,6 @@
 }
 
 /* =========================================================
-   WISHLIST
-   ========================================================= */
-
-.wishlist-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 14px;
-}
-
-/* =========================================================
    FRIENDS
    ========================================================= */
 
@@ -725,8 +720,16 @@
   font-size: 11px;
 }
 
-.friend-status.online {
+.online {
   color: #22c55e;
+}
+
+.offline {
+  color: #9ca3af;
+}
+
+.away {
+  color: #facc15;
 }
 
 /* =========================================================
@@ -786,18 +789,6 @@
   margin-left: auto;
   color: rgba(255, 255, 255, 0.25);
   font-size: 11px;
-}
-
-/* =========================================================
-   LOADING
-   ========================================================= */
-
-.loading {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: rgba(255, 255, 255, 0.45);
 }
 
 /* =========================================================
@@ -899,22 +890,6 @@
 
 .nothing-to-show {
   color: rgba(255, 255, 255, 0.45);
-}
-
-.loading-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(15, 18, 26, 0.65);
-  backdrop-filter: blur(2px);
-  border-radius: 12px;
-}
-
-.loading-overlay i {
-  font-size: 28px;
 }
 
 .last-played {

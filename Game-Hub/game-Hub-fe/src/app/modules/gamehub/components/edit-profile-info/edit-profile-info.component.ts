@@ -53,7 +53,7 @@ export class EditProfileInfoComponent implements OnInit {
     previewImage: String | undefined;
   }>();
 
-  activeTab: 'basic' | 'profile' | 'gaming' = 'basic';
+  @Input() activeTab: 'basic' | 'profile' | 'gaming' = 'basic';
   userLibraryResponse: UserLibraryResponse[] = [];
 
   selectedColorCode: string = '';
@@ -194,8 +194,8 @@ export class EditProfileInfoComponent implements OnInit {
 
   showPreview(){
     this.preview.emit({
-      selectedColorCode: this.selectedColorCode,
-      previewBanner: this.previewBanner,
+      selectedColorCode: this.selectedColorCode || this.user.cardColor?.colorCode || '',
+      previewBanner: this.previewBanner || this.getBanner(this.user),
       isPreviewImageInserted: this.isPreviewImageInserted,
       previewImage: this.previewImage
     });

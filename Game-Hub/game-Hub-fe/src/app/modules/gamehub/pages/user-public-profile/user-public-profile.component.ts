@@ -12,6 +12,7 @@ import {EmptyStateComponent} from '../../components/empty-state/empty-state.comp
 import {UserActionsComponent} from '../../components/user-actions/user-actions.component';
 import {UserLibraryResponse} from '../../../../services/models/user-library-response';
 import {RecentGamesResponse} from '../../../../services/models/recent-games-response';
+import {LoadingComponent} from '../../components/loading/loading.component';
 
 @Component({
   selector: 'app-user-public-profile',
@@ -22,7 +23,8 @@ import {RecentGamesResponse} from '../../../../services/models/recent-games-resp
     NgStyle,
     EmptyStateComponent,
     UserActionsComponent,
-    DatePipe
+    DatePipe,
+    LoadingComponent
   ],
   templateUrl: './user-public-profile.component.html',
   styleUrl: './user-public-profile.component.scss'
@@ -107,12 +109,9 @@ export class UserPublicProfileComponent implements OnInit {
 
   getProfilePicture(user: UserPublicResponse) {
     if (user.userProfilePicture) {
-      this.userHasProfilePicture = true;
       return 'data:image/jpeg;base64,' + user.userProfilePicture;
-    } else {
-      this.userHasProfilePicture = false;
     }
-    return;
+    return '';
   }
 
   getBanner(user: UserPublicResponse) {
@@ -204,5 +203,9 @@ export class UserPublicProfileComponent implements OnInit {
 
   goToUserWishList() {
 
+  }
+
+  goToUser(userId: number | undefined) {
+    this.route.navigate(['gamehub/user', userId])
   }
 }

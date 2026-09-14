@@ -1,13 +1,3 @@
-.top {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  width: 100%;
-  min-width: 0;
-  box-sizing: border-box;
-  justify-content: end;
-}
-
 /* =========================================================
    BANNER
    ========================================================= */
@@ -591,18 +581,6 @@
   margin-left: auto;
   color: rgba(255, 255, 255, 0.25);
   font-size: 11px;
-}
-
-/* =========================================================
-   LOADING
-   ========================================================= */
-
-.loading {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: rgba(255, 255, 255, 0.45);
 }
 
 /* =========================================================
