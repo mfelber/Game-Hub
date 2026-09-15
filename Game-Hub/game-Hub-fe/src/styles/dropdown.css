@@ -22,6 +22,14 @@
     }
   }
 
+  .sort-dropdown {
+    @apply w-55;
+
+    & .dropdown-select {
+      @apply w-55;
+    }
+  }
+
   .dropdown-option {
     @apply w-full px-[15px] py-2.5 text-left rounded-[7px] hover:bg-[#26334a]
     cursor-pointer transition-colors;

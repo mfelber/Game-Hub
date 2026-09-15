@@ -1,6 +1,6 @@
 @layer components {
 
-  .store-action {
+  .big-button {
     @apply items-center justify-center rounded-[8px] border-0 p-3
     text-white transition-colors w-[calc(100%-40px)] ml-5 mr-5;
   }
@@ -16,4 +16,21 @@
   .in-cart {
     @apply cursor-default bg-[#172554] text-[#60a5fa];
   }
+
+  .download {
+    @apply bg-[#3B82F6] hover:bg-[#2563EB] cursor-pointer;
+  }
+
+  .play {
+    @apply bg-[#22C55E] hover:bg-[#16A34A] cursor-pointer;
+  }
+
+  .stop {
+    @apply bg-[#f59e0b] hover:bg-[#d97706] cursor-pointer;
+  }
+
+  .remove-wishlist {
+    @apply bg-[#dc2626] hover:bg-[#b91c1c] cursor-pointer;
+  }
+
 }

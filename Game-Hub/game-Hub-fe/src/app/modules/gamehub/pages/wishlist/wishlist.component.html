@@ -25,48 +25,135 @@
     </div>
 
     <div class="filter-options">
+
       <div class="dropdown">
-        <label>Genre</label>
-        <select [(ngModel)]="filters.genre" (change)="changeFilter()">
-          <option value="">All Genres</option>
-          <option *ngFor="let genre of allGenres" [value]="genre">{{ genre }}</option>
-        </select>
+        <label>
+          Genre
+        </label>
+
+        <button id="genreDropdownButton"
+                data-dropdown-toggle="genreDropdown"
+                type="button"
+                class="dropdown-button"
+        ><span>
+          {{ filters.genre || 'All Genres' }}
+        </span>
+          <i class="fa-solid fa-chevron-down text-xs"></i>
+        </button>
+
+        <div id="genreDropdown" class="dropdown-select">
+          <ul>
+            <li>
+              <button type="button"
+                      (click)="filters.genre = ''; changeFilter(); closeGenreDropdown()"
+                      class="dropdown-option">
+                All Genres
+              </button>
+            </li>
+            <li *ngFor="let genre of allGenres">
+              <button
+                type="button"
+                (click)="filters.genre = genre; changeFilter(); closeGenreDropdown()"
+                class="dropdown-option">
+                {{ genre }}
+              </button>
+            </li>
+          </ul>
+        </div>
+
       </div>
 
       <div class="dropdown">
-        <label>Operation System</label>
-        <select [(ngModel)]="filters.operationSystem" (change)="changeFilter()">
-          <option value="">All Operation Systems</option>
-          <option *ngFor="let platform of allOperationSystems" [value]="platform">{{ platform }}
-          </option>
-        </select>
+        <label>
+          Operation System
+        </label>
+        <button id="operationSystemDropdownButton"
+                data-dropdown-toggle="operationSystemDropdown"
+                type="button"
+                class="dropdown-button"
+        ><span>
+          {{ filters.operationSystem || 'All Systems' }}
+        </span>
+          <i class="fa-solid fa-chevron-down text-xs"></i>
+        </button>
+
+        <div id="operationSystemDropdown" class="dropdown-select">
+          <ul>
+            <li>
+              <button type="button"
+                      (click)="filters.operationSystem = ''; changeFilter(); closeOsDropdown()"
+                      class="dropdown-option">
+                All Systems
+              </button>
+            </li>
+            <li *ngFor="let operationSystem of allOperationSystems">
+              <button
+                type="button"
+                (click)="filters.operationSystem = operationSystem; changeFilter(); closeOsDropdown()"
+                class="dropdown-option">
+                {{ operationSystem }}
+              </button>
+            </li>
+          </ul>
+        </div>
       </div>
+
 
       <div class="checkbox">
         <label>
-          <input type="checkbox"
-                 [(ngModel)]="filters.discount"
-                 (change)="changeFilter()"> Discount
+          Discount
+        </label>
+
+        <input
+          type="checkbox"
+          id="discount-option"
+          [(ngModel)]="filters.discount"
+          (change)="changeFilter()"
+          class="hidden peer">
+        <label
+          for="discount-option"
+          class="checkbox-label">
+          <div class="checkbox-content">
+            <i class="fa-solid fa-tag"></i>
+            <span>Discount</span>
+          </div>
         </label>
       </div>
 
-      <div class="dropdown push-right">
+
+      <div class="dropdown sort-right sort-dropdown">
         <label>Sort by</label>
-        <select [(ngModel)]="sortBy" (change)="changeSort()">
-          <option value="recentlyAdded">Recently Added</option>
-          <option value="priceAsc">Price: Low to High</option>
-          <option value="priceDesc">Price: High to Low</option>
-          <option value="nameAsc">Name: A to Z</option>
-          <option value="nameDesc">Name: Z to A</option>
-        </select>
+        <button id="sortDropdownButton"
+                data-dropdown-toggle="sortDropdown"
+                type="button"
+                class="dropdown-button"
+        ><span>
+          {{ selectedSortLabel }}
+        </span>
+          <i class="fa-solid fa-chevron-down text-xs"></i>
+        </button>
+
+        <div id="sortDropdown" class="dropdown-select">
+          <ul>
+            <li *ngFor="let sortOption of sortOptions">
+              <button
+                type="button"
+                (click)="sortBy = sortOption.value; changeSort(); closeGenreDropdown()"
+                class="dropdown-option">
+                {{ sortOption.label }}
+              </button>
+            </li>
+          </ul>
+        </div>
       </div>
+
 
     </div>
   </section>
 
   <app-empty-state
     *ngIf="wishlistPageResponse.totalElements === 0 && !isLoading"
-    icon = 'fa-solid fa-box-open'
+    icon='fa-solid fa-box-open'
     [title]="hasActiveFilters ? 'No games found' : 'No games available'"
     [message]="hasActiveFilters
     ? 'There are no games matching the selected filters. Try changing or resetting your filters.'
@@ -74,50 +161,75 @@
   </app-empty-state>
 
   <!-- GAMES -->
-  <section class="games">
+  <section class="games-cards">
 
     <app-loading *ngIf="isLoading"/>
 
     <div class="card relative" *ngFor="let wishlist of filteredGames"
          (click)="goToGame(wishlist.game?.gameId)">
       <img [src]="getGameImageCover(wishlist.game!)" alt="{{wishlist.game?.title}}">
-      <div class="card-content">
-        <h3>{{ wishlist.game?.title }}</h3>
+      <div class="badges">
+
+        <div class="badge trending">
+          <i class="fa-solid fa-fire"></i>
+          Trending
+        </div>
+
+        <div *ngIf="wishlist.game?.discountPercent! > 0" class="badge discount">
+          -{{ wishlist.game?.discountPercent }} %
+        </div>
+
+      </div>
+      <div class="wishlist-card-content">
+
+        <div class="flex justify-between">
+          <h3>{{ wishlist.game?.title }}</h3>
+          <span class="added-at">
+          Added {{ wishlist.addedAt | date:'dd.MM.yyyy' }}
+          </span>
+        </div>
         <p>
       <span *ngFor="let genre of wishlist.game?.genres?.slice(0, 2); let last = last">
         {{ genre.name }}<span *ngIf="!last">&nbsp; • &nbsp;</span>
       </span>
         </p>
-      <span class="added-at">
-        Added {{ wishlist.addedAt | date:'dd.MM.yyyy' }}
-      </span>
+
       </div>
-      <div class="price" *ngIf="wishlist.game?.discountPercent! > 0">
+
+      <div class="info">
+
+        <div class="price ml-auto" *ngIf="wishlist.game?.discountPercent! > 0">
         <span class="current-price" [ngClass]="{ 'free-price' : wishlist.game?.discountPercent === 100}">{{
             wishlist.game?.discountPercent === 100
               ? 'Free'
               : wishlist.game?.discountPrice + ' €'
           }}
-
         </span>
 
-        <div class="price-info">
-          <span class="old-price">{{ wishlist.game?.price }} €</span>
-          <span class="discount">-{{ wishlist.game?.discountPercent }}%</span>
+          <div class="price-info">
+            <span class="old-price">{{ wishlist.game?.price }} €</span>
+          </div>
         </div>
+
+        <div class="price ml-auto" *ngIf="!wishlist.game?.discountPercent!">
+        <span class="current-price" [ngClass]="{ 'free-price' : wishlist.game?.price === 0}">{{
+            wishlist.game?.price === 0
+              ? 'Free'
+              : wishlist.game?.price + ' €'
+          }} </span>
+        </div>
+
       </div>
 
-      <div class="price" *ngIf="!wishlist.game?.discountPercent!">
-        <span class="current-price">{{ wishlist.game?.price }} €</span>
-      </div>
-      <div class="buttons">
-        <button class="buy" *ngIf="!wishlist.game?.inCart" (click)="addToCart(wishlist.game?.gameId) ; $event.stopPropagation()">
+      <div class="wishlist-buttons">
+        <button class="big-button add-to-cart" *ngIf="!wishlist.game?.inCart"
+                (click)="addToCart(wishlist.game?.gameId) ; $event.stopPropagation()">
           Add to Cart <i class="fa-solid fa-cart-shopping"></i>
         </button>
-        <button class="in-cart" *ngIf="wishlist.game?.inCart">
+        <button class="big-button in-cart" *ngIf="wishlist.game?.inCart">
           In Cart <i class="fa-solid fa-check"></i>
         </button>
-        <button class="remove" (click)="removeGameFromWishList(wishlist.game?.gameId); $event.stopPropagation()">
+        <button class="big-button remove-wishlist" (click)="removeGameFromWishList(wishlist.game?.gameId); $event.stopPropagation()">
           Remove <i class="fa-solid fa-bookmark"></i>
         </button>
       </div>
@@ -126,9 +238,9 @@
   </section>
 
   <app-pagination
-  *ngIf="filteredGames.length && wishlistPageResponse.totalPages! > 1"
-  [currentPage]="page"
-  [totalPages]="wishlistPageResponse.totalPages!"
-  (pageChange)="changePage($event)">
+    *ngIf="filteredGames.length && wishlistPageResponse.totalPages! > 1"
+    [currentPage]="page"
+    [totalPages]="wishlistPageResponse.totalPages!"
+    (pageChange)="changePage($event)">
   </app-pagination>
 </main>

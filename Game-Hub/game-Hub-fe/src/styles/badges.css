@@ -7,21 +7,23 @@
   .badge {
     @apply flex items-center gap-1.5 text-white px-3 py-1 text-[0.75rem]
     font-[600] shadow-[0_4px_12px_rgba(0,0,0,0.25)];
+
+    &.owned {
+      @apply w-fit px-[7px] py-[3px] rounded-[5px] bg-[#093A3F] text-[#46ECD5];
+    }
+
+    &.discount {
+      @apply w-fit px-[7px] py-[3px] rounded-[5px] bg-[#00a63e];
+    }
+
+    &.wishlist {
+      @apply w-fit px-[7px] py-[3px] rounded-[5px] bg-[#dc2626];
+    }
+
+    &.trending {
+      @apply w-fit px-[7px] py-[3px] rounded-[5px] bg-[#ea580c];
+    }
   }
 
-  .owned {
-    @apply w-fit px-[7px] py-[3px] rounded-[5px] bg-[#093A3F] text-[#46ECD5];
-  }
 
-  .discount {
-    @apply w-fit px-[7px] py-[3px] rounded-[5px] bg-[#00a63e];
-  }
-
-  .wishlist {
-    @apply w-fit px-[7px] py-[3px] rounded-[5px] bg-[#dc2626];
-  }
-
-  .trending {
-    @apply w-fit px-[7px] py-[3px] rounded-[5px] bg-[#ea580c];
-  }
 }

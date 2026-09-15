@@ -159,7 +159,7 @@
   <!-- GAMES -->
   <section class="games-cards">
     <app-loading *ngIf="isLoading"/>
-    <div class="card relative" *ngFor="let game of filteredGames" (click)="goToGame(game.gameId)">
+    <div class="card" *ngFor="let game of filteredGames" (click)="goToGame(game.gameId)">
       <img [src]="getGameImageCover(game)" alt=""/>
       <div class="badges">
 
@@ -214,15 +214,15 @@
         </div>
       </div>
 
-      <button class="store-action add-to-cart" *ngIf="!game.inLibrary && !game.inCart"
+      <button class="big-button add-to-cart" *ngIf="!game.inLibrary && !game.inCart"
               (click)="addToCart(game.gameId) ; $event.stopPropagation()">
         {{ game.price === 0 ? 'Add to Library' : 'Add to Cart' }}
         <i class="fa-solid fa-cart-shopping"></i>
       </button>
-      <button *ngIf="game.inLibrary" class="store-action in-library" (click)=" $event.stopPropagation() ">
+      <button *ngIf="game.inLibrary" class="big-button in-library" (click)=" $event.stopPropagation() ">
         In Library <i class="fa-solid fa-gamepad"></i>
       </button>
-      <button *ngIf="game.inCart" class="store-action in-cart" (click)=" $event.stopPropagation() ">
+      <button *ngIf="game.inCart" class="big-button in-cart" (click)=" $event.stopPropagation() ">
         In Cart <i class="fa-solid fa-check"></i>
       </button>
     </div>

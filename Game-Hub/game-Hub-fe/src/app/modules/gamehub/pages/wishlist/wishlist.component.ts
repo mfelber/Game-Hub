@@ -13,6 +13,7 @@ import {UserActionsComponent} from '../../components/user-actions/user-actions.c
 import {PaginationComponent} from '../../components/pagination/pagination.component';
 import {CartControllerService} from '../../../../services/services/cart-controller.service';
 import {LoadingComponent} from '../../components/loading/loading.component';
+import {Dropdown, initFlowbite} from 'flowbite';
 
 @Component({
   selector: 'app-wishlist',
@@ -47,6 +48,14 @@ export class WishlistComponent implements OnInit{
 
   sortBy = 'recentlyAdded'
 
+  sortOptions = [
+    { value: 'recentlyAdded', label: 'Recently Added' },
+    { value: 'priceAsc', label: 'Price: Low to High' },
+    { value: 'priceDesc', label: 'Price: High to Low' },
+    { value: 'nameAsc', label: 'Name: A to Z' },
+    { value: 'nameDesc', label: 'Name: Z to A' }
+  ]
+
   constructor(
     private wishListService: WishlistControllerService,
     private gameService: StoreControllerService,
@@ -60,6 +69,7 @@ export class WishlistComponent implements OnInit{
   public size = 12;
 
   ngOnInit() {
+    initFlowbite();
     this.route.queryParams.subscribe(params => {
       this.page = Number(params['page'] ?? 1) - 1;
 
@@ -238,5 +248,39 @@ export class WishlistComponent implements OnInit{
         console.error('Error with adding game:', err);
       }
     })
+  }
+
+  get selectedSortLabel(): string {
+    return this.sortOptions.find(option => option.value === this.sortBy)?.label
+      ?? 'Recently Added';
+  }
+
+  closeGenreDropdown() {
+    const dropdownGenreElement = document.getElementById('genreDropdown');
+    const buttonElement = document.getElementById('genreDropdownButton');
+
+    const dropdownSortElement = document.getElementById('sortDropdown');
+    const dropdownSortButtonElement = document.getElementById('sortDropdownButton');
+
+    if (dropdownGenreElement && buttonElement) {
+      const dropdown = new Dropdown(dropdownGenreElement, buttonElement);
+      dropdown.hide();
+    }
+
+    if (dropdownSortElement && dropdownSortButtonElement) {
+      const dropdown = new Dropdown(dropdownSortElement, dropdownSortButtonElement);
+      dropdown.hide();
+    }
+
+  }
+
+  closeOsDropdown() {
+    const dropdownOSElement = document.getElementById('operationSystemDropdown');
+    const buttonElement = document.getElementById('operationSystemDropdownButton');
+
+    if (dropdownOSElement && buttonElement) {
+      const dropdown = new Dropdown(dropdownOSElement, buttonElement);
+      dropdown.hide();
+    }
   }
 }

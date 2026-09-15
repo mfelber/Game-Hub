@@ -69,7 +69,7 @@
 
 
   <!-- GAMES -->
-  <section class="games" *ngIf="gamePageResponse.content?.length">
+  <section class="games-cards" *ngIf="gamePageResponse.content?.length">
 
     <app-loading *ngIf="isLoading"/>
 
@@ -77,7 +77,7 @@
       <div class="card" *ngFor="let game of gamePageResponse.content"
            (click)="goToGame(game.gameId)">
         <img [src]="getGameImageCover(game)" alt="{{game.title}}}">
-        <div class="card-content">
+        <div class="library-card-content">
           <h3>{{ game.title }}</h3>
           <p *ngIf="!game.installed">Not downloaded</p>
           <p *ngIf="game.installed"><i class="fa-solid fa-download"></i> Downloaded</p>
@@ -90,16 +90,15 @@
       <div class="card" *ngFor="let game of gamePageResponse.content"
            (click)="goToGame(game.gameId)">
         <img [src]="getGameImageCover(game)" alt="{{game.title}}}">
-        <div class="card-content">
+        <div class="library-card-content">
           <h3>{{ game.title }}</h3>
-          <p *ngIf="!game.installed">Not downloaded</p>
           <p *ngIf="game.installed"><i class="fa-solid fa-download"></i> Downloaded</p>
           <small>Played : {{ game.playtimeMinutes }}</small>
-          <button *ngIf="!game.currentlyPlaying && game.installed" class="play-btn"
+          <button *ngIf="!game.currentlyPlaying && game.installed" class="big-button play"
                   (click)="playGame(game) ; $event.stopPropagation()">
             Play <i class="fa-solid fa-play"></i>
           </button>
-          <button *ngIf="game.currentlyPlaying" class="stop-play-btn" (click)="stopPlayingGame(game); $event.stopPropagation()">
+          <button *ngIf="game.currentlyPlaying" class="big-button stop" (click)="stopPlayingGame(game); $event.stopPropagation()">
             Stop playing <i class="fa-solid fa-stop"></i>
           </button>
         </div>
@@ -110,20 +109,20 @@
       <div class="card" *ngFor="let game of gamePageResponse.content"
            (click)="goToGame(game.gameId)">
         <img [src]="getGameImageCover(game)" alt="{{game.title}}}">
-        <div class="card-content">
+        <div class="library-card-content">
           <h3>{{ game.title }}</h3>
           <p *ngIf="!game.installed">Not downloaded</p>
           <p *ngIf="game.installed"><i class="fa-solid fa-download"></i> Downloaded</p>
           <small>Played : {{ game.playtimeMinutes }}</small>
-          <button *ngIf="!game.currentlyPlaying && game.installed" class="play-btn"
+          <button *ngIf="!game.currentlyPlaying && game.installed" class="big-button play"
                   (click)="playGame(game) ; $event.stopPropagation()">
             Play <i class="fa-solid fa-play"></i>
           </button>
-          <button *ngIf="game.currentlyPlaying" class="stop-play-btn"
+          <button *ngIf="game.currentlyPlaying" class="big-button stop"
                   (click)="stopPlayingGame(game); $event.stopPropagation()">
-            Stop playing <i class="fa-solid fa-xmark"></i>
+            Stop playing <i class="fa-solid fa-stop"></i>
           </button>
-          <button *ngIf="!game.installed" class="download-btn"
+          <button *ngIf="!game.installed" class="big-button download"
                   (click)="downloadGame(game); $event.stopPropagation()">
             Download <i class="fa-solid fa-download"></i>
           </button>
