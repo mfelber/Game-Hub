@@ -1,5 +1,15 @@
 @import "tailwindcss";
+@import "./styles/badges.css";
+@import "./styles/card.css";
+@import "./styles/buttons.css";
+@import "./styles/common.css";
+@import "./styles/dropdown.css";
+@import "./styles/checkbox.css";
+@import "./styles/filter-bar.css";
+
 @import "@fortawesome/fontawesome-free/css/all.css";
+
+@plugin "flowbite/plugin";
 @source "../node_modules/flowbite";
 
 @font-face {

@@ -1,0 +1,30 @@
+@layer components {
+
+  .checkbox {
+    @apply flex flex-col gap-2 text-xs text-[#777] w-30 max-sm:w-full;
+  }
+
+  .checkbox-label {
+    @apply flex items-center h-11 px-4 text-xs
+    rounded-[10px]
+    bg-[#1b2230] cursor-pointer
+    border border-transparent
+    hover:bg-[#26334a]
+    peer-checked:border-[#155dfc]
+    peer-checked:[&_span]:text-[#155dfc]
+    peer-checked:[&_i]:text-[#155dfc];
+
+    & span {
+      @apply text-sm text-[#ddd];
+    }
+
+    & i {
+      @apply text-[#ddd];
+    }
+  }
+
+  .checkbox-content {
+    @apply flex items-center gap-2;
+  }
+
+}

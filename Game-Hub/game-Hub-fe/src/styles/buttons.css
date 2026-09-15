@@ -1,0 +1,19 @@
+@layer components {
+
+  .store-action {
+    @apply items-center justify-center rounded-[8px] border-0 p-3
+    text-white transition-colors w-[calc(100%-40px)] ml-5 mr-5;
+  }
+
+  .add-to-cart {
+    @apply bg-[#155dfc] hover:bg-[#1447e6] cursor-pointer;
+  }
+
+  .in-library {
+    @apply cursor-default bg-[#093A3F] text-[#46ECD5];
+  }
+
+  .in-cart {
+    @apply cursor-default bg-[#172554] text-[#60a5fa];
+  }
+}

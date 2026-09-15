@@ -1,0 +1,47 @@
+@layer components {
+
+  .games-cards {
+    @apply relative grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3
+    xl:grid-cols-4 gap-6  min-h-[calc(100vh_-_250px)] items-start;
+  }
+
+  .card {
+    @apply bg-[#151b27] pb-5 rounded-[15px] overflow-hidden
+    transition duration-300 hover:-translate-y-2 hover:cursor-pointer;
+
+    & img {
+      @apply w-full h-70 object-cover rounded-t-2xl;
+    }
+
+    & h3 {
+      @apply mt-4 ml-5;
+    }
+
+    & p {
+      @apply mt-2 ml-5 text-[#777] flex;
+    }
+
+    & .info {
+      @apply p-5 flex justify-between;
+    }
+
+    & .price {
+      @apply flex items-center gap-3;
+    }
+
+    & .current-price {
+      @apply text-[1.3rem] font-bold text-white;
+    }
+
+    & .price-info {
+      @apply flex items-center gap-1;
+    }
+
+    & .old-price {
+      @apply text-[#7b8190] line-through text-[0.9rem];
+    }
+
+  }
+
+
+}

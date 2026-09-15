@@ -1,0 +1,15 @@
+.free-price {
+  @apply text-[#46d160]
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  justify-content: space-between;
+}
+
+
