@@ -5,10 +5,9 @@ import {Router} from '@angular/router';
 import {UserProfileControllerService} from '../../../../services/services/user-profile-controller.service';
 import {DatePipe, NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {GameResponse} from '../../../../services/models/game-response';
-import {StoreControllerService} from '../../../../services/services';
+import {CountryControllerService, StoreControllerService} from '../../../../services/services';
 import {FormsModule} from '@angular/forms';
 import {UserUpdateRequest} from '../../../../services/models/user-update-request';
-import {LocationControllerService} from '../../../../services/services/location-controller.service';
 import {HttpClient} from '@angular/common/http';
 import {AuthenticationService} from '../../../../services/services/authentication.service';
 import {AuthenticationRequest} from '../../../../services/models/authentication-request';
@@ -49,7 +48,7 @@ export class UserPrivateProfileComponent implements OnInit {
     private router: Router,
     private userService: UserProfileControllerService,
     private gameService: StoreControllerService,
-    private locationService: LocationControllerService,
+    private locationService: CountryControllerService,
     private http: HttpClient,
     private authenticationService: AuthenticationService,
     private cardColorService: CardColorControllerService,
@@ -410,17 +409,17 @@ export class UserPrivateProfileComponent implements OnInit {
   editProfile() {
     this.closeModal();
     this.isEditProfileModalOpen = true;
-    this.getLocations();
+    this.getCountries();
     this.getStoreFlags();
     this.getCommunityFlags()
   }
 
-  getLocations() {
-    this.locationService.getLocations().subscribe({
-      next: (location) => {
-        this.allLocations = location.map(location => ({
-          name: location.name!,
-          iconPath: location.iconPath!
+  getCountries() {
+    this.locationService.getAllCountries().subscribe({
+      next: (country) => {
+        this.allLocations = country.map(country => ({
+          name: country.name!,
+          iconPath: country.iconPath!
         }));
       }
     })

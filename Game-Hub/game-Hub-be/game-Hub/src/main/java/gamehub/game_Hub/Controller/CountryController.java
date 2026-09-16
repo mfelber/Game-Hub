@@ -7,21 +7,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import gamehub.game_Hub.Response.LocationResponse;
-import gamehub.game_Hub.Service.LocationService;
+import gamehub.game_Hub.Response.CountryResponse;
+import gamehub.game_Hub.Service.CountryService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("location")
+@RequestMapping("country")
 @RequiredArgsConstructor
-public class LocationController {
+public class CountryController {
 
-  private final LocationService locationService;
+  private final CountryService countryService;
 
   // Get all locations
-  @GetMapping("/locations")
-  public ResponseEntity<List<LocationResponse>> getLocations() {
-    return ResponseEntity.ok(locationService.findAllLocations());
+  @GetMapping("/countries")
+  public ResponseEntity<List<CountryResponse>> getAllCountries() {
+    return ResponseEntity.ok(countryService.findAllCountries());
   }
 
 }

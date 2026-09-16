@@ -8,6 +8,7 @@ import {Router} from '@angular/router';
 import {SearchBar} from '../../components/search-bar/search-bar';
 import {EmptyStateComponent} from '../../components/empty-state/empty-state.component';
 import {UserActionsComponent} from '../../components/user-actions/user-actions.component';
+import {LoadingComponent} from '../../components/loading/loading.component';
 
 @Component({
   selector: 'app-friend-requests',
@@ -18,7 +19,8 @@ import {UserActionsComponent} from '../../components/user-actions/user-actions.c
     NgStyle,
     SearchBar,
     EmptyStateComponent,
-    UserActionsComponent
+    UserActionsComponent,
+    LoadingComponent
   ],
   templateUrl: './friend-requests.component.html',
   styleUrl: './friend-requests.component.scss'
@@ -27,7 +29,7 @@ export class FriendRequestsComponent implements OnInit {
 
   friendRequestsResponse: PageResponseFriendRequestResponse = {};
 
-  isLoaded = false;
+  isLoading = false;
   emptyListOfFriendRequests = false;
   activeFilter = 'RECEIVED';
 
@@ -53,12 +55,18 @@ export class FriendRequestsComponent implements OnInit {
   }
 
   private getAllMyFriendRequests() {
+    this.isLoading = true;
     this.communityService.getAllMyFriendRequests().subscribe({
       next: (friendRequests) => {
         this.friendRequestsResponse = friendRequests;
         console.log(friendRequests);
-        this.isLoaded = true;
+        this.isLoading = false;
         this.emptyListOfFriendRequests = friendRequests.totalElements === 0;
+      },
+      error: (err) => {
+        this.isLoading = true;
+        this.emptyListOfFriendRequests = true;
+        console.log(err);
       }
     })
   }

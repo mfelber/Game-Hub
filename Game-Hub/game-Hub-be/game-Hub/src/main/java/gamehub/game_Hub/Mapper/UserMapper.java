@@ -12,7 +12,6 @@ import gamehub.game_Hub.Module.Level;
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Module.User.UserLibrary;
 import gamehub.game_Hub.Module.User.UserSuspensions;
-import gamehub.game_Hub.Module.User.Wishlist;
 import gamehub.game_Hub.Repository.BanHistoryRepository;
 import gamehub.game_Hub.Repository.FriendRequestRepository;
 import gamehub.game_Hub.Repository.FriendshipRepository;
@@ -32,7 +31,7 @@ import gamehub.game_Hub.Response.GameResponseShort;
 import gamehub.game_Hub.Response.GenreResponse;
 import gamehub.game_Hub.Response.LevelProgressResponse;
 import gamehub.game_Hub.Response.LevelResponse;
-import gamehub.game_Hub.Response.LocationResponse;
+import gamehub.game_Hub.Response.CountryResponse;
 import gamehub.game_Hub.Response.RecentUserResponse;
 import gamehub.game_Hub.Response.StatusResponse;
 import gamehub.game_Hub.Response.UserNotificationsResponse;
@@ -119,7 +118,7 @@ public class UserMapper {
         .favoriteGame(libraryMapper.toFavoriteGameResponse(profileUser))
         .currentlyPlaying(profileUser.getCurrentlyPlayingGame() != null ? gameMapper.toGameResponseShort(profileUser.getCurrentlyPlayingGame()): null)
         .location(
-            new LocationResponse(
+            new CountryResponse(
                 profileUser.getLocation() != null ? profileUser.getLocation().name() : null,
                 profileUser.getLocation() != null ? "/assets/flags/" + profileUser.getLocation().name().toLowerCase() + ".svg" : null
             )
@@ -176,7 +175,7 @@ public class UserMapper {
         .favoriteGame(libraryMapper.toFavoriteGameResponse(user))
         .currentlyPlaying(user.getCurrentlyPlayingGame() != null ? gameMapper.toGameResponseShort(user.getCurrentlyPlayingGame()): null)
         .location(
-            new LocationResponse(
+            new CountryResponse(
                 user.getLocation() != null ? user.getLocation().name() : null,
                 user.getLocation() != null ? "/assets/flags/" + user.getLocation().name().toLowerCase() + ".svg" : null
             )
@@ -281,7 +280,7 @@ public class UserMapper {
         .role(user.getRole())
         .accountType(user.getAccountType())
         .accountLevel(user.getLevel().getLevelNumber())
-        .location(new LocationResponse(
+        .location(new CountryResponse(
             user.getLocation() != null ? user.getLocation().name() : null,
             user.getLocation() != null ? "assets/flags/" + user.getLocation().name().toLowerCase() + ".svg" : null
         ))

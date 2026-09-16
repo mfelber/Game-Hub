@@ -16,7 +16,7 @@ public class UserCommunityResponse {
 
   private Long userId;
   private String username;
-  private LocationResponse location;
+  private CountryResponse location;
   private String joinedDate;
   private int friendsCount;
   private int libraryCount;

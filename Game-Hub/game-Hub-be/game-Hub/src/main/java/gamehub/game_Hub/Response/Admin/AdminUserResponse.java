@@ -2,7 +2,7 @@ package gamehub.game_Hub.Response.Admin;
 
 import java.time.LocalDateTime;
 
-import gamehub.game_Hub.Response.LocationResponse;
+import gamehub.game_Hub.Response.CountryResponse;
 import gamehub.game_Hub.enums.AccountStatus;
 import gamehub.game_Hub.enums.AccountType;
 import gamehub.game_Hub.enums.Role;
@@ -30,7 +30,7 @@ public class AdminUserResponse {
   private Role role;
   private AccountType accountType;
   private Long accountLevel;
-  private LocationResponse location;
+  private CountryResponse location;
   private AccountStatus accountStatus;
   private LocalDateTime registered;
   private LocalDateTime lastLogin;

@@ -1,7 +1,7 @@
 @layer components {
 
   .checkbox {
-    @apply flex flex-col gap-2 text-xs text-[#777] w-30 max-sm:w-full;
+    @apply flex flex-col gap-2 text-xs text-[#777] w-fit max-sm:w-full;
   }
 
   .checkbox-label {

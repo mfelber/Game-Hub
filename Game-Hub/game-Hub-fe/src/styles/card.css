@@ -5,6 +5,15 @@
     xl:grid-cols-4 gap-6 min-h-[calc(100vh_-_250px)] items-start;
   }
 
+  .users-cards {
+    @apply flex flex-col gap-5.5 mt-5 min-h-[calc(100dvh-350px)]
+    items-stretch relative;
+  }
+
+  .requests {
+    @apply relative flex flex-col gap-[22px] mt-5;
+  }
+
   .card {
     @apply bg-[#151b27] pb-5 rounded-[15px] overflow-hidden relative
     transition duration-300 hover:-translate-y-2 hover:cursor-pointer;
@@ -58,7 +67,7 @@
     }
 
     & .wishlist-buttons {
-      @apply flex gap-2.5 justify-between;
+      @apply flex justify-between;
 
       & .button {
         @apply p-3 rounded-[8px];
@@ -67,6 +76,49 @@
 
   }
 
+  .user-card {
+    @apply bg-[#151b27] p-5.5 rounded-[18px] flex justify-between items-center
+    transition duration-250 hover:-translate-y-2 hover:cursor-pointer;
 
+    & .flag {
+      @apply w-7.5 h-5 rounded-[5px];
+    }
+
+    & .username {
+      @apply flex items-center gap-2.5 mb-1.5;
+    }
+
+    & .stats {
+      @apply flex gap-4.5 mt-2.5 text-[#8892a6] text-sm;
+    }
+  }
+
+  .request-card {
+    @apply bg-[#151b27] p-5 rounded-[18px] flex items-center justify-between gap-5
+    transition duration-250 hover:-translate-y-1 hover:cursor-pointer;
+  }
+
+  /*                      */
+
+  .user-info p {
+    @apply text-[#777] text-sm mt-[5px];
+  }
+
+  .details {
+    @apply flex gap-2.5 mt-2 text-sm text-[#999];
+  }
+
+
+  .right {
+    @apply flex gap-3.75;
+  }
+
+  .left {
+    @apply flex items-center gap-5.5;
+  }
+
+  .small-img {
+    @apply w-18.75 h-18.75 rounded-[5px] object-cover;
+  }
 
 }

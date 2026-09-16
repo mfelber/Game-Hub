@@ -13,7 +13,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LocationResponse {
+public class CountryResponse {
 
   private String name;
   private String iconPath;

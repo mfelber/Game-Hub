@@ -9,7 +9,7 @@
 
   <!-- SEARCH -->
   <section>
-    <div>
+    <div class="search">
       <app-search-bar
         placeholder="Search your wishlisted games..."
         (search)="searchWishlistedGames()">
@@ -45,7 +45,7 @@
           <ul>
             <li>
               <button type="button"
-                      (click)="filters.genre = ''; changeFilter(); closeGenreDropdown()"
+                      (click)="filters.genre = ''; changeFilter(); closeDropdown()"
                       class="dropdown-option">
                 All Genres
               </button>
@@ -53,7 +53,7 @@
             <li *ngFor="let genre of allGenres">
               <button
                 type="button"
-                (click)="filters.genre = genre; changeFilter(); closeGenreDropdown()"
+                (click)="filters.genre = genre; changeFilter(); closeDropdown()"
                 class="dropdown-option">
                 {{ genre }}
               </button>
@@ -81,7 +81,7 @@
           <ul>
             <li>
               <button type="button"
-                      (click)="filters.operationSystem = ''; changeFilter(); closeOsDropdown()"
+                      (click)="filters.operationSystem = ''; changeFilter(); closeDropdown()"
                       class="dropdown-option">
                 All Systems
               </button>
@@ -89,7 +89,7 @@
             <li *ngFor="let operationSystem of allOperationSystems">
               <button
                 type="button"
-                (click)="filters.operationSystem = operationSystem; changeFilter(); closeOsDropdown()"
+                (click)="filters.operationSystem = operationSystem; changeFilter(); closeDropdown()"
                 class="dropdown-option">
                 {{ operationSystem }}
               </button>
@@ -138,7 +138,7 @@
             <li *ngFor="let sortOption of sortOptions">
               <button
                 type="button"
-                (click)="sortBy = sortOption.value; changeSort(); closeGenreDropdown()"
+                (click)="sortBy = sortOption.value; changeSort(); closeDropdown()"
                 class="dropdown-option">
                 {{ sortOption.label }}
               </button>
@@ -170,12 +170,12 @@
       <img [src]="getGameImageCover(wishlist.game!)" alt="{{wishlist.game?.title}}">
       <div class="badges">
 
-        <div class="badge trending">
+        <div class="small-badge trending">
           <i class="fa-solid fa-fire"></i>
           Trending
         </div>
 
-        <div *ngIf="wishlist.game?.discountPercent! > 0" class="badge discount">
+        <div *ngIf="wishlist.game?.discountPercent! > 0" class="small-badge discount">
           -{{ wishlist.game?.discountPercent }} %
         </div>
 
@@ -229,7 +229,7 @@
         <button class="big-button in-cart" *ngIf="wishlist.game?.inCart">
           In Cart <i class="fa-solid fa-check"></i>
         </button>
-        <button class="big-button remove-wishlist" (click)="removeGameFromWishList(wishlist.game?.gameId); $event.stopPropagation()">
+        <button class="big-button remove" (click)="removeGameFromWishList(wishlist.game?.gameId); $event.stopPropagation()">
           Remove <i class="fa-solid fa-bookmark"></i>
         </button>
       </div>

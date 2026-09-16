@@ -5,6 +5,24 @@
     text-white transition-colors w-[calc(100%-40px)] ml-5 mr-5;
   }
 
+  .big-btn-w-full {
+    @apply w-full p-[15px] transition-colors border-0 rounded-xl text-base cursor-pointer mt-3;
+  }
+
+  .medium-button {
+    @apply h-10 flex items-center gap-2 px-4 py-2 rounded-[9px]
+    text-white cursor-pointer transition duration-200 ease-in-out;
+  }
+
+  .icon-button {
+    @apply w-10.5 h-10.5 rounded-xl flex items-center justify-center text-white text-[15px]
+    transition-colors;
+  }
+
+  .review {
+    @apply bg-[#2563eb] hover:bg-[#1447e6] cursor-pointer;
+  }
+
   .add-to-cart {
     @apply bg-[#155dfc] hover:bg-[#1447e6] cursor-pointer;
   }
@@ -15,6 +33,16 @@
 
   .in-cart {
     @apply cursor-default bg-[#172554] text-[#60a5fa];
+  }
+
+  .gift {
+    @apply bg-[#202938] text-white border border-[#394355]
+    cursor-pointer hover:bg-[#2b3648];
+  }
+
+  .not-wishlist {
+    @apply bg-[#202938] text-white border border-[#394355]
+    cursor-pointer hover:bg-[#2b3648]
   }
 
   .download {
@@ -29,8 +57,8 @@
     @apply bg-[#f59e0b] hover:bg-[#d97706] cursor-pointer;
   }
 
-  .remove-wishlist {
-    @apply bg-[#dc2626] hover:bg-[#b91c1c] cursor-pointer;
+  .is-friend {
+    @apply bg-[#155dfc] hover:cursor-default
   }
 
 }

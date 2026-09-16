@@ -7,13 +7,20 @@
     <nav>
 
       <p>STORE</p>
-      <a routerLink="/gamehub/store" routerLinkActive="active"> <i class="fa-solid fa-store"></i> Store </a>
-      <a routerLink="/gamehub/library" routerLinkActive="active"> <i class="fa-solid fa-gamepad"></i>
+      <a
+        [routerLink]="['/gamehub/store']"
+        [queryParams]="{ page: 1, discount: false }"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ paths: 'subset', queryParams: 'ignored', fragment: 'ignored', matrixParams: 'ignored' }"
+      >
+        <i class="fa-solid fa-store"></i>
+        Store
+      </a>      <a routerLink="/gamehub/library" routerLinkActive="active"> <i class="fa-solid fa-gamepad"></i>
         Library </a>
       <a routerLink="/gamehub/wishlist" routerLinkActive="active"> <i class="fa-solid fa-bookmark"></i>
         Wishlist </a>
       <p>COMMUNITY</p>
-      <a routerLink="/gamehub/find-players" routerLinkActive="active"> <i class="fa-solid fa-magnifying-glass"></i>
+      <a [routerLink]="['/gamehub/find-players']" [queryParams]="{ page: 1, lookingForTeammate: false, voiceChat: false }" routerLinkActive="active"> <i class="fa-solid fa-magnifying-glass"></i>
         Find Players </a>
       <a routerLink="/gamehub/friends" routerLinkActive="active"> <i class="fa-solid fa-user-group"></i>
         Friends </a>
@@ -29,7 +36,8 @@
       <a *ngIf="friendReqCount > 0 && !isLoading "
          class="menu-item mt-4 px-4 flex items-center gap-3
                      cursor-pointer transition"
-         routerLink="/gamehub/friend-requests" routerLinkActive="active"> <i class="fa-solid fa-user-plus"></i> Friend Requests
+         routerLink="/gamehub/friend-requests" routerLinkActive="active"> <i class="fa-solid fa-user-plus"></i> Friend
+        Requests
 
         <span class="absolute top-0 right-5 bg-red-600 text-white text-xs font-bold
                          rounded-full w-5 h-5 flex items-center justify-center">
@@ -38,7 +46,8 @@
       </a>
 
       <p>Account</p>
-      <a routerLink="/gamehub/user/me" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"><i class="fa-solid fa-gear"></i>
+      <a routerLink="/gamehub/user/me" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"><i
+        class="fa-solid fa-gear"></i>
         Settings </a>
 
     </nav>

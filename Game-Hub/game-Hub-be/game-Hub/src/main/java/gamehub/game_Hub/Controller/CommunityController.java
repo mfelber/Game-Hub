@@ -75,5 +75,4 @@ public class CommunityController {
 
     return friendRequestRepository.countByReceiver_Id(user.getId());
   }
-
 }

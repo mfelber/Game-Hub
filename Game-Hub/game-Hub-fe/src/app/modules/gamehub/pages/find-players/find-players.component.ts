@@ -4,7 +4,7 @@ import {DatePipe, NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ReportUserModalComponent} from '../../components/report-user-modal/report-user-modal.component';
 import {SearchBar} from '../../components/search-bar/search-bar';
-import {initFlowbite} from 'flowbite';
+import {Dropdown, initFlowbite} from 'flowbite';
 import {CommunityControllerService} from '../../../../services/services/community-controller.service';
 import {ReportControllerService} from '../../../../services/services/report-controller.service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -16,6 +16,7 @@ import {EmptyStateComponent} from '../../components/empty-state/empty-state.comp
 import {UserActionsComponent} from '../../components/user-actions/user-actions.component';
 import {PaginationComponent} from '../../components/pagination/pagination.component';
 import {LoadingComponent} from '../../components/loading/loading.component';
+import {CountryControllerService} from '../../../../services/services/country-controller.service';
 
 @Component({
   selector: 'app-find-players',
@@ -38,14 +39,6 @@ import {LoadingComponent} from '../../components/loading/loading.component';
 })
 export class FindPlayersComponent implements OnInit {
 
-  ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      this.page = Number(params['page'] ?? 1) - 1;
-
-      this.loadAllUsers();
-    });
-    initFlowbite();
-  }
 
   public page = 0;
   public size = 10;
@@ -58,10 +51,17 @@ export class FindPlayersComponent implements OnInit {
   constructor(
     private communityService: CommunityControllerService,
     private reportService: ReportControllerService,
+    private countryService: CountryControllerService,
     private router: Router,
     private route: ActivatedRoute,
     private refreshService: RefreshService
   ) {
+  }
+
+  filters = {
+    country: '',
+    lookingForTeammate: false,
+    voiceChat: false
   }
 
   errorMessage: string = '';
@@ -69,19 +69,38 @@ export class FindPlayersComponent implements OnInit {
   toastVisible = false;
 
   selectedUserToReport: UserCommunityResponse | null = null;
-  userCommunityResponse: PageResponseUserCommunityResponse = {};
   reportRequest: ReportRequest = {reason: null!, message: ''};
 
   allCommunityGuidelines: { id: number; reason: string }[] = [];
+  allCountries: string[] = [];
 
+
+  userCommunityResponse: PageResponseUserCommunityResponse = {};
   filteredUsers: UserCommunityResponse[] = [];
+
+  ngOnInit(): void {
+    initFlowbite();
+    this.route.queryParams.subscribe(params => {
+      this.page = Number(params['page'] ?? 1) - 1;
+
+      this.filters.country = params['country'] ?? '';
+      this.filters.lookingForTeammate = params['lookingForTeammate'] === 'true';
+      this.filters.voiceChat = params['voiceChat'] === 'true';
+
+      this.loadAllUsers();
+    });
+
+    this.getCountries();
+
+  }
 
   private loadAllUsers(query: string = "") {
     this.isLoading = true;
     this.communityService.findAllUsers({
       page: this.page,
       size: this.size,
-      query: query}).subscribe({
+      query: query
+    }).subscribe({
         next: (users) => {
           this.userCommunityResponse = users;
           this.filteredUsers = [...(users.content || [])];
@@ -90,10 +109,18 @@ export class FindPlayersComponent implements OnInit {
         }, error: error => {
           console.log(error);
           this.isLoading = true;
-      }
+        }
       }
     )
 
+  }
+
+  getCountries() {
+    this.countryService.getAllCountries().subscribe({
+      next: (countries) => {
+        this.allCountries = countries.map(c => c.name!)
+      }
+    })
   }
 
   getProfilePicture(user: UserCommunityResponse) {
@@ -197,7 +224,21 @@ export class FindPlayersComponent implements OnInit {
   }
 
   resetFilters() {
-
+    this.filters = {
+      country: '',
+      lookingForTeammate: false,
+      voiceChat: false,
+    };
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        page: 1,
+        country: null,
+        lookingForTeammate: false,
+        voiceChat: false
+      },
+      queryParamsHandling: 'merge'
+    })
   }
 
   changePage(page: number) {
@@ -209,5 +250,27 @@ export class FindPlayersComponent implements OnInit {
       },
       queryParamsHandling: 'merge'
     });
+  }
+
+  changeFilter() {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        page: 1,
+        country: this.filters.country || null,
+        lookingForTeammate: this.filters.lookingForTeammate || null,
+        voiceChat: this.filters.voiceChat || null,
+      }
+    })
+  }
+
+  closeDropdown() {
+    const dropdownCountryElement = document.getElementById('countryDropdown');
+    const buttonElement = document.getElementById('countryDropdownButton');
+
+    if (dropdownCountryElement && buttonElement) {
+      const dropdown = new Dropdown(dropdownCountryElement, buttonElement);
+      dropdown.hide();
+    }
   }
 }

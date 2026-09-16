@@ -163,22 +163,22 @@
       <img [src]="getGameImageCover(game)" alt=""/>
       <div class="badges">
 
-        <div class="badge trending">
+        <div class="small-badge trending">
           <i class="fa-solid fa-fire"></i>
           Trending
         </div>
 
-        <div *ngIf="game.discountPercent! > 0" class="badge discount">
+        <div *ngIf="game.discountPercent! > 0" class="small-badge discount">
           -{{ game.discountPercent }} %
         </div>
 
-        <div *ngIf="game.inLibrary" class="badge owned">
+        <div *ngIf="game.inLibrary" class="small-badge owned">
           In Library <i class="fa-solid fa-gamepad mr-1"></i>
         </div>
 
         <div
           *ngIf="game.inWishList && !game.inLibrary"
-          class="badge wishlist">
+          class="small-badge wishlist">
           In Wishlist <i class="fa-solid fa-bookmark mr-1"></i>
         </div>
       </div>

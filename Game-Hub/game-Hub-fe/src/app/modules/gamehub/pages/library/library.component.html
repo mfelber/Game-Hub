@@ -27,18 +27,18 @@
 
   <!-- FILTER BUTTONS -->
   <section>
-    <div class="game-status-filter">
-      <div class="game-filter">
-        <button class="game-filter-button" [class.active]="activeFilter === 'ALL'" (click)="setFilter('ALL')">
+    <div class="filter-section">
+      <div class="filter-tabs">
+        <button class="filter-tab" [class.active]="activeFilter === 'ALL'" (click)="setFilter('ALL')">
           All Games
         </button>
 
-        <button class="game-filter-button" [class.active]="activeFilter === 'DOWNLOADED'"
+        <button class="filter-tab" [class.active]="activeFilter === 'DOWNLOADED'"
                 (click)="setFilter('DOWNLOADED')">
           <i class="fa-solid fa-download"></i> Downloaded Games
         </button>
 
-        <button class="game-filter-button" [class.active]="activeFilter === 'FAVORITE'" (click)="setFilter('FAVORITE')">
+        <button class="filter-tab" [class.active]="activeFilter === 'FAVORITE'" (click)="setFilter('FAVORITE')">
           <i class="fa-solid fa-heart"></i> Favorite Games
         </button>
 

@@ -13,7 +13,7 @@ import gamehub.game_Hub.Repository.FriendRequestRepository;
 import gamehub.game_Hub.Response.FriendProfileResponse;
 import gamehub.game_Hub.Response.FriendRequestResponse;
 import gamehub.game_Hub.Response.LevelResponse;
-import gamehub.game_Hub.Response.LocationResponse;
+import gamehub.game_Hub.Response.CountryResponse;
 import gamehub.game_Hub.Response.UserCommunityResponse;
 import lombok.RequiredArgsConstructor;
 
@@ -49,7 +49,7 @@ public class CommunityMapper {
         .libraryCount(foundUser.getLibrary().size())
         .friendsCount(foundUser.getFriends().size())
         .reviewsCount(0)
-        .location(new LocationResponse(foundUser.getLocation().name(), foundUser.getLocation().getLocationIcon()))
+        .location(new CountryResponse(foundUser.getLocation().name(), foundUser.getLocation().getLocationIcon()))
         .userProfilePicture(FileUtils.readCoverFromLocation(foundUser.getUserProfilePicture()))
         .profileColor(foundUser.getProfileColor())
         .isFriend(isFriend)
@@ -74,7 +74,7 @@ public class CommunityMapper {
         .status(sender.getStatus())
         .level(new LevelResponse(sender.getLevel().getId(), sender.getLevel().getLevelNumber(),
             sender.getLevel().getLevelColor()))
-        .location(new LocationResponse(sender.getLocation().name(), sender.getLocation().getLocationIcon()))
+        .location(new CountryResponse(sender.getLocation().name(), sender.getLocation().getLocationIcon()))
         .userProfilePicture(FileUtils.readCoverFromLocation(sender.getUserProfilePicture()))
         .profileColor(sender.getProfileColor())
         .createdAt(requestSentAt)

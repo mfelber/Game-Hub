@@ -58,7 +58,7 @@ export class WishlistComponent implements OnInit{
 
   constructor(
     private wishListService: WishlistControllerService,
-    private gameService: StoreControllerService,
+    private storeService: StoreControllerService,
     private cartService: CartControllerService,
     private router: Router,
     private route: ActivatedRoute,
@@ -82,7 +82,7 @@ export class WishlistComponent implements OnInit{
       this.getAllGamesInWishlist();
     })
 
-    this.getPlatforms();
+    this.getOperationSystems();
     this.getGenres();
   }
 
@@ -121,7 +121,7 @@ export class WishlistComponent implements OnInit{
   }
 
   goToGame(gameId: any) {
-    this.gameService.getGameById({gameId}).subscribe({
+    this.storeService.getGameById({gameId}).subscribe({
       next: (game) => {
         this.router.navigate(['gamehub/store/game', gameId]);
       },
@@ -182,8 +182,8 @@ export class WishlistComponent implements OnInit{
     })
   }
 
-  private getPlatforms() {
-    this.gameService.getAllPlatforms().subscribe({
+  private getOperationSystems() {
+    this.storeService.getAllPlatforms().subscribe({
       next: (platforms) => {
         this.allOperationSystems = platforms.map(p => p.platformName!)
       }
@@ -191,7 +191,7 @@ export class WishlistComponent implements OnInit{
   }
 
   private getGenres() {
-    this.gameService.getAllGenres().subscribe({
+    this.storeService.getAllGenres().subscribe({
       next: (genres) => {
         this.allGenres = genres.map(g => g.name!)
       }
@@ -203,7 +203,7 @@ export class WishlistComponent implements OnInit{
   }
 
   removeGameFromWishList(gameId: any) {
-    this.gameService.removeGameFromWishlist({gameId})
+    this.storeService.removeGameFromWishlist({gameId})
       .subscribe({
         next: () => {
           console.log('game with id: ' + gameId + ' removed from wishlist');
@@ -255,7 +255,7 @@ export class WishlistComponent implements OnInit{
       ?? 'Recently Added';
   }
 
-  closeGenreDropdown() {
+  closeDropdown() {
     const dropdownGenreElement = document.getElementById('genreDropdown');
     const buttonElement = document.getElementById('genreDropdownButton');
 
@@ -272,15 +272,14 @@ export class WishlistComponent implements OnInit{
       dropdown.hide();
     }
 
-  }
-
-  closeOsDropdown() {
     const dropdownOSElement = document.getElementById('operationSystemDropdown');
-    const buttonElement = document.getElementById('operationSystemDropdownButton');
+    const dropdownOsButtonElement = document.getElementById('operationSystemDropdownButton');
 
-    if (dropdownOSElement && buttonElement) {
+    if (dropdownOSElement && dropdownOsButtonElement) {
       const dropdown = new Dropdown(dropdownOSElement, buttonElement);
       dropdown.hide();
     }
+
   }
+
 }

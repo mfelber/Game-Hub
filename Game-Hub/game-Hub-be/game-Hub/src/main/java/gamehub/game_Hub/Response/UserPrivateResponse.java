@@ -23,7 +23,7 @@ public class UserPrivateResponse {
   private String bio;
   private Integer playTime;
   private Long reviews;
-  private LocationResponse location;
+  private CountryResponse location;
   private Status status;
   private String joinedDate;
   private int friendsCount;

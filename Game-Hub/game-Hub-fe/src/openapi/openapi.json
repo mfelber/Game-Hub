@@ -1928,29 +1928,6 @@
         }
       }
     },
-    "/location/locations": {
-      "get": {
-        "tags": [
-          "location-controller"
-        ],
-        "operationId": "getLocations",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/LocationResponse"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/library/library": {
       "get": {
         "tags": [
@@ -2270,6 +2247,29 @@
                 "schema": {
                   "type": "integer",
                   "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/country/countries": {
+      "get": {
+        "tags": [
+          "country-controller"
+        ],
+        "operationId": "getAllCountries",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CountryResponse"
+                  }
                 }
               }
             }
@@ -3743,6 +3743,17 @@
           }
         }
       },
+      "CountryResponse": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "iconPath": {
+            "type": "string"
+          }
+        }
+      },
       "FriendProfileResponse": {
         "type": "object",
         "properties": {
@@ -3793,17 +3804,6 @@
           }
         }
       },
-      "LocationResponse": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "iconPath": {
-            "type": "string"
-          }
-        }
-      },
       "UserPublicResponse": {
         "type": "object",
         "properties": {
@@ -3837,7 +3837,7 @@
             ]
           },
           "location": {
-            "$ref": "#/components/schemas/LocationResponse"
+            "$ref": "#/components/schemas/CountryResponse"
           },
           "status": {
             "type": "string",
@@ -3997,7 +3997,7 @@
             "format": "int64"
           },
           "location": {
-            "$ref": "#/components/schemas/LocationResponse"
+            "$ref": "#/components/schemas/CountryResponse"
           },
           "status": {
             "type": "string",
@@ -4038,9 +4038,6 @@
             "items": {
               "$ref": "#/components/schemas/RecentGamesResponse"
             }
-          },
-          "wishlist": {
-            "$ref": "#/components/schemas/WishlistResponse"
           },
           "friends": {
             "type": "array",
@@ -4177,7 +4174,7 @@
             "type": "string"
           },
           "location": {
-            "$ref": "#/components/schemas/LocationResponse"
+            "$ref": "#/components/schemas/CountryResponse"
           },
           "joinedDate": {
             "type": "string"
@@ -4235,7 +4232,7 @@
             "type": "string"
           },
           "location": {
-            "$ref": "#/components/schemas/LocationResponse"
+            "$ref": "#/components/schemas/CountryResponse"
           },
           "status": {
             "type": "string",
@@ -4365,7 +4362,7 @@
             "format": "int64"
           },
           "location": {
-            "$ref": "#/components/schemas/LocationResponse"
+            "$ref": "#/components/schemas/CountryResponse"
           },
           "accountStatus": {
             "type": "string",

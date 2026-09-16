@@ -1,0 +1,179 @@
+@layer components {
+
+  .hero {
+    @apply mt-5 h-137.5 relative rounded-[25px] overflow-hidden;
+  }
+
+  .hero-image {
+    @apply w-full h-full object-cover;
+  }
+
+  .overlay {
+    @apply absolute inset-0 bg-gradient-to-t from-[#0b0e14] to-transparent;
+  }
+
+  .hero-content {
+    @apply absolute bottom-10 left-10;
+  }
+
+  .hero h1 {
+    @apply text-[55px] mb-5;
+  }
+
+  .tags {
+    @apply flex gap-3;
+  }
+
+  .tags span {
+    @apply bg-white/20 px-[18px] py-2.5 rounded-[20px];
+  }
+
+  .main-grid {
+    @apply grid grid-cols-[2fr_1fr] gap-[25px] mt-[30px] max-[900px]:grid-cols-1;
+  }
+
+  .game-info-card {
+    @apply bg-[#151b27] rounded-[20px] p-[30px] border border-[#2F3949];
+
+    & .price {
+      @apply flex;
+    }
+
+    & .old-price {
+      @apply text-[#777] line-through mr-2.5;
+    }
+
+    & .purchase-actions {
+      @apply flex flex-col gap-3;
+    }
+
+    & .purchase-row {
+      @apply flex gap-2.5;
+
+      & .add-to-cart,
+      & .in-cart,
+      & .in-library {
+        @apply flex-1;
+      }
+
+      & .not-wishlist,
+      & .remove {
+        @apply w-[60px] h-[54px] flex-none;
+      }
+    }
+
+  }
+
+  .extra-info {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[25px] mt-[30px];
+  }
+
+  .extra-info h3 {
+    @apply mb-5;
+  }
+
+  .small-tags {
+    @apply flex gap-2.5 flex-wrap;
+  }
+
+  .small-tags span {
+    @apply bg-[#262D38] px-[15px] py-2 rounded-lg text-sm border-[#303740] border-2;
+  }
+
+  .requirements-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[25px];
+  }
+
+  .requirements-grid div {
+    @apply bg-[#1b2230] p-5 rounded-[15px];
+  }
+
+  .requirements-grid span {
+    @apply text-[#888] text-sm;
+  }
+
+  .requirements-grid p {
+    @apply mt-2.5;
+  }
+
+  .game-info-card h2 {
+    @apply mb-[25px];
+  }
+
+  .description p {
+    @apply text-[#b0b0b0] leading-[1.8] text-[17px];
+  }
+
+  .game-details {
+    @apply gap-2.5 mt-2 text-sm;
+  }
+
+  .game-details div {
+    @apply flex justify-between mb-[15px];
+  }
+
+  .game-details span {
+    @apply text-[#888] text-[18px];
+  }
+
+  .space-between-cards {
+    @apply mt-7.5;
+  }
+
+  .rating-summary {
+    @apply flex gap-[40px] mt-5;
+  }
+
+  .overall-rating h1 {
+    @apply text-[45px] m-0;
+  }
+
+  .stars {
+    @apply text-[#facc15];
+  }
+
+  .rating-info {
+    @apply flex-1;
+  }
+
+  .progress {
+    @apply h-2 bg-[#303746] rounded-[10px] my-[5px] mb-[15px];
+
+    & div {
+      @apply h-full bg-[#22c55e] rounded-[10px];
+    }
+  }
+
+  .review-item {
+    @apply flex gap-[15px] pt-5 mt-5 border-t border-white/10;
+
+    & img {
+      @apply w-[50px] h-[50px] rounded-full;
+    }
+
+    & p {
+      @apply text-[#aaa];
+    }
+  }
+
+  .recommended-grid {
+    @apply grid grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-5 mt-5;
+  }
+
+  .recommended-card {
+    @apply bg-[#1b2230] rounded-[15px] overflow-hidden cursor-pointer;
+  }
+
+  .recommended-card img {
+    @apply w-full h-[220px] object-cover;
+  }
+
+  .recommended-card div {
+    @apply p-3;
+  }
+
+  .recommended-card h3 {
+    @apply m-0 break-words;
+  }
+
+}

@@ -10,11 +10,11 @@
   <!-- HEADER -->
   <section>
     <div class="header">
-      <div class="header-content">
+      <div>
         <h1>Find Players <i class="fa-solid fa-magnifying-glass"></i></h1>
-        <app-user-actions/>
+        <p class="page-description">Search for players and add new friends</p>
       </div>
-      <p>Search for players and add new friends</p>
+      <app-user-actions/>
     </div>
   </section>
 
@@ -36,72 +36,117 @@
     </div>
 
     <div class="filter-options">
-      <div class="dropdown">
-        <label>Country</label>
-        <select>
-          <option value="">All Countries</option>
-          <option value="SK">Slovakia</option>
-          <option value="CZ">Czechia</option>
-          <option value="GE">Germany</option>
-        </select>
-      </div>
-
-      <!--   TODO retrieve all platforms   -->
 
       <div class="dropdown">
-        <label>Platform</label>
-        <select>
-          <option value="">All Platforms</option>
-          <option value="pc">PC</option>
-          <option value="xbox">Xbox</option>
-          <option value="ps5">PS</option>
-        </select>
+        <label>
+          Country
+        </label>
+        <button id="countryDropdownButton"
+                data-dropdown-toggle="countryDropdown"
+                type="button"
+                class="dropdown-button"
+        ><span>
+          {{ filters.country || 'All Countries' }}
+        </span>
+          <i class="fa-solid fa-chevron-down text-xs"></i>
+        </button>
+
+        <div id="countryDropdown" class="dropdown-select">
+          <ul>
+            <li>
+              <button type="button"
+                      (click)="filters.country = ''; changeFilter(); closeDropdown()"
+                      class="dropdown-option">
+                All Systems
+              </button>
+            </li>
+            <li *ngFor="let country of allCountries">
+              <button
+                type="button"
+                (click)="filters.country = country; changeFilter(); closeDropdown()"
+                class="dropdown-option">
+                {{ country }}
+              </button>
+            </li>
+          </ul>
+        </div>
       </div>
 
-      <!--   TODO   -->
+
       <div class="checkbox">
         <label>
-          <input type="checkbox"> Looking for teammates
+          Looking for teammates
+        </label>
+
+        <input
+          type="checkbox"
+          id="teammate-option"
+          [(ngModel)]="filters.lookingForTeammate"
+          (change)="changeFilter()"
+          class="hidden peer">
+        <label
+          for="teammate-option"
+          class="checkbox-label">
+          <div class="checkbox-content">
+            <i class="fa-solid fa-user-group"></i>
+            <span>Wants teammate</span>
+          </div>
         </label>
       </div>
 
       <div class="checkbox">
         <label>
-          <input type="checkbox"> Voice chat
+          Voice chat
         </label>
+
+        <input
+          type="checkbox"
+          id="voicechat-option"
+          [(ngModel)]="filters.voiceChat"
+          (change)="changeFilter()"
+          class="hidden peer">
+        <label
+          for="voicechat-option"
+          class="checkbox-label">
+          <div class="checkbox-content">
+            <i class="fa-solid fa-microphone"></i>
+            <span>Has voice chat</span>
+          </div>
+        </label>
+
       </div>
     </div>
   </section>
 
   <app-empty-state
     *ngIf="filteredUsers.length === 0 && !isLoading"
-    icon = 'fa-solid fa-sad-tear'
+    icon='fa-solid fa-sad-tear'
     title="No users were founded">
   </app-empty-state>
 
-  <section class="users">
+  <section class="users-cards">
 
-    <app-loading *ngIf="isLoading" />
+    <app-loading *ngIf="isLoading"/>
 
     <div class="user-card" (click)="navigateToUser(user.userId)" *ngFor="let user of filteredUsers">
       <div class="left">
         <img *ngIf="user.userProfilePicture"
              [src]="getProfilePicture(user)"
-             class="left-img"/>
+             class="small-img"/>
 
         <img *ngIf="!user.userProfilePicture"
              src="../../../../../assets/profilePicture/default_profile_picture.svg"
-             class="left-img"
+             class="small-img"
              [ngStyle]="{'background-color': user.profileColor}"/>
         <div>
           <div class="username">
-            <h3>{{user.username}}</h3>
+            <h3>{{ user.username }}</h3>
             <img class="flag" [src]="user.location?.iconPath" alt="">
           </div>
           <span [ngClass]="{
-          'text-green-500': user.status === 'Online' || user.status === 'Playing',
-          'text-gray-400': user.status === 'Offline',
-          'text-yellow-400': user.status === 'Away'
+          'online': user.status === 'Online' || user.status === 'Playing',
+          'offline': user.status === 'Offline',
+          'away': user.status === 'Away'
           }">• {{
               user.status === 'Playing' ? 'In Game ' + user.currentlyPlaying?.title
                 : user.status
@@ -110,55 +155,55 @@
             <span> <i class="fa-solid fa-gamepad library-count"></i> {{ user.libraryCount }}</span>
             <span> <i class="fa-solid fa-user-group friends-count"></i> {{ user.friendsCount }}</span>
             <span> <i class="fa-solid fa-star reviews-count"></i> {{ user.reviewsCount }}</span>
-            <span> <i class="fa-solid fa-calendar joined-date"></i> joined {{user.joinedDate}}</span>
+            <span> <i class="fa-solid fa-calendar joined-date"></i> joined {{ user.joinedDate }}</span>
           </div>
         </div>
       </div>
       <div class="right">
 
         <button *ngIf="user.isFriend" (click)="$event.stopPropagation()"
-                class="action-btn friend">
+                class="icon-button is-friend">
           <i class="fa-solid fa-user-group"></i>
         </button>
 
         <button *ngIf="user.friendRequestReceived"
                 (click)=" acceptFriendRequest(user.userId!) ; $event.stopPropagation()"
-                class="action-btn accept">
+                class="icon-button accept">
           <i class="fa-solid fa-user-check"></i></button>
 
         <button *ngIf="user.friendRequestReceived"
                 (click)=" rejectFriendRequest(user.userId!) ; $event.stopPropagation()"
-                class="action-btn reject">
+                class="icon-button remove">
           <i class="fa-solid fa-user-xmark"></i></button>
 
         <button
           *ngIf="user.friendRequestSent === false && user.isFriend === false && user.friendRequestReceived === false"
           (click)="sendFriendRequest(user.userId!) ; $event.stopPropagation()"
-          class="add-friend-btn">
+          class="icon-button accept">
           <i class="fa-solid fa-user-plus"></i>
         </button>
 
         <button *ngIf="user.friendRequestSent"
                 (click)="cancelFriendRequest(user.userId!) ; $event.stopPropagation()"
-                class="cancel-btn">
-           <i class="fa-solid fa-user-clock"></i>
+                class="icon-button cancel-friend">
+          <i class="fa-solid fa-user-clock"></i>
         </button>
 
         <button (click)="openReportUserModal(user) ; $event.stopPropagation()"
-                class="action-btn report">
+                class="icon-button report">
           <i class="fa-solid fa-exclamation"></i>
         </button>
       </div>
     </div>
   </section>
 
-    <app-pagination
+  <app-pagination
     *ngIf="filteredUsers.length && userCommunityResponse.totalPages! > 1"
     [currentPage]="page"
     [totalPages]="userCommunityResponse.totalPages!"
     (pageChange)="changePage($event)">
 
-    </app-pagination>
+  </app-pagination>
 
 
 </main>

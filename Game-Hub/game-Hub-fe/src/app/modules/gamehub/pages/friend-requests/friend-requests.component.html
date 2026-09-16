@@ -1,17 +1,13 @@
-<div *ngIf="!isLoaded" class="text-center justify-center text-gray-400">
-  Loading...
-</div>
-
-<main [class.hidden]="!isLoaded">
+<main>
 
   <!-- HEADER -->
   <section>
     <div class="header">
-      <div class="header-content">
+      <div>
         <h1>Friend Requests <i class="fa-solid fa-user-plus"></i></h1>
-        <app-user-actions/>
+        <p class="page-description">Manage your incoming friend requests</p>
       </div>
-      <p>Manage your incoming friend requests</p>
+        <app-user-actions/>
     </div>
   </section>
 
@@ -27,12 +23,12 @@
 
   <!-- BUTTONS -->
   <section>
-    <div class="friend-request-filter">
-      <div class="request-filter">
-        <button class="request-filter-button" [class.active]="activeFilter === 'RECEIVED'"
+    <div class="filter-section">
+      <div class="filter-tabs">
+        <button class="filter-tab" [class.active]="activeFilter === 'RECEIVED'"
                 (click)="setFilter('RECEIVED')">Received
         </button>
-        <button class="commingsoon request-filter-button" [class.active]="activeFilter === 'PENDING'"
+        <button class="commingsoon filter-tab" [class.active]="activeFilter === 'PENDING'"
                 (click)="setFilter('PENDING')">Pending Requests <span
           class="text-[10px] bg-gray-700/60 px-2 py-0.5 rounded-md">Coming soon</span>
         </button>
@@ -41,47 +37,51 @@
   </section>
 
   <app-empty-state
-    *ngIf="emptyListOfFriendRequests"
+    *ngIf="emptyListOfFriendRequests && !isLoading"
     icon='fa-solid fa-envelope'
     title="You don't have any friend requests">
   </app-empty-state>
 
   <!-- FRIEND REQUESTS -->
-  <div *ngIf="friendRequestsResponse.content?.length">
 
-    <section class="requests" *ngFor="let friendRequest of friendRequestsResponse.content">
-      <div class="request-card" (click)="navigateToUser(friendRequest.userId!)">
-        <img *ngIf="friendRequest.userProfilePicture"
-             [src]="getProfilePicture(friendRequest)"/>
+    <section class="requests">
 
-        <img *ngIf="!friendRequest.userProfilePicture"
-             src="../../../../../assets/profilePicture/default_profile_picture.svg"
-             [ngStyle]="{'background-color': friendRequest.profileColor}"/>
+      <app-loading *ngIf="isLoading"/>
 
-        <div class="user-info">
-          <h3>{{ friendRequest.username }}</h3>
-          <p> Sent {{ friendRequest.createdAt }}</p>
-          <div class="details">
+      <div class="request-card" (click)="navigateToUser(friendRequest.userId!)" *ngFor="let friendRequest of friendRequestsResponse.content">
+        <div class="left">
+          <img *ngIf="friendRequest.userProfilePicture" class="small-img"
+               [src]="getProfilePicture(friendRequest)"/>
+
+          <img *ngIf="!friendRequest.userProfilePicture" class="small-img"
+               src="../../../../../assets/profilePicture/default_profile_picture.svg"
+               [ngStyle]="{'background-color': friendRequest.profileColor}"/>
+
+          <div class="user-info">
+            <h3>{{ friendRequest.username }}</h3>
+            <p> Sent {{ friendRequest.createdAt }}</p>
+            <div class="details">
           <span [ngClass]="{
-          'text-green-500': friendRequest.status === 'Online' || friendRequest.status === 'Playing',
-          'text-gray-400': friendRequest.status === 'Offline',
-          'text-yellow-400': friendRequest.status === 'Away'
+          'online': friendRequest.status === 'Online' || friendRequest.status === 'Playing',
+          'offline': friendRequest.status === 'Offline',
+          'away': friendRequest.status === 'Away'
           }">• {{
               friendRequest.status === 'Playing' ? 'Online' : friendRequest.status
             }} </span>
-            <span>• {{ friendRequest.location?.name }}</span>
-            <span [ngStyle]="{'color': friendRequest.level?.levelColor}"> • Lvl.{{ friendRequest.level?.level }} </span>
+              <span>• {{ friendRequest.location?.name }}</span>
+              <span [ngStyle]="{'color': friendRequest.level?.levelColor}"> • Lvl.{{ friendRequest.level?.level }} </span>
+            </div>
           </div>
         </div>
-        <div class="actions">
-          <button class=" btn accept" (click)=" acceptFriendRequest(friendRequest.userId!) ; $event.stopPropagation()">
+
+        <div class="right">
+          <button class=" medium-button accept" (click)=" acceptFriendRequest(friendRequest.userId!) ; $event.stopPropagation()">
             Accept <i class="fa-solid fa-user-plus"></i>
           </button>
-          <button class=" btn decline" (click)=" rejectFriendRequest(friendRequest.userId!) ; $event.stopPropagation()">
+          <button class=" medium-button remove" (click)=" rejectFriendRequest(friendRequest.userId!) ; $event.stopPropagation()">
             Decline <i class="fa-solid fa-user-xmark"></i>
           </button>
         </div>
       </div>
     </section>
-  </div>
 </main>
