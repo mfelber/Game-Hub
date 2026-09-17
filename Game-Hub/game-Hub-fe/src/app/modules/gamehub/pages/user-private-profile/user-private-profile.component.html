@@ -18,9 +18,9 @@
   (preview)="showPreview($event)">
 </app-edit-profile-info>
 
-<app-user-actions class="top"/>
+<app-user-actions class="top-end"/>
 
-<main>
+<main class="user-profile">
 
   <section class="user">
 
@@ -63,7 +63,7 @@
 
               <img *ngIf="(!showPreviewColors || !previewImageInserted) && !userHasProfilePicture"
                    src="../../../../../assets/profilePicture/default_profile_picture.svg"
-                   class="avatar"
+                   class="profile-avatar"
                    [ngStyle]="{'background-color': userResponse.profileColor}"
               />
             </div>
@@ -99,7 +99,7 @@
             </div>
 
             <div class="profile-actions">
-              <button class="edit-profile-btn" (click)="isProfileModalOpen = true">
+              <button class="medium-button edit-profile" (click)="isProfileModalOpen = true">
                 <i class="fa-solid fa-pencil"></i>
                 Edit Profile
               </button>
@@ -280,7 +280,7 @@
               </button>
             </div>
 
-            <div class="badges">
+            <div class="profile-badges">
               <div *ngFor="let badge of userResponse.badges" class="badge">
                 <img [src]="badge.iconPath" alt="{{badge.name}}">
               </div>
@@ -501,7 +501,7 @@
       </button>
 
       <button
-        class="save-btn"
+        class="save"
         (click)="saveBio()">
         <i class="fa-solid fa-check"></i>
         Save
@@ -580,7 +580,7 @@
     <div class="modal-actions">
 
       <button
-        class="cancel-btn"
+        class=" medium-button cancel"
         (click)="cancelFavoriteGenres()">
 
         Cancel
@@ -588,7 +588,7 @@
       </button>
 
       <button
-        class="save-btn"
+        class="medium-button save"
         (click)="saveFavoriteGenres()">
         Save
       </button>

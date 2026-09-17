@@ -38,7 +38,7 @@
   @apply flex items-center gap-5 w-full min-w-0 box-border justify-between;
 }
 
-.top-game-details {
+.top-end {
   @apply flex items-center gap-5 w-full min-w-0 box-border justify-end;
 }
 
@@ -60,4 +60,56 @@
 
 .page-description {
   @apply text-[#777];
+}
+
+.about-icon {
+  color: #A78BFA;
+}
+
+.recently-played-icon {
+  color: #60A5FA;
+}
+
+.favorite-game-icon {
+  color: #F472B6;
+}
+
+.badges-icon {
+  color: #FBBF24;
+}
+
+.genres-icon {
+  color: #34D399;
+}
+
+.friends-icon {
+  color: #22D3EE;
+}
+
+.groups-icon {
+  color: #FB923C;
+}
+
+.looking-for-icon {
+  color: #C084FC;
+}
+
+.wishlist-icon {
+  color: #F87171;
+}
+
+.wishlist {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.friends {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.nothing-to-show {
+  color: rgba(255, 255, 255, 0.45);
 }

@@ -19,6 +19,12 @@
     transition-colors;
   }
 
+  .close-btn {
+    @apply border-0 bg-transparent text-[#9ca3af] text-[28px] cursor-pointer
+    transition duration-200 ease-in-out
+    hover:text-white hover:scale-110;
+  }
+
   .review {
     @apply bg-[#2563eb] hover:bg-[#1447e6] cursor-pointer;
   }
@@ -58,7 +64,20 @@
   }
 
   .is-friend {
-    @apply bg-[#155dfc] hover:cursor-default
+    @apply bg-[#155dfc] hover:cursor-default;
+  }
+
+  .save {
+    @apply bg-[#155dfc] hover:cursor-pointer hover:bg-[#1447e6];
+  }
+
+  .cancel {
+    @apply bg-[#6e7988] hover:cursor-pointer hover:bg-[#4b5563];
+  }
+
+  .edit-profile {
+    @apply border border-white/12 bg-white/6 text-white
+    hover:bg-white/12;
   }
 
 }
