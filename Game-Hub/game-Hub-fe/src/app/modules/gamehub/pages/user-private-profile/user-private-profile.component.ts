@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {UserPrivateResponse} from '../../../../services/models/user-private-response';
 import {initFlowbite} from 'flowbite';
 import {Router} from '@angular/router';
@@ -42,7 +42,7 @@ import {forkJoin} from 'rxjs';
   templateUrl: './user-private-profile.component.html',
   styleUrl: './user-private-profile.component.scss'
 })
-export class UserPrivateProfileComponent implements OnInit {
+export class UserPrivateProfileComponent implements OnInit{
 
   constructor(
     private router: Router,
@@ -58,7 +58,6 @@ export class UserPrivateProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    initFlowbite();
     this.loadUserPrivateProfile();
     this.getColorsForCard()
   }
@@ -164,6 +163,10 @@ export class UserPrivateProfileComponent implements OnInit {
         this.recentGamesResponse = recentGames;
         this.genreResponse = genres;
         this.isLoading = false;
+        setTimeout(() => {
+          console.log('MODAL:', document.getElementById('default-modal'));
+          initFlowbite();
+        });
       },
       error: (err) => {
         this.isLoading = true;
@@ -234,7 +237,6 @@ export class UserPrivateProfileComponent implements OnInit {
 
   saveBio() {
     if (this.bioUpdateRequest.bio === this.userResponse.bio) {
-      console.log('nothing change')
       this.isEditBioModalOpen = false
     } else {
       this.userService.updateBio({
@@ -299,7 +301,6 @@ export class UserPrivateProfileComponent implements OnInit {
     } else {
       this.selectedGenres.add(id)
     }
-    console.log(this.selectedGenres)
   }
 
   cancelFavoriteGenres() {
@@ -360,7 +361,6 @@ export class UserPrivateProfileComponent implements OnInit {
 
       if (changesExistProfileInfo) {
         this.showSuccess('You have successfully updated profile')
-        console.log(this.userRequest)
         await this.userService.updateUserProfile({
           body: this.userRequest
         }).toPromise();
@@ -462,7 +462,6 @@ export class UserPrivateProfileComponent implements OnInit {
   getStoreFlags() {
     this.storeFlagsService.getAllStoreFlags().subscribe({
       next: (res) => {
-        console.log(res)
         this.allStoreFlags = res.map(flag => ({
           flagName: flag.name!,
           description: flag.description!
