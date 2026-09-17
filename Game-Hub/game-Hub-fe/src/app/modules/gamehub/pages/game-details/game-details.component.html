@@ -1,13 +1,11 @@
-<main>
+<app-user-actions class="top-game-details"/>
 
+<main>
   <section class="game relative">
 
     <app-loading *ngIf="isLoading"/>
 
     <section class="loaded-game relative" *ngIf="!isLoading">
-      <div class="top-game-details">
-        <app-user-actions/>
-      </div>
 
       <section class="hero">
         <img
@@ -35,7 +33,7 @@
             {{ game.description }}
           </p>
         </div>
-        <div class="purchase game-info-card">
+        <div class="game-info-card">
           <h2>{{ game.title }}</h2>
           <div class="game-details">
             <div>
@@ -75,9 +73,9 @@
 
           </div>
 
-          <div class="purchase-actions">
+          <div class="game-actions-container">
 
-            <div class="purchase-row">
+            <div class="game-actions-row">
 
               <button
                 *ngIf="!game.inLibrary && !game.inCart"

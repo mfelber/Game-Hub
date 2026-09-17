@@ -14,87 +14,96 @@
   (stoppedPlayingGame)="gameStopped()"
   (close)="closeModal()"/>
 
-<app-loading *ngIf="isLoading" />
+<app-user-actions class="top-game-details"/>
 
-<main *ngIf="!isLoading">
+<main>
 
-  <div class="top">
-    <app-user-actions/>
-  </div>
+  <section class="game">
 
-  <section class="hero">
-    <img
-      [src]="getGameImageCover(gameResponse)"
-      alt="Game cover"
-      class="hero-image"
-    />
-    <div class="overlay"></div>
-    <div class="hero-content">
-      <h1>{{ gameResponse.title }}</h1>
-      <div class="tags">
+    <app-loading *ngIf="isLoading"/>
+
+    <section *ngIf="!isLoading">
+
+      <section class="hero">
+        <img
+          [src]="getGameImageCover(gameResponse)"
+          alt="Game cover"
+          class="hero-image"
+        />
+        <div class="overlay"></div>
+        <div class="hero-content">
+          <h1>{{ gameResponse.title }}</h1>
+          <div class="tags">
          <span *ngFor="let genre of gameResponse.genres">
       {{ genre.name }}
         </span>
-        <span [ngStyle]="{'background-color': gameResponse.ageRating?.ageRatingColor}">
+            <span [ngStyle]="{'background-color': gameResponse.ageRating?.ageRatingColor}">
       {{ gameResponse.ageRating?.ageRating }} </span>
-      </div>
-    </div>
-  </section>
+          </div>
+        </div>
+      </section>
 
-  <section class="main-grid">
-    <div class="description card">
-      <h2>About this game</h2>
-      <p>
-        {{ gameResponse.description }}
-      </p>
-    </div>
-    <div class="purchase card">
-      <h2>{{ gameResponse.title }}</h2>
-      <div class="details">
-        <div>
-          <span>Developer</span>
-          <b>{{ gameResponse.developer }}</b>
+      <section class="main-grid">
+        <div class="description game-info-card">
+          <h2>About this game</h2>
+          <p>
+            {{ gameResponse.description }}
+          </p>
+        </div>
+        <div class="game-info-card">
+          <h2>{{ gameResponse.title }}</h2>
+          <div class="game-details">
+            <div>
+              <span>Developer</span>
+              <b>{{ gameResponse.developer }}</b>
+            </div>
+
+            <div>
+              <span>Publisher</span>
+              <b>{{ gameResponse.publisher }}</b>
+            </div>
+
+            <div>
+              <span>Release Date</span>
+              <b>{{ gameResponse.releaseYear | date:'dd.MM.yyyy' }}</b>
+            </div>
+          </div>
+
+          <div class="game-actions-container">
+            <div class="game-actions-row">
+
+              <button class="big-btn-w-full download" *ngIf="!gameResponse.installed" (click)="downloadGame(gameResponse)">
+                Download
+                <i
+                  class="fa-solid fa-download"></i></button>
+              <button *ngIf="!gameResponse.currentlyPlaying && gameResponse.installed" class="big-btn-w-full play"
+                      (click)="playGame(gameResponse)">
+                Play <i class="fa-solid fa-play"></i>
+              </button>
+              <button *ngIf="gameResponse.currentlyPlaying" class="big-btn-w-full stop"
+                      (click)="stopPlayingGame(gameResponse)">
+                Stop playing <i class="fa-solid fa-stop"></i>
+              </button>
+              <button class="big-btn-w-full not-wishlist" *ngIf="!gameResponse.favorite" (click)="addGameToFavorite(gameResponse)"><i
+                class="fa-regular fa-heart"></i>
+              </button>
+              <button class="big-btn-w-full remove" *ngIf="gameResponse.favorite"
+                      (click)="removeGameFromFavorite(gameResponse)"><i
+                class="fa-solid fa-heart"></i></button>
+
+            </div>
+
+
+            <hr *ngIf="gameResponse.installed">
+            <button class="big-btn-w-full remove" *ngIf="gameResponse.installed" (click)="uninstallGame(gameResponse)">
+              Uninstall <i
+              class="fa-solid fa-trash-can"></i></button>
+
+          </div>
+
         </div>
 
-        <div>
-          <span>Publisher</span>
-          <b>{{ gameResponse.publisher }}</b>
-        </div>
-
-        <div>
-          <span>Release Date</span>
-          <b>{{ gameResponse.releaseYear | date:'dd.MM.yyyy' }}</b>
-        </div>
-      </div>
-
-      <div class="game-library-actions">
-        <div class="game-actions">
-
-          <button class="download-btn" *ngIf="!gameResponse.installed" (click)="downloadGame(gameResponse)"> Download <i
-            class="fa-solid fa-download"></i></button>
-          <button *ngIf="!gameResponse.currentlyPlaying && gameResponse.installed" class="play-btn"
-                  (click)="playGame(gameResponse)">
-            Play <i class="fa-solid fa-play"></i>
-          </button>
-          <button *ngIf="gameResponse.currentlyPlaying" class="stop-play-btn" (click)="stopPlayingGame(gameResponse)">
-            Stop playing <i class="fa-solid fa-stop"></i>
-          </button>
-          <button class="favorite" *ngIf="!gameResponse.favorite" (click)="addGameToFavorite(gameResponse)"><i
-            class="fa-regular fa-heart"></i>
-          </button>
-          <button class="favorite-remove" *ngIf="gameResponse.favorite" (click)="removeGameFromFavorite(gameResponse)"><i
-            class="fa-solid fa-heart"></i></button>
-
-        </div>
-
-
-        <hr *ngIf="gameResponse.installed">
-        <button class="favorite-remove" *ngIf="gameResponse.installed" (click)="uninstallGame(gameResponse)"> Uninstall <i
-          class="fa-solid fa-trash-can"></i></button>
-
-      </div>
-
-    </div>
-
+      </section>
+    </section>
   </section>
 </main>

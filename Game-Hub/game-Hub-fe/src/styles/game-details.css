@@ -43,11 +43,11 @@
       @apply text-[#777] line-through mr-2.5;
     }
 
-    & .purchase-actions {
+    & .game-actions-container {
       @apply flex flex-col gap-3;
     }
 
-    & .purchase-row {
+    & .game-actions-row {
       @apply flex gap-2.5;
 
       & .add-to-cart,

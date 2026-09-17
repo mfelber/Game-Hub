@@ -1,32 +1,10 @@
-
+.game {
+  position: relative;
+  min-height: calc(100vh - 150px);
+  align-items: start;
+}
 
 hr{
   border: 1px solid rgba(255,255,255,.15);
 }
 
-//.badges{
-//  position: absolute;
-//  gap: 8px;
-//  flex-wrap: wrap;
-//  justify-content: flex-end;
-//}
-
-.badge {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: #fff;
-  padding: 4px 20px;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-}
-
-.discount-badge {
-  width:         fit-content;
-  padding:       3px 15px;
-  border-radius: 5px;
-  font-size: 15px;
-  background: #16a34a;
-}
