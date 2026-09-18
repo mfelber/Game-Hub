@@ -16,7 +16,6 @@
 
 @import "@fortawesome/fontawesome-free/css/all.css";
 
-@import "@spartan-ng/brain/hlm-tailwind-preset.css";
 @plugin "flowbite/plugin";
 @source "../node_modules/flowbite";
 
