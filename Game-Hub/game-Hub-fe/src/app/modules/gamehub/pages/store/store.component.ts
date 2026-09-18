@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {NgClass, NgForOf, NgIf, NgOptimizedImage} from '@angular/common';
+import { NgClass, NgOptimizedImage } from '@angular/common';
 import {CartControllerService, StoreControllerService} from '../../../../services/services';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PageResponseGameResponse} from '../../../../services/models/page-response-game-response';
@@ -17,8 +17,6 @@ import {Dropdown, initFlowbite} from 'flowbite';
 @Component({
   selector: 'app-store',
   imports: [
-    NgForOf,
-    NgIf,
     FormsModule,
     SearchBar,
     NgClass,
@@ -26,7 +24,7 @@ import {Dropdown, initFlowbite} from 'flowbite';
     EmptyStateComponent,
     PaginationComponent,
     LoadingComponent
-  ],
+],
   templateUrl: './store.component.html',
   styleUrl: './store.component.scss'
 })

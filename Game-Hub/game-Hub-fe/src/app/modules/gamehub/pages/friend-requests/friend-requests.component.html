@@ -7,7 +7,7 @@
         <h1>Friend Requests <i class="fa-solid fa-user-plus"></i></h1>
         <p class="page-description">Manage your incoming friend requests</p>
       </div>
-        <app-user-actions/>
+      <app-user-actions/>
     </div>
   </section>
 
@@ -26,41 +26,47 @@
     <div class="filter-section">
       <div class="filter-tabs">
         <button class="filter-tab" [class.active]="activeFilter === 'RECEIVED'"
-                (click)="setFilter('RECEIVED')">Received
+          (click)="setFilter('RECEIVED')">Received
         </button>
         <button class="commingsoon filter-tab" [class.active]="activeFilter === 'PENDING'"
-                (click)="setFilter('PENDING')">Pending Requests <span
-          class="text-[10px] bg-gray-700/60 px-2 py-0.5 rounded-md">Coming soon</span>
-        </button>
-      </div>
+          (click)="setFilter('PENDING')">Pending Requests <span
+        class="text-[10px] bg-gray-700/60 px-2 py-0.5 rounded-md">Coming soon</span>
+      </button>
     </div>
-  </section>
+  </div>
+</section>
 
+@if (emptyListOfFriendRequests && !isLoading) {
   <app-empty-state
-    *ngIf="emptyListOfFriendRequests && !isLoading"
     icon='fa-solid fa-envelope'
     title="You don't have any friend requests">
   </app-empty-state>
+}
 
-  <!-- FRIEND REQUESTS -->
+<!-- FRIEND REQUESTS -->
 
-    <section class="requests">
+<section class="requests">
 
-      <app-loading *ngIf="isLoading"/>
+  @if (isLoading) {
+    <app-loading/>
+  }
 
-      <div class="request-card" (click)="navigateToUser(friendRequest.userId!)" *ngFor="let friendRequest of friendRequestsResponse.content">
-        <div class="left">
-          <img *ngIf="friendRequest.userProfilePicture" class="small-img"
-               [src]="getProfilePicture(friendRequest)"/>
-
-          <img *ngIf="!friendRequest.userProfilePicture" class="small-img"
-               src="../../../../../assets/profilePicture/default_profile_picture.svg"
-               [ngStyle]="{'background-color': friendRequest.profileColor}"/>
-
-          <div class="user-info">
-            <h3>{{ friendRequest.username }}</h3>
-            <p> Sent {{ friendRequest.createdAt }}</p>
-            <div class="details">
+  @for (friendRequest of friendRequestsResponse.content; track friendRequest) {
+    <div class="request-card" (click)="navigateToUser(friendRequest.userId!)">
+      <div class="left">
+        @if (friendRequest.userProfilePicture) {
+          <img class="small-img"
+            [src]="getProfilePicture(friendRequest)"/>
+        }
+        @if (!friendRequest.userProfilePicture) {
+          <img class="small-img"
+            src="../../../../../assets/profilePicture/default_profile_picture.svg"
+            [ngStyle]="{'background-color': friendRequest.profileColor}"/>
+        }
+        <div class="user-info">
+          <h3>{{ friendRequest.username }}</h3>
+          <p> Sent {{ friendRequest.createdAt }}</p>
+          <div class="details">
           <span [ngClass]="{
           'online': friendRequest.status === 'Online' || friendRequest.status === 'Playing',
           'offline': friendRequest.status === 'Offline',
@@ -68,20 +74,20 @@
           }">• {{
               friendRequest.status === 'Playing' ? 'Online' : friendRequest.status
             }} </span>
-              <span>• {{ friendRequest.location?.name }}</span>
-              <span [ngStyle]="{'color': friendRequest.level?.levelColor}"> • Lvl.{{ friendRequest.level?.level }} </span>
-            </div>
+            <span>• {{ friendRequest.location?.name }}</span>
+            <span [ngStyle]="{'color': friendRequest.level?.levelColor}"> • Lvl.{{ friendRequest.level?.level }} </span>
           </div>
         </div>
-
-        <div class="right">
-          <button class=" medium-button accept" (click)=" acceptFriendRequest(friendRequest.userId!) ; $event.stopPropagation()">
-            Accept <i class="fa-solid fa-user-plus"></i>
-          </button>
-          <button class=" medium-button remove" (click)=" rejectFriendRequest(friendRequest.userId!) ; $event.stopPropagation()">
-            Decline <i class="fa-solid fa-user-xmark"></i>
-          </button>
-        </div>
       </div>
-    </section>
+      <div class="right">
+        <button class=" medium-button accept" (click)=" acceptFriendRequest(friendRequest.userId!) ; $event.stopPropagation()">
+          Accept <i class="fa-solid fa-user-plus"></i>
+        </button>
+        <button class=" medium-button remove" (click)=" rejectFriendRequest(friendRequest.userId!) ; $event.stopPropagation()">
+          Decline <i class="fa-solid fa-user-xmark"></i>
+        </button>
+      </div>
+    </div>
+  }
+</section>
 </main>

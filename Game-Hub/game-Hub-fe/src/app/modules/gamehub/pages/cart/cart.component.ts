@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {CartControllerService} from '../../../../services/services/cart-controller.service';
 import {CartResponse} from '../../../../services/models/cart-response';
 import {EmptyStateComponent} from '../../components/empty-state/empty-state.component';
-import {DecimalPipe, NgForOf, NgIf} from '@angular/common';
+import { DecimalPipe } from '@angular/common';
 import {Router, RouterLink} from '@angular/router';
 import {GameResponse} from '../../../../services/models/game-response';
 import {StoreControllerService} from '../../../../services/services/store-controller.service';
@@ -13,13 +13,11 @@ import {LoadingComponent} from '../../components/loading/loading.component';
   selector: 'app-cart',
   imports: [
     EmptyStateComponent,
-    NgIf,
     RouterLink,
-    NgForOf,
     DecimalPipe,
     UserActionsComponent,
     LoadingComponent
-  ],
+],
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.scss',
 })

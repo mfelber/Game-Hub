@@ -3,7 +3,7 @@ import {UserPrivateResponse} from '../../../../services/models/user-private-resp
 import {initFlowbite} from 'flowbite';
 import {Router} from '@angular/router';
 import {UserProfileControllerService} from '../../../../services/services/user-profile-controller.service';
-import {DatePipe, NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
+import { DatePipe, NgClass, NgStyle } from '@angular/common';
 import {GameResponse} from '../../../../services/models/game-response';
 import {CountryControllerService, StoreControllerService} from '../../../../services/services';
 import {FormsModule} from '@angular/forms';
@@ -28,8 +28,6 @@ import {forkJoin} from 'rxjs';
 @Component({
   selector: 'app-user-profile',
   imports: [
-    NgIf,
-    NgForOf,
     NgClass,
     FormsModule,
     NgStyle,
@@ -37,8 +35,8 @@ import {forkJoin} from 'rxjs';
     EditProfileInfoComponent,
     UserActionsComponent,
     DatePipe,
-    LoadingComponent,
-  ],
+    LoadingComponent
+],
   templateUrl: './user-private-profile.component.html',
   styleUrl: './user-private-profile.component.scss'
 })

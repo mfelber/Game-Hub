@@ -1,17 +1,20 @@
-<app-preview-report-modal
-  *ngIf="selectedReport && isPreviewModalOpen"
-  [report]="selectedReport"
-  (close)="closeModal()"
-  (resolveReport)="showSuccess($event)">
-</app-preview-report-modal>
+@if (selectedReport && isPreviewModalOpen) {
+  <app-preview-report-modal
+    [report]="selectedReport"
+    (close)="closeModal()"
+    (resolveReport)="showSuccess($event)">
+  </app-preview-report-modal>
+}
 
 <div class="fixed top-4 right-4 flex flex-col gap-2 z-50">
-  <div *ngIf="successMessage"
+  @if (successMessage) {
+    <div
        class="bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg min-w-[250px]
               transform transition-transform duration-500 ease-in-out opacity-0"
-       [ngClass]="{'translate-x-0 opacity-100': toastVisible, 'translate-x-24 opacity-0': !toastVisible}">
-    {{ successMessage }}
-  </div>
+      [ngClass]="{'translate-x-0 opacity-100': toastVisible, 'translate-x-24 opacity-0': !toastVisible}">
+      {{ successMessage }}
+    </div>
+  }
 </div>
 
 <main [class.hidden]="!isLoaded">
@@ -47,9 +50,11 @@
             <label>Report Status</label>
             <select [(ngModel)]="filters.reportStatus" (change)="filterReportedUsers()">
               <option value="">All Report Statuses</option>
-              <option *ngFor="let reportStatus of reportStatusesResponse"
-                      [value]="reportStatus.reportStatus">{{ formatStatus(reportStatus.reportStatus) }}
-              </option>
+              @for (reportStatus of reportStatusesResponse; track reportStatus) {
+                <option
+                  [value]="reportStatus.reportStatus">{{ formatStatus(reportStatus.reportStatus) }}
+                </option>
+              }
             </select>
           </div>
           <div class="checkbox">
@@ -65,39 +70,43 @@
 
     <section>
 
-      <app-empty-state
-        *ngIf="filteredReportedUsers.length === 0"
-        icon = 'fa-solid fa-flag'
-        title="No reports found"
-        message="There are no reports matching the selected filters.">
-      </app-empty-state>
+      @if (filteredReportedUsers.length === 0) {
+        <app-empty-state
+          icon = 'fa-solid fa-flag'
+          title="No reports found"
+          message="There are no reports matching the selected filters.">
+        </app-empty-state>
+      }
 
-      <app-empty-state
-        *ngIf="!reportResponse.content?.length"
-        icon = 'fa-solid fa-flag'
-        title="No reports found">
-      </app-empty-state>
+      @if (!reportResponse.content?.length) {
+        <app-empty-state
+          icon = 'fa-solid fa-flag'
+          title="No reports found">
+        </app-empty-state>
+      }
 
-      <div class="table-container" *ngIf="filteredReportedUsers.length > 0">
-        <table>
-          <thead>
-          <tr>
-            <th>ID</th>
-            <th>Reported User</th>
-            <th>Email</th>
-            <th>Reason</th>
-            <th>Report Status</th>
-            <th>Created</th>
-            <th>Closed</th>
-            <th>Actions</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let report of filteredReportedUsers">
-            <td>#{{ report.reportId }}</td>
-            <td>{{ report.reportedUserName }}</td>
-            <td>{{ report.reportedUserEmail }}</td>
-            <td>{{ report.reportReason }}</td>
+      @if (filteredReportedUsers.length > 0) {
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Reported User</th>
+                <th>Email</th>
+                <th>Reason</th>
+                <th>Report Status</th>
+                <th>Created</th>
+                <th>Closed</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (report of filteredReportedUsers; track report) {
+                <tr>
+                  <td>#{{ report.reportId }}</td>
+                  <td>{{ report.reportedUserName }}</td>
+                  <td>{{ report.reportedUserEmail }}</td>
+                  <td>{{ report.reportReason }}</td>
             <td> <span class="status" [ngClass]="{
             'new': report.reportStatus === 'NEW',
             'in-review': report.reportStatus === 'IN_REVIEW',
@@ -105,15 +114,17 @@
             'rejected': report.reportStatus === 'REJECTED',
             'dismissed': report.reportStatus === 'DISMISSED',
             }">{{ formatStatus(report.reportStatus) }}</span></td>
-            <td>{{ report.createdAt | date: 'dd.MM.yyyy' }}</td>
-            <td>{{ report.closedAt | date: 'dd.MM.yyyy' }}</td>
-            <td>
-              <button class="action view" (click)="openReportPreview(report)"><i class="fa-solid fa-eye"></i></button>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
+                  <td>{{ report.createdAt | date: 'dd.MM.yyyy' }}</td>
+                  <td>{{ report.closedAt | date: 'dd.MM.yyyy' }}</td>
+                  <td>
+                    <button class="action view" (click)="openReportPreview(report)"><i class="fa-solid fa-eye"></i></button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
 
     </section>
 

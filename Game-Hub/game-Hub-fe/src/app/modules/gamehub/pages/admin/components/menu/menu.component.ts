@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {NgForOf, NgIf} from '@angular/common';
+
 import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {UserProfileControllerService} from '../../../../../../services/services/user-profile-controller.service';
 

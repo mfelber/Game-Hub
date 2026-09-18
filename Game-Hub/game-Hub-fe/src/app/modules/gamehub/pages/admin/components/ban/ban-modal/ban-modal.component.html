@@ -11,56 +11,62 @@
       <span>{{ user.userName }}</span>
     </p>
 
-    <div *ngIf="errorMessage" class="error-message">
-      {{ errorMessage }}
-    </div>
+    @if (errorMessage) {
+      <div class="error-message">
+        {{ errorMessage }}
+      </div>
+    }
 
     <div class="section">
       <label>Ban Reason</label>
       <p class="section-description"> Select the community guideline that was violated.</p>
 
       <div class="community-guidelines">
-        <div *ngFor="let category of categories" class="category">
-          <div class="category-title" [class.active]="selectedCategory === category"
-               (click)="selectCategory(category)">
-            <h3>{{category}}</h3>
-            <i class="fa-solid"
-               [ngClass]="selectedCategory === category ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
-          </div>
-
-          <div *ngIf="selectedCategory === category" class="guideline">
-            <label *ngFor="let guideline of getGuidelineByCategory(category)" class="guideline-option">
-              <input type="radio"
-                     name="banReason" [value]="guideline.id"
-                     [(ngModel)]="banRequest.banReason">
-              <span>{{ guideline.reason }}</span>
-            </label>
-          </div>
-
+        @for (category of categories; track category) {
+          <div class="category">
+            <div class="category-title" [class.active]="selectedCategory === category"
+              (click)="selectCategory(category)">
+              <h3>{{category}}</h3>
+              <i class="fa-solid"
+              [ngClass]="selectedCategory === category ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+            </div>
+            @if (selectedCategory === category) {
+              <div class="guideline">
+                @for (guideline of getGuidelineByCategory(category); track guideline) {
+                  <label class="guideline-option">
+                    <input type="radio"
+                      name="banReason" [value]="guideline.id"
+                      [(ngModel)]="banRequest.banReason">
+                      <span>{{ guideline.reason }}</span>
+                    </label>
+                  }
+                </div>
+              }
+            </div>
+          }
         </div>
       </div>
-    </div>
 
-    <div class="section additional-comments">
-      <label>Additional comments {{ banRequest.banReason === 15 ? '*' : '' }}</label>
-      <textarea [(ngModel)]="banRequest.customMessage" placeholder="Write custom message to user">
-      </textarea>
-    </div>
+      <div class="section additional-comments">
+        <label>Additional comments {{ banRequest.banReason === 15 ? '*' : '' }}</label>
+        <textarea [(ngModel)]="banRequest.customMessage" placeholder="Write custom message to user">
+        </textarea>
+      </div>
 
-    <div class="buttons">
-      <button
-        class="cancel"
-        (click)="close.emit()">
-        Cancel
-      </button>
+      <div class="buttons">
+        <button
+          class="cancel"
+          (click)="close.emit()">
+          Cancel
+        </button>
 
-      <button
-        class="report"
-        (click)="banUser(user.userId)">
-        Submit Ban
-      </button>
+        <button
+          class="report"
+          (click)="banUser(user.userId)">
+          Submit Ban
+        </button>
+      </div>
+
     </div>
 
   </div>
-
-</div>

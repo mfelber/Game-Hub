@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {UserPrivateResponse} from '../../../../services/models/user-private-response';
 import {UserUpdateRequest} from '../../../../services/models/user-update-request';
 import {CardColorResponse} from '../../../../services/models/card-color-response';
-import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
+import { NgClass, NgStyle } from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {initFlowbite} from 'flowbite';
 import {SearchBar} from '../search-bar/search-bar';
@@ -13,13 +13,11 @@ import {GameResponse} from '../../../../services/models/game-response';
 @Component({
   selector: 'app-edit-profile-info',
   imports: [
-    NgIf,
     FormsModule,
-    NgForOf,
     NgStyle,
     NgClass,
     SearchBar
-  ],
+],
   templateUrl: './edit-profile-info.component.html',
   styleUrl: './edit-profile-info.component.scss',
 })

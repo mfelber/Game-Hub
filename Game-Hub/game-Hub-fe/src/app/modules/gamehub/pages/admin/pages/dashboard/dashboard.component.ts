@@ -2,14 +2,11 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {AdminControllerService} from '../../../../../../services/services/admin-controller.service';
 import {DashboardResponse} from '../../../../../../services/models/dashboard-response';
-import {NgForOf, NgIf} from '@angular/common';
+
 
 @Component({
   selector: 'app-dashboard',
-  imports: [
-    NgForOf,
-    NgIf
-  ],
+  imports: [],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
 })

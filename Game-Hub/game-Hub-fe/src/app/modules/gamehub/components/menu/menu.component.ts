@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {initFlowbite} from 'flowbite';
-import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
+import { NgClass, NgStyle } from '@angular/common';
 import {UserProfileControllerService} from '../../../../services/services';
 import {UserPrivateResponse} from '../../../../services/models/user-private-response';
 import {FormsModule} from '@angular/forms';
@@ -13,13 +13,11 @@ import {RefreshService} from '../../../../services/fn/refresh-service/refresh-se
   imports: [
     RouterLink,
     RouterLinkActive,
-    NgIf,
     FormsModule,
     RouterLinkActive,
-    NgForOf,
     NgClass,
     NgStyle
-  ],
+],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.scss'
 })

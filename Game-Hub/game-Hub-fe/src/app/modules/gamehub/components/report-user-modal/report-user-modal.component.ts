@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {NgClass, NgForOf, NgIf} from '@angular/common';
+import { NgClass } from '@angular/common';
 import {UserCommunityResponse} from '../../../../services/models/user-community-response';
 import {ReportRequest} from '../../../../services/models/report-request';
 import {ReportControllerService} from '../../../../services/services/report-controller.service';
@@ -9,10 +9,8 @@ import {ReportControllerService} from '../../../../services/services/report-cont
   selector: 'app-report-user-modal',
   imports: [
     FormsModule,
-    NgForOf,
-    NgIf,
     NgClass
-  ],
+],
   templateUrl: './report-user-modal.component.html',
   styleUrl: './report-user-modal.component.scss'
 })

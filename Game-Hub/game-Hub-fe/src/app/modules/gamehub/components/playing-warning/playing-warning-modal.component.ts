@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {NgIf} from "@angular/common";
+
 import {UserLibraryResponse} from '../../../../services/models/user-library-response';
 import {LibraryControllerService} from '../../../../services/services/library-controller.service';
 

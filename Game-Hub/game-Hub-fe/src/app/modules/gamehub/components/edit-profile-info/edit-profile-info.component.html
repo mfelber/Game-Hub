@@ -31,277 +31,249 @@
     <div class="modal-content">
 
       <!--  TAB BASIC INFO   -->
-      <div *ngIf="activeTab==='basic'" class="section">
-        <h3>Personal Information</h3>
-
-        <label>Username</label>
-        <input [value]="user.username" [(ngModel)]="userRequest.username">
-
-        <label>First Name</label>
-        <input [value]="user.firstName" [(ngModel)]="userRequest.firstName">
-
-        <label>Last Name</label>
-        <input [value]="user.lastName" [(ngModel)]="userRequest.lastName">
-
-        <label>Email</label>
-        <input [value]="user.email" [(ngModel)]="userRequest.email">
-
-        <label>Nationality</label>
-
-        <div class="location-wrapper">
-
-          <select [(ngModel)]="userRequest.location">
-            <option value="" disabled>Select location</option>
-
-            <option
-              *ngFor="let loc of allLocations"
-              [value]="loc.name">
-              {{ loc.name }}
-            </option>
-          </select>
-
-
-          <img
-            *ngIf="selectedLocationIcon()"
-            [src]="selectedLocationIcon()"
-            class="location-flag">
-
+      @if (activeTab==='basic') {
+        <div class="section">
+          <h3>Personal Information</h3>
+          <label>Username</label>
+          <input [value]="user.username" [(ngModel)]="userRequest.username">
+          <label>First Name</label>
+          <input [value]="user.firstName" [(ngModel)]="userRequest.firstName">
+          <label>Last Name</label>
+          <input [value]="user.lastName" [(ngModel)]="userRequest.lastName">
+          <label>Email</label>
+          <input [value]="user.email" [(ngModel)]="userRequest.email">
+          <label>Nationality</label>
+          <div class="location-wrapper">
+            <select [(ngModel)]="userRequest.location">
+              <option value="" disabled>Select location</option>
+              @for (loc of allLocations; track loc) {
+                <option
+                  [value]="loc.name">
+                  {{ loc.name }}
+                </option>
+              }
+            </select>
+            @if (selectedLocationIcon()) {
+              <img
+                [src]="selectedLocationIcon()"
+                class="location-flag">
+            }
+          </div>
         </div>
-
-      </div>
+      }
 
       <!--   PROFILE TAB   -->
 
-      <div *ngIf="activeTab==='profile'" class="section">
-        <h3>Profile Banner</h3>
-        <div class="banner-edit">
-          <img [src]="previewBanner || getBanner(user)">
-
-          <button
-            *ngIf="(isPreviewBannerInserted) || (selectedBannerId)"
-            type="button"
-            class="remove-color"
-            (click)="removeSelectedPredefinedBanner()">
-            <i class="fa-solid fa-trash-can"></i>
-          </button>
-
-          <button type="button" class="edit-icon" (click)="bannerFile.click()">
-            <i class="fa-solid fa-pen"></i>
-          </button>
-
-          <input
-            #bannerFile
-            (change)="onBannerSelected($event)"
-            type="file"
-            accept="image/jpeg, image/png"
-            class="hidden"
-          />
-
-        </div>
-
-        <div class="show-banners" (click)="showBanners()">
-          <span>Show predefined banners</span><i
-          class="fa-solid"
-          [ngClass]="showPredefinedBanners ? 'fa-angle-up' : 'fa-angle-down'">
-        </i>
-        </div>
-
-        <div *ngIf="showPredefinedBanners" class="banners">
-
-          <div *ngIf="showPredefinedBanners" class="predefined-banners">
-            <img *ngFor="let bannerId of predefinedBanners"
-                 (click)="selectedBanner(bannerId)"
-                 [src]="'assets/banners/banner_' + bannerId + '.jpg'"
-                 [ngClass]="{'border-2 border-gray-500': selectedBannerId === bannerId, 'border-transparent': selectedBannerId !== bannerId}">
-          </div>
-
-
-        </div>
-        <hr style="border: 1px solid rgba(255,255,255,.08)">
-        <div>
-          <h3>Profile Picture</h3>
-          <div class="profile-image-wrapper">
-            <img *ngIf="!userHasProfilePicture && !isPreviewImageInserted"
-                 src="assets/profilePicture/default_profile_picture.svg"
-                 [ngStyle]="{'background-color': user.profileColor}"
-                 alt="Profile Picture"
-            />
-
-            <img *ngIf="(!userHasProfilePicture && isPreviewImageInserted) || userHasProfilePicture"
-                 [src]=" previewImage || getProfilePicture(user)"
-                 alt="Profile Picture"
-            />
-
-            <button
-              *ngIf="isPreviewImageInserted"
-              type="button"
-              class="remove-color"
-              (click)="removeProfileImage(); $event.stopPropagation()">
-              <i class="fa-solid fa-trash-can"></i>
-            </button>
-
-            <button type="button" (click)="formFile.click()" class="edit-pen">
+      @if (activeTab==='profile') {
+        <div class="section">
+          <h3>Profile Banner</h3>
+          <div class="banner-edit">
+            <img [src]="previewBanner || getBanner(user)">
+            @if ((isPreviewBannerInserted) || (selectedBannerId)) {
+              <button
+                type="button"
+                class="remove-color"
+                (click)="removeSelectedPredefinedBanner()">
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+            }
+            <button type="button" class="edit-icon" (click)="bannerFile.click()">
               <i class="fa-solid fa-pen"></i>
             </button>
+            <input
+              #bannerFile
+              (change)="onBannerSelected($event)"
+              type="file"
+              accept="image/jpeg, image/png"
+              class="hidden"
+              />
+            </div>
+            <div class="show-banners" (click)="showBanners()">
+              <span>Show predefined banners</span><i
+              class="fa-solid"
+              [ngClass]="showPredefinedBanners ? 'fa-angle-up' : 'fa-angle-down'">
+            </i>
           </div>
-
-          <input
-            #formFile
-            (change)="onFileSelected($event)"
-            type="file"
-            accept="image/jpeg, image/png"
-            class="hidden"
-          />
-
-        </div>
-        <hr style="border: 1px solid rgba(255,255,255,.08);">
-        <div class="colors">
-          <h4>Card colors</h4>
-          <div class="color-list">
-
-            <div
-              *ngFor="let color of cardColors"
-              class="color-item"
-              (click)="selectColor(color.id!, color.colorCode!)">
-
-              <div
-                class="color-box"
-                [ngStyle]="{'background': color.colorCode}">
-
+          @if (showPredefinedBanners) {
+            <div class="banners">
+              @if (showPredefinedBanners) {
+                <div class="predefined-banners">
+                  @for (bannerId of predefinedBanners; track bannerId) {
+                    <img
+                      (click)="selectedBanner(bannerId)"
+                      [src]="'assets/banners/banner_' + bannerId + '.jpg'"
+                      [ngClass]="{'border-2 border-gray-500': selectedBannerId === bannerId, 'border-transparent': selectedBannerId !== bannerId}">
+                  }
+                </div>
+              }
+            </div>
+          }
+          <hr style="border: 1px solid rgba(255,255,255,.08)">
+          <div>
+            <h3>Profile Picture</h3>
+            <div class="profile-image-wrapper">
+              @if (!userHasProfilePicture && !isPreviewImageInserted) {
+                <img
+                  src="assets/profilePicture/default_profile_picture.svg"
+                  [ngStyle]="{'background-color': user.profileColor}"
+                  alt="Profile Picture"
+                  />
+              }
+              @if ((!userHasProfilePicture && isPreviewImageInserted) || userHasProfilePicture) {
+                <img
+                  [src]=" previewImage || getProfilePicture(user)"
+                  alt="Profile Picture"
+                  />
+              }
+              @if (isPreviewImageInserted) {
                 <button
-                  *ngIf="selectedColorId === color.id"
                   type="button"
                   class="remove-color"
-                  (click)="removeSelectedCardColor(); $event.stopPropagation()">
-
+                  (click)="removeProfileImage(); $event.stopPropagation()">
                   <i class="fa-solid fa-trash-can"></i>
-
                 </button>
+              }
+              <button type="button" (click)="formFile.click()" class="edit-pen">
+                <i class="fa-solid fa-pen"></i>
+              </button>
+            </div>
+            <input
+              #formFile
+              (change)="onFileSelected($event)"
+              type="file"
+              accept="image/jpeg, image/png"
+              class="hidden"
+              />
+            </div>
+            <hr style="border: 1px solid rgba(255,255,255,.08);">
+            <div class="colors">
+              <h4>Card colors</h4>
+              <div class="color-list">
+                @for (color of cardColors; track color) {
+                  <div
+                    class="color-item"
+                    (click)="selectColor(color.id!, color.colorCode!)">
+                    <div
+                      class="color-box"
+                      [ngStyle]="{'background': color.colorCode}">
+                      @if (selectedColorId === color.id) {
+                        <button
+                          type="button"
+                          class="remove-color"
+                          (click)="removeSelectedCardColor(); $event.stopPropagation()">
+                          <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                      }
+                    </div>
+                    <label>{{ color.colorName }}</label>
+                  </div>
+                }
               </div>
-
-              <label>{{ color.colorName }}</label>
-
             </div>
-
           </div>
+        }
+
+        @if (activeTab==='gaming') {
+          <div class="section">
+            @if (user.favoriteGame && !showGameSearch) {
+              <div class="pinned-game" >
+                <div class="pinned-game-cover">
+                  <img [src]="getGameImageCover(user.favoriteGame)" alt="{{user.favoriteGame.title}}}">
+                </div>
+                <div class="pinned-game-info">
+                  <span class="pinned-game-label"> Pinned Game <i class="fa-solid fa-thumbtack"></i></span>
+                  <h1>{{user.favoriteGame.title}}</h1>
+                  <span class="pinned-game-description">This game is displayed on yout profile</span>
+                </div>
+                <div class="pinned-game-actions">
+                  <div class="pinned-game-status">
+                    <i class="fa-solid fa-check"></i>
+                  </div>
+                  <button class="change-game-btn" (click)="changeFavoriteGame()">
+                    <i class="fa-solid fa-pen"></i>
+                    Change
+                  </button>
+                </div>
+              </div>
+            }
+            @if (showGameSearch) {
+              <div class="pin-favorite-game">
+                <h3>Pin Game on your profile <i class="fa-solid fa-thumb-tack"></i></h3>
+                <div class="game-search-wrapper">
+                  <app-search-bar
+                    [value]="searchedQuery"
+                    [placeholder]="'Search your games...'"
+                    (search)="searchLibrary($event)">
+                  </app-search-bar>
+                  @if (searchedQuery !== '' && userLibraryResponse.length) {
+                    <div class="search-results">
+                      @for (game of userLibraryResponse; track game) {
+                        <div class="game-result"
+                          (click)="selectFavoriteGame(game)">
+                          <img [src]="getGameImageCover(game)" alt="{{game.title}}}">
+                          <div class="game-result-info">
+                            <strong>{{ game.title }}</strong>
+                            <span>{{ game.playtimeMinutes }}</span>
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  }
+                  @if (selectedFavoriteGame) {
+                    <div class="selected-game">
+                      <img
+                        [src]="getGameImageCover(selectedFavoriteGame)"
+                        [alt]="selectedFavoriteGame.title"
+                        >
+                        <div class="selected-game-info">
+                          <strong>{{ selectedFavoriteGame.title }}</strong>
+                          <span>{{ selectedFavoriteGame.playtimeMinutes }} minutes played</span>
+                        </div>
+                        <div style="display: flex; margin-left: auto; gap: 5px">
+                          <div class="selected-game-remove" (click)="removeSelectedGame()">
+                            <i class="fa-solid fa-xmark"></i>
+                          </div>
+                        </div>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+              <hr style="border: 1px solid rgba(255,255,255,.08)">
+              <div class="looking-for">
+                <h3>Looking for</h3>
+              </div>
+            </div>
+          }
+
         </div>
-      </div>
 
-      <div *ngIf="activeTab==='gaming'" class="section">
+        <div class="buttons" [class.profile-buttons]="activeTab === 'profile'">
 
-        <div class="pinned-game" *ngIf="user.favoriteGame && !showGameSearch" >
-          <div class="pinned-game-cover">
-            <img [src]="getGameImageCover(user.favoriteGame)" alt="{{user.favoriteGame.title}}}">
-          </div>
+          @if (activeTab === 'profile') {
+            <button
+              [title]="changesExist ? 'See how your profile will look' : 'Make at least one change to preview your profile'"
+              [disabled]="!changesExist"
+              (click)="showPreview()"
+              [ngClass]="changesExist ? 'bg-gray-600 text-white hover:bg-gray-700 cursor-pointer' : 'bg-gray-600 text-gray-400'">
+              Try changes
+            </button>
+          }
 
-          <div class="pinned-game-info">
-            <span class="pinned-game-label"> Pinned Game <i class="fa-solid fa-thumbtack"></i></span>
-            <h1>{{user.favoriteGame.title}}</h1>
-            <span class="pinned-game-description">This game is displayed on yout profile</span>
-          </div>
-
-          <div class="pinned-game-actions">
-
-            <div class="pinned-game-status">
-              <i class="fa-solid fa-check"></i>
-            </div>
-
-            <button class="change-game-btn" (click)="changeFavoriteGame()">
-              <i class="fa-solid fa-pen"></i>
-              Change
+          <div class="right-buttons">
+            <button class="cancel"
+              (click)="close.emit()">
+              Cancel
             </button>
 
+            <button class="save"
+              (click)="saveChanges()">
+              Save
+            </button>
           </div>
 
         </div>
 
-
-        <div class="pin-favorite-game" *ngIf="showGameSearch">
-          <h3>Pin Game on your profile <i class="fa-solid fa-thumb-tack"></i></h3>
-
-          <div class="game-search-wrapper">
-            <app-search-bar
-              [value]="searchedQuery"
-              [placeholder]="'Search your games...'"
-              (search)="searchLibrary($event)">
-            </app-search-bar>
-
-            <div class="search-results" *ngIf="searchedQuery !== '' && userLibraryResponse.length">
-
-              <div class="game-result"
-                   *ngFor="let game of userLibraryResponse"
-                   (click)="selectFavoriteGame(game)">
-
-                <img [src]="getGameImageCover(game)" alt="{{game.title}}}">
-
-                <div class="game-result-info">
-                  <strong>{{ game.title }}</strong>
-                  <span>{{ game.playtimeMinutes }}</span>
-                </div>
-
-              </div>
-            </div>
-
-            <div *ngIf="selectedFavoriteGame" class="selected-game">
-
-              <img
-                [src]="getGameImageCover(selectedFavoriteGame)"
-                [alt]="selectedFavoriteGame.title"
-              >
-
-              <div class="selected-game-info">
-                <strong>{{ selectedFavoriteGame.title }}</strong>
-                <span>{{ selectedFavoriteGame.playtimeMinutes }} minutes played</span>
-              </div>
-
-              <div style="display: flex; margin-left: auto; gap: 5px">
-                <div class="selected-game-remove" (click)="removeSelectedGame()">
-                  <i class="fa-solid fa-xmark"></i>
-                </div>
-              </div>
-
-            </div>
-
-
-          </div>
-        </div>
-
-        <hr style="border: 1px solid rgba(255,255,255,.08)">
-
-        <div class="looking-for">
-          <h3>Looking for</h3>
-        </div>
-
-
       </div>
 
     </div>
-
-    <div class="buttons" [class.profile-buttons]="activeTab === 'profile'">
-
-      <button
-        [title]="changesExist ? 'See how your profile will look' : 'Make at least one change to preview your profile'"
-        [disabled]="!changesExist"
-        (click)="showPreview()"
-        *ngIf="activeTab === 'profile'"
-        [ngClass]="changesExist ? 'bg-gray-600 text-white hover:bg-gray-700 cursor-pointer' : 'bg-gray-600 text-gray-400'">
-        Try changes
-      </button>
-
-      <div class="right-buttons">
-        <button class="cancel"
-                (click)="close.emit()">
-          Cancel
-        </button>
-
-        <button class="save"
-                (click)="saveChanges()">
-          Save
-        </button>
-      </div>
-
-    </div>
-
-  </div>
-
-</div>

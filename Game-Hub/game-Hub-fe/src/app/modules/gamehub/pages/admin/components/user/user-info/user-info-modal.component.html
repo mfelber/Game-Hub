@@ -7,11 +7,15 @@
     <div class="profile-header">
       <div class="avatar-wrapper">
 
-        <img *ngIf="user.profilePicture" [src]="getProfilePicture(user)" class="avatar">
+        @if (user.profilePicture) {
+          <img [src]="getProfilePicture(user)" class="avatar">
+        }
 
-        <img *ngIf="!user.profilePicture"
-             src="../../../../../assets/profilePicture/default_profile_picture.svg"
-             [ngStyle]="{'background-color': user.profileColor}" class="avatar"/>
+        @if (!user.profilePicture) {
+          <img
+            src="../../../../../assets/profilePicture/default_profile_picture.svg"
+            [ngStyle]="{'background-color': user.profileColor}" class="avatar"/>
+        }
       </div>
 
       <div class="profile-title">
@@ -24,10 +28,14 @@
       'deleted': user.accountStatus === 'DELETED',
       'suspended': user.accountStatus === 'SUSPENDED',
       }">{{ user.accountStatus }}
-          <span *ngIf="user.accountStatus === 'BANNED'" class="ban-info"> : {{ user.banReason }}
-          on {{ user.bannedAt | date: 'dd.MM.yyyy' }}</span>
-        <span *ngIf="user.accountStatus === 'SUSPENDED'" class="ban-info"> : {{ user.suspendedReason }}
-          on {{ user.suspendedAt | date: 'dd.MM.yyyy' }}</span>
+          @if (user.accountStatus === 'BANNED') {
+            <span class="ban-info"> : {{ user.banReason }}
+            on {{ user.bannedAt | date: 'dd.MM.yyyy' }}</span>
+          }
+          @if (user.accountStatus === 'SUSPENDED') {
+            <span class="ban-info"> : {{ user.suspendedReason }}
+            on {{ user.suspendedAt | date: 'dd.MM.yyyy' }}</span>
+          }
         </span>
 
       </div>
@@ -113,7 +121,9 @@
 
         <div class="bio">
           <span> Bio </span>
-          <strong *ngIf="!user.bio">The user hasn't set a bio</strong>
+          @if (!user.bio) {
+            <strong>The user hasn't set a bio</strong>
+          }
           <strong>{{ user.bio }}</strong>
         </div>
 

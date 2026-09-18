@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {AuthenticationRequest} from "../../services/models/authentication-request";
-import {NgForOf, NgIf, NgOptimizedImage} from '@angular/common';
+import { NgOptimizedImage } from '@angular/common';
 import {RouterOutlet} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 import {Router} from '@angular/router';
@@ -11,10 +11,9 @@ import {UserProfileControllerService} from '../../services/services/user-profile
 @Component({
   selector: 'app-login',
   imports: [
-    NgIf,
     FormsModule,
     NgOptimizedImage
-  ],
+],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })

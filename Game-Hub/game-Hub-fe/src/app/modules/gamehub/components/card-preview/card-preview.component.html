@@ -3,15 +3,19 @@
   <section class="banner-section">
     <div class="banner">
 
-      <img *ngIf="userResponse.bannerType === 'PREDEFINED'"
-           [src]="previewBanner || getBanner(userResponse)"
-           class="w-full h-full object-cover rounded-t-2xl border-t border-r border-l border-white/20"
-           alt="Profile Banner"/>
+      @if (userResponse.bannerType === 'PREDEFINED') {
+        <img
+          [src]="previewBanner || getBanner(userResponse)"
+          class="w-full h-full object-cover rounded-t-2xl border-t border-r border-l border-white/20"
+          alt="Profile Banner"/>
+      }
 
-      <img *ngIf="userResponse.bannerType === 'CUSTOM'"
-           [src]="previewBanner || getBanner(userResponse)"
-           class="w-full h-full object-cover rounded-t-2xl border-t border-r border-l border-white/20"
-           alt="Profile Banner"/>
+      @if (userResponse.bannerType === 'CUSTOM') {
+        <img
+          [src]="previewBanner || getBanner(userResponse)"
+          class="w-full h-full object-cover rounded-t-2xl border-t border-r border-l border-white/20"
+          alt="Profile Banner"/>
+      }
 
 
     </div>
@@ -22,16 +26,19 @@
 
       <div class="profile-main">
         <div class="avatar-wrapper">
-          <img class="avatar" *ngIf="!userResponse.userProfilePicture && !isPreviewImageInserted"
-               src="../../../../../assets/profilePicture/default_profile_picture.svg"
-               [ngStyle]="{'background-color': userResponse.profileColor}"
-          />
+          @if (!userResponse.userProfilePicture && !isPreviewImageInserted) {
+            <img class="avatar"
+              src="../../../../../assets/profilePicture/default_profile_picture.svg"
+              [ngStyle]="{'background-color': userResponse.profileColor}"
+              />
+          }
 
-          <img class="avatar"
-               *ngIf="(userResponse.userProfilePicture) || (!userResponse.userProfilePicture && isPreviewImageInserted)"
-               [src]=" previewImage || getProfilePicture(userResponse)"
-               alt="Profile Picture"
-          />
+          @if ((userResponse.userProfilePicture) || (!userResponse.userProfilePicture && isPreviewImageInserted)) {
+            <img class="avatar"
+              [src]=" previewImage || getProfilePicture(userResponse)"
+              alt="Profile Picture"
+              />
+          }
         </div>
 
         <div class="user-info">
@@ -44,8 +51,8 @@
             }">
               <span class="status-dot"></span>
               {{
-                userResponse.status === 'Playing' ? 'In Game ' + userResponse.currentlyPlaying?.title
-                  : userResponse.status
+              userResponse.status === 'Playing' ? 'In Game ' + userResponse.currentlyPlaying?.title
+              : userResponse.status
               }}
             </span>
           </div>
@@ -119,7 +126,7 @@
     <div class="profile-left">
 
       <div class="profile-card about-card"
-           [ngStyle]="{'background-color': selectedColor || userResponse.cardColor?.colorCode}">
+        [ngStyle]="{'background-color': selectedColor || userResponse.cardColor?.colorCode}">
         <div class="card-header">
           <div>
             <span class="section-label">PROFILE</span>
@@ -131,17 +138,21 @@
         </div>
         <div class="card-divider"></div>
 
-        <p *ngIf="!userResponse.bio?.length" class="empty-text">
-          {{ userResponse.username }} hasn't written anything about themselves
-        </p>
+        @if (!userResponse.bio?.length) {
+          <p class="empty-text">
+            {{ userResponse.username }} hasn't written anything about themselves
+          </p>
+        }
 
-        <p *ngIf="userResponse.bio?.length" class="bio-text">
-          {{ userResponse.bio }}
-        </p>
+        @if (userResponse.bio?.length) {
+          <p class="bio-text">
+            {{ userResponse.bio }}
+          </p>
+        }
       </div>
 
       <div class="profile-card recently-played"
-           [ngStyle]="{'background-color': selectedColor || userResponse.cardColor?.colorCode}">
+        [ngStyle]="{'background-color': selectedColor || userResponse.cardColor?.colorCode}">
         <div class="card-header">
           <div>
             <span class="section-label"> ACTIVITY </span>
@@ -155,225 +166,235 @@
         </div>
 
         <div class="card-divider"></div>
-        <div class="recent-games" *ngFor="let game of recentGames">
-          <div class="recent-game">
-            <img
-              [src]="getGameImageCover(game.game!)">
-            <div class="game-info">
-              <h3>{{ game.game?.title }}</h3>
-              <p>{{ game.playTime }} Hours played</p>
+        @for (game of recentGames; track game) {
+          <div class="recent-games">
+            <div class="recent-game">
+              <img
+                [src]="getGameImageCover(game.game!)">
+                <div class="game-info">
+                  <h3>{{ game.game?.title }}</h3>
+                  <p>{{ game.playTime }} Hours played</p>
+                </div>
+                <div class="last-played">
+                  <span>Last played on</span>
+                  <p>{{ game.lastPlayed | date: 'dd.MM.yyyy' }}</p>
+                </div>
+                <i class="fa-solid fa-chevron-right game-arrow"></i>
+              </div>
+              <div class="card-divider"></div>
             </div>
-            <div class="last-played">
-              <span>Last played on</span>
-              <p>{{ game.lastPlayed | date: 'dd.MM.yyyy' }}</p>
-            </div>
+          }
+        </div>
 
-            <i class="fa-solid fa-chevron-right game-arrow"></i>
+        <div class="profile-card favorite-game"
+          [ngStyle]="{'background-color': selectedColor || userResponse.cardColor?.colorCode}">
+          <div class="card-header">
+            <div>
+              <span class="section-label">FAVORITE</span>
+              <h2 class="favorite-game-icon"><i class="fa-solid fa-star"></i> Favorite Game </h2>
+            </div>
           </div>
+
           <div class="card-divider"></div>
 
-        </div>
-      </div>
-
-      <div class="profile-card favorite-game"
-           [ngStyle]="{'background-color': selectedColor || userResponse.cardColor?.colorCode}">
-        <div class="card-header">
-          <div>
-            <span class="section-label">FAVORITE</span>
-            <h2 class="favorite-game-icon"><i class="fa-solid fa-star"></i> Favorite Game </h2>
-          </div>
-        </div>
-
-        <div class="card-divider"></div>
-
-        <div class="favorite-game-content" *ngIf="userResponse.favoriteGame">
-          <img
-            [src]="getGameImageCover(userResponse.favoriteGame)">
-          <div class="favorite-game-info">
-            <h3>{{ userResponse.favoriteGame.title }}</h3>
-            <p>{{ userResponse.favoriteGame.playtimeMinutes }} Hours played</p>
-          </div>
-          <i class="fa-solid fa-chevron-right game-arrow"></i>
-        </div>
-
-        <div class="favorite-game-content" *ngIf="!userResponse.favoriteGame">
-          <h2 class="nothing-to-show">No favorite game set</h2>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="profile-card profile-sidebar"
-         [ngStyle]="{'background-color': selectedColor || userResponse.cardColor?.colorCode}">
-
-      <div class="sidebar-section">
-        <div class="sidebar-header">
-          <div>
-            <h3 class="badges-icon">
-              <i class="fa-solid fa-medal"></i>
-              Badges
-              <span>
-                {{ userResponse.badges?.length || 0 }}
-              </span>
-            </h3>
-          </div>
-        </div>
-
-        <div class="badges">
-          <div *ngFor="let badge of userResponse.badges" class="badge">
-            <img [src]="badge.iconPath" alt="{{badge.name}}">
-          </div>
-        </div>
-        <p
-          *ngIf="!userResponse.badges?.length"
-          class="empty-text">
-          No badges earned
-        </p>
-      </div>
-
-      <div class="sidebar-divider"></div>
-
-      <div class="sidebar-section">
-
-        <div class="sidebar-header">
-          <div>
-            <h3 class="genres-icon">
-              <i class="fa-solid fa-masks-theater"></i>
-              Favorite Genres
-              <span>
-                {{ userResponse.favoriteGenres?.length || 0 }}
-              </span>
-            </h3>
-          </div>
-        </div>
-
-        <div class="genre-list">
-          <span *ngFor="let genre of userResponse.favoriteGenres" class="genre">
-            {{ genre.name }}
-          </span>
-        </div>
-
-        <p
-          *ngIf="!userResponse.favoriteGenres?.length"
-          class="empty-text">
-          No favorite genres
-        </p>
-      </div>
-
-      <div class="sidebar-divider"></div>
-
-      <div class="sidebar-section">
-
-        <div class="sidebar-header">
-          <div>
-            <h3 class="looking-for-icon">
-              <i class="fa-solid fa-gamepad"></i>
-              Looking For
-            </h3>
-          </div>
-        </div>
-
-        <div class="looking-for-list">
-          <!--          TODO FETCH LOOKING FOR ITEMS-->
-          <div></div>
-        </div>
-
-        <p
-          class="empty-text">
-          No preferences set
-        </p>
-      </div>
-
-      <div class="sidebar-divider"></div>
-
-      <div class="sidebar-section">
-
-        <div class="sidebar-header">
-          <div>
-            <h3 class="wishlist-icon">
-              <i class="fa-solid fa-bookmark"></i>
-              Wishlist
-              <span>
-                {{ userResponse.wishlistCount }}
-              </span>
-            </h3>
-          </div>
-        </div>
-
-        <div class="wishlist-list">
-          <!--          TODO FETCH 3 games from wishlist image and title FOR ITEMS-->
-          <div></div>
-        </div>
-
-        <p
-          class="empty-text">
-          Nothing in wishlist
-        </p>
-      </div>
-
-      <div class="sidebar-divider"></div>
-
-      <div class="sidebar-section">
-        <div class="sidebar-header">
-          <div>
-            <h3 class="friends-icon">
-              <i class="fa-solid fa-user-group"></i>
-              Friends
-
-              <span>{{ userResponse.friendsCount || 0 }}</span>
-            </h3>
-          </div>
-
-        </div>
-
-        <div class="friends-list">
-          <div class="friend">
-            <div class="friend-avatar">
+          @if (userResponse.favoriteGame) {
+            <div class="favorite-game-content">
               <img
-                src="https://images.immediate.co.uk/production/volatile/sites/3/2022/12/Star-Wars-Jedi-Survivor-release-date-0cbfc04.jpg?quality=90&webp=true&resize=1000,667">
-            </div>
-            <div class="friend-info">
-              <h4>Matus</h4>
-              <span class="friend-status online">
-                <span class="status-dot"></span>
-                Online
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
+                [src]="getGameImageCover(userResponse.favoriteGame)">
+                <div class="favorite-game-info">
+                  <h3>{{ userResponse.favoriteGame.title }}</h3>
+                  <p>{{ userResponse.favoriteGame.playtimeMinutes }} Hours played</p>
+                </div>
+                <i class="fa-solid fa-chevron-right game-arrow"></i>
+              </div>
+            }
 
-      <div class="sidebar-divider"></div>
-
-      <div class="sidebar-section">
-        <div class="sidebar-header">
-          <div>
-            <h3 class="groups-icon">
-              <i class="fa-solid fa-users"></i>
-              Groups
-              <span>12</span>
-            </h3>
+            @if (!userResponse.favoriteGame) {
+              <div class="favorite-game-content">
+                <h2 class="nothing-to-show">No favorite game set</h2>
+              </div>
+            }
           </div>
+
         </div>
 
-        <div class="group-list">
-          <div class="group-item">
-            <div class="group-icon">
-              <img
-                src="https://images.immediate.co.uk/production/volatile/sites/3/2022/12/Star-Wars-Jedi-Survivor-release-date-0cbfc04.jpg?quality=90&webp=true&resize=1000,667">
+        <div class="profile-card profile-sidebar"
+          [ngStyle]="{'background-color': selectedColor || userResponse.cardColor?.colorCode}">
+
+          <div class="sidebar-section">
+            <div class="sidebar-header">
+              <div>
+                <h3 class="badges-icon">
+                  <i class="fa-solid fa-medal"></i>
+                  Badges
+                  <span>
+                    {{ userResponse.badges?.length || 0 }}
+                  </span>
+                </h3>
+              </div>
             </div>
 
-            <div class="group-info">
-              <h4>
-                RPG
-              </h4>
-              <p>120 members</p>
+            <div class="badges">
+              @for (badge of userResponse.badges; track badge) {
+                <div class="badge">
+                  <img [src]="badge.iconPath" alt="{{badge.name}}">
+                </div>
+              }
             </div>
-            <i class="fa-solid fa-chevron-right group-arrow"></i>
+            @if (!userResponse.badges?.length) {
+              <p
+                class="empty-text">
+                No badges earned
+              </p>
+            }
           </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
-</main>
+          <div class="sidebar-divider"></div>
+
+          <div class="sidebar-section">
+
+            <div class="sidebar-header">
+              <div>
+                <h3 class="genres-icon">
+                  <i class="fa-solid fa-masks-theater"></i>
+                  Favorite Genres
+                  <span>
+                    {{ userResponse.favoriteGenres?.length || 0 }}
+                  </span>
+                </h3>
+              </div>
+            </div>
+
+            <div class="genre-list">
+              @for (genre of userResponse.favoriteGenres; track genre) {
+                <span class="genre">
+                  {{ genre.name }}
+                </span>
+              }
+            </div>
+
+            @if (!userResponse.favoriteGenres?.length) {
+              <p
+                class="empty-text">
+                No favorite genres
+              </p>
+            }
+          </div>
+
+          <div class="sidebar-divider"></div>
+
+          <div class="sidebar-section">
+
+            <div class="sidebar-header">
+              <div>
+                <h3 class="looking-for-icon">
+                  <i class="fa-solid fa-gamepad"></i>
+                  Looking For
+                </h3>
+              </div>
+            </div>
+
+            <div class="looking-for-list">
+              <!--          TODO FETCH LOOKING FOR ITEMS-->
+              <div></div>
+            </div>
+
+            <p
+              class="empty-text">
+              No preferences set
+            </p>
+          </div>
+
+          <div class="sidebar-divider"></div>
+
+          <div class="sidebar-section">
+
+            <div class="sidebar-header">
+              <div>
+                <h3 class="wishlist-icon">
+                  <i class="fa-solid fa-bookmark"></i>
+                  Wishlist
+                  <span>
+                    {{ userResponse.wishlistCount }}
+                  </span>
+                </h3>
+              </div>
+            </div>
+
+            <div class="wishlist-list">
+              <!--          TODO FETCH 3 games from wishlist image and title FOR ITEMS-->
+              <div></div>
+            </div>
+
+            <p
+              class="empty-text">
+              Nothing in wishlist
+            </p>
+          </div>
+
+          <div class="sidebar-divider"></div>
+
+          <div class="sidebar-section">
+            <div class="sidebar-header">
+              <div>
+                <h3 class="friends-icon">
+                  <i class="fa-solid fa-user-group"></i>
+                  Friends
+
+                  <span>{{ userResponse.friendsCount || 0 }}</span>
+                </h3>
+              </div>
+
+            </div>
+
+            <div class="friends-list">
+              <div class="friend">
+                <div class="friend-avatar">
+                  <img
+                    src="https://images.immediate.co.uk/production/volatile/sites/3/2022/12/Star-Wars-Jedi-Survivor-release-date-0cbfc04.jpg?quality=90&webp=true&resize=1000,667">
+                  </div>
+                  <div class="friend-info">
+                    <h4>Matus</h4>
+                    <span class="friend-status online">
+                      <span class="status-dot"></span>
+                      Online
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="sidebar-divider"></div>
+
+            <div class="sidebar-section">
+              <div class="sidebar-header">
+                <div>
+                  <h3 class="groups-icon">
+                    <i class="fa-solid fa-users"></i>
+                    Groups
+                    <span>12</span>
+                  </h3>
+                </div>
+              </div>
+
+              <div class="group-list">
+                <div class="group-item">
+                  <div class="group-icon">
+                    <img
+                      src="https://images.immediate.co.uk/production/volatile/sites/3/2022/12/Star-Wars-Jedi-Survivor-release-date-0cbfc04.jpg?quality=90&webp=true&resize=1000,667">
+                    </div>
+
+                    <div class="group-info">
+                      <h4>
+                        RPG
+                      </h4>
+                      <p>120 members</p>
+                    </div>
+                    <i class="fa-solid fa-chevron-right group-arrow"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+        </main>

@@ -1,15 +1,14 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {AdminUserResponse} from '../../../../../../../services/models/admin-user-response';
-import {DatePipe, NgClass, NgIf, NgStyle} from '@angular/common';
+import { DatePipe, NgClass, NgStyle } from '@angular/common';
 
 @Component({
   selector: 'app-user-info-modal',
   imports: [
     NgClass,
     DatePipe,
-    NgIf,
     NgStyle
-  ],
+],
   templateUrl: './user-info-modal.component.html',
   styleUrl: './user-info-modal.component.scss',
 })

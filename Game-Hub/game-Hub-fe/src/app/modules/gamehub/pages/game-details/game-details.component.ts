@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {CartControllerService, StoreControllerService} from '../../../../services/services';
-import {DatePipe, NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
+import { DatePipe, NgClass, NgStyle } from '@angular/common';
 import {GameResponse} from '../../../../services/models/game-response';
 import {UserActionsComponent} from '../../components/user-actions/user-actions.component';
 import {LoadingComponent} from '../../components/loading/loading.component';
@@ -9,14 +9,12 @@ import {LoadingComponent} from '../../components/loading/loading.component';
 @Component({
   selector: 'app-game-details',
   imports: [
-    NgIf,
-    NgForOf,
     NgStyle,
     NgClass,
     DatePipe,
     UserActionsComponent,
     LoadingComponent
-  ],
+],
   templateUrl: './game-details.component.html',
   styleUrl: './game-details.component.scss'
 })

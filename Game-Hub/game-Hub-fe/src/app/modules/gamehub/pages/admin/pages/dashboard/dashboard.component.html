@@ -1,6 +1,8 @@
-<div *ngIf="!isLoaded" class="text-center justify-center text-gray-400">
-  Loading...
-</div>
+@if (!isLoaded) {
+  <div class="text-center justify-center text-gray-400">
+    Loading...
+  </div>
+}
 
 <main [class.hidden]="!isLoaded">
   <section class="dashboard">
@@ -55,24 +57,32 @@
     <div class="dashboard-grid">
       <div class="panel">
         <h3>Recent Users</h3>
-        <div class="list-item" *ngIf="dashboardPageResponse.recentUsers?.length === 0" style="justify-content: center">
-          <span>No recently registered users <i class="fa-solid fa-user-xmark"></i> </span>
-        </div>
-        <div class="list-item" *ngFor="let user of dashboardPageResponse.recentUsers">
-          <span>{{user.username}}</span>
-          <small>{{user.createdAt}}</small>
-        </div>
+        @if (dashboardPageResponse.recentUsers?.length === 0) {
+          <div class="list-item" style="justify-content: center">
+            <span>No recently registered users <i class="fa-solid fa-user-xmark"></i> </span>
+          </div>
+        }
+        @for (user of dashboardPageResponse.recentUsers; track user) {
+          <div class="list-item">
+            <span>{{user.username}}</span>
+            <small>{{user.createdAt}}</small>
+          </div>
+        }
       </div>
 
       <div class="panel">
         <h3>Latest Reports</h3>
-        <div class="list-item" *ngIf="dashboardPageResponse.latestReports?.length === 0" style="justify-content: center"  >
-          <span>Nobody was recently reported </span>
-        </div>
-        <div class="list-item" *ngFor="let report of dashboardPageResponse.latestReports">
-          <span>{{report.reportedUser}}</span>
-          <span>{{report.reason}}</span>
-        </div>
+        @if (dashboardPageResponse.latestReports?.length === 0) {
+          <div class="list-item" style="justify-content: center"  >
+            <span>Nobody was recently reported </span>
+          </div>
+        }
+        @for (report of dashboardPageResponse.latestReports; track report) {
+          <div class="list-item">
+            <span>{{report.reportedUser}}</span>
+            <span>{{report.reason}}</span>
+          </div>
+        }
       </div>
     </div>
   </section>

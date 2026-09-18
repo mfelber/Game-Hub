@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {NgClass, NgForOf, NgIf} from "@angular/common";
+import { NgClass } from "@angular/common";
 import {SearchBar} from '../../../../components/search-bar/search-bar';
 import {StoreControllerService} from '../../../../../../services/services/store-controller.service';
 import {PageResponseGameResponse} from '../../../../../../services/models/page-response-game-response';
@@ -9,11 +9,9 @@ import {Router} from '@angular/router';
 @Component({
   selector: 'app-admin-store',
   imports: [
-    NgIf,
     SearchBar,
-    NgForOf,
     NgClass
-  ],
+],
   templateUrl: './admin-store.component.html',
   styleUrl: './admin-store.component.scss',
 })

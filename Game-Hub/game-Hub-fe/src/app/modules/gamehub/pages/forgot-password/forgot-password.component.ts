@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {NgForOf, NgIf, NgOptimizedImage} from "@angular/common";
+import { NgOptimizedImage } from "@angular/common";
 import {AuthenticationRequest} from '../../../../services/models/authentication-request';
 import {Router} from '@angular/router';
 import {AuthenticationService} from '../../../../services/services/authentication.service';
@@ -8,12 +8,10 @@ import {AuthenticationService} from '../../../../services/services/authenticatio
 @Component({
   selector: 'app-forgot-password',
     imports: [
-        FormsModule,
-        NgForOf,
-        NgIf,
-        NgOptimizedImage,
-        ReactiveFormsModule
-    ],
+    FormsModule,
+    NgOptimizedImage,
+    ReactiveFormsModule
+],
   templateUrl: './forgot-password.component.html',
   styleUrl: './forgot-password.component.scss'
 })

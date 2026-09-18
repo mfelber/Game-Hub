@@ -2,17 +2,15 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {StoreControllerService} from '../../../../../../../services/services/store-controller.service';
 import {GameResponse} from '../../../../../../../services/models/game-response';
-import {DatePipe, NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
+import { DatePipe, NgClass, NgStyle } from '@angular/common';
 
 @Component({
   selector: 'app-admin-game-details',
   imports: [
-    NgIf,
-    NgForOf,
     NgStyle,
     DatePipe,
     NgClass
-  ],
+],
   templateUrl: './admin-game-details.component.html',
   styleUrl: './admin-game-details.component.scss',
 })

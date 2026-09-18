@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ReportRequest} from '../../../../services/models/report-request';
-import {DatePipe, NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
+import { DatePipe, NgClass, NgStyle } from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ReportUserModalComponent} from '../../components/report-user-modal/report-user-modal.component';
 import {SearchBar} from '../../components/search-bar/search-bar';
@@ -21,8 +21,6 @@ import {CountryControllerService} from '../../../../services/services/country-co
 @Component({
   selector: 'app-find-players',
   imports: [
-    NgForOf,
-    NgIf,
     NgStyle,
     NgClass,
     ReactiveFormsModule,
@@ -33,7 +31,7 @@ import {CountryControllerService} from '../../../../services/services/country-co
     UserActionsComponent,
     PaginationComponent,
     LoadingComponent
-  ],
+],
   templateUrl: './find-players.component.html',
   styleUrl: './find-players.component.scss',
 })

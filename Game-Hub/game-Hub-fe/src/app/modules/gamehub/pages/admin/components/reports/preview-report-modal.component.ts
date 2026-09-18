@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {NgClass, NgForOf, NgIf} from '@angular/common';
+import { NgClass } from '@angular/common';
 import {AdminReportsResponse} from '../../../../../../services/models/admin-reports-response';
 import {FormsModule} from '@angular/forms';
 import {AdminControllerService} from '../../../../../../services/services/admin-controller.service';
@@ -11,11 +11,9 @@ import {BanUserRequest} from '../../../../../../services/models/ban-user-request
 @Component({
   selector: 'app-preview-report-modal',
   imports: [
-    NgIf,
     NgClass,
-    FormsModule,
-    NgForOf
-  ],
+    FormsModule
+],
   templateUrl: './preview-report-modal.component.html',
   styleUrl: './preview-report-modal.component.scss',
 })

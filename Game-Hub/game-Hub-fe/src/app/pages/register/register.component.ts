@@ -1,6 +1,6 @@
 import {Component, OnInit, Inject, PLATFORM_ID} from '@angular/core';
-import {isPlatformBrowser, CommonModule} from '@angular/common';
-import {NgForOf, NgIf, NgOptimizedImage} from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
+import { NgOptimizedImage } from '@angular/common';
 import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AuthenticationService} from '../../services/services/authentication.service';
 import {Router} from '@angular/router';
@@ -11,12 +11,10 @@ import {RegistrationRequest} from '../../services/models/registration-request';
   selector: 'app-register',
   standalone: true,
   imports: [
-    NgIf,
     ReactiveFormsModule,
     FormsModule,
-    NgOptimizedImage,
-    CommonModule
-  ],
+    NgOptimizedImage
+],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })

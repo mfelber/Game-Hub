@@ -1,37 +1,43 @@
 <div class="notification-actions">
 
-  <button class="warning-btn" *ngIf="userNotificationsResponse.suspendedCount! >= 3"><span
+  @if (userNotificationsResponse.suspendedCount! >= 3) {
+    <button class="warning-btn"><span
+      class="warning-tooltip">
+      <i class="fa-solid fa-triangle-exclamation warning-icon"></i>
+      <span class="tooltip-text">
+        Your account has been suspended 3 or more times. Further violations may result in a permanent ban.
+      </span>
+    </span>
+  </button>
+}
+
+@if (userNotificationsResponse.warningCount! >= 3) {
+  <button class="warning-btn"><span
     class="warning-tooltip">
-              <i class="fa-solid fa-triangle-exclamation warning-icon"></i>
-              <span class="tooltip-text">
-                Your account has been suspended 3 or more times. Further violations may result in a permanent ban.
-              </span>
-            </span>
-  </button>
+    <i class="fa-solid fa-triangle-exclamation warning-icon"></i>
+    <span class="tooltip-text">
+      Your account has received 3 or more warnings. Further violations may result in a suspension or ban.
+    </span>
+  </span>
+</button>
+}
 
-  <button class="warning-btn" *ngIf="userNotificationsResponse.warningCount! >= 3"><span
-    class="warning-tooltip">
-              <i class="fa-solid fa-triangle-exclamation warning-icon"></i>
-              <span class="tooltip-text">
-                Your account has received 3 or more warnings. Further violations may result in a suspension or ban.
-              </span>
-            </span>
-  </button>
+<button class="balance-btn">
+  <i class="fa-solid fa-wallet"></i>
+  <span>3123 €</span>
+</button>
 
-  <button class="balance-btn">
-    <i class="fa-solid fa-wallet"></i>
-    <span>3123 €</span>
-  </button>
+<button routerLink="/gamehub/cart">
+  <i class="fa-solid fa-basket-shopping"></i>
+  @if (userNotificationsResponse.cartCount! > 0) {
+    <span class="notification-badge">{{userNotificationsResponse.cartCount}}</span>
+  }
+</button>
 
-  <button routerLink="/gamehub/cart">
-    <i class="fa-solid fa-basket-shopping"></i>
-      <span class="notification-badge" *ngIf="userNotificationsResponse.cartCount! > 0">{{userNotificationsResponse.cartCount}}</span>
-  </button>
-
-  <button class="notification-btn">
-    <i class="fa-solid fa-bell"></i>
-    <span class="notification-badge">1</span>
-  </button>
+<button class="notification-btn">
+  <i class="fa-solid fa-bell"></i>
+  <span class="notification-badge">1</span>
+</button>
 
 
 </div>

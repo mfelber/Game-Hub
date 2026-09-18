@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {NgForOf, NgIf} from "@angular/common";
+
 import {PageResponseGameResponse} from '../../../../services/models/page-response-game-response';
 import {LibraryControllerService} from '../../../../services/services/library-controller.service';
 import {GameResponse} from '../../../../services/models/game-response';
@@ -17,15 +17,13 @@ import {LoadingComponent} from '../../components/loading/loading.component';
 @Component({
   selector: 'app-library',
   imports: [
-    NgForOf,
-    NgIf,
     SearchBar,
     EmptyStateComponent,
     UserActionsComponent,
     PaginationComponent,
     PlayingWarningModalComponent,
     LoadingComponent
-  ],
+],
   templateUrl: './library.component.html',
   styleUrl: './library.component.scss'
 })

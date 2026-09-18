@@ -5,7 +5,7 @@ import {
   PageResponseAdminSuspendedAccountsResponse
 } from '../../../../../../services/models/page-response-admin-suspended-accounts-response';
 import {SearchBar} from '../../../../components/search-bar/search-bar';
-import {DatePipe, NgClass, NgForOf, NgIf} from '@angular/common';
+import { DatePipe, NgClass } from '@angular/common';
 import {
   PreviewSuspendedUserModalComponent
 } from '../../components/suspended-accounts/preview-suspended-user-modal.component';
@@ -17,13 +17,11 @@ import {EmptyStateComponent} from '../../../../components/empty-state/empty-stat
   selector: 'app-suspended-accounts',
   imports: [
     SearchBar,
-    NgForOf,
     DatePipe,
     NgClass,
-    NgIf,
     PreviewSuspendedUserModalComponent,
     EmptyStateComponent
-  ],
+],
   templateUrl: './suspended-accounts.component.html',
   styleUrl: './suspended-accounts.component.scss',
 })

@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {WishlistControllerService} from '../../../../services/services/wishlist-controller.service';
 import {StoreControllerService} from '../../../../services/services/store-controller.service';
-import {DatePipe, NgClass, NgForOf, NgIf} from '@angular/common';
+import { DatePipe, NgClass } from '@angular/common';
 import {GameResponse} from '../../../../services/models/game-response';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormsModule} from '@angular/forms';
@@ -18,8 +18,6 @@ import {Dropdown, initFlowbite} from 'flowbite';
 @Component({
   selector: 'app-wishlist',
   imports: [
-    NgForOf,
-    NgIf,
     FormsModule,
     SearchBar,
     NgClass,
@@ -27,8 +25,8 @@ import {Dropdown, initFlowbite} from 'flowbite';
     EmptyStateComponent,
     UserActionsComponent,
     PaginationComponent,
-    LoadingComponent,
-  ],
+    LoadingComponent
+],
   templateUrl: './wishlist.component.html',
   styleUrl: './wishlist.component.scss'
 })

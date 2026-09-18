@@ -1,6 +1,6 @@
 import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {GameResponse} from '../../../../../../../services/models/game-response';
-import {DecimalPipe, NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
+import { DecimalPipe, NgClass, NgStyle } from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {GenreResponse} from '../../../../../../../services/models/genre-response';
 import {PlatformResponse} from '../../../../../../../services/models/platform-response';
@@ -20,14 +20,12 @@ import {
 @Component({
   selector: 'app-edit-game-modal',
   imports: [
-    NgForOf,
-    NgIf,
     ReactiveFormsModule,
     NgClass,
     FormsModule,
     NgStyle,
     DecimalPipe
-  ],
+],
   templateUrl: './edit-game-modal.component.html',
   styleUrl: './edit-game-modal.component.scss',
 })

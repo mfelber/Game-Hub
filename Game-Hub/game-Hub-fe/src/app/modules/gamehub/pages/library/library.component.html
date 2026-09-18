@@ -1,10 +1,11 @@
-<app-playing-warning-modal
-  *ngIf="userIsPlayingGame"
-  [game]="currentlyPlayingGame"
-  [title]="'You are already playing a game'"
-  [description]="'Stop your current game before starting another one.'"
-  (stoppedPlayingGame)="gameStopped()"
-  (close)="closeModal()"/>
+@if (userIsPlayingGame) {
+  <app-playing-warning-modal
+    [game]="currentlyPlayingGame"
+    [title]="'You are already playing a game'"
+    [description]="'Stop your current game before starting another one.'"
+    (stoppedPlayingGame)="gameStopped()"
+    (close)="closeModal()"/>
+}
 
 <main>
 
@@ -34,7 +35,7 @@
         </button>
 
         <button class="filter-tab" [class.active]="activeFilter === 'DOWNLOADED'"
-                (click)="setFilter('DOWNLOADED')">
+          (click)="setFilter('DOWNLOADED')">
           <i class="fa-solid fa-download"></i> Downloaded Games
         </button>
 
@@ -46,98 +47,126 @@
     </div>
   </section>
 
-  <app-empty-state
-    *ngIf="emptyLibrary && loadAllGames"
-    icon='fa-solid fa-box-open'
-    title="Your library is empty"
-    message="Buy or claim free games to see them here!">
-  </app-empty-state>
+  @if (emptyLibrary && loadAllGames) {
+    <app-empty-state
+      icon='fa-solid fa-box-open'
+      title="Your library is empty"
+      message="Buy or claim free games to see them here!">
+    </app-empty-state>
+  }
 
-  <app-empty-state
-    *ngIf="emptyFavoriteGames && loadFavoriteGames"
-    icon='fa-solid fa-heart'
-    title="No favorite games"
-    message="Games you mark as favorite will appear here.">
-  </app-empty-state>
+  @if (emptyFavoriteGames && loadFavoriteGames) {
+    <app-empty-state
+      icon='fa-solid fa-heart'
+      title="No favorite games"
+      message="Games you mark as favorite will appear here.">
+    </app-empty-state>
+  }
 
-  <app-empty-state
-    *ngIf="emptyDownloadedGames && loadDownloadedGames"
-    icon='fa-solid fa-download'
-    title="No downloaded  games"
-    message="Downloaded games will appear here.">
-  </app-empty-state>
+  @if (emptyDownloadedGames && loadDownloadedGames) {
+    <app-empty-state
+      icon='fa-solid fa-download'
+      title="No downloaded  games"
+      message="Downloaded games will appear here.">
+    </app-empty-state>
+  }
 
 
   <!-- GAMES -->
-  <section class="games-cards" *ngIf="gamePageResponse.content?.length">
-
-    <app-loading *ngIf="isLoading"/>
-
-    <ng-container *ngIf="loadAllGames && !isLoading">
-      <div class="card" *ngFor="let game of gamePageResponse.content"
-           (click)="goToGame(game.gameId)">
-        <img [src]="getGameImageCover(game)" alt="{{game.title}}}">
-        <div class="library-card-content">
-          <h3>{{ game.title }}</h3>
-          <p *ngIf="!game.installed">Not downloaded</p>
-          <p *ngIf="game.installed"><i class="fa-solid fa-download"></i> Downloaded</p>
-          <small>Played : {{ game.playtimeMinutes }}</small>
-        </div>
-      </div>
-    </ng-container>
-
-    <ng-container *ngIf="loadDownloadedGames && !isLoading">
-      <div class="card" *ngFor="let game of gamePageResponse.content"
-           (click)="goToGame(game.gameId)">
-        <img [src]="getGameImageCover(game)" alt="{{game.title}}}">
-        <div class="library-card-content">
-          <h3>{{ game.title }}</h3>
-          <p *ngIf="game.installed"><i class="fa-solid fa-download"></i> Downloaded</p>
-          <small>Played : {{ game.playtimeMinutes }}</small>
-          <button *ngIf="!game.currentlyPlaying && game.installed" class="big-button play"
+  @if (gamePageResponse.content?.length) {
+    <section class="games-cards">
+      @if (isLoading) {
+        <app-loading/>
+      }
+      @if (loadAllGames && !isLoading) {
+        @for (game of gamePageResponse.content; track game) {
+          <div class="card"
+            (click)="goToGame(game.gameId)">
+            <img [src]="getGameImageCover(game)" alt="{{game.title}}}">
+            <div class="library-card-content">
+              <h3>{{ game.title }}</h3>
+              @if (!game.installed) {
+                <p>Not downloaded</p>
+              }
+              @if (game.installed) {
+                <p><i class="fa-solid fa-download"></i> Downloaded</p>
+              }
+              <small>Played : {{ game.playtimeMinutes }}</small>
+            </div>
+          </div>
+        }
+      }
+      @if (loadDownloadedGames && !isLoading) {
+        @for (game of gamePageResponse.content; track game) {
+          <div class="card"
+            (click)="goToGame(game.gameId)">
+            <img [src]="getGameImageCover(game)" alt="{{game.title}}}">
+            <div class="library-card-content">
+              <h3>{{ game.title }}</h3>
+              @if (game.installed) {
+                <p><i class="fa-solid fa-download"></i> Downloaded</p>
+              }
+              <small>Played : {{ game.playtimeMinutes }}</small>
+              @if (!game.currentlyPlaying && game.installed) {
+                <button class="big-button play"
                   (click)="playGame(game) ; $event.stopPropagation()">
-            Play <i class="fa-solid fa-play"></i>
-          </button>
-          <button *ngIf="game.currentlyPlaying" class="big-button stop" (click)="stopPlayingGame(game); $event.stopPropagation()">
-            Stop playing <i class="fa-solid fa-stop"></i>
-          </button>
-        </div>
-      </div>
-    </ng-container>
-
-    <ng-container *ngIf="loadFavoriteGames && !isLoading">
-      <div class="card" *ngFor="let game of gamePageResponse.content"
-           (click)="goToGame(game.gameId)">
-        <img [src]="getGameImageCover(game)" alt="{{game.title}}}">
-        <div class="library-card-content">
-          <h3>{{ game.title }}</h3>
-          <p *ngIf="!game.installed">Not downloaded</p>
-          <p *ngIf="game.installed"><i class="fa-solid fa-download"></i> Downloaded</p>
-          <small>Played : {{ game.playtimeMinutes }}</small>
-          <button *ngIf="!game.currentlyPlaying && game.installed" class="big-button play"
+                  Play <i class="fa-solid fa-play"></i>
+                </button>
+              }
+              @if (game.currentlyPlaying) {
+                <button class="big-button stop" (click)="stopPlayingGame(game); $event.stopPropagation()">
+                  Stop playing <i class="fa-solid fa-stop"></i>
+                </button>
+              }
+            </div>
+          </div>
+        }
+      }
+      @if (loadFavoriteGames && !isLoading) {
+        @for (game of gamePageResponse.content; track game) {
+          <div class="card"
+            (click)="goToGame(game.gameId)">
+            <img [src]="getGameImageCover(game)" alt="{{game.title}}}">
+            <div class="library-card-content">
+              <h3>{{ game.title }}</h3>
+              @if (!game.installed) {
+                <p>Not downloaded</p>
+              }
+              @if (game.installed) {
+                <p><i class="fa-solid fa-download"></i> Downloaded</p>
+              }
+              <small>Played : {{ game.playtimeMinutes }}</small>
+              @if (!game.currentlyPlaying && game.installed) {
+                <button class="big-button play"
                   (click)="playGame(game) ; $event.stopPropagation()">
-            Play <i class="fa-solid fa-play"></i>
-          </button>
-          <button *ngIf="game.currentlyPlaying" class="big-button stop"
+                  Play <i class="fa-solid fa-play"></i>
+                </button>
+              }
+              @if (game.currentlyPlaying) {
+                <button class="big-button stop"
                   (click)="stopPlayingGame(game); $event.stopPropagation()">
-            Stop playing <i class="fa-solid fa-stop"></i>
-          </button>
-          <button *ngIf="!game.installed" class="big-button download"
+                  Stop playing <i class="fa-solid fa-stop"></i>
+                </button>
+              }
+              @if (!game.installed) {
+                <button class="big-button download"
                   (click)="downloadGame(game); $event.stopPropagation()">
-            Download <i class="fa-solid fa-download"></i>
-          </button>
-        </div>
-      </div>
-    </ng-container>
+                  Download <i class="fa-solid fa-download"></i>
+                </button>
+              }
+            </div>
+          </div>
+        }
+      }
+    </section>
+  }
 
-  </section>
-
-  <app-pagination
-    *ngIf="gamePageResponse.totalPages! > 1"
-    [currentPage]="page"
-    [totalPages]="gamePageResponse.totalPages!"
-    (pageChange)="changePage($event)">
-
-  </app-pagination>
+  @if (gamePageResponse.totalPages! > 1) {
+    <app-pagination
+      [currentPage]="page"
+      [totalPages]="gamePageResponse.totalPages!"
+      (pageChange)="changePage($event)">
+    </app-pagination>
+  }
 
 </main>

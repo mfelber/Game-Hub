@@ -1,37 +1,43 @@
-<app-user-info-modal
-  *ngIf="isUserInfoModalOpen && selectedUser"
-  [user]="selectedUser"
-  (close)="closeModal()">
-</app-user-info-modal>
+@if (isUserInfoModalOpen && selectedUser) {
+  <app-user-info-modal
+    [user]="selectedUser"
+    (close)="closeModal()">
+  </app-user-info-modal>
+}
 
-<app-change-user-role-modal
-  *ngIf="isChangeRoleModalOpen && selectedUser"
-  [user]="selectedUser"
-  (roleChanged)="showSuccess($event)"
-  (close)="closeModal()">
-</app-change-user-role-modal>
+@if (isChangeRoleModalOpen && selectedUser) {
+  <app-change-user-role-modal
+    [user]="selectedUser"
+    (roleChanged)="showSuccess($event)"
+    (close)="closeModal()">
+  </app-change-user-role-modal>
+}
 
-<app-ban-modal
-  *ngIf="isBanUserModalOpen && selectedUser"
-  [user]="selectedUser"
-  (bannedUser)="showSuccess($event)"
-  (close)="closeModal()">
-</app-ban-modal>
+@if (isBanUserModalOpen && selectedUser) {
+  <app-ban-modal
+    [user]="selectedUser"
+    (bannedUser)="showSuccess($event)"
+    (close)="closeModal()">
+  </app-ban-modal>
+}
 
-<app-unban-modal
-  *ngIf="isUnbanUserModalOpen && selectedUser"
-  [user]="selectedUser"
-  (unBanUser)="showSuccess($event)"
-  (close)="closeModal()">
-</app-unban-modal>
+@if (isUnbanUserModalOpen && selectedUser) {
+  <app-unban-modal
+    [user]="selectedUser"
+    (unBanUser)="showSuccess($event)"
+    (close)="closeModal()">
+  </app-unban-modal>
+}
 
 <div class="fixed top-4 right-4 flex flex-col gap-2 z-50">
-  <div *ngIf="successMessage"
+  @if (successMessage) {
+    <div
        class="bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg min-w-[250px]
               transform transition-transform duration-500 ease-in-out opacity-0"
-       [ngClass]="{'translate-x-0 opacity-100': toastVisible, 'translate-x-24 opacity-0': !toastVisible}">
-    {{ successMessage }}
-  </div>
+      [ngClass]="{'translate-x-0 opacity-100': toastVisible, 'translate-x-24 opacity-0': !toastVisible}">
+      {{ successMessage }}
+    </div>
+  }
 </div>
 
 <main [class.hidden]="!isLoaded">
@@ -45,16 +51,16 @@
       </div>
     </div>
 
-<!-- SEARCH -->
+    <!-- SEARCH -->
     <section>
       <div class="top">
         <app-search-bar
-        placeholder="Search users...">
+          placeholder="Search users...">
         </app-search-bar>
       </div>
     </section>
 
-<!--  FILTERS  -->
+    <!--  FILTERS  -->
     <section class="filter-bar">
 
       <div class="filter-header">
@@ -67,7 +73,9 @@
           <label>Role</label>
           <select [(ngModel)]="filters.role" (change)="filterUsers()">
             <option value="">All Roles</option>
-            <option *ngFor="let role of roleResponse" [value]="role.roleName">{{role.roleName}}</option>
+            @for (role of roleResponse; track role) {
+              <option [value]="role.roleName">{{role.roleName}}</option>
+            }
           </select>
 
         </div>
@@ -76,41 +84,46 @@
           <label>Account Status</label>
           <select [(ngModel)]="filters.accountStatus" (change)="filterUsers()">
             <option value="">All Statuses</option>
-            <option *ngFor="let accountStatus of accountStatusResponse" [value]="accountStatus.accountStatus">{{accountStatus.accountStatus}}</option>
+            @for (accountStatus of accountStatusResponse; track accountStatus) {
+              <option [value]="accountStatus.accountStatus">{{accountStatus.accountStatus}}</option>
+            }
           </select>
         </div>
       </div>
     </section>
 
-<!--  TABLE  -->
+    <!--  TABLE  -->
     <section>
 
-      <app-empty-state
-        *ngIf="filteredUsers.length === 0"
-        icon = 'fa-solid fa-user-slash'
-        title="No users found"
-        message="There are no users matching the selected filters.">
-      </app-empty-state>
+      @if (filteredUsers.length === 0) {
+        <app-empty-state
+          icon = 'fa-solid fa-user-slash'
+          title="No users found"
+          message="There are no users matching the selected filters.">
+        </app-empty-state>
+      }
 
-      <div class="table-container" *ngIf="filteredUsers.length > 0">
-        <table>
-          <thead>
-          <tr>
-            <th>ID</th>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Account Status</th>
-            <th>Registered</th>
-            <th>Last Login</th>
-            <th>Actions</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let user of filteredUsers">
-            <td>{{user.userId}}</td>
-            <td>{{user.userName}}</td>
-            <td>{{user.email}}</td>
+      @if (filteredUsers.length > 0) {
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Account Status</th>
+                <th>Registered</th>
+                <th>Last Login</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (user of filteredUsers; track user) {
+                <tr>
+                  <td>{{user.userId}}</td>
+                  <td>{{user.userName}}</td>
+                  <td>{{user.email}}</td>
             <td><span [ngClass]="{
             'role-user': user.role === 'USER',
             'role-admin': user.role === 'ADMIN'
@@ -123,24 +136,27 @@
             'status-deleted': user.accountStatus === 'DELETED',
             'status-suspended': user.accountStatus === 'SUSPENDED',
             }">{{user.accountStatus}} </span></td>
-            <td>{{user.registered | date: 'dd.MM.yyyy'}}</td>
-            <td>{{user.lastLogin | date: 'dd.MM.yyyy'}}</td>
-            <td>
-              <button class="action view" (click)="getUserInfo(user.userId)"><i class="fa-solid fa-eye"></i></button>
-              <button class="action change-role" (click)="changeRole(user)"><i class="fa-solid fa-user-shield"></i></button>
-              <button class="action ban" *ngIf="user.role !== 'ADMIN'" (click)="banOrUnbanUser(user)"><i
+                  <td>{{user.registered | date: 'dd.MM.yyyy'}}</td>
+                  <td>{{user.lastLogin | date: 'dd.MM.yyyy'}}</td>
+                  <td>
+                    <button class="action view" (click)="getUserInfo(user.userId)"><i class="fa-solid fa-eye"></i></button>
+                    <button class="action change-role" (click)="changeRole(user)"><i class="fa-solid fa-user-shield"></i></button>
+                    @if (user.role !== 'ADMIN') {
+                      <button class="action ban" (click)="banOrUnbanUser(user)"><i
                 [ngClass]="{
                   'fa-ban': user.accountStatus !== 'BANNED',
                   'fa-lock-open': user.accountStatus === 'BANNED'
                 }"
-                class="fa-solid">
-              </i></button>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-
-      </div>
+                        class="fa-solid">
+                      </i></button>
+                    }
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
     </section>
 
 
