@@ -17,6 +17,7 @@ import {UserActionsComponent} from '../../components/user-actions/user-actions.c
 import {PaginationComponent} from '../../components/pagination/pagination.component';
 import {LoadingComponent} from '../../components/loading/loading.component';
 import {CountryControllerService} from '../../../../services/services/country-controller.service';
+import {HlmDropdownMenu, HlmDropdownMenuItem, HlmDropdownMenuTrigger} from '@spartan/dropdown-menu';
 
 @Component({
   selector: 'app-find-players',
@@ -30,8 +31,11 @@ import {CountryControllerService} from '../../../../services/services/country-co
     EmptyStateComponent,
     UserActionsComponent,
     PaginationComponent,
-    LoadingComponent
-],
+    LoadingComponent,
+    HlmDropdownMenuTrigger,
+    HlmDropdownMenu,
+    HlmDropdownMenuItem
+  ],
   templateUrl: './find-players.component.html',
   styleUrl: './find-players.component.scss',
 })
@@ -116,7 +120,7 @@ export class FindPlayersComponent implements OnInit {
   getCountries() {
     this.countryService.getAllCountries().subscribe({
       next: (countries) => {
-        this.allCountries = countries.map(c => c.name!)
+        this.allCountries = countries.map(c => c.countryName!)
       }
     })
   }

@@ -44,12 +44,12 @@
           <input [value]="user.email" [(ngModel)]="userRequest.email">
           <label>Nationality</label>
           <div class="location-wrapper">
-            <select [(ngModel)]="userRequest.location">
+            <select [(ngModel)]="userRequest.country">
               <option value="" disabled>Select location</option>
-              @for (loc of allLocations; track loc) {
+              @for (country of allLocations; track country) {
                 <option
-                  [value]="loc.name">
-                  {{ loc.name }}
+                  [value]="country.name">
+                  {{ country.countryName }}
                 </option>
               }
             </select>

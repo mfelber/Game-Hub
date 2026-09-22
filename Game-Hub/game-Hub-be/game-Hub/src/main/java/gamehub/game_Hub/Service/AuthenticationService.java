@@ -3,7 +3,6 @@ package gamehub.game_Hub.Service;
 import static gamehub.game_Hub.enums.AccountType.ADULT;
 import static gamehub.game_Hub.enums.AccountType.CHILD;
 
-import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Random;
@@ -25,7 +24,7 @@ import gamehub.game_Hub.Module.Flags.UserCommunityFlag;
 import gamehub.game_Hub.Module.Flags.UserStoreFlag;
 import gamehub.game_Hub.Module.Level;
 import gamehub.game_Hub.enums.AccountStatus;
-import gamehub.game_Hub.enums.Location;
+import gamehub.game_Hub.enums.Country;
 import gamehub.game_Hub.enums.Role;
 import gamehub.game_Hub.enums.Status;
 import gamehub.game_Hub.Repository.CardColorRepository;
@@ -38,8 +37,6 @@ import gamehub.game_Hub.Request.AuthenticationRequest;
 import gamehub.game_Hub.Response.AuthenticationResponse;
 import gamehub.game_Hub.Request.ForgotPasswordRequest;
 import gamehub.game_Hub.Request.RegistrationRequest;
-import gamehub.game_Hub.Email.EmailService;
-import gamehub.game_Hub.Email.EmailTemplate;
 import gamehub.game_Hub.Module.User.PasswordResetToken;
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Repository.role.RoleRepository;
@@ -109,7 +106,7 @@ public class AuthenticationService {
           .role(Role.USER)
           .status(Status.OFFLINE)
           .accountStatus(AccountStatus.ACTIVE)
-          .location(Location.UNKNOWN)
+          .country(Country.NOT_SPECIFIED)
           .profileColor(getRandomColor())
           .bannerType("PREDEFINED")
           .banner("/assets/banners/banner_1.jpg")
@@ -144,7 +141,7 @@ public class AuthenticationService {
         .password(passwordEncoder.encode(request.getPassword()))
         .role(Role.USER)
         .status(Status.OFFLINE)
-        .location(Location.UNKNOWN)
+        .country(Country.NOT_SPECIFIED)
         .profileColor(getRandomColor())
         .bannerType("PREDEFINED")
         .banner("/assets/banners/banner_1.jpg")

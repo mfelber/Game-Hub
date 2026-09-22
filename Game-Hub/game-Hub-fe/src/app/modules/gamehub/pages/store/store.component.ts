@@ -12,8 +12,12 @@ import {PaginationComponent} from '../../components/pagination/pagination.compon
 import {subscribe} from 'node:diagnostics_channel';
 import {LoadingComponent} from '../../components/loading/loading.component';
 import {Dropdown, initFlowbite} from 'flowbite';
-
-
+import {
+  HlmDropdownMenu, HlmDropdownMenuGroup,
+  HlmDropdownMenuItem, HlmDropdownMenuLabel, HlmDropdownMenuSeparator,
+  HlmDropdownMenuTrigger
+} from '@spartan/dropdown-menu';
+import {HlmCheckbox} from '@spartan/checkbox';
 @Component({
   selector: 'app-store',
   imports: [
@@ -23,8 +27,11 @@ import {Dropdown, initFlowbite} from 'flowbite';
     UserActionsComponent,
     EmptyStateComponent,
     PaginationComponent,
-    LoadingComponent
-],
+    LoadingComponent,
+    HlmDropdownMenu,
+    HlmDropdownMenuTrigger,
+    HlmDropdownMenuItem
+  ],
   templateUrl: './store.component.html',
   styleUrl: './store.component.scss'
 })
@@ -209,37 +216,6 @@ export class StoreComponent implements OnInit {
     return this.priceOptions.find(
       option => option.value === this.filters.maxPrice
     )?.label ?? 'Any price';
-  }
-
-  closeGenreDropdown() {
-    const dropdownGenreElement = document.getElementById('genreDropdown');
-    const buttonElement = document.getElementById('genreDropdownButton');
-
-    if (dropdownGenreElement && buttonElement) {
-      const dropdown = new Dropdown(dropdownGenreElement, buttonElement);
-      dropdown.hide();
-    }
-
-  }
-
-  closeOsDropdown() {
-    const dropdownOSElement = document.getElementById('operationSystemDropdown');
-    const buttonElement = document.getElementById('operationSystemDropdownButton');
-
-    if (dropdownOSElement && buttonElement) {
-      const dropdown = new Dropdown(dropdownOSElement, buttonElement);
-      dropdown.hide();
-    }
-  }
-
-  closePriceDropdown() {
-    const dropdownOSElement = document.getElementById('priceDropdown');
-    const buttonElement = document.getElementById('priceDropdownButton');
-
-    if (dropdownOSElement && buttonElement) {
-      const dropdown = new Dropdown(dropdownOSElement, buttonElement);
-      dropdown.hide();
-    }
   }
 
 }

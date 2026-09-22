@@ -1,4 +1,4 @@
-@layer components {
+@layer utilities {
 
   .dropdown {
     @apply flex flex-col gap-2 text-sm w-45 max-sm:w-full;
@@ -13,25 +13,11 @@
     cursor-pointer py-3 pl-4 pr-4 gap-3 text-sm hover:bg-[#26334a];
   }
 
-  .dropdown-select {
-    @apply z-10 hidden w-45 max-h-55 overflow-y-auto bg-[#1b2230] rounded-[10px]
-    shadow-[0_8px_20px_rgba(0,0,0,0.3)] p-1.5;
-
-    & ul {
-      @apply text-sm text-[#ddd];
-    }
-  }
-
   .sort-dropdown {
-    @apply w-55;
+    @apply !w-55;
 
     & .dropdown-select {
-      @apply w-55;
+      @apply !w-55;
     }
-  }
-
-  .dropdown-option {
-    @apply w-full px-[15px] py-2.5 text-left rounded-[7px] hover:bg-[#26334a]
-    cursor-pointer transition-colors;
   }
 }

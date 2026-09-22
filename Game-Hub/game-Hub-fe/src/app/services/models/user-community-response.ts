@@ -5,6 +5,7 @@
 import { CountryResponse } from '../models/country-response';
 import { GameResponseShort } from '../models/game-response-short';
 export interface UserCommunityResponse {
+  country?: CountryResponse;
   currentlyPlaying?: GameResponseShort;
   friendRequestReceived?: boolean;
   friendRequestSent?: boolean;
@@ -12,7 +13,6 @@ export interface UserCommunityResponse {
   isFriend?: boolean;
   joinedDate?: string;
   libraryCount?: number;
-  location?: CountryResponse;
   profileColor?: string;
   reviewsCount?: number;
   status?: 'Online' | 'Playing' | 'Offline' | 'Away';

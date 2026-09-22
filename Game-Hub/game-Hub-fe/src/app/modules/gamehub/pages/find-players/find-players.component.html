@@ -41,37 +41,32 @@
         <label>
           Country
         </label>
-        <button id="countryDropdownButton"
-          data-dropdown-toggle="countryDropdown"
-          type="button"
-          class="dropdown-button"
-          ><span>
-          {{ filters.country || 'All Countries' }}
-        </span>
-        <i class="fa-solid fa-chevron-down text-xs"></i>
-      </button>
+        <button class="dropdown-button" type="button" [hlmDropdownMenuTrigger]="countryMenu" align="start">
+          <span> {{ filters.country || 'All Countries' }} </span>
 
-      <div id="countryDropdown" class="dropdown-select">
-        <ul>
-          <li>
-            <button type="button"
-              (click)="filters.country = ''; changeFilter(); closeDropdown()"
-              class="dropdown-option">
-              All Systems
+          <i class="fa-solid fa-chevron-down text-xs"></i></button>
+
+        <ng-template #countryMenu>
+          <hlm-dropdown-menu>
+            <button
+              hlmDropdownMenuItem
+              type="button"
+              class="new-dropdown-option"
+              (click)="filters.country = ''; changeFilter()">
+              All Countries
             </button>
-          </li>
-          @for (country of allCountries; track country) {
-            <li>
+
+            @for (country of allCountries; track country) {
               <button
+                hlmDropdownMenuItem
+                class="new-dropdown-option"
                 type="button"
-                (click)="filters.country = country; changeFilter(); closeDropdown()"
-                class="dropdown-option">
+                (click)="filters.country = country; changeFilter()">
                 {{ country }}
               </button>
-            </li>
-          }
-        </ul>
-      </div>
+            }
+          </hlm-dropdown-menu>
+        </ng-template>
     </div>
 
 
@@ -150,7 +145,7 @@
             <div>
               <div class="username">
                 <h3>{{ user.username }}</h3>
-                <img class="flag" [src]="user.location?.iconPath" alt="">
+                <img class="flag" [src]="user.country?.iconPath" alt="">
               </div>
           <span [ngClass]="{
           'online': user.status === 'Online' || user.status === 'Playing',

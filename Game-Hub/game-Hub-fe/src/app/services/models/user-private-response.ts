@@ -17,6 +17,7 @@ export interface UserPrivateResponse {
   bannerType?: string;
   bio?: string;
   cardColor?: CardColorResponse;
+  country?: CountryResponse;
   currentlyPlaying?: GameResponseShort;
   email?: string;
   favoriteGame?: UserLibraryResponse;
@@ -29,7 +30,6 @@ export interface UserPrivateResponse {
   lastName?: string;
   level?: LevelResponse;
   libraryCount?: number;
-  location?: CountryResponse;
   playTime?: number;
   predefinedBannerPath?: string;
   profileColor?: string;

@@ -79,7 +79,7 @@ public class UserMapper {
         .firstName(userUpdateRequest.getFirstName())
         .lastName(userUpdateRequest.getLastName())
         .email(userUpdateRequest.getEmail())
-        .location(userUpdateRequest.getLocation())
+        .country(userUpdateRequest.getCountry())
         .bio(userUpdateRequest.getBio())
         .build();
   }
@@ -104,6 +104,7 @@ public class UserMapper {
 
 
     // TODO get reviews count when implementing reviews
+    assert profileUser.getCountry() != null;
     return UserPublicResponse.builder()
         .userId(profileUser.getId())
         .username(profileUser.getName())
@@ -117,10 +118,11 @@ public class UserMapper {
         .friendRequestReceived(friendReqReceived)
         .favoriteGame(libraryMapper.toFavoriteGameResponse(profileUser))
         .currentlyPlaying(profileUser.getCurrentlyPlayingGame() != null ? gameMapper.toGameResponseShort(profileUser.getCurrentlyPlayingGame()): null)
-        .location(
+        .country(
             new CountryResponse(
-                profileUser.getLocation() != null ? profileUser.getLocation().name() : null,
-                profileUser.getLocation() != null ? "/assets/flags/" + profileUser.getLocation().name().toLowerCase() + ".svg" : null
+                profileUser.getCountry() != null ? profileUser.getCountry().name() : null,
+                profileUser.getCountry().getCountryName(),
+                profileUser.getCountry() != null ? "/assets/flags/" + profileUser.getCountry().name().toLowerCase() + ".svg" : null
             )
         )
         .status(profileUser.getStatus())
@@ -174,10 +176,11 @@ public class UserMapper {
         .friends(communityMapper.toUserFriendsResponse(friends))
         .favoriteGame(libraryMapper.toFavoriteGameResponse(user))
         .currentlyPlaying(user.getCurrentlyPlayingGame() != null ? gameMapper.toGameResponseShort(user.getCurrentlyPlayingGame()): null)
-        .location(
+        .country(
             new CountryResponse(
-                user.getLocation() != null ? user.getLocation().name() : null,
-                user.getLocation() != null ? "/assets/flags/" + user.getLocation().name().toLowerCase() + ".svg" : null
+                user.getCountry() != null ? user.getCountry().name() : null,
+                user.getCountry().getCountryName(),
+                user.getCountry() != null ? "/assets/flags/" + user.getCountry().name().toLowerCase() + ".svg" : null
             )
         )
         .status(user.getStatus())
@@ -280,9 +283,10 @@ public class UserMapper {
         .role(user.getRole())
         .accountType(user.getAccountType())
         .accountLevel(user.getLevel().getLevelNumber())
-        .location(new CountryResponse(
-            user.getLocation() != null ? user.getLocation().name() : null,
-            user.getLocation() != null ? "assets/flags/" + user.getLocation().name().toLowerCase() + ".svg" : null
+        .country(new CountryResponse(
+            user.getCountry() != null ? user.getCountry().name() : null,
+            user.getCountry().getCountryName(),
+            user.getCountry() != null ? "assets/flags/" + user.getCountry().name().toLowerCase() + ".svg" : null
         ))
         .accountStatus(user.getAccountStatus())
         .registered(user.getCreatedAt())

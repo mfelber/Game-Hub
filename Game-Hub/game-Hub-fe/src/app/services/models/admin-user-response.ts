@@ -10,12 +10,12 @@ export interface AdminUserResponse {
   banReason?: string;
   bannedAt?: string;
   bio?: string;
+  country?: CountryResponse;
   email?: string;
   firstName?: string;
   lastLogin?: string;
   lastModifiedAt?: string;
   lastName?: string;
-  location?: CountryResponse;
   profileColor?: string;
   profilePicture?: string;
   registered?: string;

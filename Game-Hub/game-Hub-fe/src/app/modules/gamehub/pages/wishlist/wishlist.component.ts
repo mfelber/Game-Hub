@@ -14,6 +14,7 @@ import {PaginationComponent} from '../../components/pagination/pagination.compon
 import {CartControllerService} from '../../../../services/services/cart-controller.service';
 import {LoadingComponent} from '../../components/loading/loading.component';
 import {Dropdown, initFlowbite} from 'flowbite';
+import {HlmDropdownMenu, HlmDropdownMenuItem, HlmDropdownMenuTrigger} from '@spartan/dropdown-menu';
 
 @Component({
   selector: 'app-wishlist',
@@ -25,8 +26,11 @@ import {Dropdown, initFlowbite} from 'flowbite';
     EmptyStateComponent,
     UserActionsComponent,
     PaginationComponent,
-    LoadingComponent
-],
+    LoadingComponent,
+    HlmDropdownMenu,
+    HlmDropdownMenuItem,
+    HlmDropdownMenuTrigger
+  ],
   templateUrl: './wishlist.component.html',
   styleUrl: './wishlist.component.scss'
 })

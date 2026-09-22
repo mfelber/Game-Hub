@@ -49,7 +49,7 @@ public class CommunityMapper {
         .libraryCount(foundUser.getLibrary().size())
         .friendsCount(foundUser.getFriends().size())
         .reviewsCount(0)
-        .location(new CountryResponse(foundUser.getLocation().name(), foundUser.getLocation().getLocationIcon()))
+        .country(new CountryResponse(foundUser.getCountry().name(), foundUser.getCountry().getCountryName(), foundUser.getCountry().getCountryIcon()))
         .userProfilePicture(FileUtils.readCoverFromLocation(foundUser.getUserProfilePicture()))
         .profileColor(foundUser.getProfileColor())
         .isFriend(isFriend)
@@ -74,7 +74,7 @@ public class CommunityMapper {
         .status(sender.getStatus())
         .level(new LevelResponse(sender.getLevel().getId(), sender.getLevel().getLevelNumber(),
             sender.getLevel().getLevelColor()))
-        .location(new CountryResponse(sender.getLocation().name(), sender.getLocation().getLocationIcon()))
+        .country(new CountryResponse(sender.getCountry().name(), sender.getCountry().getCountryName(), sender.getCountry().getCountryIcon()))
         .userProfilePicture(FileUtils.readCoverFromLocation(sender.getUserProfilePicture()))
         .profileColor(sender.getProfileColor())
         .createdAt(requestSentAt)

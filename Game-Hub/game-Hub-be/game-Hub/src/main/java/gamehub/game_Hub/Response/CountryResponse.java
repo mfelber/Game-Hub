@@ -16,6 +16,7 @@ import lombok.Setter;
 public class CountryResponse {
 
   private String name;
+  private String countryName;
   private String iconPath;
 
 }

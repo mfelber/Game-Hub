@@ -5,9 +5,9 @@
 import { CountryResponse } from '../models/country-response';
 import { LevelResponse } from '../models/level-response';
 export interface FriendRequestResponse {
+  country?: CountryResponse;
   createdAt?: string;
   level?: LevelResponse;
-  location?: CountryResponse;
   profileColor?: string;
   status?: 'Online' | 'Playing' | 'Offline' | 'Away';
   userId?: number;

@@ -30,7 +30,7 @@ public class AdminUserResponse {
   private Role role;
   private AccountType accountType;
   private Long accountLevel;
-  private CountryResponse location;
+  private CountryResponse country;
   private AccountStatus accountStatus;
   private LocalDateTime registered;
   private LocalDateTime lastLogin;

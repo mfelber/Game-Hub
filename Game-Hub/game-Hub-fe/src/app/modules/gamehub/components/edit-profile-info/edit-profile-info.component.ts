@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {UserPrivateResponse} from '../../../../services/models/user-private-response';
 import {UserUpdateRequest} from '../../../../services/models/user-update-request';
 import {CardColorResponse} from '../../../../services/models/card-color-response';
-import { NgClass, NgStyle } from '@angular/common';
+import {NgClass, NgStyle} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {initFlowbite} from 'flowbite';
 import {SearchBar} from '../search-bar/search-bar';
@@ -17,7 +17,7 @@ import {GameResponse} from '../../../../services/models/game-response';
     NgStyle,
     NgClass,
     SearchBar
-],
+  ],
   templateUrl: './edit-profile-info.component.html',
   styleUrl: './edit-profile-info.component.scss',
 })
@@ -34,6 +34,7 @@ export class EditProfileInfoComponent implements OnInit {
   @Input() allLocations: {
     name: string;
     iconPath: string;
+    countryName: string;
   }[] = [];
   @Input() cardColors: CardColorResponse[] = [];
   @Output() save = new EventEmitter<{
@@ -95,8 +96,8 @@ export class EditProfileInfoComponent implements OnInit {
     this.userRequest.cardColorId = id;
   }
 
-  selectedLocationIcon() : string | undefined {
-    const location = this.allLocations.find(location => location.name === this.userRequest.location);
+  selectedLocationIcon(): string | undefined {
+    const location = this.allLocations.find(location => location.name === this.userRequest.country);
     return location?.iconPath;
   }
 
@@ -176,7 +177,7 @@ export class EditProfileInfoComponent implements OnInit {
 
   }
 
-  saveChanges(){
+  saveChanges() {
     this.save.emit({
       profilePicture: this.profilePicture,
       profileBanner: this.profileBanner,
@@ -190,7 +191,7 @@ export class EditProfileInfoComponent implements OnInit {
     return this.selectedColorId !== null || this.isPreviewBannerInserted || this.isPreviewImageInserted || this.selectedBannerId !== null;
   }
 
-  showPreview(){
+  showPreview() {
     this.preview.emit({
       selectedColorCode: this.selectedColorCode || this.user.cardColor?.colorCode || '',
       previewBanner: this.previewBanner || this.getBanner(this.user),

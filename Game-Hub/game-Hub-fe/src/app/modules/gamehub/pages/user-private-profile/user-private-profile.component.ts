@@ -81,7 +81,7 @@ export class UserPrivateProfileComponent implements OnInit{
   isPreviewBannerInserted = false;
   userHasProfilePicture = true
 
-  allLocations: { name: string; iconPath: string }[] = [];
+  allLocations: { name: string; iconPath: string, countryName: string }[] = [];
   selectedGenres: Set<number> = new Set<number>()
   favoriteGenreIds: number[] = [];
   allStoreFlags: { flagName: string; description: string }[] = [];
@@ -151,7 +151,7 @@ export class UserPrivateProfileComponent implements OnInit{
           firstName: user.firstName,
           lastName: user.lastName,
           username: user.username,
-          location: this.userResponse.location?.name as undefined
+          country: this.userResponse.country?.name as undefined
         }
         this.authenticationRequest = {
           email: user.email!,
@@ -355,7 +355,7 @@ export class UserPrivateProfileComponent implements OnInit{
         this.userRequest.firstName !== this.userResponse.firstName ||
         this.userRequest.lastName !== this.userResponse.lastName ||
         this.userRequest.email !== this.userResponse.email ||
-        this.userRequest.location !== this.userResponse.location?.name || this.userRequest.cardColorId !== this.userResponse.cardColor?.id
+        this.userRequest.country !== this.userResponse.country?.name || this.userRequest.cardColorId !== this.userResponse.cardColor?.id
 
       if (changesExistProfileInfo) {
         this.showSuccess('You have successfully updated profile')
@@ -383,7 +383,7 @@ export class UserPrivateProfileComponent implements OnInit{
     this.isEditProfileModalOpen = false;
     this.isEditBioModalOpen = false;
     this.bioUpdateRequest.bio = this.userResponse.bio;
-    this.userRequest.location = this.userResponse.location?.name as undefined;
+    this.userRequest.country = this.userResponse.country?.name as undefined;
     this.userRequest.username = this.userResponse.username;
     this.userRequest.firstName = this.userResponse.firstName;
     this.userRequest.lastName = this.userResponse.lastName;
@@ -417,7 +417,8 @@ export class UserPrivateProfileComponent implements OnInit{
       next: (country) => {
         this.allLocations = country.map(country => ({
           name: country.name!,
-          iconPath: country.iconPath!
+          iconPath: country.iconPath!,
+          countryName: country.countryName!,
         }));
       }
     })

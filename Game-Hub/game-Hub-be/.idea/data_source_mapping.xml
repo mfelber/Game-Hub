@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourcePerFileMappings">
+    <file url="file://$PROJECT_DIR$/game-Hub/src/main/resources/db/migration/V40__Rename_location_country.sql" value="4ba65a63-f1bc-48d3-94ef-d58b1126de4f" />
+  </component>
+</project>

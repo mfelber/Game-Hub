@@ -27,80 +27,65 @@
     <div class="filter-options">
 
       <div class="dropdown">
-        <label>
-          Genre
-        </label>
+        <label>Genre</label>
+        <button class="dropdown-button" type="button" [hlmDropdownMenuTrigger]="genreMenu" align="start">
+          <span> {{ filters.genre || 'All Genres' }} </span>
 
-        <button id="genreDropdownButton"
-          data-dropdown-toggle="genreDropdown"
-          type="button"
-          class="dropdown-button"
-          ><span>
-          {{ filters.genre || 'All Genres' }}
-        </span>
-        <i class="fa-solid fa-chevron-down text-xs"></i>
-      </button>
+          <i class="fa-solid fa-chevron-down text-xs"></i></button>
 
-      <div id="genreDropdown" class="dropdown-select">
-        <ul>
-          <li>
-            <button type="button"
-              (click)="filters.genre = ''; changeFilter(); closeDropdown()"
-              class="dropdown-option">
+        <ng-template #genreMenu>
+          <hlm-dropdown-menu>
+            <button
+              hlmDropdownMenuItem
+              type="button"
+              class="new-dropdown-option"
+              (click)="filters.genre = ''; changeFilter()"
+            >
               All Genres
             </button>
-          </li>
-          @for (genre of allGenres; track genre) {
-            <li>
+
+            @for (genre of allGenres; track genre) {
               <button
+                hlmDropdownMenuItem
+                class="new-dropdown-option"
                 type="button"
-                (click)="filters.genre = genre; changeFilter(); closeDropdown()"
-                class="dropdown-option">
+                (click)="filters.genre = genre; changeFilter()">
                 {{ genre }}
               </button>
-            </li>
-          }
-        </ul>
+            }
+          </hlm-dropdown-menu>
+        </ng-template>
       </div>
 
-    </div>
+      <div class="dropdown">
+        <label>Operation System</label>
+        <button class="dropdown-button" type="button" [hlmDropdownMenuTrigger]="osMenu" align="start">
+          <span> {{ filters.operationSystem || 'All Systems' }} </span>
 
-    <div class="dropdown">
-      <label>
-        Operation System
-      </label>
-      <button id="operationSystemDropdownButton"
-        data-dropdown-toggle="operationSystemDropdown"
-        type="button"
-        class="dropdown-button"
-        ><span>
-        {{ filters.operationSystem || 'All Systems' }}
-      </span>
-      <i class="fa-solid fa-chevron-down text-xs"></i>
-    </button>
+          <i class="fa-solid fa-chevron-down text-xs"></i></button>
 
-    <div id="operationSystemDropdown" class="dropdown-select">
-      <ul>
-        <li>
-          <button type="button"
-            (click)="filters.operationSystem = ''; changeFilter(); closeDropdown()"
-            class="dropdown-option">
-            All Systems
-          </button>
-        </li>
-        @for (operationSystem of allOperationSystems; track operationSystem) {
-          <li>
+        <ng-template #osMenu>
+          <hlm-dropdown-menu>
             <button
+              hlmDropdownMenuItem
               type="button"
-              (click)="filters.operationSystem = operationSystem; changeFilter(); closeDropdown()"
-              class="dropdown-option">
-              {{ operationSystem }}
+              class="new-dropdown-option"
+              (click)="filters.operationSystem = ''; changeFilter()">
+              All Systems
             </button>
-          </li>
-        }
-      </ul>
-    </div>
-  </div>
+
+            @for (os of allOperationSystems; track os) {
+              <button
+                hlmDropdownMenuItem
+                class="new-dropdown-option"
+                type="button"
+                (click)="filters.operationSystem = os; changeFilter()">
+                {{ os }}
+              </button>
+            }
+          </hlm-dropdown-menu>
+        </ng-template>
+      </div>
 
 
   <div class="checkbox">
@@ -127,30 +112,30 @@
 
     <div class="dropdown sort-right sort-dropdown">
       <label>Sort by</label>
-      <button id="sortDropdownButton"
-        data-dropdown-toggle="sortDropdown"
-        type="button"
+      <button
         class="dropdown-button"
-        ><span>
-        {{ selectedSortLabel }}
-      </span>
-      <i class="fa-solid fa-chevron-down text-xs"></i>
-    </button>
+        type="button"
+        [hlmDropdownMenuTrigger]="sortMenu"
+        align="start"
+      >
+        <span>{{ selectedSortLabel }}</span>
+        <i class="fa-solid fa-chevron-down text-xs"></i>
+      </button>
 
-    <div id="sortDropdown" class="dropdown-select">
-      <ul>
-        @for (sortOption of sortOptions; track sortOption) {
-          <li>
+      <ng-template #sortMenu>
+        <hlm-dropdown-menu class="sort-dropdown">
+          @for (sortOption of sortOptions; track sortOption) {
             <button
+              hlmDropdownMenuItem
               type="button"
-              (click)="sortBy = sortOption.value; changeSort(); closeDropdown()"
-              class="dropdown-option">
+              (click)="sortBy = sortOption.value; changeSort()"
+            >
               {{ sortOption.label }}
             </button>
-          </li>
-        }
-      </ul>
-    </div>
+          }
+        </hlm-dropdown-menu>
+      </ng-template>
+
   </div>
 
 

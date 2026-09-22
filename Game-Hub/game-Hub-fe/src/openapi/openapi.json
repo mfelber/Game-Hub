@@ -2980,7 +2980,7 @@
           "bio": {
             "type": "string"
           },
-          "location": {
+          "country": {
             "type": "string",
             "enum": [
               "SK",
@@ -2988,7 +2988,7 @@
               "PL",
               "HU",
               "US",
-              "UNKNOWN"
+              "NOT_SPECIFIED"
             ]
           },
           "cardColorId": {
@@ -3605,13 +3605,13 @@
               "$ref": "#/components/schemas/SubtitleResponse"
             }
           },
-          "inLibrary": {
+          "inCart": {
             "type": "boolean"
           },
           "inWishList": {
             "type": "boolean"
           },
-          "inCart": {
+          "inLibrary": {
             "type": "boolean"
           }
         }
@@ -3749,6 +3749,9 @@
           "name": {
             "type": "string"
           },
+          "countryName": {
+            "type": "string"
+          },
           "iconPath": {
             "type": "string"
           }
@@ -3836,7 +3839,7 @@
               "DELETED"
             ]
           },
-          "location": {
+          "country": {
             "$ref": "#/components/schemas/CountryResponse"
           },
           "status": {
@@ -3996,7 +3999,7 @@
             "type": "integer",
             "format": "int64"
           },
-          "location": {
+          "country": {
             "$ref": "#/components/schemas/CountryResponse"
           },
           "status": {
@@ -4173,7 +4176,7 @@
           "username": {
             "type": "string"
           },
-          "location": {
+          "country": {
             "$ref": "#/components/schemas/CountryResponse"
           },
           "joinedDate": {
@@ -4231,7 +4234,7 @@
           "username": {
             "type": "string"
           },
-          "location": {
+          "country": {
             "$ref": "#/components/schemas/CountryResponse"
           },
           "status": {
@@ -4361,7 +4364,7 @@
             "type": "integer",
             "format": "int64"
           },
-          "location": {
+          "country": {
             "$ref": "#/components/schemas/CountryResponse"
           },
           "accountStatus": {

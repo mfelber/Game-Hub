@@ -74,7 +74,9 @@
           }">• {{
               friendRequest.status === 'Playing' ? 'Online' : friendRequest.status
             }} </span>
-            <span>• {{ friendRequest.location?.name }}</span>
+            @if (friendRequest.country?.name !== 'NOT_SPECIFIED') {
+              <span>• {{ friendRequest.country?.countryName }}</span>
+            }
             <span [ngStyle]="{'color': friendRequest.level?.levelColor}"> • Lvl.{{ friendRequest.level?.level }} </span>
           </div>
         </div>
