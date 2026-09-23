@@ -27,6 +27,33 @@
       ],
       "@spartan/checkbox": [
         "./libs/ui/checkbox/src/index.ts"
+      ],
+      "@spartan/dialog": [
+        "./libs/ui/dialog/src/index.ts"
+      ],
+      "@spartan/textarea": [
+        "./libs/ui/textarea/src/index.ts"
+      ],
+      "@spartan/tabs": [
+        "./libs/ui/tabs/src/index.ts"
+      ],
+      "@spartan/label": [
+        "./libs/ui/label/src/index.ts"
+      ],
+      "@spartan/input": [
+        "./libs/ui/input/src/index.ts"
+      ],
+      "@spartan/card": [
+        "./libs/ui/card/src/index.ts"
+      ],
+      "@spartan/spinner": [
+        "./libs/ui/spinner/src/index.ts"
+      ],
+      "@spartan/field": [
+        "./libs/ui/field/src/index.ts"
+      ],
+      "@spartan/separator": [
+        "./libs/ui/separator/src/index.ts"
       ]
     }
   },

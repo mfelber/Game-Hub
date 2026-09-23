@@ -2,26 +2,19 @@
 
   <!-- CART HEADER -->
   <section>
-    <div class="cart-header">
-      <div class="top">
-        <div>
-          <h1>Shopping Cart</h1>
-          <p>{{cartResponse.games?.length}} games in your cart</p>
-        </div>
-        <div>
-          <app-user-actions/>
-        </div>
+    <div class="header">
+      <div>
+        <h1>Shopping Cart</h1>
       </div>
-
+      <app-user-actions/>
     </div>
-
   </section>
 
   <!-- EMPTY CART -->
   @if (cartResponse.games?.length === 0) {
     <section>
       <app-empty-state
-        icon = 'fa-solid fa-cart-shopping'
+        icon='fa-solid fa-cart-shopping'
         title="Your carst is empty"
         message="Looks like you haven't added any games yet.">
       </app-empty-state>
@@ -29,77 +22,190 @@
     </section>
   }
 
-  <!-- CART -->
-  @if (isLoading) {
-    <app-loading/>
-  }
+  <section class=" relative w-full mt-5 min-h-[calc(100vh_-_250px)]">
+    <!-- CART -->
 
-  <section class="cart">
+    <!--  check out steps  -->
 
-    <div class="cart-content">
-      <div class="cart-items">
+    @if (!isLoading) {
+      <div class="mb-6 flex items-center justify-center">
+        <div class="flex w-full max-w-2xl items-center">
+
+          <!--    CART    -->
+          <div class="flex items-center gap-2 text-white">
+            <div class="flex h-8 w-8 items-center justify-center rounded-full bg-[#155dfc] text-sm font-semibold">
+              1
+            </div>
+            <span class="text-sm font-medium">Cart</span>
+          </div>
+
+          <div class="mx-4 h-px flex-1 bg-[#343c4e]"></div>
+
+          <div class="flex items-center gap-2 text-white">
+            <div class="flex h-8 w-8 items-center justify-center rounded-full bg-[#155dfc] text-sm font-semibold">
+              2
+            </div>
+            <span class="text-sm font-medium">Checkout</span>
+          </div>
+
+          <div class="mx-4 h-px flex-1 bg-[#343c4e]"></div>
+
+          <div class="flex items-center gap-2 text-white">
+            <div class="flex h-8 w-8 items-center justify-center rounded-full bg-[#155dfc] text-sm font-semibold">
+              3
+            </div>
+            <span class="text-sm font-medium">Order Confirmation</span>
+          </div>
+        </div>
+      </div>
+    }
+
+
+    @if (isLoading) {
+      <app-loading/>
+    }
+
+    <!--  MAIN LAYOUT  -->
+    <div class="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_360px]">
+      <!--   LEFT : cart items   -->
+      <div class="flex min-w-0 flex-col gap-3">
         @for (cartItem of cartResponse.games; track cartItem) {
-          <div class="cart-item" (click)="goToGame(cartItem.gameId)">
-            <div class="game-cover">
-              <img [src]="getGameImageCover(cartItem)" alt="{{cartItem.title}}}">
+          <div
+            class="relative flex min-h-[120px] w-full cursor-pointer items-center rounded-xl border border-[#242a38]
+            bg-[#151923]  p-[14px] transition duration-200 hover:border-[#343c4e]"
+            (click)="goToGame(cartItem.gameId)">
+            <!--    Cover      -->
+            <div class="h-[90px] w-[150px] shrink-0 overflow-hidden rounded-lg bg-[#0f121a]">
+              <img class="block h-full w-full object-cover" [src]="getGameImageCover(cartItem)"
+                   alt="{{cartItem.title}}">
             </div>
-            <div class="game-info">
-              <h3>{{cartItem.title}}</h3>
-              <span class="publisher">{{cartItem.publisher}}</span>
+            <!--     Game Info       -->
+            <div class="ml-[18px] min-w-0 flex-1">
+              <h3 class="mb-1.5 truncate text-[17px] font-semibold text-white">{{ cartItem.title }}</h3>
+              <span class="text-sm text-[#858c9e]">{{ cartItem.publisher }}</span>
               @if (cartItem.hasDiscount) {
-                <span class="discount-badge">-{{cartItem.discountPercent}}%</span>
+                <span
+                  class="mt-2.5 block w-fit rounded-[5px] bg-[#16a34a] px-[7px] py-[3px] text-[11px] font-semibold text-white">-{{ cartItem.discountPercent }}
+                  %</span>
               }
             </div>
-            <div class="game-price">
+            <!--      Price      -->
+            <div class="mr-[45px] flex min-w-[100px] flex-col items-end">
               @if (cartItem.hasDiscount) {
-                <span class="old-price">{{cartItem.price}} €</span>
+                <span class="text-xs text-[#707789] line-through">{{ cartItem.price }} €</span>
+                <span class="mt-[3px] text-base font-semibold text-white"
+                      [ngClass]="{'free-price' : cartItem.discountPercent === 100}">
+                {{
+                    cartItem.discountPercent === 100 ? 'Free' : cartItem.discountPrice + " €"
+                  }}
+              </span>
               }
-              <span class="current-price">            {{
-                cartItem.hasDiscount
-                ? cartItem.discountPrice
-                : cartItem.price
-              }} €</span>
+
+              @if (!cartItem.hasDiscount) {
+                <span class="mt-[3px] text-base font-semibold text-white"
+                      [ngClass]="{'free-price' : cartItem.price === 0}">
+                {{
+                    cartItem.price === 0 ? 'Free' : cartItem.price + " €"
+                  }}
+              </span>
+              }
+
+              <div class="dropdown-small mt-2">
+                <button class="dropdown-button-small" type="button" [hlmDropdownMenuTrigger]="menu" align="start"
+                        (click)="$event.stopPropagation()">
+                  <span> {{ isGiftOpen === cartItem.gameId ? 'This is a gift' : 'For my account' }} </span>
+
+                  <i class="fa-solid fa-chevron-down text-xs"></i></button>
+
+                <ng-template #menu>
+                  <hlm-dropdown-menu>
+                    <button hlmDropdownMenuItem (click)="isGiftOpen = null">For my account</button>
+                    <button hlmDropdownMenuItem (click)="isGiftOpen = cartItem.gameId!">This is a gift</button>
+                  </hlm-dropdown-menu>
+                </ng-template>
+              </div>
+
+              @if (isGiftOpen === cartItem.gameId) {
+                <div>
+                  <textarea placeholder="Enter msg for tour friend"></textarea>
+                </div>
+              }
+
             </div>
-            <button class="remove-button" (click)="removeFromCart(cartItem.gameId); $event.stopPropagation()">
-              <i class="fa-solid fa-trash"></i>
+
+            <!--     Remove       -->
+            <button
+              class="absolute right-[14px] top-1/2 flex h-[34px] w-[34px] -translate-y-1/2 cursor-pointer items-center justify-center rounded-[7px]
+              border-0 bg-transparent text-gray-400 transition duration-200 hover:text-[#ef4444]"
+              (click)="removeFromCart(cartItem.gameId); $event.stopPropagation()">
+              <i class="fa-solid fa-trash text-sm"></i>
             </button>
           </div>
         }
       </div>
 
+      <!--   ORDER SUMMARY   -->
       @if (cartResponse.games?.length) {
-        <section>
-          <div class="cart-summary">
-            <div class="summary-header">
-              <h2>Order Summary</h2>
-            </div>
-            <div class="summary-row">
-              <span>Items</span>
-              <span>{{ cartResponse.games?.length }}</span>
-            </div>
-            <div class="summary-divider"></div>
-            <div class="total-row">
-              <span>Total</span>
-              <strong>{{ total | number:'1.2-2' }} €</strong>
-            </div>
-            <button class="checkout-button" (click)="checkout()">
-              Proceed to Checkout
-              <i class="fa-solid fa-arrow-right"></i>
-            </button>
-            <button
-              class="continue-button"
-              routerLink="/gamehub/store"
-              >
-              Continue Shopping
-            </button>
+        <aside class="h-fit rounded-xl border border-[#242a38] bg-[#151923] p-[22px]">
+          <div class="mb-5">
+            <h2 class="m-0 text-lg font-semibold text-white">
+              Order Summary
+            </h2>
           </div>
-        </section>
+          <div class="flex items-center justify-between text-sm text-[#9299aa]">
+            <span>Items</span>
+            <span class="text-white">{{ cartResponse.games?.length }}</span>
+          </div>
+
+          <!--    PROMO CODE      -->
+          <div class="mt-5">
+
+            <div class="flex gap-2">
+
+              <input
+                id="promo-code"
+                type="text"
+                placeholder="Discount Code"
+                class="min-w-0 flex-1 rounded-lg border border-[#2b3140]
+                     bg-[#10131a] px-3 py-2.5 text-sm text-white
+                     outline-none transition
+                     placeholder:text-[#707789]
+                     focus:border-[#4da3ff]"
+              />
+
+              <button
+                class="shrink-0 rounded-lg border border-[#2b3140]
+                     bg-transparent px-3 text-sm font-medium
+                     text-[#aeb4c3] transition duration-200
+                     hover:bg-[#1c212d] hover:text-white cursor-pointer"
+              >
+                Apply
+              </button>
+            </div>
+          </div>
+
+          <div class="my-[18px] h-px w-full bg-[#292f3d]"></div>
+
+          <div class="mt-5 flex items-center justify-between">
+            <span class="text-[14px] text-[#a3a9b8]">Total</span>
+            <strong class="text-[22px] font-bold text-white">{{ total | number:'1.2-2' }} €</strong>
+          </div>
+
+          <button class="big-btn-w-full font-semibold text-sm rounded-lg save">
+            Proceed to Checkout <i class="fa-solid fa-arrow-right text-[13px]"></i>
+          </button>
+
+          <button
+            class="mt-2.5 w-full cursor-pointer bg-transparent px-[11px]
+                 py-[11px] text-[13px] text-[#aeb4c3]
+                 transition duration-200 hover:text-white"
+            routerLink="/gamehub/store">
+            Continue Shopping
+          </button>
+
+        </aside>
       }
 
     </div>
-
   </section>
-
-
-
 </main>

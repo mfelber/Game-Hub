@@ -2,22 +2,45 @@ import {Component, OnInit} from '@angular/core';
 import {CartControllerService} from '../../../../services/services/cart-controller.service';
 import {CartResponse} from '../../../../services/models/cart-response';
 import {EmptyStateComponent} from '../../components/empty-state/empty-state.component';
-import { DecimalPipe } from '@angular/common';
+import {DecimalPipe, NgClass} from '@angular/common';
 import {Router, RouterLink} from '@angular/router';
 import {GameResponse} from '../../../../services/models/game-response';
 import {StoreControllerService} from '../../../../services/services/store-controller.service';
 import {UserActionsComponent} from '../../components/user-actions/user-actions.component';
 import {LoadingComponent} from '../../components/loading/loading.component';
+import {HlmInput} from '@spartan/input';
+import {
+  HlmField,
+  HlmFieldLabel,
+  HlmFieldDescription,
+} from '@spartan/field';
+import {
+  HlmDropdownMenu,
+  HlmDropdownMenuGroup, HlmDropdownMenuItem,
+  HlmDropdownMenuLabel, HlmDropdownMenuSeparator,
+  HlmDropdownMenuTrigger
+} from '@spartan/dropdown-menu';
 
 @Component({
   selector: 'app-cart',
   imports: [
+    NgClass,
     EmptyStateComponent,
     RouterLink,
     DecimalPipe,
     UserActionsComponent,
-    LoadingComponent
-],
+    LoadingComponent,
+    HlmInput,
+    HlmField,
+    HlmFieldLabel,
+    HlmFieldDescription,
+    HlmDropdownMenuTrigger,
+    HlmDropdownMenu,
+    HlmDropdownMenuGroup,
+    HlmDropdownMenuLabel,
+    HlmDropdownMenuSeparator,
+    HlmDropdownMenuItem,
+  ],
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.scss',
 })
@@ -26,6 +49,7 @@ export class CartComponent implements OnInit {
   cartResponse: CartResponse = {};
 
   isLoading = false;
+  isGiftOpen: number | null = null;
 
   constructor(
     private cartService: CartControllerService,

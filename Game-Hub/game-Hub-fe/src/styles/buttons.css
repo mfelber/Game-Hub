@@ -19,6 +19,13 @@
     transition-colors;
   }
 
+  .tag-remove {
+    @apply absolute -top-[6px] -right-[6px] w-[22px] h-[22px]
+    border-0 rounded-full bg-[#dc2626] text-white cursor-pointer
+    flex items-center justify-center text-[0.7rem]
+    transition duration-200 hover:bg-[#b91c1c];
+  }
+
   .close-btn {
     @apply border-0 bg-transparent text-[#9ca3af] text-[28px] cursor-pointer
     transition duration-200 ease-in-out

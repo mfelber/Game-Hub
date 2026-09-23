@@ -9,14 +9,45 @@ import {SearchBar} from '../search-bar/search-bar';
 import {UserProfileControllerService} from '../../../../services/services/user-profile-controller.service';
 import {UserLibraryResponse} from '../../../../services/models/user-library-response';
 import {GameResponse} from '../../../../services/models/game-response';
+import {
+  HlmDialog, HlmDialogClose,
+  HlmDialogContent, HlmDialogDescription,
+  HlmDialogFooter,
+  HlmDialogHeader, HlmDialogPortal,
+  HlmDialogTitle,
+  HlmDialogTrigger
+} from '@spartan/dialog';
+import {HlmTextarea} from '@spartan/textarea';
+import {HlmTabs, HlmTabsContent, HlmTabsList, HlmTabsTrigger} from '@spartan/tabs';
+import {HlmButton} from '@spartan/button';
+import {HlmLabel} from '@spartan/label';
+import {HlmInput} from '@spartan/input';
+import {HlmCard, HlmCardContent, HlmCardDescription, HlmCardFooter, HlmCardHeader, HlmCardTitle} from '@spartan/card';
 
 @Component({
   selector: 'app-edit-profile-info',
   imports: [
     FormsModule,
+    // HlmDialogHeader,
+    // HlmDialogFooter,
+    // HlmDialogTitle,
+    // HlmDialogClose,
+    // HlmTabs,
+    // HlmTabsList,
+    // HlmTabsTrigger,
+    // HlmButton,
+    // HlmTabsContent,
+    // HlmLabel,
+    // HlmInput,
+    // HlmCard,
+    // HlmCardFooter,
+    // HlmCardHeader,
+    // HlmCardTitle,
+    // HlmCardDescription,
+    // HlmCardContent,
+    SearchBar,
     NgStyle,
     NgClass,
-    SearchBar
   ],
   templateUrl: './edit-profile-info.component.html',
   styleUrl: './edit-profile-info.component.scss',

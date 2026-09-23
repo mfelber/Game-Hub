@@ -29,7 +29,7 @@ export class HlmDropdownMenu {
 	constructor() {
 		classes(
 			() =>
-				'w-45 max-h-55 overflow-y-auto bg-[#1b2230] rounded-[10px]' +
+				'w-45 mt-1 max-h-55 overflow-y-auto bg-[#1b2230] rounded-[10px]' +
         '    shadow-[0_8px_20px_rgba(0,0,0,0.3)] p-1.5',
 		);
 

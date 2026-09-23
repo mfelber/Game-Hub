@@ -13,6 +13,16 @@
     cursor-pointer py-3 pl-4 pr-4 gap-3 text-sm hover:bg-[#26334a];
   }
 
+
+  .dropdown-small {
+    @apply flex flex-col gap-2 text-sm max-sm:w-full;
+  }
+
+  .dropdown-button-small {
+    @apply w-fit items-center justify-between bg-[#1b2230] text-[#ddd] rounded-[6px]
+    cursor-pointer py-1 pl-2 pr-2 text-sm hover:bg-[#26334a];
+  }
+
   .sort-dropdown {
     @apply !w-55;
 

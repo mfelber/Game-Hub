@@ -24,6 +24,17 @@ import {RecentGamesResponse} from '../../../../services/models/recent-games-resp
 import {GameResponseShort} from '../../../../services/models/game-response-short';
 import {LoadingComponent} from '../../components/loading/loading.component';
 import {forkJoin} from 'rxjs';
+import {
+  HlmDialog, HlmDialogClose,
+  HlmDialogContent, HlmDialogDescription,
+  HlmDialogFooter,
+  HlmDialogHeader,
+  HlmDialogTitle,
+  HlmDialogTrigger,
+  HlmDialogPortal
+} from '@spartan/dialog';
+import {HlmButton} from '@spartan/button';
+import {HlmTextarea} from '@spartan/textarea';
 
 @Component({
   selector: 'app-user-profile',
@@ -35,8 +46,18 @@ import {forkJoin} from 'rxjs';
     EditProfileInfoComponent,
     UserActionsComponent,
     DatePipe,
-    LoadingComponent
-],
+    LoadingComponent,
+    HlmDialog,
+    HlmDialogContent,
+    HlmDialogHeader,
+    HlmDialogFooter,
+    HlmDialogTrigger,
+    HlmDialogTitle,
+    HlmDialogDescription,
+    HlmDialogClose,
+    HlmDialogPortal,
+    HlmTextarea
+  ],
   templateUrl: './user-private-profile.component.html',
   styleUrl: './user-private-profile.component.scss'
 })
@@ -68,8 +89,6 @@ export class UserPrivateProfileComponent implements OnInit{
   profileBanner: File | null = null;
   selectedBannerId: number | null = null;
 
-  isEditBioModalOpen = false;
-  isEditGenresModalOpen = false;
   isEditProfileModalOpen = false;
   isProfileModalOpen = false;
   isLoading = false;
@@ -233,9 +252,10 @@ export class UserPrivateProfileComponent implements OnInit{
     });
   }
 
-  saveBio() {
+  saveBio(ctx: any) {
     if (this.bioUpdateRequest.bio === this.userResponse.bio) {
-      this.isEditBioModalOpen = false
+      ctx.close();
+      return;
     } else {
       this.userService.updateBio({
         body: this.bioUpdateRequest
@@ -243,7 +263,7 @@ export class UserPrivateProfileComponent implements OnInit{
           next: () => {
             this.showSuccess('Bio updated successfully!')
             this.getUserBio()
-            this.isEditBioModalOpen = false
+            ctx.close();
           },
           error: (err) => {
             console.log(err)
@@ -261,7 +281,7 @@ export class UserPrivateProfileComponent implements OnInit{
     })
   }
 
-  saveFavoriteGenres() {
+  saveFavoriteGenres(ctx: any) {
     const allGenres = [...new Set([...this.favoriteGenreIds, ...this.selectedGenres])];
 
     this.userService.updateFavoriteGenres({
@@ -269,8 +289,8 @@ export class UserPrivateProfileComponent implements OnInit{
     }).subscribe({
       next: () => {
         this.showSuccess('Genres saved successfully!');
-        this.isEditGenresModalOpen = false
-        this.loadUserPrivateProfile()
+        this.loadUserPrivateProfile();
+        ctx.close();
       },
       error: (err) => console.error(err)
     });
@@ -304,7 +324,6 @@ export class UserPrivateProfileComponent implements OnInit{
   cancelFavoriteGenres() {
     this.selectedGenres.clear()
     this.favoriteGenreIds = this.userResponse.favoriteGenres?.map(g => g.id!) || [];
-    this.isEditGenresModalOpen = false
   }
 
   removeFavoriteGenre(id: any) {
@@ -381,7 +400,6 @@ export class UserPrivateProfileComponent implements OnInit{
     this.userRequest.cardColorId = this.userResponse.cardColor?.id;
     this.isProfileModalOpen = false;
     this.isEditProfileModalOpen = false;
-    this.isEditBioModalOpen = false;
     this.bioUpdateRequest.bio = this.userResponse.bio;
     this.userRequest.country = this.userResponse.country?.name as undefined;
     this.userRequest.username = this.userResponse.username;
