@@ -153,7 +153,7 @@
 }
 
 <!-- GAMES -->
-<section class="games-cards">
+<section class="games-cards pb-5">
 
   @if (isLoading) {
     <app-loading/>
@@ -234,13 +234,16 @@
   </div>
 }
 
+  @if (filteredGames.length && wishlistPageResponse.totalPages! > 1) {
+    <app-pagination
+      [currentPage]="page"
+      [totalPages]="wishlistPageResponse.totalPages!"
+      (pageChange)="changePage($event)">
+    </app-pagination>
+  }
+
 </section>
 
-@if (filteredGames.length && wishlistPageResponse.totalPages! > 1) {
-  <app-pagination
-    [currentPage]="page"
-    [totalPages]="wishlistPageResponse.totalPages!"
-    (pageChange)="changePage($event)">
-  </app-pagination>
-}
+
+
 </main>

@@ -162,11 +162,13 @@
   }
 
   @if (gamePageResponse.totalPages! > 1) {
+    <section class="pb-5">
     <app-pagination
       [currentPage]="page"
       [totalPages]="gamePageResponse.totalPages!"
       (pageChange)="changePage($event)">
     </app-pagination>
+    </section>
   }
 
 </main>

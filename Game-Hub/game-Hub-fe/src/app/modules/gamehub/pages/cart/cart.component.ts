@@ -8,16 +8,8 @@ import {GameResponse} from '../../../../services/models/game-response';
 import {StoreControllerService} from '../../../../services/services/store-controller.service';
 import {UserActionsComponent} from '../../components/user-actions/user-actions.component';
 import {LoadingComponent} from '../../components/loading/loading.component';
-import {HlmInput} from '@spartan/input';
 import {
-  HlmField,
-  HlmFieldLabel,
-  HlmFieldDescription,
-} from '@spartan/field';
-import {
-  HlmDropdownMenu,
-  HlmDropdownMenuGroup, HlmDropdownMenuItem,
-  HlmDropdownMenuLabel, HlmDropdownMenuSeparator,
+  HlmDropdownMenu, HlmDropdownMenuItem,
   HlmDropdownMenuTrigger
 } from '@spartan/dropdown-menu';
 
@@ -30,15 +22,8 @@ import {
     DecimalPipe,
     UserActionsComponent,
     LoadingComponent,
-    HlmInput,
-    HlmField,
-    HlmFieldLabel,
-    HlmFieldDescription,
     HlmDropdownMenuTrigger,
     HlmDropdownMenu,
-    HlmDropdownMenuGroup,
-    HlmDropdownMenuLabel,
-    HlmDropdownMenuSeparator,
     HlmDropdownMenuItem,
   ],
   templateUrl: './cart.component.html',
@@ -93,7 +78,7 @@ export class CartComponent implements OnInit {
 
   }
 
-  goToGame(gameId:any) {
+  goToGame(gameId: any) {
     this.storeService.getGameById({gameId}).subscribe({
       next: (game) => {
         this.router.navigate(['/gamehub/store/game/', gameId]);

@@ -60,9 +60,9 @@
                 <div class="username-row">
                   <h1>{{ userResponse.username }}</h1>
                   <span class="status" [ngClass]="{
-            'text-green-500': userResponse.status === 'Online' || userResponse.status === 'Playing',
-            'text-gray-400': userResponse.status === 'Offline',
-            'text-yellow-400': userResponse.status === 'Away'
+            'online': userResponse.status === 'Online' || userResponse.status === 'Playing',
+            'offline': userResponse.status === 'Offline',
+            'away': userResponse.status === 'Away'
             }">
               <span class="status-dot" [ngClass]="{
             'online': userResponse.status === 'Online' || userResponse.status === 'Playing',

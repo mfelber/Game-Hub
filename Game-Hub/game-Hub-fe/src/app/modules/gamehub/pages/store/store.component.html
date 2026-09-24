@@ -24,7 +24,10 @@
 
       <div class="dropdown">
         <label>Genre</label>
-        <button class="dropdown-button" type="button" [hlmDropdownMenuTrigger]="genreMenu" align="start">
+        <button
+          class="dropdown-button"
+          type="button" [hlmDropdownMenuTrigger]="genreMenu"
+          align="start">
           <span> {{ filters.genre || 'All Genres' }} </span>
 
           <i class="fa-solid fa-chevron-down text-xs"></i></button>
@@ -238,6 +241,8 @@
     }
   </section>
 
+  <section class="pb-5">
+
   @if (filteredGames.length && gamePageResponse.totalPages! > 1) {
     <app-pagination
       [currentPage]="page"
@@ -245,5 +250,6 @@
       (pageChange)="changePage($event)">
     </app-pagination>
   }
+  </section>
 
 </main>

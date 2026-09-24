@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import { NgClass, NgOptimizedImage } from '@angular/common';
 import {CartControllerService, StoreControllerService} from '../../../../services/services';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -18,6 +18,7 @@ import {
   HlmDropdownMenuTrigger
 } from '@spartan/dropdown-menu';
 import {HlmCheckbox} from '@spartan/checkbox';
+import {Overlay} from '@angular/cdk/overlay';
 @Component({
   selector: 'app-store',
   imports: [
@@ -217,6 +218,5 @@ export class StoreComponent implements OnInit {
       option => option.value === this.filters.maxPrice
     )?.label ?? 'Any price';
   }
-
 }
 

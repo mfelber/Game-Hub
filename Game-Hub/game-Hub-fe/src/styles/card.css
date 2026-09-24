@@ -77,7 +77,7 @@
   }
 
   .user-card {
-    @apply bg-[#151b27] p-5.5 rounded-[18px] flex justify-between items-center
+    @apply bg-[#151b27] p-4 rounded-[18px] flex justify-between items-center
     transition duration-250 hover:-translate-y-2 hover:cursor-pointer;
 
     & .flag {

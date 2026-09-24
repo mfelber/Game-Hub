@@ -122,7 +122,7 @@
       </app-empty-state>
     }
 
-    <section class="users-cards">
+    <section class="users-cards pb-5">
 
       @if (isLoading) {
         <app-loading/>
@@ -203,15 +203,17 @@
               </div>
             </div>
           }
+
+      @if (filteredUsers.length && userCommunityResponse.totalPages! > 1) {
+        <app-pagination
+          [currentPage]="page"
+          [totalPages]="userCommunityResponse.totalPages!"
+          (pageChange)="changePage($event)">
+        </app-pagination>
+      }
         </section>
 
-        @if (filteredUsers.length && userCommunityResponse.totalPages! > 1) {
-          <app-pagination
-            [currentPage]="page"
-            [totalPages]="userCommunityResponse.totalPages!"
-            (pageChange)="changePage($event)">
-          </app-pagination>
-        }
+
 
 
       </main>

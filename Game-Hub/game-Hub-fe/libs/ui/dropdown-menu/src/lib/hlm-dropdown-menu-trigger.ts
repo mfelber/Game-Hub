@@ -1,5 +1,5 @@
 import { CdkMenuTrigger } from '@angular/cdk/menu';
-import { computed, Directive, effect, forwardRef, inject, input } from '@angular/core';
+import {computed, Directive, DOCUMENT, effect, forwardRef, inject, input} from '@angular/core';
 import { createMenuPosition, MENU_SIDE, type MenuAlign, type MenuSide } from '@spartan-ng/brain/core';
 import { injectHlmDropdownMenuConfig } from './hlm-dropdown-menu-token';
 
@@ -23,7 +23,8 @@ export class HlmDropdownMenuTrigger {
 	public readonly side = input<MenuSide>(this._config.side);
 
 	private readonly _menuPosition = computed(() => createMenuPosition(this.align(), this.side()));
-
+  private _isOpen = false;
+  private readonly _document = inject(DOCUMENT);
 	constructor() {
 		// CDK sets transform-origin on the menu content from the resolved position; the content reads it to
 		// animate from the anchored corner and to derive its data-side. Cast tolerates @angular/cdk < 21.2
@@ -33,5 +34,28 @@ export class HlmDropdownMenuTrigger {
 		effect(() => {
 			this._cdkTrigger.menuPosition = this._menuPosition();
 		});
+
+    this._cdkTrigger.opened.subscribe(() => {
+      this._isOpen = true;
+    });
+
+    this._cdkTrigger.closed.subscribe(() => {
+      this._isOpen = false;
+    });
+
+    this._document.addEventListener('wheel', (event) => {
+      if (!this._isOpen) {
+        return;
+      }
+
+      const target = event.target as HTMLElement;
+
+      if (target.closest('[data-slot="dropdown-menu"]')) {
+        return;
+      }
+
+      this._cdkTrigger.close();
+    });
+
 	}
 }

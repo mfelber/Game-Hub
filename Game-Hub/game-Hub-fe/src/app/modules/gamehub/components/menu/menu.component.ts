@@ -7,6 +7,17 @@ import {UserPrivateResponse} from '../../../../services/models/user-private-resp
 import {FormsModule} from '@angular/forms';
 import {StatusResponse} from '../../../../services/models/status-response';
 import {RefreshService} from '../../../../services/fn/refresh-service/refresh-service';
+import {
+  HlmSidebar,
+  HlmSidebarContent,
+  HlmSidebarFooter,
+  HlmSidebarHeader,
+  HlmSidebarMenu,
+  HlmSidebarMenuButton,
+  HlmSidebarMenuItem,
+  HlmSidebarTrigger, HlmSidebarWrapper,
+} from '@spartan/sidebar';
+import {HlmDropdownMenu, HlmDropdownMenuItem, HlmDropdownMenuTrigger} from '@spartan/dropdown-menu';
 
 @Component({
   selector: 'app-menu',
@@ -16,8 +27,20 @@ import {RefreshService} from '../../../../services/fn/refresh-service/refresh-se
     FormsModule,
     RouterLinkActive,
     NgClass,
-    NgStyle
-],
+    NgStyle,
+    HlmSidebar,
+    HlmSidebarContent,
+    HlmSidebarFooter,
+    HlmSidebarHeader,
+    HlmSidebarMenu,
+    HlmSidebarMenuButton,
+    HlmSidebarMenuItem,
+    HlmSidebarTrigger,
+    HlmSidebarWrapper,
+    HlmDropdownMenuTrigger,
+    HlmDropdownMenu,
+    HlmDropdownMenuItem,
+  ],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.scss'
 })
@@ -32,7 +55,6 @@ export class MenuComponent implements OnInit {
     });
   }
 
-  statusMenuOpen = false;
   userResponse: UserPrivateResponse = {};
   statusResponse: StatusResponse = {};
   statuses = ['Online', 'Offline', 'Away'];
@@ -99,7 +121,6 @@ export class MenuComponent implements OnInit {
     this.userService.setStatusToOnline().subscribe({
       next: () => {
         this.getStatus();
-
       }
     })
   }
@@ -108,7 +129,6 @@ export class MenuComponent implements OnInit {
     this.userService.setStatusToOffline().subscribe({
       next: () => {
         this.getStatus();
-
       }
     })
   }
@@ -137,13 +157,7 @@ export class MenuComponent implements OnInit {
 
   }
 
-  toggleStatusMenu(event: MouseEvent) {
-    event.stopPropagation();
-    this.statusMenuOpen = !this.statusMenuOpen;
-  }
-
   changeStatus(status: string) {
-    this.statusMenuOpen = false;
     this.onStatusChange(status)
   }
 
