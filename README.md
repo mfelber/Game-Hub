@@ -1,4 +1,4 @@
-# GameHub <img width="1080" height="976" alt="gamehub-logo" src="https://github.com/user-attachments/assets/0a480935-2837-4153-9ecf-85e4de111fcc" />
+# GameHub
 
 
 GameHub is a full-stack web application designed as a central hub for discovering, managing, and building a personal game collection.
