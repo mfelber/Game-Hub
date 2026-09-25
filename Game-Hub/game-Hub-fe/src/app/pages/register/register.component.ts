@@ -5,6 +5,19 @@ import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AuthenticationService} from '../../services/services/authentication.service';
 import {Router} from '@angular/router';
 import {RegistrationRequest} from '../../services/models/registration-request';
+import {HlmInputGroup, HlmInputGroupAddon, HlmInputGroupButton, HlmInputGroupInput} from '@spartan/input-group';
+import {HlmTooltip} from '@spartan/tooltip';
+import {HlmLabel} from '@spartan/label';
+import {HlmSwitch} from '@spartan/switch';
+import {
+  HlmDialog,
+  HlmDialogClose,
+  HlmDialogContent,
+  HlmDialogDescription,
+  HlmDialogFooter, HlmDialogHeader, HlmDialogPortal, HlmDialogTitle,
+  HlmDialogTrigger
+} from '@spartan/dialog';
+import {HlmTextarea} from '@spartan/textarea';
 
 
 @Component({
@@ -13,12 +26,26 @@ import {RegistrationRequest} from '../../services/models/registration-request';
   imports: [
     ReactiveFormsModule,
     FormsModule,
-    NgOptimizedImage
-],
+    HlmInputGroup,
+    HlmInputGroupAddon,
+    HlmInputGroupInput,
+    HlmInputGroupButton,
+    HlmTooltip,
+    HlmSwitch,
+    HlmDialog,
+    HlmDialogTrigger,
+    HlmDialogClose,
+    HlmDialogContent,
+    HlmDialogDescription,
+    HlmDialogFooter,
+    HlmDialogHeader,
+    HlmDialogPortal,
+    HlmDialogTitle
+  ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent {
 
   constructor(
     private router: Router,
@@ -27,20 +54,12 @@ export class RegisterComponent implements OnInit {
   ) {
   }
 
-  async ngOnInit() {
-    if (isPlatformBrowser(this.platformId)) {
-      const flowbite = await import('flowbite');
-      flowbite.initFlowbite();
-    }
-  }
-
   registerRequest: RegistrationRequest = {
-    email: '', firstName: '', lastName: '', password: '', username: '', childAccount: null!, parentEmail: ''
+    email: '', firstName: '', lastName: '', password: '', username: '', childAccount: false, parentEmail: ''
   };
 
   errorMessage: string = '';
   successMessage = '';
-  childAccount = false;
 
   register() {
     this.errorMessage = '';
@@ -100,7 +119,7 @@ export class RegisterComponent implements OnInit {
   validateRegister(): boolean {
     const {email, firstName, lastName, username, password, parentEmail} = this.registerRequest;
 
-    if (this.childAccount && !parentEmail?.trim()) {
+    if (this.registerRequest.childAccount && !parentEmail?.trim()) {
       this.errorMessage = 'Please enter parent email'
       return false;
     }
@@ -146,11 +165,7 @@ export class RegisterComponent implements OnInit {
     return true;
   }
 
-  createChildAccount() {
-    if (this.childAccount) {
-      this.childAccount = false
-    } else {
-      this.childAccount = true;
-    }
+  closeModal() {
+
   }
 }

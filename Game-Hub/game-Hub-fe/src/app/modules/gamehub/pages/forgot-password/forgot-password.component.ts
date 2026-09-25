@@ -4,14 +4,17 @@ import { NgOptimizedImage } from "@angular/common";
 import {AuthenticationRequest} from '../../../../services/models/authentication-request';
 import {Router} from '@angular/router';
 import {AuthenticationService} from '../../../../services/services/authentication.service';
+import {HlmInputGroup, HlmInputGroupAddon, HlmInputGroupInput} from '@spartan/input-group';
 
 @Component({
   selector: 'app-forgot-password',
-    imports: [
+  imports: [
     FormsModule,
-    NgOptimizedImage,
-    ReactiveFormsModule
-],
+    ReactiveFormsModule,
+    HlmInputGroup,
+    HlmInputGroupAddon,
+    HlmInputGroupInput
+  ],
   templateUrl: './forgot-password.component.html',
   styleUrl: './forgot-password.component.scss'
 })
@@ -22,6 +25,7 @@ export class ForgotPasswordComponent {
     password: ''
   }
   errorMessage: Array<string>[] = [];
+  successMessage: string = '';
 
   constructor(
     private router: Router,
@@ -35,7 +39,7 @@ export class ForgotPasswordComponent {
     }).subscribe({
       next: () => {
         this.authenticationRequest.email = ''
-
+        this.successMessage = 'A password reset link has been sent to your email address.'
         setTimeout(() => {
           this.router.navigate(['login']);
         },3000);

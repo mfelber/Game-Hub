@@ -141,6 +141,7 @@ public class AuthenticationService {
         .password(passwordEncoder.encode(request.getPassword()))
         .role(Role.USER)
         .status(Status.OFFLINE)
+        .accountStatus(AccountStatus.ACTIVE)
         .country(Country.NOT_SPECIFIED)
         .profileColor(getRandomColor())
         .bannerType("PREDEFINED")

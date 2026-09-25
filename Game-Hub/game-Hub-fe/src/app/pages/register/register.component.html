@@ -1,127 +1,233 @@
-<main>
-  <div class="auth-page">
+<main class="min-h-screen bg-[#0B0F14] text-white">
+  <div class="flex min-h-screen items-center justify-center p-6">
+    <div class="w-full max-w-xl rounded-3xl border border-[#242a38] bg-[#151923] px-10 py-12 shadow-2xl">
 
-    <div class="auth-container">
+      <div class="flex items-center justify-center">
+        <img src="assets/images/gamehub-logo.png" class="h-50 w-auto" alt="GameHub">
+      </div>
 
-      <!-- LEFT SIDE -->
-      <section class="auth-form">
+      <h1 class="text-center text-4xl font-bold tracking-tight">Welcome to
+        <span class="text-[#FB5F1E] font-bold">Game</span><span
+        class="text-[#40D1D8] font-bold">Hub</span> </h1>
+      <p class="mt-2 text-center text-[#76849D]">Register to get access to hundreds of games</p>
 
-        <div class="logo">
-          <img src="assets/images/gamehub-logo.png" class="w-50 h-50"
-               alt="GameHub Logo"/>
+      @if (errorMessage) {
+        <div class="mt-6 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+          {{ errorMessage }}
+        </div>
+      }
+
+      @if (successMessage) {
+        <div class="mt-6 rounded-xl border border-green-500/20 bg-green-500/10 px-4 py-3 text-sm text-green-400">
+          {{ successMessage }}
+        </div>
+      }
+
+      <form class="mt-8 space-y-3">
+
+        <hlm-input-group class="
+          !h-auto !rounded-lg !border-[#2A3445] !bg-[#151C2B]
+          !outline-none !ring-0 focus-within:!border-[#155dfc]
+          focus-within:!outline-none focus-within:!ring-0
+        autofill:!bg-[#151C2B]
+        autofill:!text-white">
+          <input
+            hlmInputGroupInput
+            [(ngModel)]="registerRequest.firstName"
+            type="text"
+            name="firstName"
+            id="firstName"
+            placeholder="First Name"
+            class="!py-5 !text-white placeholder:!text-[#596579] mb-1"/>
+          <hlm-input-group-addon>
+            <i class="fa-solid fa-user"></i>
+          </hlm-input-group-addon>
+        </hlm-input-group>
+
+        <hlm-input-group class="
+          !h-auto !rounded-lg !border-[#2A3445] !bg-[#151C2B]
+          !outline-none !ring-0 focus-within:!border-[#155dfc]
+          focus-within:!outline-none focus-within:!ring-0
+        autofill:!bg-[#151C2B]
+        autofill:!text-white">
+          <input
+            hlmInputGroupInput
+            [(ngModel)]="registerRequest.lastName"
+            type="text"
+            name="lastName"
+            id="lastName"
+            placeholder="Last Name"
+            class="!py-5 !text-white placeholder:!text-[#596579] mb-1"/>
+          <hlm-input-group-addon>
+            <i class="fa-solid fa-user-tag"></i>
+          </hlm-input-group-addon>
+        </hlm-input-group>
+
+        <hlm-input-group class="
+          !h-auto !rounded-lg !border-[#2A3445] !bg-[#151C2B]
+          !outline-none !ring-0 focus-within:!border-[#155dfc]
+          focus-within:!outline-none focus-within:!ring-0
+        autofill:!bg-[#151C2B]
+        autofill:!text-white">
+          <input
+            hlmInputGroupInput
+            [(ngModel)]="registerRequest.username"
+            type="text"
+            name="userName"
+            id="userName"
+            placeholder="Username"
+            class="!py-5 !text-white placeholder:!text-[#596579] mb-1"/>
+          <hlm-input-group-addon>
+            <i class="fa-solid fa-id-badge"></i>
+          </hlm-input-group-addon>
+          <hlm-input-group-addon align="inline-end">
+          <button
+            hlmInputGroupButton
+            class="hover:bg-transparent hover:text-[#737373]"
+            [hlmTooltip]="'This is how other players will see you'"
+            aria-label="Info"
+            size="icon-xs"
+          >
+            <i class="fa-solid fa-info-circle"></i>
+          </button>
+          </hlm-input-group-addon>
+        </hlm-input-group>
+
+        <hlm-input-group class="
+          !h-auto !rounded-lg !border-[#2A3445] !bg-[#151C2B]
+          !outline-none !ring-0 focus-within:!border-[#155dfc]
+          focus-within:!outline-none focus-within:!ring-0
+        autofill:!bg-[#151C2B]
+        autofill:!text-white">
+          <input
+            hlmInputGroupInput
+            type="email"
+            name="email"
+            placeholder="Email"
+            [(ngModel)]="registerRequest.email"
+            class="!py-5 !text-white placeholder:!text-[#596579] mb-1"/>
+          <hlm-input-group-addon>
+            <i class="fa-solid fa-envelope"></i>
+          </hlm-input-group-addon>
+        </hlm-input-group>
+
+        @if (this.registerRequest.childAccount) {
+        <hlm-input-group class="
+          !h-auto !rounded-lg !border-[#2A3445] !bg-[#151C2B]
+          !outline-none !ring-0 focus-within:!border-[#155dfc]
+          focus-within:!outline-none focus-within:!ring-0
+        autofill:!bg-[#151C2B]
+        autofill:!text-white">
+          <input
+            hlmInputGroupInput
+            type="email"
+            name="parentEmail"
+            placeholder="Parent Email"
+            [(ngModel)]="registerRequest.parentEmail"
+            class="!py-5 !text-white placeholder:!text-[#596579] mb-1"/>
+          <hlm-input-group-addon>
+            <i class="fa-solid fa-envelope"></i>
+          </hlm-input-group-addon>
+        </hlm-input-group>
+        }
+
+        <hlm-input-group class="
+          !h-auto !rounded-lg !border-[#2A3445] !bg-[#151C2B]
+          !outline-none !ring-0 focus-within:!border-[#155dfc]
+          focus-within:!outline-none focus-within:!ring-0">
+          <input
+            hlmInputGroupInput
+            type="password"
+            name="password"
+            placeholder="Password"
+            [(ngModel)]="registerRequest.password"
+            class="!py-5 !text-white placeholder:!text-[#596579] mb-1"/>
+          <hlm-input-group-addon>
+            <i class="fa-solid fa-lock"></i>
+          </hlm-input-group-addon>
+          <hlm-input-group-addon align="inline-end">
+            <button
+              hlmInputGroupButton
+              class="hover:bg-transparent hover:text-[#737373]"
+              [hlmTooltip]="'Password must be at least 6 characters'"
+              aria-label="Info"
+              size="icon-xs"
+            >
+              <i class="fa-solid fa-info-circle"></i>
+            </button>
+          </hlm-input-group-addon>
+        </hlm-input-group>
+
+        <div class="rounded-xl border border-[#2A3445] bg-[#111722] p-4">
+
+          <div class="flex items-center justify-between gap-4">
+
+            <div class="flex items-center gap-3">
+              <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#155dfc]/10 text-[#155dfc]">
+                <i class="fa-solid fa-shield-halved"></i>
+              </div>
+
+              <div>
+                <div class="flex items-center gap-2">
+                  <p class="font-medium text-white">
+                    Child account
+                  </p>
+
+                  <hlm-dialog>
+                    <button hlmDialogTrigger class="flex h-5 w-5 cursor-pointer items-center justify-center
+                    rounded-full text-[#596579] transition hover:bg-[#155dfc]/10
+                    hover:text-[#155dfc]"><i class="fa-solid fa-circle-info text-xs"></i></button>
+                    <hlm-dialog-content *hlmDialogPortal="let ctx" class="w-2xl">
+                      <hlm-dialog-header>
+                        <h3 hlmDialogTitle>
+                          <i class="fa-solid fa-shield-halved"></i>
+                          What are parental restrictions?
+                        </h3>
+                        <p hlmDialogDescription>
+                          Parental restrictions are settings designed to provide a safer gaming experience for younger players.
+                        </p>
+                      </hlm-dialog-header>
+                      <hlm-dialog-footer>
+                        <button class="medium-button cancel" hlmDialogClose (click)="closeModal()">Cancel</button>
+                      </hlm-dialog-footer>
+                    </hlm-dialog-content>
+                  </hlm-dialog>
+
+
+                </div>
+
+                <p class="mt-1 text-xs text-[#76849D]">
+                  Create an account with parental restrictions
+                </p>
+              </div>
+            </div>
+
+            <hlm-switch
+              id="childAccount"
+              name="childAccount"
+              [(ngModel)]="registerRequest.childAccount"
+              class=" !transition-none"/>
+          </div>
         </div>
 
-        <!--        <span class="text-[#FB5F1E]">Game</span><span class="text-[#40D1D8]">Hub</span>-->
-        <h1>Welcome to <span class="text-[#FB5F1E] font-bold">Game</span><span
-          class="text-[#40D1D8] font-bold">Hub</span></h1>
+        <button
+          type="submit"
+          (click)="register()"
+          class="big-btn-w-full save">
+          Register
+          <i class="fa-solid fa-user-plus"></i>
+        </button>
 
-        <p class="subtitle">
-          Register to get access to hundreds of games
-        </p>
-
-        @if (errorMessage) {
-          <div class="error">
-            {{ errorMessage }}
-          </div>
-        }
-
-        @if (successMessage) {
-          <div class="success">
-            {{ successMessage }}
-          </div>
-        }
-
-        <form>
-
-          <div class="input-group">
-            <i class="fa-solid fa-user"></i>
-            <input [(ngModel)]="registerRequest.firstName"
-                   type="text"
-                   name="firstName"
-                   id="firstName"
-                   placeholder="First Name"/>
-          </div>
-
-          <div class="input-group">
-            <i class="fa-solid fa-user-tag"></i>
-            <input [(ngModel)]="registerRequest.lastName"
-                   type="text"
-                   name="lastName"
-                   id="lastName"
-                   placeholder="Last Name"/>
-          </div>
-
-          <div class="input-group">
-            <i class="fa-solid fa-id-badge"></i>
-            <input [(ngModel)]="registerRequest.username"
-                   type="text"
-                   name="userName"
-                   id="userName"
-                   placeholder="Username"/>
-          </div>
-
-          <div class="input-group">
-            <i class="fa-solid fa-envelope"></i>
-            <input [(ngModel)]="registerRequest.email"
-                   type="email"
-                   name="email"
-                   placeholder="Email"/>
-          </div>
-
-          @if (childAccount) {
-            <div class="input-group">
-              <i class="fa-solid fa-envelope"></i>
-              <input [(ngModel)]="registerRequest.parentEmail"
-                     type="email"
-                     name="parentEmail"
-                     placeholder="Parent email"/>
-            </div>
-          }
-
-          <div class="input-group">
-            <i class="fa-solid fa-lock"></i>
-            <input [(ngModel)]="registerRequest.password"
-                   type="password"
-                   name="password"
-                   placeholder="Password"/>
-          </div>
-
-          <div class="options">
-            <label>
-              <input type="checkbox" id="childAccount" name="childAccount" (click)="createChildAccount()"
-                     [(ngModel)]="registerRequest.childAccount">
-              Create a child account
-            </label>
-          </div>
-
+        <p class="pt-2 text-center text-sm text-[#76849D]">
+          Already have an account?
           <button
-            type="submit"
-            (click)="register()"
-            class="register-btn">
-            Register
-            <i class="fa-solid fa-user-plus"></i>
+            type="button"
+            (click)="login()"
+            class="ml-1 cursor-pointer font-medium text-[#155dfc] hover:text-white">
+            Login
           </button>
-
-          <p class="have-account-text">
-            Already have an account?
-            <button type="button" (click)="login()">
-              Login
-            </button>
-          </p>
-
-        </form>
-
-      </section>
-
-      <!-- RIGHT SIDE -->
-      <section class="astronaut">
-
-        <img ngSrc="assets/images/astronaut_logIn.svg"
-             alt="Astronaut"
-             width="700"
-             height="700"/>
-
-      </section>
+        </p>
+      </form>
     </div>
   </div>
 </main>
