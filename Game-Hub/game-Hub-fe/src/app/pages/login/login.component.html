@@ -1,115 +1,210 @@
-<main>
-  <div class="auth-page">
+<main class="min-h-screen bg-[#0B0F14] text-white">
+  <div class="flex min-h-screen items-center justify-center p-6">
+    <div class="w-full max-w-md rounded-3xl border border-[#242a38] bg-[#151923] px-10 py-12 shadow-2xl">
 
-    <div class="auth-container">
+      <div class="flex items-center justify-center">
+        <img src="assets/images/gamehub-logo.png" class="h-50 w-auto" alt="GameHub">
+      </div>
 
-      <!-- LEFT SIDE -->
-      <section class="auth-form">
-<!--        <img src="../../../../../assets/images/gamehub-logo.png" class="w-50 h-50">-->
-        <div class="logo">
 
-        <img src="assets/images/gamehub-logo.png" class="w-50 h-50">
+      <h1 class="text-center text-4xl font-bold tracking-tight">Welcome back</h1>
+      <p class="mt-2 text-center text-[#76849D]">Sign in to acces your games</p>
+
+      @if (errorMessage) {
+        <div class="mt-6 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+          {{ errorMessage }}
+        </div>
+      }
+
+      <form class="mt-8 space-y-3">
+
+          <hlm-input-group class="
+          !h-auto !rounded-lg !border-[#2A3445] !bg-[#151C2B]
+          !outline-none !ring-0 focus-within:!border-[#155dfc]
+          focus-within:!outline-none focus-within:!ring-0
+        autofill:!bg-[#151C2B]
+        autofill:!text-white">
+            <input
+              hlmInputGroupInput
+              type="email"
+              name="email"
+              placeholder="Email"
+              [(ngModel)]="authenticationRequest.email"
+              class="!py-5 !text-white placeholder:!text-[#596579] mb-1"/>
+            <hlm-input-group-addon>
+              <i class="fa-solid fa-envelope"></i>
+            </hlm-input-group-addon>
+          </hlm-input-group>
+
+          <hlm-input-group class="
+          !h-auto !rounded-lg !border-[#2A3445] !bg-[#151C2B]
+          !outline-none !ring-0 focus-within:!border-[#155dfc]
+          focus-within:!outline-none focus-within:!ring-0">
+            <input
+              hlmInputGroupInput
+              type="password"
+              name="password"
+              placeholder="Password"
+              [(ngModel)]="authenticationRequest.password"
+              class="!py-5 !text-white placeholder:!text-[#596579] mb-1"/>
+            <hlm-input-group-addon>
+              <i class="fa-solid fa-lock"></i>
+            </hlm-input-group-addon>
+          </hlm-input-group>
+
+        <div class="flex items-center justify-between text-sm">
+
+          <label class="flex cursor-pointer items-center gap-2 text-[#76849D]">
+            <input
+              type="checkbox"
+              class="w-4 h-4 ronded border-[#3A4354] bg-[#151C2B]"
+            />
+            Remember me
+          </label>
+
+          <button
+            type="button"
+            (click)="resetPassword()"
+            class="cursor-pointer text-[#155dfc] transition hover:text-white">
+            Forgot Password?
+          </button>
         </div>
 
-          <h1>Welcome back</h1>
+        <button
+          type="submit"
+          (click)="login()"
+          class="big-btn-w-full save">
+          Login
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
 
-          <p class="subtitle">
-            Sign in to access your launcher and games
-          </p>
-
-          @if (errorMessage) {
-            <div class="error">
-              {{ errorMessage }}
-            </div>
-          }
-
-          <form>
-
-            <div class="input-group">
-              <i class="fa-solid fa-envelope"></i>
-              <input [(ngModel)]="authenticationRequest.email"
-                type="email"
-                name="email"
-                placeholder="Email"/>
-              </div>
-
-              <div class="input-group">
-                <i class="fa-solid fa-lock"></i>
-                <input [(ngModel)]="authenticationRequest.password"
-                  type="password"
-                  name="password"
-                  placeholder="Password"/>
-                </div>
-
-                <div class="options">
-                  <label>
-                    <input type="checkbox">
-                    Remember me
-                  </label>
-
-                  <button type="button" (click)="resetPassword()">
-                    Forgot Password?
-                  </button>
-                </div>
-
-                <button
-                  type="submit"
-                  (click)="login()"
-                  class="login-btn">
-                  Login
-                  <i class="fa-solid fa-arrow-right"></i>
-                </button>
-
-                <p class="register-text">
-                  Don't have account?
-                  <button type="button" (click)="register()">
-                    Register
-                  </button>
-                </p>
-
-              </form>
-
-            </section>
-
-            <!-- RIGHT SIDE -->
-            <section class="astronaut">
-
-              <img src="../../../../../assets/images/log-in-image.png"
-                alt="Astronaut" class="!w-100 !h-200"
-               />
-
-              </section>
-            </div>
-          </div>
-        </main>
+        <p class="pt-2 text-center text-sm text-[#76849D]">
+          Don't have an account?
+          <button
+            type="button"
+            (click)="register()"
+            class="ml-1 cursor-pointer font-medium text-[#155dfc] hover:text-white">
+            Register
+          </button>
+        </p>
+      </form>
+    </div>
+  </div>
+</main>
 
 
-        <!--<div class="min-h-screen bg-gradient-to-b from-[#090C2D] to-[#1D2793] flex items-center justify-center p-4">-->
+<!--<main>-->
+<!--  <div class="auth-page">-->
 
-        <!--  <div class="w-full max-w-6xl flex flex-col md:flex-row overflow-hidden justify-center">-->
+<!--    <div class="auth-container">-->
 
-        <!--    <div class="w-full md:w-[55%] p-17 justify-center">-->
-        <!--      <img ngSrc="joystick.png" alt="GameHub Logo" class="w-20 h-20 mx-auto mb-4" width="20" height="20"/>-->
-        <!--      <h3 class="text-[3em] font-semibold text-white text-center mb-5">Welcome back</h3>-->
-        <!--      <h3 class="text-[1em] font-semibold text-[#76849D] text-center mb-5">Sign in to access your launcher and-->
-      <!--        games</h3>-->
+<!--      &lt;!&ndash; LEFT SIDE &ndash;&gt;-->
+<!--      <section class="auth-form">-->
+<!--        &lt;!&ndash;        <img src="../../../../../assets/images/gamehub-logo.png" class="w-50 h-50">&ndash;&gt;-->
+<!--        <div class="logo">-->
 
-      <!--      <div *ngIf="errorMessage" class="text-sm text-center mb-5">-->
-      <!--        <p style="color:red">{{ errorMessage }}</p>-->
-    <!--      </div>-->
+<!--          <img src="assets/images/gamehub-logo.png" class="w-50 h-50">-->
+<!--        </div>-->
 
-    <!--      <form class="space-y-5 w-[25em] mx-auto">-->
+<!--        <h1>Welcome back</h1>-->
 
-    <!--        <div>-->
-    <!--          <input [(ngModel)]="authenticationRequest.email" type="email" name="email" id="email"-->
-    <!--                 placeholder="name@domain.com"-->
-    <!--                 class="form-control w-[25em] border rounded-xl px-4 py-3 focus:ring-transparent bg-transparent text-white border-[#76849D]"/>-->
-  <!--        </div>-->
+<!--        <p class="subtitle">-->
+<!--          Sign in to access your launcher and games-->
+<!--        </p>-->
 
-  <!--        <div>-->
-  <!--          <input [(ngModel)]="authenticationRequest.password" type="password" name="password" id="password"-->
-  <!--                 placeholder="Password"-->
-  <!--                 class="form-control w-[25em] border rounded-xl px-4 py-3 focus:ring-transparent bg-transparent text-white border-[#76849D]"/>-->
+<!--        @if (errorMessage) {-->
+<!--          <div class="error">-->
+<!--            {{ errorMessage }}-->
+<!--          </div>-->
+<!--        }-->
+
+<!--        <form>-->
+
+<!--          <div class="input-group">-->
+<!--            <i class="fa-solid fa-envelope"></i>-->
+<!--            <input [(ngModel)]="authenticationRequest.email"-->
+<!--                   type="email"-->
+<!--                   name="email"-->
+<!--                   placeholder="Email"/>-->
+<!--          </div>-->
+
+<!--          <div class="input-group">-->
+<!--            <i class="fa-solid fa-lock"></i>-->
+<!--            <input [(ngModel)]="authenticationRequest.password"-->
+<!--                   type="password"-->
+<!--                   name="password"-->
+<!--                   placeholder="Password"/>-->
+<!--          </div>-->
+
+<!--          <div class="options">-->
+<!--            <label>-->
+<!--              <input type="checkbox">-->
+<!--              Remember me-->
+<!--            </label>-->
+
+<!--            <button type="button" (click)="resetPassword()">-->
+<!--              Forgot Password?-->
+<!--            </button>-->
+<!--          </div>-->
+
+<!--          <button-->
+<!--            type="submit"-->
+<!--            (click)="login()"-->
+<!--            class="login-btn">-->
+<!--            Login-->
+<!--            <i class="fa-solid fa-arrow-right"></i>-->
+<!--          </button>-->
+
+<!--          <p class="register-text">-->
+<!--            Don't have account?-->
+<!--            <button type="button" (click)="register()">-->
+<!--              Register-->
+<!--            </button>-->
+<!--          </p>-->
+
+<!--        </form>-->
+
+<!--      </section>-->
+
+<!--      &lt;!&ndash; RIGHT SIDE &ndash;&gt;-->
+<!--      <section class="astronaut">-->
+
+<!--        <img src="../../../../../assets/images/log-in-image.png"-->
+<!--             alt="Astronaut" class="!w-100 !h-200"-->
+<!--        />-->
+
+<!--      </section>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</main>-->
+
+
+<!--<div class="min-h-screen bg-gradient-to-b from-[#090C2D] to-[#1D2793] flex items-center justify-center p-4">-->
+
+<!--  <div class="w-full max-w-6xl flex flex-col md:flex-row overflow-hidden justify-center">-->
+
+<!--    <div class="w-full md:w-[55%] p-17 justify-center">-->
+<!--      <img ngSrc="joystick.png" alt="GameHub Logo" class="w-20 h-20 mx-auto mb-4" width="20" height="20"/>-->
+<!--      <h3 class="text-[3em] font-semibold text-white text-center mb-5">Welcome back</h3>-->
+<!--      <h3 class="text-[1em] font-semibold text-[#76849D] text-center mb-5">Sign in to access your launcher and-->
+<!--        games</h3>-->
+
+<!--      <div *ngIf="errorMessage" class="text-sm text-center mb-5">-->
+<!--        <p style="color:red">{{ errorMessage }}</p>-->
+<!--      </div>-->
+
+<!--      <form class="space-y-5 w-[25em] mx-auto">-->
+
+<!--        <div>-->
+<!--          <input [(ngModel)]="authenticationRequest.email" type="email" name="email" id="email"-->
+<!--                 placeholder="name@domain.com"-->
+<!--                 class="form-control w-[25em] border rounded-xl px-4 py-3 focus:ring-transparent bg-transparent text-white border-[#76849D]"/>-->
+<!--        </div>-->
+
+<!--        <div>-->
+<!--          <input [(ngModel)]="authenticationRequest.password" type="password" name="password" id="password"-->
+<!--                 placeholder="Password"-->
+<!--                 class="form-control w-[25em] border rounded-xl px-4 py-3 focus:ring-transparent bg-transparent text-white border-[#76849D]"/>-->
 <!--        </div>-->
 
 <!--        <div class="flex items-end">-->

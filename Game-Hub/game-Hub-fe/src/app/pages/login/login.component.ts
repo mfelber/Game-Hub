@@ -7,13 +7,16 @@ import {Router} from '@angular/router';
 import {AuthenticationService} from '../../services/services/authentication.service';
 import {TokenService} from '../../services/token/token.service';
 import {UserProfileControllerService} from '../../services/services/user-profile-controller.service';
+import {HlmInputGroup, HlmInputGroupAddon, HlmInputGroupInput} from '@spartan/input-group';
 
 @Component({
   selector: 'app-login',
   imports: [
     FormsModule,
-    NgOptimizedImage
-],
+    HlmInputGroup,
+    HlmInputGroupInput,
+    HlmInputGroupAddon
+  ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
