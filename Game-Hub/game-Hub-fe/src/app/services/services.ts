@@ -13,6 +13,6 @@ export { AuthenticationService } from './services/authentication.service';
 export { WishlistControllerService } from './services/wishlist-controller.service';
 export { UserLevelControllerService } from './services/user-level-controller.service';
 export { SystemRequirementsControllerService } from './services/system-requirements-controller.service';
-export { LocationControllerService } from './services/location-controller.service';
 export { FlagsControllerService } from './services/flags-controller.service';
+export { CountryControllerService } from './services/country-controller.service';
 export { CardColorControllerService } from './services/card-color-controller.service';

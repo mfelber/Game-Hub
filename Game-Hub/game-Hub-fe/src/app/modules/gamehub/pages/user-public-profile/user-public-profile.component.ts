@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {UserProfileControllerService} from '../../../../services/services/user-profile-controller.service';
 import {UserPublicResponse} from '../../../../services/models/user-public-response';
 import {ActivatedRoute, Router} from '@angular/router';
-import {DatePipe, NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
+import { DatePipe, NgClass, NgStyle } from '@angular/common';
 import {StoreControllerService} from '../../../../services/services';
 import {GameResponse} from '../../../../services/models/game-response';
 import {CommunityControllerService} from '../../../../services/services/community-controller.service';
@@ -17,15 +17,13 @@ import {LoadingComponent} from '../../components/loading/loading.component';
 @Component({
   selector: 'app-user-public-profile',
   imports: [
-    NgIf,
     NgClass,
-    NgForOf,
     NgStyle,
     EmptyStateComponent,
     UserActionsComponent,
     DatePipe,
     LoadingComponent
-  ],
+],
   templateUrl: './user-public-profile.component.html',
   styleUrl: './user-public-profile.component.scss'
 })

@@ -1,24 +1,44 @@
 import {Component, OnInit} from '@angular/core';
 import {Router, RouterLink, RouterLinkActive} from '@angular/router';
-import {initFlowbite} from 'flowbite';
-import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
+import { NgClass, NgStyle } from '@angular/common';
 import {UserProfileControllerService} from '../../../../services/services';
 import {UserPrivateResponse} from '../../../../services/models/user-private-response';
 import {FormsModule} from '@angular/forms';
 import {StatusResponse} from '../../../../services/models/status-response';
 import {RefreshService} from '../../../../services/fn/refresh-service/refresh-service';
+import {
+  HlmSidebar,
+  HlmSidebarContent,
+  HlmSidebarFooter,
+  HlmSidebarHeader,
+  HlmSidebarMenu,
+  HlmSidebarMenuButton,
+  HlmSidebarMenuItem,
+  HlmSidebarTrigger, HlmSidebarWrapper,
+} from '@spartan/sidebar';
+import {HlmDropdownMenu, HlmDropdownMenuItem, HlmDropdownMenuTrigger} from '@spartan/dropdown-menu';
 
 @Component({
   selector: 'app-menu',
   imports: [
     RouterLink,
     RouterLinkActive,
-    NgIf,
     FormsModule,
     RouterLinkActive,
-    NgForOf,
     NgClass,
-    NgStyle
+    NgStyle,
+    HlmSidebar,
+    HlmSidebarContent,
+    HlmSidebarFooter,
+    HlmSidebarHeader,
+    HlmSidebarMenu,
+    HlmSidebarMenuButton,
+    HlmSidebarMenuItem,
+    HlmSidebarTrigger,
+    HlmSidebarWrapper,
+    HlmDropdownMenuTrigger,
+    HlmDropdownMenu,
+    HlmDropdownMenuItem,
   ],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.scss'
@@ -26,7 +46,6 @@ import {RefreshService} from '../../../../services/fn/refresh-service/refresh-se
 export class MenuComponent implements OnInit {
 
   ngOnInit(): void {
-    initFlowbite();
     this.loadUser();
     this.getStatus();
     this.refreshService.refresh$.subscribe(() => {
@@ -34,7 +53,6 @@ export class MenuComponent implements OnInit {
     });
   }
 
-  statusMenuOpen = false;
   userResponse: UserPrivateResponse = {};
   statusResponse: StatusResponse = {};
   statuses = ['Online', 'Offline', 'Away'];
@@ -101,7 +119,6 @@ export class MenuComponent implements OnInit {
     this.userService.setStatusToOnline().subscribe({
       next: () => {
         this.getStatus();
-
       }
     })
   }
@@ -110,7 +127,6 @@ export class MenuComponent implements OnInit {
     this.userService.setStatusToOffline().subscribe({
       next: () => {
         this.getStatus();
-
       }
     })
   }
@@ -139,13 +155,7 @@ export class MenuComponent implements OnInit {
 
   }
 
-  toggleStatusMenu(event: MouseEvent) {
-    event.stopPropagation();
-    this.statusMenuOpen = !this.statusMenuOpen;
-  }
-
   changeStatus(status: string) {
-    this.statusMenuOpen = false;
     this.onStatusChange(status)
   }
 

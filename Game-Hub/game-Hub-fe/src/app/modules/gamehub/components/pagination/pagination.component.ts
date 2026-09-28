@@ -1,11 +1,9 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {NgForOf, NgIf} from "@angular/common";
+
 
 @Component({
   selector: 'app-pagination',
-  imports: [
-    NgForOf
-  ],
+  imports: [],
   templateUrl: './pagination.component.html',
   styleUrl: './pagination.component.scss',
 })

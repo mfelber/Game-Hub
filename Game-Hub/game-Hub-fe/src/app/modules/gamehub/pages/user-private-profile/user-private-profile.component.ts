@@ -1,14 +1,12 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {UserPrivateResponse} from '../../../../services/models/user-private-response';
-import {initFlowbite} from 'flowbite';
 import {Router} from '@angular/router';
 import {UserProfileControllerService} from '../../../../services/services/user-profile-controller.service';
-import {DatePipe, NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
+import { DatePipe, NgClass, NgStyle } from '@angular/common';
 import {GameResponse} from '../../../../services/models/game-response';
-import {StoreControllerService} from '../../../../services/services';
+import {CountryControllerService, StoreControllerService} from '../../../../services/services';
 import {FormsModule} from '@angular/forms';
 import {UserUpdateRequest} from '../../../../services/models/user-update-request';
-import {LocationControllerService} from '../../../../services/services/location-controller.service';
 import {HttpClient} from '@angular/common/http';
 import {AuthenticationService} from '../../../../services/services/authentication.service';
 import {AuthenticationRequest} from '../../../../services/models/authentication-request';
@@ -25,12 +23,21 @@ import {RecentGamesResponse} from '../../../../services/models/recent-games-resp
 import {GameResponseShort} from '../../../../services/models/game-response-short';
 import {LoadingComponent} from '../../components/loading/loading.component';
 import {forkJoin} from 'rxjs';
+import {
+  HlmDialog, HlmDialogClose,
+  HlmDialogContent, HlmDialogDescription,
+  HlmDialogFooter,
+  HlmDialogHeader,
+  HlmDialogTitle,
+  HlmDialogTrigger,
+  HlmDialogPortal
+} from '@spartan/dialog';
+import {HlmButton} from '@spartan/button';
+import {HlmTextarea} from '@spartan/textarea';
 
 @Component({
   selector: 'app-user-profile',
   imports: [
-    NgIf,
-    NgForOf,
     NgClass,
     FormsModule,
     NgStyle,
@@ -39,17 +46,27 @@ import {forkJoin} from 'rxjs';
     UserActionsComponent,
     DatePipe,
     LoadingComponent,
+    HlmDialog,
+    HlmDialogContent,
+    HlmDialogHeader,
+    HlmDialogFooter,
+    HlmDialogTrigger,
+    HlmDialogTitle,
+    HlmDialogDescription,
+    HlmDialogClose,
+    HlmDialogPortal,
+    HlmTextarea
   ],
   templateUrl: './user-private-profile.component.html',
   styleUrl: './user-private-profile.component.scss'
 })
-export class UserPrivateProfileComponent implements OnInit {
+export class UserPrivateProfileComponent implements OnInit{
 
   constructor(
     private router: Router,
     private userService: UserProfileControllerService,
     private gameService: StoreControllerService,
-    private locationService: LocationControllerService,
+    private locationService: CountryControllerService,
     private http: HttpClient,
     private authenticationService: AuthenticationService,
     private cardColorService: CardColorControllerService,
@@ -59,7 +76,6 @@ export class UserPrivateProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    initFlowbite();
     this.loadUserPrivateProfile();
     this.getColorsForCard()
   }
@@ -72,8 +88,6 @@ export class UserPrivateProfileComponent implements OnInit {
   profileBanner: File | null = null;
   selectedBannerId: number | null = null;
 
-  isEditBioModalOpen = false;
-  isEditGenresModalOpen = false;
   isEditProfileModalOpen = false;
   isProfileModalOpen = false;
   isLoading = false;
@@ -85,7 +99,7 @@ export class UserPrivateProfileComponent implements OnInit {
   isPreviewBannerInserted = false;
   userHasProfilePicture = true
 
-  allLocations: { name: string; iconPath: string }[] = [];
+  allLocations: { name: string; iconPath: string, countryName: string }[] = [];
   selectedGenres: Set<number> = new Set<number>()
   favoriteGenreIds: number[] = [];
   allStoreFlags: { flagName: string; description: string }[] = [];
@@ -155,7 +169,7 @@ export class UserPrivateProfileComponent implements OnInit {
           firstName: user.firstName,
           lastName: user.lastName,
           username: user.username,
-          location: this.userResponse.location?.name as undefined
+          country: this.userResponse.country?.name as undefined
         }
         this.authenticationRequest = {
           email: user.email!,
@@ -233,10 +247,10 @@ export class UserPrivateProfileComponent implements OnInit {
     });
   }
 
-  saveBio() {
+  saveBio(ctx: any) {
     if (this.bioUpdateRequest.bio === this.userResponse.bio) {
-      console.log('nothing change')
-      this.isEditBioModalOpen = false
+      ctx.close();
+      return;
     } else {
       this.userService.updateBio({
         body: this.bioUpdateRequest
@@ -244,7 +258,7 @@ export class UserPrivateProfileComponent implements OnInit {
           next: () => {
             this.showSuccess('Bio updated successfully!')
             this.getUserBio()
-            this.isEditBioModalOpen = false
+            ctx.close();
           },
           error: (err) => {
             console.log(err)
@@ -262,7 +276,7 @@ export class UserPrivateProfileComponent implements OnInit {
     })
   }
 
-  saveFavoriteGenres() {
+  saveFavoriteGenres(ctx: any) {
     const allGenres = [...new Set([...this.favoriteGenreIds, ...this.selectedGenres])];
 
     this.userService.updateFavoriteGenres({
@@ -270,8 +284,8 @@ export class UserPrivateProfileComponent implements OnInit {
     }).subscribe({
       next: () => {
         this.showSuccess('Genres saved successfully!');
-        this.isEditGenresModalOpen = false
-        this.loadUserPrivateProfile()
+        this.loadUserPrivateProfile();
+        ctx.close();
       },
       error: (err) => console.error(err)
     });
@@ -300,13 +314,11 @@ export class UserPrivateProfileComponent implements OnInit {
     } else {
       this.selectedGenres.add(id)
     }
-    console.log(this.selectedGenres)
   }
 
   cancelFavoriteGenres() {
     this.selectedGenres.clear()
     this.favoriteGenreIds = this.userResponse.favoriteGenres?.map(g => g.id!) || [];
-    this.isEditGenresModalOpen = false
   }
 
   removeFavoriteGenre(id: any) {
@@ -357,11 +369,10 @@ export class UserPrivateProfileComponent implements OnInit {
         this.userRequest.firstName !== this.userResponse.firstName ||
         this.userRequest.lastName !== this.userResponse.lastName ||
         this.userRequest.email !== this.userResponse.email ||
-        this.userRequest.location !== this.userResponse.location?.name || this.userRequest.cardColorId !== this.userResponse.cardColor?.id
+        this.userRequest.country !== this.userResponse.country?.name || this.userRequest.cardColorId !== this.userResponse.cardColor?.id
 
       if (changesExistProfileInfo) {
         this.showSuccess('You have successfully updated profile')
-        console.log(this.userRequest)
         await this.userService.updateUserProfile({
           body: this.userRequest
         }).toPromise();
@@ -384,9 +395,8 @@ export class UserPrivateProfileComponent implements OnInit {
     this.userRequest.cardColorId = this.userResponse.cardColor?.id;
     this.isProfileModalOpen = false;
     this.isEditProfileModalOpen = false;
-    this.isEditBioModalOpen = false;
     this.bioUpdateRequest.bio = this.userResponse.bio;
-    this.userRequest.location = this.userResponse.location?.name as undefined;
+    this.userRequest.country = this.userResponse.country?.name as undefined;
     this.userRequest.username = this.userResponse.username;
     this.userRequest.firstName = this.userResponse.firstName;
     this.userRequest.lastName = this.userResponse.lastName;
@@ -410,17 +420,18 @@ export class UserPrivateProfileComponent implements OnInit {
   editProfile() {
     this.closeModal();
     this.isEditProfileModalOpen = true;
-    this.getLocations();
+    this.getCountries();
     this.getStoreFlags();
     this.getCommunityFlags()
   }
 
-  getLocations() {
-    this.locationService.getLocations().subscribe({
-      next: (location) => {
-        this.allLocations = location.map(location => ({
-          name: location.name!,
-          iconPath: location.iconPath!
+  getCountries() {
+    this.locationService.getAllCountries().subscribe({
+      next: (country) => {
+        this.allLocations = country.map(country => ({
+          name: country.name!,
+          iconPath: country.iconPath!,
+          countryName: country.countryName!,
         }));
       }
     })
@@ -463,7 +474,6 @@ export class UserPrivateProfileComponent implements OnInit {
   getStoreFlags() {
     this.storeFlagsService.getAllStoreFlags().subscribe({
       next: (res) => {
-        console.log(res)
         this.allStoreFlags = res.map(flag => ({
           flagName: flag.name!,
           description: flag.description!

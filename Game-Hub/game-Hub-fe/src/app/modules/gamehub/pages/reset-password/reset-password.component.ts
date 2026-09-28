@@ -1,14 +1,20 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {NgIf} from '@angular/common';
+
 import {AuthenticationService} from '../../../../services/services/authentication.service';
+import {HlmInputGroup, HlmInputGroupAddon, HlmInputGroupButton, HlmInputGroupInput} from '@spartan/input-group';
+import {HlmTooltip} from '@spartan/tooltip';
 @Component({
   selector: 'app-reset-password',
   imports: [
     FormsModule,
-    NgIf,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HlmInputGroup,
+    HlmInputGroupAddon,
+    HlmInputGroupInput,
+    HlmInputGroupButton,
+    HlmTooltip
   ],
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.scss'

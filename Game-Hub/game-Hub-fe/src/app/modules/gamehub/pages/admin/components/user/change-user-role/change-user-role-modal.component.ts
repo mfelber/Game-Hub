@@ -1,13 +1,11 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {AdminUserResponse} from '../../../../../../../services/models/admin-user-response';
-import {NgIf} from '@angular/common';
+
 import {AdminControllerService} from '../../../../../../../services/services/admin-controller.service';
 
 @Component({
   selector: 'app-change-user-role-modal',
-  imports: [
-    NgIf
-  ],
+  imports: [],
   templateUrl: './change-user-role-modal.component.html',
   styleUrl: './change-user-role-modal.component.scss',
 })

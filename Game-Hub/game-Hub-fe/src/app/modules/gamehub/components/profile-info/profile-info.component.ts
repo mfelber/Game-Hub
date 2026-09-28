@@ -1,13 +1,12 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {UserPrivateResponse} from '../../../../services/models/user-private-response';
-import {NgIf, NgStyle} from '@angular/common';
+import { NgStyle } from '@angular/common';
 
 @Component({
   selector: 'app-profile-info',
   imports: [
-    NgIf,
     NgStyle
-  ],
+],
   templateUrl: './profile-info.component.html',
   styleUrl: './profile-info.component.scss',
 })

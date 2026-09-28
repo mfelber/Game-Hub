@@ -1,0 +1,119 @@
+.free-price {
+  @apply text-[#46d160];
+}
+
+.online {
+  @apply text-green-500
+}
+
+.offline {
+  @apply text-gray-400
+}
+
+.away {
+  @apply text-yellow-400
+}
+
+.status-dot {
+  @apply w-2 h-2 rounded-full bg-current;
+}
+
+.accept {
+  @apply bg-[#16a34a] hover:bg-[#15803d] cursor-pointer;
+}
+
+.remove {
+  @apply bg-[#dc2626] hover:bg-[#b91c1c] cursor-pointer;
+}
+
+.report {
+  @apply bg-[#d97706] hover:bg-[#b45309] cursor-pointer;
+}
+
+.cancel-friend {
+  @apply bg-[#475569] hover:bg-[#334155] cursor-pointer;
+}
+
+.discount {
+  @apply bg-[#00a63e];
+}
+
+.top {
+  @apply flex items-center gap-5 w-full min-w-0 box-border justify-between;
+}
+
+.top-end {
+  @apply flex items-center gap-5 w-full min-w-0 box-border justify-end;
+}
+
+.header {
+  @apply flex justify-between items-start;
+}
+
+.header > div:first-child {
+  @apply flex flex-col gap-1;
+}
+
+.header h1{
+  @apply text-[1.9rem];
+}
+
+.search {
+  @apply mt-3.75 mb-5;
+}
+
+.page-description {
+  @apply text-[#777];
+}
+
+.about-icon {
+  color: #A78BFA;
+}
+
+.recently-played-icon {
+  color: #60A5FA;
+}
+
+.favorite-game-icon {
+  color: #F472B6;
+}
+
+.badges-icon {
+  color: #FBBF24;
+}
+
+.genres-icon {
+  color: #34D399;
+}
+
+.friends-icon {
+  color: #22D3EE;
+}
+
+.groups-icon {
+  color: #FB923C;
+}
+
+.looking-for-icon {
+  color: #C084FC;
+}
+
+.wishlist-icon {
+  color: #F87171;
+}
+
+.wishlist {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.friends {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.nothing-to-show {
+  color: rgba(255, 255, 255, 0.45);
+}

@@ -1,0 +1,90 @@
+@layer components {
+
+  .big-button {
+    @apply items-center justify-center rounded-[8px] border-0 p-3
+    text-white transition-colors w-[calc(100%-40px)] ml-5 mr-5;
+  }
+
+  .big-btn-w-full {
+    @apply w-full p-[15px] transition-colors border-0 rounded-xl text-base cursor-pointer mt-3;
+  }
+
+  .medium-button {
+    @apply h-10 flex items-center gap-2 px-4 py-2 rounded-[9px]
+    text-white cursor-pointer transition duration-200 ease-in-out;
+  }
+
+  .icon-button {
+    @apply w-10.5 h-10.5 rounded-xl flex items-center justify-center text-white text-[15px]
+    transition-colors;
+  }
+
+  .tag-remove {
+    @apply absolute -top-[6px] -right-[6px] w-[22px] h-[22px]
+    border-0 rounded-full bg-[#dc2626] text-white cursor-pointer
+    flex items-center justify-center text-[0.7rem]
+    transition duration-200 hover:bg-[#b91c1c];
+  }
+
+  .close-btn {
+    @apply border-0 bg-transparent text-[#9ca3af] text-[28px] cursor-pointer
+    transition duration-200 ease-in-out
+    hover:text-white hover:scale-110;
+  }
+
+  .review {
+    @apply bg-[#2563eb] hover:bg-[#1447e6] cursor-pointer;
+  }
+
+  .add-to-cart {
+    @apply bg-[#155dfc] hover:bg-[#1447e6] cursor-pointer;
+  }
+
+  .in-library {
+    @apply cursor-default bg-[#093A3F] text-[#46ECD5];
+  }
+
+  .in-cart {
+    @apply cursor-default bg-[#172554] text-[#60a5fa];
+  }
+
+  .gift {
+    @apply bg-[#202938] text-white border border-[#394355]
+    cursor-pointer hover:bg-[#2b3648];
+  }
+
+  .not-wishlist {
+    @apply bg-[#202938] text-white border border-[#394355]
+    cursor-pointer hover:bg-[#2b3648]
+  }
+
+  .download {
+    @apply bg-[#3B82F6] hover:bg-[#2563EB] cursor-pointer;
+  }
+
+  .play {
+    @apply bg-[#22C55E] hover:bg-[#16A34A] cursor-pointer;
+  }
+
+  .stop {
+    @apply bg-[#f59e0b] hover:bg-[#d97706] cursor-pointer;
+  }
+
+  .is-friend {
+    @apply bg-[#155dfc] hover:cursor-default;
+  }
+
+  .save {
+    @apply bg-[#155dfc] hover:cursor-pointer hover:bg-[#1447e6];
+  }
+
+  .cancel {
+    @apply bg-[#6e7988] hover:cursor-pointer hover:bg-[#4b5563];
+  }
+
+  .edit-profile {
+    @apply border border-white/12 bg-white/6 text-white
+    hover:bg-white/12;
+  }
+
+}

@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {NgForOf, NgIf} from "@angular/common";
+import {Component, OnInit, ViewChild} from '@angular/core';
+
 import {PageResponseGameResponse} from '../../../../services/models/page-response-game-response';
 import {LibraryControllerService} from '../../../../services/services/library-controller.service';
 import {GameResponse} from '../../../../services/models/game-response';
@@ -13,18 +13,23 @@ import {UserActionsComponent} from '../../components/user-actions/user-actions.c
 import {PaginationComponent} from '../../components/pagination/pagination.component';
 import {PlayingWarningModalComponent} from '../../components/playing-warning/playing-warning-modal.component';
 import {LoadingComponent} from '../../components/loading/loading.component';
+import {HlmDialog, HlmDialogContent, HlmDialogPortal, HlmDialogTrigger} from '@spartan/dialog';
+import {EditProfileInfoComponent} from '../../components/edit-profile-info/edit-profile-info.component';
 
 @Component({
   selector: 'app-library',
   imports: [
-    NgForOf,
-    NgIf,
     SearchBar,
     EmptyStateComponent,
     UserActionsComponent,
     PaginationComponent,
     PlayingWarningModalComponent,
-    LoadingComponent
+    LoadingComponent,
+    HlmDialog,
+    HlmDialogContent,
+    HlmDialogTrigger,
+    EditProfileInfoComponent,
+    HlmDialogPortal
   ],
   templateUrl: './library.component.html',
   styleUrl: './library.component.scss'
@@ -201,10 +206,16 @@ export class LibraryComponent implements OnInit {
     });
   }
 
+  @ViewChild('warningDialog')
+  warningDialog!: HlmDialog;
+
   playGame(game: UserLibraryResponse) {
 
     if (this.currentlyPlayingGameId !== null && this.currentlyPlayingGameId !== game.gameId) {
       this.userIsPlayingGame = true;
+      setTimeout(() => {
+        this.warningDialog.open();
+      });
       return;
     }
 
@@ -228,6 +239,7 @@ export class LibraryComponent implements OnInit {
 
   closeModal() {
     this.userIsPlayingGame = false;
+    this.warningDialog.close();
   }
 
   loadCurrentlyPlayingGame() {

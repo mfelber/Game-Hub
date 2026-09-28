@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {DatePipe, NgForOf, NgIf, NgStyle} from '@angular/common';
+import { DatePipe, NgStyle } from '@angular/common';
 import {ActivatedRoute} from '@angular/router';
 import {GameResponse} from '../../../../services/models/game-response';
 import {LibraryControllerService} from '../../../../services/services/library-controller.service';
@@ -11,14 +11,12 @@ import {PlayingWarningModalComponent} from '../../components/playing-warning/pla
 @Component({
   selector: 'app-game-details-library',
   imports: [
-    NgForOf,
-    NgIf,
     NgStyle,
     DatePipe,
     UserActionsComponent,
     LoadingComponent,
     PlayingWarningModalComponent
-  ],
+],
   templateUrl: './game-details-library.component.html',
   styleUrl: './game-details-library.component.scss'
 })

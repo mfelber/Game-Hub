@@ -1,7 +1,6 @@
 package gamehub.game_Hub.Module.User;
 
 import java.security.Principal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
@@ -23,7 +22,7 @@ import gamehub.game_Hub.Module.Genre;
 import gamehub.game_Hub.Module.Level;
 import gamehub.game_Hub.enums.AccountStatus;
 import gamehub.game_Hub.enums.AccountType;
-import gamehub.game_Hub.enums.Location;
+import gamehub.game_Hub.enums.Country;
 import gamehub.game_Hub.enums.Role;
 import gamehub.game_Hub.enums.Status;
 import jakarta.persistence.CascadeType;
@@ -79,7 +78,7 @@ public class User implements UserDetails, Principal {
   private String bio;
 
   @Enumerated(EnumType.STRING)
-  private Location location;
+  private Country country;
 
   @Enumerated(EnumType.STRING)
   private Status status;

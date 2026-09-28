@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {NgClass, NgForOf, NgIf, NgOptimizedImage} from '@angular/common';
+import {Component, inject, OnInit} from '@angular/core';
+import { NgClass, NgOptimizedImage } from '@angular/common';
 import {CartControllerService, StoreControllerService} from '../../../../services/services';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PageResponseGameResponse} from '../../../../services/models/page-response-game-response';
@@ -11,20 +11,26 @@ import {EmptyStateComponent} from '../../components/empty-state/empty-state.comp
 import {PaginationComponent} from '../../components/pagination/pagination.component';
 import {subscribe} from 'node:diagnostics_channel';
 import {LoadingComponent} from '../../components/loading/loading.component';
-
-
+import {
+  HlmDropdownMenu, HlmDropdownMenuGroup,
+  HlmDropdownMenuItem, HlmDropdownMenuLabel, HlmDropdownMenuSeparator,
+  HlmDropdownMenuTrigger
+} from '@spartan/dropdown-menu';
+import {HlmCheckbox} from '@spartan/checkbox';
+import {Overlay} from '@angular/cdk/overlay';
 @Component({
   selector: 'app-store',
   imports: [
-    NgForOf,
-    NgIf,
     FormsModule,
     SearchBar,
     NgClass,
     UserActionsComponent,
     EmptyStateComponent,
     PaginationComponent,
-    LoadingComponent
+    LoadingComponent,
+    HlmDropdownMenu,
+    HlmDropdownMenuTrigger,
+    HlmDropdownMenuItem
   ],
   templateUrl: './store.component.html',
   styleUrl: './store.component.scss'
@@ -44,6 +50,13 @@ export class StoreComponent implements OnInit {
     maxPrice: '',
     discount: false
   };
+
+  priceOptions = [
+    { value: '10', label: 'Up to 10 €' },
+    { value: '20', label: 'Up to 20 €' },
+    { value: '50', label: 'Up to 50 €' },
+    { value: '100', label: 'Up to 100 €' }
+  ];
 
   isLoading = false;
 
@@ -196,6 +209,12 @@ export class StoreComponent implements OnInit {
         discount: this.filters.discount ? true : null
       }
     })
+  }
+
+  get selectedPriceLabel(): string {
+    return this.priceOptions.find(
+      option => option.value === this.filters.maxPrice
+    )?.label ?? 'Any price';
   }
 }
 

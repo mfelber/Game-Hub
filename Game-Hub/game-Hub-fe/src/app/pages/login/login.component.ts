@@ -1,19 +1,21 @@
 import {Component} from '@angular/core';
 import {AuthenticationRequest} from "../../services/models/authentication-request";
-import {NgForOf, NgIf, NgOptimizedImage} from '@angular/common';
+import { NgOptimizedImage } from '@angular/common';
 import {RouterOutlet} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 import {Router} from '@angular/router';
 import {AuthenticationService} from '../../services/services/authentication.service';
 import {TokenService} from '../../services/token/token.service';
 import {UserProfileControllerService} from '../../services/services/user-profile-controller.service';
+import {HlmInputGroup, HlmInputGroupAddon, HlmInputGroupInput} from '@spartan/input-group';
 
 @Component({
   selector: 'app-login',
   imports: [
-    NgIf,
     FormsModule,
-    NgOptimizedImage
+    HlmInputGroup,
+    HlmInputGroupInput,
+    HlmInputGroupAddon
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'

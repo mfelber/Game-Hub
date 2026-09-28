@@ -1,7 +1,7 @@
 package gamehub.game_Hub.Request;
 
 
-import gamehub.game_Hub.enums.Location;
+import gamehub.game_Hub.enums.Country;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,6 +21,6 @@ public class UserUpdateRequest {
   private String username;
   private String email;
   private String bio;
-  private Location location;
+  private Country country;
   private Long cardColorId;
 }

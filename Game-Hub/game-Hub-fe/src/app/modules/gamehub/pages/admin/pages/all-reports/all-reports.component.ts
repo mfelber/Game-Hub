@@ -4,7 +4,7 @@ import {AdminReportsResponse} from '../../../../../../services/models/admin-repo
 import {PageResponseAdminUserResponse} from '../../../../../../services/models/page-response-admin-user-response';
 import {PageResponseAdminReportsResponse} from '../../../../../../services/models/page-response-admin-reports-response';
 import {AdminControllerService} from '../../../../../../services/services/admin-controller.service';
-import {DatePipe, NgClass, NgForOf, NgIf} from '@angular/common';
+import { DatePipe, NgClass } from '@angular/common';
 import {ReportStatusResponse} from '../../../../../../services/models/report-status-response';
 import {FormsModule} from '@angular/forms';
 import {PreviewReportModalComponent} from '../../components/reports/preview-report-modal.component';
@@ -14,14 +14,12 @@ import {EmptyStateComponent} from '../../../../components/empty-state/empty-stat
   selector: 'app-all-reports',
   imports: [
     SearchBar,
-    NgForOf,
     DatePipe,
     FormsModule,
-    NgIf,
     NgClass,
     PreviewReportModalComponent,
     EmptyStateComponent
-  ],
+],
   templateUrl: './all-reports.component.html',
   styleUrl: './all-reports.component.scss',
 })

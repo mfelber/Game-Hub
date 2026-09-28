@@ -1,26 +1,27 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {CartControllerService, StoreControllerService} from '../../../../services/services';
-import {DatePipe, NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
+import { DatePipe, NgClass, NgStyle } from '@angular/common';
 import {GameResponse} from '../../../../services/models/game-response';
 import {UserActionsComponent} from '../../components/user-actions/user-actions.component';
+import {LoadingComponent} from '../../components/loading/loading.component';
 
 @Component({
   selector: 'app-game-details',
   imports: [
-    NgIf,
-    NgForOf,
     NgStyle,
     NgClass,
     DatePipe,
-    UserActionsComponent
-  ],
+    UserActionsComponent,
+    LoadingComponent
+],
   templateUrl: './game-details.component.html',
   styleUrl: './game-details.component.scss'
 })
 export class GameDetailsComponent implements OnInit {
 
   game: any;
+  isLoading = false;
   activeTab: 'details' | 'system' | 'dlc'| 'friends' = 'details';
 
   constructor(
@@ -35,14 +36,18 @@ export class GameDetailsComponent implements OnInit {
   }
 
   private getInfoGame() {
+    this.isLoading = true;
     const gameId: any = this.router.snapshot.paramMap.get('id')
     if (gameId) {
       this.storeService.getGameById({gameId}).subscribe({
           next: (data) => {
             this.game = data;
-            console.log(this.game);
+            this.isLoading = false;
           },
-          error: (err) => console.error('Error with loading details of this game', err)
+        error: err => {
+            this.isLoading = true;
+            console.log(err);
+        }
         },
       )
     }

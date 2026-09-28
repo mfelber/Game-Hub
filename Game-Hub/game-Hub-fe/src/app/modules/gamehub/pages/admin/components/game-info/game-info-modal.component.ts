@@ -1,14 +1,12 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {NgForOf, NgIf, NgStyle} from '@angular/common';
+import { NgStyle } from '@angular/common';
 import {GameResponse} from '../../../../../../services/models/game-response';
 
 @Component({
   selector: 'app-game-info',
   imports: [
-    NgIf,
-    NgForOf,
     NgStyle
-  ],
+],
   templateUrl: './game-info-modal.component.html',
   styleUrl: './game-info-modal.component.scss',
 })

@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {UserPrivateResponse} from '../../../../services/models/user-private-response';
 import {FormsModule} from '@angular/forms';
-import {DatePipe, NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
+import { DatePipe, NgClass, NgStyle } from '@angular/common';
 import {UserActionsComponent} from '../user-actions/user-actions.component';
 import {RecentGamesResponse} from '../../../../services/models/recent-games-response';
 import {UserLibraryResponse} from '../../../../services/models/user-library-response';
@@ -10,12 +10,10 @@ import {UserLibraryResponse} from '../../../../services/models/user-library-resp
   selector: 'app-card-preview',
   imports: [
     FormsModule,
-    NgIf,
     NgClass,
     NgStyle,
-    NgForOf,
     DatePipe
-  ],
+],
   templateUrl: './card-preview.component.html',
   styleUrl: './card-preview.component.scss'
 })

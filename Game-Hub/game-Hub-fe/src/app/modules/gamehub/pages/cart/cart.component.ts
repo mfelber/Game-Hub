@@ -2,23 +2,29 @@ import {Component, OnInit} from '@angular/core';
 import {CartControllerService} from '../../../../services/services/cart-controller.service';
 import {CartResponse} from '../../../../services/models/cart-response';
 import {EmptyStateComponent} from '../../components/empty-state/empty-state.component';
-import {DecimalPipe, NgForOf, NgIf} from '@angular/common';
+import {DecimalPipe, NgClass} from '@angular/common';
 import {Router, RouterLink} from '@angular/router';
 import {GameResponse} from '../../../../services/models/game-response';
 import {StoreControllerService} from '../../../../services/services/store-controller.service';
 import {UserActionsComponent} from '../../components/user-actions/user-actions.component';
 import {LoadingComponent} from '../../components/loading/loading.component';
+import {
+  HlmDropdownMenu, HlmDropdownMenuItem,
+  HlmDropdownMenuTrigger
+} from '@spartan/dropdown-menu';
 
 @Component({
   selector: 'app-cart',
   imports: [
+    NgClass,
     EmptyStateComponent,
-    NgIf,
     RouterLink,
-    NgForOf,
     DecimalPipe,
     UserActionsComponent,
-    LoadingComponent
+    LoadingComponent,
+    HlmDropdownMenuTrigger,
+    HlmDropdownMenu,
+    HlmDropdownMenuItem,
   ],
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.scss',
@@ -28,6 +34,7 @@ export class CartComponent implements OnInit {
   cartResponse: CartResponse = {};
 
   isLoading = false;
+  isGiftOpen: number | null = null;
 
   constructor(
     private cartService: CartControllerService,
@@ -71,7 +78,7 @@ export class CartComponent implements OnInit {
 
   }
 
-  goToGame(gameId:any) {
+  goToGame(gameId: any) {
     this.storeService.getGameById({gameId}).subscribe({
       next: (game) => {
         this.router.navigate(['/gamehub/store/game/', gameId]);

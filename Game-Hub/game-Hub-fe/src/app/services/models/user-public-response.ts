@@ -4,11 +4,11 @@
 
 import { BadgeResponse } from '../models/badge-response';
 import { CardColorResponse } from '../models/card-color-response';
+import { CountryResponse } from '../models/country-response';
 import { FriendProfileResponse } from '../models/friend-profile-response';
 import { GameResponseShort } from '../models/game-response-short';
 import { GenreResponse } from '../models/genre-response';
 import { LevelResponse } from '../models/level-response';
-import { LocationResponse } from '../models/location-response';
 import { UserLibraryResponse } from '../models/user-library-response';
 export interface UserPublicResponse {
   accountStatus?: 'ACTIVE' | 'BANNED' | 'DISABLED' | 'SUSPENDED' | 'DELETING' | 'DELETED';
@@ -17,6 +17,7 @@ export interface UserPublicResponse {
   bannerType?: string;
   bio?: string;
   cardColor?: CardColorResponse;
+  country?: CountryResponse;
   currentlyPlaying?: GameResponseShort;
   favoriteGame?: UserLibraryResponse;
   favoriteGenres?: Array<GenreResponse>;
@@ -28,7 +29,6 @@ export interface UserPublicResponse {
   joinedDate?: string;
   level?: LevelResponse;
   libraryCount?: number;
-  location?: LocationResponse;
   playTime?: number;
   predefinedBannerPath?: string;
   profileColor?: string;

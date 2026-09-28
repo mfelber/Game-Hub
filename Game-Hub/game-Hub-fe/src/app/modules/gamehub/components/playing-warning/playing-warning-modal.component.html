@@ -1,19 +1,44 @@
-<div class="modal-backdrop">
-  <div class="change-role-modal">
-    <h2>{{ title }}</h2>
-    <p>
-      <strong class="user-name">{{ game.title }}</strong> is currently running.
-      {{description}}
-      <br />
-    </p>
-    <div class="buttons">
-      <button class="cancel" (click)="close.emit()">
-        Cancel
-      </button>
+<hlm-dialog-header class="w-full">
+  <div class="flex items-start gap-4">
 
-      <button class="stop-play-btn" (click)="stopPlaying(game.gameId)">
-        Stop playing <i class="fa-solid fa-stop"></i>
-      </button>
+    <div
+      class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#F59E0B]/10 text-[#F59E0B]">
+      <i class="fa-solid fa-triangle-exclamation text-xl"></i>
     </div>
+
+    <div>
+      <h3 hlmDialogTitle class="text-xl font-semibold text-white">
+        {{ title }}
+      </h3>
+
+      <p hlmDialogDescription class="mt-2 text-sm leading-6 text-[#A7ADBD]">
+        <strong class="font-semibold text-white">
+          {{ game.title }}
+        </strong>
+        is currently running.
+        {{ description }}
+      </p>
+    </div>
+
   </div>
-</div>
+</hlm-dialog-header>
+
+<hlm-dialog-footer class="mt-6 flex gap-3">
+
+  <button
+    type="button"
+    hlmDialogClose
+    class="cursor-pointer rounded-lg bg-[#333D52] px-5 py-2.5
+           font-semibold text-white transition-colors duration-200
+           hover:bg-[#46526B]"
+    (click)="close.emit()"> Cancel </button>
+
+  <button
+    type="button"
+    class="cursor-pointer rounded-lg bg-[#F59E0B] px-5 py-2.5
+           font-semibold text-white transition-colors duration-200
+           hover:bg-[#D97706]"
+    (click)="stopPlaying(game.gameId)"> Stop playing <i class="fa-solid fa-stop ml-2"></i>
+  </button>
+
+</hlm-dialog-footer>

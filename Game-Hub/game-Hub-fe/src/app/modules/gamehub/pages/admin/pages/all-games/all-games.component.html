@@ -1,41 +1,49 @@
-<div *ngIf="!isLoaded" class="text-center justify-center text-gray-400">
-  Loading...
-</div>
+@if (!isLoaded) {
+  <div class="text-center justify-center text-gray-400">
+    Loading...
+  </div>
+}
 
-<app-game-info
-  *ngIf="isGameInfoModalOpen && selectedGame"
-  [game]="selectedGame"
-  (close)="closeModal()">
-</app-game-info>
+@if (isGameInfoModalOpen && selectedGame) {
+  <app-game-info
+    [game]="selectedGame"
+    (close)="closeModal()">
+  </app-game-info>
+}
 
-<app-delete-game-modal
-  *ngIf="isGameDeleteModalOpen"
-  [game]="selectedGame"
-  (close)="closeModal()"
-  (deleted)="loadGamesTableData()">
-</app-delete-game-modal>
+@if (isGameDeleteModalOpen) {
+  <app-delete-game-modal
+    [game]="selectedGame"
+    (close)="closeModal()"
+    (deleted)="loadGamesTableData()">
+  </app-delete-game-modal>
+}
 
-<app-add-game-modal
-  *ngIf="isAddGameModalOpen"
-  (close)="closeModal()"
-  (gameAdded)="showSuccess($event)">
-</app-add-game-modal>
+@if (isAddGameModalOpen) {
+  <app-add-game-modal
+    (close)="closeModal()"
+    (gameAdded)="showSuccess($event)">
+  </app-add-game-modal>
+}
 
-<app-edit-game-modal
-  *ngIf="isEditGameModalOpen"
-  [game]="selectedGame"
-  (close)="closeModal()"
-  (gameEdited)="showSuccess($event)">
-</app-edit-game-modal>
+@if (isEditGameModalOpen) {
+  <app-edit-game-modal
+    [game]="selectedGame"
+    (close)="closeModal()"
+    (gameEdited)="showSuccess($event)">
+  </app-edit-game-modal>
+}
 
 
 <div class="fixed top-4 right-4 flex flex-col gap-2 z-50">
-  <div *ngIf="successMessage"
+  @if (successMessage) {
+    <div
        class="bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg min-w-[250px]
               transform transition-transform duration-500 ease-in-out opacity-0"
-       [ngClass]="{'translate-x-0 opacity-100': toastVisible, 'translate-x-24 opacity-0': !toastVisible}">
-    {{ successMessage }}
-  </div>
+      [ngClass]="{'translate-x-0 opacity-100': toastVisible, 'translate-x-24 opacity-0': !toastVisible}">
+      {{ successMessage }}
+    </div>
+  }
 </div>
 
 <main [class.hidden]="!isLoaded">
@@ -74,42 +82,44 @@
     <div class="table-container">
       <table>
         <thead>
-        <tr>
-          <th>Cover</th>
-          <th>Name</th>
-          <th>Original Price</th>
-          <th>Discounted Price</th>
-          <th>Discount</th>
-          <th>Actions</th>
-        </tr>
+          <tr>
+            <th>Cover</th>
+            <th>Name</th>
+            <th>Original Price</th>
+            <th>Discounted Price</th>
+            <th>Discount</th>
+            <th>Actions</th>
+          </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let game of gamesResponse.content">
-          <td>
-            <img [src]="getGameImageCover(game)" alt="{{game.title}}}">
-          </td>
-          <td>{{ game.title }}</td>
-          <td [ngClass]="{'free-price' : game.price === 0}">{{ game.price! > 0 ? (game.price + ' €'): 'Free' }} </td>
-          <td [ngClass]="{'free-price' : game.discountPercent === 100}">{{ game.discountPercent === 100 ? 'Free' : game.discountPrice! > 0 ? (game.discountPrice + ' €') : '' }}</td>
-          <td>
-              <span class="discount" *ngIf="game.discountPercent! > 0">
-                - {{ game.discountPercent }} %
-              </span>
-          </td>
-          <td>
-            <button class="action edit">
-              <i class="fa-solid fa-pen" (click)="loadGameDataEditModal(game.gameId)"></i>
-            </button>
-
-            <button class="action view" (click)="getGameInfo(game.gameId)">
-              <i class="fa-solid fa-eye"></i>
-            </button>
-
-            <button class="action delete" (click)="deleteGame(game)">
-              <i class="fa-solid fa-trash"></i>
-            </button>
-          </td>
-        </tr>
+          @for (game of gamesResponse.content; track game) {
+            <tr>
+              <td>
+                <img [src]="getGameImageCover(game)" alt="{{game.title}}}">
+              </td>
+              <td>{{ game.title }}</td>
+              <td [ngClass]="{'free-price' : game.price === 0}">{{ game.price! > 0 ? (game.price + ' €'): 'Free' }} </td>
+              <td [ngClass]="{'free-price' : game.discountPercent === 100}">{{ game.discountPercent === 100 ? 'Free' : game.discountPrice! > 0 ? (game.discountPrice + ' €') : '' }}</td>
+              <td>
+                @if (game.discountPercent! > 0) {
+                  <span class="discount">
+                    - {{ game.discountPercent }} %
+                  </span>
+                }
+              </td>
+              <td>
+                <button class="action edit">
+                  <i class="fa-solid fa-pen" (click)="loadGameDataEditModal(game.gameId)"></i>
+                </button>
+                <button class="action view" (click)="getGameInfo(game.gameId)">
+                  <i class="fa-solid fa-eye"></i>
+                </button>
+                <button class="action delete" (click)="deleteGame(game)">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+          }
         </tbody>
       </table>
 

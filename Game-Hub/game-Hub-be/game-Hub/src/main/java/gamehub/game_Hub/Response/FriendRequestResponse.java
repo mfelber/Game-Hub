@@ -17,7 +17,7 @@ public class FriendRequestResponse {
 
   private Long userId;
   private String username;
-  private LocationResponse location;
+  private CountryResponse country;
   private Status status;
   private byte [] userProfilePicture;
   private String profileColor;

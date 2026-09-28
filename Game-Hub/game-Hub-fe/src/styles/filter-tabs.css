@@ -1,0 +1,17 @@
+.filter-section {
+  @apply flex flex-col gap-[7px] text-sm mb-5 mt-5;
+}
+
+.filter-tabs {
+  @apply inline-flex items-center gap-0.5 p-1 bg-[#151923] rounded-[10px];
+}
+
+.filter-tab {
+  @apply bg-transparent border-0 text-[#9CA3AF] px-[15px] py-2 rounded-[7px]
+  text-sm cursor-pointer transition-all duration-200
+  hover:text-[#E5E7EB] hover:bg-[#232B3D];
+
+  &.active {
+    @apply bg-[#2A3347] text-white shadow-[0_1px_2px_rgba(0,0,0,0.2)];
+  }
+}

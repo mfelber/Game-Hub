@@ -33,8 +33,12 @@
 
         <div>
           <span>Suspended until</span>
-          <strong *ngIf="user.accountStatus !== 'SUSPENDED'">Currently not suspended</strong>
-          <strong *ngIf="user.accountStatus === 'SUSPENDED'">{{ user.suspensions![0].expiresAt | date: 'dd.MM.yyyy'}}</strong>
+          @if (user.accountStatus !== 'SUSPENDED') {
+            <strong>Currently not suspended</strong>
+          }
+          @if (user.accountStatus === 'SUSPENDED') {
+            <strong>{{ user.suspensions![0].expiresAt | date: 'dd.MM.yyyy'}}</strong>
+          }
         </div>
       </div>
     </div>
@@ -65,14 +69,14 @@
       </div>
     </div>
 
-<!--  WARNINGS  -->
+    <!--  WARNINGS  -->
 
     <div class="moderation-panel">
       <button class="moderation-panel-header" (click)="warningsOpen = !warningsOpen">
-      <div class="panel-title">
-        <h4>Warnings</h4>
-        <span class="count">{{ user.warningCount }}</span>
-      </div>
+        <div class="panel-title">
+          <h4>Warnings</h4>
+          <span class="count">{{ user.warningCount }}</span>
+        </div>
         <span class="toogle-icon" [class.open]="warningsOpen">
           <i class="fa-solid" [ngClass]="{
       'fa-chevron-right': !warningsOpen,
@@ -80,30 +84,38 @@
       }"></i>
         </span>
       </button>
-      <div class="moderation-panel-content" *ngIf="warningsOpen">
-      <div class="history-list">
-        <div class="history-item" *ngFor="let warning of user.warnings">
-          <div class="history-content">
-            <div class="history-title">
-              <strong>Warning #{{ warning.warningId }}</strong>
-              <span>{{ warning.createdAt | date: 'dd.MM.yyyy' }}</span>
-            </div>
-            <div class="history-details">
-              <span>Report #{{ warning.reportId }}</span>
-            </div>
-            <p *ngIf="warning.adminMsg">
-              Message to user : {{ warning.adminMsg }}
-            </p>
+      @if (warningsOpen) {
+        <div class="moderation-panel-content">
+          <div class="history-list">
+            @for (warning of user.warnings; track warning) {
+              <div class="history-item">
+                <div class="history-content">
+                  <div class="history-title">
+                    <strong>Warning #{{ warning.warningId }}</strong>
+                    <span>{{ warning.createdAt | date: 'dd.MM.yyyy' }}</span>
+                  </div>
+                  <div class="history-details">
+                    <span>Report #{{ warning.reportId }}</span>
+                  </div>
+                  @if (warning.adminMsg) {
+                    <p>
+                      Message to user : {{ warning.adminMsg }}
+                    </p>
+                  }
+                </div>
+              </div>
+            }
+            @if (!user.warnings?.length) {
+              <div class="empty-state">
+                No warnings for this user.
+              </div>
+            }
           </div>
         </div>
-        <div class="empty-state" *ngIf="!user.warnings?.length">
-          No warnings for this user.
-        </div>
-      </div>
-      </div>
+      }
     </div>
 
-<!--  SUSPENSIONS  -->
+    <!--  SUSPENSIONS  -->
     <div class="moderation-panel">
       <button class="moderation-panel-header" (click)="suspensionsOpen = !suspensionsOpen">
         <div class="panel-title">
@@ -117,37 +129,44 @@
       }"></i>
         </span>
       </button>
-      <div class="moderation-panel-content" *ngIf="suspensionsOpen">
-      <div class="history-list">
-        <div class="history-item" *ngFor="let suspension of user.suspensions">
-          <div class="history-content">
-            <div class="history-title">
-              <strong>Suspension #{{ suspension.suspensionId }}</strong>
+      @if (suspensionsOpen) {
+        <div class="moderation-panel-content">
+          <div class="history-list">
+            @for (suspension of user.suspensions; track suspension) {
+              <div class="history-item">
+                <div class="history-content">
+                  <div class="history-title">
+                    <strong>Suspension #{{ suspension.suspensionId }}</strong>
               <span class="status" [ngClass]="{
             'ongoing': suspension.suspensionStatus === 'ONGOING',
             'expired': suspension .suspensionStatus === 'EXPIRED',
             'canceled': suspension .suspensionStatus === 'CANCELED'
             }">{{ suspension.suspensionStatus }}</span>
-            </div>
-
-            <div class="history-details">
-              <span>Reason : <strong>{{suspension.suspensionReason}}</strong></span>
-              <span>Report #{{suspension.reportId}}</span>
-              <span>Suspension duration {{suspension.createdAt | date: 'dd.MM.yyyy'}} - {{suspension.expiresAt | date: 'dd.MM.yyyy'}}</span>
-            </div>
-            <p *ngIf="suspension.messageFromAdmin">
-              Message to user : {{ suspension.messageFromAdmin }}
-            </p>
+                  </div>
+                  <div class="history-details">
+                    <span>Reason : <strong>{{suspension.suspensionReason}}</strong></span>
+                    <span>Report #{{suspension.reportId}}</span>
+                    <span>Suspension duration {{suspension.createdAt | date: 'dd.MM.yyyy'}} - {{suspension.expiresAt | date: 'dd.MM.yyyy'}}</span>
+                  </div>
+                  @if (suspension.messageFromAdmin) {
+                    <p>
+                      Message to user : {{ suspension.messageFromAdmin }}
+                    </p>
+                  }
+                </div>
+              </div>
+            }
+            @if (!user.suspensions?.length) {
+              <div class="empty-state">
+                No suspensions for this user.
+              </div>
+            }
           </div>
         </div>
-        <div class="empty-state" *ngIf="!user.suspensions?.length">
-          No suspensions for this user.
-        </div>
-      </div>
-      </div>
+      }
     </div>
 
-<!--BAN HISTORY-->
+    <!--BAN HISTORY-->
     <div class="moderation-panel">
       <button class="moderation-panel-header" (click)="bansOpen = !bansOpen">
         <div class="panel-title">
@@ -161,32 +180,39 @@
       }"></i>
         </span>
       </button>
-      <div class="moderation-panel-content" *ngIf="bansOpen">
-      <div class="history-list">
-        <div class="history-item" *ngFor="let ban of user.bans">
-          <div class="history-content">
-            <div class="history-title">
-              <strong>Ban #{{ ban.id }}</strong>
-              <span>{{ ban.bannedAt | date: 'dd.MM.yyyy' }}</span>
-            </div>
-
-            <div class="history-details">
-              <span>Reason : <strong>{{ban.banReason}}</strong></span>
-              <span>Report : {{ ban.reportId ? '#' + ban.reportId : 'None - admin action' }}</span>
-            </div>
-            <p *ngIf="ban.customMsg">
-              Message to user : {{ ban.customMsg }}
-            </p>
+      @if (bansOpen) {
+        <div class="moderation-panel-content">
+          <div class="history-list">
+            @for (ban of user.bans; track ban) {
+              <div class="history-item">
+                <div class="history-content">
+                  <div class="history-title">
+                    <strong>Ban #{{ ban.id }}</strong>
+                    <span>{{ ban.bannedAt | date: 'dd.MM.yyyy' }}</span>
+                  </div>
+                  <div class="history-details">
+                    <span>Reason : <strong>{{ban.banReason}}</strong></span>
+                    <span>Report : {{ ban.reportId ? '#' + ban.reportId : 'None - admin action' }}</span>
+                  </div>
+                  @if (ban.customMsg) {
+                    <p>
+                      Message to user : {{ ban.customMsg }}
+                    </p>
+                  }
+                </div>
+              </div>
+            }
+            @if (!user.bans?.length) {
+              <div class="empty-state">
+                No bans for this user.
+              </div>
+            }
           </div>
         </div>
-        <div class="empty-state" *ngIf="!user.bans?.length">
-          No bans for this user.
-        </div>
-      </div>
-      </div>
+      }
     </div>
 
-<!--  REPORTS  -->
+    <!--  REPORTS  -->
 
     <div class="moderation-panel">
       <button class="moderation-panel-header" (click)="reportsOpen = !reportsOpen">
@@ -201,11 +227,13 @@
       }"></i>
         </span>
       </button>
-      <div class="moderation-panel-content" *ngIf="reportsOpen">
-      <div class="history-list">
-        <div class="report-item" *ngFor="let report of user.reports">
-          <div class="report-header">
-            <strong>Report #{{report.reportId}}</strong>
+      @if (reportsOpen) {
+        <div class="moderation-panel-content">
+          <div class="history-list">
+            @for (report of user.reports; track report) {
+              <div class="report-item">
+                <div class="report-header">
+                  <strong>Report #{{report.reportId}}</strong>
             <span class="report-status" [ngClass]="{
             'new': report.reportStatus === 'NEW',
             'in-review': report.reportStatus === 'IN_REVIEW',
@@ -213,37 +241,49 @@
             'rejected': report.reportStatus === 'REJECTED',
             'dismissed': report.reportStatus === 'DISMISSED',
             }">{{ formatStatus(report.reportStatus) }}</span>
-          </div>
-          <div class="report-details">
-            <div>
-              <span>Reporter</span>
-              <strong>{{report.reporterUserName}}</strong>
-            </div>
-            <div>
-              <span>Reason</span>
-              <strong>{{report.reportReason}}</strong>
-            </div>
-            <div *ngIf="!report.closedByReport">
-              <span>Created</span>
-              <strong>{{report.createdAt | date: 'dd.MM.yyyy'}}</strong>
-            </div>
-            <div *ngIf="report.closedByReport">
-              <span>Closed by report</span>
-              <strong>#{{report.closedByReport}}</strong>
-            </div>
-          </div>
-          <p *ngIf="report.reportMsg">
-            Message from reporter :{{report.reportMsg}}
-          </p>
-          <div class="moderation-action" *ngIf="report.moderationAction">
-            Moderation action: <strong>{{report.moderationAction}}</strong>
+                </div>
+                <div class="report-details">
+                  <div>
+                    <span>Reporter</span>
+                    <strong>{{report.reporterUserName}}</strong>
+                  </div>
+                  <div>
+                    <span>Reason</span>
+                    <strong>{{report.reportReason}}</strong>
+                  </div>
+                  @if (!report.closedByReport) {
+                    <div>
+                      <span>Created</span>
+                      <strong>{{report.createdAt | date: 'dd.MM.yyyy'}}</strong>
+                    </div>
+                  }
+                  @if (report.closedByReport) {
+                    <div>
+                      <span>Closed by report</span>
+                      <strong>#{{report.closedByReport}}</strong>
+                    </div>
+                  }
+                </div>
+                @if (report.reportMsg) {
+                  <p>
+                    Message from reporter :{{report.reportMsg}}
+                  </p>
+                }
+                @if (report.moderationAction) {
+                  <div class="moderation-action">
+                    Moderation action: <strong>{{report.moderationAction}}</strong>
+                  </div>
+                }
+              </div>
+            }
+            @if (!user.reports?.length) {
+              <div class="empty-state">
+                No reports for this user.
+              </div>
+            }
           </div>
         </div>
-        <div class="empty-state" *ngIf="!user.reports?.length">
-          No reports for this user.
-        </div>
-      </div>
-      </div>
+      }
     </div>
 
   </div>

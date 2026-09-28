@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {WishlistControllerService} from '../../../../services/services/wishlist-controller.service';
 import {StoreControllerService} from '../../../../services/services/store-controller.service';
-import {DatePipe, NgClass, NgForOf, NgIf} from '@angular/common';
+import { DatePipe, NgClass } from '@angular/common';
 import {GameResponse} from '../../../../services/models/game-response';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormsModule} from '@angular/forms';
@@ -13,12 +13,11 @@ import {UserActionsComponent} from '../../components/user-actions/user-actions.c
 import {PaginationComponent} from '../../components/pagination/pagination.component';
 import {CartControllerService} from '../../../../services/services/cart-controller.service';
 import {LoadingComponent} from '../../components/loading/loading.component';
+import {HlmDropdownMenu, HlmDropdownMenuItem, HlmDropdownMenuTrigger} from '@spartan/dropdown-menu';
 
 @Component({
   selector: 'app-wishlist',
   imports: [
-    NgForOf,
-    NgIf,
     FormsModule,
     SearchBar,
     NgClass,
@@ -27,6 +26,9 @@ import {LoadingComponent} from '../../components/loading/loading.component';
     UserActionsComponent,
     PaginationComponent,
     LoadingComponent,
+    HlmDropdownMenu,
+    HlmDropdownMenuItem,
+    HlmDropdownMenuTrigger
   ],
   templateUrl: './wishlist.component.html',
   styleUrl: './wishlist.component.scss'
@@ -47,9 +49,17 @@ export class WishlistComponent implements OnInit{
 
   sortBy = 'recentlyAdded'
 
+  sortOptions = [
+    { value: 'recentlyAdded', label: 'Recently Added' },
+    { value: 'priceAsc', label: 'Price: Low to High' },
+    { value: 'priceDesc', label: 'Price: High to Low' },
+    { value: 'nameAsc', label: 'Name: A to Z' },
+    { value: 'nameDesc', label: 'Name: Z to A' }
+  ]
+
   constructor(
     private wishListService: WishlistControllerService,
-    private gameService: StoreControllerService,
+    private storeService: StoreControllerService,
     private cartService: CartControllerService,
     private router: Router,
     private route: ActivatedRoute,
@@ -72,7 +82,7 @@ export class WishlistComponent implements OnInit{
       this.getAllGamesInWishlist();
     })
 
-    this.getPlatforms();
+    this.getOperationSystems();
     this.getGenres();
   }
 
@@ -111,7 +121,7 @@ export class WishlistComponent implements OnInit{
   }
 
   goToGame(gameId: any) {
-    this.gameService.getGameById({gameId}).subscribe({
+    this.storeService.getGameById({gameId}).subscribe({
       next: (game) => {
         this.router.navigate(['gamehub/store/game', gameId]);
       },
@@ -172,8 +182,8 @@ export class WishlistComponent implements OnInit{
     })
   }
 
-  private getPlatforms() {
-    this.gameService.getAllPlatforms().subscribe({
+  private getOperationSystems() {
+    this.storeService.getAllPlatforms().subscribe({
       next: (platforms) => {
         this.allOperationSystems = platforms.map(p => p.platformName!)
       }
@@ -181,7 +191,7 @@ export class WishlistComponent implements OnInit{
   }
 
   private getGenres() {
-    this.gameService.getAllGenres().subscribe({
+    this.storeService.getAllGenres().subscribe({
       next: (genres) => {
         this.allGenres = genres.map(g => g.name!)
       }
@@ -193,7 +203,7 @@ export class WishlistComponent implements OnInit{
   }
 
   removeGameFromWishList(gameId: any) {
-    this.gameService.removeGameFromWishlist({gameId})
+    this.storeService.removeGameFromWishlist({gameId})
       .subscribe({
         next: () => {
           console.log('game with id: ' + gameId + ' removed from wishlist');
@@ -239,4 +249,10 @@ export class WishlistComponent implements OnInit{
       }
     })
   }
+
+  get selectedSortLabel(): string {
+    return this.sortOptions.find(option => option.value === this.sortBy)?.label
+      ?? 'Recently Added';
+  }
+
 }

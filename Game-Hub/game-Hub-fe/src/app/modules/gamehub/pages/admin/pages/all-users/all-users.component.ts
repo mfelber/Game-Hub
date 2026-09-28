@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AdminControllerService} from '../../../../../../services/services/admin-controller.service';
 import {PageResponseAdminUserResponse} from '../../../../../../services/models/page-response-admin-user-response';
 import {SearchBar} from '../../../../components/search-bar/search-bar';
-import {DatePipe, NgClass, NgForOf, NgIf} from '@angular/common';
+import { DatePipe, NgClass } from '@angular/common';
 import {AccountStatusResponse} from '../../../../../../services/models/account-status-response';
 import {RoleResponse} from '../../../../../../services/models/role-response';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -17,10 +17,8 @@ import {EmptyStateComponent} from '../../../../components/empty-state/empty-stat
   selector: 'app-all-users',
   imports: [
     SearchBar,
-    NgForOf,
     DatePipe,
     NgClass,
-    NgIf,
     ReactiveFormsModule,
     FormsModule,
     UserInfoModalComponent,
@@ -28,7 +26,7 @@ import {EmptyStateComponent} from '../../../../components/empty-state/empty-stat
     BanModalComponent,
     UnbanModalComponent,
     EmptyStateComponent
-  ],
+],
   templateUrl: './all-users.component.html',
   styleUrl: './all-users.component.scss',
 })

@@ -1,17 +1,15 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {AdminSuspendedAccountsResponse} from '../../../../../../services/models/admin-suspended-accounts-response';
 import {AdminControllerService} from '../../../../../../services/services/admin-controller.service';
-import {DatePipe, NgClass, NgForOf, NgIf} from '@angular/common';
+import { DatePipe, NgClass } from '@angular/common';
 import {AdminUserModerationResponse} from '../../../../../../services/models/admin-user-moderation-response';
 
 @Component({
   selector: 'app-preview-suspended-user-modal',
   imports: [
     NgClass,
-    DatePipe,
-    NgIf,
-    NgForOf
-  ],
+    DatePipe
+],
   templateUrl: './preview-suspended-user-modal.component.html',
   styleUrl: './preview-suspended-user-modal.component.scss',
 })

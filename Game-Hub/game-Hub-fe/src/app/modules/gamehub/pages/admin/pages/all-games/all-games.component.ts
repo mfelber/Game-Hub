@@ -3,7 +3,7 @@ import {GamePreviewResponse} from '../../../../../../services/models/game-previe
 import {AdminControllerService} from '../../../../../../services/services/admin-controller.service';
 import {Router} from '@angular/router';
 import {PageResponseGamePreviewResponse} from '../../../../../../services/models/page-response-game-preview-response';
-import {NgClass, NgForOf, NgIf} from '@angular/common';
+import { NgClass } from '@angular/common';
 import {SearchBar} from '../../../../components/search-bar/search-bar';
 import {ReactiveFormsModule} from '@angular/forms';
 import {GameInfoModalComponent} from '../../components/game-info/game-info-modal.component';
@@ -15,16 +15,14 @@ import {EditGameModalComponent} from '../../components/game/edit-game-modal/edit
 @Component({
   selector: 'app-all-games',
   imports: [
-    NgIf,
     SearchBar,
-    NgForOf,
     ReactiveFormsModule,
     GameInfoModalComponent,
     DeleteGameModalComponent,
     AddGameModalComponent,
     NgClass,
     EditGameModalComponent
-  ],
+],
   templateUrl: './all-games.component.html',
   styleUrl: './all-games.component.scss',
 })

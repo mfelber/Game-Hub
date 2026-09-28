@@ -1,12 +1,17 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {NgIf} from "@angular/common";
+
 import {UserLibraryResponse} from '../../../../services/models/user-library-response';
 import {LibraryControllerService} from '../../../../services/services/library-controller.service';
+import {HlmDialogDescription, HlmDialogFooter, HlmDialogHeader, HlmDialogTitle} from '@spartan/dialog';
 
 @Component({
   selector: 'app-playing-warning-modal',
-    imports: [
-    ],
+  imports: [
+    HlmDialogHeader,
+    HlmDialogTitle,
+    HlmDialogDescription,
+    HlmDialogFooter
+  ],
   templateUrl: './playing-warning-modal.component.html',
   styleUrl: './playing-warning-modal.component.scss',
 })

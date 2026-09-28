@@ -13,17 +13,16 @@
         <h4>Developer : {{game.developer}}</h4>
         <h4>Publisher : {{game.publisher}}</h4>
         <span [ngStyle]="{'background-color': game.ageRating?.ageRatingColor}" class="age-rating">
-      {{ game.ageRating?.ageRating }} </span>
+        {{ game.ageRating?.ageRating }} </span>
         <div class="prices">
-          <ng-container *ngIf="game.discountPrice! > 0 || game.discountPercent === 100; else normalPrice">
+          @if (game.discountPrice! > 0 || game.discountPercent === 100) {
             <span class="old-price">{{game.price}}</span>
             <span class="discount">-{{game.discountPercent}}%</span>
             <span class="new-price">{{ game.discountPrice! > 0 ? (game.discountPrice + ' €'): 'Free' }}</span>
-          </ng-container>
-
-          <ng-template #normalPrice>
+          } @else {
             <span class="new-price">{{ game.price! > 0 ? (game.price + ' €'): 'Free' }}</span>
-          </ng-template>
+          }
+
         </div>
       </div>
     </div>
@@ -33,9 +32,11 @@
         Genres
       </h4>
       <div class="tags">
-        <span class="tag" *ngFor="let genre of game.genres">
-          {{genre.name}}
-        </span>
+        @for (genre of game.genres; track genre) {
+          <span class="tag">
+            {{genre.name}}
+          </span>
+        }
       </div>
     </div>
 
@@ -87,9 +88,11 @@
       <h4>
         Platforms
         <div class="tags">
-        <span class="tag" *ngFor="let platform of game.platforms">
-          {{platform.platformName}}
-        </span>
+          @for (platform of game.platforms; track platform) {
+            <span class="tag">
+              {{platform.platformName}}
+            </span>
+          }
         </div>
       </h4>
     </div>
@@ -98,9 +101,11 @@
       <h4>
         Languages
         <div class="tags">
-        <span class="tag" *ngFor="let language of game.languages">
-          {{language.languageName}}
-        </span>
+          @for (language of game.languages; track language) {
+            <span class="tag">
+              {{language.languageName}}
+            </span>
+          }
         </div>
       </h4>
     </div>
@@ -109,9 +114,11 @@
       <h4>
         Subtitles
         <div class="tags">
-        <span class="tag" *ngFor="let subtitle of game.subtitles">
-          {{subtitle.subtitleName}}
-        </span>
+          @for (subtitle of game.subtitles; track subtitle) {
+            <span class="tag">
+              {{subtitle.subtitleName}}
+            </span>
+          }
         </div>
       </h4>
     </div>

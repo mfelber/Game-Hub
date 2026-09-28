@@ -4,20 +4,20 @@
 
 import { BadgeResponse } from '../models/badge-response';
 import { CardColorResponse } from '../models/card-color-response';
+import { CountryResponse } from '../models/country-response';
 import { FriendProfileResponse } from '../models/friend-profile-response';
 import { GameResponseShort } from '../models/game-response-short';
 import { GenreResponse } from '../models/genre-response';
 import { LevelResponse } from '../models/level-response';
-import { LocationResponse } from '../models/location-response';
 import { RecentGamesResponse } from '../models/recent-games-response';
 import { UserLibraryResponse } from '../models/user-library-response';
-import { WishlistResponse } from '../models/wishlist-response';
 export interface UserPrivateResponse {
   badges?: Array<BadgeResponse>;
   bannerImage?: string;
   bannerType?: string;
   bio?: string;
   cardColor?: CardColorResponse;
+  country?: CountryResponse;
   currentlyPlaying?: GameResponseShort;
   email?: string;
   favoriteGame?: UserLibraryResponse;
@@ -30,7 +30,6 @@ export interface UserPrivateResponse {
   lastName?: string;
   level?: LevelResponse;
   libraryCount?: number;
-  location?: LocationResponse;
   playTime?: number;
   predefinedBannerPath?: string;
   profileColor?: string;
@@ -41,6 +40,5 @@ export interface UserPrivateResponse {
   userId?: number;
   userProfilePicture?: string;
   username?: string;
-  wishlist?: WishlistResponse;
   wishlistCount?: number;
 }

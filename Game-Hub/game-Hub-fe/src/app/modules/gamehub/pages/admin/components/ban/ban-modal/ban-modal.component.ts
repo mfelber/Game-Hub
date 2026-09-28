@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {AdminUserResponse} from '../../../../../../../services/models/admin-user-response';
 import {FormsModule} from '@angular/forms';
-import {NgClass, NgForOf, NgIf} from '@angular/common';
+import { NgClass } from '@angular/common';
 import {ReportControllerService} from '../../../../../../../services/services/report-controller.service';
 import {BanUserRequest} from '../../../../../../../services/models/ban-user-request';
 import {AdminControllerService} from '../../../../../../../services/services/admin-controller.service';
@@ -10,10 +10,8 @@ import {AdminControllerService} from '../../../../../../../services/services/adm
   selector: 'app-ban-modal',
   imports: [
     FormsModule,
-    NgForOf,
-    NgIf,
-    NgClass,
-  ],
+    NgClass
+],
   templateUrl: './ban-modal.component.html',
   styleUrl: './ban-modal.component.scss',
 })

@@ -5,7 +5,7 @@ import {GenreResponse} from '../../../../../../../services/models/genre-response
 import {PlatformResponse} from '../../../../../../../services/models/platform-response';
 import {LanguageResponse} from '../../../../../../../services/models/language-response';
 import {SubtitleResponse} from '../../../../../../../services/models/subtitle-response';
-import {NgClass, NgForOf, NgIf, NgStyle} from '@angular/common';
+import { NgClass, NgStyle } from '@angular/common';
 import {StoreControllerService} from '../../../../../../../services/services/store-controller.service';
 import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {AgeRatingResponse} from '../../../../../../../services/models/age-rating-response';
@@ -20,12 +20,10 @@ import {UnitSizeResponse} from '../../../../../../../services/models/unit-size-r
   selector: 'app-add-game-modal',
   imports: [
     FormsModule,
-    NgForOf,
     NgClass,
-    NgIf,
     MatSlideToggle,
     NgStyle
-  ],
+],
   templateUrl: './add-game-modal.component.html',
   styleUrl: './add-game-modal.component.scss',
 })

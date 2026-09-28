@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
         .lastName(userUpdateRequest.getLastName())
         .username(userUpdateRequest.getUsername())
         .email(userUpdateRequest.getEmail())
-        .location(userUpdateRequest.getLocation())
+        .country(userUpdateRequest.getCountry())
         .cardColor(cardColor)
         .build();
 

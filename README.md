@@ -1,4 +1,6 @@
-# GameHub
+<p align="center">
+  <img src="./assets/logo.svg" width="300" alt="GameHub" />
+</p>
 
 
 GameHub is a full-stack web application designed as a central hub for discovering, managing, and building a personal game collection.
@@ -50,10 +52,10 @@ Users can browse games, add them to their library or wishlist, customize their p
 <img width="100%" alt="User game library" src="./assets/library.png" />
 </p>
 
-### 🎨 Profile Customization
+### 🛒 Cart
 
 <p align="center">
-<img width="100%" alt="User game library" src="./assets/Profile-customization.png" />
+<img width="100%" alt="User game library" src="./assets/cart.png" />
 </p>
 
 ---
