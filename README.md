@@ -5,6 +5,7 @@
   </span>
 </p>
 
+
 GameHub is a full-stack web application designed as a central hub for discovering, managing, and building a personal game collection.
 
 Users can browse games, add them to their library or wishlist, customize their profiles, and manage their accounts. The application also includes administration and moderation tools for managing users and platform content.
