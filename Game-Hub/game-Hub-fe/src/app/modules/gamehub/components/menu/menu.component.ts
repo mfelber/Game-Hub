@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {Router, RouterLink, RouterLinkActive} from '@angular/router';
-import {initFlowbite} from 'flowbite';
 import { NgClass, NgStyle } from '@angular/common';
 import {UserProfileControllerService} from '../../../../services/services';
 import {UserPrivateResponse} from '../../../../services/models/user-private-response';
@@ -47,7 +46,6 @@ import {HlmDropdownMenu, HlmDropdownMenuItem, HlmDropdownMenuTrigger} from '@spa
 export class MenuComponent implements OnInit {
 
   ngOnInit(): void {
-    initFlowbite();
     this.loadUser();
     this.getStatus();
     this.refreshService.refresh$.subscribe(() => {

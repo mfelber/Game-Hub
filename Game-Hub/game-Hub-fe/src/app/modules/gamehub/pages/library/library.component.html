@@ -1,11 +1,11 @@
-@if (userIsPlayingGame) {
-  <app-playing-warning-modal
-    [game]="currentlyPlayingGame"
-    [title]="'You are already playing a game'"
-    [description]="'Stop your current game before starting another one.'"
-    (stoppedPlayingGame)="gameStopped()"
-    (close)="closeModal()"/>
-}
+<!--@if (userIsPlayingGame) {-->
+<!--  <app-playing-warning-modal-->
+<!--    [game]="currentlyPlayingGame"-->
+<!--    [title]="'You are already playing a game'"-->
+<!--    [description]="'Stop your current game before starting another one.'"-->
+<!--    (stoppedPlayingGame)="gameStopped()"-->
+<!--    (close)="closeModal()"/>-->
+<!--}-->
 
 <main>
 
@@ -35,7 +35,7 @@
         </button>
 
         <button class="filter-tab" [class.active]="activeFilter === 'DOWNLOADED'"
-          (click)="setFilter('DOWNLOADED')">
+                (click)="setFilter('DOWNLOADED')">
           <i class="fa-solid fa-download"></i> Downloaded Games
         </button>
 
@@ -81,7 +81,7 @@
       @if (loadAllGames && !isLoading) {
         @for (game of gamePageResponse.content; track game) {
           <div class="card"
-            (click)="goToGame(game.gameId)">
+               (click)="goToGame(game.gameId)">
             <img [src]="getGameImageCover(game)" alt="{{game.title}}}">
             <div class="library-card-content">
               <h3>{{ game.title }}</h3>
@@ -99,7 +99,7 @@
       @if (loadDownloadedGames && !isLoading) {
         @for (game of gamePageResponse.content; track game) {
           <div class="card"
-            (click)="goToGame(game.gameId)">
+               (click)="goToGame(game.gameId)">
             <img [src]="getGameImageCover(game)" alt="{{game.title}}}">
             <div class="library-card-content">
               <h3>{{ game.title }}</h3>
@@ -108,10 +108,24 @@
               }
               <small>Played : {{ game.playtimeMinutes }}</small>
               @if (!game.currentlyPlaying && game.installed) {
-                <button class="big-button play"
-                  (click)="playGame(game) ; $event.stopPropagation()">
-                  Play <i class="fa-solid fa-play"></i>
-                </button>
+                <hlm-dialog #warningDialog>
+
+                  <button class="big-button play"
+                          (click)="playGame(game) ; $event.stopPropagation()">
+                    Play <i class="fa-solid fa-play"></i>
+                  </button>
+
+                  <hlm-dialog-content *hlmDialogPortal="let ctx" class="sm:max-w-xl">
+                    <app-playing-warning-modal
+                      [game]="currentlyPlayingGame"
+                      [title]="'You are already playing a game'"
+                      [description]="'Stop your current game before starting another one.'"
+                      (stoppedPlayingGame)="gameStopped()"
+                      (close)="closeModal()"
+                    />
+                  </hlm-dialog-content>
+
+                </hlm-dialog>
               }
               @if (game.currentlyPlaying) {
                 <button class="big-button stop" (click)="stopPlayingGame(game); $event.stopPropagation()">
@@ -125,7 +139,7 @@
       @if (loadFavoriteGames && !isLoading) {
         @for (game of gamePageResponse.content; track game) {
           <div class="card"
-            (click)="goToGame(game.gameId)">
+               (click)="goToGame(game.gameId)">
             <img [src]="getGameImageCover(game)" alt="{{game.title}}}">
             <div class="library-card-content">
               <h3>{{ game.title }}</h3>
@@ -137,20 +151,34 @@
               }
               <small>Played : {{ game.playtimeMinutes }}</small>
               @if (!game.currentlyPlaying && game.installed) {
-                <button class="big-button play"
-                  (click)="playGame(game) ; $event.stopPropagation()">
-                  Play <i class="fa-solid fa-play"></i>
-                </button>
+                <hlm-dialog #warningDialog>
+
+                  <button class="big-button play"
+                          (click)="playGame(game) ; $event.stopPropagation()">
+                    Play <i class="fa-solid fa-play"></i>
+                  </button>
+
+                  <hlm-dialog-content *hlmDialogPortal="let ctx" class="sm:max-w-xl">
+                    <app-playing-warning-modal
+                      [game]="currentlyPlayingGame"
+                      [title]="'You are already playing a game'"
+                      [description]="'Stop your current game before starting another one.'"
+                      (stoppedPlayingGame)="gameStopped()"
+                      (close)="closeModal()"
+                    />
+                  </hlm-dialog-content>
+
+                </hlm-dialog>
               }
               @if (game.currentlyPlaying) {
                 <button class="big-button stop"
-                  (click)="stopPlayingGame(game); $event.stopPropagation()">
+                        (click)="stopPlayingGame(game); $event.stopPropagation()">
                   Stop playing <i class="fa-solid fa-stop"></i>
                 </button>
               }
               @if (!game.installed) {
                 <button class="big-button download"
-                  (click)="downloadGame(game); $event.stopPropagation()">
+                        (click)="downloadGame(game); $event.stopPropagation()">
                   Download <i class="fa-solid fa-download"></i>
                 </button>
               }
@@ -163,11 +191,11 @@
 
   @if (gamePageResponse.totalPages! > 1) {
     <section class="pb-5">
-    <app-pagination
-      [currentPage]="page"
-      [totalPages]="gamePageResponse.totalPages!"
-      (pageChange)="changePage($event)">
-    </app-pagination>
+      <app-pagination
+        [currentPage]="page"
+        [totalPages]="gamePageResponse.totalPages!"
+        (pageChange)="changePage($event)">
+      </app-pagination>
     </section>
   }
 

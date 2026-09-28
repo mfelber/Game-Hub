@@ -4,7 +4,6 @@ import {UserUpdateRequest} from '../../../../services/models/user-update-request
 import {CardColorResponse} from '../../../../services/models/card-color-response';
 import {NgClass, NgStyle} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {initFlowbite} from 'flowbite';
 import {SearchBar} from '../search-bar/search-bar';
 import {UserProfileControllerService} from '../../../../services/services/user-profile-controller.service';
 import {UserLibraryResponse} from '../../../../services/models/user-library-response';
@@ -56,7 +55,6 @@ export class EditProfileInfoComponent implements OnInit {
 
 
   ngOnInit(): void {
-    initFlowbite();
     this.getProfilePicture(this.user)
   }
 

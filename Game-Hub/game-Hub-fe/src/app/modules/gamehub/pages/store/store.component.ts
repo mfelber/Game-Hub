@@ -11,7 +11,6 @@ import {EmptyStateComponent} from '../../components/empty-state/empty-state.comp
 import {PaginationComponent} from '../../components/pagination/pagination.component';
 import {subscribe} from 'node:diagnostics_channel';
 import {LoadingComponent} from '../../components/loading/loading.component';
-import {Dropdown, initFlowbite} from 'flowbite';
 import {
   HlmDropdownMenu, HlmDropdownMenuGroup,
   HlmDropdownMenuItem, HlmDropdownMenuLabel, HlmDropdownMenuSeparator,
@@ -70,7 +69,6 @@ export class StoreComponent implements OnInit {
   }
 
   ngOnInit() {
-    initFlowbite();
     this.route.queryParams.subscribe(params => {
       this.page = Number(params['page'] ?? 1) - 1;
 

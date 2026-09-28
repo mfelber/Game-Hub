@@ -4,7 +4,6 @@ import { DatePipe, NgClass, NgStyle } from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ReportUserModalComponent} from '../../components/report-user-modal/report-user-modal.component';
 import {SearchBar} from '../../components/search-bar/search-bar';
-import {Dropdown, initFlowbite} from 'flowbite';
 import {CommunityControllerService} from '../../../../services/services/community-controller.service';
 import {ReportControllerService} from '../../../../services/services/report-controller.service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -81,7 +80,6 @@ export class FindPlayersComponent implements OnInit {
   filteredUsers: UserCommunityResponse[] = [];
 
   ngOnInit(): void {
-    initFlowbite();
     this.route.queryParams.subscribe(params => {
       this.page = Number(params['page'] ?? 1) - 1;
 
@@ -264,15 +262,5 @@ export class FindPlayersComponent implements OnInit {
         voiceChat: this.filters.voiceChat || null,
       }
     })
-  }
-
-  closeDropdown() {
-    const dropdownCountryElement = document.getElementById('countryDropdown');
-    const buttonElement = document.getElementById('countryDropdownButton');
-
-    if (dropdownCountryElement && buttonElement) {
-      const dropdown = new Dropdown(dropdownCountryElement, buttonElement);
-      dropdown.hide();
-    }
   }
 }

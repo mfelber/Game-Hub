@@ -1,6 +1,5 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {UserPrivateResponse} from '../../../../services/models/user-private-response';
-import {initFlowbite} from 'flowbite';
 import {Router} from '@angular/router';
 import {UserProfileControllerService} from '../../../../services/services/user-profile-controller.service';
 import { DatePipe, NgClass, NgStyle } from '@angular/common';
@@ -180,10 +179,6 @@ export class UserPrivateProfileComponent implements OnInit{
         this.recentGamesResponse = recentGames;
         this.genreResponse = genres;
         this.isLoading = false;
-        setTimeout(() => {
-          console.log('MODAL:', document.getElementById('default-modal'));
-          initFlowbite();
-        });
       },
       error: (err) => {
         this.isLoading = true;

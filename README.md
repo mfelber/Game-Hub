@@ -1,4 +1,9 @@
-# GameHub 🎮
+<p align="left">
+  <img src="./assets/gamehub-logo.png" width="60" alt="GameHub Logo" />
+  <span style="font-size: 32px; font-weight: bold;">
+    <span style="color: #FB5F1E;">Game</span><span style="color: #40D1D8;">Hub</span>
+  </span>
+</p>
 
 GameHub is a full-stack web application designed as a central hub for discovering, managing, and building a personal game collection.
 
