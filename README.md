@@ -52,10 +52,10 @@ Users can browse games, add them to their library or wishlist, customize their p
 <img width="100%" alt="User game library" src="./assets/library.png" />
 </p>
 
-### 🎨 Profile Customization
+### 🛒 Cart
 
 <p align="center">
-<img width="100%" alt="User game library" src="./assets/Profile-customization.png" />
+<img width="100%" alt="User game library" src="./assets/cart.png" />
 </p>
 
 ---
