@@ -1,10 +1,5 @@
-<p align="left">
-  <img src="./assets/gamehub-logo.png" width="60" alt="GameHub Logo" />
-  <font size="6">
-    <b>
-      <font color="#FB5F1E">Game</font><font color="#40D1D8">Hub</font>
-    </b>
-  </font>
+<p align="center">
+  <img src="./assets/logo.svg" width="300" alt="GameHub" />
 </p>
 
 
