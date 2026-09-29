@@ -31,6 +31,7 @@ import gamehub.game_Hub.Response.UserLibraryResponse;
 import gamehub.game_Hub.Response.UserNotificationsResponse;
 import gamehub.game_Hub.Response.UserPrivateResponse;
 import gamehub.game_Hub.Response.UserPublicResponse;
+import gamehub.game_Hub.Response.UserSettingsResponse;
 import gamehub.game_Hub.Service.UserService;
 import gamehub.game_Hub.Request.UserUpdateRequest;
 import jakarta.persistence.EntityNotFoundException;
@@ -145,6 +146,15 @@ public class UserServiceImpl implements UserService {
     userRepository.save(user);
 
     return user.getId();
+  }
+
+  @Override
+  public UserSettingsResponse getUserSettings(final Authentication connectedUser) {
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+    return userMapper.toUserSettingsResponse(user);
   }
 
   @Override

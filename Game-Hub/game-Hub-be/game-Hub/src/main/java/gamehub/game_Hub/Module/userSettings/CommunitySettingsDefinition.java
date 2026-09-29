@@ -1,4 +1,4 @@
-package gamehub.game_Hub.Module.Flags;
+package gamehub.game_Hub.Module.userSettings;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,23 +14,21 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "store_flag_type", schema = "game_hub")
-public class StoreFlagType {
+@Table(name = "community_settings_definition", schema = "game_hub")
+public class CommunitySettingsDefinition {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(name = "flag_name")
-  private String flagName;
+  @Column(nullable = false, unique = true)
+  private String name;
 
-  @Column(name = "flag_code")
-  private String flagCode;
-
+  @Column(nullable = false)
   private String description;
 
 }

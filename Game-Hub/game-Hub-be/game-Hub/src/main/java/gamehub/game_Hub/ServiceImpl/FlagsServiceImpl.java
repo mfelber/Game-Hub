@@ -3,18 +3,15 @@ package gamehub.game_Hub.ServiceImpl;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import gamehub.game_Hub.Module.Flags.FriendRequestOption;
-import gamehub.game_Hub.Module.Flags.GroupInvitesOption;
-import gamehub.game_Hub.Module.Flags.PlayTogetherInvitesOption;
-import gamehub.game_Hub.Module.Flags.ProfileVisibilityOption;
-import gamehub.game_Hub.Module.Flags.SendMessagesOption;
-import gamehub.game_Hub.Repository.StoreFlagTypeRepository;
+import gamehub.game_Hub.Module.userSettings.FriendRequestOption;
+import gamehub.game_Hub.Module.userSettings.GroupInvitesOption;
+import gamehub.game_Hub.Module.userSettings.PlayTogetherInvitesOption;
+import gamehub.game_Hub.Module.userSettings.ProfileVisibilityOption;
+import gamehub.game_Hub.Module.userSettings.SendMessagesOption;
 import gamehub.game_Hub.Response.CommunityFlagsResponse;
-import gamehub.game_Hub.Response.StoreFlagsResponse;
 import gamehub.game_Hub.Service.FlagsService;
 import lombok.RequiredArgsConstructor;
 
@@ -22,15 +19,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FlagsServiceImpl implements FlagsService {
 
-  private final StoreFlagTypeRepository storeFlagTypeRepository;
+  // private final StoreFlagTypeRepository storeFlagTypeRepository;
 
-  @Override
-  public List<StoreFlagsResponse> getStoreFlags() {
-    return storeFlagTypeRepository.findAll()
-        .stream()
-        .map(flag -> new StoreFlagsResponse(flag.getFlagName(), flag.getDescription()))
-        .toList();
-  }
+  // @Override
+  // public List<StoreFlagsResponse> getStoreFlags() {
+  //   return storeFlagTypeRepository.findAll()
+  //       .stream()
+  //       .map(flag -> new StoreFlagsResponse(flag.getFlagName(), flag.getDescription()))
+  //       .toList();
+  // }
 
   @Override
   public List<CommunityFlagsResponse> getCommunityFlags() {

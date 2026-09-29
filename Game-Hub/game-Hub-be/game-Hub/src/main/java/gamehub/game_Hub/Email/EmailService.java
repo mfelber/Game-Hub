@@ -27,6 +27,41 @@ public class EmailService {
 
   private final SpringTemplateEngine templateEngine;
 
+  // TODO
+  // @Async
+  // public void sendChildAccountCreatedToParentEmail(final String to, final String username, String childEmail , final EmailTemplate emailTemplate,
+  //     final String loginUrl, final String subject) throws MessagingException {
+  //   String templateName;
+  //   if (emailTemplate == null) {
+  //     templateName = "welcome-email";
+  //   } else {
+  //     templateName = emailTemplate.getName();
+  //   }
+  //
+  //   MimeMessage mimeMessage = mailSender.createMimeMessage();
+  //   MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, MULTIPART_MODE_MIXED, UTF_8.name());
+  //   Map<String, Object> properties = new HashMap<>();
+  //   properties.put("username", username);
+  //   properties.put("loginUrl", loginUrl);
+  //
+  //   Context context = new Context();
+  //   context.setVariables(properties);
+  //
+  //   helper.setFrom("contact@gamehub.com");
+  //   helper.setTo(to);
+  //   helper.setSubject(subject);
+  //
+  //   String template = templateEngine.process(templateName, context);
+  //
+  //   helper.setText(template, true);
+  //
+  //   Resource image = new ClassPathResource("images/joystick.png");
+  //   helper.addInline("joystickImage", image);
+  //
+  //   mailSender.send(mimeMessage);
+  // }
+
+
   @Async
   public void sendWelcomeEmail(final String to, final String username, final EmailTemplate emailTemplate,
       final String loginUrl, final String subject) throws MessagingException {

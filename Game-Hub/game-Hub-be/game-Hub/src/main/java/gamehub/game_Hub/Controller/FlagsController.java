@@ -18,10 +18,10 @@ public class FlagsController {
 
   private final FlagsService flagsService;
 
-  @GetMapping("/get/store/flags")
-  public List<StoreFlagsResponse> getAllStoreFlags() {
-    return flagsService.getStoreFlags();
-  }
+  // @GetMapping("/get/store/flags")
+  // public List<StoreFlagsResponse> getAllStoreFlags() {
+  //   return flagsService.getStoreFlags();
+  // }
 
   @GetMapping("/get/community/flags")
   public List<CommunityFlagsResponse> getAllCommunityFlags() {

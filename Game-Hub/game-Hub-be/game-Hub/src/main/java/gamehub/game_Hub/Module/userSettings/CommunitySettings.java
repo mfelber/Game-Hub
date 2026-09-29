@@ -1,7 +1,10 @@
-package gamehub.game_Hub.Module.Flags;
+package gamehub.game_Hub.Module.userSettings;
 
 import gamehub.game_Hub.Module.User.User;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -16,25 +19,26 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "user_community_flag", schema = "game_hub")
-public class UserCommunityFlag {
+@Table(name = "community_settings", schema = "game_hub")
+public class CommunitySettings {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @ManyToOne
-  @JoinColumn(name = "user_id")
+  @JoinColumn(name = "user_id", nullable = false)
   private User user;
 
   @ManyToOne
-  @JoinColumn(name = "flag_type_id")
-  private CommunityFlagType userFlagType;
+  @JoinColumn(name = "setting_definition_id", nullable = false)
+  private CommunitySettingsDefinition settingDefinition;
 
-  private String value;
+  @Enumerated(EnumType.STRING)
+  private Access access;
 
 }

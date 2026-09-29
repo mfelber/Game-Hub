@@ -1,4 +1,4 @@
-package gamehub.game_Hub.Module.Flags;
+package gamehub.game_Hub.Module.userSettings;
 
 import lombok.Getter;
 

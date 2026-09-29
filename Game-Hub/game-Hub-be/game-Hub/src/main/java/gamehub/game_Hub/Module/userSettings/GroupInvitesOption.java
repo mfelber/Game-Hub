@@ -1,9 +1,9 @@
-package gamehub.game_Hub.Module.Flags;
+package gamehub.game_Hub.Module.userSettings;
 
 import lombok.Getter;
 
 @Getter
-public enum ProfileVisibilityOption {
+public enum GroupInvitesOption {
 
   FRIENDS("Friends"),
   EVERY_ONE("Every one"),
@@ -11,7 +11,7 @@ public enum ProfileVisibilityOption {
 
   private final String name;
 
-  ProfileVisibilityOption(final String name) {
+  GroupInvitesOption(final String name) {
     this.name = name;
   }
 

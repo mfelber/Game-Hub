@@ -7,7 +7,7 @@ import gamehub.game_Hub.Response.StoreFlagsResponse;
 
 public interface FlagsService {
 
-  List<StoreFlagsResponse> getStoreFlags();
+  // List<StoreFlagsResponse> getStoreFlags();
 
   List<CommunityFlagsResponse> getCommunityFlags();
 

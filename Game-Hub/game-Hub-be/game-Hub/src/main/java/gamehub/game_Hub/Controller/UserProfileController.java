@@ -27,6 +27,7 @@ import gamehub.game_Hub.Response.UserLibraryResponse;
 import gamehub.game_Hub.Response.UserNotificationsResponse;
 import gamehub.game_Hub.Response.UserPrivateResponse;
 import gamehub.game_Hub.Response.UserPublicResponse;
+import gamehub.game_Hub.Response.UserSettingsResponse;
 import gamehub.game_Hub.Service.LibraryService;
 import gamehub.game_Hub.Service.UserService;
 import gamehub.game_Hub.Request.UserUpdateRequest;
@@ -187,6 +188,11 @@ public class UserProfileController {
   @GetMapping("/get-recent-games/{userId}")
   public ResponseEntity<List<RecentGamesResponse>> getUsersRecentlyPlayedGames(@PathVariable Long userId) {
     return ResponseEntity.ok(libraryService.getLast3PlayedGames(userId));
+  }
+
+  @GetMapping("/settings")
+  public UserSettingsResponse getUserSettings(Authentication connectedUser) {
+    return userService.getUserSettings(connectedUser);
   }
 
 }

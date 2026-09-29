@@ -12,11 +12,15 @@ import gamehub.game_Hub.Module.Level;
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Module.User.UserLibrary;
 import gamehub.game_Hub.Module.User.UserSuspensions;
+import gamehub.game_Hub.Module.userSettings.StoreSettings;
 import gamehub.game_Hub.Repository.BanHistoryRepository;
 import gamehub.game_Hub.Repository.FriendRequestRepository;
 import gamehub.game_Hub.Repository.FriendshipRepository;
 import gamehub.game_Hub.Repository.LevelRepository;
+import gamehub.game_Hub.Repository.PrivacySettingsRepository;
+import gamehub.game_Hub.Repository.UserCommunitySettingsRepository;
 import gamehub.game_Hub.Repository.UserLibraryRepository;
+import gamehub.game_Hub.Repository.UserStoreSettingsRepository;
 import gamehub.game_Hub.Repository.UserSuspensionRepository;
 import gamehub.game_Hub.Repository.UserWarningsRepository;
 import gamehub.game_Hub.Repository.WishlistRepository;
@@ -27,16 +31,20 @@ import gamehub.game_Hub.Request.UserUpdateRequest;
 import gamehub.game_Hub.Response.Admin.AdminUserResponse;
 import gamehub.game_Hub.Response.BadgeResponse;
 import gamehub.game_Hub.Response.CardColorResponse;
+import gamehub.game_Hub.Response.CommunitySettingsResponse;
 import gamehub.game_Hub.Response.GameResponseShort;
 import gamehub.game_Hub.Response.GenreResponse;
 import gamehub.game_Hub.Response.LevelProgressResponse;
 import gamehub.game_Hub.Response.LevelResponse;
 import gamehub.game_Hub.Response.CountryResponse;
+import gamehub.game_Hub.Response.PrivacySettingsResponse;
 import gamehub.game_Hub.Response.RecentUserResponse;
 import gamehub.game_Hub.Response.StatusResponse;
+import gamehub.game_Hub.Response.StoreSettingsResponse;
 import gamehub.game_Hub.Response.UserNotificationsResponse;
 import gamehub.game_Hub.Response.UserPrivateResponse;
 import gamehub.game_Hub.Response.UserPublicResponse;
+import gamehub.game_Hub.Response.UserSettingsResponse;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
@@ -74,6 +82,12 @@ public class UserMapper {
 
   private final WishlistMapper wishlistMapper;
 
+  private final UserStoreSettingsRepository userStoreSettingsRepository;
+
+  private final UserCommunitySettingsRepository userCommunitySettingsRepository;
+
+  private final PrivacySettingsRepository privacySettingsRepository;
+
   public User toUser(UserUpdateRequest userUpdateRequest) {
     return User.builder()
         .firstName(userUpdateRequest.getFirstName())
@@ -102,7 +116,6 @@ public class UserMapper {
 
     List<Friendship> friends = friendshipRepository.findTop5ByUserOrderByFriend_LevelDesc(profileUser);
 
-
     // TODO get reviews count when implementing reviews
     assert profileUser.getCountry() != null;
     return UserPublicResponse.builder()
@@ -117,12 +130,14 @@ public class UserMapper {
         .friends(communityMapper.toUserFriendsResponse(friends))
         .friendRequestReceived(friendReqReceived)
         .favoriteGame(libraryMapper.toFavoriteGameResponse(profileUser))
-        .currentlyPlaying(profileUser.getCurrentlyPlayingGame() != null ? gameMapper.toGameResponseShort(profileUser.getCurrentlyPlayingGame()): null)
+        .currentlyPlaying(profileUser.getCurrentlyPlayingGame() != null ? gameMapper.toGameResponseShort(
+            profileUser.getCurrentlyPlayingGame()) : null)
         .country(
             new CountryResponse(
                 profileUser.getCountry() != null ? profileUser.getCountry().name() : null,
                 profileUser.getCountry().getCountryName(),
-                profileUser.getCountry() != null ? "/assets/flags/" + profileUser.getCountry().name().toLowerCase() + ".svg" : null
+                profileUser.getCountry() != null ? "/assets/flags/" + profileUser.getCountry().name().toLowerCase()
+                                                   + ".svg" : null
             )
         )
         .status(profileUser.getStatus())
@@ -130,7 +145,8 @@ public class UserMapper {
         .friendsCount(profileUser.getFriends().size())
         .libraryCount(profileUser.getLibrary().size())
         .wishlistCount(profileUser.getWishlist().size())
-        .level(new LevelResponse(profileUser.getLevel().getId(), profileUser.getLevel().getLevelNumber(), profileUser.getLevel().getLevelColor()))
+        .level(new LevelResponse(profileUser.getLevel().getId(), profileUser.getLevel().getLevelNumber(),
+            profileUser.getLevel().getLevelColor()))
         .badges(profileUser.getBadges().stream().map(badge -> new BadgeResponse(badge.getId(), badge.getName(),
             badge.getDescription(), badge.getIconPath())).collect(Collectors.toSet()))
         .favoriteGenres(profileUser.getFavoriteGenres().stream()
@@ -175,7 +191,9 @@ public class UserMapper {
         .joinedDate(joinedDate)
         .friends(communityMapper.toUserFriendsResponse(friends))
         .favoriteGame(libraryMapper.toFavoriteGameResponse(user))
-        .currentlyPlaying(user.getCurrentlyPlayingGame() != null ? gameMapper.toGameResponseShort(user.getCurrentlyPlayingGame()): null)
+        .currentlyPlaying(user.getCurrentlyPlayingGame() != null
+            ? gameMapper.toGameResponseShort(user.getCurrentlyPlayingGame())
+            : null)
         .country(
             new CountryResponse(
                 user.getCountry() != null ? user.getCountry().name() : null,
@@ -187,7 +205,8 @@ public class UserMapper {
         .friendsCount(user.getFriends().size())
         .libraryCount(user.getLibrary().size())
         .wishlistCount(user.getWishlist().size())
-        .level(new LevelResponse(user.getLevel().getId(), user.getLevel().getLevelNumber(),user.getLevel().getLevelColor()))
+        .level(new LevelResponse(user.getLevel().getId(), user.getLevel().getLevelNumber(),
+            user.getLevel().getLevelColor()))
         .badges(user.getBadges().stream().map(badge -> new BadgeResponse(badge.getId(), badge.getName(),
             badge.getDescription(), badge.getIconPath())).collect(Collectors.toSet()))
         .favoriteGenres(user.getFavoriteGenres()
@@ -239,13 +258,15 @@ public class UserMapper {
 
   public LevelProgressResponse toUserLevelProgress(final User user) {
 
-    Level nextLevel = levelRepository.findById(user.getLevel().getId() + 1).orElseThrow(() -> new EntityNotFoundException("No user found with id: "));
+    Level nextLevel = levelRepository.findById(user.getLevel().getId() + 1)
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: "));
 
     Long requiredXP = nextLevel.getRequiredXp();
     Long userXP = user.getXp();
 
     return LevelProgressResponse.builder()
-        .level(new LevelResponse(user.getLevel().getId(), user.getLevel().getLevelNumber(),user.getLevel().getLevelColor()))
+        .level(new LevelResponse(user.getLevel().getId(), user.getLevel().getLevelNumber(),
+            user.getLevel().getLevelColor()))
         .currentXp(user.getXp())
         .requiredXp(requiredXP)
         .nextLevel(nextLevel.getLevelNumber())
@@ -294,7 +315,8 @@ public class UserMapper {
         .lastModifiedAt(user.getLastModifiedAt())
         .banReason(activeBan != null ? activeBan.getReason().getCommunityGuideline() : null)
         .bannedAt(activeBan != null ? activeBan.getBannedAt() : null)
-        .suspendedReason(activeSuspension != null ? activeSuspension.getSuspensionReason().getCommunityGuideline() : null)
+        .suspendedReason(
+            activeSuspension != null ? activeSuspension.getSuspensionReason().getCommunityGuideline() : null)
         .suspendedAt(activeSuspension != null ? activeSuspension.getCreatedAt() : null)
         .build();
   }
@@ -306,9 +328,38 @@ public class UserMapper {
     Long cartItems = cartItemRepository.countByCart_User_Id(user.getId());
 
     return UserNotificationsResponse.builder()
-        .warningCount(warnings !=null ? warnings : null)
-        .suspendedCount(suspensions !=null ? suspensions : null)
+        .warningCount(warnings != null ? warnings : null)
+        .suspendedCount(suspensions != null ? suspensions : null)
         .cartCount(cartItems != null ? cartItems : null)
+        .build();
+  }
+
+  public UserSettingsResponse toUserSettingsResponse(final User user) {
+
+    List<StoreSettingsResponse> storeSettingsResponse = userStoreSettingsRepository.findByUser(user)
+        .stream()
+        .map(storeSettings -> new StoreSettingsResponse(
+            storeSettings.getId(), user.getId(), storeSettings.getPegiRating().getName(), storeSettings.getPegiRating()
+            .getDescription(),
+            storeSettings.isDisabled()
+        )).toList();
+
+    List<CommunitySettingsResponse> communitySettingsResponse = userCommunitySettingsRepository.findByUser(user)
+        .stream().map(communitySettings -> new CommunitySettingsResponse(
+            communitySettings.getId(), user.getId(), communitySettings.getSettingDefinition().getName(),
+            communitySettings.getSettingDefinition().getDescription(), communitySettings.getAccess().getAccessName()
+        )).toList();
+
+    List<PrivacySettingsResponse> privacySettingsResponse = privacySettingsRepository.findByUser(user)
+        .stream()
+        .map(privacySettings -> new PrivacySettingsResponse(privacySettings.getId(), user.getId(),
+            privacySettings.getSettingDefinition().getName(), privacySettings.getSettingDefinition().getDescription(),
+            privacySettings.getAccess().getAccessName())).toList();
+
+    return UserSettingsResponse.builder()
+        .storeSettingsResponse(storeSettingsResponse)
+        .communitySettingsResponse(communitySettingsResponse)
+        .privacySettingsResponse(privacySettingsResponse)
         .build();
   }
 

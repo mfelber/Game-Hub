@@ -2,10 +2,13 @@ package gamehub.game_Hub.Service;
 
 import static gamehub.game_Hub.enums.AccountType.ADULT;
 import static gamehub.game_Hub.enums.AccountType.CHILD;
+import static java.util.stream.Collectors.toList;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -15,24 +18,29 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import gamehub.game_Hub.Email.SendEmailUserService;
 import gamehub.game_Hub.Module.CardColor;
-import gamehub.game_Hub.Module.Flags.CommunityFlagType;
-import gamehub.game_Hub.Module.Flags.StoreFlagType;
-import gamehub.game_Hub.Module.Flags.UserCommunityFlag;
-import gamehub.game_Hub.Module.Flags.UserStoreFlag;
 import gamehub.game_Hub.Module.Level;
+import gamehub.game_Hub.Module.userSettings.Access;
+import gamehub.game_Hub.Module.userSettings.CommunitySettings;
+import gamehub.game_Hub.Module.userSettings.PrivacySettings;
+import gamehub.game_Hub.Module.userSettings.StoreSettings;
+import gamehub.game_Hub.Module.userSettings.UserSettings;
+import gamehub.game_Hub.Repository.CommunitySettingsDefinitionRepository;
+import gamehub.game_Hub.Repository.PegiRatingRepository;
+import gamehub.game_Hub.Repository.PrivacySettingsDefinitionRepository;
+import gamehub.game_Hub.Repository.PrivacySettingsRepository;
+import gamehub.game_Hub.Repository.UserCommunitySettingsRepository;
+import gamehub.game_Hub.Repository.UserSettingsRepository;
+import gamehub.game_Hub.Repository.UserStoreSettingsRepository;
 import gamehub.game_Hub.enums.AccountStatus;
 import gamehub.game_Hub.enums.Country;
 import gamehub.game_Hub.enums.Role;
 import gamehub.game_Hub.enums.Status;
 import gamehub.game_Hub.Repository.CardColorRepository;
-import gamehub.game_Hub.Repository.CommunityFlagTypeRepository;
 import gamehub.game_Hub.Repository.LevelRepository;
-import gamehub.game_Hub.Repository.StoreFlagTypeRepository;
-import gamehub.game_Hub.Repository.UserCommunityFlagRepository;
-import gamehub.game_Hub.Repository.UserStoreFlagRepository;
 import gamehub.game_Hub.Request.AuthenticationRequest;
 import gamehub.game_Hub.Response.AuthenticationResponse;
 import gamehub.game_Hub.Request.ForgotPasswordRequest;
@@ -73,13 +81,19 @@ public class AuthenticationService {
 
   private final LevelRepository levelRepository;
 
-  private final StoreFlagTypeRepository storeFlagTypeRepository;
+  private final UserStoreSettingsRepository userStoreSettingsRepository;
 
-  private final UserStoreFlagRepository userStoreFlagRepository;
+  private final PegiRatingRepository pegiRatingRepository;
 
-  private final CommunityFlagTypeRepository communityFlagTypeRepository;
+  private final CommunitySettingsDefinitionRepository communitySettingsDefinitionRepository;
 
-  private final UserCommunityFlagRepository userCommunityFlagRepository;
+  private final UserCommunitySettingsRepository userCommunitySettingsRepository;
+
+  private final UserSettingsRepository userSettingsRepository;
+
+  private final PrivacySettingsDefinitionRepository privacySettingsDefinitionRepository;
+
+  private final PrivacySettingsRepository privacySettingsRepository;
 
   @Value("${application.mailing.frontend.login-url}")
   private String logInUrl;
@@ -117,11 +131,17 @@ public class AuthenticationService {
           .build();
 
       userRepository.save(user);
-      setAdultAccountFlags(user);
+      var userSettings = UserSettings.builder()
+          .user(user)
+          .build();
+
+      userSettingsRepository.save(userSettings);
+      setAdultAccountSettings(user);
       emailUserService.sendWelcomeEmail(user);
     }
   }
 
+  @Transactional
   public void registerChildUser(final @Valid RegistrationRequest request) throws MessagingException {
     var UserRole = roleRepository.findByName("USER")
         .orElseThrow(() -> new IllegalStateException("Role USER was not initialized"));
@@ -153,60 +173,123 @@ public class AuthenticationService {
         .build();
 
     userRepository.save(user);
-    setChildAccountFlags(user);
+    var userSettings = UserSettings.builder()
+        .user(user)
+        .build();
+
+    userSettingsRepository.save(userSettings);
+    createChildAccountSettings(user);
     emailUserService.sendWelcomeEmail(user);
   }
 
-  private void setChildAccountFlags(final User user) {
-    for (StoreFlagType flagType : storeFlagTypeRepository.findAll()) {
-      UserStoreFlag storeFlag = new UserStoreFlag();
-      storeFlag.setUser(user);
-      storeFlag.setUserFlagType(flagType);
-      storeFlag.setValue(true);
-      userStoreFlagRepository.save(storeFlag);
-    }
+  private void createChildAccountSettings(final User user) {
 
-    for (CommunityFlagType flagType : communityFlagTypeRepository.findAll()) {
-      UserCommunityFlag communityFlag = new UserCommunityFlag();
-      communityFlag.setUser(user);
-      communityFlag.setUserFlagType(flagType);
-      switch (flagType.getFlagCode()) {
-        case "FRIEND_REQUEST", "GROUP_INVITES", "PLAY_TOGETHER_INVITES", "PROFILE_VISIBILITY", "SEND_MESSAGES":
-          communityFlag.setValue("No one");
-          break;
-        default:
-          throw new IllegalArgumentException("Unknown flag code: " + flagType.getFlagCode());
-      }
-      userCommunityFlagRepository.save(communityFlag);
-    }
+    Map<String, Access> childCommunitySettings = Map.of(
+        "Friend Requests", Access.EVERYONE,
+        "Group invites", Access.FRIENDS,
+        "Group event invites", Access.FRIENDS,
+        "Play together invites", Access.FRIENDS,
+        "Send messages", Access.FRIENDS
+        );
+
+    Map<String, Access> childPrivacySettings = Map.of(
+        "Profile visibility", Access.FRIENDS,
+        "Wishlist visibility", Access.FRIENDS,
+        "Friends list visibility", Access.FRIENDS,
+        "Groups visibility", Access.FRIENDS,
+        "Game activity visibility", Access.FRIENDS,
+        "Favorite game visibility", Access.FRIENDS
+    );
+
+    var pegiRatings = pegiRatingRepository.findAll();
+
+    var storeSettings = pegiRatings.stream()
+        .map(pegiRating -> StoreSettings.builder()
+            .user(user)
+            .pegiRating(pegiRating)
+            .disabled(!Set.of("PEGI 3", "PEGI 7").contains(pegiRating.getName()))
+            .build()).toList();
+
+    var communitySettingDefinitions =
+        communitySettingsDefinitionRepository.findAll();
+
+    var communitySettings = communitySettingDefinitions.stream()
+        .map(definition -> CommunitySettings.builder()
+            .user(user)
+            .settingDefinition(definition)
+            .access(childCommunitySettings.get(definition.getName()))
+            .build())
+        .toList();
+
+    var privacySettingDefinitions = privacySettingsDefinitionRepository.findAll();
+
+    var privacySettings = privacySettingDefinitions.stream()
+        .map(definition -> PrivacySettings.builder()
+            .user(user)
+            .settingDefinition(definition)
+            .access(childPrivacySettings.get(definition.getName()))
+            .build())
+        .toList();
+
+
+    privacySettingsRepository.saveAll(privacySettings);
+    userCommunitySettingsRepository.saveAll(communitySettings);
+    userStoreSettingsRepository.saveAll(storeSettings);
   }
 
-  private void setAdultAccountFlags(final User user) {
-    for (StoreFlagType flagType : storeFlagTypeRepository.findAll()) {
-      UserStoreFlag flag = new UserStoreFlag();
-      flag.setUser(user);
-      flag.setUserFlagType(flagType);
-      flag.setValue(false);
-      userStoreFlagRepository.save(flag);
-    }
+  private void setAdultAccountSettings(final User user) {
 
-    for (CommunityFlagType flagType : communityFlagTypeRepository.findAll()) {
-      UserCommunityFlag comflag = new UserCommunityFlag();
-      comflag.setUser(user);
-      comflag.setUserFlagType(flagType);
-      switch (flagType.getFlagCode()) {
-        case "FRIEND_REQUEST":
-          comflag.setValue("Every one");
-          break;
-        case "GROUP_INVITES", "PLAY_TOGETHER_INVITES", "PROFILE_VISIBILITY", "SEND_MESSAGES":
-          comflag.setValue("Friends");
-          break;
-        default:
-          throw new IllegalArgumentException("Unknown flag code: " + flagType.getFlagCode());
-      }
-      userCommunityFlagRepository.save(comflag);
-    }
+    Map<String, Access> adultCommunitySettings = Map.of(
+        "Friend Requests", Access.EVERYONE,
+        "Group invites", Access.EVERYONE,
+        "Group event invites", Access.EVERYONE,
+        "Play together invites", Access.FRIENDS,
+        "Profile visibility", Access.EVERYONE,
+        "Send messages", Access.FRIENDS
+    );
 
+    Map<String, Access> adultPrivacySettings = Map.of(
+        "Profile visibility", Access.EVERYONE,
+        "Wishlist visibility", Access.EVERYONE,
+        "Friends list visibility", Access.EVERYONE,
+        "Groups visibility", Access.EVERYONE,
+        "Game activity visibility", Access.EVERYONE,
+        "Favorite game visibility", Access.EVERYONE
+    );
+
+    var pegiRatings = pegiRatingRepository.findAll();
+
+    var storeSettings = pegiRatings.stream()
+        .map(pegiRating -> StoreSettings.builder()
+            .user(user)
+            .pegiRating(pegiRating)
+            .disabled(false)
+            .build()).toList();
+
+    var communitySettingDefinitions =
+        communitySettingsDefinitionRepository.findAll();
+
+    var communitySettings = communitySettingDefinitions.stream()
+        .map(definition -> CommunitySettings.builder()
+            .user(user)
+            .settingDefinition(definition)
+            .access(adultCommunitySettings.get(definition.getName()))
+          .build())
+      .toList();
+
+    var privacySettingDefinitions = privacySettingsDefinitionRepository.findAll();
+
+    var privacySettings = privacySettingDefinitions.stream()
+        .map(definition -> PrivacySettings.builder()
+            .user(user)
+            .settingDefinition(definition)
+            .access(adultPrivacySettings.get(definition.getName()))
+            .build())
+        .toList();
+
+    privacySettingsRepository.saveAll(privacySettings);
+    userCommunitySettingsRepository.saveAll(communitySettings);
+    userStoreSettingsRepository.saveAll(storeSettings);
   }
 
   public String getRandomColor() {
@@ -273,11 +356,11 @@ public class AuthenticationService {
   }
 
   private void canUserLogIn(User user) {
-    if (user.getAccountStatus() == AccountStatus.SUSPENDED){
+    if (user.getAccountStatus() == AccountStatus.SUSPENDED) {
       throw new AccountSuspendedException("Your account is currently suspended");
     }
 
-    if (user.getAccountStatus() == AccountStatus.BANNED){
+    if (user.getAccountStatus() == AccountStatus.BANNED) {
       throw new AccountBannedException("Your account is permanently banned");
     }
   }

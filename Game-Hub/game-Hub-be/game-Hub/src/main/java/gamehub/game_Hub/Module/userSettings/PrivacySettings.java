@@ -1,7 +1,9 @@
-package gamehub.game_Hub.Module.Flags;
+package gamehub.game_Hub.Module.userSettings;
 
 import gamehub.game_Hub.Module.User.User;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -20,21 +22,22 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "user_store_flag", schema = "game_hub")
-public class UserStoreFlag {
+@Table(name = "privacy_settings", schema = "game_hub")
+public class PrivacySettings {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @ManyToOne
-  @JoinColumn(name = "user_id")
+  @JoinColumn(name = "user_id", nullable = false)
   private User user;
 
   @ManyToOne
-  @JoinColumn(name = "flag_type_id")
-  private StoreFlagType userFlagType;
+  @JoinColumn(name = "setting_definition_id", nullable = false)
+  private PrivacySettingsDefinition settingDefinition;
 
-  private boolean value;
+  @Enumerated(EnumType.STRING)
+  private Access access;
 
 }
