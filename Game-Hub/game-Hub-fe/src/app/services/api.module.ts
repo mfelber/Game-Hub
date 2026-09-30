@@ -14,10 +14,10 @@ import { LibraryControllerService } from './services/library-controller.service'
 import { CommunityControllerService } from './services/community-controller.service';
 import { CartControllerService } from './services/cart-controller.service';
 import { AuthenticationService } from './services/authentication.service';
+import { SettingsControllerService } from './services/settings-controller.service';
 import { WishlistControllerService } from './services/wishlist-controller.service';
 import { UserLevelControllerService } from './services/user-level-controller.service';
 import { SystemRequirementsControllerService } from './services/system-requirements-controller.service';
-import { FlagsControllerService } from './services/flags-controller.service';
 import { CountryControllerService } from './services/country-controller.service';
 import { CardColorControllerService } from './services/card-color-controller.service';
 
@@ -37,10 +37,10 @@ import { CardColorControllerService } from './services/card-color-controller.ser
     CommunityControllerService,
     CartControllerService,
     AuthenticationService,
+    SettingsControllerService,
     WishlistControllerService,
     UserLevelControllerService,
     SystemRequirementsControllerService,
-    FlagsControllerService,
     CountryControllerService,
     CardColorControllerService,
     ApiConfiguration

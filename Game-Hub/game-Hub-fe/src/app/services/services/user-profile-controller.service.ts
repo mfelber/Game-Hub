@@ -25,6 +25,8 @@ import { getUserPrivateShort } from '../fn/user-profile-controller/get-user-priv
 import { GetUserPrivateShort$Params } from '../fn/user-profile-controller/get-user-private-short';
 import { getUserPublic } from '../fn/user-profile-controller/get-user-public';
 import { GetUserPublic$Params } from '../fn/user-profile-controller/get-user-public';
+import { getUserSettings } from '../fn/user-profile-controller/get-user-settings';
+import { GetUserSettings$Params } from '../fn/user-profile-controller/get-user-settings';
 import { getUsersRecentlyPlayedGames } from '../fn/user-profile-controller/get-users-recently-played-games';
 import { GetUsersRecentlyPlayedGames$Params } from '../fn/user-profile-controller/get-users-recently-played-games';
 import { getUserStatus } from '../fn/user-profile-controller/get-user-status';
@@ -55,6 +57,7 @@ import { UserLibraryResponse } from '../models/user-library-response';
 import { UserNotificationsResponse } from '../models/user-notifications-response';
 import { UserPrivateResponse } from '../models/user-private-response';
 import { UserPublicResponse } from '../models/user-public-response';
+import { UserSettingsResponse } from '../models/user-settings-response';
 
 @Injectable({ providedIn: 'root' })
 export class UserProfileControllerService extends BaseService {
@@ -446,6 +449,31 @@ export class UserProfileControllerService extends BaseService {
   getUserStatus(params?: GetUserStatus$Params, context?: HttpContext): Observable<StatusResponse> {
     return this.getUserStatus$Response(params, context).pipe(
       map((r: StrictHttpResponse<StatusResponse>): StatusResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `getUserSettings()` */
+  static readonly GetUserSettingsPath = '/profile/settings';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getUserSettings()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getUserSettings$Response(params?: GetUserSettings$Params, context?: HttpContext): Observable<StrictHttpResponse<UserSettingsResponse>> {
+    return getUserSettings(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getUserSettings$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getUserSettings(params?: GetUserSettings$Params, context?: HttpContext): Observable<UserSettingsResponse> {
+    return this.getUserSettings$Response(params, context).pipe(
+      map((r: StrictHttpResponse<UserSettingsResponse>): UserSettingsResponse => r.body)
     );
   }
 

@@ -27,8 +27,6 @@ import {EditProfileInfoComponent} from '../../components/edit-profile-info/edit-
     LoadingComponent,
     HlmDialog,
     HlmDialogContent,
-    HlmDialogTrigger,
-    EditProfileInfoComponent,
     HlmDialogPortal
   ],
   templateUrl: './library.component.html',

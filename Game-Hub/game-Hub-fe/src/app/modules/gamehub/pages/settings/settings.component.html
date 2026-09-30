@@ -1,0 +1,86 @@
+<main>
+
+  <section class="mb-5">
+    <div class="header">
+      <div>
+        <h1>Settings</h1>
+        <p class="page-description">Manage your account settings and preferences</p>
+      </div>
+      <app-user-actions/>
+    </div>
+  </section>
+
+  <hlm-tabs tab="profile" class="w-full !gap-0">
+    <hlm-tabs-list aria-label="tabs example" variant="line">
+      <button hlmTabsTrigger="profile"><i class="fa-solid fa-user"></i> Profile</button>
+      <button hlmTabsTrigger="privacy"><i class="fa-solid fa-lock"></i> Privacy</button>
+      <button hlmTabsTrigger="community"><i class="fa-solid fa-comment"></i> Community</button>
+      <button hlmTabsTrigger="store"><i class="fa-solid fa-store"></i>Store</button>
+      <button hlmTabsTrigger="gaming"><i class="fa-solid fa-gamepad"></i>Gaming</button>
+      <button hlmTabsTrigger="account"><i class="fa-solid fa-triangle-exclamation"></i>Account</button>
+    </hlm-tabs-list>
+    <div hlmTabsContent="profile">
+      <div>
+      profile picture
+      bio edit bio?
+      username
+      firstname / last name
+      email
+      country
+      banner
+      profile color
+      edit button
+      </div>
+    </div>
+    <div hlmTabsContent="privacy">
+      <div>
+      Profile visibility
+      Wishlist visibility
+      Friends list visibility
+      Groups visibility
+      Game activity visibility
+      Favorite game visibility
+      </div>
+    </div>
+    <div hlmTabsContent="community">
+      <div>
+      Friend Requests
+      Group invites
+      Group event invites
+      Play Together invites
+      Send messages
+      </div>
+    </div>
+    <div hlmTabsContent="store">
+      <div>
+      PEGI 3     [ Enabled ]
+      PEGI 7     [ Enabled ]
+      PEGI 12    [ Disabled ]
+      PEGI 16    [ Disabled ]
+      PEGI 18    [ Disabled ]
+      </div>
+    </div>
+    <div hlmTabsContent="gaming">
+      <div>
+      Favorite game
+      Multiplayer preference
+      Looking for:
+      Casual players
+      Competitive players
+      Co-op
+      etc.
+      Player type
+      Gaming tags
+      Favorite genres
+      </div>
+    </div>
+    <div hlmTabsContent="account">
+      <div>
+        Change password
+        Suspend account
+        Delete account
+      </div>
+
+    </div>
+  </hlm-tabs>
+</main>
