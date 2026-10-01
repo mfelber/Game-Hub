@@ -1,6 +1,4 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-
-import {PageResponseGameResponse} from '../../../../services/models/page-response-game-response';
 import {LibraryControllerService} from '../../../../services/services/library-controller.service';
 import {GameResponse} from '../../../../services/models/game-response';
 import {StoreControllerService} from '../../../../services/services';
@@ -13,8 +11,11 @@ import {UserActionsComponent} from '../../components/user-actions/user-actions.c
 import {PaginationComponent} from '../../components/pagination/pagination.component';
 import {PlayingWarningModalComponent} from '../../components/playing-warning/playing-warning-modal.component';
 import {LoadingComponent} from '../../components/loading/loading.component';
-import {HlmDialog, HlmDialogContent, HlmDialogPortal, HlmDialogTrigger} from '@spartan/dialog';
-import {EditProfileInfoComponent} from '../../components/edit-profile-info/edit-profile-info.component';
+import {
+  HlmDialog,
+  HlmDialogContent,
+  HlmDialogPortal,
+} from '@spartan/dialog';
 
 @Component({
   selector: 'app-library',

@@ -23,6 +23,10 @@
     cursor-pointer py-1 pl-2 pr-2 text-sm hover:bg-[#26334a];
   }
 
+  .fit {
+    @apply !w-30
+  }
+
   .sort-dropdown {
     @apply !w-55;
 

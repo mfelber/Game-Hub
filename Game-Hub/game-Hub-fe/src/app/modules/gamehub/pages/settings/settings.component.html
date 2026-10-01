@@ -10,7 +10,7 @@
     </div>
   </section>
 
-  <hlm-tabs tab="profile" class="w-full !gap-0">
+  <hlm-tabs tab="profile" activationMode="manual" class="w-full !gap-0" (brnTabsChange)="onTabChange($event)">
     <hlm-tabs-list aria-label="tabs example" variant="line">
       <button hlmTabsTrigger="profile"><i class="fa-solid fa-user"></i> Profile</button>
       <button hlmTabsTrigger="privacy"><i class="fa-solid fa-lock"></i> Privacy</button>
@@ -21,57 +21,205 @@
     </hlm-tabs-list>
     <div hlmTabsContent="profile">
       <div>
-      profile picture
-      bio edit bio?
-      username
-      firstname / last name
-      email
-      country
-      banner
-      profile color
-      edit button
+        profile picture
+        bio edit bio?
+        username
+        firstname / last name
+        email
+        country
+        banner
+        profile color
+        edit button
       </div>
     </div>
     <div hlmTabsContent="privacy">
-      <div>
-      Profile visibility
-      Wishlist visibility
-      Friends list visibility
-      Groups visibility
-      Game activity visibility
-      Favorite game visibility
+      <h2 class="text-xl font-semibold text-white">Privacy</h2>
+      <p class="mt-1 text-sm text-gray-400">Control who can see your information and activity</p>
+
+      <div class="mt-6 overflow-hidden rounded-lg border border-[#252b36] bg-[#151B27]">
+        <div class="border-b border-[#252b36] px-5 py-4">
+          <h3 class="text-base font-medium text-white">Visibility</h3>
+          <p class="mt-1 text-sm text-gray-400">Choose who can see different parts of your profile</p>
+        </div>
+
+        <div class="divide-y divide-[#252b36]">
+          @for (setting of privacySettingsResponse; track setting.settingId) {
+            <div class="flex items-center justify-between px-5 py-4">
+              <div>
+                <h4 class="text-sm font-medium text-white">{{ setting.settingName }}</h4>
+                <p class="mt-1 text-sm text-gray-400">{{ setting.description }}</p>
+              </div>
+
+              <div class="flex items-center gap-2">
+                @if (isPrivacySettingsChanged(setting)) {
+                  <button
+                    hlmInputGroupButton
+                    class="hover:!bg-transparent hover:!text-[#737373]"
+                    [hlmTooltip]="'This value was changed'"
+                    aria-label="Info"
+                    size="icon-xs"
+                  >
+                    <i class="fa-solid fa-info-circle"></i>
+                  </button>
+                }
+
+                <div class="dropdown-small fit">
+                  <button class="dropdown-button" type="button" [hlmDropdownMenuTrigger]="privacy"
+                          align="start"><span>{{ setting.access }}</span> <i
+                    class="fa-solid fa-chevron-down text-xs"></i>
+                  </button>
+
+                  <ng-template #privacy>
+                    <hlm-dropdown-menu class="fit">
+                      <button hlmDropdownMenuItem [class.selected]="setting.access === 'Everyone'"
+                              (click)="setting.access = 'Everyone'">Everyone
+                      </button>
+                      <button hlmDropdownMenuItem [class.selected]="setting.access === 'Friends'"
+                              (click)="setting.access = 'Friends'">Friends
+                      </button>
+                      <button hlmDropdownMenuItem [class.selected]="setting.access === 'No one'"
+                              (click)="setting.access = 'No one'">No one
+                      </button>
+                    </hlm-dropdown-menu>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
       </div>
+
+      <div class="flex justify-end mt-6">
+        <button class="medium-button save" (click)="savePrivacySettings()">Save</button>
+      </div>
+
     </div>
     <div hlmTabsContent="community">
-      <div>
-      Friend Requests
-      Group invites
-      Group event invites
-      Play Together invites
-      Send messages
+      <h2 class="text-xl font-semibold text-white">Community</h2>
+      <p class="mt-1 text-sm text-gray-400">Manage who can interact with you and send you invitations</p>
+
+      <div class="mt-6 overflow-hidden rounded-lg border border-[#252b36] bg-[#151B27]">
+        <div class="border-b border-[#252b36] px-5 py-4">
+          <h3 class="text-base font-medium text-white">Interactions</h3>
+          <p class="mt-1 text-sm text-gray-400">hoose who can send you requests, invitations, and messages</p>
+        </div>
+
+        <div class="divide-y divide-[#252b36]">
+          @for (setting of communitySettingsResponse; track setting.settingId) {
+            <div class="flex items-center justify-between px-5 py-4">
+              <div>
+                <h4 class="text-sm font-medium text-white">{{ setting.settingName }}</h4>
+                <p class="mt-1 text-sm text-gray-400">{{ setting.description }}</p>
+              </div>
+
+              <div class="flex items-center gap-2">
+                @if (isCommunitySettingsChanged(setting)) {
+                  <button
+                    hlmInputGroupButton
+                    class="hover:!bg-transparent hover:!text-[#737373]"
+                    [hlmTooltip]="'This value was changed'"
+                    aria-label="Info"
+                    size="icon-xs"
+                  >
+                    <i class="fa-solid fa-info-circle"></i>
+                  </button>
+                }
+
+                <div class="dropdown-small fit">
+                  <button class="dropdown-button" type="button" [hlmDropdownMenuTrigger]="community"
+                          align="start"><span>{{ setting.access }}</span> <i
+                    class="fa-solid fa-chevron-down text-xs"></i>
+                  </button>
+
+                  <ng-template #community>
+                    <hlm-dropdown-menu class="fit">
+                      <button hlmDropdownMenuItem [class.selected]="setting.access === 'Everyone'"
+                              (click)="setting.access = 'Everyone'">Everyone
+                      </button>
+                      @if (setting.settingName !== 'Friend Requests') {
+                        <button hlmDropdownMenuItem [class.selected]="setting.access === 'Friends'"
+                                (click)="setting.access = 'Friends'">Friends
+                        </button>
+                      }
+                      <button hlmDropdownMenuItem [class.selected]="setting.access === 'No one'"
+                              (click)="setting.access = 'No one'">No one
+                      </button>
+                    </hlm-dropdown-menu>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+
       </div>
+
+      <div class="flex justify-end mt-6">
+        <button class="medium-button save" (click)="saveCommunitySettings()">Save</button>
+      </div>
+
     </div>
     <div hlmTabsContent="store">
-      <div>
-      PEGI 3     [ Enabled ]
-      PEGI 7     [ Enabled ]
-      PEGI 12    [ Disabled ]
-      PEGI 16    [ Disabled ]
-      PEGI 18    [ Disabled ]
+      <h2 class="text-xl font-semibold text-white">Store</h2>
+      <p class="mt-1 text-sm text-gray-400">Control which age-rated games are shown in your store</p>
+
+      <div class="mt-6 overflow-hidden rounded-lg border border-[#252b36] bg-[#151B27]">
+        <div class="border-b border-[#252b36] px-5 py-4">
+          <h3 class="text-base font-medium text-white">Content restrictions</h3>
+          <p class="mt-1 text-sm text-gray-400">Choose which PEGI-rated games can appear in your store</p>
+        </div>
+
+        <div class="divide-y divide-[#252b36]">
+          @for (setting of storeSettingsResponse; track setting.settingId) {
+            <div class="flex items-center justify-between px-5 py-4">
+              <div>
+                <h4 class="text-sm font-medium"
+                    [ngClass]="getPegiColor(setting.pegiRatingName)">{{ setting.pegiRatingName }}</h4>
+                <p class="mt-1 text-sm text-gray-400">{{ setting.description }}</p>
+              </div>
+
+              <div class="flex items-center gap-2">
+                @if (isStoreSettingsChanged(setting)) {
+                  <button
+                    hlmInputGroupButton
+                    class="hover:!bg-transparent hover:!text-[#737373]"
+                    [hlmTooltip]="'This value was changed'"
+                    aria-label="Info"
+                    size="icon-xs"
+                  >
+                    <i class="fa-solid fa-info-circle"></i>
+                  </button>
+                }
+
+                <hlm-switch
+                  id="pegiRating"
+                  name="pegiRating"
+                  [(ngModel)]="setting.disabled"
+                  class=" !transition-none"/>
+
+              </div>
+            </div>
+          }
+        </div>
       </div>
+
+      <div class="flex justify-end mt-6">
+        <button class="medium-button save" (click)="saveStoreSettings()">Save</button>
+      </div>
+
     </div>
     <div hlmTabsContent="gaming">
       <div>
-      Favorite game
-      Multiplayer preference
-      Looking for:
-      Casual players
-      Competitive players
-      Co-op
-      etc.
-      Player type
-      Gaming tags
-      Favorite genres
+        Favorite game
+        Multiplayer preference
+        Looking for:
+        Casual players
+        Competitive players
+        Co-op
+        etc.
+        Player type
+        Gaming tags
+        Favorite genres
       </div>
     </div>
     <div hlmTabsContent="account">
@@ -83,4 +231,49 @@
 
     </div>
   </hlm-tabs>
+
+  <hlm-dialog #warningDialog>
+    <hlm-dialog-content *hlmDialogPortal="let ctx" class="sm:max-w-md">
+
+      <hlm-dialog-header>
+        <h3 hlmDialogTitle>
+          Unsaved {{ unsavedChangesTitle }} changes
+        </h3>
+
+        <p hlmDialogDescription class="mt-2">
+          You have unsaved changes. Would you like to save them before leaving?
+        </p>
+      </hlm-dialog-header>
+
+      <hlm-dialog-footer class="mt-6 flex items-center !justify-between">
+
+        <button
+          (click)="discardChanges()"
+          type="button"
+          hlmDialogClose
+          class="medium-button cancel">
+          Discard
+        </button>
+
+        <div class="flex gap-3">
+          <button
+            type="button"
+            hlmDialogClose
+            class="medium-button cancel">
+            Cancel
+          </button>
+
+          <button
+            type="button"
+            class="medium-button save"
+            (click)="saveChanges()">
+            Save changes
+          </button>
+        </div>
+
+      </hlm-dialog-footer>
+
+    </hlm-dialog-content>
+  </hlm-dialog>
+
 </main>
