@@ -1,5 +1,6 @@
 package gamehub.game_Hub.Mapper;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -337,7 +338,7 @@ public class UserMapper {
   public UserSettingsResponse toUserSettingsResponse(final User user) {
 
     List<StoreSettingsResponse> storeSettingsResponse = userStoreSettingsRepository.findByUser(user)
-        .stream()
+        .stream().sorted(Comparator.comparing(privacySettings -> privacySettings.getPegiRating().getId()))
         .map(storeSettings -> new StoreSettingsResponse(
             storeSettings.getId(), user.getId(), storeSettings.getPegiRating().getName(), storeSettings.getPegiRating()
             .getDescription(),
@@ -345,13 +346,14 @@ public class UserMapper {
         )).toList();
 
     List<CommunitySettingsResponse> communitySettingsResponse = userCommunitySettingsRepository.findByUser(user)
-        .stream().map(communitySettings -> new CommunitySettingsResponse(
+        .stream().sorted(Comparator.comparing(privacySettings -> privacySettings.getSettingDefinition().getId()))
+        .map(communitySettings -> new CommunitySettingsResponse(
             communitySettings.getId(), user.getId(), communitySettings.getSettingDefinition().getName(),
             communitySettings.getSettingDefinition().getDescription(), communitySettings.getAccess().getAccessName()
         )).toList();
 
     List<PrivacySettingsResponse> privacySettingsResponse = privacySettingsRepository.findByUser(user)
-        .stream()
+        .stream().sorted(Comparator.comparing(privacySettings -> privacySettings.getSettingDefinition().getId()))
         .map(privacySettings -> new PrivacySettingsResponse(privacySettings.getId(), user.getId(),
             privacySettings.getSettingDefinition().getName(), privacySettings.getSettingDefinition().getDescription(),
             privacySettings.getAccess().getAccessName())).toList();

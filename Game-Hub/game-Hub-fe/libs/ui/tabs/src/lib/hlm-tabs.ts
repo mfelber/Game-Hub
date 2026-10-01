@@ -8,7 +8,7 @@ import { classes } from '@spartan/utils';
 		{
 			directive: BrnTabs,
 			inputs: ['orientation', 'activationMode', 'brnTabs: tab'],
-			outputs: ['tabActivated'],
+			outputs: ['tabActivated', 'brnTabsChange'],
 		},
 	],
 	host: {

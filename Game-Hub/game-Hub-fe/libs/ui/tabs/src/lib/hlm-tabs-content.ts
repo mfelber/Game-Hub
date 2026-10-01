@@ -14,7 +14,7 @@ export class HlmTabsContent {
 
 	constructor() {
     classes(() =>
-      'flex-1 text-sm outline-none bg-[#151923] rounded-r-md rounded-bl-md border border-white/15 pl-2 '
+      'flex-1 text-sm outline-none bg-[#151923] rounded-r-md rounded-bl-md border border-white/15 px-8 py-6'
     );
 	}
 }
