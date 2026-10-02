@@ -1,22 +1,66 @@
-import { Directive, input } from '@angular/core';
-import { BrnTabsTrigger } from '@spartan-ng/brain/tabs';
-import { classes } from '@spartan/utils';
+import {Directive, input} from '@angular/core';
+import {BrnTabsTrigger} from '@spartan-ng/brain/tabs';
+import {classes} from '@spartan/utils';
 
 @Directive({
-	selector: '[hlmTabsTrigger]',
-	hostDirectives: [{ directive: BrnTabsTrigger, inputs: ['brnTabsTrigger: hlmTabsTrigger', 'disabled'] }],
-	host: {
-		'data-slot': 'tabs-trigger',
-	},
+  selector: '[hlmTabsTrigger]',
+  hostDirectives: [{directive: BrnTabsTrigger, inputs: ['brnTabsTrigger: hlmTabsTrigger', 'disabled']}],
+  host: {
+    'data-slot': 'tabs-trigger',
+  },
 })
 export class HlmTabsTrigger {
-	public readonly triggerFor = input.required<string>({ alias: 'hlmTabsTrigger' });
-	constructor() {
-		classes(() => [
-			`gap-1.5 rounded-md border border-transparent px-1.5 py-0.5 text-sm font-medium group-data-[variant=default]/tabs-list:data-active:shadow-sm group-data-[variant=line]/tabs-list:data-active:shadow-none [&_ng-icon:not([class*='text-'])]:text-[length:--spacing(4)] focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring text-foreground/60 hover:text-foreground dark:text-muted-foreground dark:hover:text-foreground relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center whitespace-nowrap transition-all group-data-[orientation=vertical]/tabs:w-full group-data-[orientation=vertical]/tabs:justify-start focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 [&_ng-icon]:pointer-events-none [&_ng-icon]:shrink-0`,
-			'group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-active:bg-transparent dark:group-data-[variant=line]/tabs-list:data-active:border-transparent dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent',
-			'data-active:bg-background dark:data-active:text-foreground dark:data-active:border-input dark:data-active:bg-input/30 data-active:text-foreground',
-			'after:bg-foreground after:absolute after:opacity-0 after:transition-opacity group-data-[orientation=horizontal]/tabs:after:inset-x-0 group-data-[orientation=horizontal]/tabs:after:bottom-[-5px] group-data-[orientation=horizontal]/tabs:after:h-0.5 group-data-[orientation=vertical]/tabs:after:inset-y-0 group-data-[orientation=vertical]/tabs:after:-right-1 group-data-[orientation=vertical]/tabs:after:w-0.5 group-data-[variant=line]/tabs-list:data-active:after:opacity-100',
-		]);
-	}
+  public readonly triggerFor = input.required<string>({alias: 'hlmTabsTrigger'});
+
+  constructor() {
+    classes(() => [
+    ` relative z-10 inline-flex h-[42px] items-center justify-start whitespace-nowrap
+    before:absolute
+    before:bottom-[-1px]
+    before:left-0
+    before:right-0
+    before:h-px
+    before:bg-[#151923]
+    before:content-['']
+    before:opacity-0
+    data-active:before:opacity-100
+    gap-1.5 px-6
+    text-sm font-medium
+    text-white/55
+    rounded-t-md
+    transition-colors duration-200
+    hover:cursor-pointer
+    hover:text-white
+    hover:bg-[#151B27]/60
+    data-active:text-white
+    data-active:!bg-[#151923]
+    data-active:!border-b-0
+    data-active:!border-white/15
+    border-t border-x border-white/15
+    group-data-[orientation=vertical]/tabs:w-full
+    group-data-[orientation=vertical]/tabs:justify-start
+    group-data-[variant=line]/tabs-list:data-active:shadow-none
+    focus-visible:outline-none
+    focus-visible:ring-2
+    focus-visible:ring-[#3B82F6]/40
+    disabled:pointer-events-none
+    disabled:opacity-50
+    [&_ng-icon]:pointer-events-none
+    [&_ng-icon]:shrink-0`,
+
+    `group-data-[variant=line]/tabs-list:bg-transparent`,
+
+    `after:absolute
+    after:bottom-0
+    after:left-0
+    after:right-0
+    after:h-0.5
+    after:rounded-full
+    after:bg-[#3B82F6]
+    after:opacity-0
+    after:transition-opacity
+    after:duration-200
+    group-data-[variant=line]/tabs-list:data-active:after:opacity-0`,
+    ]);
+  }
 }

@@ -10,9 +10,9 @@ export { LibraryControllerService } from './services/library-controller.service'
 export { CommunityControllerService } from './services/community-controller.service';
 export { CartControllerService } from './services/cart-controller.service';
 export { AuthenticationService } from './services/authentication.service';
+export { SettingsControllerService } from './services/settings-controller.service';
 export { WishlistControllerService } from './services/wishlist-controller.service';
 export { UserLevelControllerService } from './services/user-level-controller.service';
 export { SystemRequirementsControllerService } from './services/system-requirements-controller.service';
-export { FlagsControllerService } from './services/flags-controller.service';
 export { CountryControllerService } from './services/country-controller.service';
 export { CardColorControllerService } from './services/card-color-controller.service';

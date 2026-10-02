@@ -3,7 +3,9 @@
 </p>
 
 
-GameHub is a full-stack web application designed as a central hub for discovering, managing, and building a personal game collection.
+GameHub is a full-stack gaming platform inspired by platforms such as Steam and Epic Games. The project explores the idea of building a gaming platform with its own features and approaches, including areas where existing platforms could be improved or handled differently.
+
+A major focus of GameHub is its community experience. Players can create and join groups, organize Game Nights where other members can participate, and compete against other groups through group-versus-group events and tournaments. The goal is to make GameHub more than just a place to discover and manage games, but also a platform where players can actively connect, organize events, and play together.
 
 Users can browse games, add them to their library or wishlist, customize their profiles, and manage their accounts. The application also includes administration and moderation tools for managing users and platform content.
 

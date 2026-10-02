@@ -38,7 +38,6 @@ import gamehub.game_Hub.Repository.LanguageRepository;
 import gamehub.game_Hub.Repository.PlatformRepository;
 import gamehub.game_Hub.Repository.SubtitleRepository;
 import gamehub.game_Hub.Repository.UserLibraryRepository;
-import gamehub.game_Hub.Repository.UserStoreFlagRepository;
 import gamehub.game_Hub.Repository.WishlistRepository;
 import gamehub.game_Hub.Repository.game.GameRepository;
 import gamehub.game_Hub.Repository.genre.GenreRepository;
@@ -69,7 +68,7 @@ public class GameServiceImpl implements GameService {
 
   private final UserProgressService userProgressService;
 
-  private final UserStoreFlagRepository userStoreFlagRepository;
+  // private final UserStoreFlagRepository userStoreFlagRepository;
 
   private final UserLibraryRepository libraryRepository;
 

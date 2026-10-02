@@ -22,6 +22,7 @@ import {userProfileGuard} from '../../services/guard/user-profile-guard';
 import {AdminStoreComponent} from './pages/admin/pages/store/admin-store.component';
 import {AdminGameDetailsComponent} from './pages/admin/pages/store/game-details/admin-game-details.component';
 import {CartComponent} from './pages/cart/cart.component';
+import {SettingsComponent} from './pages/settings/settings.component';
 
 const routes: Routes = [
   {
@@ -69,6 +70,11 @@ const routes: Routes = [
       {
         path: 'friend-requests',
         component: FriendRequestsComponent,
+        canActivate: [authGuard]
+      },
+      {
+        path: 'settings',
+        component: SettingsComponent,
         canActivate: [authGuard]
       },
       {

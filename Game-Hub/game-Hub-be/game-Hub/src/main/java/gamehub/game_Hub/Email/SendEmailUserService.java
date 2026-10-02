@@ -29,6 +29,14 @@ public class SendEmailUserService {
           logInUrl, "Welcome to GameHub!");
     }
 
+    // if (user.getAccountType() == CHILD) {
+    //   emailService.sendWelcomeEmail(user.getParentEmail(),
+    //       user.getName(),
+    //       user.getEmail(),
+    //       EmailTemplate.WELCOME_EMAIL_CHILD,
+    //       logInUrl, "Welcome to GameHub!");
+    // }
+
     emailService.sendWelcomeEmail(user.getEmail(),
         user.getName(),
         EmailTemplate.WELCOME_EMAIL_ADULT,

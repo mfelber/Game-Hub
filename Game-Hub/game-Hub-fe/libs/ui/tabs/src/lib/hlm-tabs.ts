@@ -8,7 +8,7 @@ import { classes } from '@spartan/utils';
 		{
 			directive: BrnTabs,
 			inputs: ['orientation', 'activationMode', 'brnTabs: tab'],
-			outputs: ['tabActivated'],
+			outputs: ['tabActivated', 'brnTabsChange'],
 		},
 	],
 	host: {
@@ -19,6 +19,6 @@ export class HlmTabs {
 	public readonly tab = input.required<string>();
 
 	constructor() {
-		classes(() => 'group/tabs flex gap-2 data-[orientation=horizontal]:flex-col');
+		classes(() => 'group/tabs flex data-[orientation=horizontal]:flex-col');
 	}
 }

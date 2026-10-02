@@ -12,6 +12,7 @@ import gamehub.game_Hub.Response.UserLibraryResponse;
 import gamehub.game_Hub.Response.UserNotificationsResponse;
 import gamehub.game_Hub.Response.UserPrivateResponse;
 import gamehub.game_Hub.Response.UserPublicResponse;
+import gamehub.game_Hub.Response.UserSettingsResponse;
 
 public interface UserService {
 
@@ -46,4 +47,7 @@ public interface UserService {
   UserNotificationsResponse getUserNotifications(Authentication connectedUser);
 
   Long pinGame(Authentication connectedUser, Long gameId);
+
+  UserSettingsResponse getUserSettings(Authentication connectedUser);
+
 }

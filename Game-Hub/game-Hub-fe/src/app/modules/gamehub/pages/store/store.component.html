@@ -37,7 +37,6 @@
             <button
               hlmDropdownMenuItem
               type="button"
-              class="new-dropdown-option"
               (click)="filters.genre = ''; changeFilter()"
             >
               All Genres
@@ -46,7 +45,6 @@
             @for (genre of allGenres; track genre) {
               <button
                 hlmDropdownMenuItem
-                class="new-dropdown-option"
                 type="button"
                 (click)="filters.genre = genre; changeFilter()">
                 {{ genre }}

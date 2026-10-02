@@ -1346,6 +1346,37 @@
         }
       }
     },
+    "/settings/update/user-settings": {
+      "patch": {
+        "tags": [
+          "settings-controller"
+        ],
+        "operationId": "updateUserSettings",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserSettingsUpdateRequests"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/wishlist/wishlist": {
       "get": {
         "tags": [
@@ -1818,6 +1849,26 @@
         }
       }
     },
+    "/profile/settings": {
+      "get": {
+        "tags": [
+          "user-profile-controller"
+        ],
+        "operationId": "getUserSettings",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserSettingsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/profile/search-library-games": {
       "get": {
         "tags": [
@@ -2087,52 +2138,6 @@
               "application/json": {
                 "schema": {
                   "type": "boolean"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/flags/get/store/flags": {
-      "get": {
-        "tags": [
-          "flags-controller"
-        ],
-        "operationId": "getAllStoreFlags",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/StoreFlagsResponse"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/flags/get/community/flags": {
-      "get": {
-        "tags": [
-          "flags-controller"
-        ],
-        "operationId": "getAllCommunityFlags",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CommunityFlagsResponse"
-                  }
                 }
               }
             }
@@ -3351,6 +3356,91 @@
           }
         }
       },
+      "UpdateCommunitySettingsRequest": {
+        "required": [
+          "access",
+          "settingId"
+        ],
+        "type": "object",
+        "properties": {
+          "settingId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "access": {
+            "type": "string",
+            "enum": [
+              "EVERYONE",
+              "FRIENDS",
+              "NO_ONE"
+            ]
+          }
+        }
+      },
+      "UpdatePrivacySettingsRequest": {
+        "required": [
+          "access",
+          "settingId"
+        ],
+        "type": "object",
+        "properties": {
+          "settingId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "access": {
+            "type": "string",
+            "enum": [
+              "EVERYONE",
+              "FRIENDS",
+              "NO_ONE"
+            ]
+          }
+        }
+      },
+      "UpdateStoreSettingsRequest": {
+        "required": [
+          "settingId"
+        ],
+        "type": "object",
+        "properties": {
+          "settingId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "disabled": {
+            "type": "boolean"
+          }
+        }
+      },
+      "UserSettingsUpdateRequests": {
+        "required": [
+          "communitySettingsIds",
+          "privacySettingsIds",
+          "storeSettingsIds"
+        ],
+        "type": "object",
+        "properties": {
+          "communitySettingsIds": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UpdateCommunitySettingsRequest"
+            }
+          },
+          "privacySettingsIds": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UpdatePrivacySettingsRequest"
+            }
+          },
+          "storeSettingsIds": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UpdateStoreSettingsRequest"
+            }
+          }
+        }
+      },
       "GamePreviewResponse": {
         "type": "object",
         "properties": {
@@ -3608,10 +3698,10 @@
           "inCart": {
             "type": "boolean"
           },
-          "inWishList": {
+          "inLibrary": {
             "type": "boolean"
           },
-          "inLibrary": {
+          "inWishList": {
             "type": "boolean"
           }
         }
@@ -4108,27 +4198,91 @@
           }
         }
       },
-      "StoreFlagsResponse": {
+      "CommunitySettingsResponse": {
         "type": "object",
         "properties": {
-          "name": {
+          "settingId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "settingName": {
             "type": "string"
           },
           "description": {
             "type": "string"
+          },
+          "access": {
+            "type": "string"
           }
         }
       },
-      "CommunityFlagsResponse": {
+      "PrivacySettingsResponse": {
         "type": "object",
         "properties": {
-          "flagKey": {
+          "settingId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "settingName": {
             "type": "string"
           },
-          "options": {
+          "description": {
+            "type": "string"
+          },
+          "access": {
+            "type": "string"
+          }
+        }
+      },
+      "StoreSettingsResponse": {
+        "type": "object",
+        "properties": {
+          "settingId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "pegiRatingName": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "disabled": {
+            "type": "boolean"
+          }
+        }
+      },
+      "UserSettingsResponse": {
+        "type": "object",
+        "properties": {
+          "communitySettingsResponse": {
             "type": "array",
             "items": {
-              "type": "string"
+              "$ref": "#/components/schemas/CommunitySettingsResponse"
+            }
+          },
+          "storeSettingsResponse": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StoreSettingsResponse"
+            }
+          },
+          "privacySettingsResponse": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PrivacySettingsResponse"
             }
           }
         }

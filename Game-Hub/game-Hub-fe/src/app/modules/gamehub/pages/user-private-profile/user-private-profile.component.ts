@@ -14,7 +14,6 @@ import {CardColorControllerService} from '../../../../services/services/card-col
 import {CardPreviewComponent} from '../../components/card-preview/card-preview.component';
 import {RefreshService} from '../../../../services/fn/refresh-service/refresh-service';
 import {MatSlideToggle} from '@angular/material/slide-toggle';
-import {FlagsControllerService} from '../../../../services/services/flags-controller.service';
 import {ProfileInfoComponent} from '../../components/profile-info/profile-info.component';
 import {EditProfileInfoComponent} from '../../components/edit-profile-info/edit-profile-info.component';
 import {UserActionsComponent} from '../../components/user-actions/user-actions.component';
@@ -71,7 +70,6 @@ export class UserPrivateProfileComponent implements OnInit{
     private authenticationService: AuthenticationService,
     private cardColorService: CardColorControllerService,
     private refreshService: RefreshService,
-    private storeFlagsService: FlagsControllerService
   ) {
   }
 
@@ -472,38 +470,38 @@ export class UserPrivateProfileComponent implements OnInit{
 
   // TODO settings page
   getStoreFlags() {
-    this.storeFlagsService.getAllStoreFlags().subscribe({
-      next: (res) => {
-        this.allStoreFlags = res.map(flag => ({
-          flagName: flag.name!,
-          description: flag.description!
-        }))
-      }
-    })
+    // this.storeFlagsService.getAllStoreFlags().subscribe({
+    //   next: (res) => {
+    //     this.allStoreFlags = res.map(flag => ({
+    //       flagName: flag.name!,
+    //       description: flag.description!
+    //     }))
+    //   }
+    // })
   }
 
   // TODO settings page
   getCommunityFlags() {
-    this.storeFlagsService.getAllCommunityFlags().subscribe(res => {
-      res.forEach(flag => {
-        if (flag.flagKey === 'FRIEND_REQUEST') {
-          this.friendRequestOptions = flag.options!
-        }
-        if (flag.flagKey === 'SEND_MESSAGES') {
-          this.sendMessageOptions = flag.options!
-        }
-        if (flag.flagKey === 'PROFILE_VISIBILITY') {
-          this.profileVisibilityOptions = flag.options!
-        }
-        if (flag.flagKey === 'GROUP_INVITES') {
-          this.groupInvitesOptions = flag.options!
-        }
-        if (flag.flagKey === 'PLAY_TOGETHER') {
-          this.playTogetherInvitesOptions = flag.options!
-        }
-      })
-      }
-    )
+    // this.storeFlagsService.getAllCommunityFlags().subscribe(res => {
+    //   res.forEach(flag => {
+    //     if (flag.flagKey === 'FRIEND_REQUEST') {
+    //       this.friendRequestOptions = flag.options!
+    //     }
+    //     if (flag.flagKey === 'SEND_MESSAGES') {
+    //       this.sendMessageOptions = flag.options!
+    //     }
+    //     if (flag.flagKey === 'PROFILE_VISIBILITY') {
+    //       this.profileVisibilityOptions = flag.options!
+    //     }
+    //     if (flag.flagKey === 'GROUP_INVITES') {
+    //       this.groupInvitesOptions = flag.options!
+    //     }
+    //     if (flag.flagKey === 'PLAY_TOGETHER') {
+    //       this.playTogetherInvitesOptions = flag.options!
+    //     }
+    //   })
+    //   }
+    // )
   }
 
   goToWishList() {
