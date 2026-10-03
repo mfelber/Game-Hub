@@ -17,23 +17,175 @@
       <button hlmTabsTrigger="community"><i class="fa-solid fa-comment"></i> Community</button>
       <button hlmTabsTrigger="store"><i class="fa-solid fa-store"></i>Store</button>
       <button hlmTabsTrigger="gaming"><i class="fa-solid fa-gamepad"></i>Gaming</button>
+      <button hlmTabsTrigger="account"><i class="fa-solid fa-bell"></i>Notifications</button>
       <button hlmTabsTrigger="account"><i class="fa-solid fa-triangle-exclamation"></i>Account</button>
     </hlm-tabs-list>
     <div hlmTabsContent="profile">
-      <div>
-        profile picture
-        bio edit bio?
-        username
-        firstname / last name
-        email
-        country
-        banner
-        profile color
-        edit button
+      <h2 class="text-xl font-semibold text-white"><i class="fa-solid fa-user"></i> Profile</h2>
+      <p class="mt-1 text-sm text-gray-400">Manage your profile information and appearance</p>
+
+      <div class="mt-4 grid grid-cols-1 gap-6 md:grid-cols-2">
+        <div class="left-side">
+        <h3 class="text-base font-medium text-gray-300">Basic Information</h3>
+
+        <div class="flex items-end gap-3">
+          @if (response.userProfilePicture) {
+            <img
+              [src]="'data:image/jpeg;base64,' + response.userProfilePicture"
+              class="mt-4 h-24 w-24 rounded-xl object-cover border-2 border-[#2A3445]"/>
+          }
+
+          @if (!response.userProfilePicture) {
+            <img
+              src="../../../../../assets/profilePicture/default_profile_picture.svg"
+              class="mt-4 h-24 w-24 rounded-xl object-cover border-2 border-[#2A3445]"
+              [ngStyle]="{'background-color': response.profileColor}"/>
+          }
+
+          <div class="mb-1">
+            <p class="text-xs text-gray-500">Member since</p>
+            <p class="text-sm text-gray-400">{{ response.joinedDate }}</p>
+          </div>
+        </div>
+
+        <form class="mt-4 space-y-3">
+
+          <span class="mb-1.5 block text-sm text-gray-400">Username</span>
+          <hlm-input-group class="input">
+            <input
+              readonly
+              tabindex="-1"
+              (mousedown)="$event.preventDefault()"
+              hlmInputGroupInput
+              id="userName"
+              type="text"
+              name="username"
+              [(ngModel)]="response.userName"
+              class="!py-5 !text-white hover:!cursor-default"
+            />
+            <hlm-input-group-addon align="inline-end">
+              <button
+                hlmInputGroupButton
+                class="hover:bg-transparent hover:text-[#737373]"
+                [hlmTooltip]="'This is how other people see you'"
+                aria-label="Info"
+                size="icon-xs">
+                <i class="fa-solid fa-info-circle"></i>
+              </button>
+            </hlm-input-group-addon>
+          </hlm-input-group>
+
+          <span class="mb-1.5 block text-sm text-gray-400">First name</span>
+          <hlm-input-group class="input">
+            <input
+              readonly
+              tabindex="-1"
+              (mousedown)="$event.preventDefault()"
+              hlmInputGroupInput
+              id="firstName"
+              type="text"
+              name="firstname"
+              [(ngModel)]="response.firstName"
+              class="!py-5 !text-white hover:!cursor-default"
+            />
+          </hlm-input-group>
+
+          <span class="mb-1.5 block text-sm text-gray-400">Last name</span>
+          <hlm-input-group class="input">
+            <input
+              readonly
+              tabindex="-1"
+              (mousedown)="$event.preventDefault()"
+              hlmInputGroupInput
+              id="lastName"
+              type="text"
+              name="lastname"
+              [(ngModel)]="response.lastName"
+              class="!py-5 !text-white hover:!cursor-default"
+            />
+          </hlm-input-group>
+
+          <span class="mb-1.5 block text-sm text-gray-400">Email</span>
+          <hlm-input-group class="input">
+            <input
+              readonly
+              tabindex="-1"
+              (mousedown)="$event.preventDefault()"
+              hlmInputGroupInput
+              id="email"
+              type="text"
+              name="email"
+              [(ngModel)]="response.email"
+              class="!py-5 !text-white hover:!cursor-default"
+            />
+          </hlm-input-group>
+
+          <span class="mb-1.5 block text-sm text-gray-400">Country</span>
+
+          <hlm-input-group class="input">
+            <div class="flex items-center gap-3 px-3 py-2.5">
+              <img
+                [src]="response.country?.iconPath"
+                [alt]="response.country?.countryName"
+                class="w-7 rounded-[5px]"/>
+
+              <span class="text-white"> {{ response.country?.countryName }} </span>
+            </div>
+          </hlm-input-group>
+        </form>
+        </div>
+        <div class="middle">
+          <div>
+            <h3 class="text-base font-medium text-gray-300">About me</h3>
+            <textarea hlmTextarea [(ngModel)]="response.bio" class="w-100 mt-3 resize-none cursor-default" readonly (mousedown)="$event.preventDefault()"
+                      placeholder="Write something about yourself..."></textarea>
+          </div>
+
+          <div class="mt-8">
+            <h3 class="text-base font-medium text-gray-300">Favorite game</h3>
+            <div class="pinned-game mt-2">
+              <div class="pinned-game-cover">
+                <img [src]="'data:image/jpeg;base64,' + response.favoriteGame?.gameCoverImage" alt="{{response.favoriteGame}}}">
+              </div>
+              <div class="pinned-game-info">
+                <span class="pinned-game-label"> Pinned Game <i class="fa-solid fa-thumbtack"></i></span>
+                <h1>{{response.favoriteGame?.title}}</h1>
+                <span class="pinned-game-description">This game is displayed on your profile</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-8">
+            <h3 class="text-base font-medium text-gray-300">Favorite genres</h3>
+            <div class="flex flex-wrap gap-2 mt-[14px]">
+              @for (genre of response.favoriteGenres; track genre) {
+                <span class="px-[11px] py-[7px] rounded-[7px] bg-white/7 text-white/80 text-xs
+      transition duration-200 ease-in-out hover:bg-white/11 hover:text-white">
+                          {{ genre.name }}
+                        </span>
+              }
+            </div>
+          </div>
+        </div>
+
+        <div class="right-side">
+          <h3 class="text-base font-medium text-gray-300">Profile Appearance</h3>
+
+          <div class="flex gap-3">
+            <div>
+              <h3 class="text-sm font-medium text-gray-300 mt-3">Banner</h3>
+              <img [src]="getBanner(response)" class="w-70 h-30 object-cover">
+            </div>
+            <div>
+              <h3 class="text-sm font-medium text-gray-300 mt-3">Profile color</h3>
+              get profile color
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div hlmTabsContent="privacy">
-      <h2 class="text-xl font-semibold text-white">Privacy</h2>
+      <h2 class="text-xl font-semibold text-white"><i class="fa-solid fa-lock"></i> Privacy</h2>
       <p class="mt-1 text-sm text-gray-400">Control who can see your information and activity</p>
 
       <div class="mt-6 overflow-hidden rounded-lg border border-[#252b36] bg-[#151B27]">
@@ -90,12 +242,14 @@
       </div>
 
       <div class="flex justify-end mt-6">
-        <button class="medium-button save" (click)="savePrivacySettings()">Save</button>
+        <button hlmBtn class="medium-button !bg-[#155dfc] !text-white !border-0" (click)="savePrivacySettings()"
+                [disabled]="!hasPrivacyChanges()">Save
+        </button>
       </div>
 
     </div>
     <div hlmTabsContent="community">
-      <h2 class="text-xl font-semibold text-white">Community</h2>
+      <h2 class="text-xl font-semibold text-white"><i class="fa-solid fa-comment"></i> Community</h2>
       <p class="mt-1 text-sm text-gray-400">Manage who can interact with you and send you invitations</p>
 
       <div class="mt-6 overflow-hidden rounded-lg border border-[#252b36] bg-[#151B27]">
@@ -155,12 +309,14 @@
       </div>
 
       <div class="flex justify-end mt-6">
-        <button class="medium-button save" (click)="saveCommunitySettings()">Save</button>
+        <button hlmBtn class="medium-button !bg-[#155dfc] !text-white !border-0" (click)="saveCommunitySettings()"
+                [disabled]="!hasCommunityChanges()">Save
+        </button>
       </div>
 
     </div>
     <div hlmTabsContent="store">
-      <h2 class="text-xl font-semibold text-white">Store</h2>
+      <h2 class="text-xl font-semibold text-white"><i class="fa-solid fa-store"></i> Store</h2>
       <p class="mt-1 text-sm text-gray-400">Control which age-rated games are shown in your store</p>
 
       <div class="mt-6 overflow-hidden rounded-lg border border-[#252b36] bg-[#151B27]">
@@ -204,11 +360,14 @@
       </div>
 
       <div class="flex justify-end mt-6">
-        <button class="medium-button save" (click)="saveStoreSettings()">Save</button>
+        <button hlmBtn class="medium-button !bg-[#155dfc] !text-white !border-0" (click)="saveStoreSettings()"
+                [disabled]="!hasStoreChanges()">Save
+        </button>
       </div>
 
     </div>
     <div hlmTabsContent="gaming">
+      <h2 class="text-xl font-semibold text-white"><i class="fa-solid fa-gamepad"></i> Gaming</h2>
       <div>
         Favorite game
         Multiplayer preference
@@ -223,6 +382,7 @@
       </div>
     </div>
     <div hlmTabsContent="account">
+      <h2 class="text-xl font-semibold text-white"><i class="fa-solid fa-triangle-exclamation"></i> Account </h2>
       <div>
         Change password
         Suspend account

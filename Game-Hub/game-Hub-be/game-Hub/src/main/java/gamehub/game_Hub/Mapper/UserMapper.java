@@ -358,7 +358,39 @@ public class UserMapper {
             privacySettings.getSettingDefinition().getName(), privacySettings.getSettingDefinition().getDescription(),
             privacySettings.getAccess().getAccessName())).toList();
 
+    String joinedDate = user.getCreatedAt().getMonth().name().charAt(0) + user.getCreatedAt()
+        .getMonth()
+        .name()
+        .substring(1)
+        .toLowerCase() + " " + user.getCreatedAt().getYear();
+
     return UserSettingsResponse.builder()
+        .userId(user.getId())
+        .firstName(user.getFirstName())
+        .lastName(user.getLastName())
+        .userName(user.getName())
+        .joinedDate(joinedDate)
+        .email(user.getEmail())
+        .bio(user.getBio())
+        .level(new LevelResponse(user.getLevel().getId(), user.getLevel().getLevelNumber(),
+            user.getLevel().getLevelColor()))
+        .favoriteGame(libraryMapper.toFavoriteGameResponse(user))
+        .userProfilePicture(FileUtils.readCoverFromLocation(user.getUserProfilePicture()))
+        .profileColor(user.getProfileColor())
+        .bannerImage(FileUtils.readCoverFromLocation(user.getBanner()))
+        .bannerType(user.getBannerType())
+        .predefinedBannerPath(user.getBanner())
+        .country(new CountryResponse(
+            user.getCountry() != null ? user.getCountry().name() : null,
+            user.getCountry().getCountryName(),
+            user.getCountry() != null ? "assets/flags/" + user.getCountry().name().toLowerCase() + ".svg" : null
+        ))
+        .cardColor(new CardColorResponse(user.getCardColor().getId(),
+            user.getCardColor().getColorName(),
+            user.getCardColor().getColorCode()))
+        .favoriteGenres(user.getFavoriteGenres().stream()
+            .map(g -> new GenreResponse(g.getId(), g.getName()))
+            .collect(Collectors.toSet()))
         .storeSettingsResponse(storeSettingsResponse)
         .communitySettingsResponse(communitySettingsResponse)
         .privacySettingsResponse(privacySettingsResponse)

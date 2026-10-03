@@ -4267,6 +4267,64 @@
       "UserSettingsResponse": {
         "type": "object",
         "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "userName": {
+            "type": "string"
+          },
+          "joinedDate": {
+            "type": "string"
+          },
+          "level": {
+            "$ref": "#/components/schemas/LevelResponse"
+          },
+          "email": {
+            "type": "string"
+          },
+          "bio": {
+            "type": "string"
+          },
+          "country": {
+            "$ref": "#/components/schemas/CountryResponse"
+          },
+          "userProfilePicture": {
+            "type": "string",
+            "format": "byte"
+          },
+          "bannerImage": {
+            "type": "string",
+            "format": "byte"
+          },
+          "bannerType": {
+            "type": "string"
+          },
+          "predefinedBannerPath": {
+            "type": "string"
+          },
+          "profileColor": {
+            "type": "string"
+          },
+          "cardColor": {
+            "$ref": "#/components/schemas/CardColorResponse"
+          },
+          "favoriteGenres": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GenreResponse"
+            }
+          },
+          "favoriteGame": {
+            "$ref": "#/components/schemas/UserLibraryResponse"
+          },
           "communitySettingsResponse": {
             "type": "array",
             "items": {

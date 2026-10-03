@@ -3,3 +3,104 @@
   color: white;
 }
 
+.medium-button {
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 9px;
+  color: white;
+  cursor: pointer;
+  transition: all 200ms ease-in-out;
+}
+
+.pinned-game {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  width: 400px;
+  padding: 12px;
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+}
+
+/* Cover */
+
+.pinned-game-cover {
+  width: 70px;
+  height: 92px;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #151923;
+}
+
+.pinned-game-cover img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transition: transform 0.25s ease;
+}
+
+/* Info */
+.pinned-game-info {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.pinned-game-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #818cf8;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.pinned-game-label i {
+  font-size: 10px;
+}
+
+.pinned-game-info h1 {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 18px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pinned-game-description {
+  color: rgba(255, 255, 255, 0.38);
+  font-size: 12px;
+}
+
+/* Check */
+.pinned-game-status {
+  margin-left: auto;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+  color: #4ade80;
+  font-size: 12px;
+}
+
+.pinned-game-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}

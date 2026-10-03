@@ -9,7 +9,7 @@ import {HlmDropdownMenu, HlmDropdownMenuItem, HlmDropdownMenuTrigger} from '@spa
 import {HlmSwitch} from '@spartan/switch';
 import {FormsModule} from '@angular/forms';
 import {HlmTooltip} from '@spartan/tooltip';
-import {HlmInputGroupButton} from '@spartan/input-group';
+import {HlmInputGroup, HlmInputGroupAddon, HlmInputGroupButton, HlmInputGroupInput} from '@spartan/input-group';
 import {BrnTabs} from '@spartan-ng/brain/tabs';
 import {SettingsControllerService} from '../../../../services/services/settings-controller.service';
 import {UserSettingsUpdateRequests} from '../../../../services/models/user-settings-update-requests';
@@ -20,7 +20,13 @@ import {
   HlmDialogDescription, HlmDialogFooter, HlmDialogHeader,
   HlmDialogPortal, HlmDialogTitle
 } from '@spartan/dialog';
-import {NgClass} from '@angular/common';
+import {NgClass, NgStyle} from '@angular/common';
+import {UserSettingsResponse} from '../../../../services/models/user-settings-response';
+import {UserPrivateResponse} from '../../../../services/models/user-private-response';
+import {HlmButton} from '@spartan/button';
+import {HlmField, HlmFieldLabel} from '@spartan/field';
+import {HlmInput} from '@spartan/input';
+import {HlmTextarea} from '@spartan/textarea';
 
 @Component({
   selector: 'app-settings',
@@ -45,7 +51,16 @@ import {NgClass} from '@angular/common';
     HlmDialogFooter,
     HlmDialogHeader,
     HlmDialogTitle,
-    NgClass
+    NgClass,
+    HlmInputGroup,
+    HlmInputGroupAddon,
+    HlmInputGroupInput,
+    NgStyle,
+    HlmButton,
+    HlmField,
+    HlmFieldLabel,
+    HlmInput,
+    HlmTextarea
   ],
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.scss',
@@ -60,6 +75,8 @@ export class SettingsComponent implements OnInit {
 
   originalCommunitySettingsResponse: CommunitySettingsResponse[] = [];
   communitySettingsResponse: CommunitySettingsResponse[] = [];
+
+  response: UserSettingsResponse = {};
 
   activeTab: string = 'profile';
 
@@ -80,6 +97,7 @@ export class SettingsComponent implements OnInit {
     this.userService.getUserSettings().subscribe(
       userSettings => {
         console.log(userSettings);
+        this.response = userSettings;
         this.privacySettingsResponse = userSettings.privacySettingsResponse ?? []
         this.originalPrivacySettingsResponse = userSettings.privacySettingsResponse?.map(setting => ({
           ...setting,
@@ -195,7 +213,7 @@ export class SettingsComponent implements OnInit {
     return originalSettings?.access !== setting.access;
   }
 
-  private hasCommunityChanges() {
+  hasCommunityChanges() {
     return this.communitySettingsResponse.some(setting => this.isCommunitySettingsChanged(setting));
   }
 
@@ -289,6 +307,14 @@ export class SettingsComponent implements OnInit {
     }
   }
 
+  // getProfilePicture(user: UserPrivateResponse) {
+  //   if (user.userProfilePicture) {
+  //     return 'data:image/jpeg;base64,' + user.userProfilePicture;
+  //   }
+  //
+  //   return this.hasProfilePicture;
+  // }
+
   getPegiColor(pegiRatingName: string | undefined): string {
     switch (pegiRatingName) {
       case 'PEGI 3':
@@ -309,5 +335,19 @@ export class SettingsComponent implements OnInit {
 
   get unsavedChangesTitle(): string {
     return `${this.activeTab}`;
+  }
+
+  getGameImageCover(game: UserSettingsResponse): string {
+    if (game.favoriteGame) {
+      return 'data:image/jpeg;base64,' + game.favoriteGame;
+    }
+    return 'https://images.pexels.com/photos/1054655/pexels-photo-1054655.jpeg';
+  }
+
+  getBanner(user: UserPrivateResponse) {
+    if (user.bannerImage) {
+      return 'data:image/jpeg;base64,' + user.bannerImage;
+    }
+    return user.predefinedBannerPath;
   }
 }

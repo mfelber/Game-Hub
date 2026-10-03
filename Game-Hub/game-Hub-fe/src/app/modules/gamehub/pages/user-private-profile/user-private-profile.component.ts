@@ -129,7 +129,6 @@ export class UserPrivateProfileComponent implements OnInit{
     wishlistCount: 0,
     libraryCount: 0,
     profileColor: '',
-
   };
   userRequest: UserUpdateRequest = {
     email: this.userResponse.email,

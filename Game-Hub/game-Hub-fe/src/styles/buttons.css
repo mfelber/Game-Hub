@@ -87,4 +87,12 @@
     hover:bg-white/12;
   }
 
+  .input {
+    @apply !h-auto !w-60 !rounded-lg
+    !border !border-[#2A3445]
+    !bg-[#151C2B]
+    !text-white
+    !outline-none !ring-0;
+  }
+
 }
