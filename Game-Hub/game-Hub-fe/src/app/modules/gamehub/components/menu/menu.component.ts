@@ -17,6 +17,8 @@ import {
   HlmSidebarTrigger, HlmSidebarWrapper,
 } from '@spartan/sidebar';
 import {HlmDropdownMenu, HlmDropdownMenuItem, HlmDropdownMenuTrigger} from '@spartan/dropdown-menu';
+import {HlmInputGroupButton} from '@spartan/input-group';
+import {HlmTooltip} from '@spartan/tooltip';
 
 @Component({
   selector: 'app-menu',
@@ -39,6 +41,8 @@ import {HlmDropdownMenu, HlmDropdownMenuItem, HlmDropdownMenuTrigger} from '@spa
     HlmDropdownMenuTrigger,
     HlmDropdownMenu,
     HlmDropdownMenuItem,
+    HlmInputGroupButton,
+    HlmTooltip,
   ],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.scss'

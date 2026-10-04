@@ -27,6 +27,11 @@ import {HlmButton} from '@spartan/button';
 import {HlmField, HlmFieldLabel} from '@spartan/field';
 import {HlmInput} from '@spartan/input';
 import {HlmTextarea} from '@spartan/textarea';
+import {UserUpdateRequest} from '../../../../services/models/user-update-request';
+import {CountryControllerService} from '../../../../services/services/country-controller.service';
+import {Router} from '@angular/router';
+import {toast} from '@spartan-ng/brain/sonner';
+import {ToastService} from '../../../../services/ToastService/toast.service';
 
 @Component({
   selector: 'app-settings',
@@ -53,13 +58,9 @@ import {HlmTextarea} from '@spartan/textarea';
     HlmDialogTitle,
     NgClass,
     HlmInputGroup,
-    HlmInputGroupAddon,
     HlmInputGroupInput,
     NgStyle,
     HlmButton,
-    HlmField,
-    HlmFieldLabel,
-    HlmInput,
     HlmTextarea
   ],
   templateUrl: './settings.component.html',
@@ -78,7 +79,14 @@ export class SettingsComponent implements OnInit {
 
   response: UserSettingsResponse = {};
 
+  userRequest: UserUpdateRequest = {};
+
   activeTab: string = 'profile';
+
+  editBasicInfo: boolean = false;
+
+  allCountries: { name: string; iconPath: string, countryName: string }[] = [];
+  selectedCountry = this.response.country;
 
   @ViewChild(BrnTabs)
   tabs!: BrnTabs;
@@ -87,34 +95,56 @@ export class SettingsComponent implements OnInit {
   warningDialog!: HlmDialog;
 
   constructor(
+    private toastService: ToastService,
     private userService: UserProfileControllerService,
     private settingsService: SettingsControllerService,
+    private countryService: CountryControllerService,
+    private router: Router
   ) {
   }
 
   ngOnInit() {
     console.log('Initial tab:', this.activeTab);
-    this.userService.getUserSettings().subscribe(
-      userSettings => {
-        console.log(userSettings);
-        this.response = userSettings;
-        this.privacySettingsResponse = userSettings.privacySettingsResponse ?? []
-        this.originalPrivacySettingsResponse = userSettings.privacySettingsResponse?.map(setting => ({
-          ...setting,
-        })) ?? [];
+    this.getCountries();
+    this.loadProfile();
+    this.userService.getUserSettings().subscribe({
+        next: (userSettings) => {
+          console.log(userSettings);
+          this.response = userSettings;
+          this.privacySettingsResponse = userSettings.privacySettingsResponse ?? []
+          this.originalPrivacySettingsResponse = userSettings.privacySettingsResponse?.map(setting => ({
+            ...setting,
+          })) ?? [];
 
-        this.storeSettingsResponse = userSettings.storeSettingsResponse ?? [];
-        this.originalStoreSettingsResponse = userSettings.storeSettingsResponse?.map(setting => ({
-          ...setting
-        })) ?? [];
+          this.storeSettingsResponse = userSettings.storeSettingsResponse ?? [];
+          this.originalStoreSettingsResponse = userSettings.storeSettingsResponse?.map(setting => ({
+            ...setting
+          })) ?? [];
 
 
-        this.communitySettingsResponse = userSettings.communitySettingsResponse ?? [];
-        this.originalCommunitySettingsResponse = userSettings.communitySettingsResponse?.map(setting => ({
-          ...setting,
-        })) ?? [];
+          this.communitySettingsResponse = userSettings.communitySettingsResponse ?? [];
+          this.originalCommunitySettingsResponse = userSettings.communitySettingsResponse?.map(setting => ({
+            ...setting,
+          })) ?? [];
+        }
       }
     )
+  }
+
+  loadProfile() {
+    this.userService.getUserSettings().subscribe({
+      next: (profile) => {
+        this.response = profile;
+
+        this.userRequest = {
+          email: profile.email,
+          firstName: profile.firstName,
+          lastName: profile.lastName,
+          username: profile.userName,
+          country: profile.country?.name as undefined
+        }
+      }
+    })
   }
 
   savePrivacySettings() {
@@ -229,18 +259,25 @@ export class SettingsComponent implements OnInit {
     return this.storeSettingsResponse.some(setting => this.isStoreSettingsChanged(setting));
   }
 
-  private getAccessEnum(
-    access: string | undefined
-  ): 'EVERYONE' | 'FRIENDS' | 'NO_ONE' {
-    if (access === 'Everyone') {
-      return 'EVERYONE';
+  hasProfileInfoChanges(): boolean {
+    const hasEmptyField =
+      !this.userRequest.username?.trim() ||
+      !this.userRequest.firstName?.trim() ||
+      !this.userRequest.lastName?.trim() ||
+      !this.userRequest.email?.trim() ||
+      !this.userRequest.country?.trim();
+
+    if (hasEmptyField) {
+      return false;
     }
 
-    if (access === 'Friends') {
-      return 'FRIENDS';
-    }
-
-    return 'NO_ONE';
+    return (
+      this.userRequest.username !== this.response.userName ||
+      this.userRequest.firstName !== this.response.firstName ||
+      this.userRequest.lastName !== this.response.lastName ||
+      this.userRequest.email !== this.response.email ||
+      this.userRequest.country !== this.response.country?.name
+    );
   }
 
   hasUnsavedChanges(): boolean {
@@ -307,13 +344,19 @@ export class SettingsComponent implements OnInit {
     }
   }
 
-  // getProfilePicture(user: UserPrivateResponse) {
-  //   if (user.userProfilePicture) {
-  //     return 'data:image/jpeg;base64,' + user.userProfilePicture;
-  //   }
-  //
-  //   return this.hasProfilePicture;
-  // }
+  private getAccessEnum(
+    access: string | undefined
+  ): 'EVERYONE' | 'FRIENDS' | 'NO_ONE' {
+    if (access === 'Everyone') {
+      return 'EVERYONE';
+    }
+
+    if (access === 'Friends') {
+      return 'FRIENDS';
+    }
+
+    return 'NO_ONE';
+  }
 
   getPegiColor(pegiRatingName: string | undefined): string {
     switch (pegiRatingName) {
@@ -349,5 +392,74 @@ export class SettingsComponent implements OnInit {
       return 'data:image/jpeg;base64,' + user.bannerImage;
     }
     return user.predefinedBannerPath;
+  }
+
+  private getCountries() {
+    this.countryService.getAllCountries().subscribe({
+      next: (country) => {
+        this.allCountries = country.map(country => ({
+          name: country.name!,
+          iconPath: country.iconPath!,
+          countryName: country.countryName!,
+        }));
+      }
+    })
+  }
+
+  selectCountry(country: any) {
+    this.selectedCountry = country;
+    this.userRequest.country = country.name;
+  }
+
+  getSelectedCountry() {
+    return this.allCountries.find(
+      country => country.name === this.userRequest.country
+    );
+  }
+
+  saveBasicInfo() {
+    const emailChanged = this.response.email !== this.userRequest.email;
+    console.log('Email changed:', emailChanged);
+    this.userService.updateUserProfile({
+      body: this.userRequest,
+    }).subscribe({
+      next: (profile) => {
+        console.log('Profile saved');
+        if (emailChanged) {
+          this.toastService.success('Profile updated successfully')
+          console.log('Email changed -> logging out');
+          localStorage.clear();
+          this.router.navigate(['login']);
+          return;
+        }
+
+        this.loadProfile();
+        this.toastService.success('Profile updated successfully');
+        this.editBasicInfo = false;
+
+      },
+      error: (err) => {
+        console.error('updateUserProfile failed:', err);
+        this.toastService.error('Failed to update profile');
+      }
+    })
+  }
+
+
+  cancelEdit() {
+    this.userRequest = {
+      username: this.response.userName,
+      firstName: this.response.firstName,
+      lastName: this.response.lastName,
+      email: this.response.email,
+      country: this.response.country?.name as undefined
+    };
+
+    this.editBasicInfo = false;
+  }
+
+  showTopRight() {
+    console.log('showTopRight');
+
   }
 }

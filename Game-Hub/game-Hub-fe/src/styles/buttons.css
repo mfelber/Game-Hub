@@ -14,6 +14,16 @@
     text-white cursor-pointer transition duration-200 ease-in-out;
   }
 
+  .small-button {
+    @apply h-8 flex items-center gap-2 px-3 py-1 rounded-md
+    text-white cursor-pointer transition duration-200 ease-in-out;
+  }
+
+  [data-disabled] {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
   .icon-button {
     @apply w-10.5 h-10.5 rounded-xl flex items-center justify-center text-white text-[15px]
     transition-colors;
@@ -30,6 +40,13 @@
     @apply border-0 bg-transparent text-[#9ca3af] text-[28px] cursor-pointer
     transition duration-200 ease-in-out
     hover:text-white hover:scale-110;
+  }
+
+  .big-button:disabled,
+  .big-btn-w-full:disabled,
+  .medium-button:disabled,
+  .small-button:disabled {
+    @apply pointer-events-none opacity-50;
   }
 
   .review {
@@ -85,14 +102,6 @@
   .edit-profile {
     @apply border border-white/12 bg-white/6 text-white
     hover:bg-white/12;
-  }
-
-  .input {
-    @apply !h-auto !w-60 !rounded-lg
-    !border !border-[#2A3445]
-    !bg-[#151C2B]
-    !text-white
-    !outline-none !ring-0;
   }
 
 }

@@ -3,6 +3,7 @@ package gamehub.game_Hub.ServiceImpl;
 import static gamehub.game_Hub.enums.Status.*;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -62,9 +63,14 @@ public class UserServiceImpl implements UserService {
     // TODO try this
     // user = userMapper.toUser(userUpdateRequest);
 
-    CardColor cardColor = cardColorRepository.findById(userUpdateRequest.getCardColorId())
-        .orElseThrow(
-            () -> new EntityNotFoundException("No card color found with id: " + userUpdateRequest.getCardColorId()));
+    // CardColor cardColor = cardColorRepository.findById(userUpdateRequest.getCardColorId())
+    //     .orElseThrow(
+    //         () -> new EntityNotFoundException("No card color found with id: " + userUpdateRequest.getCardColorId()));
+
+    boolean emailChanged = !Objects.equals(
+        user.getEmail(),
+        userUpdateRequest.getEmail()
+    );
 
     user = user.toBuilder()
         .firstName(userUpdateRequest.getFirstName())
@@ -72,8 +78,12 @@ public class UserServiceImpl implements UserService {
         .username(userUpdateRequest.getUsername())
         .email(userUpdateRequest.getEmail())
         .country(userUpdateRequest.getCountry())
-        .cardColor(cardColor)
+        // .cardColor(cardColor)
         .build();
+
+    if (emailChanged) {
+      user = user.toBuilder().status(OFFLINE).build();
+    }
 
     return userRepository.save(user).getId();
   }

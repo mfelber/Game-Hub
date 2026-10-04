@@ -24,15 +24,22 @@
       <h2 class="text-xl font-semibold text-white"><i class="fa-solid fa-user"></i> Profile</h2>
       <p class="mt-1 text-sm text-gray-400">Manage your profile information and appearance</p>
 
-      <div class="mt-4 grid grid-cols-1 gap-6 md:grid-cols-2">
-        <div class="left-side">
-        <h3 class="text-base font-medium text-gray-300">Basic Information</h3>
 
-        <div class="flex items-end gap-3">
+      <section class="relative mt-4 banner-photo">
+
+        <div class="h-40 rounded-t-xl bg-[#151B27] border-t border-x border-[#2A3445]">
+          <img
+            [src]="getBanner(response)"
+            class="h-full w-full rounded-t-xl object-cover"
+          />
+        </div>
+
+        <div class="relative h-20 bg-[#151B27] rounded-b-xl border-b border-x border-[#2A3445]">
           @if (response.userProfilePicture) {
             <img
               [src]="'data:image/jpeg;base64,' + response.userProfilePicture"
-              class="mt-4 h-24 w-24 rounded-xl object-cover border-2 border-[#2A3445]"/>
+              class="absolute left-[35px] top-[-35px] h-25 w-25 rounded-[18px] border-3 border-[#151B27] object-cover"
+            />
           }
 
           @if (!response.userProfilePicture) {
@@ -41,103 +48,266 @@
               class="mt-4 h-24 w-24 rounded-xl object-cover border-2 border-[#2A3445]"
               [ngStyle]="{'background-color': response.profileColor}"/>
           }
+          <div class="absolute left-[150px] right-5 h-full flex items-center justify-between">
+            <div>
+              <h2 class="text-xl font-semibold text-white">
+                {{ response.userName }}
+              </h2>
+              <p class="text-base text-gray-400">
+                Member since {{ response.joinedDate }}
+              </p>
+            </div>
 
-          <div class="mb-1">
-            <p class="text-xs text-gray-500">Member since</p>
-            <p class="text-sm text-gray-400">{{ response.joinedDate }}</p>
+            <div class=" flex justify-center gap-2">
+
+              <div class="medium-button edit-profile border-none hover:!cursor-default hover:!bg-white/6">
+                <img
+                  [src]="response.country?.iconPath"
+                  [alt]="response.country?.countryName"
+                  class="w-7 rounded-[5px]"/>
+
+                <span class="text-white"> {{ response.country?.countryName }} </span>
+              </div>
+
+              <button class="medium-button edit-profile">
+                <i class="fa-solid fa-pen"></i> Edit
+<!--           dont forget colorId of cards     -->
+              </button>
+
+            </div>
           </div>
         </div>
+      </section>
 
-        <form class="mt-4 space-y-3">
-
-          <span class="mb-1.5 block text-sm text-gray-400">Username</span>
-          <hlm-input-group class="input">
-            <input
-              readonly
-              tabindex="-1"
-              (mousedown)="$event.preventDefault()"
-              hlmInputGroupInput
-              id="userName"
-              type="text"
-              name="username"
-              [(ngModel)]="response.userName"
-              class="!py-5 !text-white hover:!cursor-default"
-            />
-            <hlm-input-group-addon align="inline-end">
-              <button
-                hlmInputGroupButton
-                class="hover:bg-transparent hover:text-[#737373]"
-                [hlmTooltip]="'This is how other people see you'"
-                aria-label="Info"
-                size="icon-xs">
-                <i class="fa-solid fa-info-circle"></i>
-              </button>
-            </hlm-input-group-addon>
-          </hlm-input-group>
-
-          <span class="mb-1.5 block text-sm text-gray-400">First name</span>
-          <hlm-input-group class="input">
-            <input
-              readonly
-              tabindex="-1"
-              (mousedown)="$event.preventDefault()"
-              hlmInputGroupInput
-              id="firstName"
-              type="text"
-              name="firstname"
-              [(ngModel)]="response.firstName"
-              class="!py-5 !text-white hover:!cursor-default"
-            />
-          </hlm-input-group>
-
-          <span class="mb-1.5 block text-sm text-gray-400">Last name</span>
-          <hlm-input-group class="input">
-            <input
-              readonly
-              tabindex="-1"
-              (mousedown)="$event.preventDefault()"
-              hlmInputGroupInput
-              id="lastName"
-              type="text"
-              name="lastname"
-              [(ngModel)]="response.lastName"
-              class="!py-5 !text-white hover:!cursor-default"
-            />
-          </hlm-input-group>
-
-          <span class="mb-1.5 block text-sm text-gray-400">Email</span>
-          <hlm-input-group class="input">
-            <input
-              readonly
-              tabindex="-1"
-              (mousedown)="$event.preventDefault()"
-              hlmInputGroupInput
-              id="email"
-              type="text"
-              name="email"
-              [(ngModel)]="response.email"
-              class="!py-5 !text-white hover:!cursor-default"
-            />
-          </hlm-input-group>
-
-          <span class="mb-1.5 block text-sm text-gray-400">Country</span>
-
-          <hlm-input-group class="input">
-            <div class="flex items-center gap-3 px-3 py-2.5">
-              <img
-                [src]="response.country?.iconPath"
-                [alt]="response.country?.countryName"
-                class="w-7 rounded-[5px]"/>
-
-              <span class="text-white"> {{ response.country?.countryName }} </span>
+      <section class="grid grid-cols-[2fr_3fr] gap-10">
+        <section class="basic-info">
+          <div class="mt-6 overflow-hidden rounded-lg border border-[#252b36] bg-[#151B27]">
+            <div class="border-b border-[#252b36] px-5 py-4">
+              <div class="flex justify-between">
+                <h3 class="text-base font-medium text-white">Account details</h3>
+                <div class="flex gap-2">
+                  @if (!editBasicInfo) {
+                    <button class="small-button edit-profile" (click)="editBasicInfo=true"><i
+                      class="fa-solid fa-pen"></i>Edit
+                    </button>
+                  }
+                  @if (editBasicInfo) {
+                    <button class="small-button cancel" (click)="cancelEdit()">Cancel</button>
+                    <button class="small-button save" [disabled]="!hasProfileInfoChanges()" (click)="saveBasicInfo()">Save changes</button>
+                  }
+                </div>
+              </div>
             </div>
-          </hlm-input-group>
-        </form>
-        </div>
+
+            <div class="flex items-center justify-between px-5 py-2">
+              <div class="flex gap-2">
+                <span class="text-sm font-bold text-gray-400">Username</span>
+                <button [hlmTooltip]="'This is how other people see you'" aria-label="Info"
+                        size="icon-xs" class="hover:bg-transparent text-gray-400 hover:text-[#737373]"><i
+                  class="fa-solid fa-info-circle"></i></button>
+              </div>
+              <div class="flex gap-2">
+                @if (userRequest.username !== response.userName) {
+                  <button hlmTooltip="This value was changed" class="text-amber-400"><i
+                    class="fa-solid fa-info-circle"></i></button>
+                }
+                <hlm-input-group class="hlm-input-group !gap-0 transition-colors duration-200">
+                  <input
+                    [readonly]="!editBasicInfo"
+                    autocomplete="off"
+                    tabindex="-1"
+                    hlmInputGroupInput
+                    id="userName"
+                    type="text"
+                    name="username"
+                    [(ngModel)]="userRequest.username"
+                    class="input"
+                    [class.bg-[#1e2635]]="editBasicInfo" [class.bg-transparent]="!editBasicInfo"
+                  />
+                </hlm-input-group>
+              </div>
+
+
+            </div>
+
+            <div class="border-t border-[#252b36]"></div>
+            <div class="flex items-center justify-between px-5 py-2">
+              <span class="text-sm font-bold text-gray-400">First name</span>
+              <div class="flex gap-2">
+                @if (userRequest.firstName !== response.firstName) {
+                  <button hlmTooltip="This value was changed" class="text-amber-400"><i
+                    class="fa-solid fa-info-circle"></i></button>
+                }
+                <hlm-input-group class="hlm-input-group !gap-0">
+                  <input
+                    [readonly]="!editBasicInfo"
+                    autocomplete="off"
+                    tabindex="-1"
+                    hlmInputGroupInput
+                    id="firstName"
+                    type="text"
+                    name="firstName"
+                    [(ngModel)]="userRequest.firstName"
+                    class="input"
+                    [class.bg-[#1e2635]]="editBasicInfo" [class.bg-transparent]="!editBasicInfo"
+                  />
+                </hlm-input-group>
+              </div>
+            </div>
+
+            <div class="border-t border-[#252b36]"></div>
+            <div class="flex items-center justify-between px-5 py-2">
+              <span class="text-sm font-bold text-gray-400">Last name</span>
+              <div class="flex gap-2">
+                @if (userRequest.lastName !== response.lastName) {
+                  <button hlmTooltip="This value was changed" class="text-amber-400"><i
+                    class="fa-solid fa-info-circle"></i></button>
+                }
+                <hlm-input-group class="hlm-input-group !gap-0">
+                  <input
+                    [readonly]="!editBasicInfo"
+                    autocomplete="off"
+                    tabindex="-1"
+                    hlmInputGroupInput
+                    id="lastName"
+                    type="text"
+                    name="lastName"
+                    [(ngModel)]="userRequest.lastName"
+                    class="input"
+                    [class.bg-[#1e2635]]="editBasicInfo" [class.bg-transparent]="!editBasicInfo"
+                  />
+                </hlm-input-group>
+              </div>
+            </div>
+
+            <div class="border-t border-[#252b36]"></div>
+            <div class="flex items-center justify-between px-5 py-2">
+              <span class="text-sm font-bold text-gray-400">Email</span>
+              <div class="flex gap-2">
+                @if (userRequest.email !== response.email) {
+                  <button hlmTooltip="After changing your email, you will need to log in with your new email address."
+                          class="text-red-500"
+                          aria-label="Email change warning"><i
+                    class="fa-solid fa-info-circle"></i></button>
+                }
+                @if (editBasicInfo) {
+                  <hlm-input-group class="hlm-input-group !gap-0">
+                    <input
+                      [readonly]="!editBasicInfo"
+                      autocomplete="off"
+                      tabindex="-1"
+                      hlmInputGroupInput
+                      id="email"
+                      type="email"
+                      name="email"
+                      [(ngModel)]="userRequest.email"
+                      class="input !text-right"
+                      [class.bg-[#1e2635]]="editBasicInfo" [class.bg-transparent]="!editBasicInfo"
+                      [class.!w-[200px]]="editBasicInfo"
+                      [class.cursor]="editBasicInfo"
+                      [class.!max-w-[300px]]="!editBasicInfo"
+                    />
+                  </hlm-input-group>
+                } @else {
+                  <span class="flex h-[32px] items-center px-2.5 py-1">{{response.email}}</span>
+                }
+
+              </div>
+            </div>
+
+            <div class="border-t border-[#252b36]"></div>
+            <div class="flex !h-[57px] items-center justify-between px-5 py-2">
+              <span class=" text-sm font-bold text-gray-400">Country</span>
+              @if (!editBasicInfo) {
+                <div class="flex items-center gap-3 px-3 py-2.5">
+                  <img
+                    [src]="response.country?.iconPath"
+                    [alt]="response.country?.countryName"
+                    class="w-7 rounded-[5px]"/>
+                  <span class="text-white"> {{ response.country?.countryName }} </span>
+                </div>
+              }
+
+              @if (editBasicInfo) {
+                <div class="dropdown">
+                  <button
+                    class="dropdown-button"
+                    type="button" [hlmDropdownMenuTrigger]="countryMenu"
+                    align="start">
+
+                    @if (getSelectedCountry(); as country) {
+                      <img
+                        [src]="country.iconPath"
+                        [alt]="country.countryName"
+                        class="w-6 rounded-[4px]"
+                      />
+
+                      <span class="max-w-[140px] truncate"> {{ country.countryName }}</span>
+                    } @else {
+                      <span>Select country</span>
+                    }
+                    <i class="fa-solid fa-chevron-down text-xs"></i></button>
+
+                  <ng-template #countryMenu>
+                    <hlm-dropdown-menu>
+                      @for (country of allCountries; track country) {
+                        <button
+                          hlmDropdownMenuItem
+                          type="button" (click)="selectCountry(country)">
+                          <div class="flex items-center gap-2">
+                            <img [src]="country.iconPath"
+                                 [alt]="country.countryName"
+                                 class="w-6 rounded-[4px]">
+                          </div>
+                          <span class="max-w-[140px] truncate">{{ country.countryName }}</span>
+                        </button>
+                      }
+                    </hlm-dropdown-menu>
+                  </ng-template>
+                </div>
+              }
+
+
+            </div>
+          </div>
+        </section>
+
+        <section class="right-side gap-y-3">
+          <section class="about-me">
+            <div class="mt-6 overflow-hidden rounded-lg border border-[#252b36] bg-[#151B27]">
+              <div class=" border-[#252b36] px-5 py-4">
+                <h3 class="text-base font-medium text-white">About me</h3>
+              </div>
+              <div class="border-t border-[#252b36]"></div>
+              <div class=" border-[#252b36] px-5 py-4">
+                <h3 class="text-base font-medium text-gray-400">{{ response.bio }}</h3>
+              </div>
+            </div>
+          </section>
+
+          <section class="about-me">
+            <div class="mt-6 overflow-hidden rounded-lg border border-[#252b36] bg-[#151B27]">
+              <div class=" border-[#252b36] px-5 py-4">
+                <h3 class="text-base font-medium text-white">About me</h3>
+              </div>
+              <div class="border-t border-[#252b36]"></div>
+              <div class=" border-[#252b36] px-5 py-4">
+                <h3 class="text-base font-medium text-gray-400">{{ response.bio }}</h3>
+              </div>
+            </div>
+          </section>
+
+        </section>
+
+
+      </section>
+
+      <div class="mt-4 grid grid-cols-1 gap-6 md:grid-cols-2">
         <div class="middle">
           <div>
             <h3 class="text-base font-medium text-gray-300">About me</h3>
-            <textarea hlmTextarea [(ngModel)]="response.bio" class="w-100 mt-3 resize-none cursor-default" readonly (mousedown)="$event.preventDefault()"
+            <textarea hlmTextarea [(ngModel)]="response.bio" class="w-100 mt-3 resize-none cursor-default" readonly
+                      (mousedown)="$event.preventDefault()"
                       placeholder="Write something about yourself..."></textarea>
           </div>
 
@@ -145,11 +315,12 @@
             <h3 class="text-base font-medium text-gray-300">Favorite game</h3>
             <div class="pinned-game mt-2">
               <div class="pinned-game-cover">
-                <img [src]="'data:image/jpeg;base64,' + response.favoriteGame?.gameCoverImage" alt="{{response.favoriteGame}}}">
+                <img [src]="'data:image/jpeg;base64,' + response.favoriteGame?.gameCoverImage"
+                     alt="{{response.favoriteGame}}}">
               </div>
               <div class="pinned-game-info">
                 <span class="pinned-game-label"> Pinned Game <i class="fa-solid fa-thumbtack"></i></span>
-                <h1>{{response.favoriteGame?.title}}</h1>
+                <h1>{{ response.favoriteGame?.title }}</h1>
                 <span class="pinned-game-description">This game is displayed on your profile</span>
               </div>
             </div>
@@ -164,21 +335,6 @@
                           {{ genre.name }}
                         </span>
               }
-            </div>
-          </div>
-        </div>
-
-        <div class="right-side">
-          <h3 class="text-base font-medium text-gray-300">Profile Appearance</h3>
-
-          <div class="flex gap-3">
-            <div>
-              <h3 class="text-sm font-medium text-gray-300 mt-3">Banner</h3>
-              <img [src]="getBanner(response)" class="w-70 h-30 object-cover">
-            </div>
-            <div>
-              <h3 class="text-sm font-medium text-gray-300 mt-3">Profile color</h3>
-              get profile color
             </div>
           </div>
         </div>
@@ -206,7 +362,7 @@
                 @if (isPrivacySettingsChanged(setting)) {
                   <button
                     hlmInputGroupButton
-                    class="hover:!bg-transparent hover:!text-[#737373]"
+                    class="hover:!bg-transparent !text-amber-400"
                     [hlmTooltip]="'This value was changed'"
                     aria-label="Info"
                     size="icon-xs"
@@ -242,7 +398,7 @@
       </div>
 
       <div class="flex justify-end mt-6">
-        <button hlmBtn class="medium-button !bg-[#155dfc] !text-white !border-0" (click)="savePrivacySettings()"
+        <button class="medium-button !bg-[#155dfc] !text-white !border-0" (click)="savePrivacySettings()"
                 [disabled]="!hasPrivacyChanges()">Save
         </button>
       </div>
@@ -270,7 +426,7 @@
                 @if (isCommunitySettingsChanged(setting)) {
                   <button
                     hlmInputGroupButton
-                    class="hover:!bg-transparent hover:!text-[#737373]"
+                    class="hover:!bg-transparent !text-amber-400"
                     [hlmTooltip]="'This value was changed'"
                     aria-label="Info"
                     size="icon-xs"
@@ -309,7 +465,7 @@
       </div>
 
       <div class="flex justify-end mt-6">
-        <button hlmBtn class="medium-button !bg-[#155dfc] !text-white !border-0" (click)="saveCommunitySettings()"
+        <button class="medium-button !bg-[#155dfc] !text-white !border-0" (click)="saveCommunitySettings()"
                 [disabled]="!hasCommunityChanges()">Save
         </button>
       </div>
@@ -338,7 +494,7 @@
                 @if (isStoreSettingsChanged(setting)) {
                   <button
                     hlmInputGroupButton
-                    class="hover:!bg-transparent hover:!text-[#737373]"
+                    class="hover:!bg-transparent !text-amber-400"
                     [hlmTooltip]="'This value was changed'"
                     aria-label="Info"
                     size="icon-xs"
@@ -360,7 +516,7 @@
       </div>
 
       <div class="flex justify-end mt-6">
-        <button hlmBtn class="medium-button !bg-[#155dfc] !text-white !border-0" (click)="saveStoreSettings()"
+        <button class="medium-button !bg-[#155dfc] !text-white !border-0" (click)="saveStoreSettings()"
                 [disabled]="!hasStoreChanges()">Save
         </button>
       </div>

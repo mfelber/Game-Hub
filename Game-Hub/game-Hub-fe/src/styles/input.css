@@ -1,0 +1,9 @@
+.hlm-input-group {
+    @apply !h-auto !w-fit
+    text-white border-none
+    !outline-none !ring-0;
+  }
+
+  .input {
+    @apply !flex-none !text-right !text-white !rounded-[9px]
+  }

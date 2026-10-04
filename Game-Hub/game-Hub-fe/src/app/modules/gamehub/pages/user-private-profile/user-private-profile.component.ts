@@ -65,7 +65,7 @@ export class UserPrivateProfileComponent implements OnInit{
     private router: Router,
     private userService: UserProfileControllerService,
     private gameService: StoreControllerService,
-    private locationService: CountryControllerService,
+    private countryService: CountryControllerService,
     private http: HttpClient,
     private authenticationService: AuthenticationService,
     private cardColorService: CardColorControllerService,
@@ -423,7 +423,7 @@ export class UserPrivateProfileComponent implements OnInit{
   }
 
   getCountries() {
-    this.locationService.getAllCountries().subscribe({
+    this.countryService.getAllCountries().subscribe({
       next: (country) => {
         this.allLocations = country.map(country => ({
           name: country.name!,
