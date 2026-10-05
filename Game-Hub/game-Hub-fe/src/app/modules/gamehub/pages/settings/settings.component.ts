@@ -9,7 +9,7 @@ import {HlmDropdownMenu, HlmDropdownMenuItem, HlmDropdownMenuTrigger} from '@spa
 import {HlmSwitch} from '@spartan/switch';
 import {FormsModule} from '@angular/forms';
 import {HlmTooltip} from '@spartan/tooltip';
-import {HlmInputGroup, HlmInputGroupAddon, HlmInputGroupButton, HlmInputGroupInput} from '@spartan/input-group';
+import {HlmInputGroup, HlmInputGroupButton, HlmInputGroupInput} from '@spartan/input-group';
 import {BrnTabs} from '@spartan-ng/brain/tabs';
 import {SettingsControllerService} from '../../../../services/services/settings-controller.service';
 import {UserSettingsUpdateRequests} from '../../../../services/models/user-settings-update-requests';
@@ -23,15 +23,16 @@ import {
 import {NgClass, NgStyle} from '@angular/common';
 import {UserSettingsResponse} from '../../../../services/models/user-settings-response';
 import {UserPrivateResponse} from '../../../../services/models/user-private-response';
-import {HlmButton} from '@spartan/button';
-import {HlmField, HlmFieldLabel} from '@spartan/field';
-import {HlmInput} from '@spartan/input';
 import {HlmTextarea} from '@spartan/textarea';
 import {UserUpdateRequest} from '../../../../services/models/user-update-request';
 import {CountryControllerService} from '../../../../services/services/country-controller.service';
 import {Router} from '@angular/router';
-import {toast} from '@spartan-ng/brain/sonner';
 import {ToastService} from '../../../../services/ToastService/toast.service';
+import {CardColorResponse} from '../../../../services/models/card-color-response';
+import {CardColorControllerService} from '../../../../services/services/card-color-controller.service';
+import {concatMap, forkJoin, Observable, of} from 'rxjs';
+import {RefreshService} from '../../../../services/fn/refresh-service/refresh-service';
+import {LoadingComponent} from '../../components/loading/loading.component';
 
 @Component({
   selector: 'app-settings',
@@ -60,13 +61,19 @@ import {ToastService} from '../../../../services/ToastService/toast.service';
     HlmInputGroup,
     HlmInputGroupInput,
     NgStyle,
-    HlmButton,
-    HlmTextarea
+    HlmTextarea,
+    LoadingComponent
   ],
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.scss',
 })
 export class SettingsComponent implements OnInit {
+
+  @ViewChild(BrnTabs)
+  tabs!: BrnTabs;
+
+  @ViewChild('warningDialog')
+  warningDialog!: HlmDialog;
 
   originalPrivacySettingsResponse: PrivacySettingsResponse[] = [];
   privacySettingsResponse: PrivacySettingsResponse[] = [];
@@ -83,22 +90,35 @@ export class SettingsComponent implements OnInit {
 
   activeTab: string = 'profile';
 
-  editBasicInfo: boolean = false;
-
   allCountries: { name: string; iconPath: string, countryName: string }[] = [];
   selectedCountry = this.response.country;
 
-  @ViewChild(BrnTabs)
-  tabs!: BrnTabs;
+  predefinedBanners = [1, 2, 3, 4];
+  cardColorsResponse: CardColorResponse[] = [];
 
-  @ViewChild('warningDialog')
-  warningDialog!: HlmDialog;
+  newCustomColor = '';
+  selectedColorCode: string = '';
+  originalColorId: number | null = null;
+  selectedColorId: number | null = null;
+
+  profileBanner: File | null = null;
+  profilePicture: File | null = null;
+
+  previewBanner: string | undefined;
+  previewProfilePic: string | undefined;
+  selectedBannerId: number | null = null;
+
+  editBasicInfo = false;
+  editAppearance = false
+  addCustomColor = false;
 
   constructor(
     private toastService: ToastService,
+    private refreshService: RefreshService,
     private userService: UserProfileControllerService,
     private settingsService: SettingsControllerService,
     private countryService: CountryControllerService,
+    private cardService: CardColorControllerService,
     private router: Router
   ) {
   }
@@ -107,6 +127,7 @@ export class SettingsComponent implements OnInit {
     console.log('Initial tab:', this.activeTab);
     this.getCountries();
     this.loadProfile();
+    this.loadColorsForCard();
     this.userService.getUserSettings().subscribe({
         next: (userSettings) => {
           console.log(userSettings);
@@ -135,14 +156,27 @@ export class SettingsComponent implements OnInit {
     this.userService.getUserSettings().subscribe({
       next: (profile) => {
         this.response = profile;
-
+        this.originalColorId = profile.cardColor?.id!;
+        this.selectedColorId = profile.cardColor?.id!;
         this.userRequest = {
           email: profile.email,
           firstName: profile.firstName,
           lastName: profile.lastName,
           username: profile.userName,
-          country: profile.country?.name as undefined
+          country: profile.country?.name as undefined,
+          cardColorId: profile.cardColor?.id!,
         }
+        this.isSavingAppearance = false;
+      },  error: () => {
+        this.isSavingAppearance = false;
+      }
+    })
+  }
+
+  loadColorsForCard() {
+    this.cardService.getColors().subscribe({
+      next: (colors) => {
+        this.cardColorsResponse = colors;
       }
     })
   }
@@ -219,6 +253,18 @@ export class SettingsComponent implements OnInit {
         console.log(error);
       }
     })
+  }
+
+  hasProfileAppearanceChanges() {
+    if (this.originalColorId !== this.selectedColorId) {
+      return true;
+    }
+
+    if (this.previewProfilePic || this.previewBanner) {
+      return true;
+    }
+
+    return false;
   }
 
   isPrivacySettingsChanged(setting: PrivacySettingsResponse): boolean {
@@ -419,15 +465,13 @@ export class SettingsComponent implements OnInit {
 
   saveBasicInfo() {
     const emailChanged = this.response.email !== this.userRequest.email;
-    console.log('Email changed:', emailChanged);
+
     this.userService.updateUserProfile({
       body: this.userRequest,
     }).subscribe({
       next: (profile) => {
-        console.log('Profile saved');
         if (emailChanged) {
           this.toastService.success('Profile updated successfully')
-          console.log('Email changed -> logging out');
           localStorage.clear();
           this.router.navigate(['login']);
           return;
@@ -446,7 +490,7 @@ export class SettingsComponent implements OnInit {
   }
 
 
-  cancelEdit() {
+  cancelEditBasicInfo() {
     this.userRequest = {
       username: this.response.userName,
       firstName: this.response.firstName,
@@ -458,8 +502,169 @@ export class SettingsComponent implements OnInit {
     this.editBasicInfo = false;
   }
 
-  showTopRight() {
-    console.log('showTopRight');
+  cancelAppearance() {
+    this.editAppearance = false;
+    this.addCustomColor = false;
 
+    this.previewBanner = undefined;
+    this.profileBanner = null;
+    this.selectedBannerId = null;
+
+    this.previewProfilePic = undefined;
+    this.profilePicture = null;
+
+    this.selectedColorId = this.originalColorId;
+
+  }
+
+  selectCustomColor() {
+    console.log(this.newCustomColor);
+  }
+
+  onBannerSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.profileBanner = input.files![0];
+
+    if (this.profileBanner) {
+      const reader = new FileReader();
+      this.selectedBannerId = null;
+      reader.onloadend = () => {
+        this.previewBanner = reader.result as string;
+      }
+      reader.readAsDataURL(this.profileBanner);
+    }
+  }
+
+  removeSelectedBanner() {
+    this.previewBanner = undefined;
+    this.selectedBannerId = null;
+    this.profileBanner = null;
+  }
+
+  selectedBanner(bannerId: number) {
+    if (this.selectedBannerId === bannerId) {
+      this.selectedBannerId = null;
+      this.previewBanner = undefined;
+    } else {
+      this.selectedBannerId = bannerId;
+      this.profileBanner = null;
+      this.previewBanner = `assets/banners/banner_${bannerId}.jpg`
+    }
+  }
+
+  getProfilePicture(user: UserPrivateResponse) {
+    if (user.userProfilePicture) {
+      return 'data:image/jpeg;base64,' + user.userProfilePicture;
+    }
+    return user.userProfilePicture;
+  }
+
+  onProfilePicSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.profilePicture = input.files![0]
+    if (this.profilePicture) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.previewProfilePic = reader.result as string;
+      }
+      reader.readAsDataURL(this.profilePicture);
+    }
+  }
+
+  removeSelectedProfilePicture() {
+    this.previewProfilePic = undefined;
+    this.profilePicture = null;
+  }
+
+  selectColor(id: number, colorCode: string) {
+    console.log('Selected Color:', id, colorCode);
+    this.selectedColorCode = colorCode;
+    this.selectedColorId = id;
+    this.userRequest.cardColorId = id;
+  }
+
+  resetColor() {
+    this.selectedColorId = this.originalColorId;
+  }
+
+  isSavingAppearance = false;
+
+  saveAppearance() {
+    console.log(this.userRequest);
+    console.log(this.previewBanner);
+    let request$: Observable<any> = of(null);
+
+    if (this.originalColorId !== this.selectedColorId) {
+      request$ = request$.pipe(
+        concatMap(() => this.saveProfileColor())
+      );
+    }
+
+    if (this.previewProfilePic) {
+      request$ = request$.pipe(
+        concatMap(() => this.saveProfilePicture())
+      );
+    }
+
+    if (this.selectedBannerId !== null) {
+      request$ = request$.pipe(
+        concatMap(() => this.savePredefinedBanner())
+      );
+    } else if (this.previewBanner) {
+      request$ = request$.pipe(
+        concatMap(() => this.saveBanner())
+      );
+    }
+
+    this.isSavingAppearance = true;
+    request$.subscribe({
+      next: () => {
+        this.toastService.success('Profile appearance updated successfully');
+        this.refreshService.triggerRefresh();
+        this.editAppearance = false;
+        this.previewBanner = undefined;
+        this.previewProfilePic = undefined;
+        this.profileBanner = null;
+        this.profilePicture = null;
+        this.loadProfile();
+      },
+      error: (err) => {
+        console.error('updateUserProfile failed:', err);
+        this.isSavingAppearance = false;
+        this.toastService.error('Failed to update profile appearance');
+      }
+    })
+  }
+
+
+  private saveProfileColor(): Observable<any> {
+    return this.userService.updateUserProfile({
+      body: this.userRequest,
+    })
+  }
+
+  private saveProfilePicture(): Observable<any> {
+    return this.userService.uploadProfileImage({
+      body: {
+        file: this.profilePicture!
+      }
+    })
+  }
+
+  private saveBanner(): Observable<any> {
+    return this.userService.uploadBannerImage({
+      body : {
+        file: this.profileBanner!
+      }
+    })
+  }
+
+  private savePredefinedBanner(): Observable<any> {
+    const bannerPath = "/assets/banners/banner_" + this.selectedBannerId + ".jpg";
+    return this.userService.setPredefinedBanner({
+      body: {
+        bannerPath
+      }
+    })
   }
 }

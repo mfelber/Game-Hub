@@ -22,5 +22,5 @@ public class UserUpdateRequest {
   private String email;
   private String bio;
   private Country country;
-  // private Long cardColorId;
+  private Long cardColorId;
 }

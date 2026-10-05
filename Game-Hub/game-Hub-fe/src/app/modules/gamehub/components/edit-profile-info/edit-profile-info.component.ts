@@ -122,7 +122,7 @@ export class EditProfileInfoComponent implements OnInit {
     console.log('you have selected', id, colorCode)
     this.selectedColorCode = colorCode;
     this.selectedColorId = id;
-    this.userRequest.cardColorId = id;
+    // this.userRequest.cardColorId = id;
   }
 
   selectedLocationIcon(): string | undefined {

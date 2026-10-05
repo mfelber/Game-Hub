@@ -25,75 +25,231 @@
       <p class="mt-1 text-sm text-gray-400">Manage your profile information and appearance</p>
 
 
-      <section class="relative mt-4 banner-photo">
+      @if (!isSavingAppearance) {
+        <section class="mt-4 banner-photo">
 
-        <div class="h-40 rounded-t-xl bg-[#151B27] border-t border-x border-[#2A3445]">
-          <img
-            [src]="getBanner(response)"
-            class="h-full w-full rounded-t-xl object-cover"
-          />
-        </div>
-
-        <div class="relative h-20 bg-[#151B27] rounded-b-xl border-b border-x border-[#2A3445]">
-          @if (response.userProfilePicture) {
+          <div class="h-40 rounded-t-xl border-x border-t border-[#2A3445] bg-[#151B27]">
             <img
-              [src]="'data:image/jpeg;base64,' + response.userProfilePicture"
-              class="absolute left-[35px] top-[-35px] h-25 w-25 rounded-[18px] border-3 border-[#151B27] object-cover"
+              [src]="previewBanner || getBanner(response)"
+              class="h-full w-full rounded-t-xl object-cover"
             />
-          }
+          </div>
 
-          @if (!response.userProfilePicture) {
-            <img
-              src="../../../../../assets/profilePicture/default_profile_picture.svg"
-              class="mt-4 h-24 w-24 rounded-xl object-cover border-2 border-[#2A3445]"
-              [ngStyle]="{'background-color': response.profileColor}"/>
-          }
-          <div class="absolute left-[150px] right-5 h-full flex items-center justify-between">
-            <div>
-              <h2 class="text-xl font-semibold text-white">
-                {{ response.userName }}
-              </h2>
-              <p class="text-base text-gray-400">
-                Member since {{ response.joinedDate }}
-              </p>
-            </div>
+          <div
+            class="relative min-h-20 rounded-b-xl border-x border-b border-[#2A3445] bg-[#151B27]">
 
-            <div class=" flex justify-center gap-2">
+            @if (previewProfilePic) {
+              <img
+                [src]="previewProfilePic"
+                class="absolute left-[15px] top-[-35px] h-25 w-25 rounded-[18px] border-3 border-[#151B27] object-cover"
+              />
+            } @else if (response.userProfilePicture) {
+              <img
+                [src]="getProfilePicture(response)"
+                class="absolute left-[15px] top-[-35px] h-25 w-25 rounded-[18px] border-3 border-[#151B27] object-cover"
+              />
+            } @else if (!response.userProfilePicture) {
+              <img
+                src="../../../../../assets/profilePicture/default_profile_picture.svg"
+                class="absolute left-[15px] top-[-35px] h-25 w-25 rounded-xl border-3 border-[#151B27] object-cover"
+                [ngStyle]="{'background-color': response.profileColor}"
+              />
+            }
 
-              <div class="medium-button edit-profile border-none hover:!cursor-default hover:!bg-white/6">
-                <img
-                  [src]="response.country?.iconPath"
-                  [alt]="response.country?.countryName"
-                  class="w-7 rounded-[5px]"/>
+            <div class="ml-[120px] mr-5 flex min-h-20 items-center justify-between gap-5 py-3">
 
-                <span class="text-white"> {{ response.country?.countryName }} </span>
+              <div>
+                <h2 class="text-xl font-semibold text-white">
+                  {{ response.userName }}
+                </h2>
+
+                <p class="text-base text-gray-400">
+                  Member since {{ response.joinedDate }}
+                </p>
               </div>
 
-              <button class="medium-button edit-profile">
-                <i class="fa-solid fa-pen"></i> Edit
-<!--           dont forget colorId of cards     -->
-              </button>
+              <div class="flex flex-wrap justify-end gap-2 items-center">
 
+                <div class="medium-button edit-profile !p-2 border-none hover:!cursor-default hover:!bg-white/6">
+                  <button type="button"
+                          class="w-8 h-8 rounded rounded-full border border-white/20"
+                          [ngStyle]="{'background': response.cardColor?.colorCode}">
+                  </button>
+                </div>
+
+                <div class="medium-button edit-profile border-none hover:!cursor-default hover:!bg-white/6">
+                  <img
+                    [src]="response.country?.iconPath"
+                    [alt]="response.country?.countryName"
+                    class="w-7 rounded-[5px]"
+                  />
+
+                  <span class="text-white">
+                {{ response.country?.countryName }}
+                </span>
+                </div>
+
+                <div class="flex gap-2">
+                  @if (!editAppearance) {
+                    <button
+                      class="medium-button edit-profile"
+                      (click)="editAppearance = true; cancelEditBasicInfo()">
+                      <i class="fa-solid fa-pen"></i>
+                      Edit
+                    </button>
+                  }
+
+                  @if (editAppearance) {
+                    <button
+                      class="medium-button cancel"
+                      (click)="cancelAppearance()">
+                      Cancel
+                    </button>
+
+                    <button
+                      class="medium-button save"
+                      (click)="saveAppearance()"
+                      [disabled]="!hasProfileAppearanceChanges()">
+                      Save changes
+                    </button>
+                  }
+                </div>
+
+              </div>
             </div>
+
+            @if (editAppearance) {
+              <div class="border-t border-[#2A3445] mb-3">
+                <div class="ml-5 mt-2">
+                  <div class="flex flex-col gap-y-4">
+                    <div class="flex flex-col gap-y-2">
+                      <span class="text-base text-gray-400">Profile photo</span>
+                      <div class="flex gap-2">
+                        <input #profilePic
+                               (change)="onProfilePicSelected($event)"
+                               type="file"
+                               id="profilePic"
+                               accept="image/jpeg, image/png"
+                               class="hidden"/>
+
+                        <button class="small-button edit-profile" (click)="profilePic.click()">
+                          <i class="fa-solid fa-camera"></i> Upload photo
+                        </button>
+                        @if (previewProfilePic) {
+                          <button class="small-button remove" (click)="removeSelectedProfilePicture()">Remove</button>
+                        }
+                      </div>
+                    </div>
+
+                    <div class="flex flex-col gap-y-2">
+                      <span class="text-base text-gray-400">Banner</span>
+                      <div class="flex gap-3 items-center">
+                        @for (bannerId of predefinedBanners; track bannerId) {
+                          <img
+                            (click)="selectedBanner(bannerId)"
+                            [src]="'assets/banners/banner_' + bannerId + '.jpg'"
+                            class="w-35 h-15 rounded rounded-xl cursor-pointer"
+                            [ngClass]="{
+                         'border-2 border-[#155dfc]': selectedBannerId === bannerId,
+                         'border-transparent': selectedBannerId !== bannerId}">
+                        }
+                        <div class="flex gap-2">
+                          <input #bannerInput
+                                 (change)="onBannerSelected($event)"
+                                 type="file"
+                                 id="bannerPic"
+                                 accept="image/jpeg, image/png"
+                                 class="hidden"/>
+                          <button class="small-button edit-profile" (click)="bannerInput.click()">
+                            <i class="fa-solid fa-camera"></i> Upload banner
+                          </button>
+
+                          @if (previewBanner) {
+                            <button class="small-button remove" (click)="removeSelectedBanner()">Remove</button>
+                          }
+
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="flex flex-col gap-y-2">
+                      <span class="text-base text-gray-400">Profile color</span>
+                      <div>
+                        <span class="text-sm text-gray-400">Predifenied colors</span>
+                        <div class="mt-2 flex gap-2 items-center flex">
+                          @for (color of cardColorsResponse; track color) {
+                            <div (click)="selectColor(color.id!, color.colorCode!)">
+                              <button type="button"
+                                      [ngClass]="{'ring-2 ring-[#155dfc]': selectedColorId === color.id}"
+                                      class="w-8 h-8 rounded rounded-full border border-white/20 transition-transform hover:scale-110 hover:cursor-pointer"
+                                      [ngStyle]="{'background': color.colorCode}">
+                              </button>
+                            </div>
+                          }
+                          @if (originalColorId !== selectedColorId) {
+                            <button type="button"
+                                    (click)="resetColor()"
+                                    class="w-8 h-8 flex items-center text-gray-400 justify-center hover:cursor-pointer hover:text-gray-200 transition-all transition-duration-500">
+                              <i class="fa-solid fa-rotate-left"></i>
+                            </button>
+                          }
+                        </div>
+                      </div>
+                      <div>
+                        <span class="text-sm text-gray-400">Custom colors</span>
+                        <div class="mt-2 flex gap-2">
+                          <button
+                            class="w-8 h-8 rounded rounded-full border border-white/20 transition-transform hover:scale-110 bg-red-500 hover:cursor-pointer"></button>
+                          <button type="button" (click)="addCustomColor = !addCustomColor"
+                                  class="flex items-center justify-center edit-profile border-2 border-dashed w-8 h-8 rounded rounded-full border border-white/20 transition-transform hover:scale-110 hover:cursor-pointer">
+                            <i class="fa-solid fa-plus text-white/20"></i>
+                          </button>
+
+                          @if (addCustomColor) {
+                            <input
+                              type="text"
+                              [(ngModel)]="newCustomColor"
+                              maxlength="7"
+                              placeholder="#40D1D8"
+                              class="h-8 w-24 rounded-lg border border-[#2A3445] bg-[#1e2635] px-2 text-xs text-white outline-none focus:border-[#155dfc]"
+                            />
+
+                            <button [hlmTooltip]="'Enter a HEX color (e.g. #FF5733 or FF5733)'" aria-label="Info"
+                                    size="icon-xs" class="hover:bg-transparent text-gray-400 hover:text-[#737373]"><i
+                              class="fa-solid fa-info-circle"></i></button>
+                          }
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
           </div>
-        </div>
-      </section>
+
+        </section>
+      } @else {
+          <app-loading/>
+      }
+
 
       <section class="grid grid-cols-[2fr_3fr] gap-10">
         <section class="basic-info">
           <div class="mt-6 overflow-hidden rounded-lg border border-[#252b36] bg-[#151B27]">
             <div class="border-b border-[#252b36] px-5 py-4">
               <div class="flex justify-between">
-                <h3 class="text-base font-medium text-white">Account details</h3>
+                <h3 class="text-base font-medium text-white">Account Details</h3>
                 <div class="flex gap-2">
                   @if (!editBasicInfo) {
-                    <button class="small-button edit-profile" (click)="editBasicInfo=true"><i
+                    <button class="small-button edit-profile" (click)="editBasicInfo=true; cancelAppearance()"><i
                       class="fa-solid fa-pen"></i>Edit
                     </button>
                   }
                   @if (editBasicInfo) {
-                    <button class="small-button cancel" (click)="cancelEdit()">Cancel</button>
-                    <button class="small-button save" [disabled]="!hasProfileInfoChanges()" (click)="saveBasicInfo()">Save changes</button>
+                    <button class="small-button cancel" (click)="cancelEditBasicInfo()">Cancel</button>
+                    <button class="small-button save" [disabled]="!hasProfileInfoChanges()" (click)="saveBasicInfo()">
+                      Save changes
+                    </button>
                   }
                 </div>
               </div>
@@ -111,7 +267,7 @@
                   <button hlmTooltip="This value was changed" class="text-amber-400"><i
                     class="fa-solid fa-info-circle"></i></button>
                 }
-                <hlm-input-group class="hlm-input-group !gap-0 transition-colors duration-200">
+                <hlm-input-group class="hlm-input-group !gap-0 ">
                   <input
                     [readonly]="!editBasicInfo"
                     autocomplete="off"
@@ -121,8 +277,10 @@
                     type="text"
                     name="username"
                     [(ngModel)]="userRequest.username"
-                    class="input"
-                    [class.bg-[#1e2635]]="editBasicInfo" [class.bg-transparent]="!editBasicInfo"
+                    class="input !transition-none"
+                    [ngClass]="{
+                    'bg-[#1e2635] !border !border-[#2A3445]': editBasicInfo,
+                    'bg-transparent': !editBasicInfo}"
                   />
                 </hlm-input-group>
               </div>
@@ -148,8 +306,10 @@
                     type="text"
                     name="firstName"
                     [(ngModel)]="userRequest.firstName"
-                    class="input"
-                    [class.bg-[#1e2635]]="editBasicInfo" [class.bg-transparent]="!editBasicInfo"
+                    class="input !transition-none"
+                    [ngClass]="{
+                    'bg-[#1e2635] !border !border-[#2A3445]': editBasicInfo,
+                    'bg-transparent': !editBasicInfo}"
                   />
                 </hlm-input-group>
               </div>
@@ -173,8 +333,10 @@
                     type="text"
                     name="lastName"
                     [(ngModel)]="userRequest.lastName"
-                    class="input"
-                    [class.bg-[#1e2635]]="editBasicInfo" [class.bg-transparent]="!editBasicInfo"
+                    class="input !transition-none"
+                    [ngClass]="{
+                    'bg-[#1e2635] !border !border-[#2A3445]': editBasicInfo,
+                    'bg-transparent': !editBasicInfo}"
                   />
                 </hlm-input-group>
               </div>
@@ -202,14 +364,13 @@
                       name="email"
                       [(ngModel)]="userRequest.email"
                       class="input !text-right"
-                      [class.bg-[#1e2635]]="editBasicInfo" [class.bg-transparent]="!editBasicInfo"
-                      [class.!w-[200px]]="editBasicInfo"
-                      [class.cursor]="editBasicInfo"
-                      [class.!max-w-[300px]]="!editBasicInfo"
+                      [ngClass]="{
+                    'bg-[#1e2635] !border !border-[#2A3445] !w-[200px]': editBasicInfo,
+                    'bg-transparent !max-w-[300px]': !editBasicInfo}"
                     />
                   </hlm-input-group>
                 } @else {
-                  <span class="flex h-[32px] items-center px-2.5 py-1">{{response.email}}</span>
+                  <span class="flex h-[32px] items-center px-2.5 py-1">{{ response.email }}</span>
                 }
 
               </div>
@@ -218,56 +379,62 @@
             <div class="border-t border-[#252b36]"></div>
             <div class="flex !h-[57px] items-center justify-between px-5 py-2">
               <span class=" text-sm font-bold text-gray-400">Country</span>
-              @if (!editBasicInfo) {
-                <div class="flex items-center gap-3 px-3 py-2.5">
-                  <img
-                    [src]="response.country?.iconPath"
-                    [alt]="response.country?.countryName"
-                    class="w-7 rounded-[5px]"/>
-                  <span class="text-white"> {{ response.country?.countryName }} </span>
-                </div>
-              }
 
-              @if (editBasicInfo) {
-                <div class="dropdown">
-                  <button
-                    class="dropdown-button"
-                    type="button" [hlmDropdownMenuTrigger]="countryMenu"
-                    align="start">
+              <div class="flex gap-2">
+                @if (userRequest.country !== response.country?.name) {
+                  <button hlmTooltip="This value was changed" class="text-amber-400"><i
+                    class="fa-solid fa-info-circle"></i></button>
+                }
+                @if (!editBasicInfo) {
+                  <div class="flex items-center gap-3 px-3 py-2.5">
+                    <img
+                      [src]="response.country?.iconPath"
+                      [alt]="response.country?.countryName"
+                      class="w-7 rounded-[5px]"/>
+                    <span class="text-white"> {{ response.country?.countryName }} </span>
+                  </div>
+                }
 
-                    @if (getSelectedCountry(); as country) {
-                      <img
-                        [src]="country.iconPath"
-                        [alt]="country.countryName"
-                        class="w-6 rounded-[4px]"
-                      />
+                @if (editBasicInfo) {
+                  <div class="dropdown">
+                    <button
+                      class="dropdown-button"
+                      type="button" [hlmDropdownMenuTrigger]="countryMenu"
+                      align="start">
 
-                      <span class="max-w-[140px] truncate"> {{ country.countryName }}</span>
-                    } @else {
-                      <span>Select country</span>
-                    }
-                    <i class="fa-solid fa-chevron-down text-xs"></i></button>
+                      @if (getSelectedCountry(); as country) {
+                        <img
+                          [src]="country.iconPath"
+                          [alt]="country.countryName"
+                          class="w-6 rounded-[4px]"
+                        />
 
-                  <ng-template #countryMenu>
-                    <hlm-dropdown-menu>
-                      @for (country of allCountries; track country) {
-                        <button
-                          hlmDropdownMenuItem
-                          type="button" (click)="selectCountry(country)">
-                          <div class="flex items-center gap-2">
-                            <img [src]="country.iconPath"
-                                 [alt]="country.countryName"
-                                 class="w-6 rounded-[4px]">
-                          </div>
-                          <span class="max-w-[140px] truncate">{{ country.countryName }}</span>
-                        </button>
+                        <span class="max-w-[140px] truncate"> {{ country.countryName }}</span>
+                      } @else {
+                        <span>Select country</span>
                       }
-                    </hlm-dropdown-menu>
-                  </ng-template>
-                </div>
-              }
+                      <i class="fa-solid fa-chevron-down text-xs"></i></button>
 
+                    <ng-template #countryMenu>
+                      <hlm-dropdown-menu>
+                        @for (country of allCountries; track country) {
+                          <button
+                            hlmDropdownMenuItem
+                            type="button" (click)="selectCountry(country)">
+                            <div class="flex items-center gap-2">
+                              <img [src]="country.iconPath"
+                                   [alt]="country.countryName"
+                                   class="w-6 rounded-[4px]">
+                            </div>
+                            <span class="max-w-[140px] truncate">{{ country.countryName }}</span>
+                          </button>
+                        }
+                      </hlm-dropdown-menu>
+                    </ng-template>
+                  </div>
+                }
 
+              </div>
             </div>
           </div>
         </section>

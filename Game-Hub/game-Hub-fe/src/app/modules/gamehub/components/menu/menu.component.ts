@@ -41,7 +41,6 @@ import {HlmTooltip} from '@spartan/tooltip';
     HlmDropdownMenuTrigger,
     HlmDropdownMenu,
     HlmDropdownMenuItem,
-    HlmInputGroupButton,
     HlmTooltip,
   ],
   templateUrl: './menu.component.html',

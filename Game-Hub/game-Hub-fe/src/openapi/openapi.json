@@ -3695,13 +3695,13 @@
               "$ref": "#/components/schemas/SubtitleResponse"
             }
           },
-          "inCart": {
-            "type": "boolean"
-          },
           "inLibrary": {
             "type": "boolean"
           },
           "inWishList": {
+            "type": "boolean"
+          },
+          "inCart": {
             "type": "boolean"
           }
         }

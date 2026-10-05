@@ -19,11 +19,6 @@
     text-white cursor-pointer transition duration-200 ease-in-out;
   }
 
-  [data-disabled] {
-    pointer-events: none;
-    opacity: 0.5;
-  }
-
   .icon-button {
     @apply w-10.5 h-10.5 rounded-xl flex items-center justify-center text-white text-[15px]
     transition-colors;

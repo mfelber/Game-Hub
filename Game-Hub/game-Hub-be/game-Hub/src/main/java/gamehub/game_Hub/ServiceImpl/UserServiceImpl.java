@@ -63,9 +63,9 @@ public class UserServiceImpl implements UserService {
     // TODO try this
     // user = userMapper.toUser(userUpdateRequest);
 
-    // CardColor cardColor = cardColorRepository.findById(userUpdateRequest.getCardColorId())
-    //     .orElseThrow(
-    //         () -> new EntityNotFoundException("No card color found with id: " + userUpdateRequest.getCardColorId()));
+    CardColor cardColor = cardColorRepository.findById(userUpdateRequest.getCardColorId())
+        .orElseThrow(
+            () -> new EntityNotFoundException("No card color found with id: " + userUpdateRequest.getCardColorId()));
 
     boolean emailChanged = !Objects.equals(
         user.getEmail(),
@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
         .username(userUpdateRequest.getUsername())
         .email(userUpdateRequest.getEmail())
         .country(userUpdateRequest.getCountry())
-        // .cardColor(cardColor)
+        .cardColor(cardColor)
         .build();
 
     if (emailChanged) {

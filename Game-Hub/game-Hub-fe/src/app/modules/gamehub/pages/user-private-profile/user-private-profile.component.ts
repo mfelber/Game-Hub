@@ -132,7 +132,7 @@ export class UserPrivateProfileComponent implements OnInit{
   };
   userRequest: UserUpdateRequest = {
     email: this.userResponse.email,
-    cardColorId: this.selectedColorId!
+    // cardColorId: this.selectedColorId!
   };
 
   bioUpdateRequest: UserUpdateRequest = {
@@ -366,7 +366,7 @@ export class UserPrivateProfileComponent implements OnInit{
         this.userRequest.firstName !== this.userResponse.firstName ||
         this.userRequest.lastName !== this.userResponse.lastName ||
         this.userRequest.email !== this.userResponse.email ||
-        this.userRequest.country !== this.userResponse.country?.name || this.userRequest.cardColorId !== this.userResponse.cardColor?.id
+        this.userRequest.country !== this.userResponse.country?.name
 
       if (changesExistProfileInfo) {
         this.showSuccess('You have successfully updated profile')
@@ -389,7 +389,7 @@ export class UserPrivateProfileComponent implements OnInit{
     this.isLocationDropdownOpen = false;
     this.selectedColorCode = '';
     this.selectedColorId = null;
-    this.userRequest.cardColorId = this.userResponse.cardColor?.id;
+    // this.userRequest.cardColorId = this.userResponse.cardColor?.id;
     this.isProfileModalOpen = false;
     this.isEditProfileModalOpen = false;
     this.bioUpdateRequest.bio = this.userResponse.bio;
