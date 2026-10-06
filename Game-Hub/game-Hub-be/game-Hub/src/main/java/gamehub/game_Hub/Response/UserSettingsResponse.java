@@ -29,7 +29,7 @@ public class UserSettingsResponse {
   private String predefinedBannerPath;
   private String profileColor;
   private CardColorResponse cardColor;
-  private Set<GenreResponse> favoriteGenres;
+  private List<GenreResponse> favoriteGenres;
   private UserLibraryResponse favoriteGame;
   private List<CommunitySettingsResponse> communitySettingsResponse;
   private List<StoreSettingsResponse> storeSettingsResponse;

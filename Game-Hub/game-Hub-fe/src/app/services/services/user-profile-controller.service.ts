@@ -65,31 +65,6 @@ export class UserProfileControllerService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `updateUserProfile()` */
-  static readonly UpdateUserProfilePath = '/profile/update-profile';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `updateUserProfile()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  updateUserProfile$Response(params: UpdateUserProfile$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
-    return updateUserProfile(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `updateUserProfile$Response()` instead.
-   *
-   * This method sends `application/json` and handles request body of type `application/json`.
-   */
-  updateUserProfile(params: UpdateUserProfile$Params, context?: HttpContext): Observable<number> {
-    return this.updateUserProfile$Response(params, context).pipe(
-      map((r: StrictHttpResponse<number>): number => r.body)
-    );
-  }
-
   /** Path part for operation `updateBio()` */
   static readonly UpdateBioPath = '/profile/update-bio';
 
@@ -111,6 +86,31 @@ export class UserProfileControllerService extends BaseService {
    */
   updateBio(params: UpdateBio$Params, context?: HttpContext): Observable<number> {
     return this.updateBio$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `updateUserProfile()` */
+  static readonly UpdateUserProfilePath = '/profile/update-profile';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `updateUserProfile()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateUserProfile$Response(params: UpdateUserProfile$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return updateUserProfile(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `updateUserProfile$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  updateUserProfile(params: UpdateUserProfile$Params, context?: HttpContext): Observable<number> {
+    return this.updateUserProfile$Response(params, context).pipe(
       map((r: StrictHttpResponse<number>): number => r.body)
     );
   }

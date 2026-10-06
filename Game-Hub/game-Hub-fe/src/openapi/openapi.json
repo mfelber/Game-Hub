@@ -31,6 +31,37 @@
     }
   ],
   "paths": {
+    "/profile/update-bio": {
+      "put": {
+        "tags": [
+          "user-profile-controller"
+        ],
+        "operationId": "updateBio",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBioRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/admin/unban/{userId}": {
       "put": {
         "tags": [
@@ -419,37 +450,6 @@
           "user-profile-controller"
         ],
         "operationId": "updateUserProfile",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserUpdateRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "integer",
-                  "format": "int64"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/profile/update-bio": {
-      "post": {
-        "tags": [
-          "user-profile-controller"
-        ],
-        "operationId": "updateBio",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2834,6 +2834,16 @@
   },
   "components": {
     "schemas": {
+      "UpdateBioRequest": {
+        "type": "object",
+        "properties": {
+          "bio": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string"
+          }
+        }
+      },
       "GameUpdateRequest": {
         "required": [
           "ageRatingId",
@@ -3695,13 +3705,13 @@
               "$ref": "#/components/schemas/SubtitleResponse"
             }
           },
-          "inLibrary": {
+          "inCart": {
             "type": "boolean"
           },
           "inWishList": {
             "type": "boolean"
           },
-          "inCart": {
+          "inLibrary": {
             "type": "boolean"
           }
         }
@@ -4316,7 +4326,6 @@
             "$ref": "#/components/schemas/CardColorResponse"
           },
           "favoriteGenres": {
-            "uniqueItems": true,
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/GenreResponse"

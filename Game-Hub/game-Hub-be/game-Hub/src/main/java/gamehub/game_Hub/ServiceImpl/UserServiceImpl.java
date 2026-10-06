@@ -27,6 +27,7 @@ import gamehub.game_Hub.Repository.genre.GenreRepository;
 import gamehub.game_Hub.Repository.user.UserRepository;
 import gamehub.game_Hub.Mapper.UserMapper;
 import gamehub.game_Hub.Request.BannerRequest;
+import gamehub.game_Hub.Request.UpdateBioRequest;
 import gamehub.game_Hub.Response.StatusResponse;
 import gamehub.game_Hub.Response.UserLibraryResponse;
 import gamehub.game_Hub.Response.UserNotificationsResponse;
@@ -148,10 +149,16 @@ public class UserServiceImpl implements UserService {
     User user = userRepository.findById(authUser.getId())
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
 
-    Game game = gameRepository.findById(gameId)
-        .orElseThrow(() -> new EntityNotFoundException("No game found with id: " + gameId));
 
-    user.setFavoriteGame(game);
+
+    if (gameId == null) {
+      user.setFavoriteGame(null);
+    } else {
+      Game game = gameRepository.findById(gameId)
+          .orElseThrow(() -> new EntityNotFoundException("No game found with id: " + gameId));
+      user.setFavoriteGame(game);
+    }
+
 
     userRepository.save(user);
 
@@ -249,13 +256,13 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public Long updateBio(final Authentication connectedUser, final UserUpdateRequest userUpdateRequest) {
+  public Long updateBio(final Authentication connectedUser, final UpdateBioRequest request) {
     User authUser = (User) connectedUser.getPrincipal();
     User user = userRepository.findById(authUser.getId())
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
 
     user = user.toBuilder()
-        .bio(userUpdateRequest.getBio())
+        .bio(request.bio())
         .build();
 
     return userRepository.save(user).getId();

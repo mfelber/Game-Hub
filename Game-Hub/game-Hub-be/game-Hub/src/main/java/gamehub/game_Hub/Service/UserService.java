@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
 
 import gamehub.game_Hub.Request.BannerRequest;
+import gamehub.game_Hub.Request.UpdateBioRequest;
 import gamehub.game_Hub.Request.UserUpdateRequest;
 import gamehub.game_Hub.Response.StatusResponse;
 import gamehub.game_Hub.Response.UserLibraryResponse;
@@ -22,7 +23,7 @@ public interface UserService {
 
   void updateFavoriteGenres(Set<Long> genreIds, Authentication connectedUser);
 
-  Long updateBio(Authentication connectedUser, UserUpdateRequest userUpdateRequest);
+  Long updateBio(Authentication connectedUser, UpdateBioRequest userUpdateBioRequest);
 
   UserPrivateResponse getPrivateProfile(Authentication connectedUser);
 

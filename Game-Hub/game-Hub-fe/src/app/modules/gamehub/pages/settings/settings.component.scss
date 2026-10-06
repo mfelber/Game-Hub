@@ -3,16 +3,34 @@
   color: white;
 }
 
+.selected-genre {
+  background: #2563eb;
+  color: white;
+}
+
+.not-selected{
+  background: #374151;
+  color: white;
+}
+
+.search-results {
+  margin-top: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6px;
+  border-radius: 10px;
+  background: #191d27;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+}
+
 .pinned-game {
   display: flex;
   align-items: center;
   gap: 18px;
   width: 400px;
-  padding: 12px;
   box-sizing: border-box;
-  background: rgba(255, 255, 255, 0.035);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
 }
 
 /* Cover */

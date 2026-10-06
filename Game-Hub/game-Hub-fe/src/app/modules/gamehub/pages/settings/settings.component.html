@@ -20,14 +20,22 @@
       <button hlmTabsTrigger="account"><i class="fa-solid fa-bell"></i>Notifications</button>
       <button hlmTabsTrigger="account"><i class="fa-solid fa-triangle-exclamation"></i>Account</button>
     </hlm-tabs-list>
-    <div hlmTabsContent="profile">
-      <h2 class="text-xl font-semibold text-white"><i class="fa-solid fa-user"></i> Profile</h2>
-      <p class="mt-1 text-sm text-gray-400">Manage your profile information and appearance</p>
+    <section class="settings">
 
+      <div hlmTabsContent="profile" class="mb-3">
+        <h2 class="text-xl font-semibold text-white"><i class="fa-solid fa-user"></i> Profile</h2>
+        <p class="mt-1 text-sm text-gray-400">Manage your profile information and appearance</p>
 
-      @if (!isSavingAppearance) {
-        <section class="mt-4 banner-photo">
+        <section class="mt-4 banner-photo relative">
+          @if (isLoading || isSavingAppearance) {
+            <div
+              class="absolute inset-0 z-30 flex items-center justify-center
+             rounded-xl bg-[#0b0e14]/75 backdrop-blur-[2px]">
 
+              <app-loading></app-loading>
+
+            </div>
+          }
           <div class="h-40 rounded-t-xl border-x border-t border-[#2A3445] bg-[#151B27]">
             <img
               [src]="previewBanner || getBanner(response)"
@@ -93,7 +101,7 @@
                   @if (!editAppearance) {
                     <button
                       class="medium-button edit-profile"
-                      (click)="editAppearance = true; cancelEditBasicInfo()">
+                      (click)="editAppearance = true; cancelEditBasicInfo(); cancelEditAboutMe() ;cancelEditFavoriteGenres(); cancelEditFavoriteGame()">
                       <i class="fa-solid fa-pen"></i>
                       Edit
                     </button>
@@ -228,491 +236,694 @@
           </div>
 
         </section>
-      } @else {
-          <app-loading/>
-      }
 
 
-      <section class="grid grid-cols-[2fr_3fr] gap-10">
-        <section class="basic-info">
-          <div class="mt-6 overflow-hidden rounded-lg border border-[#252b36] bg-[#151B27]">
-            <div class="border-b border-[#252b36] px-5 py-4">
-              <div class="flex justify-between">
-                <h3 class="text-base font-medium text-white">Account Details</h3>
-                <div class="flex gap-2">
-                  @if (!editBasicInfo) {
-                    <button class="small-button edit-profile" (click)="editBasicInfo=true; cancelAppearance()"><i
-                      class="fa-solid fa-pen"></i>Edit
-                    </button>
-                  }
-                  @if (editBasicInfo) {
-                    <button class="small-button cancel" (click)="cancelEditBasicInfo()">Cancel</button>
-                    <button class="small-button save" [disabled]="!hasProfileInfoChanges()" (click)="saveBasicInfo()">
-                      Save changes
-                    </button>
-                  }
+        <section class="grid grid-cols-[2fr_3fr] gap-10">
+          <section class="basic-info">
+            <div class="mt-6 overflow-hidden rounded-lg border border-[#252b36] bg-[#151B27]">
+              <div class="border-b border-[#252b36] px-5 py-4">
+                <div class="flex justify-between">
+                  <h3 class="text-base font-medium text-white">Account Details</h3>
+                  <div class="flex gap-2">
+                    @if (!editBasicInfo) {
+                      <button class="small-button edit-profile"
+                              (click)="editBasicInfo=true; cancelAppearance(); cancelEditAboutMe(); cancelEditFavoriteGenres(); cancelEditFavoriteGame()"><i
+                        class="fa-solid fa-pen"></i>Edit
+                      </button>
+                    }
+                    @if (editBasicInfo) {
+                      <button class="small-button cancel" (click)="cancelEditBasicInfo()">Cancel</button>
+                      <button class="small-button save" [disabled]="!hasProfileInfoChanges()" (click)="saveBasicInfo()">
+                        Save changes
+                      </button>
+                    }
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div class="flex items-center justify-between px-5 py-2">
-              <div class="flex gap-2">
-                <span class="text-sm font-bold text-gray-400">Username</span>
-                <button [hlmTooltip]="'This is how other people see you'" aria-label="Info"
-                        size="icon-xs" class="hover:bg-transparent text-gray-400 hover:text-[#737373]"><i
-                  class="fa-solid fa-info-circle"></i></button>
-              </div>
-              <div class="flex gap-2">
-                @if (userRequest.username !== response.userName) {
-                  <button hlmTooltip="This value was changed" class="text-amber-400"><i
-                    class="fa-solid fa-info-circle"></i></button>
+
+              <section class="relative">
+                @if (isLoading) {
+                  <div
+                    class="absolute inset-0 z-30 flex items-center justify-center
+                      rounded-b bg-[#0b0e14]/75 backdrop-blur-[2px]">
+
+                    <app-loading></app-loading>
+
+                  </div>
                 }
-                <hlm-input-group class="hlm-input-group !gap-0 ">
-                  <input
-                    [readonly]="!editBasicInfo"
-                    autocomplete="off"
-                    tabindex="-1"
-                    hlmInputGroupInput
-                    id="userName"
-                    type="text"
-                    name="username"
-                    [(ngModel)]="userRequest.username"
-                    class="input !transition-none"
-                    [ngClass]="{
-                    'bg-[#1e2635] !border !border-[#2A3445]': editBasicInfo,
+                <div class="flex items-center justify-between px-5 py-2">
+                  <div class="flex gap-2">
+                    <span class="text-sm font-bold text-gray-400">Username</span>
+                    <button [hlmTooltip]="'This is how other people see you'" aria-label="Info"
+                            size="icon-xs" class="hover:bg-transparent text-gray-400 hover:text-[#737373]"><i
+                      class="fa-solid fa-info-circle"></i></button>
+                  </div>
+                  <div class="flex gap-2">
+                    @if (userRequest.username !== response.userName) {
+                      <button hlmTooltip="This value was changed" class="text-amber-400"><i
+                        class="fa-solid fa-info-circle"></i></button>
+                    }
+                    <hlm-input-group class="hlm-input-group !gap-0 ">
+                      <input
+                        [readonly]="!editBasicInfo"
+                        autocomplete="off"
+                        tabindex="-1"
+                        hlmInputGroupInput
+                        id="userName"
+                        type="text"
+                        name="username"
+                        [(ngModel)]="userRequest.username"
+                        class="input !transition-none"
+                        [ngClass]="{
+                    'bg-[#1e2635] !border !border-[#2A3445] focus:!ring-1 focus:!ring-[#155dfc]': editBasicInfo,
                     'bg-transparent': !editBasicInfo}"
-                  />
-                </hlm-input-group>
-              </div>
+                      />
+                    </hlm-input-group>
+                  </div>
+                </div>
 
-
-            </div>
-
-            <div class="border-t border-[#252b36]"></div>
-            <div class="flex items-center justify-between px-5 py-2">
-              <span class="text-sm font-bold text-gray-400">First name</span>
-              <div class="flex gap-2">
-                @if (userRequest.firstName !== response.firstName) {
-                  <button hlmTooltip="This value was changed" class="text-amber-400"><i
-                    class="fa-solid fa-info-circle"></i></button>
-                }
-                <hlm-input-group class="hlm-input-group !gap-0">
-                  <input
-                    [readonly]="!editBasicInfo"
-                    autocomplete="off"
-                    tabindex="-1"
-                    hlmInputGroupInput
-                    id="firstName"
-                    type="text"
-                    name="firstName"
-                    [(ngModel)]="userRequest.firstName"
-                    class="input !transition-none"
-                    [ngClass]="{
-                    'bg-[#1e2635] !border !border-[#2A3445]': editBasicInfo,
+                <div class="border-t border-[#252b36]"></div>
+                <div class="flex items-center justify-between px-5 py-2">
+                  <span class="text-sm font-bold text-gray-400">First name</span>
+                  <div class="flex gap-2">
+                    @if (userRequest.firstName !== response.firstName) {
+                      <button hlmTooltip="This value was changed" class="text-amber-400"><i
+                        class="fa-solid fa-info-circle"></i></button>
+                    }
+                    <hlm-input-group class="hlm-input-group !gap-0">
+                      <input
+                        [readonly]="!editBasicInfo"
+                        autocomplete="off"
+                        tabindex="-1"
+                        hlmInputGroupInput
+                        id="firstName"
+                        type="text"
+                        name="firstName"
+                        [(ngModel)]="userRequest.firstName"
+                        class="input !transition-none"
+                        [ngClass]="{
+                    'bg-[#1e2635] !border !border-[#2A3445] focus:!ring-1 focus:!ring-[#155dfc]': editBasicInfo,
                     'bg-transparent': !editBasicInfo}"
-                  />
-                </hlm-input-group>
-              </div>
-            </div>
+                      />
+                    </hlm-input-group>
+                  </div>
+                </div>
 
-            <div class="border-t border-[#252b36]"></div>
-            <div class="flex items-center justify-between px-5 py-2">
-              <span class="text-sm font-bold text-gray-400">Last name</span>
-              <div class="flex gap-2">
-                @if (userRequest.lastName !== response.lastName) {
-                  <button hlmTooltip="This value was changed" class="text-amber-400"><i
-                    class="fa-solid fa-info-circle"></i></button>
-                }
-                <hlm-input-group class="hlm-input-group !gap-0">
-                  <input
-                    [readonly]="!editBasicInfo"
-                    autocomplete="off"
-                    tabindex="-1"
-                    hlmInputGroupInput
-                    id="lastName"
-                    type="text"
-                    name="lastName"
-                    [(ngModel)]="userRequest.lastName"
-                    class="input !transition-none"
-                    [ngClass]="{
-                    'bg-[#1e2635] !border !border-[#2A3445]': editBasicInfo,
+                <div class="border-t border-[#252b36]"></div>
+                <div class="flex items-center justify-between px-5 py-2">
+                  <span class="text-sm font-bold text-gray-400">Last name</span>
+                  <div class="flex gap-2">
+                    @if (userRequest.lastName !== response.lastName) {
+                      <button hlmTooltip="This value was changed" class="text-amber-400"><i
+                        class="fa-solid fa-info-circle"></i></button>
+                    }
+                    <hlm-input-group class="hlm-input-group !gap-0">
+                      <input
+                        [readonly]="!editBasicInfo"
+                        autocomplete="off"
+                        tabindex="-1"
+                        hlmInputGroupInput
+                        id="lastName"
+                        type="text"
+                        name="lastName"
+                        [(ngModel)]="userRequest.lastName"
+                        class="input !transition-none"
+                        [ngClass]="{
+                    'bg-[#1e2635] !border !border-[#2A3445] focus:!ring-1 focus:!ring-[#155dfc]': editBasicInfo,
                     'bg-transparent': !editBasicInfo}"
-                  />
-                </hlm-input-group>
-              </div>
-            </div>
+                      />
+                    </hlm-input-group>
+                  </div>
+                </div>
 
-            <div class="border-t border-[#252b36]"></div>
-            <div class="flex items-center justify-between px-5 py-2">
-              <span class="text-sm font-bold text-gray-400">Email</span>
-              <div class="flex gap-2">
-                @if (userRequest.email !== response.email) {
-                  <button hlmTooltip="After changing your email, you will need to log in with your new email address."
-                          class="text-red-500"
-                          aria-label="Email change warning"><i
-                    class="fa-solid fa-info-circle"></i></button>
-                }
-                @if (editBasicInfo) {
-                  <hlm-input-group class="hlm-input-group !gap-0">
-                    <input
-                      [readonly]="!editBasicInfo"
-                      autocomplete="off"
-                      tabindex="-1"
-                      hlmInputGroupInput
-                      id="email"
-                      type="email"
-                      name="email"
-                      [(ngModel)]="userRequest.email"
-                      class="input !text-right"
-                      [ngClass]="{
-                    'bg-[#1e2635] !border !border-[#2A3445] !w-[200px]': editBasicInfo,
+                <div class="border-t border-[#252b36]"></div>
+                <div class="flex items-center justify-between px-5 py-2">
+                  <span class="text-sm font-bold text-gray-400">Email</span>
+                  <div class="flex gap-2">
+                    @if (userRequest.email !== response.email) {
+                      <button
+                        hlmTooltip="After changing your email, you will need to log in with your new email address."
+                        class="text-red-500"
+                        aria-label="Email change warning"><i
+                        class="fa-solid fa-info-circle"></i></button>
+                    }
+                    @if (editBasicInfo) {
+                      <hlm-input-group class="hlm-input-group !gap-0">
+                        <input
+                          [readonly]="!editBasicInfo"
+                          autocomplete="off"
+                          tabindex="-1"
+                          hlmInputGroupInput
+                          id="email"
+                          type="email"
+                          name="email"
+                          [(ngModel)]="userRequest.email"
+                          class="input !text-right"
+                          [ngClass]="{
+                    'bg-[#1e2635] !border !border-[#2A3445] !w-[200px] focus:!ring-1 focus:!ring-[#155dfc]': editBasicInfo,
                     'bg-transparent !max-w-[300px]': !editBasicInfo}"
-                    />
-                  </hlm-input-group>
-                } @else {
-                  <span class="flex h-[32px] items-center px-2.5 py-1">{{ response.email }}</span>
-                }
-
-              </div>
-            </div>
-
-            <div class="border-t border-[#252b36]"></div>
-            <div class="flex !h-[57px] items-center justify-between px-5 py-2">
-              <span class=" text-sm font-bold text-gray-400">Country</span>
-
-              <div class="flex gap-2">
-                @if (userRequest.country !== response.country?.name) {
-                  <button hlmTooltip="This value was changed" class="text-amber-400"><i
-                    class="fa-solid fa-info-circle"></i></button>
-                }
-                @if (!editBasicInfo) {
-                  <div class="flex items-center gap-3 px-3 py-2.5">
-                    <img
-                      [src]="response.country?.iconPath"
-                      [alt]="response.country?.countryName"
-                      class="w-7 rounded-[5px]"/>
-                    <span class="text-white"> {{ response.country?.countryName }} </span>
-                  </div>
-                }
-
-                @if (editBasicInfo) {
-                  <div class="dropdown">
-                    <button
-                      class="dropdown-button"
-                      type="button" [hlmDropdownMenuTrigger]="countryMenu"
-                      align="start">
-
-                      @if (getSelectedCountry(); as country) {
-                        <img
-                          [src]="country.iconPath"
-                          [alt]="country.countryName"
-                          class="w-6 rounded-[4px]"
                         />
+                      </hlm-input-group>
+                    } @else {
+                      <span class="flex h-[32px] items-center px-2.5 py-1">{{ response.email }}</span>
+                    }
 
-                        <span class="max-w-[140px] truncate"> {{ country.countryName }}</span>
-                      } @else {
-                        <span>Select country</span>
-                      }
-                      <i class="fa-solid fa-chevron-down text-xs"></i></button>
-
-                    <ng-template #countryMenu>
-                      <hlm-dropdown-menu>
-                        @for (country of allCountries; track country) {
-                          <button
-                            hlmDropdownMenuItem
-                            type="button" (click)="selectCountry(country)">
-                            <div class="flex items-center gap-2">
-                              <img [src]="country.iconPath"
-                                   [alt]="country.countryName"
-                                   class="w-6 rounded-[4px]">
-                            </div>
-                            <span class="max-w-[140px] truncate">{{ country.countryName }}</span>
-                          </button>
-                        }
-                      </hlm-dropdown-menu>
-                    </ng-template>
                   </div>
-                }
+                </div>
 
-              </div>
-            </div>
-          </div>
-        </section>
+                <div class="border-t border-[#252b36]"></div>
+                <div class="flex !h-[57px] items-center justify-between px-5 py-2">
+                  <span class=" text-sm font-bold text-gray-400">Country</span>
 
-        <section class="right-side gap-y-3">
-          <section class="about-me">
-            <div class="mt-6 overflow-hidden rounded-lg border border-[#252b36] bg-[#151B27]">
-              <div class=" border-[#252b36] px-5 py-4">
-                <h3 class="text-base font-medium text-white">About me</h3>
-              </div>
-              <div class="border-t border-[#252b36]"></div>
-              <div class=" border-[#252b36] px-5 py-4">
-                <h3 class="text-base font-medium text-gray-400">{{ response.bio }}</h3>
-              </div>
+                  <div class="flex gap-2">
+                    @if (userRequest.country !== response.country?.name) {
+                      <button hlmTooltip="This value was changed" class="text-amber-400"><i
+                        class="fa-solid fa-info-circle"></i></button>
+                    }
+                    @if (!editBasicInfo) {
+                      <div class="flex items-center gap-3 px-3 py-2.5">
+                        <img
+                          [src]="response.country?.iconPath"
+                          [alt]="response.country?.countryName"
+                          class="w-7 rounded-[5px]"/>
+                        <span class="text-white"> {{ response.country?.countryName }} </span>
+                      </div>
+                    }
+
+                    @if (editBasicInfo) {
+                      <div class="dropdown">
+                        <button
+                          class="dropdown-button"
+                          type="button" [hlmDropdownMenuTrigger]="countryMenu"
+                          align="start">
+
+                          @if (getSelectedCountry(); as country) {
+                            <img
+                              [src]="country.iconPath"
+                              [alt]="country.countryName"
+                              class="w-6 rounded-[4px]"
+                            />
+
+                            <span class="max-w-[140px] truncate"> {{ country.countryName }}</span>
+                          } @else {
+                            <span>Select country</span>
+                          }
+                          <i class="fa-solid fa-chevron-down text-xs"></i></button>
+
+                        <ng-template #countryMenu>
+                          <hlm-dropdown-menu>
+                            @for (country of allCountries; track country) {
+                              <button
+                                hlmDropdownMenuItem
+                                type="button" (click)="selectCountry(country)">
+                                <div class="flex items-center gap-2">
+                                  <img [src]="country.iconPath"
+                                       [alt]="country.countryName"
+                                       class="w-6 rounded-[4px]">
+                                </div>
+                                <span class="max-w-[140px] truncate">{{ country.countryName }}</span>
+                              </button>
+                            }
+                          </hlm-dropdown-menu>
+                        </ng-template>
+                      </div>
+                    }
+
+                  </div>
+                </div>
+
+              </section>
+
             </div>
           </section>
 
-          <section class="about-me">
-            <div class="mt-6 overflow-hidden rounded-lg border border-[#252b36] bg-[#151B27]">
-              <div class=" border-[#252b36] px-5 py-4">
-                <h3 class="text-base font-medium text-white">About me</h3>
-              </div>
-              <div class="border-t border-[#252b36]"></div>
-              <div class=" border-[#252b36] px-5 py-4">
-                <h3 class="text-base font-medium text-gray-400">{{ response.bio }}</h3>
-              </div>
-            </div>
-          </section>
+          <section class="right-side gap-y-3">
+            <section class="about-me">
+              <div class="mt-6 overflow-hidden rounded-lg border border-[#252b36] bg-[#151B27]">
+                <div class="border-b border-[#252b36] px-5 py-4">
+                  <div class="flex justify-between items-center">
+                    <h3 class="text-base font-medium text-white">About me</h3>
+                    <div class="flex gap-2">
+                      @if (!editAboutMe) {
+                        <button class="small-button edit-profile"
+                                (click)="editAboutMe=true; cancelAppearance(); cancelEditBasicInfo(); cancelEditFavoriteGame(); cancelEditFavoriteGenres()"><i
+                          class="fa-solid fa-pen"></i>Edit
+                        </button>
+                      }
+                      @if (editAboutMe) {
+                        <button class="small-button cancel" (click)="cancelEditAboutMe()">Cancel</button>
+                        <button class="small-button save" [disabled]="!hasAboutMeChanges()"
+                                (click)="saveAboutMe()">
+                          Save changes
+                        </button>
+                      }
+                    </div>
+                  </div>
+                </div>
+                <div class="border-t border-[#252b36]"></div>
+                <div class=" border-[#252b36] px-2 py-2 relative">
+                  @if (isLoading) {
+                    <div
+                      class="absolute inset-0 z-30 flex items-center justify-center
+                      rounded-b bg-[#0b0e14]/75 backdrop-blur-[2px]">
 
-        </section>
+                      <app-loading></app-loading>
 
+                    </div>
+                  }
 
-      </section>
+                  @if (!editAboutMe) {
+                    <div
+                      class="px-2 py-1 text-gray-400 line-clamp-2 break-words"
+                      [title]="response.bio || ''">
 
-      <div class="mt-4 grid grid-cols-1 gap-6 md:grid-cols-2">
-        <div class="middle">
-          <div>
-            <h3 class="text-base font-medium text-gray-300">About me</h3>
-            <textarea hlmTextarea [(ngModel)]="response.bio" class="w-100 mt-3 resize-none cursor-default" readonly
-                      (mousedown)="$event.preventDefault()"
-                      placeholder="Write something about yourself..."></textarea>
-          </div>
+                      {{ response.bio || 'No information provided.' }}
 
-          <div class="mt-8">
-            <h3 class="text-base font-medium text-gray-300">Favorite game</h3>
-            <div class="pinned-game mt-2">
-              <div class="pinned-game-cover">
-                <img [src]="'data:image/jpeg;base64,' + response.favoriteGame?.gameCoverImage"
-                     alt="{{response.favoriteGame}}}">
-              </div>
-              <div class="pinned-game-info">
-                <span class="pinned-game-label"> Pinned Game <i class="fa-solid fa-thumbtack"></i></span>
-                <h1>{{ response.favoriteGame?.title }}</h1>
-                <span class="pinned-game-description">This game is displayed on your profile</span>
-              </div>
-            </div>
-          </div>
+                    </div>
+                  }
 
-          <div class="mt-8">
-            <h3 class="text-base font-medium text-gray-300">Favorite genres</h3>
-            <div class="flex flex-wrap gap-2 mt-[14px]">
-              @for (genre of response.favoriteGenres; track genre) {
-                <span class="px-[11px] py-[7px] rounded-[7px] bg-white/7 text-white/80 text-xs
-      transition duration-200 ease-in-out hover:bg-white/11 hover:text-white">
-                          {{ genre.name }}
-                        </span>
-              }
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div hlmTabsContent="privacy">
-      <h2 class="text-xl font-semibold text-white"><i class="fa-solid fa-lock"></i> Privacy</h2>
-      <p class="mt-1 text-sm text-gray-400">Control who can see your information and activity</p>
+                  @if (editAboutMe) {
+                    <textarea
+                      hlmTextarea
+                      [(ngModel)]="response.bio"
+                      class="w-full min-h-[56px] resize-none !transition-none
+                      bg-[#1e2635] !border-none
+                      focus:!ring-1 focus:!ring-[#155dfc]"
+                      placeholder="Write something about yourself..."> </textarea>
+                  }
 
-      <div class="mt-6 overflow-hidden rounded-lg border border-[#252b36] bg-[#151B27]">
-        <div class="border-b border-[#252b36] px-5 py-4">
-          <h3 class="text-base font-medium text-white">Visibility</h3>
-          <p class="mt-1 text-sm text-gray-400">Choose who can see different parts of your profile</p>
-        </div>
-
-        <div class="divide-y divide-[#252b36]">
-          @for (setting of privacySettingsResponse; track setting.settingId) {
-            <div class="flex items-center justify-between px-5 py-4">
-              <div>
-                <h4 class="text-sm font-medium text-white">{{ setting.settingName }}</h4>
-                <p class="mt-1 text-sm text-gray-400">{{ setting.description }}</p>
-              </div>
-
-              <div class="flex items-center gap-2">
-                @if (isPrivacySettingsChanged(setting)) {
-                  <button
-                    hlmInputGroupButton
-                    class="hover:!bg-transparent !text-amber-400"
-                    [hlmTooltip]="'This value was changed'"
-                    aria-label="Info"
-                    size="icon-xs"
-                  >
-                    <i class="fa-solid fa-info-circle"></i>
-                  </button>
-                }
-
-                <div class="dropdown-small fit">
-                  <button class="dropdown-button" type="button" [hlmDropdownMenuTrigger]="privacy"
-                          align="start"><span>{{ setting.access }}</span> <i
-                    class="fa-solid fa-chevron-down text-xs"></i>
-                  </button>
-
-                  <ng-template #privacy>
-                    <hlm-dropdown-menu class="fit">
-                      <button hlmDropdownMenuItem [class.selected]="setting.access === 'Everyone'"
-                              (click)="setting.access = 'Everyone'">Everyone
-                      </button>
-                      <button hlmDropdownMenuItem [class.selected]="setting.access === 'Friends'"
-                              (click)="setting.access = 'Friends'">Friends
-                      </button>
-                      <button hlmDropdownMenuItem [class.selected]="setting.access === 'No one'"
-                              (click)="setting.access = 'No one'">No one
-                      </button>
-                    </hlm-dropdown-menu>
-                  </ng-template>
                 </div>
               </div>
-            </div>
-          }
-        </div>
-      </div>
+            </section>
 
-      <div class="flex justify-end mt-6">
-        <button class="medium-button !bg-[#155dfc] !text-white !border-0" (click)="savePrivacySettings()"
-                [disabled]="!hasPrivacyChanges()">Save
-        </button>
-      </div>
+            <section>
 
-    </div>
-    <div hlmTabsContent="community">
-      <h2 class="text-xl font-semibold text-white"><i class="fa-solid fa-comment"></i> Community</h2>
-      <p class="mt-1 text-sm text-gray-400">Manage who can interact with you and send you invitations</p>
+              <div class="mt-6 overflow-hidden rounded-lg border border-[#252b36] bg-[#151B27]">
+                <div class="border-b border-[#252b36] px-5 py-4">
+                  <div class="flex justify-between items-center">
+                    <h3 class="text-base font-medium text-white">Favorite game</h3>
 
-      <div class="mt-6 overflow-hidden rounded-lg border border-[#252b36] bg-[#151B27]">
-        <div class="border-b border-[#252b36] px-5 py-4">
-          <h3 class="text-base font-medium text-white">Interactions</h3>
-          <p class="mt-1 text-sm text-gray-400">hoose who can send you requests, invitations, and messages</p>
-        </div>
+                    <div class="flex gap-2">
+                      @if (!editFavoriteGame) {
+                        <button class="small-button edit-profile"
+                                (click)="editFavoriteGame=true; cancelAppearance(); cancelEditBasicInfo(); cancelEditAboutMe() ; cancelEditFavoriteGenres()"><i
+                          class="fa-solid fa-pen"></i>Edit
+                        </button>
+                      }
+                      @if (editFavoriteGame) {
+                        <button class="small-button cancel" (click)="cancelEditFavoriteGame()">Cancel</button>
+                        <button class="small-button save" [disabled]="!hasFavoriteGameChanges()"
+                                (click)="saveFavoriteGame()">
+                          Save changes
+                        </button>
+                      }
+                    </div>
+                  </div>
+                </div>
+                <div class="border-t border-[#252b36]"></div>
+                <div class=" border-[#252b36] px-2 py-2 relative">
+                  @if (isLoading) {
+                    <div
+                      class="absolute inset-0 z-30 flex items-center justify-center
+                      rounded-b bg-[#0b0e14]/75 backdrop-blur-[2px]">
 
-        <div class="divide-y divide-[#252b36]">
-          @for (setting of communitySettingsResponse; track setting.settingId) {
-            <div class="flex items-center justify-between px-5 py-4">
-              <div>
-                <h4 class="text-sm font-medium text-white">{{ setting.settingName }}</h4>
-                <p class="mt-1 text-sm text-gray-400">{{ setting.description }}</p>
+                      <app-loading></app-loading>
+
+                    </div>
+                  }
+
+                  @if (editFavoriteGame) {
+
+                    @if (selectedFavoriteGame) {
+                      <div class="mt-2.5 flex w-full items-center gap-3 rounded-[10px] border border-blue-500/45 bg-blue-500/8 p-2.5">
+                        <img
+                          class="h-[54px] w-[42px] shrink-0 rounded-[5px] object-cover"
+                          [src]="getGameImageCoverLibrary(selectedFavoriteGame)"
+                          [alt]="selectedFavoriteGame.title"
+                        >
+                        <div class="min-w-0">
+                          <strong class="block truncate text-sm font-medium text-white/95">{{ selectedFavoriteGame.title }}</strong>
+                        </div>
+
+                        <button
+                          type="button"
+                          class="ml-auto flex h-7 w-7 shrink-0 items-center justify-center
+           rounded-full border border-red-500/25
+           bg-red-500/12 text-red-400
+           transition-colors hover:bg-red-500/20 hover:cursor-pointer"
+                          (click)="removeSelectedGame()"
+                        >
+                          <i class="fa-solid fa-xmark text-[13px]"></i>
+                        </button>
+                      </div>
+                    } @else {
+
+
+
+                    <div>
+                        <app-search-bar
+                          [value]="searchedQuery"
+                          [placeholder]="'Search your games...'"
+                          (search)="searchLibrary($event)">
+                        </app-search-bar>
+
+
+
+                      @if (searchedQuery !== '' && userLibraryResponse.length) {
+                        <div class="search-results">
+                          @for (game of userLibraryResponse; track game.gameId) {
+                            <div
+                              class="flex min-h-[54px] w-full cursor-pointer items-center gap-2.5
+                               rounded-[7px] p-[7px] transition-colors duration-150 hover:bg-white/7"
+                              (click)="selectFavoriteGame(game)">
+                              <img
+                                class="h-[54px] w-[42px] shrink-0 rounded-[5px] object-cover"
+                                [src]="getGameImageCoverLibrary(game)"
+                                [alt]="game.title">
+
+                              <div class="min-w-0">
+                                <h2 class="truncate text-base font-medium text-white/92">
+                                  {{ game.title }}
+                                </h2>
+                              </div>
+                            </div>
+                          }
+                        </div>
+                      }
+                    </div>
+                      }
+                  } @else {
+
+                  @if (response.favoriteGame && !editFavoriteGame) {
+                    <div class="pinned-game px-3 py-2">
+                      <div class="pinned-game-cover">
+                        <img [src]="'data:image/jpeg;base64,' + response.favoriteGame?.gameCoverImage"
+                             alt="{{response.favoriteGame}}}">
+                      </div>
+                      <div class="pinned-game-info">
+                        <span class="pinned-game-label"> Pinned Game <i class="fa-solid fa-thumbtack"></i></span>
+                        <h1>{{ response.favoriteGame?.title }}</h1>
+                        <span class="pinned-game-description">This game is displayed on your profile</span>
+                      </div>
+                    </div>
+                  } @else {
+                    <div class="text-gray-400 px-3 py-2">
+                      <span>No favorite game selected.</span>
+                    </div>
+                  }
+}
+                </div>
               </div>
 
-              <div class="flex items-center gap-2">
-                @if (isCommunitySettingsChanged(setting)) {
-                  <button
-                    hlmInputGroupButton
-                    class="hover:!bg-transparent !text-amber-400"
-                    [hlmTooltip]="'This value was changed'"
-                    aria-label="Info"
-                    size="icon-xs"
-                  >
-                    <i class="fa-solid fa-info-circle"></i>
-                  </button>
-                }
+            </section>
 
-                <div class="dropdown-small fit">
-                  <button class="dropdown-button" type="button" [hlmDropdownMenuTrigger]="community"
-                          align="start"><span>{{ setting.access }}</span> <i
-                    class="fa-solid fa-chevron-down text-xs"></i>
-                  </button>
+            <section class="favorite-genres">
+              <div class="mt-6 overflow-hidden rounded-lg border border-[#252b36] bg-[#151B27]">
+                <div class=" border-[#252b36] px-5 py-4">
+                  <div class="flex justify-between items-center">
+                    <h3 class="text-base font-medium text-white">Favorite genres</h3>
+                    <div class="flex gap-2">
+                      @if (!editGenres) {
+                        <button class="small-button edit-profile"
+                                (click)="editGenres=true; cancelAppearance(); cancelEditBasicInfo(); cancelEditAboutMe(); cancelEditFavoriteGame()">
+                          <i
+                            class="fa-solid fa-pen"></i>Edit
+                        </button>
+                      }
+                      @if (editGenres) {
+                        <button class="small-button cancel" (click)="cancelEditFavoriteGenres()">Cancel</button>
+                        <button class="small-button save" [disabled]="!hasGenreChanges()"
+                                (click)="saveFavoriteGenres()">
+                          Save changes
+                        </button>
+                      }
+                    </div>
+                  </div>
+                </div>
+                <div class="border-t border-[#252b36]"></div>
+                <div class=" border-[#252b36] px-4 py-3">
+                  @if (editGenres) {
+                    <div class=" flex gap-2">
+                      @for (genre of genreResponse; track genre) {
+                        <div (click)="selectedGenre(genre.id)"
+                             class="relative inline-flex items-center gap-1.5
+                            px-[11px] py-[7px] rounded-[7px]
+                          bg-white/7 text-white/80 text-xs
+                           transition duration-200 ease-in-out
+                         hover:bg-white/11 hover:text-white hover:cursor-pointer"
+                             [ngClass]="{
+                           'selected-genre': selectedGenres.has(genre.id),
+                           'not-selected': !selectedGenres.has(genre.id)}">
+                          @if (selectedGenres.has(genre.id)) {
+                            <i class="fa-solid fa-check text-[10px]"></i>
+                          }
+                          {{ genre.name }}
+                          @if (selectedGenres.has(genre.id)) {
+                            <button
+                              type="button"
+                              (click)="selectedGenre(genre.id); $event.stopPropagation()"
+                              class="tag-remove">
+                              <i class="fa-solid fa-xmark"></i>
+                            </button>
+                          }
+                        </div>
+                      }
+                    </div>
+                  } @else {
+                    @if (response.favoriteGenres?.length) {
+                      <div class=" flex gap-2">
+                        @for (genre of response.favoriteGenres; track genre) {
+                          <span class="px-[11px] py-[7px] rounded-[7px] bg-[#374151] text-white/80 text-xs
+                    transition duration-200 ease-in-out hover:text-white">
+                        {{ genre.name }}
+                      </span>
+                        }
+                      </div>
+                    } @else {
+                      <div class="text-gray-400">
+                        <span>No genres selected.</span>
+                      </div>
+                    }
 
-                  <ng-template #community>
-                    <hlm-dropdown-menu class="fit">
-                      <button hlmDropdownMenuItem [class.selected]="setting.access === 'Everyone'"
-                              (click)="setting.access = 'Everyone'">Everyone
-                      </button>
-                      @if (setting.settingName !== 'Friend Requests') {
+                  }
+
+                </div>
+              </div>
+            </section>
+
+
+
+          </section>
+        </section>
+      </div>
+      <div hlmTabsContent="privacy">
+        <h2 class="text-xl font-semibold text-white"><i class="fa-solid fa-lock"></i> Privacy</h2>
+        <p class="mt-1 text-sm text-gray-400">Control who can see your information and activity</p>
+
+        <div class="mt-6 overflow-hidden rounded-lg border border-[#252b36] bg-[#151B27]">
+          <div class="border-b border-[#252b36] px-5 py-4">
+            <h3 class="text-base font-medium text-white">Visibility</h3>
+            <p class="mt-1 text-sm text-gray-400">Choose who can see different parts of your profile</p>
+          </div>
+
+          <div class="divide-y divide-[#252b36]">
+            @for (setting of privacySettingsResponse; track setting.settingId) {
+              <div class="flex items-center justify-between px-5 py-4">
+                <div>
+                  <h4 class="text-sm font-medium text-white">{{ setting.settingName }}</h4>
+                  <p class="mt-1 text-sm text-gray-400">{{ setting.description }}</p>
+                </div>
+
+                <div class="flex items-center gap-2">
+                  @if (isPrivacySettingsChanged(setting)) {
+                    <button
+                      hlmInputGroupButton
+                      class="hover:!bg-transparent !text-amber-400"
+                      [hlmTooltip]="'This value was changed'"
+                      aria-label="Info"
+                      size="icon-xs"
+                    >
+                      <i class="fa-solid fa-info-circle"></i>
+                    </button>
+                  }
+
+                  <div class="dropdown-small fit">
+                    <button class="dropdown-button" type="button" [hlmDropdownMenuTrigger]="privacy"
+                            align="start"><span>{{ setting.access }}</span> <i
+                      class="fa-solid fa-chevron-down text-xs"></i>
+                    </button>
+
+                    <ng-template #privacy>
+                      <hlm-dropdown-menu class="fit">
+                        <button hlmDropdownMenuItem [class.selected]="setting.access === 'Everyone'"
+                                (click)="setting.access = 'Everyone'">Everyone
+                        </button>
                         <button hlmDropdownMenuItem [class.selected]="setting.access === 'Friends'"
                                 (click)="setting.access = 'Friends'">Friends
                         </button>
-                      }
-                      <button hlmDropdownMenuItem [class.selected]="setting.access === 'No one'"
-                              (click)="setting.access = 'No one'">No one
-                      </button>
-                    </hlm-dropdown-menu>
-                  </ng-template>
+                        <button hlmDropdownMenuItem [class.selected]="setting.access === 'No one'"
+                                (click)="setting.access = 'No one'">No one
+                        </button>
+                      </hlm-dropdown-menu>
+                    </ng-template>
+                  </div>
                 </div>
               </div>
-            </div>
-          }
+            }
+          </div>
+        </div>
+
+        <div class="flex justify-end mt-6">
+          <button class="medium-button !bg-[#155dfc] !text-white !border-0" (click)="savePrivacySettings()"
+                  [disabled]="!hasPrivacyChanges()">Save
+          </button>
         </div>
 
       </div>
+      <div hlmTabsContent="community">
+        <h2 class="text-xl font-semibold text-white"><i class="fa-solid fa-comment"></i> Community</h2>
+        <p class="mt-1 text-sm text-gray-400">Manage who can interact with you and send you invitations</p>
 
-      <div class="flex justify-end mt-6">
-        <button class="medium-button !bg-[#155dfc] !text-white !border-0" (click)="saveCommunitySettings()"
-                [disabled]="!hasCommunityChanges()">Save
-        </button>
-      </div>
+        <div class="mt-6 overflow-hidden rounded-lg border border-[#252b36] bg-[#151B27]">
+          <div class="border-b border-[#252b36] px-5 py-4">
+            <h3 class="text-base font-medium text-white">Interactions</h3>
+            <p class="mt-1 text-sm text-gray-400">hoose who can send you requests, invitations, and messages</p>
+          </div>
 
-    </div>
-    <div hlmTabsContent="store">
-      <h2 class="text-xl font-semibold text-white"><i class="fa-solid fa-store"></i> Store</h2>
-      <p class="mt-1 text-sm text-gray-400">Control which age-rated games are shown in your store</p>
+          <div class="divide-y divide-[#252b36]">
+            @for (setting of communitySettingsResponse; track setting.settingId) {
+              <div class="flex items-center justify-between px-5 py-4">
+                <div>
+                  <h4 class="text-sm font-medium text-white">{{ setting.settingName }}</h4>
+                  <p class="mt-1 text-sm text-gray-400">{{ setting.description }}</p>
+                </div>
 
-      <div class="mt-6 overflow-hidden rounded-lg border border-[#252b36] bg-[#151B27]">
-        <div class="border-b border-[#252b36] px-5 py-4">
-          <h3 class="text-base font-medium text-white">Content restrictions</h3>
-          <p class="mt-1 text-sm text-gray-400">Choose which PEGI-rated games can appear in your store</p>
-        </div>
+                <div class="flex items-center gap-2">
+                  @if (isCommunitySettingsChanged(setting)) {
+                    <button
+                      hlmInputGroupButton
+                      class="hover:!bg-transparent !text-amber-400"
+                      [hlmTooltip]="'This value was changed'"
+                      aria-label="Info"
+                      size="icon-xs"
+                    >
+                      <i class="fa-solid fa-info-circle"></i>
+                    </button>
+                  }
 
-        <div class="divide-y divide-[#252b36]">
-          @for (setting of storeSettingsResponse; track setting.settingId) {
-            <div class="flex items-center justify-between px-5 py-4">
-              <div>
-                <h4 class="text-sm font-medium"
-                    [ngClass]="getPegiColor(setting.pegiRatingName)">{{ setting.pegiRatingName }}</h4>
-                <p class="mt-1 text-sm text-gray-400">{{ setting.description }}</p>
+                  <div class="dropdown-small fit">
+                    <button class="dropdown-button" type="button" [hlmDropdownMenuTrigger]="community"
+                            align="start"><span>{{ setting.access }}</span> <i
+                      class="fa-solid fa-chevron-down text-xs"></i>
+                    </button>
+
+                    <ng-template #community>
+                      <hlm-dropdown-menu class="fit">
+                        <button hlmDropdownMenuItem [class.selected]="setting.access === 'Everyone'"
+                                (click)="setting.access = 'Everyone'">Everyone
+                        </button>
+                        @if (setting.settingName !== 'Friend Requests') {
+                          <button hlmDropdownMenuItem [class.selected]="setting.access === 'Friends'"
+                                  (click)="setting.access = 'Friends'">Friends
+                          </button>
+                        }
+                        <button hlmDropdownMenuItem [class.selected]="setting.access === 'No one'"
+                                (click)="setting.access = 'No one'">No one
+                        </button>
+                      </hlm-dropdown-menu>
+                    </ng-template>
+                  </div>
+                </div>
               </div>
+            }
+          </div>
 
-              <div class="flex items-center gap-2">
-                @if (isStoreSettingsChanged(setting)) {
-                  <button
-                    hlmInputGroupButton
-                    class="hover:!bg-transparent !text-amber-400"
-                    [hlmTooltip]="'This value was changed'"
-                    aria-label="Info"
-                    size="icon-xs"
-                  >
-                    <i class="fa-solid fa-info-circle"></i>
-                  </button>
-                }
+        </div>
 
-                <hlm-switch
-                  id="pegiRating"
-                  name="pegiRating"
-                  [(ngModel)]="setting.disabled"
-                  class=" !transition-none"/>
+        <div class="flex justify-end mt-6">
+          <button class="medium-button !bg-[#155dfc] !text-white !border-0" (click)="saveCommunitySettings()"
+                  [disabled]="!hasCommunityChanges()">Save
+          </button>
+        </div>
 
+      </div>
+      <div hlmTabsContent="store">
+        <h2 class="text-xl font-semibold text-white"><i class="fa-solid fa-store"></i> Store</h2>
+        <p class="mt-1 text-sm text-gray-400">Control which age-rated games are shown in your store</p>
+
+        <div class="mt-6 overflow-hidden rounded-lg border border-[#252b36] bg-[#151B27]">
+          <div class="border-b border-[#252b36] px-5 py-4">
+            <h3 class="text-base font-medium text-white">Content restrictions</h3>
+            <p class="mt-1 text-sm text-gray-400">Choose which PEGI-rated games can appear in your store</p>
+          </div>
+
+          <div class="divide-y divide-[#252b36]">
+            @for (setting of storeSettingsResponse; track setting.settingId) {
+              <div class="flex items-center justify-between px-5 py-4">
+                <div>
+                  <h4 class="text-sm font-medium"
+                      [ngClass]="getPegiColor(setting.pegiRatingName)">{{ setting.pegiRatingName }}</h4>
+                  <p class="mt-1 text-sm text-gray-400">{{ setting.description }}</p>
+                </div>
+
+                <div class="flex items-center gap-2">
+                  @if (isStoreSettingsChanged(setting)) {
+                    <button
+                      hlmInputGroupButton
+                      class="hover:!bg-transparent !text-amber-400"
+                      [hlmTooltip]="'This value was changed'"
+                      aria-label="Info"
+                      size="icon-xs"
+                    >
+                      <i class="fa-solid fa-info-circle"></i>
+                    </button>
+                  }
+
+                  <hlm-switch
+                    id="pegiRating"
+                    name="pegiRating"
+                    [(ngModel)]="setting.disabled"
+                    class=" !transition-none"/>
+
+                </div>
               </div>
-            </div>
-          }
+            }
+          </div>
+        </div>
+
+        <div class="flex justify-end mt-6">
+          <button class="medium-button !bg-[#155dfc] !text-white !border-0" (click)="saveStoreSettings()"
+                  [disabled]="!hasStoreChanges()">Save
+          </button>
+        </div>
+
+      </div>
+      <div hlmTabsContent="gaming">
+        <h2 class="text-xl font-semibold text-white"><i class="fa-solid fa-gamepad"></i> Gaming</h2>
+        <div>
+          Favorite game
+          Multiplayer preference
+          Looking for:
+          Casual players
+          Competitive players
+          Co-op
+          etc.
+          Player type
+          Gaming tags
+          Favorite genres
         </div>
       </div>
+      <div hlmTabsContent="account">
+        <h2 class="text-xl font-semibold text-white"><i class="fa-solid fa-triangle-exclamation"></i> Account </h2>
+        <div>
+          Change password
+          Suspend account
+          Delete account
+        </div>
 
-      <div class="flex justify-end mt-6">
-        <button class="medium-button !bg-[#155dfc] !text-white !border-0" (click)="saveStoreSettings()"
-                [disabled]="!hasStoreChanges()">Save
-        </button>
       </div>
-
-    </div>
-    <div hlmTabsContent="gaming">
-      <h2 class="text-xl font-semibold text-white"><i class="fa-solid fa-gamepad"></i> Gaming</h2>
-      <div>
-        Favorite game
-        Multiplayer preference
-        Looking for:
-        Casual players
-        Competitive players
-        Co-op
-        etc.
-        Player type
-        Gaming tags
-        Favorite genres
-      </div>
-    </div>
-    <div hlmTabsContent="account">
-      <h2 class="text-xl font-semibold text-white"><i class="fa-solid fa-triangle-exclamation"></i> Account </h2>
-      <div>
-        Change password
-        Suspend account
-        Delete account
-      </div>
-
-    </div>
+    </section>
   </hlm-tabs>
 
   <hlm-dialog #warningDialog>

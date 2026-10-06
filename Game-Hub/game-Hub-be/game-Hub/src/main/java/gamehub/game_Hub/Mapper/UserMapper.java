@@ -388,9 +388,10 @@ public class UserMapper {
         .cardColor(new CardColorResponse(user.getCardColor().getId(),
             user.getCardColor().getColorName(),
             user.getCardColor().getColorCode()))
-        .favoriteGenres(user.getFavoriteGenres().stream()
-            .map(g -> new GenreResponse(g.getId(), g.getName()))
-            .collect(Collectors.toSet()))
+        .favoriteGenres(user.getFavoriteGenres()
+            .stream().sorted(Comparator.comparing(genre -> genre.getName()))
+            .map(genre -> new GenreResponse(genre.getId(), genre.getName()))
+            .toList())
         .storeSettingsResponse(storeSettingsResponse)
         .communitySettingsResponse(communitySettingsResponse)
         .privacySettingsResponse(privacySettingsResponse)

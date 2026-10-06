@@ -6,10 +6,10 @@ import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core
 import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
+import { UserProfileControllerService } from './services/user-profile-controller.service';
 import { AdminControllerService } from './services/admin-controller.service';
 import { StoreControllerService } from './services/store-controller.service';
 import { ReportControllerService } from './services/report-controller.service';
-import { UserProfileControllerService } from './services/user-profile-controller.service';
 import { LibraryControllerService } from './services/library-controller.service';
 import { CommunityControllerService } from './services/community-controller.service';
 import { CartControllerService } from './services/cart-controller.service';
@@ -29,10 +29,10 @@ import { CardColorControllerService } from './services/card-color-controller.ser
   exports: [],
   declarations: [],
   providers: [
+    UserProfileControllerService,
     AdminControllerService,
     StoreControllerService,
     ReportControllerService,
-    UserProfileControllerService,
     LibraryControllerService,
     CommunityControllerService,
     CartControllerService,
