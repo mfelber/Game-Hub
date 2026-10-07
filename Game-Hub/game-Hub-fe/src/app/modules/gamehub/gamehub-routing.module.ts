@@ -23,6 +23,7 @@ import {AdminStoreComponent} from './pages/admin/pages/store/admin-store.compone
 import {AdminGameDetailsComponent} from './pages/admin/pages/store/game-details/admin-game-details.component';
 import {CartComponent} from './pages/cart/cart.component';
 import {SettingsComponent} from './pages/settings/settings.component';
+import {NewsComponent} from './pages/admin/pages/news/news.component';
 
 const routes: Routes = [
   {
@@ -107,6 +108,10 @@ const routes: Routes = [
       {
         path: 'dashboard',
         component: DashboardComponent,
+      },
+      {
+        path: 'news',
+        component: NewsComponent,
       },
       {
         path: 'games',

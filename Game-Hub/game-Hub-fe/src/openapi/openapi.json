@@ -679,6 +679,37 @@
         }
       }
     },
+    "/news/news": {
+      "post": {
+        "tags": [
+          "news-controller"
+        ],
+        "operationId": "createNews",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/library/uninstall/{gameId}": {
       "post": {
         "tags": [
@@ -3031,6 +3062,63 @@
           }
         }
       },
+      "NewsItemRequest": {
+        "required": [
+          "description"
+        ],
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "NewsRequest": {
+        "required": [
+          "title",
+          "version"
+        ],
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "sections": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NewsSectionRequest"
+            }
+          }
+        }
+      },
+      "NewsSectionRequest": {
+        "required": [
+          "newsItems",
+          "newsType"
+        ],
+        "type": "object",
+        "properties": {
+          "newsType": {
+            "type": "string",
+            "enum": [
+              "ADDED",
+              "IMPROVED",
+              "FIXED",
+              "SECURITY",
+              "REMOVED"
+            ]
+          },
+          "newsItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NewsItemRequest"
+            }
+          }
+        }
+      },
       "AgeRatingResponse": {
         "required": [
           "ageRating",
@@ -3713,13 +3801,13 @@
               "$ref": "#/components/schemas/SubtitleResponse"
             }
           },
+          "inCart": {
+            "type": "boolean"
+          },
           "inWishList": {
             "type": "boolean"
           },
           "inLibrary": {
-            "type": "boolean"
-          },
-          "inCart": {
             "type": "boolean"
           }
         }
@@ -3994,7 +4082,6 @@
             }
           },
           "favoriteGenres": {
-            "uniqueItems": true,
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/GenreResponse"
@@ -4164,7 +4251,6 @@
             }
           },
           "favoriteGenres": {
-            "uniqueItems": true,
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/GenreResponse"
