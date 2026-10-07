@@ -27,6 +27,7 @@ import gamehub.game_Hub.Repository.genre.GenreRepository;
 import gamehub.game_Hub.Repository.user.UserRepository;
 import gamehub.game_Hub.Mapper.UserMapper;
 import gamehub.game_Hub.Request.BannerRequest;
+import gamehub.game_Hub.Request.PinGameRequest;
 import gamehub.game_Hub.Request.UpdateBioRequest;
 import gamehub.game_Hub.Response.StatusResponse;
 import gamehub.game_Hub.Response.UserLibraryResponse;
@@ -144,18 +145,18 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public Long pinGame(final Authentication connectedUser, final Long gameId) {
+  public Long pinGame(final Authentication connectedUser, final PinGameRequest request) {
     User authUser = (User) connectedUser.getPrincipal();
     User user = userRepository.findById(authUser.getId())
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
 
 
 
-    if (gameId == null) {
+    if (request.gameId() == null) {
       user.setFavoriteGame(null);
     } else {
-      Game game = gameRepository.findById(gameId)
-          .orElseThrow(() -> new EntityNotFoundException("No game found with id: " + gameId));
+      Game game = gameRepository.findById(request.gameId())
+          .orElseThrow(() -> new EntityNotFoundException("No game found with id: " + request.gameId()));
       user.setFavoriteGame(game);
     }
 

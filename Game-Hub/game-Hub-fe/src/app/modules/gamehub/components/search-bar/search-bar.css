@@ -1,5 +1,5 @@
 input{
-  width: 500px;
+  min-width: 500px;
   padding: 15px;
   border-radius: 12px;
   border: none;

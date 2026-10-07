@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import gamehub.game_Hub.File.FileUtils;
 import gamehub.game_Hub.Module.BanHistory;
 import gamehub.game_Hub.Module.Friendship;
+import gamehub.game_Hub.Module.Genre;
 import gamehub.game_Hub.Module.Level;
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Module.User.UserLibrary;
@@ -150,9 +151,9 @@ public class UserMapper {
             profileUser.getLevel().getLevelColor()))
         .badges(profileUser.getBadges().stream().map(badge -> new BadgeResponse(badge.getId(), badge.getName(),
             badge.getDescription(), badge.getIconPath())).collect(Collectors.toSet()))
-        .favoriteGenres(profileUser.getFavoriteGenres().stream()
+        .favoriteGenres(profileUser.getFavoriteGenres().stream().sorted(Comparator.comparing(Genre::getName))
             .map(g -> new GenreResponse(g.getId(), g.getName()))
-            .collect(Collectors.toSet()))
+            .toList())
         .recommendedGames(profileUser.getRecommendationGames()
             .stream()
             .map(g -> new GameResponseShort(g.getId(), g.getTitle(),
@@ -211,9 +212,9 @@ public class UserMapper {
         .badges(user.getBadges().stream().map(badge -> new BadgeResponse(badge.getId(), badge.getName(),
             badge.getDescription(), badge.getIconPath())).collect(Collectors.toSet()))
         .favoriteGenres(user.getFavoriteGenres()
-            .stream()
+            .stream().sorted(Comparator.comparing(Genre::getName))
             .map(genre -> new GenreResponse(genre.getId(), genre.getName()))
-            .collect(Collectors.toSet()))
+            .toList())
         .recommendedGames(user.getRecommendationGames()
             .stream()
             .map(g -> new GameResponseShort(g.getId(), g.getTitle(),
@@ -389,7 +390,7 @@ public class UserMapper {
             user.getCardColor().getColorName(),
             user.getCardColor().getColorCode()))
         .favoriteGenres(user.getFavoriteGenres()
-            .stream().sorted(Comparator.comparing(genre -> genre.getName()))
+            .stream().sorted(Comparator.comparing(Genre::getName))
             .map(genre -> new GenreResponse(genre.getId(), genre.getName()))
             .toList())
         .storeSettingsResponse(storeSettingsResponse)

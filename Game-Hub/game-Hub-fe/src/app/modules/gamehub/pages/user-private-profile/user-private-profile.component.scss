@@ -5,22 +5,6 @@
   margin-top: 6px;
 }
 
-.genres-list{
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.selected{
-  background: #2563eb;
-  color: white;
-}
-
-.favorite{
-  background: #374151;
-  color: white;
-}
-
 .preview-overlay {
   position: fixed;
   inset: 0;

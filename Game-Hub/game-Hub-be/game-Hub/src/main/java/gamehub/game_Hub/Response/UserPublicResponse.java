@@ -32,7 +32,7 @@ public class UserPublicResponse {
   private GameResponseShort currentlyPlaying;
   private List<FriendProfileResponse> friends;
   private Set<BadgeResponse> badges;
-  private Set<GenreResponse> favoriteGenres;
+  private List<GenreResponse> favoriteGenres;
   private Set<GameResponseShort> recommendedGames;
   private UserLibraryResponse favoriteGame;
   private byte [] userProfilePicture;

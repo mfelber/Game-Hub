@@ -35,7 +35,7 @@ public class UserPrivateResponse {
   private List<RecentGamesResponse> recentGamesResponse;
   private List<FriendProfileResponse> friends;
   private Set<BadgeResponse> badges;
-  private Set<GenreResponse> favoriteGenres;
+  private List<GenreResponse> favoriteGenres;
   private Set<GameResponseShort> recommendedGames;
   private UserLibraryResponse favoriteGame;
   private byte [] userProfilePicture;

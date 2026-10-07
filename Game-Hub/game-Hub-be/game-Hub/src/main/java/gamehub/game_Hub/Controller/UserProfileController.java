@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Repository.user.UserRepository;
 import gamehub.game_Hub.Request.BannerRequest;
+import gamehub.game_Hub.Request.PinGameRequest;
 import gamehub.game_Hub.Request.UpdateBioRequest;
 import gamehub.game_Hub.Response.RecentGamesResponse;
 import gamehub.game_Hub.Response.StatusResponse;
@@ -178,9 +179,9 @@ public class UserProfileController {
     return ResponseEntity.ok(libraryService.searchLibraryGames(query, connectedUser));
   }
 
-  @PostMapping("/pin-game/{gameId}")
-  public ResponseEntity<Long> pinGame(Authentication connectedUser, @PathVariable Long gameId) {
-    return ResponseEntity.ok(userService.pinGame(connectedUser, gameId));
+  @PutMapping("/pin-game")
+  public ResponseEntity<Long> pinGame(Authentication connectedUser, @RequestBody PinGameRequest request) {
+    return ResponseEntity.ok(userService.pinGame(connectedUser, request));
   }
 
   @GetMapping("/get-recent-games")

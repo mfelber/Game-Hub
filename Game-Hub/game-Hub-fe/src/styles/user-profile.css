@@ -61,10 +61,8 @@
       @apply flex items-center gap-1.5 text-[13px] font-semibold;
     }
 
-
-
     .member-info {
-      @apply flex items-center gap-2.5 mt-[7px] text-[rgba(255,255,255,0.6)] text-sm;
+      @apply flex items-center gap-2.5 text-[rgba(255,255,255,0.6)] text-sm;
     }
 
     .location img {
@@ -86,11 +84,11 @@
     }
 
     .stats {
-      @apply m-auto min-h-[80px] flex items-center justify-around rounded-[14px] px-5 py-3;
+      @apply w-full min-h-[80px] flex items-center justify-around rounded-[14px] px-5 py-3;
     }
 
     .stat {
-      @apply flex flex-col items-center min-w-[100px] relative;
+      @apply flex-1 flex flex-col items-center relative;
     }
 
     .stat:not(:last-child)::after {

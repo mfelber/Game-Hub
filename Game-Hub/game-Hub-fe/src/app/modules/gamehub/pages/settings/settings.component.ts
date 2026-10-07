@@ -30,11 +30,9 @@ import {Router} from '@angular/router';
 import {ToastService} from '../../../../services/ToastService/toast.service';
 import {CardColorResponse} from '../../../../services/models/card-color-response';
 import {CardColorControllerService} from '../../../../services/services/card-color-controller.service';
-import {concatMap, forkJoin, Observable, of} from 'rxjs';
+import {concatMap, Observable, of} from 'rxjs';
 import {RefreshService} from '../../../../services/fn/refresh-service/refresh-service';
 import {LoadingComponent} from '../../components/loading/loading.component';
-import {response} from 'express';
-import {List} from 'postcss/lib/list';
 import {StoreControllerService} from '../../../../services/services/store-controller.service';
 import {SearchBar} from '../../components/search-bar/search-bar';
 import {UserLibraryResponse} from '../../../../services/models/user-library-response';
@@ -540,7 +538,7 @@ export class SettingsComponent implements OnInit {
 
     const match = path.match(/banner_(\d+)\.jpg$/);
     return match ? Number(match[1]) : null;
-  }
+    }
 
   saveBasicInfo() {
     const emailChanged = this.response.email !== this.userRequest.email;
@@ -859,10 +857,14 @@ export class SettingsComponent implements OnInit {
 
   saveFavoriteGame() {
     this.userService.pinGame({
-      gameId: this.selectedFavoriteGame?.gameId
+      body: {
+        gameId: this.selectedFavoriteGame?.gameId
+      }
     }).subscribe({
       next: () => {
         this.toastService.success('Favorite game has been updated');
+        this.editFavoriteGame = false;
+        this.loadProfile();
       },
       error: (err) => {
         console.log(err);
@@ -870,4 +872,14 @@ export class SettingsComponent implements OnInit {
       }
     })
   }
+
+  // sendResetLink() {
+  //   this.authenticationService.processForgotPasswordRequest({
+  //     body: this.authenticationRequest
+  //   }).subscribe({
+  //     next: () => {
+  //     }
+  //   })
+  // }
+
 }

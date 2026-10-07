@@ -247,8 +247,9 @@
                   <div class="flex gap-2">
                     @if (!editBasicInfo) {
                       <button class="small-button edit-profile"
-                              (click)="editBasicInfo=true; cancelAppearance(); cancelEditAboutMe(); cancelEditFavoriteGenres(); cancelEditFavoriteGame()"><i
-                        class="fa-solid fa-pen"></i>Edit
+                              (click)="editBasicInfo=true; cancelAppearance(); cancelEditAboutMe(); cancelEditFavoriteGenres(); cancelEditFavoriteGame()">
+                        <i
+                          class="fa-solid fa-pen"></i>Edit
                       </button>
                     }
                     @if (editBasicInfo) {
@@ -449,7 +450,6 @@
                         </ng-template>
                       </div>
                     }
-
                   </div>
                 </div>
 
@@ -467,8 +467,8 @@
                     <div class="flex gap-2">
                       @if (!editAboutMe) {
                         <button class="small-button edit-profile"
-                                (click)="editAboutMe=true; cancelAppearance(); cancelEditBasicInfo(); cancelEditFavoriteGame(); cancelEditFavoriteGenres()"><i
-                          class="fa-solid fa-pen"></i>Edit
+                                (click)="editAboutMe=true; cancelAppearance(); cancelEditBasicInfo(); cancelEditFavoriteGame(); cancelEditFavoriteGenres()">
+                          <i class="fa-solid fa-pen"></i>Edit
                         </button>
                       }
                       @if (editAboutMe) {
@@ -519,7 +519,7 @@
 
             <section>
 
-              <div class="mt-6 overflow-hidden rounded-lg border border-[#252b36] bg-[#151B27]">
+              <div class="mt-6 rounded-lg border border-[#252b36] bg-[#151B27]">
                 <div class="border-b border-[#252b36] px-5 py-4">
                   <div class="flex justify-between items-center">
                     <h3 class="text-base font-medium text-white">Favorite game</h3>
@@ -527,8 +527,9 @@
                     <div class="flex gap-2">
                       @if (!editFavoriteGame) {
                         <button class="small-button edit-profile"
-                                (click)="editFavoriteGame=true; cancelAppearance(); cancelEditBasicInfo(); cancelEditAboutMe() ; cancelEditFavoriteGenres()"><i
-                          class="fa-solid fa-pen"></i>Edit
+                                (click)="editFavoriteGame=true; cancelAppearance(); cancelEditBasicInfo(); cancelEditAboutMe() ; cancelEditFavoriteGenres()">
+                          <i
+                            class="fa-solid fa-pen"></i>Edit
                         </button>
                       }
                       @if (editFavoriteGame) {
@@ -542,7 +543,7 @@
                   </div>
                 </div>
                 <div class="border-t border-[#252b36]"></div>
-                <div class=" border-[#252b36] px-2 py-2 relative">
+                <div class="w-full px-2 py-2 relative">
                   @if (isLoading) {
                     <div
                       class="absolute inset-0 z-30 flex items-center justify-center
@@ -556,14 +557,16 @@
                   @if (editFavoriteGame) {
 
                     @if (selectedFavoriteGame) {
-                      <div class="mt-2.5 flex w-full items-center gap-3 rounded-[10px] border border-blue-500/45 bg-blue-500/8 p-2.5">
+                      <div
+                        class="mt-2.5 flex w-full items-center gap-3 rounded-[10px] border border-blue-500/45 bg-blue-500/8 p-2.5">
                         <img
                           class="h-[54px] w-[42px] shrink-0 rounded-[5px] object-cover"
                           [src]="getGameImageCoverLibrary(selectedFavoriteGame)"
                           [alt]="selectedFavoriteGame.title"
                         >
                         <div class="min-w-0">
-                          <strong class="block truncate text-sm font-medium text-white/95">{{ selectedFavoriteGame.title }}</strong>
+                          <strong
+                            class="block truncate text-sm font-medium text-white/95">{{ selectedFavoriteGame.title }}</strong>
                         </div>
 
                         <button
@@ -579,60 +582,58 @@
                       </div>
                     } @else {
 
-
-
-                    <div>
+                      <div class="relative !w-full">
                         <app-search-bar
+                          class="!block !w-full"
                           [value]="searchedQuery"
                           [placeholder]="'Search your games...'"
                           (search)="searchLibrary($event)">
                         </app-search-bar>
 
-
-
-                      @if (searchedQuery !== '' && userLibraryResponse.length) {
-                        <div class="search-results">
-                          @for (game of userLibraryResponse; track game.gameId) {
-                            <div
-                              class="flex min-h-[54px] w-full cursor-pointer items-center gap-2.5
+                        @if (searchedQuery !== '' && userLibraryResponse.length) {
+                          <div class="absolute left-0 top-full z-50 mt-2 w-full max-h-40 overflow-y-auto
+                             rounded-lg border border-[#30394A]
+                             bg-[#252D3A] p-1.5 shadow-xl shadow-black/30">
+                            @for (game of userLibraryResponse; track game.gameId) {
+                              <div
+                                class="flex min-h-[54px] w-full cursor-pointer items-center gap-2.5
                                rounded-[7px] p-[7px] transition-colors duration-150 hover:bg-white/7"
-                              (click)="selectFavoriteGame(game)">
-                              <img
-                                class="h-[54px] w-[42px] shrink-0 rounded-[5px] object-cover"
-                                [src]="getGameImageCoverLibrary(game)"
-                                [alt]="game.title">
+                                (click)="selectFavoriteGame(game)">
+                                <img
+                                  class="h-[54px] w-[42px] shrink-0 rounded-[5px] object-cover"
+                                  [src]="getGameImageCoverLibrary(game)"
+                                  [alt]="game.title">
 
-                              <div class="min-w-0">
-                                <h2 class="truncate text-base font-medium text-white/92">
-                                  {{ game.title }}
-                                </h2>
+                                <div class="min-w-0">
+                                  <h2 class="truncate text-base font-medium text-white/92">
+                                    {{ game.title }}
+                                  </h2>
+                                </div>
                               </div>
-                            </div>
-                          }
-                        </div>
-                      }
-                    </div>
-                      }
+                            }
+                          </div>
+                        }
+                      </div>
+                    }
                   } @else {
 
-                  @if (response.favoriteGame && !editFavoriteGame) {
-                    <div class="pinned-game px-3 py-2">
-                      <div class="pinned-game-cover">
-                        <img [src]="'data:image/jpeg;base64,' + response.favoriteGame?.gameCoverImage"
-                             alt="{{response.favoriteGame}}}">
+                    @if (response.favoriteGame && !editFavoriteGame) {
+                      <div class="pinned-game px-3 py-2">
+                        <div class="pinned-game-cover">
+                          <img [src]="'data:image/jpeg;base64,' + response.favoriteGame.gameCoverImage"
+                               alt="{{response.favoriteGame}}}">
+                        </div>
+                        <div class="pinned-game-info">
+                          <h1>{{ response.favoriteGame.title }}</h1>
+                          <span class="pinned-game-description">This game is displayed on your profile</span>
+                        </div>
                       </div>
-                      <div class="pinned-game-info">
-                        <span class="pinned-game-label"> Pinned Game <i class="fa-solid fa-thumbtack"></i></span>
-                        <h1>{{ response.favoriteGame?.title }}</h1>
-                        <span class="pinned-game-description">This game is displayed on your profile</span>
+                    } @else {
+                      <div class="text-gray-400 px-3 py-2">
+                        <span>No favorite game selected.</span>
                       </div>
-                    </div>
-                  } @else {
-                    <div class="text-gray-400 px-3 py-2">
-                      <span>No favorite game selected.</span>
-                    </div>
+                    }
                   }
-}
                 </div>
               </div>
 
@@ -711,7 +712,6 @@
                 </div>
               </div>
             </section>
-
 
 
           </section>

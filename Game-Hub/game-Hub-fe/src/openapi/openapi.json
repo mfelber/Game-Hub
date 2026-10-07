@@ -62,6 +62,37 @@
         }
       }
     },
+    "/profile/pin-game": {
+      "put": {
+        "tags": [
+          "user-profile-controller"
+        ],
+        "operationId": "pinGame",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PinGameRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/admin/unban/{userId}": {
       "put": {
         "tags": [
@@ -537,38 +568,6 @@
               "application/json": {
                 "schema": {
                   "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/profile/pin-game/{gameId}": {
-      "post": {
-        "tags": [
-          "user-profile-controller"
-        ],
-        "operationId": "pinGame",
-        "parameters": [
-          {
-            "name": "gameId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "integer",
-                  "format": "int64"
                 }
               }
             }
@@ -2844,6 +2843,15 @@
           }
         }
       },
+      "PinGameRequest": {
+        "type": "object",
+        "properties": {
+          "gameId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
       "GameUpdateRequest": {
         "required": [
           "ageRatingId",
@@ -3705,13 +3713,13 @@
               "$ref": "#/components/schemas/SubtitleResponse"
             }
           },
-          "inCart": {
-            "type": "boolean"
-          },
           "inWishList": {
             "type": "boolean"
           },
           "inLibrary": {
+            "type": "boolean"
+          },
+          "inCart": {
             "type": "boolean"
           }
         }
