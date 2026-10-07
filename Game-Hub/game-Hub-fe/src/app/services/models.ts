@@ -44,6 +44,7 @@ export type { PageResponseGameResponse } from './models/page-response-game-respo
 export type { PageResponseUserCommunityResponse } from './models/page-response-user-community-response';
 export type { PageResponseUserLibraryResponse } from './models/page-response-user-library-response';
 export type { PageResponseWishlistResponse } from './models/page-response-wishlist-response';
+export type { PinGameRequest } from './models/pin-game-request';
 export type { PlatformResponse } from './models/platform-response';
 export type { PrivacySettingsResponse } from './models/privacy-settings-response';
 export type { RecentGamesResponse } from './models/recent-games-response';
@@ -59,6 +60,7 @@ export type { SuspendAccountRequest } from './models/suspend-account-request';
 export type { SystemRequirements } from './models/system-requirements';
 export type { TokenExpiredResponse } from './models/token-expired-response';
 export type { UnitSizeResponse } from './models/unit-size-response';
+export type { UpdateBioRequest } from './models/update-bio-request';
 export type { UpdateCommunitySettingsRequest } from './models/update-community-settings-request';
 export type { UpdatePrivacySettingsRequest } from './models/update-privacy-settings-request';
 export type { UpdateStoreSettingsRequest } from './models/update-store-settings-request';

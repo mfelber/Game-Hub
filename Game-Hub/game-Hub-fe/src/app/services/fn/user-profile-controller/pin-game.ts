@@ -8,15 +8,16 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { PinGameRequest } from '../../models/pin-game-request';
 
 export interface PinGame$Params {
-  gameId: number;
+      body: PinGameRequest
 }
 
 export function pinGame(http: HttpClient, rootUrl: string, params: PinGame$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
-  const rb = new RequestBuilder(rootUrl, pinGame.PATH, 'post');
+  const rb = new RequestBuilder(rootUrl, pinGame.PATH, 'put');
   if (params) {
-    rb.path('gameId', params.gameId, {});
+    rb.body(params.body, 'application/json');
   }
 
   return http.request(
@@ -29,4 +30,4 @@ export function pinGame(http: HttpClient, rootUrl: string, params: PinGame$Param
   );
 }
 
-pinGame.PATH = '/profile/pin-game/{gameId}';
+pinGame.PATH = '/profile/pin-game';

@@ -72,6 +72,9 @@
       ],
       "@spartan/switch": [
         "./libs/ui/switch/src/index.ts"
+      ],
+      "@spartan/sonner": [
+        "./libs/ui/sonner/src/index.ts"
       ]
     }
   },

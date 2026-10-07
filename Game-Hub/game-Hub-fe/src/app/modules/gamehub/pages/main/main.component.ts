@@ -1,12 +1,14 @@
 import {AfterViewInit, Component} from '@angular/core';
 import {NavigationEnd, Router, RouterOutlet} from '@angular/router';
 import {MenuComponent} from '../../components/menu/menu.component';
+import {HlmToaster} from '@spartan/sonner';
 
 @Component({
   selector: 'app-main',
   imports: [
     RouterOutlet,
-    MenuComponent
+    MenuComponent,
+    HlmToaster
   ],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'

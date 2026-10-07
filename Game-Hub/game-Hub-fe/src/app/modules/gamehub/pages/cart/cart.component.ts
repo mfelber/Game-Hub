@@ -12,6 +12,7 @@ import {
   HlmDropdownMenu, HlmDropdownMenuItem,
   HlmDropdownMenuTrigger
 } from '@spartan/dropdown-menu';
+import {RefreshService} from '../../../../services/fn/refresh-service/refresh-service';
 
 @Component({
   selector: 'app-cart',

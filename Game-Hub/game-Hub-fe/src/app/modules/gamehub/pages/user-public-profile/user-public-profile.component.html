@@ -51,6 +51,9 @@
                   }
                 </div>
                 <div class="user-info">
+                  <span class="location">
+                      <img [src]="userResponse.country?.iconPath" class="w-8 h-5 rounded-sm"/>
+                    </span>
                   <div class="username-row">
                     <h1>{{ userResponse.username }}</h1>
                 <span class="status" [ngClass]="{
@@ -71,9 +74,6 @@
                   </div>
                   <div class="member-info">
                     <span>Member since {{ userResponse.joinedDate }}</span>
-                    <span class="location">
-                      <img [src]="userResponse.country?.iconPath"/>
-                    </span>
                   </div>
                 </div>
                 <div class="profile-actions">

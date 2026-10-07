@@ -31,6 +31,68 @@
     }
   ],
   "paths": {
+    "/profile/update-bio": {
+      "put": {
+        "tags": [
+          "user-profile-controller"
+        ],
+        "operationId": "updateBio",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBioRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/profile/pin-game": {
+      "put": {
+        "tags": [
+          "user-profile-controller"
+        ],
+        "operationId": "pinGame",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PinGameRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/admin/unban/{userId}": {
       "put": {
         "tags": [
@@ -444,37 +506,6 @@
         }
       }
     },
-    "/profile/update-bio": {
-      "post": {
-        "tags": [
-          "user-profile-controller"
-        ],
-        "operationId": "updateBio",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserUpdateRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "integer",
-                  "format": "int64"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/profile/status/online": {
       "post": {
         "tags": [
@@ -537,38 +568,6 @@
               "application/json": {
                 "schema": {
                   "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/profile/pin-game/{gameId}": {
-      "post": {
-        "tags": [
-          "user-profile-controller"
-        ],
-        "operationId": "pinGame",
-        "parameters": [
-          {
-            "name": "gameId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "integer",
-                  "format": "int64"
                 }
               }
             }
@@ -2834,6 +2833,25 @@
   },
   "components": {
     "schemas": {
+      "UpdateBioRequest": {
+        "type": "object",
+        "properties": {
+          "bio": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string"
+          }
+        }
+      },
+      "PinGameRequest": {
+        "type": "object",
+        "properties": {
+          "gameId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
       "GameUpdateRequest": {
         "required": [
           "ageRatingId",
@@ -3695,13 +3713,13 @@
               "$ref": "#/components/schemas/SubtitleResponse"
             }
           },
-          "inCart": {
+          "inWishList": {
             "type": "boolean"
           },
           "inLibrary": {
             "type": "boolean"
           },
-          "inWishList": {
+          "inCart": {
             "type": "boolean"
           }
         }
@@ -4267,6 +4285,63 @@
       "UserSettingsResponse": {
         "type": "object",
         "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "userName": {
+            "type": "string"
+          },
+          "joinedDate": {
+            "type": "string"
+          },
+          "level": {
+            "$ref": "#/components/schemas/LevelResponse"
+          },
+          "email": {
+            "type": "string"
+          },
+          "bio": {
+            "type": "string"
+          },
+          "country": {
+            "$ref": "#/components/schemas/CountryResponse"
+          },
+          "userProfilePicture": {
+            "type": "string",
+            "format": "byte"
+          },
+          "bannerImage": {
+            "type": "string",
+            "format": "byte"
+          },
+          "bannerType": {
+            "type": "string"
+          },
+          "predefinedBannerPath": {
+            "type": "string"
+          },
+          "profileColor": {
+            "type": "string"
+          },
+          "cardColor": {
+            "$ref": "#/components/schemas/CardColorResponse"
+          },
+          "favoriteGenres": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GenreResponse"
+            }
+          },
+          "favoriteGame": {
+            "$ref": "#/components/schemas/UserLibraryResponse"
+          },
           "communitySettingsResponse": {
             "type": "array",
             "items": {

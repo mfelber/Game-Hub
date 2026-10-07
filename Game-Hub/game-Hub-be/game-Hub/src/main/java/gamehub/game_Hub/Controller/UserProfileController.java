@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,6 +22,8 @@ import org.springframework.web.multipart.MultipartFile;
 import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Repository.user.UserRepository;
 import gamehub.game_Hub.Request.BannerRequest;
+import gamehub.game_Hub.Request.PinGameRequest;
+import gamehub.game_Hub.Request.UpdateBioRequest;
 import gamehub.game_Hub.Response.RecentGamesResponse;
 import gamehub.game_Hub.Response.StatusResponse;
 import gamehub.game_Hub.Response.UserLibraryResponse;
@@ -33,6 +36,7 @@ import gamehub.game_Hub.Service.UserService;
 import gamehub.game_Hub.Request.UserUpdateRequest;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -85,10 +89,10 @@ public class UserProfileController {
   }
 
   // Allows a user to update their bio
-  @PostMapping("/update-bio")
+  @PutMapping("/update-bio")
   public ResponseEntity<Long> updateBio(final Authentication connectedUser,
-      @RequestBody final UserUpdateRequest userUpdateRequest) {
-  return ResponseEntity.ok(userService.updateBio(connectedUser, userUpdateRequest));
+      @RequestBody @Valid final UpdateBioRequest userUpdateBioRequest) {
+  return ResponseEntity.ok(userService.updateBio(connectedUser, userUpdateBioRequest));
   }
 
   // Allows a user to update their favorite genres
@@ -175,9 +179,9 @@ public class UserProfileController {
     return ResponseEntity.ok(libraryService.searchLibraryGames(query, connectedUser));
   }
 
-  @PostMapping("/pin-game/{gameId}")
-  public ResponseEntity<Long> pinGame(Authentication connectedUser, @PathVariable Long gameId) {
-    return ResponseEntity.ok(userService.pinGame(connectedUser, gameId));
+  @PutMapping("/pin-game")
+  public ResponseEntity<Long> pinGame(Authentication connectedUser, @RequestBody PinGameRequest request) {
+    return ResponseEntity.ok(userService.pinGame(connectedUser, request));
   }
 
   @GetMapping("/get-recent-games")

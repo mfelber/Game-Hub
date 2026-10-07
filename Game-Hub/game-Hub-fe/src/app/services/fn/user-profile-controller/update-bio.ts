@@ -8,14 +8,14 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { UserUpdateRequest } from '../../models/user-update-request';
+import { UpdateBioRequest } from '../../models/update-bio-request';
 
 export interface UpdateBio$Params {
-      body: UserUpdateRequest
+      body: UpdateBioRequest
 }
 
 export function updateBio(http: HttpClient, rootUrl: string, params: UpdateBio$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
-  const rb = new RequestBuilder(rootUrl, updateBio.PATH, 'post');
+  const rb = new RequestBuilder(rootUrl, updateBio.PATH, 'put');
   if (params) {
     rb.body(params.body, 'application/json');
   }

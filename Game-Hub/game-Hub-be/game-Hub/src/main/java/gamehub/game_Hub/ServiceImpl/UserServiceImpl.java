@@ -3,6 +3,7 @@ package gamehub.game_Hub.ServiceImpl;
 import static gamehub.game_Hub.enums.Status.*;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -26,6 +27,8 @@ import gamehub.game_Hub.Repository.genre.GenreRepository;
 import gamehub.game_Hub.Repository.user.UserRepository;
 import gamehub.game_Hub.Mapper.UserMapper;
 import gamehub.game_Hub.Request.BannerRequest;
+import gamehub.game_Hub.Request.PinGameRequest;
+import gamehub.game_Hub.Request.UpdateBioRequest;
 import gamehub.game_Hub.Response.StatusResponse;
 import gamehub.game_Hub.Response.UserLibraryResponse;
 import gamehub.game_Hub.Response.UserNotificationsResponse;
@@ -66,6 +69,11 @@ public class UserServiceImpl implements UserService {
         .orElseThrow(
             () -> new EntityNotFoundException("No card color found with id: " + userUpdateRequest.getCardColorId()));
 
+    boolean emailChanged = !Objects.equals(
+        user.getEmail(),
+        userUpdateRequest.getEmail()
+    );
+
     user = user.toBuilder()
         .firstName(userUpdateRequest.getFirstName())
         .lastName(userUpdateRequest.getLastName())
@@ -74,6 +82,10 @@ public class UserServiceImpl implements UserService {
         .country(userUpdateRequest.getCountry())
         .cardColor(cardColor)
         .build();
+
+    if (emailChanged) {
+      user = user.toBuilder().status(OFFLINE).build();
+    }
 
     return userRepository.save(user).getId();
   }
@@ -133,15 +145,21 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public Long pinGame(final Authentication connectedUser, final Long gameId) {
+  public Long pinGame(final Authentication connectedUser, final PinGameRequest request) {
     User authUser = (User) connectedUser.getPrincipal();
     User user = userRepository.findById(authUser.getId())
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
 
-    Game game = gameRepository.findById(gameId)
-        .orElseThrow(() -> new EntityNotFoundException("No game found with id: " + gameId));
 
-    user.setFavoriteGame(game);
+
+    if (request.gameId() == null) {
+      user.setFavoriteGame(null);
+    } else {
+      Game game = gameRepository.findById(request.gameId())
+          .orElseThrow(() -> new EntityNotFoundException("No game found with id: " + request.gameId()));
+      user.setFavoriteGame(game);
+    }
+
 
     userRepository.save(user);
 
@@ -239,13 +257,13 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public Long updateBio(final Authentication connectedUser, final UserUpdateRequest userUpdateRequest) {
+  public Long updateBio(final Authentication connectedUser, final UpdateBioRequest request) {
     User authUser = (User) connectedUser.getPrincipal();
     User user = userRepository.findById(authUser.getId())
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
 
     user = user.toBuilder()
-        .bio(userUpdateRequest.getBio())
+        .bio(request.bio())
         .build();
 
     return userRepository.save(user).getId();
