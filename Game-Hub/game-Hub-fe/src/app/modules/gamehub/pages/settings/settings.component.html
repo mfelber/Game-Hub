@@ -543,7 +543,7 @@
                   </div>
                 </div>
                 <div class="border-t border-[#252b36]"></div>
-                <div class="w-full px-2 py-2 relative">
+                <div class="w-full min-h-[124px] px-2 py-2 relative">
                   @if (isLoading) {
                     <div
                       class="absolute inset-0 z-30 flex items-center justify-center
@@ -663,7 +663,7 @@
                   </div>
                 </div>
                 <div class="border-t border-[#252b36]"></div>
-                <div class=" border-[#252b36] px-4 py-3">
+                <div class=" border-[#252b36] px-4 py-3 relative">
                   @if (editGenres) {
                     <div class=" flex gap-2">
                       @for (genre of genreResponse; track genre) {
@@ -692,6 +692,15 @@
                       }
                     </div>
                   } @else {
+                    @if (isLoading) {
+                      <div
+                        class="absolute inset-0 z-30 flex items-center justify-center
+                      rounded-b bg-[#0b0e14]/75 backdrop-blur-[2px]">
+
+                        <app-loading></app-loading>
+
+                      </div>
+                    }
                     @if (response.favoriteGenres?.length) {
                       <div class=" flex gap-2">
                         @for (genre of response.favoriteGenres; track genre) {

@@ -5,9 +5,6 @@ import {UserProfileControllerService} from '../../../../services/services/user-p
 import { DatePipe, NgClass, NgStyle } from '@angular/common';
 import {StoreControllerService} from '../../../../services/services';
 import {FormsModule} from '@angular/forms';
-import {UserUpdateRequest} from '../../../../services/models/user-update-request';
-import {AuthenticationService} from '../../../../services/services/authentication.service';
-import {AuthenticationRequest} from '../../../../services/models/authentication-request';
 import {UserActionsComponent} from '../../components/user-actions/user-actions.component';
 import {UserLibraryResponse} from '../../../../services/models/user-library-response';
 import {RecentGamesResponse} from '../../../../services/models/recent-games-response';
@@ -32,8 +29,7 @@ export class UserPrivateProfileComponent implements OnInit{
   constructor(
     private router: Router,
     private userService: UserProfileControllerService,
-    private gameService: StoreControllerService,
-    private authenticationService: AuthenticationService,
+    private gameService: StoreControllerService
   ) {
   }
 
@@ -44,8 +40,6 @@ export class UserPrivateProfileComponent implements OnInit{
   profilePicture: File | null = null;
 
   isLoading = false;
-
-  userHasProfilePicture = true
 
   recentGamesResponse: RecentGamesResponse[] = [];
 
@@ -60,19 +54,6 @@ export class UserPrivateProfileComponent implements OnInit{
     libraryCount: 0,
     profileColor: '',
   };
-  userRequest: UserUpdateRequest = {
-    email: this.userResponse.email,
-    // cardColorId: this.selectedColorId!
-  };
-
-  bioUpdateRequest: UserUpdateRequest = {
-    bio: ''
-  }
-
-  authenticationRequest: AuthenticationRequest = {
-    email: '',
-    password: ''
-  }
 
   loadUserPrivateProfile() {
     this.isLoading = true;
@@ -84,8 +65,6 @@ export class UserPrivateProfileComponent implements OnInit{
       next: ({user, recentGames}) => {
         this.userResponse = user;
         console.log(user);
-
-        this.userHasProfilePicture = !!user.userProfilePicture;
 
         this.recentGamesResponse = recentGames;
         this.isLoading = false;
@@ -106,12 +85,11 @@ export class UserPrivateProfileComponent implements OnInit{
     return 'https://images.pexels.com/photos/1054655/pexels-photo-1054655.jpeg';
   }
 
-
   getProfilePicture(user: UserPrivateResponse) {
     if (user.userProfilePicture) {
       return 'data:image/jpeg;base64,' + user.userProfilePicture;
     }
-    return '';
+    return user.userProfilePicture;
   }
 
   getBanner(user: UserPrivateResponse) {
@@ -134,24 +112,6 @@ export class UserPrivateProfileComponent implements OnInit{
         console.error('Error with loading game:', err);
       }
     });
-  }
-
-  getUserBio() {
-    this.userService.getBio().subscribe({
-      next: (response) => {
-        this.userResponse.bio = response.bio
-      }
-    })
-  }
-
-  // TODO use this method in settings page
-  sendResetLink() {
-    this.authenticationService.processForgotPasswordRequest({
-      body: this.authenticationRequest
-    }).subscribe({
-      next: () => {
-      }
-    })
   }
 
   goToWishList() {

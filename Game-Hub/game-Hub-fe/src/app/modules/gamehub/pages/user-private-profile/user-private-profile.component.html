@@ -24,13 +24,13 @@
                [ngStyle]="{'background-color': userResponse.cardColor?.colorCode}">
             <div class="profile-main">
               <div class="avatar-wrapper">
-                @if (userHasProfilePicture) {
+                @if (userResponse.userProfilePicture) {
                   <img
                     [src]="getProfilePicture(userResponse)"
                     class="avatar"
                   />
                 }
-                @if (!userHasProfilePicture) {
+                @if (!userResponse.userProfilePicture) {
                   <img
                     src="../../../../../assets/profilePicture/default_profile_picture.svg"
                     class="avatar"

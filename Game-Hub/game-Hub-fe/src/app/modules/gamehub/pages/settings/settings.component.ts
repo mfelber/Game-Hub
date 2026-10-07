@@ -90,6 +90,8 @@ export class SettingsComponent implements OnInit {
   originalCommunitySettingsResponse: CommunitySettingsResponse[] = [];
   communitySettingsResponse: CommunitySettingsResponse[] = [];
 
+  userLibraryResponse: UserLibraryResponse[] = [];
+
   response: UserSettingsResponse = {};
 
   userRequest: UserUpdateRequest = {};
@@ -150,33 +152,10 @@ export class SettingsComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('Initial tab:', this.activeTab);
     this.getCountries();
     this.loadProfile();
     this.loadColorsForCard();
     this.getGenres();
-    this.userService.getUserSettings().subscribe({
-        next: (userSettings) => {
-          console.log(userSettings);
-          this.response = userSettings;
-          this.privacySettingsResponse = userSettings.privacySettingsResponse ?? []
-          this.originalPrivacySettingsResponse = userSettings.privacySettingsResponse?.map(setting => ({
-            ...setting,
-          })) ?? [];
-
-          this.storeSettingsResponse = userSettings.storeSettingsResponse ?? [];
-          this.originalStoreSettingsResponse = userSettings.storeSettingsResponse?.map(setting => ({
-            ...setting
-          })) ?? [];
-
-
-          this.communitySettingsResponse = userSettings.communitySettingsResponse ?? [];
-          this.originalCommunitySettingsResponse = userSettings.communitySettingsResponse?.map(setting => ({
-            ...setting,
-          })) ?? [];
-        }
-      }
-    )
   }
 
   loadProfile() {
@@ -184,8 +163,10 @@ export class SettingsComponent implements OnInit {
     this.userService.getUserSettings().subscribe({
       next: (profile) => {
         this.response = profile;
+
         this.originalColorId = profile.cardColor?.id!;
         this.selectedColorId = profile.cardColor?.id!;
+
         this.userRequest = {
           email: profile.email,
           firstName: profile.firstName,
@@ -206,17 +187,60 @@ export class SettingsComponent implements OnInit {
         this.originalFavoriteGame = this.response.favoriteGame ?? null;
         this.selectedFavoriteGame = this.originalFavoriteGame;
 
+        this.privacySettingsResponse = profile.privacySettingsResponse ?? []
+        this.originalPrivacySettingsResponse = profile.privacySettingsResponse?.map(setting => ({
+          ...setting,
+        })) ?? [];
+
+        this.storeSettingsResponse = profile.storeSettingsResponse ?? [];
+        this.originalStoreSettingsResponse = profile.storeSettingsResponse?.map(setting => ({
+          ...setting
+        })) ?? [];
+
+
+        this.communitySettingsResponse = profile.communitySettingsResponse ?? [];
+        this.originalCommunitySettingsResponse = profile.communitySettingsResponse?.map(setting => ({
+          ...setting,
+        })) ?? [];
+
         this.isSavingAppearance = false;
         this.isLoading = false;
-      },  error: () => {
+      }, error: () => {
         this.toastService.error('Error loading profile profile');
         this.isSavingAppearance = true;
-        this.isLoading = true;
+        this.isLoading = false;
+      }
+    })
+  }
+  // =============================================
+
+  // ============ COUNTRIES =======================
+  getCountries() {
+    this.countryService.getAllCountries().subscribe({
+      next: (country) => {
+        this.allCountries = country.map(country => ({
+          name: country.name!,
+          iconPath: country.iconPath!,
+          countryName: country.countryName!,
+        }));
       }
     })
   }
 
-  private getGenres() {
+  selectCountry(country: any) {
+    this.selectedCountry = country;
+    this.userRequest.country = country.name;
+  }
+
+  getSelectedCountry() {
+    return this.allCountries.find(
+      country => country.name === this.userRequest.country
+    );
+  }
+  // ===========================================
+
+  // ============ GENRES =======================
+  getGenres() {
     this.gameService.getAllGenres().subscribe({
       next: (genres) => {
         this.genreResponse = genres;
@@ -225,6 +249,52 @@ export class SettingsComponent implements OnInit {
     })
   }
 
+  selectedGenre(id: number): void {
+    const genres = new Set(this.selectedGenres);
+
+    if (genres.has(id)) {
+      genres.delete(id);
+    } else {
+      genres.add(id);
+    }
+
+    this.selectedGenres = genres;
+  }
+
+  hasGenreChanges() {
+    const original = new Set(this.originalFavoriteGenresIds);
+
+    if (original.size !== this.selectedGenres.size) {
+      return true;
+    }
+
+    return [...original].some(id => !this.selectedGenres.has(id));
+  }
+
+  cancelEditFavoriteGenres() {
+    this.selectedGenres = new Set(this.originalFavoriteGenresIds);
+    this.editGenres = false;
+  }
+
+  saveFavoriteGenres() {
+    const selectedGenres = [...new Set([...this.selectedGenres])];
+
+    this.userService.updateFavoriteGenres({
+      body: selectedGenres
+    }).subscribe({
+      next: () => {
+        this.toastService.success('Favorite genres has been updated');
+        this.loadProfile();
+        this.editGenres = false;
+      },
+      error: (err) => {
+        this.toastService.error('Failed to update favorite genres');
+      }
+    })
+  }
+  // =============================================
+
+  // ============ CARD COLORS =======================
   loadColorsForCard() {
     this.cardService.getColors().subscribe({
       next: (colors) => {
@@ -233,80 +303,80 @@ export class SettingsComponent implements OnInit {
     })
   }
 
-  savePrivacySettings() {
-    const request: UserSettingsUpdateRequests = {
-      communitySettingsIds: [],
-      privacySettingsIds: this.privacySettingsResponse.map(setting => ({
-        settingId: setting.settingId!,
-        access: this.getAccessEnum(setting.access),
-      })),
-      storeSettingsIds: [],
+  selectColor(id: number, colorCode: string) {
+    console.log('Selected Color:', id, colorCode);
+    this.selectedColorCode = colorCode;
+    this.selectedColorId = id;
+    this.userRequest.cardColorId = id;
+  }
+
+  resetColor() {
+    this.selectedColorId = this.originalColorId;
+  }
+  // ========================================
+
+  // ============ PROFILE BASIC INFO =======================
+  hasProfileInfoChanges(): boolean {
+    const hasEmptyField =
+      !this.userRequest.username?.trim() ||
+      !this.userRequest.firstName?.trim() ||
+      !this.userRequest.lastName?.trim() ||
+      !this.userRequest.email?.trim() ||
+      !this.userRequest.country?.trim();
+
+    if (hasEmptyField) {
+      return false;
     }
 
-    this.settingsService.updateUserSettings({body: request}).subscribe({
-      next: response => {
-        this.originalPrivacySettingsResponse = this.privacySettingsResponse.map(setting => ({
-          settingId: setting.settingId,
-          access: setting.access
-        }));
+    return (
+      this.userRequest.username !== this.response.userName ||
+      this.userRequest.firstName !== this.response.firstName ||
+      this.userRequest.lastName !== this.response.lastName ||
+      this.userRequest.email !== this.response.email ||
+      this.userRequest.country !== this.response.country?.name
+    );
+  }
 
-        this.warningDialog.close();
+  saveBasicInfo() {
+    const emailChanged = this.response.email !== this.userRequest.email;
+
+    this.userService.updateUserProfile({
+      body: this.userRequest,
+    }).subscribe({
+      next: (profile) => {
+        if (emailChanged) {
+          this.toastService.success('Profile updated successfully')
+          localStorage.clear();
+          this.router.navigate(['login']);
+          return;
+        }
+
+        this.loadProfile();
+        this.toastService.success('Profile updated successfully');
+        this.editBasicInfo = false;
 
       },
-      error: error => {
-        console.log(error);
+      error: (err) => {
+        console.error('updateUserProfile failed:', err);
+        this.toastService.error('Failed to update profile');
       }
     })
   }
 
-  saveCommunitySettings() {
-    const request: UserSettingsUpdateRequests = {
-      communitySettingsIds: this.communitySettingsResponse.map(setting => ({
-        settingId: setting.settingId!,
-        access: this.getAccessEnum(setting.access),
-      })),
-      privacySettingsIds: [],
-      storeSettingsIds: [],
-    }
+  cancelEditBasicInfo() {
+    this.userRequest = {
+      username: this.response.userName,
+      firstName: this.response.firstName,
+      lastName: this.response.lastName,
+      email: this.response.email,
+      country: this.response.country?.name as undefined
+    };
 
-    this.settingsService.updateUserSettings({body: request}).subscribe({
-      next: response => {
-        this.originalCommunitySettingsResponse = this.communitySettingsResponse.map(setting => ({
-          settingId: setting.settingId,
-          access: setting.access
-        }))
-
-        this.warningDialog.close();
-      },
-      error: error => {
-        console.log(error);
-      }
-    })
+    this.editBasicInfo = false;
   }
+  // ========================================
 
-  saveStoreSettings() {
-    const request: UserSettingsUpdateRequests = {
-      communitySettingsIds: [],
-      privacySettingsIds: [],
-      storeSettingsIds: this.storeSettingsResponse.map(setting => ({
-        settingId: setting.settingId!,
-        disabled: setting.disabled
-      }))
-    }
-    console.log(request);
-    this.settingsService.updateUserSettings({body: request}).subscribe({
-      next: response => {
-        this.originalStoreSettingsResponse = this.storeSettingsResponse.map(setting => ({
-          ...setting,
-        }))
-        this.warningDialog.close();
-      },
-      error: error => {
-        console.log(error);
-      }
-    })
-  }
-
+  // ============ PROFILE APPEARANCE =======================
   hasProfileAppearanceChanges() {
     if (this.originalColorId !== this.selectedColorId) {
       return true;
@@ -328,6 +398,210 @@ export class SettingsComponent implements OnInit {
     return false;
   }
 
+  getSelectedBannerId(path: string | undefined): number | null {
+    if (!path) {
+      return null;
+    }
+
+    const match = path.match(/banner_(\d+)\.jpg$/);
+    return match ? Number(match[1]) : null;
+  }
+
+  selectedBanner(bannerId: number): void {
+    this.selectedBannerId = bannerId;
+    this.profileBanner = null;
+
+    if (bannerId === this.originalBannerId) {
+      this.previewBanner = undefined;
+      return;
+    }
+
+    this.previewBanner = `assets/banners/banner_${bannerId}.jpg`;
+  }
+
+  onBannerSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.profileBanner = input.files![0];
+
+    if (this.profileBanner) {
+      const reader = new FileReader();
+      this.selectedBannerId = null;
+      reader.onloadend = () => {
+        this.previewBanner = reader.result as string;
+      }
+      reader.readAsDataURL(this.profileBanner);
+    }
+  }
+
+  removeSelectedBanner() {
+    this.previewBanner = undefined;
+    this.selectedBannerId = this.originalBannerId;
+    this.profileBanner = null;
+  }
+
+  onProfilePicSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.profilePicture = input.files![0]
+    if (this.profilePicture) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.previewProfilePic = reader.result as string;
+      }
+      reader.readAsDataURL(this.profilePicture);
+    }
+  }
+
+  removeSelectedProfilePicture() {
+    this.previewProfilePic = undefined;
+    this.profilePicture = null;
+  }
+
+  cancelAppearance() {
+    this.editAppearance = false;
+    this.addCustomColor = false;
+
+    this.previewBanner = undefined;
+    this.profileBanner = null;
+    this.selectedBannerId = this.originalBannerId;
+
+    this.previewProfilePic = undefined;
+    this.profilePicture = null;
+
+    this.selectedColorId = this.originalColorId;
+  }
+
+  saveAppearance() {
+    console.log(this.userRequest);
+    console.log(this.previewBanner);
+    let request$: Observable<any> = of(null);
+
+    if (this.originalColorId !== this.selectedColorId) {
+      request$ = request$.pipe(
+        concatMap(() => this.saveProfileColor())
+      );
+    }
+
+    if (this.previewProfilePic) {
+      request$ = request$.pipe(
+        concatMap(() => this.saveProfilePicture())
+      );
+    }
+
+    if (this.selectedBannerId !== null) {
+      request$ = request$.pipe(
+        concatMap(() => this.savePredefinedBanner())
+      );
+    } else if (this.previewBanner) {
+      request$ = request$.pipe(
+        concatMap(() => this.saveBanner())
+      );
+    }
+
+    this.isSavingAppearance = true;
+    request$.subscribe({
+      next: () => {
+        this.toastService.success('Profile appearance updated successfully');
+        this.refreshService.triggerRefresh();
+        this.editAppearance = false;
+        this.previewBanner = undefined;
+        this.previewProfilePic = undefined;
+        this.profileBanner = null;
+        this.profilePicture = null;
+        this.loadProfile();
+      },
+      error: (err) => {
+        console.error('updateUserProfile failed:', err);
+        this.isSavingAppearance = false;
+        this.toastService.error('Failed to update profile appearance');
+      }
+    })
+  }
+  // =============================================
+
+  // ============ ABOUT ME =======================
+  hasAboutMeChanges() {
+    return this.response.bio !== this.originalBio;
+  }
+
+  cancelEditAboutMe() {
+    this.editAboutMe = false;
+    this.response.bio = this.originalBio;
+  }
+
+  saveAboutMe() {
+    this.userService.updateBio({
+      body: {
+        bio: this.response.bio,
+      }
+    }).subscribe({
+      next: () => {
+        this.editAboutMe = false;
+        this.toastService.success('About me has been updated');
+        this.loadProfile();
+      },
+      error: (err) => {
+        this.toastService.error('Failed to update About me');
+      }
+    })
+  }
+  // =============================================
+
+  // ============ FAVORITE GAME =======================
+  hasFavoriteGameChanges() {
+    return this.originalFavoriteGame?.gameId !== this.selectedFavoriteGame?.gameId;
+  }
+
+  searchLibrary(query: string) {
+    this.searchedQuery = query;
+    this.getLibraryGames(this.searchedQuery);
+  }
+
+  getLibraryGames(query: string) {
+    this.userService.getLibraryGames({
+      query: query
+    }).subscribe({
+      next: (result) => {
+        this.userLibraryResponse = result;
+      }
+    })
+  }
+
+  selectFavoriteGame(game: UserLibraryResponse) {
+    this.searchedQuery = '';
+    this.selectedFavoriteGame = game;
+    this.userLibraryResponse = [];
+  }
+
+  removeSelectedGame() {
+    this.selectedFavoriteGame = null;
+    this.searchedQuery = '';
+  }
+
+  cancelEditFavoriteGame() {
+    this.selectedFavoriteGame = this.originalFavoriteGame;
+    this.editFavoriteGame = false;
+  }
+
+  saveFavoriteGame() {
+    this.userService.pinGame({
+      body: {
+        gameId: this.selectedFavoriteGame?.gameId
+      }
+    }).subscribe({
+      next: () => {
+        this.toastService.success('Favorite game has been updated');
+        this.editFavoriteGame = false;
+        this.loadProfile();
+      },
+      error: (err) => {
+        console.log(err);
+        this.toastService.error('Failed to update favorite game');
+      }
+    })
+  }
+  // ==================================================
+
+  // ============ PRIVACY =======================
   isPrivacySettingsChanged(setting: PrivacySettingsResponse): boolean {
     const originalSettings = this.originalPrivacySettingsResponse.find(
       original => original.settingId === setting.settingId
@@ -342,11 +616,38 @@ export class SettingsComponent implements OnInit {
     );
   }
 
+  savePrivacySettings() {
+    const request: UserSettingsUpdateRequests = {
+      communitySettingsIds: [],
+      privacySettingsIds: this.privacySettingsResponse.map(setting => ({
+        settingId: setting.settingId!,
+        access: this.getAccessEnum(setting.access),
+      })),
+      storeSettingsIds: [],
+    }
+
+    this.settingsService.updateUserSettings({body: request}).subscribe({
+      next: response => {
+        this.originalPrivacySettingsResponse = this.privacySettingsResponse.map(setting => ({
+          settingId: setting.settingId,
+          access: setting.access
+        }));
+        this.toastService.success('Privacy settings updated successfully');
+        this.warningDialog.close();
+      },
+      error: error => {
+        this.toastService.error('Failed to update privacy settings');
+        console.log(error);
+      }
+    })
+  }
+  // ============================================
+
+  // ============ COMMUNITY =======================
   isCommunitySettingsChanged(setting: CommunitySettingsResponse): boolean {
     const originalSettings = this.originalCommunitySettingsResponse.find(
       original => original.settingId === setting.settingId
     );
-
     return originalSettings?.access !== setting.access;
   }
 
@@ -354,11 +655,39 @@ export class SettingsComponent implements OnInit {
     return this.communitySettingsResponse.some(setting => this.isCommunitySettingsChanged(setting));
   }
 
+  saveCommunitySettings() {
+    const request: UserSettingsUpdateRequests = {
+      communitySettingsIds: this.communitySettingsResponse.map(setting => ({
+        settingId: setting.settingId!,
+        access: this.getAccessEnum(setting.access),
+      })),
+      privacySettingsIds: [],
+      storeSettingsIds: [],
+    }
+
+    this.settingsService.updateUserSettings({body: request}).subscribe({
+      next: response => {
+        this.originalCommunitySettingsResponse = this.communitySettingsResponse.map(setting => ({
+          settingId: setting.settingId,
+          access: setting.access
+        }))
+
+        this.toastService.success('Community settings updated successfully');
+        this.warningDialog.close();
+      },
+      error: error => {
+        this.toastService.error('Failed to update community settings');
+        console.log(error);
+      }
+    })
+  }
+  // ==============================================
+
+  // ============ STORE =======================
   isStoreSettingsChanged(setting: StoreSettingsResponse): boolean {
     const originalSettings = this.originalStoreSettingsResponse.find(
       original => original.settingId === setting.settingId
     );
-
     return originalSettings?.disabled !== setting.disabled;
   }
 
@@ -366,25 +695,35 @@ export class SettingsComponent implements OnInit {
     return this.storeSettingsResponse.some(setting => this.isStoreSettingsChanged(setting));
   }
 
-  hasProfileInfoChanges(): boolean {
-    const hasEmptyField =
-      !this.userRequest.username?.trim() ||
-      !this.userRequest.firstName?.trim() ||
-      !this.userRequest.lastName?.trim() ||
-      !this.userRequest.email?.trim() ||
-      !this.userRequest.country?.trim();
-
-    if (hasEmptyField) {
-      return false;
+  saveStoreSettings() {
+    const request: UserSettingsUpdateRequests = {
+      communitySettingsIds: [],
+      privacySettingsIds: [],
+      storeSettingsIds: this.storeSettingsResponse.map(setting => ({
+        settingId: setting.settingId!,
+        disabled: setting.disabled
+      }))
     }
+    console.log(request);
+    this.settingsService.updateUserSettings({body: request}).subscribe({
+      next: response => {
+        this.originalStoreSettingsResponse = this.storeSettingsResponse.map(setting => ({
+          ...setting,
+        }))
+        this.toastService.success('Store settings updated successfully');
+        this.warningDialog.close();
+      },
+      error: error => {
+        this.toastService.error('Failed to update store settings');
+        console.log(error);
+      }
+    })
+  }
+  // ==========================================
 
-    return (
-      this.userRequest.username !== this.response.userName ||
-      this.userRequest.firstName !== this.response.firstName ||
-      this.userRequest.lastName !== this.response.lastName ||
-      this.userRequest.email !== this.response.email ||
-      this.userRequest.country !== this.response.country?.name
-    );
+  // ============ SETTINGS TABS / UNSAVED CHANGES =======================
+  get unsavedChangesTitle(): string {
+    return `${this.activeTab}`;
   }
 
   hasUnsavedChanges(): boolean {
@@ -450,7 +789,9 @@ export class SettingsComponent implements OnInit {
       console.log(this.activeTab);
     }
   }
+  // ====================================================================
 
+  // ============ HELPERS =======================
   private getAccessEnum(
     access: string | undefined
   ): 'EVERYONE' | 'FRIENDS' | 'NO_ONE' {
@@ -483,10 +824,6 @@ export class SettingsComponent implements OnInit {
     }
   }
 
-  get unsavedChangesTitle(): string {
-    return `${this.activeTab}`;
-  }
-
   getGameImageCover(game: UserSettingsResponse): string {
     if (game.favoriteGame) {
       return 'data:image/jpeg;base64,' + game.favoriteGame;
@@ -508,215 +845,15 @@ export class SettingsComponent implements OnInit {
     return user.predefinedBannerPath;
   }
 
-  private getCountries() {
-    this.countryService.getAllCountries().subscribe({
-      next: (country) => {
-        this.allCountries = country.map(country => ({
-          name: country.name!,
-          iconPath: country.iconPath!,
-          countryName: country.countryName!,
-        }));
-      }
-    })
-  }
-
-  selectCountry(country: any) {
-    this.selectedCountry = country;
-    this.userRequest.country = country.name;
-  }
-
-  getSelectedCountry() {
-    return this.allCountries.find(
-      country => country.name === this.userRequest.country
-    );
-  }
-
-  getSelectedBannerId(path: string | undefined):number | null {
-    if (!path) {
-      return null;
-    }
-
-    const match = path.match(/banner_(\d+)\.jpg$/);
-    return match ? Number(match[1]) : null;
-    }
-
-  saveBasicInfo() {
-    const emailChanged = this.response.email !== this.userRequest.email;
-
-    this.userService.updateUserProfile({
-      body: this.userRequest,
-    }).subscribe({
-      next: (profile) => {
-        if (emailChanged) {
-          this.toastService.success('Profile updated successfully')
-          localStorage.clear();
-          this.router.navigate(['login']);
-          return;
-        }
-
-        this.loadProfile();
-        this.toastService.success('Profile updated successfully');
-        this.editBasicInfo = false;
-
-      },
-      error: (err) => {
-        console.error('updateUserProfile failed:', err);
-        this.toastService.error('Failed to update profile');
-      }
-    })
-  }
-
-
-  cancelEditBasicInfo() {
-    this.userRequest = {
-      username: this.response.userName,
-      firstName: this.response.firstName,
-      lastName: this.response.lastName,
-      email: this.response.email,
-      country: this.response.country?.name as undefined
-    };
-
-    this.editBasicInfo = false;
-  }
-
-  cancelAppearance() {
-    this.editAppearance = false;
-    this.addCustomColor = false;
-
-    this.previewBanner = undefined;
-    this.profileBanner = null;
-    this.selectedBannerId = this.originalBannerId;
-
-    this.previewProfilePic = undefined;
-    this.profilePicture = null;
-
-    this.selectedColorId = this.originalColorId;
-
-  }
-
-  selectCustomColor() {
-    console.log(this.newCustomColor);
-  }
-
-  hasSelectedFavoriteGame():boolean {
-    return this.selectedFavoriteGame !== null;
-}
-
-  onBannerSelected(event: Event) {
-    const input = event.target as HTMLInputElement;
-    this.profileBanner = input.files![0];
-
-    if (this.profileBanner) {
-      const reader = new FileReader();
-      this.selectedBannerId = null;
-      reader.onloadend = () => {
-        this.previewBanner = reader.result as string;
-      }
-      reader.readAsDataURL(this.profileBanner);
-    }
-  }
-
-  removeSelectedBanner() {
-    this.previewBanner = undefined;
-    this.selectedBannerId = this.originalBannerId;
-    this.profileBanner = null;
-  }
-
-  selectedBanner(bannerId: number): void {
-    this.selectedBannerId = bannerId;
-    this.profileBanner = null;
-
-    if (bannerId === this.originalBannerId) {
-      this.previewBanner = undefined;
-      return;
-    }
-
-    this.previewBanner = `assets/banners/banner_${bannerId}.jpg`;
-  }
-
   getProfilePicture(user: UserPrivateResponse) {
     if (user.userProfilePicture) {
       return 'data:image/jpeg;base64,' + user.userProfilePicture;
     }
     return user.userProfilePicture;
   }
+  // ============================================
 
-  onProfilePicSelected(event: Event) {
-    const input = event.target as HTMLInputElement;
-    this.profilePicture = input.files![0]
-    if (this.profilePicture) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.previewProfilePic = reader.result as string;
-      }
-      reader.readAsDataURL(this.profilePicture);
-    }
-  }
-
-  removeSelectedProfilePicture() {
-    this.previewProfilePic = undefined;
-    this.profilePicture = null;
-  }
-
-  selectColor(id: number, colorCode: string) {
-    console.log('Selected Color:', id, colorCode);
-    this.selectedColorCode = colorCode;
-    this.selectedColorId = id;
-    this.userRequest.cardColorId = id;
-  }
-
-  resetColor() {
-    this.selectedColorId = this.originalColorId;
-  }
-
-  saveAppearance() {
-    console.log(this.userRequest);
-    console.log(this.previewBanner);
-    let request$: Observable<any> = of(null);
-
-    if (this.originalColorId !== this.selectedColorId) {
-      request$ = request$.pipe(
-        concatMap(() => this.saveProfileColor())
-      );
-    }
-
-    if (this.previewProfilePic) {
-      request$ = request$.pipe(
-        concatMap(() => this.saveProfilePicture())
-      );
-    }
-
-    if (this.selectedBannerId !== null) {
-      request$ = request$.pipe(
-        concatMap(() => this.savePredefinedBanner())
-      );
-    } else if (this.previewBanner) {
-      request$ = request$.pipe(
-        concatMap(() => this.saveBanner())
-      );
-    }
-
-    this.isSavingAppearance = true;
-    request$.subscribe({
-      next: () => {
-        this.toastService.success('Profile appearance updated successfully');
-        this.refreshService.triggerRefresh();
-        this.editAppearance = false;
-        this.previewBanner = undefined;
-        this.previewProfilePic = undefined;
-        this.profileBanner = null;
-        this.profilePicture = null;
-        this.loadProfile();
-      },
-      error: (err) => {
-        console.error('updateUserProfile failed:', err);
-        this.isSavingAppearance = false;
-        this.toastService.error('Failed to update profile appearance');
-      }
-    })
-  }
-
-
+  // ============ API HELPERS =======================
   private saveProfileColor(): Observable<any> {
     return this.userService.updateUserProfile({
       body: this.userRequest,
@@ -733,7 +870,7 @@ export class SettingsComponent implements OnInit {
 
   private saveBanner(): Observable<any> {
     return this.userService.uploadBannerImage({
-      body : {
+      body: {
         file: this.profileBanner!
       }
     })
@@ -747,131 +884,7 @@ export class SettingsComponent implements OnInit {
       }
     })
   }
-
-  cancelEditAboutMe() {
-    this.editAboutMe = false;
-    this.response.bio = this.originalBio;
-  }
-
-  hasAboutMeChanges() {
-    return this.response.bio !== this.originalBio;
-  }
-
-  saveAboutMe() {
-    this.userService.updateBio({
-      body: {
-        bio: this.response.bio,
-      }
-    }).subscribe({
-      next: () => {
-        this.editAboutMe = false;
-        this.toastService.success('About me has been updated');
-      },
-      error: (err) => {
-        this.toastService.error('Failed to update About me');
-      }
-    })
-  }
-
-  cancelEditFavoriteGenres() {
-    this.selectedGenres = new Set(this.originalFavoriteGenresIds);
-    this.editGenres = false;
-  }
-
-  selectedGenre(id: number): void {
-    const genres = new Set(this.selectedGenres);
-
-    if (genres.has(id)) {
-      genres.delete(id);
-    } else {
-      genres.add(id);
-    }
-
-    this.selectedGenres = genres;
-  }
-
-  hasGenreChanges() {
-    const original = new Set(this.originalFavoriteGenresIds);
-
-    if (original.size !== this.selectedGenres.size) {
-      return true;
-    }
-
-    return [...original].some(id => !this.selectedGenres.has(id));
-  }
-
-  saveFavoriteGenres() {
-    const selectedGenres= [...new Set([...this.selectedGenres])];
-
-    this.userService.updateFavoriteGenres({
-      body: selectedGenres
-    }).subscribe({
-      next: () => {
-        this.toastService.success('Favorite genres has been updated');
-        this.loadProfile();
-        this.editGenres = false;
-      },
-      error: (err) => {
-        this.toastService.error('Failed to update favorite genres');
-      }
-    })
-  }
-
-  cancelEditFavoriteGame() {
-    this.selectedFavoriteGame = this.originalFavoriteGame;
-    this.editFavoriteGame = false;
-  }
-
-  searchLibrary(query: string) {
-    this.searchedQuery = query;
-    this.getLibraryGames(this.searchedQuery);
-  }
-  userLibraryResponse: UserLibraryResponse[] = [];
-  getLibraryGames(query: string) {
-    this.userService.getLibraryGames({
-      query: query
-    }).subscribe({
-      next: (result) => {
-        this.userLibraryResponse = result;
-      }
-    })
-  }
-
-
-
-  selectFavoriteGame(game: UserLibraryResponse) {
-    this.searchedQuery = '';
-    this.selectedFavoriteGame = game;
-    this.userLibraryResponse = [];
-  }
-
-  removeSelectedGame() {
-    this.selectedFavoriteGame = null;
-    this.searchedQuery = '';
-  }
-
-  hasFavoriteGameChanges() {
-
-    return this.originalFavoriteGame?.gameId !== this.selectedFavoriteGame?.gameId;
-  }
-
-  saveFavoriteGame() {
-    this.userService.pinGame({
-      body: {
-        gameId: this.selectedFavoriteGame?.gameId
-      }
-    }).subscribe({
-      next: () => {
-        this.toastService.success('Favorite game has been updated');
-        this.editFavoriteGame = false;
-        this.loadProfile();
-      },
-      error: (err) => {
-        console.log(err);
-        this.toastService.error('Failed to update favorite game');
-      }
-    })
-  }
+  // ================================================
 
   // sendResetLink() {
   //   this.authenticationService.processForgotPasswordRequest({
