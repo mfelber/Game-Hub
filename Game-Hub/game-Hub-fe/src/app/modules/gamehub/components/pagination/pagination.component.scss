@@ -2,7 +2,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 25px;
 }
 
 .pagination-items {
@@ -47,9 +46,8 @@
 }
 
 .page-link.active {
-  background: #155dfc;
-  color: white;
-  border-color: #155dfc;
+  color: #4DA3FF;
+  border-color: #4DA3FF;
 }
 
 .page-ling i {

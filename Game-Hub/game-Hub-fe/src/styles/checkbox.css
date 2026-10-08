@@ -1,25 +1,25 @@
 @layer components {
 
   .checkbox {
-    @apply flex flex-col gap-2 text-xs text-[#777] w-fit max-sm:w-full;
+    @apply flex flex-col gap-2 text-xs text-[#E8ECF4] w-fit max-sm:w-full;
   }
 
   .checkbox-label {
     @apply flex items-center h-11 px-4 text-xs
     rounded-[10px]
-    bg-[#1b2230] cursor-pointer
-    border border-transparent
-    hover:bg-[#26334a]
-    peer-checked:border-[#155dfc]
-    peer-checked:[&_span]:text-[#155dfc]
-    peer-checked:[&_i]:text-[#155dfc];
+    bg-[#151b27] cursor-pointer
+    border border-[#222B3D]
+    hover:bg-[#1c2436]
+    peer-checked:border-[#4DA3FF]
+    peer-checked:[&_span]:text-[#4DA3FF]
+    peer-checked:[&_i]:text-[#4DA3FF];
 
     & span {
-      @apply text-sm text-[#ddd];
+      @apply text-sm text-[#E8ECF4];
     }
 
     & i {
-      @apply text-[#ddd];
+      @apply text-[#E8ECF4];
     }
   }
 

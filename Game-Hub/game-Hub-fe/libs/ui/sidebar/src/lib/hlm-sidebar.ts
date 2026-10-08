@@ -47,7 +47,7 @@ import { injectHlmSidebarConfig } from './hlm-sidebar.token';
 			<!-- Sidebar gap on desktop -->
 			<div data-slot="sidebar-gap" [class]="_sidebarGapComputedClass()"></div>
 			<div data-slot="sidebar-container" [attr.data-side]="_dataSide()" [class]="_sidebarContainerComputedClass()">
-				<div data-sidebar="sidebar" data-slot="sidebar-inner" class="!bg-[#0b0e14] group-data-[variant=floating]:ring-sidebar-border border-r border-[#252b36] group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:shadow-sm group-data-[variant=floating]:ring-1 flex size-full flex-col">
+				<div data-sidebar="sidebar" data-slot="sidebar-inner" class="!bg-[#0E131B] group-data-[variant=floating]:ring-sidebar-border border-r border-[#252b36] group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:shadow-sm group-data-[variant=floating]:ring-1 flex size-full flex-col">
 					<ng-container *ngTemplateOutlet="contentContainer" />
 				</div>
 			</div>

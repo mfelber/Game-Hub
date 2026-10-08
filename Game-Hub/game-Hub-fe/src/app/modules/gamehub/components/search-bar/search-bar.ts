@@ -9,6 +9,7 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 export class SearchBar {
 
   @Input() value = '';
+  @Input() inputClass = '';
   @Input() placeholder = 'Search...';
   @Output() search = new EventEmitter<string>();
 

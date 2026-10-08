@@ -27,7 +27,7 @@ public class CommunityMapper {
 
   public UserCommunityResponse toUserCommunityResponse(User foundUser, User connetedUser, Set<Long> friendIds) {
 
-    String joinedDate = foundUser.getCreatedAt().getMonth().name().charAt(0) + foundUser.getCreatedAt()
+    String joinedDate = foundUser.getCreatedAt().getDayOfMonth() + " " + foundUser.getCreatedAt().getMonth().name().charAt(0) + foundUser.getCreatedAt()
         .getMonth()
         .name()
         .substring(1)
