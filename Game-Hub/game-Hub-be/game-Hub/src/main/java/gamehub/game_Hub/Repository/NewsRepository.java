@@ -10,4 +10,8 @@ public interface NewsRepository extends JpaRepository<News, Long> {
 
   List<News> findTop3ByOrderByCreatedAtDesc();
 
+  List<News> findTop2ByOrderByCreatedAtDesc();
+
+  News findNewsByNewsId(Long newsId);
+
 }

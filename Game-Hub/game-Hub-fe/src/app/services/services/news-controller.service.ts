@@ -15,12 +15,39 @@ import { createNews } from '../fn/news-controller/create-news';
 import { CreateNews$Params } from '../fn/news-controller/create-news';
 import { getNews } from '../fn/news-controller/get-news';
 import { GetNews$Params } from '../fn/news-controller/get-news';
-import { NewsResponse } from '../models/news-response';
+import { markNewsAsSeen } from '../fn/news-controller/mark-news-as-seen';
+import { MarkNewsAsSeen$Params } from '../fn/news-controller/mark-news-as-seen';
+import { NewsOverviewResponse } from '../models/news-overview-response';
 
 @Injectable({ providedIn: 'root' })
 export class NewsControllerService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
+  }
+
+  /** Path part for operation `markNewsAsSeen()` */
+  static readonly MarkNewsAsSeenPath = '/news/user/seen';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `markNewsAsSeen()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  markNewsAsSeen$Response(params: MarkNewsAsSeen$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return markNewsAsSeen(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `markNewsAsSeen$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  markNewsAsSeen(params: MarkNewsAsSeen$Params, context?: HttpContext): Observable<void> {
+    return this.markNewsAsSeen$Response(params, context).pipe(
+      map((r: StrictHttpResponse<void>): void => r.body)
+    );
   }
 
   /** Path part for operation `getNews()` */
@@ -32,7 +59,7 @@ export class NewsControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getNews$Response(params?: GetNews$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<NewsResponse>>> {
+  getNews$Response(params?: GetNews$Params, context?: HttpContext): Observable<StrictHttpResponse<NewsOverviewResponse>> {
     return getNews(this.http, this.rootUrl, params, context);
   }
 
@@ -42,9 +69,9 @@ export class NewsControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getNews(params?: GetNews$Params, context?: HttpContext): Observable<Array<NewsResponse>> {
+  getNews(params?: GetNews$Params, context?: HttpContext): Observable<NewsOverviewResponse> {
     return this.getNews$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<NewsResponse>>): Array<NewsResponse> => r.body)
+      map((r: StrictHttpResponse<NewsOverviewResponse>): NewsOverviewResponse => r.body)
     );
   }
 

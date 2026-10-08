@@ -37,6 +37,7 @@ export type { LevelProgressResponse } from './models/level-progress-response';
 export type { LevelResponse } from './models/level-response';
 export type { NewsItemRequest } from './models/news-item-request';
 export type { NewsItemResponse } from './models/news-item-response';
+export type { NewsOverviewResponse } from './models/news-overview-response';
 export type { NewsRequest } from './models/news-request';
 export type { NewsResponse } from './models/news-response';
 export type { NewsSectionRequest } from './models/news-section-request';

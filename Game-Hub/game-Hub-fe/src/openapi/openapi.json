@@ -679,6 +679,30 @@
         }
       }
     },
+    "/news/user/seen": {
+      "post": {
+        "tags": [
+          "news-controller"
+        ],
+        "operationId": "markNewsAsSeen",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/news/news": {
       "get": {
         "tags": [
@@ -691,10 +715,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/NewsResponse"
-                  }
+                  "$ref": "#/components/schemas/NewsOverviewResponse"
                 }
               }
             }
@@ -4477,9 +4498,30 @@
           }
         }
       },
-      "NewsResponse": {
+      "NewsOverviewResponse": {
         "type": "object",
         "properties": {
+          "news": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NewsResponse"
+            }
+          },
+          "hasUnseenNews": {
+            "type": "boolean"
+          }
+        }
+      },
+      "NewsResponse": {
+        "required": [
+          "newsId"
+        ],
+        "type": "object",
+        "properties": {
+          "newsId": {
+            "type": "integer",
+            "format": "int64"
+          },
           "version": {
             "type": "string"
           },

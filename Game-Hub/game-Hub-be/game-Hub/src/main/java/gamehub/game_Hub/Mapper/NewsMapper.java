@@ -52,6 +52,7 @@ public class NewsMapper {
 
   public NewsResponse toNewsResponse(News news) {
     return NewsResponse.builder()
+        .newsId(news.getNewsId())
         .version(news.getVersion())
         .title(news.getTitle())
         .createdAt(news.getCreatedAt())

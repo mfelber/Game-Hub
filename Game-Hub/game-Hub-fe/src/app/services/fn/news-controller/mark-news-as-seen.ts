@@ -8,24 +8,25 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { NewsOverviewResponse } from '../../models/news-overview-response';
 
-export interface GetNews$Params {
+export interface MarkNewsAsSeen$Params {
+      body: number
 }
 
-export function getNews(http: HttpClient, rootUrl: string, params?: GetNews$Params, context?: HttpContext): Observable<StrictHttpResponse<NewsOverviewResponse>> {
-  const rb = new RequestBuilder(rootUrl, getNews.PATH, 'get');
+export function markNewsAsSeen(http: HttpClient, rootUrl: string, params: MarkNewsAsSeen$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  const rb = new RequestBuilder(rootUrl, markNewsAsSeen.PATH, 'post');
   if (params) {
+    rb.body(params.body, 'application/json');
   }
 
   return http.request(
-    rb.build({ responseType: 'json', accept: 'application/json', context })
+    rb.build({ responseType: 'text', accept: '*/*', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<NewsOverviewResponse>;
+      return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
     })
   );
 }
 
-getNews.PATH = '/news/news';
+markNewsAsSeen.PATH = '/news/user/seen';

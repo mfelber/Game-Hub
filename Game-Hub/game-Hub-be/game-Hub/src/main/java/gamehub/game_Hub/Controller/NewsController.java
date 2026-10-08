@@ -3,6 +3,7 @@ package gamehub.game_Hub.Controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import gamehub.game_Hub.Request.news.NewsRequest;
+import gamehub.game_Hub.Response.NewsOverviewResponse;
 import gamehub.game_Hub.Response.news.NewsResponse;
 import gamehub.game_Hub.Service.NewsService;
 import jakarta.validation.Valid;
@@ -29,9 +31,13 @@ public class NewsController {
   }
 
   @GetMapping("news")
-  public ResponseEntity<List<NewsResponse>> getNews() {
-    return ResponseEntity.ok(newsService.getNews());
+  public ResponseEntity<NewsOverviewResponse> getNews(Authentication connectedUser) {
+    return ResponseEntity.ok(newsService.getNews(connectedUser));
   }
 
-
+  @PostMapping("/user/seen")
+  public ResponseEntity<Void> markNewsAsSeen(@RequestBody Long newsId, Authentication connectedUser) {
+    newsService.markNewsAsSeen(newsId, connectedUser);
+    return ResponseEntity.ok().build();
+  }
 }

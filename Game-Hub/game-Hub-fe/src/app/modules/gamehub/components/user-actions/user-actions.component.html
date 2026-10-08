@@ -27,7 +27,7 @@
     <span>3123 €</span>
   </button>
 
-  <hlm-dialog>
+  <hlm-dialog [state]="dialogState">
     <button hlmDialogTrigger class="!bg-blue-500/10 !text-blue-400">
       <i class="fa-solid fa-newspaper"></i>
     </button>
@@ -54,8 +54,8 @@
       </hlm-dialog-header>
 
       <div class="mt-5 space-y-5">
-        
-        @for (latestRelease of newsResponse; track latestRelease.title) {
+
+        @for (latestRelease of newsResponse.news; track latestRelease.title) {
           @if ($first) {
             <div class="rounded-xl border border-[#2A3445] bg-[#151B27] p-4">
 
@@ -106,7 +106,7 @@
           }
         }
 
-        @for (release of newsResponse; track release.title; let i = $index) {
+        @for (release of newsResponse.news; track release.title; let i = $index) {
 
           @if (i > 0) {
             <div class="rounded-xl border border-[#252B36] p-4 opacity-70">

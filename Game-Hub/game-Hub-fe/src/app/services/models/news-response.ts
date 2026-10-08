@@ -5,6 +5,7 @@
 import { NewsSectionResponse } from '../models/news-section-response';
 export interface NewsResponse {
   createdAt?: string;
+  newsId: number;
   newsSections?: Array<NewsSectionResponse>;
   title?: string;
   version?: string;
