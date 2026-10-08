@@ -10,6 +10,7 @@ import { UserProfileControllerService } from './services/user-profile-controller
 import { AdminControllerService } from './services/admin-controller.service';
 import { StoreControllerService } from './services/store-controller.service';
 import { ReportControllerService } from './services/report-controller.service';
+import { NewsControllerService } from './services/news-controller.service';
 import { LibraryControllerService } from './services/library-controller.service';
 import { CommunityControllerService } from './services/community-controller.service';
 import { CartControllerService } from './services/cart-controller.service';
@@ -33,6 +34,7 @@ import { CardColorControllerService } from './services/card-color-controller.ser
     AdminControllerService,
     StoreControllerService,
     ReportControllerService,
+    NewsControllerService,
     LibraryControllerService,
     CommunityControllerService,
     CartControllerService,

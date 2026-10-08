@@ -8,36 +8,161 @@
         Your account has been suspended 3 or more times. Further violations may result in a permanent ban.
       </span>
     </span>
-  </button>
-}
+    </button>
+  }
 
-@if (userNotificationsResponse.warningCount! >= 3) {
-  <button class="warning-btn"><span
-    class="warning-tooltip">
+  @if (userNotificationsResponse.warningCount! >= 3) {
+    <button class="warning-btn"><span
+      class="warning-tooltip">
     <i class="fa-solid fa-triangle-exclamation warning-icon"></i>
     <span class="tooltip-text">
       Your account has received 3 or more warnings. Further violations may result in a suspension or ban.
     </span>
   </span>
-</button>
-}
-
-<button class="balance-btn">
-  <i class="fa-solid fa-wallet"></i>
-  <span>3123 €</span>
-</button>
-
-<button routerLink="/gamehub/cart">
-  <i class="fa-solid fa-basket-shopping"></i>
-  @if (userNotificationsResponse.cartCount! > 0) {
-    <span class="notification-badge">{{userNotificationsResponse.cartCount}}</span>
+    </button>
   }
-</button>
 
-<button class="notification-btn">
-  <i class="fa-solid fa-bell"></i>
-  <span class="notification-badge">1</span>
-</button>
+  <button class="balance-btn">
+    <i class="fa-solid fa-wallet"></i>
+    <span>3123 €</span>
+  </button>
 
+  <hlm-dialog [state]="dialogState">
+    <button hlmDialogTrigger class="!bg-blue-500/10 !text-blue-400">
+      <i class="fa-solid fa-newspaper"></i>
+    </button>
+
+    <hlm-dialog-content *hlmDialogPortal="let ctx" class="sm:max-w-lg">
+      <hlm-dialog-header>
+        <div class="flex items-center gap-3">
+          <div
+            class="flex h-10 w-10 items-center justify-center rounded-lg
+                 bg-blue-500/10 text-blue-400">
+            <i class="fa-solid fa-newspaper"></i>
+          </div>
+
+          <div>
+            <h3 hlmDialogTitle class="text-lg font-semibold">
+              What's new
+            </h3>
+
+            <p hlmDialogDescription class="text-sm text-slate-400">
+              Latest updates and improvements.
+            </p>
+          </div>
+        </div>
+      </hlm-dialog-header>
+
+      <div class="mt-5 space-y-5">
+
+        @for (latestRelease of newsResponse.news; track latestRelease.title) {
+          @if ($first) {
+            <div class="rounded-xl border border-[#2A3445] bg-[#151B27] p-4">
+
+              <div class="flex items-center justify-between gap-3">
+                <div>
+                  <p class="text-lg font-semibold text-white">
+                    {{ latestRelease.version }}
+                  </p>
+
+                  <p class="text-sm text-slate-400">
+                    {{ latestRelease.title }}
+                  </p>
+                </div>
+
+                <span
+                  class="rounded-full border border-blue-500/20
+                   bg-blue-500/10 px-2.5 py-1 text-xs
+                   font-medium text-blue-400"
+                >
+                  {{ latestRelease.createdAt | date:'d.MM.yyyy' }}
+                   </span>
+              </div>
+
+              <div class="mt-4 space-y-4">
+                @for (section of latestRelease.newsSections; track section.newsType) {
+
+
+                  <div>
+                    <div class="mb-2 flex items-center gap-2">
+              <span class="text-sm font-semibold text-white">
+                <i [class]="section.newsTypeIcon + ' mr-1 ' + section.iconColor"></i>
+                {{ section.newsTypeName }}
+              </span>
+                    </div>
+
+                    <ul class="space-y-2 text-sm text-slate-400">
+                      @for (item of section.newsItems; track item.description) {
+                        <li class="flex gap-2">
+                          <span class="text-slate-600">•</span>
+                          <span>{{ item.description }}</span>
+                        </li>
+                      }
+                    </ul>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        }
+
+        @for (release of newsResponse.news; track release.title; let i = $index) {
+
+          @if (i > 0) {
+            <div class="rounded-xl border border-[#252B36] p-4 opacity-70">
+
+              <div class="flex items-center justify-between gap-3">
+                <div>
+                  <p class="font-semibold text-white">
+                    {{ release.version }}
+                  </p>
+
+                  <p class="text-sm text-slate-500">
+                    {{ release.title }}
+                  </p>
+                </div>
+
+                <span class="text-xs text-slate-500"> {{ release.createdAt | date:'d.MM.yyyy' }} </span>
+              </div>
+
+              <div class="mt-3 space-y-2">
+                @for (section of release.newsSections; track section.newsType) {
+                  <div class="flex items-start gap-2">
+                    <div class="min-w-0">
+
+                        <ul class="space-y-2 text-sm text-slate-400">
+                          @for (item of section.newsItems; track item.description) {
+                            <li class="flex gap-2">
+                              <span class="text-slate-600">•</span>
+                              <span>{{ item.description }}</span>
+                            </li>
+                          }
+                        </ul>
+
+                    </div>
+                  </div>
+                }
+              </div>
+
+            </div>
+          }
+
+        }
+
+      </div>
+    </hlm-dialog-content>
+  </hlm-dialog>
+
+  <button routerLink="/gamehub/cart">
+    <i class="fa-solid fa-basket-shopping"></i>
+    @if (userNotificationsResponse.cartCount! > 0) {
+      <span class="notification-badge">{{ userNotificationsResponse.cartCount }}</span>
+    }
+  </button>
+
+  <button class="notification-btn">
+    <i class="fa-solid fa-bell"></i>
+    <span class="notification-badge">1</span>
+  </button>
 
 </div>

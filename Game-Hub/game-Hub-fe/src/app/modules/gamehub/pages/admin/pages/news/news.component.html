@@ -1,0 +1,117 @@
+<hlm-dialog [closeOnOutsidePointerEvents]="false" (closed)="resetForm()">
+  <button hlmDialogTrigger class="medium-button save">Open Dialog</button>
+  <hlm-dialog-content *hlmDialogPortal="let ctx" class="sm:max-w-sm">
+    <div [formGroup]="form">
+      <hlm-dialog-header>
+        <h3 hlmDialogTitle>Edit profile</h3>
+        <p hlmDialogDescription>Make changes to your profile here. Click save when you're done.</p>
+      </hlm-dialog-header>
+      <div class="flex flex-col gap-2">
+        <label>Version</label>
+        <hlm-input-group class="
+          !h-auto !rounded-lg !border-[#2A3445] !bg-[#10131A]
+          !outline-none !ring-0 focus-within:!border-[#155dfc]
+          focus-within:!outline-none focus-within:!ring-0
+        autofill:!bg-[#151C2B]
+        autofill:!text-white">
+          <input
+            hlmInputGroupInput
+            formControlName="version"
+            id="version"
+            type="text"
+            name="version"
+            placeholder="v0.5.0"
+            class="!py-5 !text-white placeholder:!text-[#596579] mb-1"/>
+        </hlm-input-group>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label>Title</label>
+        <hlm-input-group class="
+          !h-auto !rounded-lg !border-[#2A3445] !bg-[#10131A]
+          !outline-none !ring-0 focus-within:!border-[#155dfc]
+          focus-within:!outline-none focus-within:!ring-0
+        autofill:!bg-[#151C2B]
+        autofill:!text-white">
+          <input
+            hlmInputGroupInput
+            formControlName="title"
+            id="title"
+            type="text"
+            name="title"
+            placeholder="New edit"
+            class="!py-5 !text-white placeholder:!text-[#596579] mb-1"/>
+        </hlm-input-group>
+      </div>
+
+      <div>
+        <button (click)="addSection()">Add section</button>
+      </div>
+
+      <div>
+        <div formArrayName="sections">
+          @for (test of section.controls; track test; let i = $index) {
+            <div class="border border-dotted" [formGroupName]="i">
+              <div class="flex flex-col gap-2">
+                <label>Type</label>
+                <div class="dropdown-small mt-2">
+                  <button class="dropdown-button-small" type="button" [hlmDropdownMenuTrigger]="menu" align="start"
+                          (click)="$event.stopPropagation()">
+                    <span> {{ test.get('newsType')?.value }} </span>
+
+                    <i class="fa-solid fa-chevron-down text-xs"></i></button>
+
+                  <ng-template #menu>
+                    <hlm-dropdown-menu>
+                      <button hlmDropdownMenuItem (click)="selectNewsType(test, 'ADDED')">Addded</button>
+                      <button hlmDropdownMenuItem (click)="selectNewsType(test, 'IMPROVED')">Improved</button>
+                      <button hlmDropdownMenuItem (click)="selectNewsType(test, 'FIXED')">Fixed</button>
+                      <button hlmDropdownMenuItem (click)="selectNewsType(test, 'SECURITY')">Security</button>
+                      <button hlmDropdownMenuItem (click)="selectNewsType(test, 'REMOVED')">Removed</button>
+                    </hlm-dropdown-menu>
+                  </ng-template>
+                </div>
+
+                <div formArrayName="newsItems">
+                  @for (item of getNewsItems(i).controls; track item; let j = $index) {
+                    <div [formGroupName]="j">
+                      <hlm-input-group class="
+                  !h-auto !rounded-lg !border-[#2A3445] !bg-[#10131A]
+                  !outline-none !ring-0 focus-within:!border-[#155dfc]
+                  focus-within:!outline-none focus-within:!ring-0
+                autofill:!bg-[#151C2B]
+                autofill:!text-white">
+                        <input
+                          formControlName="description"
+                          hlmInputGroupInput
+                          id="title"
+                          type="text"
+                          name="title"
+                          placeholder="user can edit profile from settings"
+                          class="!py-5 !text-white placeholder:!text-[#596579] mb-1"/>
+                      </hlm-input-group>
+                    </div>
+                    <button (click)="deleteNewsItems(i, j)">delete desc</button>
+                  }
+                </div>
+
+                <button type="button" (click)="addDescription(i)">Add description</button>
+
+                <!--              <label>Describtion</label>-->
+
+              </div>
+              <button type="button" (click)="deleteSection(i)">remove</button>
+            </div>
+
+          }
+        </div>
+
+      </div>
+    </div>
+    <hlm-dialog-footer>
+      <button class="medium-button cancel" hlmDialogClose (click)="resetForm()">Cancel</button>
+      <button class="medium-button save" type="submit" (click)="submitNews()">Save changes</button>
+    </hlm-dialog-footer>
+  </hlm-dialog-content>
+</hlm-dialog>
+

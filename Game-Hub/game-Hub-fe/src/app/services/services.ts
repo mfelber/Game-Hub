@@ -6,6 +6,7 @@ export { UserProfileControllerService } from './services/user-profile-controller
 export { AdminControllerService } from './services/admin-controller.service';
 export { StoreControllerService } from './services/store-controller.service';
 export { ReportControllerService } from './services/report-controller.service';
+export { NewsControllerService } from './services/news-controller.service';
 export { LibraryControllerService } from './services/library-controller.service';
 export { CommunityControllerService } from './services/community-controller.service';
 export { CartControllerService } from './services/cart-controller.service';

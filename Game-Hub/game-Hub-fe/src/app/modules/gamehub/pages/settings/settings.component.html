@@ -234,9 +234,7 @@
               </div>
             }
           </div>
-
         </section>
-
 
         <section class="grid grid-cols-[2fr_3fr] gap-10">
           <section class="basic-info">
@@ -431,7 +429,6 @@
                             <span>Select country</span>
                           }
                           <i class="fa-solid fa-chevron-down text-xs"></i></button>
-
                         <ng-template #countryMenu>
                           <hlm-dropdown-menu>
                             @for (country of allCountries; track country) {
@@ -452,9 +449,7 @@
                     }
                   </div>
                 </div>
-
               </section>
-
             </div>
           </section>
 
@@ -487,9 +482,7 @@
                     <div
                       class="absolute inset-0 z-30 flex items-center justify-center
                       rounded-b bg-[#0b0e14]/75 backdrop-blur-[2px]">
-
                       <app-loading></app-loading>
-
                     </div>
                   }
 
@@ -497,9 +490,7 @@
                     <div
                       class="px-2 py-1 text-gray-400 line-clamp-2 break-words"
                       [title]="response.bio || ''">
-
                       {{ response.bio || 'No information provided.' }}
-
                     </div>
                   }
 
@@ -548,9 +539,7 @@
                     <div
                       class="absolute inset-0 z-30 flex items-center justify-center
                       rounded-b bg-[#0b0e14]/75 backdrop-blur-[2px]">
-
                       <app-loading></app-loading>
-
                     </div>
                   }
 
