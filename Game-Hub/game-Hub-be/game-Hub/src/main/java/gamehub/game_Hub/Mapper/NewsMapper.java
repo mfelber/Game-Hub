@@ -10,6 +10,9 @@ import gamehub.game_Hub.Module.news.NewsSection;
 import gamehub.game_Hub.Request.news.NewsItemRequest;
 import gamehub.game_Hub.Request.news.NewsRequest;
 import gamehub.game_Hub.Request.news.NewsSectionRequest;
+import gamehub.game_Hub.Response.news.NewsItemResponse;
+import gamehub.game_Hub.Response.news.NewsResponse;
+import gamehub.game_Hub.Response.news.NewsSectionResponse;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -46,5 +49,32 @@ public class NewsMapper {
         .description(newsItemRequest.description())
         .build();
   }
+
+  public NewsResponse toNewsResponse(News news) {
+    return NewsResponse.builder()
+        .version(news.getVersion())
+        .title(news.getTitle())
+        .createdAt(news.getCreatedAt())
+        .newsSections(news.getNewsSectionList().stream().map(this::toNewsSectionResponse).toList())
+        .build();
+  }
+
+
+  public NewsSectionResponse toNewsSectionResponse(NewsSection newsSection) {
+    return NewsSectionResponse.builder()
+        .newsType(newsSection.getNewsType())
+        .newsTypeName(newsSection.getNewsType().getNewsTypeName())
+        .newsTypeIcon(newsSection.getNewsType().getNewsTypeIcon())
+        .iconColor(newsSection.getNewsType().getIconColor())
+        .newsItems(newsSection.getNewsItemList().stream().map(this::toNewsItemResponse).toList())
+        .build();
+  }
+
+  public NewsItemResponse toNewsItemResponse(NewsItem newsItem) {
+    return NewsItemResponse.builder()
+        .description(newsItem.getDescription())
+        .build();
+  }
+
 
 }

@@ -12,6 +12,9 @@ import {
   HlmDialogTrigger
 } from '@spartan/dialog';
 import {HlmButton} from '@spartan/button';
+import {NewsControllerService} from '../../../../services/services/news-controller.service';
+import {NewsResponse} from '../../../../services/models/news-response';
+import {DatePipe} from '@angular/common';
 
 @Component({
   selector: 'app-user-actions',
@@ -23,22 +26,27 @@ import {HlmButton} from '@spartan/button';
     HlmDialogHeader,
     HlmDialogTitle,
     HlmDialogDescription,
-    HlmDialogPortal
+    HlmDialogPortal,
+    DatePipe
   ],
   templateUrl: './user-actions.component.html',
   styleUrl: './user-actions.component.scss',
 })
 export class UserActionsComponent implements OnInit {
 
-  userNotificationsResponse: UserNotificationsResponse = {}
+  userNotificationsResponse: UserNotificationsResponse = {};
+
+  newsResponse: NewsResponse[] = [];
 
   constructor(
-    private userService: UserProfileControllerService
+    private userService: UserProfileControllerService,
+    private newsService: NewsControllerService
   ) {
   }
 
   ngOnInit() {
-    this.loadNotifications()
+    this.loadNotifications();
+    this.loadNews();
   }
 
   loadNotifications() {
@@ -46,6 +54,15 @@ export class UserActionsComponent implements OnInit {
       next: data => {
         this.userNotificationsResponse = data
         console.log(data);
+      }
+    })
+  }
+
+  loadNews() {
+    this.newsService.getNews().subscribe({
+      next: data => {
+        console.log(data);
+        this.newsResponse = data;
       }
     })
   }

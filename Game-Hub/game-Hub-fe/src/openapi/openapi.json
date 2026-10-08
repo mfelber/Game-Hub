@@ -680,6 +680,27 @@
       }
     },
     "/news/news": {
+      "get": {
+        "tags": [
+          "news-controller"
+        ],
+        "operationId": "getNews",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/NewsResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
         "tags": [
           "news-controller"
@@ -3804,10 +3825,10 @@
           "inCart": {
             "type": "boolean"
           },
-          "inWishList": {
+          "inLibrary": {
             "type": "boolean"
           },
-          "inLibrary": {
+          "inWishList": {
             "type": "boolean"
           }
         }
@@ -4444,6 +4465,65 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/PrivacySettingsResponse"
+            }
+          }
+        }
+      },
+      "NewsItemResponse": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "NewsResponse": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "newsSections": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NewsSectionResponse"
+            }
+          }
+        }
+      },
+      "NewsSectionResponse": {
+        "type": "object",
+        "properties": {
+          "newsType": {
+            "type": "string",
+            "enum": [
+              "ADDED",
+              "IMPROVED",
+              "FIXED",
+              "SECURITY",
+              "REMOVED"
+            ]
+          },
+          "newsTypeName": {
+            "type": "string"
+          },
+          "newsTypeIcon": {
+            "type": "string"
+          },
+          "iconColor": {
+            "type": "string"
+          },
+          "newsItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NewsItemResponse"
             }
           }
         }

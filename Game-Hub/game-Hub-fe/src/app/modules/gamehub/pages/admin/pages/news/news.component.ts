@@ -7,8 +7,6 @@ import {
   HlmDialogTitle,
   HlmDialogTrigger
 } from '@spartan/dialog';
-import {HlmField, HlmFieldGroup, HlmFieldLabel} from '@spartan/field';
-import {HlmInput} from '@spartan/input';
 import {
   AbstractControl,
   FormArray,
@@ -16,11 +14,8 @@ import {
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
-  Validators
 } from '@angular/forms';
-import {HlmInputGroup, HlmInputGroupAddon, HlmInputGroupInput} from '@spartan/input-group';
-import {HlmLabel} from '@spartan/label';
-import {JsonPipe} from '@angular/common';
+import {HlmInputGroup, HlmInputGroupInput} from '@spartan/input-group';
 import {HlmDropdownMenu, HlmDropdownMenuItem, HlmDropdownMenuTrigger} from '@spartan/dropdown-menu';
 import {NewsControllerService} from '../../../../../../services/services/news-controller.service';
 
@@ -34,18 +29,11 @@ import {NewsControllerService} from '../../../../../../services/services/news-co
     HlmDialogHeader,
     HlmDialogTitle,
     HlmDialogDescription,
-    HlmFieldGroup,
-    HlmField,
     HlmDialogFooter,
-    HlmFieldLabel,
-    HlmInput,
     HlmDialogClose,
     FormsModule,
     HlmInputGroup,
-    HlmInputGroupAddon,
     HlmInputGroupInput,
-    HlmLabel,
-    JsonPipe,
     ReactiveFormsModule,
     HlmDropdownMenu,
     HlmDropdownMenuItem,

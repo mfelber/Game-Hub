@@ -13,11 +13,39 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { createNews } from '../fn/news-controller/create-news';
 import { CreateNews$Params } from '../fn/news-controller/create-news';
+import { getNews } from '../fn/news-controller/get-news';
+import { GetNews$Params } from '../fn/news-controller/get-news';
+import { NewsResponse } from '../models/news-response';
 
 @Injectable({ providedIn: 'root' })
 export class NewsControllerService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
+  }
+
+  /** Path part for operation `getNews()` */
+  static readonly GetNewsPath = '/news/news';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getNews()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getNews$Response(params?: GetNews$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<NewsResponse>>> {
+    return getNews(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getNews$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getNews(params?: GetNews$Params, context?: HttpContext): Observable<Array<NewsResponse>> {
+    return this.getNews$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<NewsResponse>>): Array<NewsResponse> => r.body)
+    );
   }
 
   /** Path part for operation `createNews()` */
