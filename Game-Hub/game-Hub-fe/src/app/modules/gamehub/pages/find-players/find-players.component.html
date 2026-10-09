@@ -60,7 +60,7 @@
 
         <div class="dropdown">
           <button class="dropdown-button" type="button" [hlmDropdownMenuTrigger]="platformMenu" align="start">
-            <span> PC </span>
+            <span> All platforms </span>
 
             <i class="fa-solid fa-chevron-down text-xs"></i></button>
 
@@ -74,25 +74,22 @@
           </ng-template>
         </div>
 
-        <div class="checkbox">
-          <input
-            type="checkbox"
-            id="voicechat-option"
-            [(ngModel)]="filters.voiceChat"
-            (change)="changeFilter()"
-            class="hidden peer">
-          <label
-            for="voicechat-option"
-            class="checkbox-label">
-            <div class="checkbox-content">
-              <i class="fa-solid fa-microphone"></i>
-              <span>Has voice chat</span>
-            </div>
-          </label>
+        <div class="dropdown">
+          <button class="dropdown-button" type="button" [hlmDropdownMenuTrigger]="voiceChatMenu" align="start">
+            <span> Voice chat </span>
+
+            <i class="fa-solid fa-chevron-down text-xs"></i></button>
+
+          <ng-template #voiceChatMenu>
+            <hlm-dropdown-menu>
+              <button hlmDropdownMenuItem>Uses voice chat</button>
+              <button hlmDropdownMenuItem>Voice optional</button>
+              <button hlmDropdownMenuItem>No voice chat</button>
+            </hlm-dropdown-menu>
+          </ng-template>
         </div>
 
         <div class="checkbox">
-
           <input
             type="checkbox"
             id="onlyonline-option"
@@ -204,9 +201,10 @@
           </div>
         </div>
           <div class="user-tags">
-            <span class="user-tag">RPG</span>
             <span class="user-tag">PC</span>
-            <span class="user-tag">Voice Chat</span>
+            <span class="user-tag"><i class="fa-solid fa-microphone"></i> Voice chat</span>
+            <span class="user-tag"><i class="fa-solid fa-microphone-slash"></i> No voice chat</span>
+            <span class="user-tag"> <i class="fa-solid fa-microphone"></i> Voice optional </span>
           </div>
 
           <div class="user-divider"></div>
