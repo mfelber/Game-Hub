@@ -62,7 +62,8 @@ export class FindPlayersComponent implements OnInit {
   filters = {
     country: '',
     lookingForTeammate: false,
-    voiceChat: false
+    voiceChat: false,
+    onlyOnline: false,
   }
 
   errorMessage: string = '';
@@ -86,6 +87,7 @@ export class FindPlayersComponent implements OnInit {
       this.filters.country = params['country'] ?? '';
       this.filters.lookingForTeammate = params['lookingForTeammate'] === 'true';
       this.filters.voiceChat = params['voiceChat'] === 'true';
+      this.filters.onlyOnline = params['onlyOnline'] === 'true';
 
       this.loadAllUsers();
     });
@@ -105,6 +107,7 @@ export class FindPlayersComponent implements OnInit {
           this.userCommunityResponse = users;
           this.filteredUsers = [...(users.content || [])];
           this.isLoading = false;
+          console.log(this.userCommunityResponse);
 
         }, error: error => {
           console.log(error);
@@ -228,6 +231,7 @@ export class FindPlayersComponent implements OnInit {
       country: '',
       lookingForTeammate: false,
       voiceChat: false,
+      onlyOnline: false,
     };
     this.router.navigate([], {
       relativeTo: this.route,
@@ -235,7 +239,8 @@ export class FindPlayersComponent implements OnInit {
         page: 1,
         country: null,
         lookingForTeammate: false,
-        voiceChat: false
+        voiceChat: false,
+        onlyOnline: false,
       },
       queryParamsHandling: 'merge'
     })
@@ -260,6 +265,7 @@ export class FindPlayersComponent implements OnInit {
         country: this.filters.country || null,
         lookingForTeammate: this.filters.lookingForTeammate || null,
         voiceChat: this.filters.voiceChat || null,
+        onlyOnline: this.filters.onlyOnline || null,
       }
     })
   }

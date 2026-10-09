@@ -2,12 +2,23 @@
 
   .games-cards {
     @apply relative grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3
-    xl:grid-cols-4 gap-6 min-h-[calc(100vh_-_250px)] items-start;
+    xl:grid-cols-4 gap-6 min-h-[calc(100vh_-_250px)] items-start mb-3;
+  }
+
+  .users-page {
+    @apply flex flex-col min-h-screen;
+  }
+
+  .users-content {
+    @apply flex flex-col flex-1;
   }
 
   .users-cards {
-    @apply flex flex-col gap-5.5 mt-5 min-h-[calc(100dvh-350px)]
-    items-stretch relative;
+    @apply grid grid-cols-2 gap-5.5 mt-3 mb-5 relative;
+  }
+
+  .pagination-wrapper {
+    @apply mt-auto mb-2;
   }
 
   .requests {
@@ -77,11 +88,11 @@
   }
 
   .user-card {
-    @apply bg-[#151b27] p-4 rounded-[18px] flex justify-between items-center
-    transition duration-250 hover:-translate-y-2 hover:cursor-pointer;
+    @apply bg-[#151B27] p-4 rounded-[18px]
+    transition duration-250 hover:-translate-y-1 hover:cursor-pointer;
 
     & .flag {
-      @apply w-7.5 h-5 rounded-[5px];
+      @apply w-7.5 h-6 rounded-[6px];
     }
 
     & .username {
@@ -119,6 +130,59 @@
 
   .small-img {
     @apply w-18.75 h-18.75 rounded-[5px] object-cover;
+  }
+
+  .find-player-top {
+    @apply flex items-center justify-between;
+  }
+
+  .user-main {
+    @apply flex items-center gap-5.5;
+  }
+
+  .find-player-info {
+    @apply flex items-center gap-5.5;
+  }
+
+  .user-tags {
+    @apply flex gap-2 mt-2;
+  }
+
+  .user-tag {
+    @apply px-2.5 py-1 rounded-md
+    bg-[#1A2231]
+    text-[#9AA6BA]
+    text-xs font-medium;
+  }
+
+  .user-divider {
+    @apply w-full h-px bg-[#1E2637] my-4;
+  }
+
+  .user-actions {
+    @apply flex items-center gap-2;
+  }
+
+  .user-meta {
+    @apply flex items-center gap-2
+    text-[#8892a6] text-sm;
+  }
+
+  .user-meta span {
+    @apply flex items-center gap-2;
+  }
+
+  .account-tag {
+    @apply flex items-center w-fit rounded-full gap-1.5;
+
+    &.supporter {
+      @apply px-1.5 py-0.5 bg-[#3A1630] text-sm border border-[#6F2C5B] text-[#FF9CCB];
+    }
+
+    &.creator {
+      @apply px-1.5 py-0.5 bg-[#2A1F4D] text-sm border border-[#4A3A8A] text-[#BBA6FF];
+    }
+
   }
 
 }

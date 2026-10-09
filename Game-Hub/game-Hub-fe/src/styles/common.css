@@ -19,19 +19,27 @@
 }
 
 .accept {
-  @apply bg-[#16a34a] hover:bg-[#15803d] cursor-pointer;
+  @apply bg-[#123524] hover:bg-[#0E2B1D] cursor-pointer text-[#4ADE80];
+}
+
+.msg {
+  @apply bg-[#39324A] hover:bg-[#493F5C] text-[#C9BCE8];
+}
+
+.send-friend-req {
+  @apply bg-[#16304D] hover:bg-[#112B43] cursor-pointer text-[#4DA3FF];
 }
 
 .remove {
-  @apply bg-[#dc2626] hover:bg-[#b91c1c] cursor-pointer;
+  @apply bg-[#4A2024] hover:bg-[#3B1A1D] cursor-pointer text-[#FCA5A5];
 }
 
 .report {
-  @apply bg-[#d97706] hover:bg-[#b45309] cursor-pointer;
+  @apply bg-[#2A1C22] hover:bg-[#352129] text-[#F87171] cursor-pointer;
 }
 
 .cancel-friend {
-  @apply bg-[#475569] hover:bg-[#334155] cursor-pointer;
+  @apply bg-[#3A2E10] hover:bg-[#4A3A14] cursor-pointer text-[#FBBF24];
 }
 
 .discount {

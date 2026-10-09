@@ -83,7 +83,7 @@
   }
 
   .is-friend {
-    @apply bg-[#155dfc] hover:cursor-default;
+    @apply bg-[#24313A] hover:bg-[#2D3C46] text-[#9CC7D4] hover:cursor-default;
   }
 
   .save {

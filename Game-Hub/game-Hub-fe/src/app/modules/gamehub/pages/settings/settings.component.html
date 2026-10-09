@@ -560,13 +560,13 @@
 
                         <button
                           type="button"
-                          class="ml-auto flex h-7 w-7 shrink-0 items-center justify-center
+                          class="ml-auto flex h-7 w-7 items-center justify-center
            rounded-full border border-red-500/25
            bg-red-500/12 text-red-400
            transition-colors hover:bg-red-500/20 hover:cursor-pointer"
                           (click)="removeSelectedGame()"
                         >
-                          <i class="fa-solid fa-xmark text-[13px]"></i>
+                          <i class="fa-solid fa-xmark"></i>
                         </button>
                       </div>
                     } @else {
@@ -574,6 +574,7 @@
                       <div class="relative !w-full">
                         <app-search-bar
                           class="!block !w-full"
+                          [inputClass]="'!bg-[#18202e] border-2 border-[#222c3d]'"
                           [value]="searchedQuery"
                           [placeholder]="'Search your games...'"
                           (search)="searchLibrary($event)">

@@ -14,7 +14,7 @@ import {
 import {HlmButton} from '@spartan/button';
 import {NewsControllerService} from '../../../../services/services/news-controller.service';
 import {NewsResponse} from '../../../../services/models/news-response';
-import {DatePipe} from '@angular/common';
+import {DatePipe, NgClass} from '@angular/common';
 import {NewsOverviewResponse} from '../../../../services/models/news-overview-response';
 import {BrnDialogState} from '@spartan-ng/brain/dialog';
 
@@ -29,7 +29,8 @@ import {BrnDialogState} from '@spartan-ng/brain/dialog';
     HlmDialogTitle,
     HlmDialogDescription,
     HlmDialogPortal,
-    DatePipe
+    DatePipe,
+    NgClass
   ],
   templateUrl: './user-actions.component.html',
   styleUrl: './user-actions.component.scss',

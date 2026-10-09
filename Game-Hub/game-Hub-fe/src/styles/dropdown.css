@@ -9,8 +9,8 @@
   }
 
   .dropdown-button {
-    @apply w-full flex items-center justify-between bg-[#1b2230] text-[#ddd] rounded-[10px]
-    cursor-pointer py-3 pl-4 pr-4 gap-3 text-sm hover:bg-[#26334a];
+    @apply w-full flex items-center justify-between bg-[#151b27] text-[#E8ECF4] rounded-[10px] border border-[#222B3D]
+    cursor-pointer py-3 pl-4 pr-4 gap-3 text-sm hover:bg-[#1c2436];
   }
 
 
@@ -19,8 +19,8 @@
   }
 
   .dropdown-button-small {
-    @apply w-fit items-center justify-between bg-[#1b2230] text-[#ddd] rounded-[6px]
-    cursor-pointer py-1 pl-2 pr-2 text-sm hover:bg-[#26334a];
+    @apply w-fit items-center justify-between bg-[#151b27] text-[#E8ECF4] rounded-[6px] border border-[#222B3D]
+    cursor-pointer py-1 pl-2 pr-2 text-sm hover:bg-[#1c2436];
   }
 
   .fit {

@@ -1,5 +1,5 @@
 <div hlmSidebarWrapper>
-  <hlm-sidebar collapsible="icon" class="!bg-[#151923]">
+  <hlm-sidebar collapsible="icon">
     <hlm-sidebar-header class="!flex !h-auto !items-center !justify-between !px-2 !pt-2 group-data-[collapsible=icon]:!flex-col-reverse group-data-[collapsible=icon]:!mb-2">
 
       <div class="flex min-w-0 items-center hover:cursor-pointer group-data-[collapsible=icon]:!justify-center"
@@ -76,7 +76,7 @@
             hlmSidebarMenuButton
             tooltip="Find Players"
             [routerLink]="['/gamehub/find-players']"
-            [queryParams]="{ page: 1, lookingForTeammate: false, voiceChat: false }"
+            [queryParams]="{ page: 1, lookingForTeammate: false, voiceChat: false, onlyOnline: false }"
             routerLinkActive="active"
             class="sidebar-button">
             <i class="fa-solid fa-magnifying-glass"></i>

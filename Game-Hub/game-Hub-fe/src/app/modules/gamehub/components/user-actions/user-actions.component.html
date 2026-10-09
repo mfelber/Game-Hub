@@ -86,7 +86,17 @@
                   <div>
                     <div class="mb-2 flex items-center gap-2">
               <span class="text-sm font-semibold text-white">
-                <i [class]="section.newsTypeIcon + ' mr-1 ' + section.iconColor"></i>
+              <i
+                [class]="section.newsTypeIcon ?? ''"
+                [ngClass]="{
+                  'mr-1': true,
+                  'text-emerald-400': section.newsType === 'ADDED',
+                  'text-blue-400': section.newsType === 'IMPROVED',
+                  'text-amber-400': section.newsType === 'FIXED',
+                  'text-red-400': section.newsType === 'SECURITY',
+                  'text-violet-400': section.newsType === 'REMOVED'
+                }">
+              </i>
                 {{ section.newsTypeName }}
               </span>
                     </div>
@@ -130,14 +140,14 @@
                   <div class="flex items-start gap-2">
                     <div class="min-w-0">
 
-                        <ul class="space-y-2 text-sm text-slate-400">
-                          @for (item of section.newsItems; track item.description) {
-                            <li class="flex gap-2">
-                              <span class="text-slate-600">•</span>
-                              <span>{{ item.description }}</span>
-                            </li>
-                          }
-                        </ul>
+                      <ul class="space-y-2 text-sm text-slate-400">
+                        @for (item of section.newsItems; track item.description) {
+                          <li class="flex gap-2">
+                            <span class="text-slate-600">•</span>
+                            <span>{{ item.description }}</span>
+                          </li>
+                        }
+                      </ul>
 
                     </div>
                   </div>

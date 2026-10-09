@@ -36,7 +36,7 @@ export class HlmDropdownMenuItem {
   constructor() {
     classes(
       () =>
-        "hover:bg-[#26334a] focus:bg-[#26334a] " +
+        "hover:bg-[#222b3d] focus:bg-[#222b3d] " +
         "text-[#ddd] hover:text-[#ddd] focus:text-[#ddd] " +
         "gap-1.5 rounded-[7px] px-[15px] py-2.5 text-sm " +
         "data-inset:ps-7 " +
