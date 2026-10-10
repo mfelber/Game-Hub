@@ -1,6 +1,8 @@
 package gamehub.game_Hub.ServiceImpl;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -22,9 +24,13 @@ import gamehub.game_Hub.Repository.FriendRequestRepository;
 import gamehub.game_Hub.Repository.FriendshipRepository;
 import gamehub.game_Hub.Repository.user.UserRepository;
 import gamehub.game_Hub.Response.FriendRequestResponse;
+import gamehub.game_Hub.Response.PlatformResponse;
+import gamehub.game_Hub.Response.RegionResponse;
 import gamehub.game_Hub.Response.UserCommunityResponse;
 import gamehub.game_Hub.Service.CommunityService;
 import gamehub.game_Hub.enums.AccountStatus;
+import gamehub.game_Hub.enums.Platform;
+import gamehub.game_Hub.enums.Region;
 import gamehub.game_Hub.enums.Role;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -210,6 +216,18 @@ public class CommunityServiceImpl implements CommunityService {
         requests.isFirst(),
         requests.isLast()
     );
+  }
+
+  @Override
+  public List<PlatformResponse> getAllGamingPlatforms() {
+    return Arrays.stream(Platform.values()).sorted(Comparator.comparing(Platform::getPlatformName)).map(platform -> new PlatformResponse(platform.name(),
+        platform.getPlatformName(), platform.getPlatformIcon())).toList();
+  }
+
+  @Override
+  public List<RegionResponse> getAllRegions() {
+    return Arrays.stream(Region.values()).sorted(Comparator.comparing(Region::getRegionName)).map(region -> new RegionResponse(region.name(),
+        region.getRegionName())).toList();
   }
 
 }

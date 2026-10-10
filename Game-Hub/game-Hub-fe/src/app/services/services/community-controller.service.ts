@@ -19,10 +19,16 @@ import { findAllUsers } from '../fn/community-controller/find-all-users';
 import { FindAllUsers$Params } from '../fn/community-controller/find-all-users';
 import { friendRequestsCount } from '../fn/community-controller/friend-requests-count';
 import { FriendRequestsCount$Params } from '../fn/community-controller/friend-requests-count';
+import { getAllGamingPlatforms } from '../fn/community-controller/get-all-gaming-platforms';
+import { GetAllGamingPlatforms$Params } from '../fn/community-controller/get-all-gaming-platforms';
 import { getAllMyFriendRequests } from '../fn/community-controller/get-all-my-friend-requests';
 import { GetAllMyFriendRequests$Params } from '../fn/community-controller/get-all-my-friend-requests';
+import { getAllRegions } from '../fn/community-controller/get-all-regions';
+import { GetAllRegions$Params } from '../fn/community-controller/get-all-regions';
 import { PageResponseFriendRequestResponse } from '../models/page-response-friend-request-response';
 import { PageResponseUserCommunityResponse } from '../models/page-response-user-community-response';
+import { PlatformResponse } from '../models/platform-response';
+import { RegionResponse } from '../models/region-response';
 import { rejectFriendRequest } from '../fn/community-controller/reject-friend-request';
 import { RejectFriendRequest$Params } from '../fn/community-controller/reject-friend-request';
 import { sendFriendRequest } from '../fn/community-controller/send-friend-request';
@@ -84,6 +90,31 @@ export class CommunityControllerService extends BaseService {
     );
   }
 
+  /** Path part for operation `getAllRegions()` */
+  static readonly GetAllRegionsPath = '/find-players/regions';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAllRegions()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllRegions$Response(params?: GetAllRegions$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<RegionResponse>>> {
+    return getAllRegions(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getAllRegions$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllRegions(params?: GetAllRegions$Params, context?: HttpContext): Observable<Array<RegionResponse>> {
+    return this.getAllRegions$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<RegionResponse>>): Array<RegionResponse> => r.body)
+    );
+  }
+
   /** Path part for operation `findAllUsers()` */
   static readonly FindAllUsersPath = '/find-players/get/all/users';
 
@@ -106,6 +137,31 @@ export class CommunityControllerService extends BaseService {
   findAllUsers(params?: FindAllUsers$Params, context?: HttpContext): Observable<PageResponseUserCommunityResponse> {
     return this.findAllUsers$Response(params, context).pipe(
       map((r: StrictHttpResponse<PageResponseUserCommunityResponse>): PageResponseUserCommunityResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `getAllGamingPlatforms()` */
+  static readonly GetAllGamingPlatformsPath = '/find-players/gaming-platforms';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAllGamingPlatforms()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllGamingPlatforms$Response(params?: GetAllGamingPlatforms$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<PlatformResponse>>> {
+    return getAllGamingPlatforms(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getAllGamingPlatforms$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllGamingPlatforms(params?: GetAllGamingPlatforms$Params, context?: HttpContext): Observable<Array<PlatformResponse>> {
+    return this.getAllGamingPlatforms$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<PlatformResponse>>): Array<PlatformResponse> => r.body)
     );
   }
 

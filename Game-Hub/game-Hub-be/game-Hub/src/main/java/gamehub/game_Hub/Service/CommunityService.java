@@ -1,9 +1,13 @@
 package gamehub.game_Hub.Service;
 
+import java.util.List;
+
 import org.springframework.security.core.Authentication;
 
 import gamehub.game_Hub.Common.PageResponse;
 import gamehub.game_Hub.Response.FriendRequestResponse;
+import gamehub.game_Hub.Response.PlatformResponse;
+import gamehub.game_Hub.Response.RegionResponse;
 import gamehub.game_Hub.Response.UserCommunityResponse;
 
 public interface CommunityService {
@@ -19,5 +23,9 @@ public interface CommunityService {
   Long acceptFriendRequest(Authentication connectedUser, Long userId);
 
   PageResponse<FriendRequestResponse> getAllMyFriendRequests(Authentication connectedUser, int page, int size);
+
+  List<PlatformResponse> getAllGamingPlatforms();
+
+  List<RegionResponse> getAllRegions();
 
 }

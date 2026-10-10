@@ -216,11 +216,10 @@
         routerLink="/gamehub/user/me"
       >
         @if (!userHasProfilePicture) {
-          <img
-            src="../../../../../assets/profilePicture/default_profile_picture.svg"
-            class="h-13 w-13 rounded-xl border border-black object-cover group-data-[collapsible=icon]:!rouned-[2px] group-data-[collapsible=icon]:!h-8 group-data-[collapsible=icon]:!w-8"
-            [ngStyle]="{'background-color': userResponse.profileColor}"
-          />
+          <div class=" items-center flex justify-center text-[#101521] text-sm h-13 w-13 rounded-xl object-cover group-data-[collapsible=icon]:!rounded-[5px] group-data-[collapsible=icon]:!h-8 group-data-[collapsible=icon]:!w-8"
+               [ngStyle]="{'background-color': userResponse.profileColor}">
+            {{ userResponse.username!.slice(0, 2).toUpperCase() }}
+          </div>
         }
 
         @if (userHasProfilePicture) {

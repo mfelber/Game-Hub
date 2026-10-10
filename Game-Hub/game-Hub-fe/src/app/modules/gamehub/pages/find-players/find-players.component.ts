@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ReportRequest} from '../../../../services/models/report-request';
-import { DatePipe, NgClass, NgStyle } from '@angular/common';
+import {DatePipe, NgClass, NgStyle} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ReportUserModalComponent} from '../../components/report-user-modal/report-user-modal.component';
 import {SearchBar} from '../../components/search-bar/search-bar';
@@ -17,6 +17,12 @@ import {PaginationComponent} from '../../components/pagination/pagination.compon
 import {LoadingComponent} from '../../components/loading/loading.component';
 import {CountryControllerService} from '../../../../services/services/country-controller.service';
 import {HlmDropdownMenu, HlmDropdownMenuItem, HlmDropdownMenuTrigger} from '@spartan/dropdown-menu';
+import {HlmButton} from '@spartan/button';
+import {RegionResponse} from '../../../../services/models/region-response';
+import {Platform} from '@angular/cdk/platform';
+import {PlatformResponse} from '../../../../services/models/platform-response';
+import {ToastService} from '../../../../services/ToastService/toast.service';
+import {CountryResponse} from '../../../../services/models/country-response';
 
 @Component({
   selector: 'app-find-players',
@@ -30,16 +36,12 @@ import {HlmDropdownMenu, HlmDropdownMenuItem, HlmDropdownMenuTrigger} from '@spa
     EmptyStateComponent,
     UserActionsComponent,
     PaginationComponent,
-    LoadingComponent,
-    HlmDropdownMenuTrigger,
-    HlmDropdownMenu,
-    HlmDropdownMenuItem
+    LoadingComponent
   ],
   templateUrl: './find-players.component.html',
   styleUrl: './find-players.component.scss',
 })
 export class FindPlayersComponent implements OnInit {
-
 
   public page = 0;
   public size = 10;
@@ -49,15 +51,7 @@ export class FindPlayersComponent implements OnInit {
   isLoading = false;
   isReportUserModalOpen = false;
 
-  constructor(
-    private communityService: CommunityControllerService,
-    private reportService: ReportControllerService,
-    private countryService: CountryControllerService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private refreshService: RefreshService
-  ) {
-  }
+  filterOpen = false;
 
   filters = {
     country: '',
@@ -67,8 +61,6 @@ export class FindPlayersComponent implements OnInit {
   }
 
   errorMessage: string = '';
-  successMessage: string | null = null;
-  toastVisible = false;
 
   selectedUserToReport: UserCommunityResponse | null = null;
   reportRequest: ReportRequest = {reason: null!, message: ''};
@@ -79,6 +71,27 @@ export class FindPlayersComponent implements OnInit {
 
   userCommunityResponse: PageResponseUserCommunityResponse = {};
   filteredUsers: UserCommunityResponse[] = [];
+
+  regions: RegionResponse[] = [];
+  gamingPlatforms: PlatformResponse[] = [];
+
+  pinnedCountries = ['Slovakia', 'Czechia', 'Poland', 'Germany', 'United States'];
+  countryList: CountryResponse[] = [];
+  extraCountries: string[] = [];
+  selectedCountries: string[] = [];
+  countryOpen = false;
+  countrySearchQuery = '';
+
+  constructor(
+    private communityService: CommunityControllerService,
+    private reportService: ReportControllerService,
+    private countryService: CountryControllerService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private refreshService: RefreshService,
+    private toastService: ToastService,
+  ) {
+  }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
@@ -93,7 +106,8 @@ export class FindPlayersComponent implements OnInit {
     });
 
     this.getCountries();
-
+    this.getRegions();
+    this.getGamingPlatforms();
   }
 
   private loadAllUsers(query: string = "") {
@@ -122,6 +136,31 @@ export class FindPlayersComponent implements OnInit {
     this.countryService.getAllCountries().subscribe({
       next: (countries) => {
         this.allCountries = countries.map(c => c.countryName!)
+        this.countryList = countries;
+      }
+    })
+  }
+
+  getRegions() {
+    this.communityService.getAllRegions().subscribe({
+      next: (regions) => {
+        this.regions = regions;
+      },
+      error: error => {
+        console.log(error);
+        this.toastService.error('Error getting regions.');
+      }
+    })
+  }
+
+  getGamingPlatforms() {
+    this.communityService.getAllGamingPlatforms().subscribe({
+      next: (gamingPlatforms) => {
+        this.gamingPlatforms = gamingPlatforms;
+      },
+      error: error => {
+        console.log(error);
+        this.toastService.error('Error getting gaming platforms.');
       }
     })
   }
@@ -131,6 +170,14 @@ export class FindPlayersComponent implements OnInit {
       return 'data:image/jpeg;base64,' + user.userProfilePicture;
     }
     return this.userHasProfilePicture;
+  }
+
+  get visibleCountries() {
+    return [...this.pinnedCountries, ...this.extraCountries];
+  }
+
+  getFlag(name: string) {
+    return this.countryList.find(country => country.countryName === name)?.iconPath;
   }
 
   sendFriendRequest(userId: number) {
@@ -160,6 +207,29 @@ export class FindPlayersComponent implements OnInit {
     this.searchQuery = value;
     this.userCommunityResponse = {}
     this.loadAllUsers(value);
+  }
+
+  get searchCountry(): CountryResponse[] {
+    const query = this.countrySearchQuery.trim().toLowerCase();
+    return this.countryList.filter(country =>
+      country.countryName !== 'Not Selected' && !this.visibleCountries.includes(country.countryName!) &&
+      country.countryName!.toLowerCase().includes(query));
+  }
+
+  toggleCountry(countryName: string) {
+    if (this.selectedCountries.includes(countryName)) {
+      this.selectedCountries = this.selectedCountries.filter(country => country !== countryName);
+      this.extraCountries = this.extraCountries.filter(country => country !== countryName)
+    } else {
+      this.selectedCountries = [...this.selectedCountries, countryName];
+    }
+  }
+
+  addCountry(name: string) {
+    this.extraCountries = [...this.extraCountries, name];
+    this.selectedCountries = [...this.selectedCountries, name];
+    this.countrySearchQuery = '';
+    this.countryOpen = false;
   }
 
   acceptFriendRequest(userId: number) {
@@ -208,22 +278,8 @@ export class FindPlayersComponent implements OnInit {
     })
   }
 
-  showSuccess(message: string) {
-    this.successMessage = message;
-
-    setTimeout(() => this.toastVisible = true, 10);
-
-    setTimeout(() => this.hideToast(), 3000);
-  }
-
-  hideToast() {
-    this.toastVisible = false;
-
-    setTimeout(() => this.successMessage = null, 500);
-  }
-
   handleReport(request: ReportRequest) {
-    this.showSuccess('User has been reported successfully');
+    this.toastService.success('User has been reported successfully')
   }
 
   resetFilters() {

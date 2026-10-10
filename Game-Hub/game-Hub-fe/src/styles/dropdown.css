@@ -13,6 +13,10 @@
     cursor-pointer py-3 pl-4 pr-4 gap-3 text-sm hover:bg-[#1c2436];
   }
 
+  .dropdown-button:disabled {
+    @apply pointer-events-none opacity-50;
+  }
+
 
   .dropdown-small {
     @apply flex flex-col gap-2 text-sm max-sm:w-full;

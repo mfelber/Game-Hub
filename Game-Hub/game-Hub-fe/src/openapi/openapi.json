@@ -2268,6 +2268,29 @@
         }
       }
     },
+    "/find-players/regions": {
+      "get": {
+        "tags": [
+          "community-controller"
+        ],
+        "operationId": "getAllRegions",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RegionResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/find-players/get/all/users": {
       "get": {
         "tags": [
@@ -2312,6 +2335,29 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/PageResponseUserCommunityResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/find-players/gaming-platforms": {
+      "get": {
+        "tags": [
+          "community-controller"
+        ],
+        "operationId": "getAllGamingPlatforms",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PlatformResponse"
+                  }
                 }
               }
             }
@@ -3947,10 +3993,10 @@
           "inCart": {
             "type": "boolean"
           },
-          "inLibrary": {
+          "inWishList": {
             "type": "boolean"
           },
-          "inWishList": {
+          "inLibrary": {
             "type": "boolean"
           }
         }
@@ -4672,6 +4718,17 @@
           }
         }
       },
+      "RegionResponse": {
+        "type": "object",
+        "properties": {
+          "enumName": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
       "MicrophoneUsageResponse": {
         "type": "object",
         "properties": {
@@ -4729,17 +4786,6 @@
             "type": "string"
           },
           "icon": {
-            "type": "string"
-          }
-        }
-      },
-      "RegionResponse": {
-        "type": "object",
-        "properties": {
-          "enumName": {
-            "type": "string"
-          },
-          "name": {
             "type": "string"
           }
         }

@@ -11,8 +11,10 @@
     border border-[#222B3D]
     hover:bg-[#1c2436]
     peer-checked:border-[#4DA3FF]
-    peer-checked:[&_span]:text-[#4DA3FF]
-    peer-checked:[&_i]:text-[#4DA3FF];
+    peer-checked:bg-[#16304D]
+    peer-checked:[&_span]:text-[#B5D8FF]
+    peer-checked:[&_i]:text-[#B5D8FF]
+    transition duration-200 ease-in-out;
 
     & span {
       @apply text-sm text-[#E8ECF4];

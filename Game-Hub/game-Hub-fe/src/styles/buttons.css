@@ -14,6 +14,16 @@
     text-white cursor-pointer transition duration-200 ease-in-out;
   }
 
+
+  .filter-button {
+    @apply flex items-center gap-2 px-4 py-2 rounded-[12px]
+    text-white text-sm bg-[#151b27] border border-[#222B3D] hover:bg-[#1c2436] cursor-pointer transition duration-200 ease-in-out;
+
+    &.open {
+      @apply bg-[#16304D] text-[#B5D8FF] border border-[#4DA3FF];
+    }
+  }
+
   .small-button {
     @apply h-8 flex items-center gap-2 px-3 py-1 rounded-md
     text-white cursor-pointer transition duration-200 ease-in-out;
@@ -40,6 +50,11 @@
   .tag-button {
     @apply rounded-lg border border-white/10 bg-[#151923] px-4 py-2 text-sm font-medium
     text-slate-300 transition-colors hover:border-white/25 hover:bg-[#1b2230] cursor-pointer;
+  }
+
+  .tag-button-filter {
+    @apply w-fit rounded-full border border-white/10 bg-transparent px-4 py-2 text-sm font-medium
+    text-slate-300 transition-colors hover:border-white/25 cursor-pointer;
   }
 
   .tag-button-selected {
@@ -161,6 +176,11 @@
   .edit-profile {
     @apply border border-white/12 bg-white/6 text-white
     hover:bg-white/12;
+  }
+
+  .transparent {
+    @apply flex items-center gap-2 px-4 py-2
+    text-white border border-[#222B3D] hover:bg-[#1c2436] cursor-pointer transition duration-200 ease-in-out;
   }
 
 }

@@ -23,71 +23,114 @@
 
     <div class="search !mb-2 w-full flex items-center space-x-3">
       <app-search-bar
-        placeholder="Search users..."
+        placeholder="Search user"
         (search)="searchByUsername($event)">
       </app-search-bar>
 
       <div class="filter-options">
+        <button
+          class="filter-button"
+          (click)="filterOpen = !filterOpen"
+          [ngClass]="{
+          'open': filterOpen
+          }">
+          <i class="fa-solid fa-filter"></i>
+          Filters
+          <span
+            class="flex items-center justify-center w-5 h-5 rounded-full bg-[#4DA3FF] text-xs text-[#0B0F15] font-semibold">5</span>
+          <i
+            class="fa-solid fa-chevron-down transition-transform duration-300"
+            [class.rotate-180]="filterOpen"></i>
+        </button>
 
-        <div class="dropdown">
-          <button class="dropdown-button" type="button" [hlmDropdownMenuTrigger]="countryMenu" align="start">
-            <span> {{ filters.country || 'All Countries' }} </span>
+        <!--        <div class="dropdown">-->
+        <!--          <button disabled class="dropdown-button" type="button" [hlmDropdownMenuTrigger]="countryMenu" align="start">-->
+        <!--            <span> {{ filters.country || 'All Countries' }} </span>-->
 
-            <i class="fa-solid fa-chevron-down text-xs"></i></button>
+        <!--            <i class="fa-solid fa-chevron-down text-xs"></i></button>-->
 
-          <ng-template #countryMenu>
-            <hlm-dropdown-menu>
-              <button
-                hlmDropdownMenuItem
-                type="button"
-                class="new-dropdown-option"
-                (click)="filters.country = ''; changeFilter()">
-                All Countries
-              </button>
+        <!--          <ng-template #countryMenu>-->
+        <!--            <hlm-dropdown-menu>-->
+        <!--              <button-->
+        <!--                hlmDropdownMenuItem-->
+        <!--                type="button"-->
+        <!--                class="new-dropdown-option"-->
+        <!--                (click)="filters.country = ''; changeFilter()">-->
+        <!--                All Countries-->
+        <!--              </button>-->
 
-              @for (country of allCountries; track country) {
-                <button
-                  hlmDropdownMenuItem
-                  class="new-dropdown-option"
-                  type="button"
-                  (click)="filters.country = country; changeFilter()">
-                  {{ country }}
-                </button>
-              }
-            </hlm-dropdown-menu>
-          </ng-template>
-        </div>
+        <!--              @for (country of allCountries; track country) {-->
+        <!--                <button-->
+        <!--                  hlmDropdownMenuItem-->
+        <!--                  class="new-dropdown-option"-->
+        <!--                  type="button"-->
+        <!--                  (click)="filters.country = country; changeFilter()">-->
+        <!--                  {{ country }}-->
+        <!--                </button>-->
+        <!--              }-->
+        <!--            </hlm-dropdown-menu>-->
+        <!--          </ng-template>-->
+        <!--        </div>-->
 
-        <div class="dropdown">
-          <button class="dropdown-button" type="button" [hlmDropdownMenuTrigger]="platformMenu" align="start">
-            <span> All platforms </span>
+        <!--        <div class="dropdown">-->
+        <!--          <button disabled class="dropdown-button" type="button" [hlmDropdownMenuTrigger]="countryMenu" align="start">-->
+        <!--            <span> {{ filters.country || 'All Countries' }} </span>-->
 
-            <i class="fa-solid fa-chevron-down text-xs"></i></button>
+        <!--            <i class="fa-solid fa-chevron-down text-xs"></i></button>-->
 
-          <ng-template #platformMenu>
-            <hlm-dropdown-menu>
-              <button hlmDropdownMenuItem>PC</button>
-              <button hlmDropdownMenuItem>Xbox</button>
-              <button hlmDropdownMenuItem>PS</button>
-              <button hlmDropdownMenuItem>Mobile</button>
-            </hlm-dropdown-menu>
-          </ng-template>
-        </div>
+        <!--          <ng-template #countryMenu>-->
+        <!--            <hlm-dropdown-menu>-->
+        <!--              <button-->
+        <!--                hlmDropdownMenuItem-->
+        <!--                type="button"-->
+        <!--                class="new-dropdown-option"-->
+        <!--                (click)="filters.country = ''; changeFilter()">-->
+        <!--                All Countries-->
+        <!--              </button>-->
 
-        <div class="dropdown">
-          <button class="dropdown-button" type="button" [hlmDropdownMenuTrigger]="voiceChatMenu" align="start">
-            <span> Voice chat </span>
+        <!--              @for (country of allCountries; track country) {-->
+        <!--                <button-->
+        <!--                  hlmDropdownMenuItem-->
+        <!--                  class="new-dropdown-option"-->
+        <!--                  type="button"-->
+        <!--                  (click)="filters.country = country; changeFilter()">-->
+        <!--                  {{ country }}-->
+        <!--                </button>-->
+        <!--              }-->
+        <!--            </hlm-dropdown-menu>-->
+        <!--          </ng-template>-->
+        <!--        </div>-->
 
-            <i class="fa-solid fa-chevron-down text-xs"></i></button>
+        <!--        <div class="dropdown">-->
+        <!--          <button class="dropdown-button" type="button" [hlmDropdownMenuTrigger]="platformMenu" align="start">-->
+        <!--            <span> All platforms </span>-->
 
-          <ng-template #voiceChatMenu>
-            <hlm-dropdown-menu>
-              <button hlmDropdownMenuItem>Uses voice chat</button>
-              <button hlmDropdownMenuItem>Voice optional</button>
-              <button hlmDropdownMenuItem>No voice chat</button>
-            </hlm-dropdown-menu>
-          </ng-template>
-        </div>
+        <!--            <i class="fa-solid fa-chevron-down text-xs"></i></button>-->
+
+        <!--          <ng-template #platformMenu>-->
+        <!--            <hlm-dropdown-menu>-->
+        <!--              <button hlmDropdownMenuItem>PC</button>-->
+        <!--              <button hlmDropdownMenuItem>Xbox</button>-->
+        <!--              <button hlmDropdownMenuItem>PS</button>-->
+        <!--              <button hlmDropdownMenuItem>Mobile</button>-->
+        <!--            </hlm-dropdown-menu>-->
+        <!--          </ng-template>-->
+        <!--        </div>-->
+
+        <!--        <div class="dropdown">-->
+        <!--          <button class="dropdown-button" type="button" [hlmDropdownMenuTrigger]="voiceChatMenu" align="start">-->
+        <!--            <span> Voice chat </span>-->
+
+        <!--            <i class="fa-solid fa-chevron-down text-xs"></i></button>-->
+
+        <!--          <ng-template #voiceChatMenu>-->
+        <!--            <hlm-dropdown-menu>-->
+        <!--              <button hlmDropdownMenuItem>Uses voice chat</button>-->
+        <!--              <button hlmDropdownMenuItem>Voice optional</button>-->
+        <!--              <button hlmDropdownMenuItem>No voice chat</button>-->
+        <!--            </hlm-dropdown-menu>-->
+        <!--          </ng-template>-->
+        <!--        </div>-->
 
         <div class="checkbox">
           <input
@@ -113,6 +156,99 @@
 
   </section>
 
+  <section class="find-players-filter" [class.filter-open]="filterOpen">
+    <div class="filter-content">
+      <div class="bg-[#151B27] rounded-[18px]">
+        <div class="px-6 py-4">
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 mb-3">
+            <div>
+              <span class=" block text-gray-400">Region</span>
+              <div class="mt-2 flex flex-wrap gap-2">
+                @for (region of regions; track region.name) {
+                  <button type="button" class="tag-button-filter">
+                    {{ region.name }}
+                  </button>
+                }
+              </div>
+
+            </div>
+
+            <div class="relative">
+              <span class=" block text-gray-400">Country</span>
+
+              <div class="mt-2 flex flex-wrap gap-2">
+                @for (country of visibleCountries; track country) {
+                  <button
+                    type="button" class="tag-button-filter"
+                    [class.tag-button-selected]="selectedCountries.includes(country)"
+                    (click)="toggleCountry(country)">
+                    @if (getFlag(country); as flag) {
+                      <img [src]="flag" class="mr-1 inline w-4 rounded-[3px]">
+                    }
+                    {{ country }}
+                  </button>
+                }
+                <div class="relative">
+                <button type="button" class="tag-button-filter" (click)="countryOpen = !countryOpen">
+                  <i class="fa-solid fa-plus text-sm"></i> More
+                </button>
+
+                @if (countryOpen) {
+                  <div class="absolute right-0 z-20 mt-2 w-64 rounded-[10px] border border-[#222B3D] bg-[#151B27] p-2 shadow-lg">
+                    <input
+                      class="mb-2 h-9 w-full rounded-[8px] border border-[#222B3D] bg-[#101521] px-3 text-sm text-white placeholder:text-[#7D879B] outline-none focus:border-[#4DA3FF]"
+                      placeholder="Search country" [(ngModel)]="countrySearchQuery">
+                    <ul class="max-h-52 overflow-y-auto">
+                      @for (country of searchCountry; track country.countryName) {
+                        <li
+                          class="flex cursor-pointer items-center gap-2 rounded-[6px] px-2 py-2 text-sm text-white hover:bg-[#1c2436]"
+                          (click)="addCountry(country.countryName!)">
+                          <img [src]="country.iconPath" [alt]="country.countryName" class="w-5 rounded-[3px]">
+                          {{ country.countryName }}
+                        </li>
+                      } @empty {
+                        <li class="px-2 py-2 text-sm text-gray-400">
+                          No country found
+                        </li>
+                      }
+                    </ul>
+                  </div>
+                }
+                </div>
+              </div>
+
+            </div>
+
+            <div>
+              <span class=" block text-gray-400">Platforms</span>
+              <div class="mt-2 flex flex-wrap gap-2">
+                @for (platform of gamingPlatforms; track platform.name) {
+                  <button type="button" class="tag-button-filter ">
+                    <i [class]="platform.icon"></i> {{ platform.name }}
+                  </button>
+                }
+              </div>
+            </div>
+
+            <div>
+              <span class=" block text-gray-400">Voice chat</span>
+            </div>
+          </div>
+
+          <div class="border-t border-t-[#222B3D]">
+            <div class="flex justify-end gap-3 mt-3">
+              <button class="medium-button transparent">Clear all</button>
+              <button class="medium-button save">Apply</button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
   @if (filteredUsers.length === 0 && !isLoading) {
     <app-empty-state
       icon='fa-solid fa-sad-tear'
@@ -121,85 +257,85 @@
   }
 
   <div class="users-content">
-  <section class="users-cards">
+    <section class="users-cards">
 
-    @if (isLoading) {
-      <app-loading/>
-    }
+      @if (isLoading) {
+        <app-loading/>
+      }
 
-    @for (user of filteredUsers; track user) {
-      <div class="user-card" (click)="navigateToUser(user.userId)">
+      @for (user of filteredUsers; track user) {
+        <div class="user-card" (click)="navigateToUser(user.userId)">
 
-        <div class="find-player-top">
+          <div class="find-player-top">
 
-          <div class="user-main">
-            @if (user.userProfilePicture) {
-              <img
-                [src]="getProfilePicture(user)"
-                class="small-img"/>
-            }
-            @if (!user.userProfilePicture) {
-              <div class="small-img items-center flex justify-center text-[#101521] text-xl"
-                   [ngStyle]="{'background-color': user.profileColor}">
-                {{ user.username!.slice(0, 2).toUpperCase() }}
-              </div>
-            }
+            <div class="user-main">
+              @if (user.userProfilePicture) {
+                <img
+                  [src]="getProfilePicture(user)"
+                  class="small-img"/>
+              }
+              @if (!user.userProfilePicture) {
+                <div class="small-img items-center flex justify-center text-[#101521] text-xl"
+                     [ngStyle]="{'background-color': user.profileColor}">
+                  {{ user.username!.slice(0, 2).toUpperCase() }}
+                </div>
+              }
 
-            <div class="user-info">
-              <div class="username">
-                <h3>{{ user.username }}</h3>
-                <img class="flag" [src]="user.country?.iconPath" alt="">
-              </div>
-              <span [ngClass]="{
+              <div class="user-info">
+                <div class="username">
+                  <h3>{{ user.username }}</h3>
+                  <img class="flag" [src]="user.country?.iconPath" alt="">
+                </div>
+                <span [ngClass]="{
           'online': user.status === 'Online' || user.status === 'Playing',
           'offline': user.status === 'Offline',
           'away': user.status === 'Away'
           }">• {{
-                  user.status === 'Playing' ? 'In Game ' + user.currentlyPlaying?.title
-                    : user.status
-                }} </span>
+                    user.status === 'Playing' ? 'In Game ' + user.currentlyPlaying?.title
+                      : user.status
+                  }} </span>
+              </div>
+            </div>
+
+            <div class="user-actions">
+              @if (user.isFriend) {
+                <button (click)="$event.stopPropagation()"
+                        class="icon-button is-friend">
+                  <i class="fa-solid fa-user-group"></i>
+                </button>
+              }
+              @if (user.friendRequestReceived) {
+                <button
+                  (click)=" acceptFriendRequest(user.userId!) ; $event.stopPropagation()"
+                  class="icon-button accept">
+                  <i class="fa-solid fa-user-check"></i></button>
+              }
+              @if (user.friendRequestReceived) {
+                <button
+                  (click)=" rejectFriendRequest(user.userId!) ; $event.stopPropagation()"
+                  class="icon-button remove">
+                  <i class="fa-solid fa-user-xmark"></i></button>
+              }
+              @if (user.friendRequestSent === false && user.isFriend === false && user.friendRequestReceived === false) {
+                <button
+                  (click)="sendFriendRequest(user.userId!) ; $event.stopPropagation()"
+                  class="icon-button accept">
+                  <i class="fa-solid fa-user-plus"></i>
+                </button>
+              }
+              @if (user.friendRequestSent) {
+                <button
+                  (click)="cancelFriendRequest(user.userId!) ; $event.stopPropagation()"
+                  class="icon-button cancel-friend">
+                  <i class="fa-solid fa-user-clock"></i>
+                </button>
+              }
+              <button (click)="openReportUserModal(user) ; $event.stopPropagation()"
+                      class="icon-button report">
+                <i class="fa-solid fa-exclamation"></i>
+              </button>
             </div>
           </div>
-
-          <div class="user-actions">
-            @if (user.isFriend) {
-              <button (click)="$event.stopPropagation()"
-                      class="icon-button is-friend">
-                <i class="fa-solid fa-user-group"></i>
-              </button>
-            }
-            @if (user.friendRequestReceived) {
-              <button
-                (click)=" acceptFriendRequest(user.userId!) ; $event.stopPropagation()"
-                class="icon-button accept">
-                <i class="fa-solid fa-user-check"></i></button>
-            }
-            @if (user.friendRequestReceived) {
-              <button
-                (click)=" rejectFriendRequest(user.userId!) ; $event.stopPropagation()"
-                class="icon-button remove">
-                <i class="fa-solid fa-user-xmark"></i></button>
-            }
-            @if (user.friendRequestSent === false && user.isFriend === false && user.friendRequestReceived === false) {
-              <button
-                (click)="sendFriendRequest(user.userId!) ; $event.stopPropagation()"
-                class="icon-button accept">
-                <i class="fa-solid fa-user-plus"></i>
-              </button>
-            }
-            @if (user.friendRequestSent) {
-              <button
-                (click)="cancelFriendRequest(user.userId!) ; $event.stopPropagation()"
-                class="icon-button cancel-friend">
-                <i class="fa-solid fa-user-clock"></i>
-              </button>
-            }
-            <button (click)="openReportUserModal(user) ; $event.stopPropagation()"
-                    class="icon-button report">
-              <i class="fa-solid fa-exclamation"></i>
-            </button>
-          </div>
-        </div>
 
           <div class="user-tags">
             <span class="user-tag tag-button-selected" [ngClass]="{
@@ -208,7 +344,7 @@
             'tag-xbox': user.mainPlatform?.enumName === 'XBOX',
             'tag-nintendo': user.mainPlatform?.enumName === 'NINTENDO',
             'tag-mobile': user.mainPlatform?.enumName === 'MOBILE',
-            }"><i [class]="user.mainPlatform?.icon" class="mr-1"></i>{{user.mainPlatform?.name}}</span>
+            }"><i [class]="user.mainPlatform?.icon" class="mr-1"></i>{{ user.mainPlatform?.name }}</span>
 
             <span class="user-tag mic-tag" [ngClass]="{
             'mic-yes': user.microphoneUsage?.enumName === 'YES',
@@ -225,46 +361,35 @@
             'region-me': user.region?.enumName === 'ME',
             'region-oc': user.region?.enumName === 'OC',
             'region-cab': user.region?.enumName === 'CAB',
-            }"> {{user.region?.name}}
+            }"> {{ user.region?.name }}
             </span>
           </div>
 
           <div class="user-divider"></div>
 
-        <div class="flex justify-between">
-          <div class="user-meta">
-            <span> <i class="fa-solid fa-user-group friends-count"></i> {{ user.friendsCount }}</span>
-            <span> <i class="fa-solid fa-calendar joined-date"></i> {{ user.joinedDate }}</span>
+          <div class="flex justify-between">
+            <div class="user-meta">
+              <span> <i class="fa-solid fa-user-group friends-count"></i> {{ user.friendsCount }}</span>
+              <span> <i class="fa-solid fa-calendar joined-date"></i> {{ user.joinedDate }}</span>
+            </div>
+            <div class="flex gap-2">
+              <span class="account-tag creator"> <i class="fa-regular fa-gem"></i> Creator</span>
+              <span class="account-tag supporter"> <i class="fa-regular fa-heart text-sm"></i> Supporter</span>
+            </div>
           </div>
-          <div class="flex gap-2">
-            <span class="account-tag creator"> <i class="fa-regular fa-gem"></i> Creator</span>
-            <span class="account-tag supporter"> <i class="fa-regular fa-heart text-sm"></i> Supporter</span>
-          </div>
+
+
         </div>
-
-
-      </div>
-    }
-  </section>
-  <section class="pagination-wrapper">
-  @if (filteredUsers.length && userCommunityResponse.totalPages! > 1) {
-    <app-pagination
-      [currentPage]="page"
-      [totalPages]="userCommunityResponse.totalPages!"
-      (pageChange)="changePage($event)">
-    </app-pagination>
-  }
-  </section>
+      }
+    </section>
+    <section class="pagination-wrapper">
+      @if (filteredUsers.length && userCommunityResponse.totalPages! > 1) {
+        <app-pagination
+          [currentPage]="page"
+          [totalPages]="userCommunityResponse.totalPages!"
+          (pageChange)="changePage($event)">
+        </app-pagination>
+      }
+    </section>
   </div>
 </main>
-
-<div class="fixed top-4 right-4 flex flex-col gap-2 z-50">
-  @if (successMessage) {
-    <div
-      class="bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg min-w-[250px]
-              transform transition-transform duration-500 ease-in-out opacity-0"
-      [ngClass]="{'translate-x-0 opacity-100': toastVisible, 'translate-x-24 opacity-0': !toastVisible}">
-      {{ successMessage }}
-    </div>
-  }
-</div>

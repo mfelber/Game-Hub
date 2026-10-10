@@ -1,3 +1,30 @@
+.find-players-filter {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 300ms ease, opacity 200ms ease;
+}
+
+.find-players-filter.filter-open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.filter-content {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.find-players-filter.filter-open .filter-content {
+  animation: filter-overflow-visible 0s linear 300ms forwards;
+}
+
+//@keyframes filter-overflow-visible {
+//  to {
+//    overflow: visible;
+//  }
+//}
+
 .library-count {
   color: #6c63ff;
 }

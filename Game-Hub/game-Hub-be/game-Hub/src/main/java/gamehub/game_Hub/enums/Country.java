@@ -2,7 +2,7 @@ package gamehub.game_Hub.enums;
 
 public enum Country {
   SK("sk.svg", "Slovakia"),
-  CZ("cz.svg", "Czech Republic"),
+  CZ("cz.svg", "Czechia"),
   PL("pl.svg", "Poland"),
   HU("hu.svg", "Hungary"),
   US("us.svg", "United States"),

@@ -1,6 +1,8 @@
 package gamehub.game_Hub.Controller;
 
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +18,8 @@ import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Repository.FriendRequestRepository;
 import gamehub.game_Hub.Repository.user.UserRepository;
 import gamehub.game_Hub.Response.FriendRequestResponse;
+import gamehub.game_Hub.Response.PlatformResponse;
+import gamehub.game_Hub.Response.RegionResponse;
 import gamehub.game_Hub.Response.UserCommunityResponse;
 import gamehub.game_Hub.Service.CommunityService;
 import jakarta.persistence.EntityNotFoundException;
@@ -74,5 +78,15 @@ public class CommunityController {
         .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + authUser.getId()));
 
     return friendRequestRepository.countByReceiver_Id(user.getId());
+  }
+
+  @GetMapping("/gaming-platforms")
+  public ResponseEntity<List<PlatformResponse>> getAllGamingPlatforms() {
+    return ResponseEntity.ok(communityService.getAllGamingPlatforms());
+  }
+
+  @GetMapping("regions")
+  public ResponseEntity<List<RegionResponse>> getAllRegions() {
+    return ResponseEntity.ok(communityService.getAllRegions());
   }
 }
