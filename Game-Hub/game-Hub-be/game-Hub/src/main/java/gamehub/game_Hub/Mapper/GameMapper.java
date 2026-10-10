@@ -32,7 +32,7 @@ import gamehub.game_Hub.Response.GameResponse;
 import gamehub.game_Hub.Response.GameResponseShort;
 import gamehub.game_Hub.Response.GenreResponse;
 import gamehub.game_Hub.Response.LanguageResponse;
-import gamehub.game_Hub.Response.PlatformResponse;
+import gamehub.game_Hub.Response.OperationSystemResponse;
 import gamehub.game_Hub.Response.SubtitleResponse;
 import gamehub.game_Hub.enums.GameUnitSize;
 import jakarta.persistence.EntityNotFoundException;
@@ -118,8 +118,8 @@ public class GameMapper {
         .ageRating(new AgeRatingResponse(game.getAgeRating().getId(), game.getAgeRating().getAgeRating(), game.getAgeRating().getAgeRatingColor()))
         .gameCoverImage(FileUtils.readCoverFromLocation(game.getGameCoverImage()))
         .systemRequirements(game.getSystemRequirements())
-        .platforms(game.getPlatforms().stream()
-            .map(g -> new PlatformResponse(g.getId(), g.getName()))
+        .operationSystems(game.getPlatforms().stream()
+            .map(g -> new OperationSystemResponse(g.getId(), g.getName()))
             .collect(Collectors.toSet()))
         .languages(game.getLanguages().stream()
             .map(g -> new LanguageResponse(g.getId(), g.getName()))
@@ -156,8 +156,8 @@ public class GameMapper {
         .ageRating(new AgeRatingResponse(game.getAgeRating().getId(), game.getAgeRating().getAgeRating(), game.getAgeRating().getAgeRatingColor()))
         .gameCoverImage(FileUtils.readCoverFromLocation(game.getGameCoverImage()))
         .systemRequirements(game.getSystemRequirements())
-        .platforms(game.getPlatforms().stream()
-            .map(g -> new PlatformResponse(g.getId(), g.getName()))
+        .operationSystems(game.getPlatforms().stream()
+            .map(g -> new OperationSystemResponse(g.getId(), g.getName()))
             .collect(Collectors.toSet()))
         .languages(game.getLanguages().stream()
             .map(g -> new LanguageResponse(g.getId(), g.getName()))

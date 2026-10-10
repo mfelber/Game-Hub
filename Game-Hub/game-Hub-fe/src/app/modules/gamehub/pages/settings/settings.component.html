@@ -16,7 +16,7 @@
       <button hlmTabsTrigger="privacy"><i class="fa-solid fa-lock"></i> Privacy</button>
       <button hlmTabsTrigger="community"><i class="fa-solid fa-comment"></i> Community</button>
       <button hlmTabsTrigger="store"><i class="fa-solid fa-store"></i>Store</button>
-      <button hlmTabsTrigger="gaming"><i class="fa-solid fa-gamepad"></i>Gaming</button>
+      <button hlmTabsTrigger="playerPreferences"><i class="fa-solid fa-gamepad"></i>Preferences</button>
       <button hlmTabsTrigger="account"><i class="fa-solid fa-bell"></i>Notifications</button>
       <button hlmTabsTrigger="account"><i class="fa-solid fa-triangle-exclamation"></i>Account</button>
     </hlm-tabs-list>
@@ -666,9 +666,6 @@
                              [ngClass]="{
                            'selected-genre': selectedGenres.has(genre.id),
                            'not-selected': !selectedGenres.has(genre.id)}">
-                          @if (selectedGenres.has(genre.id)) {
-                            <i class="fa-solid fa-check text-[10px]"></i>
-                          }
                           {{ genre.name }}
                           @if (selectedGenres.has(genre.id)) {
                             <button
@@ -898,10 +895,26 @@
         </div>
 
       </div>
-      <div hlmTabsContent="gaming">
-        <h2 class="text-xl font-semibold text-white"><i class="fa-solid fa-gamepad"></i> Gaming</h2>
+      <div hlmTabsContent="playerPreferences">
+        <h2 class="text-xl font-semibold text-white"><i class="fa-solid fa-gamepad"></i>Preferences</h2>
         <div>
-          Favorite game
+          main platform
+          Looking for →
+          Teammate
+          Duo
+          Squad
+          Co-op
+          Playstyle →
+          Casual
+          Competitive
+          Ranked
+          Communication →
+          Voice Chat
+          No Mic
+          Sessions →
+          Long Sessions
+          Short Sessions
+
           Multiplayer preference
           Looking for:
           Casual players
@@ -910,7 +923,6 @@
           etc.
           Player type
           Gaming tags
-          Favorite genres
         </div>
       </div>
       <div hlmTabsContent="account">

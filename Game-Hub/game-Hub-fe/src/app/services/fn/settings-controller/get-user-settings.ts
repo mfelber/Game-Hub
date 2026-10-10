@@ -28,4 +28,4 @@ export function getUserSettings(http: HttpClient, rootUrl: string, params?: GetU
   );
 }
 
-getUserSettings.PATH = '/profile/settings';
+getUserSettings.PATH = '/settings/settings';

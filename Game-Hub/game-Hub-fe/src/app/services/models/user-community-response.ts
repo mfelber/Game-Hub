@@ -4,6 +4,8 @@
 
 import { CountryResponse } from '../models/country-response';
 import { GameResponseShort } from '../models/game-response-short';
+import { MicrophoneUsageResponse } from '../models/microphone-usage-response';
+import { PlatformResponse } from '../models/platform-response';
 export interface UserCommunityResponse {
   country?: CountryResponse;
   currentlyPlaying?: GameResponseShort;
@@ -13,6 +15,8 @@ export interface UserCommunityResponse {
   isFriend?: boolean;
   joinedDate?: string;
   libraryCount?: number;
+  mainPlatform?: PlatformResponse;
+  microphoneUsage?: MicrophoneUsageResponse;
   profileColor?: string;
   reviewsCount?: number;
   status?: 'Online' | 'Playing' | 'Offline' | 'Away';

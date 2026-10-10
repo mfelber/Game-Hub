@@ -8,13 +8,12 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { OperationSystemResponse } from '../../models/operation-system-response';
 
-export interface GetAllPlatforms$Params {
+export interface IsUserOnboarded$Params {
 }
 
-export function getAllPlatforms(http: HttpClient, rootUrl: string, params?: GetAllPlatforms$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<OperationSystemResponse>>> {
-  const rb = new RequestBuilder(rootUrl, getAllPlatforms.PATH, 'get');
+export function isUserOnboarded(http: HttpClient, rootUrl: string, params?: IsUserOnboarded$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+  const rb = new RequestBuilder(rootUrl, isUserOnboarded.PATH, 'get');
   if (params) {
   }
 
@@ -23,9 +22,9 @@ export function getAllPlatforms(http: HttpClient, rootUrl: string, params?: GetA
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<OperationSystemResponse>>;
+      return (r as HttpResponse<any>).clone({ body: String((r as HttpResponse<any>).body) === 'true' }) as StrictHttpResponse<boolean>;
     })
   );
 }
 
-getAllPlatforms.PATH = '/store/platforms';
+isUserOnboarded.PATH = '/settings/onboarded';

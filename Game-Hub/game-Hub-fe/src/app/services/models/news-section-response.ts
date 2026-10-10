@@ -6,7 +6,7 @@ import { NewsItemResponse } from '../models/news-item-response';
 export interface NewsSectionResponse {
   iconColor?: string;
   newsItems?: Array<NewsItemResponse>;
-  newsType?: 'ADDED' | 'IMPROVED' | 'FIXED' | 'SECURITY' | 'REMOVED';
+  newsType?: 'ADDED' | 'IMPROVED' | 'NOTES' | 'FIXED' | 'SECURITY' | 'REMOVED';
   newsTypeIcon?: string;
   newsTypeName?: string;
 }

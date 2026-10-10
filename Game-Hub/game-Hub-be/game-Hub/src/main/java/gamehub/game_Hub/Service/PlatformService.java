@@ -2,10 +2,10 @@ package gamehub.game_Hub.Service;
 
 import java.util.List;
 
-import gamehub.game_Hub.Response.PlatformResponse;
+import gamehub.game_Hub.Response.OperationSystemResponse;
 
 public interface PlatformService {
 
-  List<PlatformResponse> findAllPlatforms();
+  List<OperationSystemResponse> findAllPlatforms();
 
 }

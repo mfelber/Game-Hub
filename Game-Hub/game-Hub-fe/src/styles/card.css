@@ -156,7 +156,7 @@
   }
 
   .user-divider {
-    @apply w-full h-px bg-[#1E2637] my-4;
+    @apply w-full h-px bg-[#1E2637] mt-3 mb-2;
   }
 
   .user-actions {

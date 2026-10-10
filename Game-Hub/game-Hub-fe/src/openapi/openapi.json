@@ -1449,6 +1449,37 @@
         }
       }
     },
+    "/settings/onboarding": {
+      "patch": {
+        "tags": [
+          "settings-controller"
+        ],
+        "operationId": "onboardUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OnboardRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/wishlist/wishlist": {
       "get": {
         "tags": [
@@ -1603,7 +1634,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/PlatformResponse"
+                    "$ref": "#/components/schemas/OperationSystemResponse"
                   }
                 }
               }
@@ -1787,6 +1818,46 @@
         }
       }
     },
+    "/settings/settings": {
+      "get": {
+        "tags": [
+          "settings-controller"
+        ],
+        "operationId": "getUserSettings",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserSettingsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/settings/onboarded": {
+      "get": {
+        "tags": [
+          "settings-controller"
+        ],
+        "operationId": "isUserOnboarded",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/report/get/community-guidelines": {
       "get": {
         "tags": [
@@ -1914,26 +1985,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/StatusResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/profile/settings": {
-      "get": {
-        "tags": [
-          "user-profile-controller"
-        ],
-        "operationId": "getUserSettings",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserSettingsResponse"
                 }
               }
             }
@@ -3148,6 +3199,7 @@
             "enum": [
               "ADDED",
               "IMPROVED",
+              "NOTES",
               "FIXED",
               "SECURITY",
               "REMOVED"
@@ -3589,6 +3641,41 @@
           }
         }
       },
+      "OnboardRequest": {
+        "required": [
+          "mainPlatform",
+          "microphoneUsage"
+        ],
+        "type": "object",
+        "properties": {
+          "mainPlatform": {
+            "type": "string",
+            "enum": [
+              "PC",
+              "NINTENDO",
+              "XBOX",
+              "PS",
+              "MOBILE"
+            ]
+          },
+          "microphoneUsage": {
+            "type": "string",
+            "enum": [
+              "YES",
+              "NO",
+              "OPTIONAL"
+            ]
+          },
+          "genreIds": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        }
+      },
       "GamePreviewResponse": {
         "type": "object",
         "properties": {
@@ -3737,7 +3824,7 @@
           }
         }
       },
-      "PlatformResponse": {
+      "OperationSystemResponse": {
         "required": [
           "id",
           "platformName"
@@ -3822,11 +3909,11 @@
           "systemRequirements": {
             "$ref": "#/components/schemas/SystemRequirements"
           },
-          "platforms": {
+          "operationSystems": {
             "uniqueItems": true,
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/PlatformResponse"
+              "$ref": "#/components/schemas/OperationSystemResponse"
             }
           },
           "languages": {
@@ -3843,13 +3930,13 @@
               "$ref": "#/components/schemas/SubtitleResponse"
             }
           },
-          "inCart": {
-            "type": "boolean"
-          },
           "inLibrary": {
             "type": "boolean"
           },
           "inWishList": {
+            "type": "boolean"
+          },
+          "inCart": {
             "type": "boolean"
           }
         }
@@ -3918,6 +4005,181 @@
           }
         }
       },
+      "CardColorResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "colorName": {
+            "type": "string"
+          },
+          "colorCode": {
+            "type": "string"
+          }
+        }
+      },
+      "CommunitySettingsResponse": {
+        "type": "object",
+        "properties": {
+          "settingId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "settingName": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "access": {
+            "type": "string"
+          }
+        }
+      },
+      "CountryResponse": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "countryName": {
+            "type": "string"
+          },
+          "iconPath": {
+            "type": "string"
+          }
+        }
+      },
+      "PrivacySettingsResponse": {
+        "type": "object",
+        "properties": {
+          "settingId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "settingName": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "access": {
+            "type": "string"
+          }
+        }
+      },
+      "StoreSettingsResponse": {
+        "type": "object",
+        "properties": {
+          "settingId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "pegiRatingName": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "disabled": {
+            "type": "boolean"
+          }
+        }
+      },
+      "UserSettingsResponse": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "userName": {
+            "type": "string"
+          },
+          "joinedDate": {
+            "type": "string"
+          },
+          "level": {
+            "$ref": "#/components/schemas/LevelResponse"
+          },
+          "email": {
+            "type": "string"
+          },
+          "bio": {
+            "type": "string"
+          },
+          "country": {
+            "$ref": "#/components/schemas/CountryResponse"
+          },
+          "userProfilePicture": {
+            "type": "string",
+            "format": "byte"
+          },
+          "bannerImage": {
+            "type": "string",
+            "format": "byte"
+          },
+          "bannerType": {
+            "type": "string"
+          },
+          "predefinedBannerPath": {
+            "type": "string"
+          },
+          "profileColor": {
+            "type": "string"
+          },
+          "cardColor": {
+            "$ref": "#/components/schemas/CardColorResponse"
+          },
+          "favoriteGenres": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GenreResponse"
+            }
+          },
+          "favoriteGame": {
+            "$ref": "#/components/schemas/UserLibraryResponse"
+          },
+          "communitySettingsResponse": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CommunitySettingsResponse"
+            }
+          },
+          "storeSettingsResponse": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StoreSettingsResponse"
+            }
+          },
+          "privacySettingsResponse": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PrivacySettingsResponse"
+            }
+          }
+        }
+      },
       "CommunityGuidelineCategoryResponse": {
         "type": "object",
         "properties": {
@@ -3959,35 +4221,6 @@
             "type": "string"
           },
           "description": {
-            "type": "string"
-          },
-          "iconPath": {
-            "type": "string"
-          }
-        }
-      },
-      "CardColorResponse": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "colorName": {
-            "type": "string"
-          },
-          "colorCode": {
-            "type": "string"
-          }
-        }
-      },
-      "CountryResponse": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "countryName": {
             "type": "string"
           },
           "iconPath": {
@@ -4344,152 +4577,6 @@
           }
         }
       },
-      "CommunitySettingsResponse": {
-        "type": "object",
-        "properties": {
-          "settingId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "userId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "settingName": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "access": {
-            "type": "string"
-          }
-        }
-      },
-      "PrivacySettingsResponse": {
-        "type": "object",
-        "properties": {
-          "settingId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "userId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "settingName": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "access": {
-            "type": "string"
-          }
-        }
-      },
-      "StoreSettingsResponse": {
-        "type": "object",
-        "properties": {
-          "settingId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "userId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "pegiRatingName": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "disabled": {
-            "type": "boolean"
-          }
-        }
-      },
-      "UserSettingsResponse": {
-        "type": "object",
-        "properties": {
-          "userId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "firstName": {
-            "type": "string"
-          },
-          "lastName": {
-            "type": "string"
-          },
-          "userName": {
-            "type": "string"
-          },
-          "joinedDate": {
-            "type": "string"
-          },
-          "level": {
-            "$ref": "#/components/schemas/LevelResponse"
-          },
-          "email": {
-            "type": "string"
-          },
-          "bio": {
-            "type": "string"
-          },
-          "country": {
-            "$ref": "#/components/schemas/CountryResponse"
-          },
-          "userProfilePicture": {
-            "type": "string",
-            "format": "byte"
-          },
-          "bannerImage": {
-            "type": "string",
-            "format": "byte"
-          },
-          "bannerType": {
-            "type": "string"
-          },
-          "predefinedBannerPath": {
-            "type": "string"
-          },
-          "profileColor": {
-            "type": "string"
-          },
-          "cardColor": {
-            "$ref": "#/components/schemas/CardColorResponse"
-          },
-          "favoriteGenres": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/GenreResponse"
-            }
-          },
-          "favoriteGame": {
-            "$ref": "#/components/schemas/UserLibraryResponse"
-          },
-          "communitySettingsResponse": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/CommunitySettingsResponse"
-            }
-          },
-          "storeSettingsResponse": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/StoreSettingsResponse"
-            }
-          },
-          "privacySettingsResponse": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PrivacySettingsResponse"
-            }
-          }
-        }
-      },
       "NewsItemResponse": {
         "type": "object",
         "properties": {
@@ -4548,6 +4635,7 @@
             "enum": [
               "ADDED",
               "IMPROVED",
+              "NOTES",
               "FIXED",
               "SECURITY",
               "REMOVED"
@@ -4567,6 +4655,20 @@
             "items": {
               "$ref": "#/components/schemas/NewsItemResponse"
             }
+          }
+        }
+      },
+      "MicrophoneUsageResponse": {
+        "type": "object",
+        "properties": {
+          "enumName": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "icon": {
+            "type": "string"
           }
         }
       },
@@ -4600,6 +4702,20 @@
           },
           "last": {
             "type": "boolean"
+          }
+        }
+      },
+      "PlatformResponse": {
+        "type": "object",
+        "properties": {
+          "enumName": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "icon": {
+            "type": "string"
           }
         }
       },
@@ -4658,6 +4774,12 @@
           },
           "currentlyPlaying": {
             "$ref": "#/components/schemas/GameResponseShort"
+          },
+          "mainPlatform": {
+            "$ref": "#/components/schemas/PlatformResponse"
+          },
+          "microphoneUsage": {
+            "$ref": "#/components/schemas/MicrophoneUsageResponse"
           }
         }
       },

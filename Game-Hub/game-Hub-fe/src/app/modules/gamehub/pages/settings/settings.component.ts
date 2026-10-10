@@ -160,7 +160,7 @@ export class SettingsComponent implements OnInit {
 
   loadProfile() {
     this.isLoading = true;
-    this.userService.getUserSettings().subscribe({
+    this.settingsService.getUserSettings().subscribe({
       next: (profile) => {
         this.response = profile;
 

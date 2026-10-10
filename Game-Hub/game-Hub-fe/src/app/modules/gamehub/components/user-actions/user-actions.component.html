@@ -22,13 +22,13 @@
     </button>
   }
 
-  <button class="balance-btn">
+  <button class=" header-button balance-btn">
     <i class="fa-solid fa-wallet"></i>
     <span>3123 €</span>
   </button>
 
-  <hlm-dialog [state]="dialogState">
-    <button hlmDialogTrigger class="!bg-blue-500/10 !text-blue-400">
+  <hlm-dialog [state]="newsDialogState">
+    <button hlmDialogTrigger class="!bg-blue-500/10 !text-blue-400 header-button">
       <i class="fa-solid fa-newspaper"></i>
     </button>
 
@@ -92,6 +92,7 @@
                   'mr-1': true,
                   'text-emerald-400': section.newsType === 'ADDED',
                   'text-blue-400': section.newsType === 'IMPROVED',
+                  'text-slate-400': section.newsType === 'NOTES',
                   'text-amber-400': section.newsType === 'FIXED',
                   'text-red-400': section.newsType === 'SECURITY',
                   'text-violet-400': section.newsType === 'REMOVED'
@@ -163,16 +164,146 @@
     </hlm-dialog-content>
   </hlm-dialog>
 
-  <button routerLink="/gamehub/cart">
+  <button routerLink="/gamehub/cart" class="header-button">
     <i class="fa-solid fa-basket-shopping"></i>
     @if (userNotificationsResponse.cartCount! > 0) {
       <span class="notification-badge">{{ userNotificationsResponse.cartCount }}</span>
     }
   </button>
 
-  <button class="notification-btn">
+  <button class="notification-btn header-button">
     <i class="fa-solid fa-bell"></i>
     <span class="notification-badge">1</span>
   </button>
 
 </div>
+
+<hlm-dialog [state]="onBoardingDialogState" disableClose>
+
+  <hlm-dialog-content [showCloseButton]="false" *hlmDialogPortal="let ctx" class="sm:max-w-xl">
+    <hlm-dialog-header class="text-center"><h3 hlmDialogTitle class="text-xl font-semibold"> Let's set up your
+      profile </h3>
+      <p hlmDialogDescription class="text-sm text-slate-400"> Tell us a little about your preferences to get
+        started. </p></hlm-dialog-header>
+
+    <div class="mt-5 space-y-6">
+
+      <!-- Main Platform -->
+      <section>
+        <div class="mb-3">
+          <div class="flex items-center gap-2"><h4 class="text-sm font-semibold text-white">Main Platform</h4> <span
+            class="text-xs text-red-400">Required</span></div>
+          <p class="mt-1 text-xs text-slate-400">
+            Which platform do you play on most?
+          </p>
+        </div>
+
+        <div class="flex flex-wrap gap-2">
+          <button type="button" class="tag-button tag-pc" (click)="selectPlatform('PC')"
+                  [class.tag-button-selected]="selectedPlatform() === 'PC'">
+            <i class="fa-solid fa-desktop mr-2"></i>PC
+          </button>
+
+          <button type="button" class="tag-button tag-ps" (click)="selectPlatform('PS')"
+                  [class.tag-button-selected]="selectedPlatform() === 'PS'">
+            <i class="fa-brands fa-playstation mr-2"></i>PlayStation
+          </button>
+
+          <button type="button" class="tag-button tag-xbox" (click)="selectPlatform('XBOX')"
+                  [class.tag-button-selected]="selectedPlatform() === 'XBOX'">
+            <i class="fa-brands fa-xbox mr-2"></i>Xbox
+          </button>
+
+          <button type="button" class="tag-button tag-nintendo" (click)="selectPlatform('NINTENDO')"
+                  [class.tag-button-selected]="selectedPlatform() === 'NINTENDO'">
+            <i class="fa-solid fa-gamepad mr-2"></i>Nintendo
+          </button>
+
+          <button type="button" class="tag-button platform-selected tag-mobile" (click)="selectPlatform('MOBILE')"
+                  [class.tag-button-selected]="selectedPlatform() === 'MOBILE'">
+            <i class="fa-solid fa-mobile-screen mr-2"></i>Mobile
+          </button>
+        </div>
+      </section>
+
+      <!-- Voice Chat -->
+      <section>
+        <div class="mb-3">
+          <div class="flex items-center gap-2"><h4 class="text-sm font-semibold text-white">Voice Chat</h4> <span
+            class="text-xs text-red-400">Required</span></div>
+          <p class="mt-1 text-xs text-slate-400">
+            Do you use voice chat while gaming?
+          </p>
+        </div>
+
+        <div class="flex flex-wrap gap-2">
+          <div type="button" class="tag-button" (click)="selectVoiceChat('YES')"
+               [class.tag-button-selected]="selectedVoiceChat() === 'YES'">
+            <i class="fa-solid fa-microphone mr-2"></i>Yes
+          </div>
+
+          <div type="button" class="tag-button" (click)="selectVoiceChat('OPTIONAL')"
+               [class.tag-button-selected]="selectedVoiceChat() === 'OPTIONAL'">
+            <i class="fa-solid fa-microphone mr-2"></i>Sometimes
+          </div>
+
+          <div type="button" class="tag-button" (click)="selectVoiceChat('NO')"
+               [class.tag-button-selected]="selectedVoiceChat() === 'NO'">
+            <i class="fa-solid fa-microphone-slash mr-2"></i>No
+          </div>
+        </div>
+      </section>
+
+      <!-- Favorite Genres -->
+      <section>
+        <div class="mb-3">
+          <div class="flex flex-wrap items-center gap-2">
+            <h4 class="text-sm font-semibold text-white">Favorite Genres</h4>
+
+            <span
+              class="rounded-md bg-white/5 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-slate-400"> Optional </span>
+          </div>
+
+          <p class="mt-1 text-xs text-slate-400">
+            Pick the genres you enjoy. You can select multiple options.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap gap-2">
+          @for (genre of genreResponse; track genre) {
+            <div type="button" class="tag-button" (click)="selectGenres(genre.id)"
+                 [ngClass]="{
+              'tag-button-selected': selectedGenres.has(genre.id)
+              }">
+              {{ genre.name }}
+            </div>
+          }
+        </div>
+      </section>
+
+
+      <!-- Information -->
+      <div class="flex gap-3 rounded-xl border border-blue-500/15 bg-blue-500/5 p-4">
+        <i class="fa-solid fa-circle-info mt-0.5 text-blue-400"></i>
+
+        <div class="space-y-2 text-xs leading-relaxed text-slate-400">
+          <p>
+            You can change your main platform and voice chat preferences anytime in
+            <span class="font-medium text-slate-200">Settings → Preferences</span>.
+          </p>
+
+          <p>
+            Your favorite genres are displayed on your profile and can be changed in
+            <span class="font-medium text-slate-200">Settings → Profile</span>.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <hlm-dialog-footer>
+      <button class="medium-button save" [disabled]="!requiredFieldSelected()" (click)="onboardUser()">Save</button>
+    </hlm-dialog-footer>
+
+  </hlm-dialog-content>
+</hlm-dialog>

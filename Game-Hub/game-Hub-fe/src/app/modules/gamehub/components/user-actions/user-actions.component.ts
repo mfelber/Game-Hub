@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, signal} from '@angular/core';
 
 import {UserProfileControllerService} from '../../../../services/services/user-profile-controller.service';
 import {UserNotificationsResponse} from '../../../../services/models/user-notifications-response';
@@ -6,7 +6,7 @@ import {RouterLink, RouterLinkActive} from '@angular/router';
 import {
   HlmDialog,
   HlmDialogContent,
-  HlmDialogDescription,
+  HlmDialogDescription, HlmDialogFooter,
   HlmDialogHeader, HlmDialogPortal,
   HlmDialogTitle,
   HlmDialogTrigger
@@ -17,6 +17,13 @@ import {NewsResponse} from '../../../../services/models/news-response';
 import {DatePipe, NgClass} from '@angular/common';
 import {NewsOverviewResponse} from '../../../../services/models/news-overview-response';
 import {BrnDialogState} from '@spartan-ng/brain/dialog';
+import {SettingsControllerService} from '../../../../services/services/settings-controller.service';
+import {Observable} from 'rxjs';
+import {StoreControllerService} from '../../../../services/services/store-controller.service';
+import {FormsModule} from '@angular/forms';
+import {platform} from 'node:os';
+import {OnboardRequest} from '../../../../services/models/onboard-request';
+import {ToastService} from '../../../../services/ToastService/toast.service';
 
 @Component({
   selector: 'app-user-actions',
@@ -30,7 +37,9 @@ import {BrnDialogState} from '@spartan-ng/brain/dialog';
     HlmDialogDescription,
     HlmDialogPortal,
     DatePipe,
-    NgClass
+    NgClass,
+    HlmDialogFooter,
+    FormsModule
   ],
   templateUrl: './user-actions.component.html',
   styleUrl: './user-actions.component.scss',
@@ -41,36 +50,56 @@ export class UserActionsComponent implements OnInit {
 
   newsResponse: NewsOverviewResponse = {};
 
+  newsDialogState: BrnDialogState = 'closed';
+  onBoardingDialogState: BrnDialogState = 'closed';
+
+  genreResponse: any[] = [];
+  selectedGenres: Set<number> = new Set();
+
+  selectedPlatform = signal<OnboardRequest['mainPlatform'] | null>(null);
+  selectedVoiceChat = signal<OnboardRequest['microphoneUsage'] | null>(null);
+
   constructor(
+    private gameService: StoreControllerService,
     private userService: UserProfileControllerService,
-    private newsService: NewsControllerService
+    private settingService: SettingsControllerService,
+    private newsService: NewsControllerService,
+    private toastService: ToastService,
   ) {
   }
 
   ngOnInit() {
     this.loadNotifications();
-    this.loadNews();
+    this.isUserOnboarded();
   }
 
   loadNotifications() {
     this.userService.getUserNotifications().subscribe({
       next: data => {
         this.userNotificationsResponse = data
-        console.log(data);
       }
     })
   }
 
-  dialogState: BrnDialogState = 'closed';
+  isUserOnboarded() {
+    this.settingService.isUserOnboarded().subscribe({
+      next: isUserOnboarded => {
+        if (isUserOnboarded === true) {
+          this.loadNews()
+        } else {
+          this.openOnboarding();
+        }
+      }
+    });
+  }
 
   loadNews() {
     this.newsService.getNews().subscribe({
       next: data => {
-        console.log(data);
         this.newsResponse = data;
         if (data.hasUnseenNews && data.news?.length) {
           setTimeout(() => {
-            this.dialogState = 'open';
+            this.newsDialogState = 'open';
             this.markNewsAsSeen(data.news![0].newsId);
           }, 650)
         }
@@ -83,9 +112,71 @@ export class UserActionsComponent implements OnInit {
       body: newsId
     }).subscribe({
       next: data => {
-        console.log(data);
       }
     })
   }
 
+  openOnboarding() {
+    this.onBoardingDialogState = 'open';
+    this.gameService.getAllGenres().subscribe({
+      next: (genres) => {
+        this.genreResponse = genres;
+      }
+    })
+  }
+
+  selectPlatform(platform: OnboardRequest['mainPlatform']): void {
+    this.selectedPlatform.set(platform);
+  }
+
+  selectVoiceChat(voiceChat: OnboardRequest['microphoneUsage']): void {
+    this.selectedVoiceChat.set(voiceChat);
+  }
+
+  selectGenres(id: number) {
+    const genres = new Set(this.selectedGenres);
+
+    if (genres.has(id)) {
+      genres.delete(id);
+    } else {
+      genres.add(id);
+    }
+
+    this.selectedGenres = genres;
+  }
+
+  requiredFieldSelected(): boolean {
+    if (this.selectedPlatform() === null) {
+      return false;
+    }
+
+    if (this.selectedVoiceChat() === null) {
+      return false;
+    }
+
+    return true;
+  }
+
+  onboardUser() {
+
+    const onboardReq: OnboardRequest = {
+      mainPlatform: this.selectedPlatform()!,
+      microphoneUsage: this.selectedVoiceChat()!,
+      genreIds: Array.from(this.selectedGenres),
+    };
+
+    this.settingService.onboardUser({
+      body: onboardReq
+    }).subscribe({
+      next: () => {
+        this.onBoardingDialogState = 'closed';
+        this.toastService.success('Preferences saved. Welcome!');
+      },
+      error: err => {
+        this.toastService.error("We couldn't save your preferences. Please try again.");
+        this.onBoardingDialogState = 'open';
+        console.log(err)
+      }
+    })
+  }
 }

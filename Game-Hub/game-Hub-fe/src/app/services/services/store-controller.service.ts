@@ -33,8 +33,8 @@ import { GetLanguages$Params } from '../fn/store-controller/get-languages';
 import { getSubtitles } from '../fn/store-controller/get-subtitles';
 import { GetSubtitles$Params } from '../fn/store-controller/get-subtitles';
 import { LanguageResponse } from '../models/language-response';
+import { OperationSystemResponse } from '../models/operation-system-response';
 import { PageResponseGameResponse } from '../models/page-response-game-response';
-import { PlatformResponse } from '../models/platform-response';
 import { removeGameFromWishlist } from '../fn/store-controller/remove-game-from-wishlist';
 import { RemoveGameFromWishlist$Params } from '../fn/store-controller/remove-game-from-wishlist';
 import { SubtitleResponse } from '../models/subtitle-response';
@@ -154,7 +154,7 @@ export class StoreControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getAllPlatforms$Response(params?: GetAllPlatforms$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<PlatformResponse>>> {
+  getAllPlatforms$Response(params?: GetAllPlatforms$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<OperationSystemResponse>>> {
     return getAllPlatforms(this.http, this.rootUrl, params, context);
   }
 
@@ -164,9 +164,9 @@ export class StoreControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getAllPlatforms(params?: GetAllPlatforms$Params, context?: HttpContext): Observable<Array<PlatformResponse>> {
+  getAllPlatforms(params?: GetAllPlatforms$Params, context?: HttpContext): Observable<Array<OperationSystemResponse>> {
     return this.getAllPlatforms$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<PlatformResponse>>): Array<PlatformResponse> => r.body)
+      map((r: StrictHttpResponse<Array<OperationSystemResponse>>): Array<OperationSystemResponse> => r.body)
     );
   }
 

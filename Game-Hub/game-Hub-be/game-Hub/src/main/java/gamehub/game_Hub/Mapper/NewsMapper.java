@@ -66,7 +66,6 @@ public class NewsMapper {
         .newsType(newsSection.getNewsType())
         .newsTypeName(newsSection.getNewsType().getNewsTypeName())
         .newsTypeIcon(newsSection.getNewsType().getNewsTypeIcon())
-        .iconColor(newsSection.getNewsType().getIconColor())
         .newsItems(newsSection.getNewsItemList().stream().map(this::toNewsItemResponse).toList())
         .build();
   }

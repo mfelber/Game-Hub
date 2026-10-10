@@ -29,4 +29,6 @@ public class UserCommunityResponse {
   private Boolean friendRequestSent;
   private Boolean friendRequestReceived;
   private GameResponseShort currentlyPlaying;
+  private PlatformResponse mainPlatform;
+  private MicrophoneUsageResponse microphoneUsage;
 }

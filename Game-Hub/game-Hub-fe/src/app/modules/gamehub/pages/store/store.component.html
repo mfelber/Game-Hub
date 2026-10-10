@@ -186,7 +186,7 @@
           {{ game.title }}
         </h3>
         <p>
-          @for (genre of game.genres?.slice(0, 2); track genre; let last = $last) {
+          @for (genre of game.genres?.slice(0, 2); track genre.id; let last = $last) {
             <span>
             {{ genre.name }}@if (!last) {
               <span>&nbsp; • &nbsp;</span>

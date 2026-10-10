@@ -8,14 +8,16 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { OperationSystemResponse } from '../../models/operation-system-response';
+import { OnboardRequest } from '../../models/onboard-request';
 
-export interface GetAllPlatforms$Params {
+export interface OnboardUser$Params {
+      body: OnboardRequest
 }
 
-export function getAllPlatforms(http: HttpClient, rootUrl: string, params?: GetAllPlatforms$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<OperationSystemResponse>>> {
-  const rb = new RequestBuilder(rootUrl, getAllPlatforms.PATH, 'get');
+export function onboardUser(http: HttpClient, rootUrl: string, params: OnboardUser$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+  const rb = new RequestBuilder(rootUrl, onboardUser.PATH, 'patch');
   if (params) {
+    rb.body(params.body, 'application/json');
   }
 
   return http.request(
@@ -23,9 +25,9 @@ export function getAllPlatforms(http: HttpClient, rootUrl: string, params?: GetA
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<OperationSystemResponse>>;
+      return (r as HttpResponse<any>).clone({ body: parseFloat(String((r as HttpResponse<any>).body)) }) as StrictHttpResponse<number>;
     })
   );
 }
 
-getAllPlatforms.PATH = '/store/platforms';
+onboardUser.PATH = '/settings/onboarding';

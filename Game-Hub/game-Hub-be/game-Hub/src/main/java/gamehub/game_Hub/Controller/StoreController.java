@@ -16,7 +16,7 @@ import gamehub.game_Hub.Response.AgeRatingResponse;
 import gamehub.game_Hub.Response.GameResponse;
 import gamehub.game_Hub.Response.GenreResponse;
 import gamehub.game_Hub.Response.LanguageResponse;
-import gamehub.game_Hub.Response.PlatformResponse;
+import gamehub.game_Hub.Response.OperationSystemResponse;
 import gamehub.game_Hub.Response.SubtitleResponse;
 import gamehub.game_Hub.Service.AgeRatingService;
 import gamehub.game_Hub.Service.GameService;
@@ -71,7 +71,7 @@ public class StoreController {
 
   // Get all platforms
   @GetMapping("/platforms")
-  public ResponseEntity<List<PlatformResponse>> getAllPlatforms() {
+  public ResponseEntity<List<OperationSystemResponse>> getAllPlatforms() {
     return ResponseEntity.ok(platformService.findAllPlatforms());
   }
 

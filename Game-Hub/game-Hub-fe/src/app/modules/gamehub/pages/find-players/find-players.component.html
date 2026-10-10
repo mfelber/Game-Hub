@@ -200,11 +200,21 @@
             </button>
           </div>
         </div>
+
           <div class="user-tags">
-            <span class="user-tag">PC</span>
-            <span class="user-tag"><i class="fa-solid fa-microphone"></i> Voice chat</span>
-            <span class="user-tag"><i class="fa-solid fa-microphone-slash"></i> No voice chat</span>
-            <span class="user-tag"> <i class="fa-solid fa-microphone"></i> Voice optional </span>
+            <span class="user-tag tag-button-selected" [ngClass]="{
+            'tag-pc': user.mainPlatform?.enumName === 'PC',
+            'tag-ps': user.mainPlatform?.enumName === 'PS',
+            'tag-xbox': user.mainPlatform?.enumName === 'XBOX',
+            'tag-nintendo': user.mainPlatform?.enumName === 'NINTENDO',
+            'tag-mobile': user.mainPlatform?.enumName === 'MOBILE',
+            }"><i [class]="user.mainPlatform?.icon" class="mr-1"></i>{{user.mainPlatform?.name}}</span>
+
+            <span class="user-tag mic-tag" [ngClass]="{
+            'mic-yes': user.microphoneUsage?.enumName === 'YES',
+            'mic-optional': user.microphoneUsage?.enumName === 'OPTIONAL',
+            'mic-no': user.microphoneUsage?.enumName === 'NO'
+            }"><i [class]="user.microphoneUsage?.icon"></i> {{ user.microphoneUsage?.name }}</span>
           </div>
 
           <div class="user-divider"></div>

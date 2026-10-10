@@ -37,6 +37,46 @@
     hover:text-white hover:scale-110;
   }
 
+  .tag-button {
+    @apply rounded-lg border border-white/10 bg-[#151923] px-4 py-2 text-sm font-medium
+    text-slate-300 transition-colors hover:border-white/25 hover:bg-[#1b2230] cursor-pointer;
+  }
+
+  .tag-button-selected {
+    @apply border border-[#4DA3FF] text-[#4DA3FF] hover:border-[#4DA3FF] hover:text-[#4DA3FF];
+  }
+
+  .tag-button-selected {
+    --platform-color: #4DA3FF;
+
+    &.tag-pc       { --platform-color: #06B6D4; }
+    &.tag-ps       { --platform-color: #0070D1; }
+    &.tag-xbox     { --platform-color: #107C10; }
+    &.tag-nintendo { --platform-color: #DF0011; }
+    &.tag-mobile   { --platform-color: #A855F7; }
+
+    color: var(--platform-color);
+    border-color: var(--platform-color);
+
+    i { color: var(--platform-color); }
+
+    &:hover {
+      color: var(--platform-color);
+      border-color: var(--platform-color);
+    }
+  }
+
+  .mic-tag {
+    &.mic-yes      { --mic-color: #22C55E; }
+    &.mic-optional { --mic-color: #F59E0B; }
+    &.mic-no       { --mic-color: #F87171; }
+
+    color: var(--mic-color);
+    border: 1px solid var(--mic-color);
+
+    i { color: var(--mic-color); }
+  }
+
   .big-button:disabled,
   .big-btn-w-full:disabled,
   .medium-button:disabled,
