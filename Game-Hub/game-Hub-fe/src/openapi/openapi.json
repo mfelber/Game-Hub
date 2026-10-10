@@ -3644,7 +3644,8 @@
       "OnboardRequest": {
         "required": [
           "mainPlatform",
-          "microphoneUsage"
+          "microphoneUsage",
+          "region"
         ],
         "type": "object",
         "properties": {
@@ -3664,6 +3665,19 @@
               "YES",
               "NO",
               "OPTIONAL"
+            ]
+          },
+          "region": {
+            "type": "string",
+            "enum": [
+              "EUROPE",
+              "NA",
+              "SA",
+              "ASIA",
+              "AFRICA",
+              "ME",
+              "OC",
+              "CAB"
             ]
           },
           "genreIds": {
@@ -3930,13 +3944,13 @@
               "$ref": "#/components/schemas/SubtitleResponse"
             }
           },
+          "inCart": {
+            "type": "boolean"
+          },
           "inLibrary": {
             "type": "boolean"
           },
           "inWishList": {
-            "type": "boolean"
-          },
-          "inCart": {
             "type": "boolean"
           }
         }
@@ -4719,6 +4733,17 @@
           }
         }
       },
+      "RegionResponse": {
+        "type": "object",
+        "properties": {
+          "enumName": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
       "UserCommunityResponse": {
         "type": "object",
         "properties": {
@@ -4780,6 +4805,9 @@
           },
           "microphoneUsage": {
             "$ref": "#/components/schemas/MicrophoneUsageResponse"
+          },
+          "region": {
+            "$ref": "#/components/schemas/RegionResponse"
           }
         }
       },

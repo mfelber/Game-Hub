@@ -215,6 +215,18 @@
             'mic-optional': user.microphoneUsage?.enumName === 'OPTIONAL',
             'mic-no': user.microphoneUsage?.enumName === 'NO'
             }"><i [class]="user.microphoneUsage?.icon"></i> {{ user.microphoneUsage?.name }}</span>
+
+            <span class="user-tag region-tag tag-button-selected" [ngClass]="{
+            'region-europe': user.region?.enumName === 'EUROPE',
+            'region-na': user.region?.enumName === 'NA',
+            'region-sa': user.region?.enumName === 'SA',
+            'region-asia': user.region?.enumName === 'ASIA',
+            'region-africa': user.region?.enumName === 'AFRICA',
+            'region-me': user.region?.enumName === 'ME',
+            'region-oc': user.region?.enumName === 'OC',
+            'region-cab': user.region?.enumName === 'CAB',
+            }"> {{user.region?.name}}
+            </span>
           </div>
 
           <div class="user-divider"></div>

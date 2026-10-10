@@ -237,20 +237,41 @@
         </div>
 
         <div class="flex flex-wrap gap-2">
-          <div type="button" class="tag-button" (click)="selectVoiceChat('YES')"
+          <button type="button" class="tag-button" (click)="selectVoiceChat('YES')"
                [class.tag-button-selected]="selectedVoiceChat() === 'YES'">
             <i class="fa-solid fa-microphone mr-2"></i>Yes
-          </div>
+          </button>
 
-          <div type="button" class="tag-button" (click)="selectVoiceChat('OPTIONAL')"
+          <button type="button" class="tag-button" (click)="selectVoiceChat('OPTIONAL')"
                [class.tag-button-selected]="selectedVoiceChat() === 'OPTIONAL'">
             <i class="fa-solid fa-microphone mr-2"></i>Sometimes
-          </div>
+          </button>
 
-          <div type="button" class="tag-button" (click)="selectVoiceChat('NO')"
+          <button type="button" class="tag-button" (click)="selectVoiceChat('NO')"
                [class.tag-button-selected]="selectedVoiceChat() === 'NO'">
             <i class="fa-solid fa-microphone-slash mr-2"></i>No
-          </div>
+          </button>
+        </div>
+      </section>
+
+      <section>
+        <div class="mb-3">
+          <div class="flex items-center gap-2"><h4 class="text-sm font-semibold text-white">Region</h4> <span
+            class="text-xs text-red-400">Required</span></div>
+          <p class="mt-1 text-xs text-slate-400">
+            Which part of the world are you from?
+          </p>
+        </div>
+
+        <div class="flex flex-wrap gap-2">
+          @for (region of regions; track region.value) {
+            <button type="button" class="tag-button region-tag"
+                    [ngClass]="region.cls"
+                    [class.tag-button-selected]="selectedRegion() === region.value"
+                    (click)="selectRegion(region.value)">
+              {{region.label}}
+            </button>
+          }
         </div>
       </section>
 
@@ -288,7 +309,8 @@
 
         <div class="space-y-2 text-xs leading-relaxed text-slate-400">
           <p>
-            You can change your main platform and voice chat preferences anytime in
+            You can change your main platform and voice chat usage anytime in
+            <br>
             <span class="font-medium text-slate-200">Settings → Preferences</span>.
           </p>
 

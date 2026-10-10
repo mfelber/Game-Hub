@@ -16,6 +16,7 @@ import gamehub.game_Hub.Response.LevelResponse;
 import gamehub.game_Hub.Response.CountryResponse;
 import gamehub.game_Hub.Response.MicrophoneUsageResponse;
 import gamehub.game_Hub.Response.PlatformResponse;
+import gamehub.game_Hub.Response.RegionResponse;
 import gamehub.game_Hub.Response.UserCommunityResponse;
 import lombok.RequiredArgsConstructor;
 
@@ -61,6 +62,7 @@ public class CommunityMapper {
             foundUser.getCurrentlyPlayingGame()) : null)
         .mainPlatform(new PlatformResponse(foundUser.getMainPlatform().name(),foundUser.getMainPlatform().getPlatformName(), foundUser.getMainPlatform().getPlatformIcon()))
         .microphoneUsage(new MicrophoneUsageResponse(foundUser.getMicrophoneUsage().name(),foundUser.getMicrophoneUsage().getMicrophoneUsageName(), foundUser.getMicrophoneUsage().getMicrophoneUsageIcon()))
+        .region(new RegionResponse(foundUser.getRegion().name(),foundUser.getRegion().getRegionName()))
         .build();
   }
 

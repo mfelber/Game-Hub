@@ -31,4 +31,5 @@ public class UserCommunityResponse {
   private GameResponseShort currentlyPlaying;
   private PlatformResponse mainPlatform;
   private MicrophoneUsageResponse microphoneUsage;
+  private RegionResponse region;
 }

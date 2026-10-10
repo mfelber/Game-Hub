@@ -69,6 +69,7 @@ public class SettingsServiceImpl implements SettingsService {
 
     user.setMainPlatform(onboardRequest.mainPlatform());
     user.setMicrophoneUsage(onboardRequest.microphoneUsage());
+    user.setRegion(onboardRequest.region());
     userService.updateFavoriteGenres(onboardRequest.genreIds(), connectedUser);
     user.setUserOnboarded(true);
     userRepository.save(user);

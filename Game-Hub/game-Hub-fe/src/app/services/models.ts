@@ -59,6 +59,7 @@ export type { PlatformResponse } from './models/platform-response';
 export type { PrivacySettingsResponse } from './models/privacy-settings-response';
 export type { RecentGamesResponse } from './models/recent-games-response';
 export type { RecentUserResponse } from './models/recent-user-response';
+export type { RegionResponse } from './models/region-response';
 export type { RegistrationRequest } from './models/registration-request';
 export type { ReportRequest } from './models/report-request';
 export type { ReportStatusResponse } from './models/report-status-response';

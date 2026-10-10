@@ -77,6 +77,30 @@
     i { color: var(--mic-color); }
   }
 
+  .region-tag {
+
+    &.region-europe          { --region-color: #6366F1; }
+    &.region-na              { --region-color: #F97316; }
+    &.region-sa              { --region-color: #A3E635; }
+    &.region-asia            { --region-color: #EC4899; }
+    &.region-africa          { --region-color: #EAB308; }
+    &.region-me              { --region-color: #D97706; }
+    &.region-oc              { --region-color: #14B8A6; }
+    &.region-cab             { --region-color: #38BDF8; }
+
+    &.tag-button-selected {
+      color: var(--region-color);
+      border-color: var(--region-color);
+
+      &:hover {
+        color: var(--region-color);
+        border-color: var(--region-color);
+      }
+
+      i { color: var(--region-color); }
+    }
+  }
+
   .big-button:disabled,
   .big-btn-w-full:disabled,
   .medium-button:disabled,

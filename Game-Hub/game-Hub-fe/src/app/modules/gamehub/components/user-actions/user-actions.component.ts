@@ -58,6 +58,18 @@ export class UserActionsComponent implements OnInit {
 
   selectedPlatform = signal<OnboardRequest['mainPlatform'] | null>(null);
   selectedVoiceChat = signal<OnboardRequest['microphoneUsage'] | null>(null);
+  selectedRegion = signal<OnboardRequest['region'] | null>(null);
+
+  regions: { value: NonNullable<OnboardRequest['region']>; label: string; cls: string }[] = [
+    { value: 'EUROPE', label: 'Europe',                      cls: 'region-europe' },
+    { value: 'NA',     label: 'North America',               cls: 'region-na' },
+    { value: 'SA',     label: 'South America',               cls: 'region-sa' },
+    { value: 'CAB',    label: 'Central America & Caribbean', cls: 'region-cab' },
+    { value: 'ASIA',   label: 'Asia',                        cls: 'region-asia' },
+    { value: 'ME',     label: 'Middle East',                 cls: 'region-me' },
+    { value: 'AFRICA', label: 'Africa',                      cls: 'region-africa' },
+    { value: 'OC',     label: 'Oceania',                     cls: 'region-oc' },
+  ];
 
   constructor(
     private gameService: StoreControllerService,
@@ -133,6 +145,10 @@ export class UserActionsComponent implements OnInit {
     this.selectedVoiceChat.set(voiceChat);
   }
 
+  selectRegion(region: OnboardRequest['region']): void {
+    this.selectedRegion.set(region);
+  }
+
   selectGenres(id: number) {
     const genres = new Set(this.selectedGenres);
 
@@ -154,6 +170,11 @@ export class UserActionsComponent implements OnInit {
       return false;
     }
 
+    if (this.selectedRegion() === null) {
+      return false;
+    }
+
+
     return true;
   }
 
@@ -162,6 +183,7 @@ export class UserActionsComponent implements OnInit {
     const onboardReq: OnboardRequest = {
       mainPlatform: this.selectedPlatform()!,
       microphoneUsage: this.selectedVoiceChat()!,
+      region: this.selectedRegion()!,
       genreIds: Array.from(this.selectedGenres),
     };
 
