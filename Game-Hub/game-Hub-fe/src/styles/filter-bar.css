@@ -18,7 +18,7 @@
   }
 
   .filter-options {
-    @apply flex flex-wrap space-x-3 max-sm:flex-col;
+    @apply flex flex-wrap gap-3 shrink-0 max-sm:w-full max-sm:flex-wrap;
   }
 
   .sort-right {

@@ -24,11 +24,13 @@ import gamehub.game_Hub.Repository.FriendRequestRepository;
 import gamehub.game_Hub.Repository.FriendshipRepository;
 import gamehub.game_Hub.Repository.user.UserRepository;
 import gamehub.game_Hub.Response.FriendRequestResponse;
+import gamehub.game_Hub.Response.MicrophoneUsageResponse;
 import gamehub.game_Hub.Response.PlatformResponse;
 import gamehub.game_Hub.Response.RegionResponse;
 import gamehub.game_Hub.Response.UserCommunityResponse;
 import gamehub.game_Hub.Service.CommunityService;
 import gamehub.game_Hub.enums.AccountStatus;
+import gamehub.game_Hub.enums.MicrophoneUsage;
 import gamehub.game_Hub.enums.Platform;
 import gamehub.game_Hub.enums.Region;
 import gamehub.game_Hub.enums.Role;
@@ -228,6 +230,12 @@ public class CommunityServiceImpl implements CommunityService {
   public List<RegionResponse> getAllRegions() {
     return Arrays.stream(Region.values()).sorted(Comparator.comparing(Region::getRegionName)).map(region -> new RegionResponse(region.name(),
         region.getRegionName())).toList();
+  }
+
+  @Override
+  public List<MicrophoneUsageResponse> getAllMicrophoneUsages() {
+    return Arrays.stream(MicrophoneUsage.values()).map(microphoneUsage -> new MicrophoneUsageResponse(microphoneUsage.name(),
+        microphoneUsage.getMicrophoneUsageName(), microphoneUsage.getMicrophoneUsageIcon())).toList();
   }
 
 }

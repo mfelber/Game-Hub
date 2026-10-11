@@ -14,7 +14,7 @@
   }
 
   .users-cards {
-    @apply grid grid-cols-2 gap-5.5 mt-3 mb-5 relative;
+    @apply grid grid-cols-1 gap-5.5 mt-3 mb-5 relative lg:grid-cols-2;
   }
 
   .pagination-wrapper {
@@ -92,11 +92,15 @@
     transition duration-250 hover:-translate-y-1 hover:cursor-pointer;
 
     & .flag {
-      @apply w-7.5 h-6 rounded-[6px];
+      @apply w-7.5 h-6 rounded-[6px] max-sm:w-6 max-sm:h-5;
     }
 
     & .username {
-      @apply flex items-center gap-2.5 mb-1.5;
+      @apply flex items-center gap-2.5 mb-1.5 max-sm:gap-1.5 max-sm:mb-0.5;
+    }
+
+    & .username h3 {
+      @apply max-sm:text-base truncate;
     }
 
     & .stats {
@@ -111,8 +115,12 @@
 
   /*                      */
 
-  .user-info p {
-    @apply text-[#777] text-sm mt-[5px];
+  & .user-info {
+    @apply min-w-0 text-sm;
+  }
+
+  & .user-info > span {
+    @apply max-sm:text-xs truncate block;
   }
 
   .details {
@@ -129,7 +137,7 @@
   }
 
   .small-img {
-    @apply w-18.75 h-18.75 rounded-[5px] object-cover;
+    @apply w-18.75 h-18.75 rounded-[5px] object-cover max-sm:w-14 max-sm:h-14;
   }
 
   .find-player-top {
@@ -137,7 +145,7 @@
   }
 
   .user-main {
-    @apply flex items-center gap-5.5;
+    @apply flex items-center gap-3 min-w-0 max-sm:gap-3;
   }
 
   .find-player-info {
@@ -152,7 +160,7 @@
     @apply px-2.5 py-1 rounded-md
     bg-[#1A2231]
     text-[#9AA6BA]
-    text-xs font-medium;
+    text-xs font-medium max-sm:px-1 max-sm:w-fit max-sm:py-0.5 max-sm:text-[11px];
   }
 
   .user-divider {
@@ -160,7 +168,7 @@
   }
 
   .user-actions {
-    @apply flex items-center gap-2;
+    @apply flex items-center gap-2 max-sm:gap-1.5;
   }
 
   .user-meta {
@@ -173,14 +181,14 @@
   }
 
   .account-tag {
-    @apply flex items-center w-fit rounded-full gap-1.5;
+    @apply flex items-center w-fit rounded-full gap-1.5 whitespace-nowrap;
 
     &.supporter {
-      @apply px-1.5 py-0.5 bg-[#3A1630] text-sm border border-[#6F2C5B] text-[#FF9CCB];
+      @apply px-1.5 py-0.5 bg-[#3A1630] text-sm border border-[#6F2C5B] text-[#FF9CCB] max-sm:text-xs;
     }
 
     &.creator {
-      @apply px-1.5 py-0.5 bg-[#2A1F4D] text-sm border border-[#4A3A8A] text-[#BBA6FF];
+      @apply px-1.5 py-0.5 bg-[#2A1F4D] text-sm border border-[#4A3A8A] text-[#BBA6FF] max-sm:text-xs;
     }
 
   }

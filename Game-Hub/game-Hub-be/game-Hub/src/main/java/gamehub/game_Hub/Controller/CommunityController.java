@@ -18,6 +18,7 @@ import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Repository.FriendRequestRepository;
 import gamehub.game_Hub.Repository.user.UserRepository;
 import gamehub.game_Hub.Response.FriendRequestResponse;
+import gamehub.game_Hub.Response.MicrophoneUsageResponse;
 import gamehub.game_Hub.Response.PlatformResponse;
 import gamehub.game_Hub.Response.RegionResponse;
 import gamehub.game_Hub.Response.UserCommunityResponse;
@@ -85,8 +86,13 @@ public class CommunityController {
     return ResponseEntity.ok(communityService.getAllGamingPlatforms());
   }
 
-  @GetMapping("regions")
+  @GetMapping("/regions")
   public ResponseEntity<List<RegionResponse>> getAllRegions() {
     return ResponseEntity.ok(communityService.getAllRegions());
+  }
+
+  @GetMapping("/voice-chat-options")
+  public ResponseEntity<List<MicrophoneUsageResponse>> getAllMicrophoneUsages() {
+    return ResponseEntity.ok(communityService.getAllMicrophoneUsages());
   }
 }

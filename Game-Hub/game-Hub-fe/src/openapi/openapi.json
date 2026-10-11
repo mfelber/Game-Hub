@@ -2268,6 +2268,29 @@
         }
       }
     },
+    "/find-players/voice-chat-options": {
+      "get": {
+        "tags": [
+          "community-controller"
+        ],
+        "operationId": "getAllMicrophoneUsages",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MicrophoneUsageResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/find-players/regions": {
       "get": {
         "tags": [
@@ -3180,6 +3203,12 @@
               "CZ",
               "PL",
               "HU",
+              "DE",
+              "LA",
+              "BA",
+              "BU",
+              "KU",
+              "LI",
               "US",
               "NOT_SPECIFIED"
             ]
@@ -4718,17 +4747,6 @@
           }
         }
       },
-      "RegionResponse": {
-        "type": "object",
-        "properties": {
-          "enumName": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          }
-        }
-      },
       "MicrophoneUsageResponse": {
         "type": "object",
         "properties": {
@@ -4739,6 +4757,17 @@
             "type": "string"
           },
           "icon": {
+            "type": "string"
+          }
+        }
+      },
+      "RegionResponse": {
+        "type": "object",
+        "properties": {
+          "enumName": {
+            "type": "string"
+          },
+          "name": {
             "type": "string"
           }
         }

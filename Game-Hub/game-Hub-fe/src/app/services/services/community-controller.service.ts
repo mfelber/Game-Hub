@@ -21,10 +21,13 @@ import { friendRequestsCount } from '../fn/community-controller/friend-requests-
 import { FriendRequestsCount$Params } from '../fn/community-controller/friend-requests-count';
 import { getAllGamingPlatforms } from '../fn/community-controller/get-all-gaming-platforms';
 import { GetAllGamingPlatforms$Params } from '../fn/community-controller/get-all-gaming-platforms';
+import { getAllMicrophoneUsages } from '../fn/community-controller/get-all-microphone-usages';
+import { GetAllMicrophoneUsages$Params } from '../fn/community-controller/get-all-microphone-usages';
 import { getAllMyFriendRequests } from '../fn/community-controller/get-all-my-friend-requests';
 import { GetAllMyFriendRequests$Params } from '../fn/community-controller/get-all-my-friend-requests';
 import { getAllRegions } from '../fn/community-controller/get-all-regions';
 import { GetAllRegions$Params } from '../fn/community-controller/get-all-regions';
+import { MicrophoneUsageResponse } from '../models/microphone-usage-response';
 import { PageResponseFriendRequestResponse } from '../models/page-response-friend-request-response';
 import { PageResponseUserCommunityResponse } from '../models/page-response-user-community-response';
 import { PlatformResponse } from '../models/platform-response';
@@ -87,6 +90,31 @@ export class CommunityControllerService extends BaseService {
   acceptFriendRequest(params: AcceptFriendRequest$Params, context?: HttpContext): Observable<number> {
     return this.acceptFriendRequest$Response(params, context).pipe(
       map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `getAllMicrophoneUsages()` */
+  static readonly GetAllMicrophoneUsagesPath = '/find-players/voice-chat-options';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAllMicrophoneUsages()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllMicrophoneUsages$Response(params?: GetAllMicrophoneUsages$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<MicrophoneUsageResponse>>> {
+    return getAllMicrophoneUsages(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getAllMicrophoneUsages$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllMicrophoneUsages(params?: GetAllMicrophoneUsages$Params, context?: HttpContext): Observable<Array<MicrophoneUsageResponse>> {
+    return this.getAllMicrophoneUsages$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<MicrophoneUsageResponse>>): Array<MicrophoneUsageResponse> => r.body)
     );
   }
 

@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 
 import gamehub.game_Hub.Common.PageResponse;
 import gamehub.game_Hub.Response.FriendRequestResponse;
+import gamehub.game_Hub.Response.MicrophoneUsageResponse;
 import gamehub.game_Hub.Response.PlatformResponse;
 import gamehub.game_Hub.Response.RegionResponse;
 import gamehub.game_Hub.Response.UserCommunityResponse;
@@ -27,5 +28,7 @@ public interface CommunityService {
   List<PlatformResponse> getAllGamingPlatforms();
 
   List<RegionResponse> getAllRegions();
+
+  List<MicrophoneUsageResponse> getAllMicrophoneUsages();
 
 }

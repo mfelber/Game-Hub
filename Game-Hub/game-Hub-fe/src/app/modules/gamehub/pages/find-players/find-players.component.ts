@@ -10,19 +10,16 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {RefreshService} from '../../../../services/fn/refresh-service/refresh-service';
 import {UserCommunityResponse} from '../../../../services/models/user-community-response';
 import {PageResponseUserCommunityResponse} from '../../../../services/models/page-response-user-community-response';
-import {firstValueFrom} from 'rxjs';
 import {EmptyStateComponent} from '../../components/empty-state/empty-state.component';
 import {UserActionsComponent} from '../../components/user-actions/user-actions.component';
 import {PaginationComponent} from '../../components/pagination/pagination.component';
 import {LoadingComponent} from '../../components/loading/loading.component';
 import {CountryControllerService} from '../../../../services/services/country-controller.service';
-import {HlmDropdownMenu, HlmDropdownMenuItem, HlmDropdownMenuTrigger} from '@spartan/dropdown-menu';
-import {HlmButton} from '@spartan/button';
 import {RegionResponse} from '../../../../services/models/region-response';
-import {Platform} from '@angular/cdk/platform';
 import {PlatformResponse} from '../../../../services/models/platform-response';
 import {ToastService} from '../../../../services/ToastService/toast.service';
 import {CountryResponse} from '../../../../services/models/country-response';
+import {MicrophoneUsageResponse} from '../../../../services/models/microphone-usage-response';
 
 @Component({
   selector: 'app-find-players',
@@ -36,7 +33,8 @@ import {CountryResponse} from '../../../../services/models/country-response';
     EmptyStateComponent,
     UserActionsComponent,
     PaginationComponent,
-    LoadingComponent
+    LoadingComponent,
+    DatePipe
   ],
   templateUrl: './find-players.component.html',
   styleUrl: './find-players.component.scss',
@@ -74,11 +72,17 @@ export class FindPlayersComponent implements OnInit {
 
   regions: RegionResponse[] = [];
   gamingPlatforms: PlatformResponse[] = [];
+  voiceChatOptions: MicrophoneUsageResponse[] = [];
 
-  pinnedCountries = ['Slovakia', 'Czechia', 'Poland', 'Germany', 'United States'];
+  pinnedCountries = ['SK', 'CZ', 'PL', 'DE', 'US'];
   countryList: CountryResponse[] = [];
+
   extraCountries: string[] = [];
   selectedCountries: string[] = [];
+  selectedRegions: string[] = [];
+  selectedPlatforms: string[] = [];
+  selectedVoiceChatOptions: string[] = [];
+
   countryOpen = false;
   countrySearchQuery = '';
 
@@ -108,6 +112,8 @@ export class FindPlayersComponent implements OnInit {
     this.getCountries();
     this.getRegions();
     this.getGamingPlatforms();
+    this.getMicrophoneUsages();
+
   }
 
   private loadAllUsers(query: string = "") {
@@ -137,8 +143,40 @@ export class FindPlayersComponent implements OnInit {
       next: (countries) => {
         this.allCountries = countries.map(c => c.countryName!)
         this.countryList = countries;
+      },
+      error: error => {
+        console.log(error);
+        this.toastService.error('Error getting countries');
       }
     })
+  }
+
+  getMicrophoneUsages() {
+    this.communityService.getAllMicrophoneUsages().subscribe({
+      next: (microphoneUsage) => {
+        this.voiceChatOptions = microphoneUsage;
+      },
+      error: error => {
+        console.log(error);
+        this.toastService.error('Error getting voice chat option');
+      }
+    })
+  }
+
+  getCountry(countryName: string) {
+    return this.countryList.find(country => country.name === countryName);
+  }
+
+  getRegion(regionName: string) {
+    return this.regions.find(region => region.enumName === regionName);
+  }
+
+  getPlatform(platformName: string) {
+    return this.gamingPlatforms.find(platform => platform.enumName === platformName);
+  }
+
+  getVoiceChatOption(voiceChatOption: string) {
+    return this.voiceChatOptions.find(voiceChat => voiceChat.enumName === voiceChatOption);
   }
 
   getRegions() {
@@ -176,8 +214,16 @@ export class FindPlayersComponent implements OnInit {
     return [...this.pinnedCountries, ...this.extraCountries];
   }
 
+  get hasActiveFilters(): boolean {
+    return this.selectedCountries.length > 0 || this.selectedRegions.length > 0 || this.selectedPlatforms.length > 0 || this.selectedVoiceChatOptions.length > 0;
+  }
+
+  get activeFiltersCount(): number {
+    return this.activeFilters.length;
+  }
+
   getFlag(name: string) {
-    return this.countryList.find(country => country.countryName === name)?.iconPath;
+    return this.countryList.find(country => country.name === name)?.iconPath;
   }
 
   sendFriendRequest(userId: number) {
@@ -221,11 +267,47 @@ export class FindPlayersComponent implements OnInit {
       this.selectedCountries = this.selectedCountries.filter(country => country !== countryName);
       this.extraCountries = this.extraCountries.filter(country => country !== countryName)
     } else {
+      this.selectedRegions = [];
       this.selectedCountries = [...this.selectedCountries, countryName];
     }
   }
 
+  toggleRegion(regionName: string) {
+    this.extraCountries = [];
+    this.selectedCountries = [];
+    if (this.selectedRegions.includes(regionName)) {
+      this.selectedRegions = this.selectedRegions.filter(region => region !== regionName);
+    } else {
+      this.selectedRegions = [regionName]
+    }
+  }
+
+  togglePlatform(platformName: string) {
+    if (this.selectedPlatforms.includes(platformName)) {
+      this.selectedPlatforms = this.selectedPlatforms.filter(platform => platform !== platformName);
+    } else {
+      this.selectedPlatforms = [...this.selectedPlatforms, platformName]
+    }
+  }
+
+  toggleVoiceChat(voiceChatOption: string) {
+    if (this.selectedVoiceChatOptions.includes(voiceChatOption)) {
+      this.selectedVoiceChatOptions = this.selectedVoiceChatOptions.filter(voice => voice !== voiceChatOption);
+    } else {
+      this.selectedVoiceChatOptions = [...this.selectedVoiceChatOptions, voiceChatOption];
+    }
+  }
+
+  get regionDisabled(): boolean {
+    return this.selectedCountries.length > 0;
+  }
+
+  get countryDisabled(): boolean {
+    return this.selectedRegions.length > 0;
+  }
+
   addCountry(name: string) {
+    this.selectedRegions = [];
     this.extraCountries = [...this.extraCountries, name];
     this.selectedCountries = [...this.selectedCountries, name];
     this.countrySearchQuery = '';
@@ -325,4 +407,28 @@ export class FindPlayersComponent implements OnInit {
       }
     })
   }
+
+  openFindPlayersFilter() {
+    this.filterOpen = !this.filterOpen
+    this.countrySearchQuery = '';
+    this.countryOpen = false;
+  }
+
+  get activeFilters(): { label: string; remove: () => void }[] {
+    return [
+      ...this.selectedCountries.map(country => ({label: this.getCountry(country)?.countryName ?? country, remove: () => this.toggleCountry(country)})),
+      ...this.selectedRegions.map(region => ({
+        label: this.getRegion(region)?.name ?? region,
+        remove: () => this.toggleRegion(region)
+      })),
+      ...this.selectedPlatforms.map(platform => ({
+        label: this.getPlatform(platform)?.name ?? platform,
+        remove: () => this.togglePlatform(platform)
+      })),
+      ...this.selectedVoiceChatOptions.map(voiceChat => ({
+        label: this.getVoiceChatOption(voiceChat)?.name ?? voiceChat, remove: () => this.toggleVoiceChat(voiceChat)
+      }))
+    ];
+  }
+
 }

@@ -5,7 +5,7 @@
   }
 
   .checkbox-label {
-    @apply flex items-center h-11 px-4 text-xs
+    @apply flex items-center max-sm:justify-center h-11 px-4 text-xs
     rounded-[10px]
     bg-[#151b27] cursor-pointer
     border border-[#222B3D]

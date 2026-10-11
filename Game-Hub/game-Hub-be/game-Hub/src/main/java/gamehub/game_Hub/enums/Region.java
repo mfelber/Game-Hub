@@ -12,7 +12,7 @@ public enum Region {
   AFRICA("Africa"),
   ME("Middle East"),
   OC("Oceania"),
-  CAB("Central America & Caribbean");
+  CAB("Central America");
 
   private final String regionName;
 

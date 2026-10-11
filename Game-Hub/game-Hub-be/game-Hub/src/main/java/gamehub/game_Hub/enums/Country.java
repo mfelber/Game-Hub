@@ -5,6 +5,12 @@ public enum Country {
   CZ("cz.svg", "Czechia"),
   PL("pl.svg", "Poland"),
   HU("hu.svg", "Hungary"),
+  DE("de.svg", "Germany"),
+  LA("hu.svg", "LA"),
+  BA("hu.svg", "BA"),
+  BU("hu.svg", "BU"),
+  KU("hu.svg", "KU"),
+  LI("hu.svg", "LI"),
   US("us.svg", "United States"),
   NOT_SPECIFIED("not_specified.svg","Not Selected");
 

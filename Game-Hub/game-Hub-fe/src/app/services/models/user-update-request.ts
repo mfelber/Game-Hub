@@ -5,7 +5,7 @@
 export interface UserUpdateRequest {
   bio?: string;
   cardColorId?: number;
-  country?: 'SK' | 'CZ' | 'PL' | 'HU' | 'US' | 'NOT_SPECIFIED';
+  country?: 'SK' | 'CZ' | 'PL' | 'HU' | 'DE' | 'LA' | 'BA' | 'BU' | 'KU' | 'LI' | 'US' | 'NOT_SPECIFIED';
   email?: string;
   firstName?: string;
   lastName?: string;

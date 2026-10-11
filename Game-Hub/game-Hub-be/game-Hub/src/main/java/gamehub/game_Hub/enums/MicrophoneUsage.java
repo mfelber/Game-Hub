@@ -5,9 +5,10 @@ import lombok.Getter;
 @Getter
 public enum MicrophoneUsage {
 
-  YES("Uses voice chat","fa-solid fa-microphone"),
-  NO("No voice chat","fa-solid fa-microphone-slash"),
-  OPTIONAL("Voice optional","fa-solid fa-microphone");
+  YES("Voice chat","fa-solid fa-microphone"),
+  OPTIONAL("Voice optional","fa-solid fa-headset"),
+  NO("No voice","fa-solid fa-microphone-slash");
+
 
   private final String microphoneUsageName;
   private final String microphoneUsageIcon;
