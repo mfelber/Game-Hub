@@ -52,9 +52,6 @@ export class FindPlayersComponent implements OnInit {
   filterOpen = false;
 
   filters = {
-    country: '',
-    lookingForTeammate: false,
-    voiceChat: false,
     onlyOnline: false,
   }
 
@@ -101,10 +98,15 @@ export class FindPlayersComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       this.page = Number(params['page'] ?? 1) - 1;
 
-      this.filters.country = params['country'] ?? '';
-      this.filters.lookingForTeammate = params['lookingForTeammate'] === 'true';
-      this.filters.voiceChat = params['voiceChat'] === 'true';
+      this.selectedCountries = params['countries']?.split(',') ?? [];
+      this.selectedRegions = this.selectedCountries.length > 0 ? [] : params['region']?.split(',') ?? [];
+
+
+      this.selectedPlatforms = params['platforms']?.split(',') ?? [];
+      this.selectedVoiceChatOptions = params['voice']?.split(',') ?? [];
       this.filters.onlyOnline = params['onlyOnline'] === 'true';
+
+      this.extraCountries = this.selectedCountries.filter(country => !this.pinnedCountries.includes(country));
 
       this.loadAllUsers();
     });
@@ -121,7 +123,12 @@ export class FindPlayersComponent implements OnInit {
     this.communityService.findAllUsers({
       page: this.page,
       size: this.size,
-      query: query
+      query: query,
+      countries: this.selectedCountries as any,
+      regions: this.selectedRegions as any,
+      platforms: this.selectedPlatforms as any,
+      voice: this.selectedVoiceChatOptions as any,
+      onlyOnline: this.filters.onlyOnline,
     }).subscribe({
         next: (users) => {
           this.userCommunityResponse = users;
@@ -258,7 +265,7 @@ export class FindPlayersComponent implements OnInit {
   get searchCountry(): CountryResponse[] {
     const query = this.countrySearchQuery.trim().toLowerCase();
     return this.countryList.filter(country =>
-      country.countryName !== 'Not Selected' && !this.visibleCountries.includes(country.countryName!) &&
+      country.countryName !== 'Not Selected' && !this.visibleCountries.includes(country.name!) &&
       country.countryName!.toLowerCase().includes(query));
   }
 
@@ -273,12 +280,14 @@ export class FindPlayersComponent implements OnInit {
   }
 
   toggleRegion(regionName: string) {
-    this.extraCountries = [];
-    this.selectedCountries = [];
     if (this.selectedRegions.includes(regionName)) {
       this.selectedRegions = this.selectedRegions.filter(region => region !== regionName);
     } else {
       this.selectedRegions = [regionName]
+      this.extraCountries = [];
+      this.selectedCountries = [];
+      this.countryOpen = false;
+      this.countrySearchQuery = '';
     }
   }
 
@@ -365,19 +374,24 @@ export class FindPlayersComponent implements OnInit {
   }
 
   resetFilters() {
-    this.filters = {
-      country: '',
-      lookingForTeammate: false,
-      voiceChat: false,
-      onlyOnline: false,
-    };
+
+    this.filters.onlyOnline = false;
+    this.selectedCountries = [];
+    this.extraCountries = [];
+    this.selectedRegions = [];
+    this.selectedPlatforms = [];
+    this.selectedVoiceChatOptions = [];
+    this.countrySearchQuery = '';
+    this.countryOpen = false;
+
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
         page: 1,
-        country: null,
-        lookingForTeammate: false,
-        voiceChat: false,
+        countries: null,
+        region: null,
+        platforms: null,
+        voice: null,
         onlyOnline: false,
       },
       queryParamsHandling: 'merge'
@@ -400,9 +414,10 @@ export class FindPlayersComponent implements OnInit {
       relativeTo: this.route,
       queryParams: {
         page: 1,
-        country: this.filters.country || null,
-        lookingForTeammate: this.filters.lookingForTeammate || null,
-        voiceChat: this.filters.voiceChat || null,
+        countries: this.selectedCountries.join(',') || null,
+        region: this.selectedRegions.join(',') || null,
+        platforms: this.selectedPlatforms.join(',') || null,
+        voice: this.selectedVoiceChatOptions.join(',') || null,
         onlyOnline: this.filters.onlyOnline || null,
       }
     })
@@ -416,7 +431,10 @@ export class FindPlayersComponent implements OnInit {
 
   get activeFilters(): { label: string; remove: () => void }[] {
     return [
-      ...this.selectedCountries.map(country => ({label: this.getCountry(country)?.countryName ?? country, remove: () => this.toggleCountry(country)})),
+      ...this.selectedCountries.map(country => ({
+        label: this.getCountry(country)?.countryName ?? country,
+        remove: () => this.toggleCountry(country)
+      })),
       ...this.selectedRegions.map(region => ({
         label: this.getRegion(region)?.name ?? region,
         remove: () => this.toggleRegion(region)
@@ -431,4 +449,12 @@ export class FindPlayersComponent implements OnInit {
     ];
   }
 
+  applyFilters() {
+    this.changeFilter();
+  }
+
+  removeFilter(filter: { label: string; remove: () => void }) {
+    filter.remove();
+    this.changeFilter();
+  }
 }

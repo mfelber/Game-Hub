@@ -12,6 +12,11 @@ import { PageResponseUserCommunityResponse } from '../../models/page-response-us
 
 export interface FindAllUsers$Params {
   query?: string;
+  countries?: Array<'SK' | 'CZ' | 'PL' | 'HU' | 'DE' | 'LA' | 'BA' | 'BU' | 'KU' | 'LI' | 'US' | 'NOT_SPECIFIED'>;
+  regions?: Array<'EUROPE' | 'NA' | 'SA' | 'ASIA' | 'AFRICA' | 'ME' | 'OC' | 'CAB'>;
+  platforms?: Array<'PC' | 'NINTENDO' | 'XBOX' | 'PS' | 'MOBILE'>;
+  voice?: Array<'YES' | 'OPTIONAL' | 'NO'>;
+  onlyOnline?: boolean;
   page?: number;
   size?: number;
 }
@@ -20,6 +25,11 @@ export function findAllUsers(http: HttpClient, rootUrl: string, params?: FindAll
   const rb = new RequestBuilder(rootUrl, findAllUsers.PATH, 'get');
   if (params) {
     rb.query('query', params.query, {});
+    rb.query('countries', params.countries, {});
+    rb.query('regions', params.regions, {});
+    rb.query('platforms', params.platforms, {});
+    rb.query('voice', params.voice, {});
+    rb.query('onlyOnline', params.onlyOnline, {});
     rb.query('page', params.page, {});
     rb.query('size', params.size, {});
   }

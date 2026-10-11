@@ -7,6 +7,19 @@
   text-align: center;
   color: #9ca3af;
   gap: 8px;
+  padding: 24px 16px;
+}
+
+icon-wrap {
+  width: 72px;
+  height: 72px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #151B27;
+  border: 1px solid #222B3D;
+  margin-bottom: 8px;
 }
 
 .empty-state i {
@@ -18,12 +31,18 @@
 .empty-state h2 {
   margin: 0;
   font-size: 20px;
-  color: #d1d5db;
+  color: #E8ECF4;
   font-weight: 600;
 }
 
 .empty-state p {
   margin: 0;
+  max-width: 360px;
   font-size: 14px;
-  color: #6b7280;
+  line-height: 1.5;
+  color: #8892a6;
+}
+
+empty-state ::ng-deep button {
+  margin-top: 12px;
 }

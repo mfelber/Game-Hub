@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,10 +31,12 @@ import gamehub.game_Hub.Response.RegionResponse;
 import gamehub.game_Hub.Response.UserCommunityResponse;
 import gamehub.game_Hub.Service.CommunityService;
 import gamehub.game_Hub.enums.AccountStatus;
+import gamehub.game_Hub.enums.Country;
 import gamehub.game_Hub.enums.MicrophoneUsage;
 import gamehub.game_Hub.enums.Platform;
 import gamehub.game_Hub.enums.Region;
 import gamehub.game_Hub.enums.Role;
+import gamehub.game_Hub.specification.UserSpecification;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
@@ -55,6 +58,11 @@ public class CommunityServiceImpl implements CommunityService {
 
   @Override
   public PageResponse<UserCommunityResponse> findAllUsers(final Authentication connectedUser, String query,
+      List<Country> countries,
+      List<Region> regions,
+      List<Platform> platforms,
+      List<MicrophoneUsage> voice,
+      boolean onlyOnline,
       final int page,
       final int size) {
 
@@ -67,42 +75,47 @@ public class CommunityServiceImpl implements CommunityService {
     Set<Long> friendIds = user.getFriends().stream().map(friendship -> friendship.getFriend().getId()).collect(
         Collectors.toSet());
 
-    if (query.isEmpty()) {
+    Specification<User> spec = Specification.allOf(UserSpecification.emailIsNot(user.getEmail()),
+        UserSpecification.hasRole(Role.USER),
+        UserSpecification.accountStatusIn(FINDABLE_STATUSES));
 
-      Page<User> users = userRepository.findAllByEmailIsNotAndRoleAndAccountStatusIn(user.getEmail(), Role.USER,
-          FINDABLE_STATUSES, pageable);
-
-      List<UserCommunityResponse> communityResponse = users.stream()
-          .map(foundUser  -> communityMapper.toUserCommunityResponse(foundUser, user, friendIds))
-          .toList();
-
-      return new PageResponse<>(
-          communityResponse,
-          users.getNumber(),
-          users.getSize(),
-          users.getTotalElements(),
-          users.getTotalPages(),
-          users.isFirst(),
-          users.isLast()
-      );
-    } else {
-      Page<User> users = userRepository.findAllByEmailIsNotAndUsernameContainingIgnoreCaseAndRoleAndAccountStatusIn(
-          user.getEmail(), query, Role.USER, FINDABLE_STATUSES, pageable);
-
-      List<UserCommunityResponse> communityResponse = users.stream()
-          .map(foundUser  -> communityMapper.toUserCommunityResponse(foundUser, user, friendIds))
-          .toList();
-
-      return new PageResponse<>(
-          communityResponse,
-          users.getNumber(),
-          users.getSize(),
-          users.getTotalElements(),
-          users.getTotalPages(),
-          users.isFirst(),
-          users.isLast()
-      );
+    if (query != null && query.isBlank()) {
+      spec = spec.and(UserSpecification.usernameContains(query));
     }
+
+    if (countries != null && !countries.isEmpty()) {
+      spec = spec.and(UserSpecification.countryIn(countries));
+    } else if (regions != null && !regions.isEmpty()) {
+      spec = spec.and(UserSpecification.regionIn(regions));
+    }
+
+    if (platforms != null && !platforms.isEmpty()) {
+      spec = spec.and(UserSpecification.platformIn(platforms));
+    }
+
+    if (voice != null && !voice.isEmpty()) {
+      spec = spec.and(UserSpecification.microphoneIn(voice));
+    }
+
+    if (onlyOnline) {
+      spec = spec.and(UserSpecification.isOnline());
+    }
+
+    Page<User> users = userRepository.findAll(spec, pageable);
+
+    List<UserCommunityResponse> communityResponse = users.stream()
+          .map(foundUser -> communityMapper.toUserCommunityResponse(foundUser, user, friendIds))
+          .toList();
+
+    return new PageResponse<>(
+              communityResponse,
+              users.getNumber(),
+              users.getSize(),
+              users.getTotalElements(),
+              users.getTotalPages(),
+              users.isFirst(),
+              users.isLast()
+    );
   }
 
   @Override
@@ -222,20 +235,28 @@ public class CommunityServiceImpl implements CommunityService {
 
   @Override
   public List<PlatformResponse> getAllGamingPlatforms() {
-    return Arrays.stream(Platform.values()).sorted(Comparator.comparing(Platform::getPlatformName)).map(platform -> new PlatformResponse(platform.name(),
-        platform.getPlatformName(), platform.getPlatformIcon())).toList();
+    return Arrays.stream(Platform.values())
+        .sorted(Comparator.comparing(Platform::getPlatformName))
+        .map(platform -> new PlatformResponse(platform.name(),
+            platform.getPlatformName(), platform.getPlatformIcon()))
+        .toList();
   }
 
   @Override
   public List<RegionResponse> getAllRegions() {
-    return Arrays.stream(Region.values()).sorted(Comparator.comparing(Region::getRegionName)).map(region -> new RegionResponse(region.name(),
-        region.getRegionName())).toList();
+    return Arrays.stream(Region.values())
+        .sorted(Comparator.comparing(Region::getRegionName))
+        .map(region -> new RegionResponse(region.name(),
+            region.getRegionName()))
+        .toList();
   }
 
   @Override
   public List<MicrophoneUsageResponse> getAllMicrophoneUsages() {
-    return Arrays.stream(MicrophoneUsage.values()).map(microphoneUsage -> new MicrophoneUsageResponse(microphoneUsage.name(),
-        microphoneUsage.getMicrophoneUsageName(), microphoneUsage.getMicrophoneUsageIcon())).toList();
+    return Arrays.stream(MicrophoneUsage.values())
+        .map(microphoneUsage -> new MicrophoneUsageResponse(microphoneUsage.name(),
+            microphoneUsage.getMicrophoneUsageName(), microphoneUsage.getMicrophoneUsageIcon()))
+        .toList();
   }
 
 }

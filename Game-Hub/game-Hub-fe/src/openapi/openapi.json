@@ -2331,6 +2331,94 @@
             }
           },
           {
+            "name": "countries",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "SK",
+                  "CZ",
+                  "PL",
+                  "HU",
+                  "DE",
+                  "LA",
+                  "BA",
+                  "BU",
+                  "KU",
+                  "LI",
+                  "US",
+                  "NOT_SPECIFIED"
+                ]
+              }
+            }
+          },
+          {
+            "name": "regions",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "EUROPE",
+                  "NA",
+                  "SA",
+                  "ASIA",
+                  "AFRICA",
+                  "ME",
+                  "OC",
+                  "CAB"
+                ]
+              }
+            }
+          },
+          {
+            "name": "platforms",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "PC",
+                  "NINTENDO",
+                  "XBOX",
+                  "PS",
+                  "MOBILE"
+                ]
+              }
+            }
+          },
+          {
+            "name": "voice",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "YES",
+                  "OPTIONAL",
+                  "NO"
+                ]
+              }
+            }
+          },
+          {
+            "name": "onlyOnline",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
             "name": "page",
             "in": "query",
             "required": false,
@@ -3738,8 +3826,8 @@
             "type": "string",
             "enum": [
               "YES",
-              "NO",
-              "OPTIONAL"
+              "OPTIONAL",
+              "NO"
             ]
           },
           "region": {
@@ -4022,10 +4110,10 @@
           "inCart": {
             "type": "boolean"
           },
-          "inWishList": {
+          "inLibrary": {
             "type": "boolean"
           },
-          "inLibrary": {
+          "inWishList": {
             "type": "boolean"
           }
         }

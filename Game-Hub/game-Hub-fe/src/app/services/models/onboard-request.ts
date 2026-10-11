@@ -5,6 +5,6 @@
 export interface OnboardRequest {
   genreIds?: Array<number>;
   mainPlatform: 'PC' | 'NINTENDO' | 'XBOX' | 'PS' | 'MOBILE';
-  microphoneUsage: 'YES' | 'NO' | 'OPTIONAL';
+  microphoneUsage: 'YES' | 'OPTIONAL' | 'NO';
   region: 'EUROPE' | 'NA' | 'SA' | 'ASIA' | 'AFRICA' | 'ME' | 'OC' | 'CAB';
 }

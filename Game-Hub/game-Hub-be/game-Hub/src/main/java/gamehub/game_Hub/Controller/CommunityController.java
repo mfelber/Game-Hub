@@ -1,6 +1,5 @@
 package gamehub.game_Hub.Controller;
 
-
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -23,6 +22,10 @@ import gamehub.game_Hub.Response.PlatformResponse;
 import gamehub.game_Hub.Response.RegionResponse;
 import gamehub.game_Hub.Response.UserCommunityResponse;
 import gamehub.game_Hub.Service.CommunityService;
+import gamehub.game_Hub.enums.Country;
+import gamehub.game_Hub.enums.MicrophoneUsage;
+import gamehub.game_Hub.enums.Platform;
+import gamehub.game_Hub.enums.Region;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
@@ -40,9 +43,16 @@ public class CommunityController {
   @GetMapping("/get/all/users")
   public ResponseEntity<PageResponse<UserCommunityResponse>> findAllUsers(Authentication connectedUser,
       @RequestParam(defaultValue = "") String query,
+      @RequestParam(name = "countries", required = false) List<Country> countries,
+      @RequestParam(name = "regions", required = false) List<Region> regions,
+      @RequestParam(name = "platforms", required = false) List<Platform> platforms,
+      @RequestParam(name = "voice", required = false) List<MicrophoneUsage> voice,
+      @RequestParam(name = "onlyOnline", required = false) boolean onlyOnline,
       @RequestParam(name = "page", defaultValue = "0", required = false) int page,
       @RequestParam(name = "size", defaultValue = "10", required = false) int size) {
-    return ResponseEntity.ok(communityService.findAllUsers(connectedUser, query, page, size));
+    return ResponseEntity.ok(
+        communityService.findAllUsers(connectedUser, query, countries, regions, platforms, voice, onlyOnline, page,
+            size));
   }
 
   @PostMapping("/send/friend-request/{userId}")
@@ -95,4 +105,5 @@ public class CommunityController {
   public ResponseEntity<List<MicrophoneUsageResponse>> getAllMicrophoneUsages() {
     return ResponseEntity.ok(communityService.getAllMicrophoneUsages());
   }
+
 }

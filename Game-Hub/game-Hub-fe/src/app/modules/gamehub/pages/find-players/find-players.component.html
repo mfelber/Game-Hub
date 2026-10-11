@@ -62,11 +62,11 @@
           </label>
         </div>
 
-        @if (hasActiveFilters) {
+
           <button type="button" (click)="resetFilters()" aria-label="Clear filters" title="Clear filters"
                   class="cursor-pointer text-sm text-[#4DA3FF] hover:text-[#75B9FF] transition-colors !px-3 max-sm:hidden"> <i class="fa-solid fa-rotate-back"></i>
           </button>
-        }
+
 
       </div>
     </div>
@@ -129,10 +129,10 @@
                       class="mb-2 h-9 w-full rounded-[8px] border border-[#222B3D] bg-[#101521] px-3 text-sm text-white placeholder:text-[#7D879B] outline-none focus:border-[#4DA3FF]"
                       placeholder="Search country" [(ngModel)]="countrySearchQuery">
                     <ul class="max-h-52 overflow-y-auto">
-                      @for (country of searchCountry; track country.countryName) {
+                      @for (country of searchCountry; track country.name) {
                         <li
                           class="flex cursor-pointer items-center gap-2 rounded-[6px] px-2 py-2 text-sm text-white hover:bg-[#1c2436]"
-                          (click)="addCountry(country.countryName!)">
+                          (click)="addCountry(country.name!)">
                           <img [src]="country.iconPath" [alt]="country.countryName" class="w-5 rounded-[3px]">
                           {{ country.countryName }}
                         </li>
@@ -150,12 +150,12 @@
             </div>
 
             <div>
-              <span class=" block text-gray-400">Platforms</span>
+              <span class=" block text-gray-400">Platform</span>
               <div class="mt-2 flex flex-wrap gap-2">
                 @for (platform of gamingPlatforms; track platform.name) {
                   <button type="button" class="tag-button-filter"
-                          [class.tag-button-filter-selected]="selectedPlatforms.includes(platform.name!)"
-                          (click)="togglePlatform(platform.name!)">
+                          [class.tag-button-filter-selected]="selectedPlatforms.includes(platform.enumName!)"
+                          (click)="togglePlatform(platform.enumName!)">
                     <i [class]="platform.icon"></i> {{ platform.name }}
                   </button>
                 }
@@ -167,8 +167,8 @@
               <div class="mt-2 flex flex-wrap gap-2">
                 @for (voiceChatOption of voiceChatOptions; track voiceChatOption.enumName) {
                   <button type="button" class="tag-button-filter"
-                          [class.tag-button-filter-selected]="selectedVoiceChatOptions.includes(voiceChatOption.name!)"
-                          (click)="toggleVoiceChat(voiceChatOption.name!)">
+                          [class.tag-button-filter-selected]="selectedVoiceChatOptions.includes(voiceChatOption.enumName!)"
+                          (click)="toggleVoiceChat(voiceChatOption.enumName!)">
                     <i [class]="voiceChatOption.icon"></i> {{ voiceChatOption.name }}
                   </button>
                 }
@@ -179,8 +179,8 @@
 
           <div class="border-t border-t-[#222B3D]">
             <div class="flex gap-3 mt-3 sm:justify-end">
-              <button class="medium-button transparent max-sm:flex-1 max-sm:justify-center">Clear all</button>
-              <button class="medium-button save max-sm:flex-1 max-sm:justify-center">Apply</button>
+              <button class="medium-button transparent max-sm:flex-1 max-sm:justify-center" (click)="resetFilters()">Clear all</button>
+              <button class="medium-button save max-sm:flex-1 max-sm:justify-center" (click)="applyFilters()">Apply</button>
             </div>
           </div>
 
@@ -193,9 +193,9 @@
   <section class="selected-filters">
     <div class="flex flex-wrap gap-2">
       @for (filter of activeFilters; track filter.label) {
-        <div class="tag-button-filter-selected whitespace-nowrap shrink-0">
-          {{ filter.label }}
-        </div>
+        <button type="button" class="tag-button-filter-selected whitespace-nowrap shrink-0 cursor-pointer" (click)="removeFilter(filter)">
+          {{ filter.label }} <i class="fa-solid fa-xmark ml-1"></i>
+        </button>
       }
     </div>
   </section>
@@ -240,8 +240,14 @@
 
   @if (filteredUsers.length === 0 && !isLoading) {
     <app-empty-state
-      icon='fa-solid fa-sad-tear'
-      title="No users were founded">
+      icon='fa-solid fa-user-magnifing-glass'
+      title="No users were founded"
+      message="Try changing your filters or search to see more players.">
+      @if (hasActiveFilters || filters.onlyOnline) {
+        <button type="button" class="medium-button justify-center transparent" (click)="resetFilters()">
+          Clear filters
+        </button>
+      }
     </app-empty-state>
   }
 
