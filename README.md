@@ -3,11 +3,21 @@
 </p>
 
 
-GameHub is a full-stack gaming platform inspired by platforms such as Steam and Epic Games. The project explores the idea of building a gaming platform with its own features and approaches, including areas where existing platforms could be improved or handled differently.
+GameHub is a full-stack web platform for finding people to play with. Instead of just listing games, it focuses on connecting players: you can search for other gamers by country, platform, voice chat preference, and the games they play, or post a “looking for players” ad for a specific game.
 
-A major focus of GameHub is its community experience. Players can create and join groups, organize Game Nights where other members can participate, and compete against other groups through group-versus-group events and tournaments. The goal is to make GameHub more than just a place to discover and manage games, but also a platform where players can actively connect, organize events, and play together.
+Users can send friend requests, browse a catalog of games, build a personal library and wishlist, and customize their profiles with banners, profile pictures, and card colors. The application also includes administration and moderation tools for managing users, reports, and platform content.
 
-Users can browse games, add them to their library or wishlist, customize their profiles, and manage their accounts. The application also includes administration and moderation tools for managing users and platform content.
+
+### 🚀 Planned Features
+* 🔨 “Looking for players” ads (in progress): post an ad with schedule, play style, and preferences such as voice chat or region
+* 💬 Chat between users
+* 👥 User-created groups
+* 🎮 Game Nights: events that group members can join
+* 🏆 Group-versus-group events and tournaments
+* 🚫 Blocking users
+* 🔔 In-app notifications
+* 📧 More email notifications, for example when a reported user is banned
+* 📱 Improved mobile responsive design
 
 <p align="center">
   <img width="100%" alt="GameHub Home Page" src="./assets/store.png" />
@@ -17,17 +27,22 @@ Users can browse games, add them to their library or wishlist, customize their p
 
 ## ✨ Features
 
+### 👤 Community
+* Find players with filters: country, platform, voice chat usage, and games
+* “Looking for players” ads with game, schedule, play style, and preferences (voice chat, region,..)
+* Friend requests: send, accept, reject
+* Online status and player profiles
+
 ### 👤 User Features
 
 * User registration and authentication
-* Browse and search for games
+* Password reset
 * Detailed game pages
-* "Purchase" games and add them to a personal library
-* Wishlist management
-* Profile customization, including banners, profile pictures, and card colors
+* Profile customization: banners, profile pictures, and card colors
+* Browse and search for games, with detailed game pages
+* Personal game library and wishlist
 * Password reset functionality
-* Email notifications upon registration, account bans, and suspensions
-* And much more
+* Email notifications on registration, account bans, and suspensions
 
 ### 🛠️ Administration & Moderation
 
@@ -151,16 +166,3 @@ Demo accounts are automatically created for development and testing purposes.
 | 👤 User           | `marcel@marcel.com` | `heslo123` |
 | 🛠️ Administrator | `admin@admin.com`   | `admin`    |
 
-
-
----
-
-## 🚀 Planned Features
-
-* 💬 Chat between system
-* 👥 User-created groups
-* 📱 Improved mobile responsive design
-* 🚫 Blocking users
-* 🔔 In-app notifications
-* 📧💸 New Email notifications for example when games go on sale, banned reported user
-* And much more 🚀
