@@ -24,7 +24,7 @@
               <i class="fa-solid fa-angle-left"></i>
             </a>
           </li>
-          @for (_ of [].constructor(this.totalPages); track _; let pageIndex = $index) {
+          @for (page of pages; track page; let pageIndex = $index) {
             <li class="page-item"
               >
               <a

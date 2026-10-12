@@ -16,9 +16,10 @@
       <button hlmTabsTrigger="privacy"><i class="fa-solid fa-lock"></i> Privacy</button>
       <button hlmTabsTrigger="community"><i class="fa-solid fa-comment"></i> Community</button>
       <button hlmTabsTrigger="store"><i class="fa-solid fa-store"></i>Store</button>
-      <button hlmTabsTrigger="gaming"><i class="fa-solid fa-gamepad"></i>Gaming</button>
-      <button hlmTabsTrigger="account"><i class="fa-solid fa-bell"></i>Notifications</button>
+      <button hlmTabsTrigger="playerPreferences"><i class="fa-solid fa-gamepad"></i>Preferences</button>
+      <button hlmTabsTrigger="notifications"><i class="fa-solid fa-bell"></i>Notifications</button>
       <button hlmTabsTrigger="account"><i class="fa-solid fa-triangle-exclamation"></i>Account</button>
+      <button hlmTabsTrigger="linkedAccounts"><i class="fa-solid fa-link"></i>Linked Accounts</button>
     </hlm-tabs-list>
     <section class="settings">
 
@@ -57,11 +58,10 @@
                 class="absolute left-[15px] top-[-35px] h-25 w-25 rounded-[18px] border-3 border-[#151B27] object-cover"
               />
             } @else if (!response.userProfilePicture) {
-              <img
-                src="../../../../../assets/profilePicture/default_profile_picture.svg"
-                class="absolute left-[15px] top-[-35px] h-25 w-25 rounded-xl border-3 border-[#151B27] object-cover"
-                [ngStyle]="{'background-color': response.profileColor}"
-              />
+              <div class=" absolute left-[15px] top-[-35px] h-25 w-25 rounded-xl border-3 border-[#151B27] object-cover items-center flex justify-center text-[#101521] text-4xl"
+                   [ngStyle]="{'background-color': response.profileColor}">
+                {{ response.userName!.slice(0, 2).toUpperCase() }}
+              </div>
             }
 
             <div class="ml-[120px] mr-5 flex min-h-20 items-center justify-between gap-5 py-3">
@@ -534,7 +534,7 @@
                   </div>
                 </div>
                 <div class="border-t border-[#252b36]"></div>
-                <div class="w-full min-h-[124px] px-2 py-2 relative">
+                <div class="w-full max-h-[124px] px-2 py-2 relative">
                   @if (isLoading) {
                     <div
                       class="absolute inset-0 z-30 flex items-center justify-center
@@ -666,9 +666,6 @@
                              [ngClass]="{
                            'selected-genre': selectedGenres.has(genre.id),
                            'not-selected': !selectedGenres.has(genre.id)}">
-                          @if (selectedGenres.has(genre.id)) {
-                            <i class="fa-solid fa-check text-[10px]"></i>
-                          }
                           {{ genre.name }}
                           @if (selectedGenres.has(genre.id)) {
                             <button
@@ -898,10 +895,27 @@
         </div>
 
       </div>
-      <div hlmTabsContent="gaming">
-        <h2 class="text-xl font-semibold text-white"><i class="fa-solid fa-gamepad"></i> Gaming</h2>
+      <div hlmTabsContent="playerPreferences">
+        <h2 class="text-xl font-semibold text-white"><i class="fa-solid fa-gamepad"></i>Preferences</h2>
         <div>
-          Favorite game
+          play region = EU,NA,ME,....
+          main platform
+          Looking for →
+          Teammate
+          Duo
+          Squad
+          Co-op
+          Playstyle →
+          Casual
+          Competitive
+          Ranked
+          Communication →
+          Voice Chat
+          No Mic
+          Sessions →
+          Long Sessions
+          Short Sessions
+
           Multiplayer preference
           Looking for:
           Casual players
@@ -910,7 +924,6 @@
           etc.
           Player type
           Gaming tags
-          Favorite genres
         </div>
       </div>
       <div hlmTabsContent="account">
@@ -919,6 +932,14 @@
           Change password
           Suspend account
           Delete account
+        </div>
+
+      </div>
+
+      <div hlmTabsContent="linkedAccounts">
+        <h2 class="text-xl font-semibold text-white"><i class="fa-solid fa-triangle-exclamation"></i> Account </h2>
+        <div>
+          Steam -> DC -> ps -> xbox -> mirosoft ,...
         </div>
 
       </div>

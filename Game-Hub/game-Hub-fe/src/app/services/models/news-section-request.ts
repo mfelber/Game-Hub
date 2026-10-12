@@ -5,5 +5,5 @@
 import { NewsItemRequest } from '../models/news-item-request';
 export interface NewsSectionRequest {
   newsItems: Array<NewsItemRequest>;
-  newsType: 'ADDED' | 'IMPROVED' | 'FIXED' | 'SECURITY' | 'REMOVED';
+  newsType: 'ADDED' | 'IMPROVED' | 'NOTES' | 'FIXED' | 'SECURITY' | 'REMOVED';
 }

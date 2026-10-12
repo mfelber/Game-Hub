@@ -14,6 +14,10 @@ export class PaginationComponent {
 
   @Output() pageChange = new EventEmitter<number>();
 
+  get pages(): number[] {
+    return Array.from({ length: this.totalPages }, (_, i) => i + 1);
+  }
+
   goToFirstPage() {
     this.changePage(0)
   }

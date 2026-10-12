@@ -23,6 +23,9 @@ import gamehub.game_Hub.Module.Level;
 import gamehub.game_Hub.enums.AccountStatus;
 import gamehub.game_Hub.enums.AccountType;
 import gamehub.game_Hub.enums.Country;
+import gamehub.game_Hub.enums.MicrophoneUsage;
+import gamehub.game_Hub.enums.Platform;
+import gamehub.game_Hub.enums.Region;
 import gamehub.game_Hub.enums.Role;
 import gamehub.game_Hub.enums.Status;
 import jakarta.persistence.CascadeType;
@@ -109,6 +112,20 @@ public class User implements UserDetails, Principal {
 
   @Column(name = "is_banned")
   private boolean isBanned;
+
+  @Enumerated(EnumType.STRING)
+  @Column(name = "microphone_usage")
+  private MicrophoneUsage microphoneUsage;
+
+  @Enumerated(EnumType.STRING)
+  @Column(name = "main_platform")
+  private Platform mainPlatform;
+
+  @Enumerated(EnumType.STRING)
+  private Region region;
+
+  @Column(name = "user_is_onboarded")
+  private boolean isUserOnboarded;
 
   @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   private List<PasswordResetToken> passwordResetTokens;

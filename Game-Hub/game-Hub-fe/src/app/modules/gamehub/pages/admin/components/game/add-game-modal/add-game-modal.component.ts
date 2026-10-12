@@ -15,6 +15,7 @@ import {
   SystemRequirementsControllerService
 } from '../../../../../../../services/services/system-requirements-controller.service';
 import {UnitSizeResponse} from '../../../../../../../services/models/unit-size-response';
+import {OperationSystemResponse} from '../../../../../../../services/models/operation-system-response';
 
 @Component({
   selector: 'app-add-game-modal',
@@ -40,7 +41,7 @@ export class AddGameModalComponent implements OnInit {
   coverPhoto: File | null = null;
 
   genreResponse: GenreResponse[] = [];
-  platformResponse: PlatformResponse[] = [];
+  platformResponse: OperationSystemResponse[] = [];
   languageResponse: LanguageResponse[] = [];
   subtitleResponses: SubtitleResponse[] = [];
   ageRatingResponse: AgeRatingResponse[] = [];

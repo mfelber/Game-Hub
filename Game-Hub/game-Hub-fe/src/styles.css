@@ -40,7 +40,7 @@ background: transparent;
 }
 
 *::-webkit-scrollbar-thumb {
-background-color: #3B82F6;
+background-color: #4DA3FF;
 border-radius: 9999px;
 border: 2px solid #1F2937;
 }
@@ -133,4 +133,8 @@ color-scheme: dark;
 body {
 @apply bg-background text-foreground;
 }
+}
+
+.cdk-dialog-container:focus {
+  outline: none !important;
 }

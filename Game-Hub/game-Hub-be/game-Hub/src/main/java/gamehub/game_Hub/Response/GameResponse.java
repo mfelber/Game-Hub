@@ -34,7 +34,7 @@ public class GameResponse {
   private AgeRatingResponse ageRating;
   private byte [] gameCoverImage;
   private SystemRequirements systemRequirements;
-  private Set<PlatformResponse> platforms;
+  private Set<OperationSystemResponse> operationSystems;
   private Set<LanguageResponse> languages;
   private Set<SubtitleResponse> subtitles;
 

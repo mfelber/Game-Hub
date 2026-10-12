@@ -5,7 +5,7 @@
 import { AgeRatingResponse } from '../models/age-rating-response';
 import { GenreResponse } from '../models/genre-response';
 import { LanguageResponse } from '../models/language-response';
-import { PlatformResponse } from '../models/platform-response';
+import { OperationSystemResponse } from '../models/operation-system-response';
 import { SubtitleResponse } from '../models/subtitle-response';
 import { SystemRequirements } from '../models/system-requirements';
 export interface GameResponse {
@@ -22,7 +22,7 @@ export interface GameResponse {
   inLibrary?: boolean;
   inWishList?: boolean;
   languages?: Array<LanguageResponse>;
-  platforms?: Array<PlatformResponse>;
+  operationSystems?: Array<OperationSystemResponse>;
   price?: number;
   publisher?: string;
   releaseYear?: string;

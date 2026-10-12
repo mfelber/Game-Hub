@@ -8,13 +8,13 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { UserSettingsResponse } from '../../models/user-settings-response';
+import { RegionResponse } from '../../models/region-response';
 
-export interface GetUserSettings$Params {
+export interface GetAllRegions$Params {
 }
 
-export function getUserSettings(http: HttpClient, rootUrl: string, params?: GetUserSettings$Params, context?: HttpContext): Observable<StrictHttpResponse<UserSettingsResponse>> {
-  const rb = new RequestBuilder(rootUrl, getUserSettings.PATH, 'get');
+export function getAllRegions(http: HttpClient, rootUrl: string, params?: GetAllRegions$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<RegionResponse>>> {
+  const rb = new RequestBuilder(rootUrl, getAllRegions.PATH, 'get');
   if (params) {
   }
 
@@ -23,9 +23,9 @@ export function getUserSettings(http: HttpClient, rootUrl: string, params?: GetU
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<UserSettingsResponse>;
+      return r as StrictHttpResponse<Array<RegionResponse>>;
     })
   );
 }
 
-getUserSettings.PATH = '/profile/settings';
+getAllRegions.PATH = '/find-players/regions';

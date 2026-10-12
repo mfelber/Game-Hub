@@ -76,7 +76,7 @@
             hlmSidebarMenuButton
             tooltip="Find Players"
             [routerLink]="['/gamehub/find-players']"
-            [queryParams]="{ page: 1, lookingForTeammate: false, voiceChat: false, onlyOnline: false }"
+            [queryParams]="{ page: 1, onlyOnline: false }"
             routerLinkActive="active"
             class="sidebar-button">
             <i class="fa-solid fa-magnifying-glass"></i>
@@ -216,11 +216,10 @@
         routerLink="/gamehub/user/me"
       >
         @if (!userHasProfilePicture) {
-          <img
-            src="../../../../../assets/profilePicture/default_profile_picture.svg"
-            class="h-13 w-13 rounded-xl border border-black object-cover group-data-[collapsible=icon]:!rouned-[2px] group-data-[collapsible=icon]:!h-8 group-data-[collapsible=icon]:!w-8"
-            [ngStyle]="{'background-color': userResponse.profileColor}"
-          />
+          <div class=" items-center flex justify-center text-[#101521] text-sm h-13 w-13 rounded-xl object-cover group-data-[collapsible=icon]:!rounded-[5px] group-data-[collapsible=icon]:!h-8 group-data-[collapsible=icon]:!w-8"
+               [ngStyle]="{'background-color': userResponse.profileColor}">
+            {{ userResponse.username!.slice(0, 2).toUpperCase() }}
+          </div>
         }
 
         @if (userHasProfilePicture) {
@@ -239,7 +238,7 @@
 
           <div class="dropdown-small mt-1">
             <button
-              class="dropdown-button-small flex cursor-pointer items-center gap-2 text-sm !bg-transparent "
+              class="dropdown-button-small flex cursor-pointer items-center gap-2 text-sm !bg-transparent !border-none"
               type="button"
               [hlmDropdownMenuTrigger]="statusMenu"
               align="start"

@@ -194,9 +194,4 @@ public class UserProfileController {
     return ResponseEntity.ok(libraryService.getLast3PlayedGames(userId));
   }
 
-  @GetMapping("/settings")
-  public UserSettingsResponse getUserSettings(Authentication connectedUser) {
-    return userService.getUserSettings(connectedUser);
-  }
-
 }

@@ -8,12 +8,12 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { PlatformResponse } from '../../models/platform-response';
+import { OperationSystemResponse } from '../../models/operation-system-response';
 
 export interface GetAllPlatforms$Params {
 }
 
-export function getAllPlatforms(http: HttpClient, rootUrl: string, params?: GetAllPlatforms$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<PlatformResponse>>> {
+export function getAllPlatforms(http: HttpClient, rootUrl: string, params?: GetAllPlatforms$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<OperationSystemResponse>>> {
   const rb = new RequestBuilder(rootUrl, getAllPlatforms.PATH, 'get');
   if (params) {
   }
@@ -23,7 +23,7 @@ export function getAllPlatforms(http: HttpClient, rootUrl: string, params?: GetA
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<PlatformResponse>>;
+      return r as StrictHttpResponse<Array<OperationSystemResponse>>;
     })
   );
 }

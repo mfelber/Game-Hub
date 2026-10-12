@@ -46,10 +46,12 @@ public class NewsServiceImpl implements NewsService {
         .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + authUser.getId()));
 
     List<News> latestNews = newsRepository.findTop2ByOrderByCreatedAtDesc();
-    boolean hasUnseenNews = latestNews.stream().anyMatch(news -> !userNewsRepository.existsByUserAndNews(user, news));
+
+    boolean hasUnseenNews = !latestNews.isEmpty()
+        && !userNewsRepository.existsByUserAndNews(user, latestNews.get(0));
 
     List<NewsResponse> newsResponses = latestNews.stream().map(newsMapper::toNewsResponse).toList();
-    // return latestNews.stream().map(newsMapper::toNewsResponse).toList();
+
     return NewsOverviewResponse.builder()
         .news(newsResponses)
         .hasUnseenNews(hasUnseenNews)

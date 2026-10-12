@@ -16,6 +16,7 @@ import {UnitSizeResponse} from '../../../../../../../services/models/unit-size-r
 import {
   SystemRequirementsControllerService
 } from '../../../../../../../services/services/system-requirements-controller.service';
+import {OperationSystemResponse} from '../../../../../../../services/models/operation-system-response';
 
 @Component({
   selector: 'app-edit-game-modal',
@@ -70,7 +71,7 @@ export class EditGameModalComponent implements OnInit {
   originalGameRequest!: GameUpdateRequest;
 
   genreResponse: GenreResponse[] = [];
-  platformResponse: PlatformResponse[] = [];
+  platformResponse: OperationSystemResponse[] = [];
   languageResponse: LanguageResponse[] = [];
   subtitleResponses: SubtitleResponse[] = [];
   ageRatingResponse: AgeRatingResponse[] = [];
@@ -97,7 +98,7 @@ export class EditGameModalComponent implements OnInit {
   ngOnInit() {
     this.gameHasSelectedAgeRatingId = this.game.ageRating?.id ?? 0;
     this.gameHasGenresIds = this.game.genres?.map(g => g.id!) || [];
-    this.gameHasOsIds = this.game.platforms?.map(os => os.id!) || [];
+    this.gameHasOsIds = this.game.operationSystems?.map(os => os.id!) || [];
     this.gameHasLanguagesIds = this.game.languages?.map(l => l.id!) || [];
     this.gameHasSubtitlesIds = this.game.subtitles?.map(sub => sub.id!) || [];
 
@@ -114,7 +115,7 @@ export class EditGameModalComponent implements OnInit {
       ram: this.game.systemRequirements?.ram ?? 0,
       storage: this.game.systemRequirements?.storage ?? 0,
       gameUnitSize: this.game.systemRequirements?.gameUnitSize ?? '',
-      platformIds: this.game.platforms?.map(os => os.id!) || [],
+      platformIds: this.game.operationSystems?.map(os => os.id!) || [],
       languageIds: this.game.languages?.map(l => l.id!) || [],
       subtitleIds: this.game.subtitles?.map(sub => sub.id!) || [],
       genresIds: this.game.genres?.map(g => g.id!) || [],

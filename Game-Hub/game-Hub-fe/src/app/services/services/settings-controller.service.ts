@@ -11,8 +11,15 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { getUserSettings } from '../fn/settings-controller/get-user-settings';
+import { GetUserSettings$Params } from '../fn/settings-controller/get-user-settings';
+import { isUserOnboarded } from '../fn/settings-controller/is-user-onboarded';
+import { IsUserOnboarded$Params } from '../fn/settings-controller/is-user-onboarded';
+import { onboardUser } from '../fn/settings-controller/onboard-user';
+import { OnboardUser$Params } from '../fn/settings-controller/onboard-user';
 import { updateUserSettings } from '../fn/settings-controller/update-user-settings';
 import { UpdateUserSettings$Params } from '../fn/settings-controller/update-user-settings';
+import { UserSettingsResponse } from '../models/user-settings-response';
 
 @Injectable({ providedIn: 'root' })
 export class SettingsControllerService extends BaseService {
@@ -42,6 +49,81 @@ export class SettingsControllerService extends BaseService {
   updateUserSettings(params: UpdateUserSettings$Params, context?: HttpContext): Observable<number> {
     return this.updateUserSettings$Response(params, context).pipe(
       map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `onboardUser()` */
+  static readonly OnboardUserPath = '/settings/onboarding';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `onboardUser()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  onboardUser$Response(params: OnboardUser$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return onboardUser(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `onboardUser$Response()` instead.
+   *
+   * This method sends `application/json` and handles request body of type `application/json`.
+   */
+  onboardUser(params: OnboardUser$Params, context?: HttpContext): Observable<number> {
+    return this.onboardUser$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `getUserSettings()` */
+  static readonly GetUserSettingsPath = '/settings/settings';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getUserSettings()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getUserSettings$Response(params?: GetUserSettings$Params, context?: HttpContext): Observable<StrictHttpResponse<UserSettingsResponse>> {
+    return getUserSettings(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getUserSettings$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getUserSettings(params?: GetUserSettings$Params, context?: HttpContext): Observable<UserSettingsResponse> {
+    return this.getUserSettings$Response(params, context).pipe(
+      map((r: StrictHttpResponse<UserSettingsResponse>): UserSettingsResponse => r.body)
+    );
+  }
+
+  /** Path part for operation `isUserOnboarded()` */
+  static readonly IsUserOnboardedPath = '/settings/onboarded';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `isUserOnboarded()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  isUserOnboarded$Response(params?: IsUserOnboarded$Params, context?: HttpContext): Observable<StrictHttpResponse<boolean>> {
+    return isUserOnboarded(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `isUserOnboarded$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  isUserOnboarded(params?: IsUserOnboarded$Params, context?: HttpContext): Observable<boolean> {
+    return this.isUserOnboarded$Response(params, context).pipe(
+      map((r: StrictHttpResponse<boolean>): boolean => r.body)
     );
   }
 
