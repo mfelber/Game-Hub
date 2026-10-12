@@ -20,6 +20,7 @@ import {PlatformResponse} from '../../../../services/models/platform-response';
 import {ToastService} from '../../../../services/ToastService/toast.service';
 import {CountryResponse} from '../../../../services/models/country-response';
 import {MicrophoneUsageResponse} from '../../../../services/models/microphone-usage-response';
+import {HlmTabs, HlmTabsList, HlmTabsTrigger} from '@spartan/tabs';
 
 @Component({
   selector: 'app-find-players',

@@ -6,21 +6,21 @@
         <h1>Settings</h1>
         <p class="page-description">Manage your account settings and preferences</p>
       </div>
-      <app-user-actions/>
+      <!--      <app-user-actions/>-->
     </div>
   </section>
 
-  <hlm-tabs tab="profile" activationMode="manual" class="w-full !gap-0" (brnTabsChange)="onTabChange($event)">
-    <hlm-tabs-list aria-label="tabs example" variant="line">
-      <button hlmTabsTrigger="profile"><i class="fa-solid fa-user"></i> Profile</button>
-      <button hlmTabsTrigger="privacy"><i class="fa-solid fa-lock"></i> Privacy</button>
-      <button hlmTabsTrigger="community"><i class="fa-solid fa-comment"></i> Community</button>
-      <button hlmTabsTrigger="store"><i class="fa-solid fa-store"></i>Store</button>
-      <button hlmTabsTrigger="playerPreferences"><i class="fa-solid fa-gamepad"></i>Preferences</button>
-      <button hlmTabsTrigger="notifications"><i class="fa-solid fa-bell"></i>Notifications</button>
-      <button hlmTabsTrigger="account"><i class="fa-solid fa-triangle-exclamation"></i>Account</button>
-      <button hlmTabsTrigger="linkedAccounts"><i class="fa-solid fa-link"></i>Linked Accounts</button>
-    </hlm-tabs-list>
+  <hlm-tabs tab="profile" activationMode="manual" class="w-full !gap-0 !flex-col" (brnTabsChange)="onTabChange($event)">
+        <hlm-tabs-list aria-label="tabs example" variant="line">
+          <button hlmTabsTrigger="profile"><i class="fa-solid fa-user"></i> Profile</button>
+          <button hlmTabsTrigger="privacy"><i class="fa-solid fa-lock"></i> Privacy</button>
+          <button hlmTabsTrigger="community"><i class="fa-solid fa-comment"></i> Community</button>
+          <button hlmTabsTrigger="store"><i class="fa-solid fa-store"></i>Store</button>
+          <button hlmTabsTrigger="playerPreferences"><i class="fa-solid fa-gamepad"></i>Preferences</button>
+          <button hlmTabsTrigger="notifications"><i class="fa-solid fa-bell"></i>Notifications</button>
+          <button hlmTabsTrigger="account"><i class="fa-solid fa-triangle-exclamation"></i>Account</button>
+          <button hlmTabsTrigger="linkedAccounts"><i class="fa-solid fa-link"></i>Linked Accounts</button>
+        </hlm-tabs-list>
     <section class="settings">
 
       <div hlmTabsContent="profile" class="mb-3">
@@ -58,9 +58,10 @@
                 class="absolute left-[15px] top-[-35px] h-25 w-25 rounded-[18px] border-3 border-[#151B27] object-cover"
               />
             } @else if (!response.userProfilePicture) {
-              <div class=" absolute left-[15px] top-[-35px] h-25 w-25 rounded-xl border-3 border-[#151B27] object-cover items-center flex justify-center text-[#101521] text-4xl"
-                   [ngStyle]="{'background-color': response.profileColor}">
-                {{ response.userName!.slice(0, 2).toUpperCase() }}
+              <div
+                class=" absolute left-[15px] top-[-35px] h-25 w-25 rounded-xl border-3 border-[#151B27] object-cover items-center flex justify-center text-[#101521] text-4xl"
+                [ngStyle]="{'background-color': response.profileColor}">
+                {{ response.userName?.slice(0, 2)?.toUpperCase() }}
               </div>
             }
 

@@ -152,8 +152,8 @@ export class SettingsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getCountries();
     this.loadProfile();
+    this.getCountries();
     this.loadColorsForCard();
     this.getGenres();
   }
