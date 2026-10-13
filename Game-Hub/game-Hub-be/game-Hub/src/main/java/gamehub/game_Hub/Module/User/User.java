@@ -153,6 +153,9 @@ public class User implements UserDetails, Principal {
   @Column(nullable = false)
   private Role role;
 
+  @Column(name = "is_supporter")
+  private boolean isSupporter;
+
   @OneToMany(mappedBy = "user")
   private Set<UserLibrary> library;
 

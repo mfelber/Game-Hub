@@ -20,7 +20,8 @@ import {PlatformResponse} from '../../../../services/models/platform-response';
 import {ToastService} from '../../../../services/ToastService/toast.service';
 import {CountryResponse} from '../../../../services/models/country-response';
 import {MicrophoneUsageResponse} from '../../../../services/models/microphone-usage-response';
-import {HlmTabs, HlmTabsList, HlmTabsTrigger} from '@spartan/tabs';
+import {HlmTabs, HlmTabsContent, HlmTabsList, HlmTabsTrigger} from '@spartan/tabs';
+import {LfgComponent} from '../community/lfg/lfg.component';
 
 @Component({
   selector: 'app-find-players',
@@ -35,7 +36,12 @@ import {HlmTabs, HlmTabsList, HlmTabsTrigger} from '@spartan/tabs';
     UserActionsComponent,
     PaginationComponent,
     LoadingComponent,
-    DatePipe
+    DatePipe,
+    HlmTabs,
+    HlmTabsList,
+    HlmTabsTrigger,
+    HlmTabsContent,
+    LfgComponent
   ],
   templateUrl: './find-players.component.html',
   styleUrl: './find-players.component.scss',
@@ -419,7 +425,7 @@ export class FindPlayersComponent implements OnInit {
         region: this.selectedRegions.join(',') || null,
         platforms: this.selectedPlatforms.join(',') || null,
         voice: this.selectedVoiceChatOptions.join(',') || null,
-        onlyOnline: this.filters.onlyOnline || null,
+        onlyOnline: this.filters.onlyOnline || false,
       }
     })
   }

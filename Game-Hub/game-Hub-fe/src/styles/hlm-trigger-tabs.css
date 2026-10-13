@@ -1,0 +1,33 @@
+.settings-trigger-tabs {
+    @apply relative inline-flex h-[42px] items-center gap-1.5 px-6
+    text-sm font-medium text-white/55 cursor-pointer
+    rounded-t-md rounded-b-none
+    border-t border-x border-white/15
+    transition-colors duration-200
+    hover:text-white hover:bg-[#151B27]/60
+    before:absolute before:bottom-[-1px] before:left-0 before:right-0
+    before:h-px before:bg-[#151923] before:opacity-0
+    data-[state=active]:z-10
+    data-[state=active]:text-white
+    data-[state=active]:bg-[#151923]
+    data-[state=active]:before:opacity-100;
+}
+
+.find-players-tabs-list {
+  @apply flex w-full sm:inline-flex sm:w-fit items-center max-sm:mt-3
+  gap-1 p-1 rounded-xl border border-[#222B3D] bg-[#151B27];
+}
+
+.find-players-tabs {
+  @apply flex-1 sm:flex-none h-10 px-6 rounded-lg
+  text-base font-medium text-white/55 cursor-pointer
+  transition-colors duration-400 ease-in-out
+  hover:text-white
+  data-[state=active]:bg-[#4DA3FF]
+  data-[state=active]:text-[#0B0F15]
+  data-[state=active]:shadow-none;
+}
+
+.hlm-settings-tabs-content {
+  @apply flex-1 text-sm outline-none bg-[#151923] rounded-r-md rounded-bl-md border border-white/15 px-8 py-6
+}

@@ -1,0 +1,36 @@
+<div class="search !mb-2 w-full flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+  <div class="flex min-w-0 flex-1 flex-col gap-3 sm:flex-row sm:items-center">
+      <div class="min-w-0 flex-1 sm:max-w-sm lg:min-w-[420px] lg:max-w-xl">
+        <app-search-bar placeholder="Search user"> </app-search-bar>
+      </div>
+
+      <div class="filter-options max-sm:w-full">
+        <button
+          class="filter-button max-sm:w-full max-sm:justify-center"
+          (click)="openLfgFilter = !openLfgFilter"
+          [ngClass]="{ 'open': openLfgFilter }">
+          <i class="fa-solid fa-filter"></i>
+          Filters
+          <!--   TODO add count of active filters   -->
+          <i
+            class="fa-solid fa-chevron-down transition-transform duration-300"
+            [class.rotate-180]="openLfgFilter"></i>
+        </button>
+
+        <button type="button" (click)="resetFilters()" aria-label="Clear filters" title="Clear filters"
+                class="cursor-pointer text-sm text-[#4DA3FF] hover:text-[#75B9FF] transition-colors !px-3 max-sm:hidden">
+          <i class="fa-solid fa-rotate-back"></i>
+        </button>
+      </div>
+  </div>
+    <div>
+      <button class="medium-button bg-[#4DA3FF] max-sm:w-full max-sm:justify-center text-[#0B0F15]">
+         <i class="fa-solid fa-plus"></i> Add new LFG
+      </button>
+    </div>
+
+
+
+
+
+</div>

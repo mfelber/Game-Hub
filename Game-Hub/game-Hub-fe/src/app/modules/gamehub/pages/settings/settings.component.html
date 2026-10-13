@@ -12,18 +12,18 @@
 
   <hlm-tabs tab="profile" activationMode="manual" class="w-full !gap-0 !flex-col" (brnTabsChange)="onTabChange($event)">
         <hlm-tabs-list aria-label="tabs example" variant="line">
-          <button hlmTabsTrigger="profile"><i class="fa-solid fa-user"></i> Profile</button>
-          <button hlmTabsTrigger="privacy"><i class="fa-solid fa-lock"></i> Privacy</button>
-          <button hlmTabsTrigger="community"><i class="fa-solid fa-comment"></i> Community</button>
-          <button hlmTabsTrigger="store"><i class="fa-solid fa-store"></i>Store</button>
-          <button hlmTabsTrigger="playerPreferences"><i class="fa-solid fa-gamepad"></i>Preferences</button>
-          <button hlmTabsTrigger="notifications"><i class="fa-solid fa-bell"></i>Notifications</button>
-          <button hlmTabsTrigger="account"><i class="fa-solid fa-triangle-exclamation"></i>Account</button>
-          <button hlmTabsTrigger="linkedAccounts"><i class="fa-solid fa-link"></i>Linked Accounts</button>
+          <button hlmTabsTrigger="profile" class="settings-trigger-tabs"><i class="fa-solid fa-user"></i> Profile</button>
+          <button hlmTabsTrigger="privacy" class="settings-trigger-tabs"><i class="fa-solid fa-lock"></i> Privacy</button>
+          <button hlmTabsTrigger="community" class="settings-trigger-tabs"><i class="fa-solid fa-comment"></i> Community</button>
+          <button hlmTabsTrigger="store" class="settings-trigger-tabs"><i class="fa-solid fa-store"></i>Store</button>
+          <button hlmTabsTrigger="playerPreferences" class="settings-trigger-tabs"><i class="fa-solid fa-gamepad"></i>Preferences</button>
+          <button hlmTabsTrigger="notifications" class="settings-trigger-tabs"><i class="fa-solid fa-bell"></i>Notifications</button>
+          <button hlmTabsTrigger="account" class="settings-trigger-tabs"><i class="fa-solid fa-triangle-exclamation"></i>Account</button>
+          <button hlmTabsTrigger="linkedAccounts" class="settings-trigger-tabs"><i class="fa-solid fa-link"></i>Linked Accounts</button>
         </hlm-tabs-list>
     <section class="settings">
 
-      <div hlmTabsContent="profile" class="mb-3">
+      <div hlmTabsContent="profile" class="hlm-settings-tabs-content">
         <h2 class="text-xl font-semibold text-white"><i class="fa-solid fa-user"></i> Profile</h2>
         <p class="mt-1 text-sm text-gray-400">Manage your profile information and appearance</p>
 
@@ -714,7 +714,7 @@
           </section>
         </section>
       </div>
-      <div hlmTabsContent="privacy">
+      <div hlmTabsContent="privacy" class="hlm-settings-tabs-content">
         <h2 class="text-xl font-semibold text-white"><i class="fa-solid fa-lock"></i> Privacy</h2>
         <p class="mt-1 text-sm text-gray-400">Control who can see your information and activity</p>
 
@@ -778,7 +778,7 @@
         </div>
 
       </div>
-      <div hlmTabsContent="community">
+      <div hlmTabsContent="community" class="hlm-settings-tabs-content">
         <h2 class="text-xl font-semibold text-white"><i class="fa-solid fa-comment"></i> Community</h2>
         <p class="mt-1 text-sm text-gray-400">Manage who can interact with you and send you invitations</p>
 
@@ -845,7 +845,7 @@
         </div>
 
       </div>
-      <div hlmTabsContent="store">
+      <div hlmTabsContent="store" class="hlm-settings-tabs-content">
         <h2 class="text-xl font-semibold text-white"><i class="fa-solid fa-store"></i> Store</h2>
         <p class="mt-1 text-sm text-gray-400">Control which age-rated games are shown in your store</p>
 
@@ -896,7 +896,7 @@
         </div>
 
       </div>
-      <div hlmTabsContent="playerPreferences">
+      <div hlmTabsContent="playerPreferences" class="hlm-settings-tabs-content">
         <h2 class="text-xl font-semibold text-white"><i class="fa-solid fa-gamepad"></i>Preferences</h2>
         <div>
           play region = EU,NA,ME,....
@@ -927,7 +927,7 @@
           Gaming tags
         </div>
       </div>
-      <div hlmTabsContent="account">
+      <div hlmTabsContent="account" class="hlm-settings-tabs-content">
         <h2 class="text-xl font-semibold text-white"><i class="fa-solid fa-triangle-exclamation"></i> Account </h2>
         <div>
           Change password
@@ -937,7 +937,7 @@
 
       </div>
 
-      <div hlmTabsContent="linkedAccounts">
+      <div hlmTabsContent="linkedAccounts" class="hlm-settings-tabs-content">
         <h2 class="text-xl font-semibold text-white"><i class="fa-solid fa-triangle-exclamation"></i> Account </h2>
         <div>
           Steam -> DC -> ps -> xbox -> mirosoft ,...

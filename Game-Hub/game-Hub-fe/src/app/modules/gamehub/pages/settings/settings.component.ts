@@ -40,7 +40,6 @@ import {UserLibraryResponse} from '../../../../services/models/user-library-resp
 @Component({
   selector: 'app-settings',
   imports: [
-    UserActionsComponent,
     HlmTabs,
     HlmTabsList,
     HlmTabsTrigger,

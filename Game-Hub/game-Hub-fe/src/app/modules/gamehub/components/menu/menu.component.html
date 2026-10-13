@@ -78,6 +78,7 @@
             [routerLink]="['/gamehub/find-players']"
             [queryParams]="{ page: 1, onlyOnline: false }"
             routerLinkActive="active"
+            [routerLinkActiveOptions]="{ paths: 'subset', queryParams: 'ignored', fragment: 'ignored', matrixParams: 'ignored' }"
             class="sidebar-button">
             <i class="fa-solid fa-magnifying-glass"></i>
             <span>Find Players</span>
