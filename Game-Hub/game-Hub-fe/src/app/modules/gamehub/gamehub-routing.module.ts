@@ -24,6 +24,7 @@ import {AdminGameDetailsComponent} from './pages/admin/pages/store/game-details/
 import {CartComponent} from './pages/cart/cart.component';
 import {SettingsComponent} from './pages/settings/settings.component';
 import {NewsComponent} from './pages/admin/pages/news/news.component';
+import {NewLfgPostComponent} from './pages/community/new-lfg-post/new-lfg-post.component';
 
 const routes: Routes = [
   {
@@ -65,8 +66,15 @@ const routes: Routes = [
       },
       {
         path: 'find-players',
-        component: FindPlayersComponent,
-        canActivate: [authGuard]
+        canActivate: [authGuard],
+        children: [
+          {
+            path:'', component: FindPlayersComponent
+          },
+          {
+            path: 'new-lfg-post', component: NewLfgPostComponent
+          }
+        ]
       },
       {
         path: 'friend-requests',

@@ -22,6 +22,7 @@ export interface UserCommunityResponse {
   region?: RegionResponse;
   reviewsCount?: number;
   status?: 'Online' | 'Playing' | 'Offline' | 'Away';
+  supporter?: boolean;
   userId?: number;
   userProfilePicture?: string;
   username?: string;

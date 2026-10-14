@@ -32,4 +32,5 @@ public class UserCommunityResponse {
   private PlatformResponse mainPlatform;
   private MicrophoneUsageResponse microphoneUsage;
   private RegionResponse region;
+  private boolean isSupporter;
 }

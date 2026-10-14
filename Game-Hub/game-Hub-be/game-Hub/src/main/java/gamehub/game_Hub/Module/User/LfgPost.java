@@ -2,20 +2,19 @@ package gamehub.game_Hub.Module.User;
 
 import java.time.DayOfWeek;
 import java.time.Instant;
-import java.util.List;
 import java.util.Set;
 
 import gamehub.game_Hub.Module.Game;
-import gamehub.game_Hub.enums.Commitment;
+import gamehub.game_Hub.enums.Lfg.Commitment;
 import gamehub.game_Hub.enums.Languages;
 import gamehub.game_Hub.enums.Lfg.LookingFor;
-import gamehub.game_Hub.enums.LfgStatus;
+import gamehub.game_Hub.enums.Lfg.LfgStatus;
 import gamehub.game_Hub.enums.MicrophoneUsage;
-import gamehub.game_Hub.enums.Personality;
+import gamehub.game_Hub.enums.Lfg.Personality;
 import gamehub.game_Hub.enums.Platform;
-import gamehub.game_Hub.enums.PlayStyle;
+import gamehub.game_Hub.enums.Lfg.PlayStyle;
 import gamehub.game_Hub.enums.Region;
-import gamehub.game_Hub.enums.TimeOfDay;
+import gamehub.game_Hub.enums.Lfg.TimeOfDay;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -86,12 +85,14 @@ public class LfgPost {
   @Enumerated(EnumType.STRING)
   private Set<DayOfWeek> days;
 
-
   @ElementCollection
   @CollectionTable(name = "lfg_post_times_of_day", schema = "game_hub", joinColumns = @JoinColumn(name = "lfg_post_id"))
   @Column(name = "time_of_day")
   @Enumerated(EnumType.STRING)
   private Set<TimeOfDay> timesOfDay;
+
+  @Column(nullable = false)
+  private boolean flexible;
 
   @ElementCollection
   @CollectionTable(name = "lfg_post_open_to_regions", schema = "game_hub", joinColumns = @JoinColumn(name = "lfg_post_id"))

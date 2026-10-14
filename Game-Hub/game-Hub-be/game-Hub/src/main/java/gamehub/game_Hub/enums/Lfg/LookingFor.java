@@ -1,17 +1,18 @@
 package gamehub.game_Hub.enums.Lfg;
 
+import gamehub.game_Hub.enums.IconLfgOption;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-public enum LookingFor {
+@RequiredArgsConstructor
+public enum LookingFor implements IconLfgOption {
 
-  FRIEND("Friend"),
-  DUO("Duo Partner"),
-  SQUAD("Squad");
+  FRIEND("Friend", "Someone to play with regularly and stay in touch.", "fa-solid fa-user"),
+  DUO("Duo Partner", "One teammate to queue or co-op with.","fa-solid fa-user-group"),
+  SQUAD("Squad", "A group of players for team games.", "fa-solid fa-users");
 
   private final String label;
-
-  LookingFor(final String label) {
-    this.label  = label;
-  }
+  private final String description;
+  private final String icon;
 }

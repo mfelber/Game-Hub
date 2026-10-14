@@ -1,8 +1,10 @@
 package gamehub.game_Hub.enums;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
+@RequiredArgsConstructor
 public enum Languages {
 
   EN("English"),
@@ -26,12 +28,5 @@ public enum Languages {
   CS("Czech");
 
   private final String label;
-
-  Languages(String label) {
-    this.label = label;
-  }
-
-  public String getLabel() { return label; }
-
 
 }

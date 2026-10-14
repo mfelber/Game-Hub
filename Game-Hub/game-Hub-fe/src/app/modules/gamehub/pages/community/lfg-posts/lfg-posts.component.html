@@ -1,0 +1,36 @@
+<div class="search !mb-2 flex w-full flex-col gap-3 2xl:flex-row 2xl:items-center 2xl:justify-between">
+  <div class="flex min-w-0 flex-1 flex-col gap-3 2xl:flex-row 2xl:items-center">
+
+    <hlm-tabs tab="All" class="max-2xl:w-full">
+
+      <hlm-tabs-list class="lfg-tabs-list">
+        <button hlmTabsTrigger="All" class="lfg-tabs">All posts</button>
+        <button hlmTabsTrigger="Saved" class="lfg-tabs"> <i class="fa-solid fa-bookmark"></i> Saved</button>
+        <button hlmTabsTrigger="my-posts" class="lfg-tabs"> <i class="fa-regular fa-file-lines"></i> My posts</button>
+      </hlm-tabs-list>
+    </hlm-tabs>
+    <div class="min-w-0 w-full 2xl:flex-1 2xl:min-w-[420px] 2xl:max-w-xl">
+      <app-search-bar placeholder="Search post"> </app-search-bar>
+    </div>
+
+    <div class="filter-options max-2xl:w-full">
+      <button
+        class="filter-button max-2xl:w-full max-2xl:justify-center"
+        (click)="openLfgFilter = !openLfgFilter"
+        [ngClass]="{ 'open': openLfgFilter }">
+        <i class="fa-solid fa-filter"></i>
+        Filters
+        <!--   TODO add count of active filters   -->
+        <i
+          class="fa-solid fa-chevron-down transition-transform duration-300"
+          [class.rotate-180]="openLfgFilter"></i>
+      </button>
+    </div>
+  </div>
+  <div>
+    <button class="medium-button bg-[#4DA3FF] text-[#0B0F15] max-2xl:w-full max-2xl:justify-center" (click)="navigateToNewPost()">
+      <i class="fa-solid fa-plus"></i> Add new LFG
+    </button>
+  </div>
+
+</div>

@@ -1,0 +1,215 @@
+<main>
+  <section class="header mb-3">
+    <div>
+      <h1 class="text-[#E8ECF4]">New LFG post</h1>
+      <p class="page-description">Tell other players what you are looking for. Fields marked * are required.</p>
+    </div>
+    <app-user-actions/>
+  </section>
+
+  <section class="post">
+    @if (isLoading) {
+      <div class="relative min-h-[300px] rounded-xl border border-[#222B3D] bg-[#151B27]">
+        <app-loading></app-loading>
+      </div>
+    } @else {
+      <div class=" bg-[#151B27] rounded-lg p-5 border border-[#222B3D]">
+        <div class="grid grid-cols-1 gap-10 lg:gap-10 lg:grid-cols-2">
+          <div class="flex flex-col gap-4">
+            <div class="flex flex-col gap-2">
+              <label class="text-base text-[#E8ECF4]">Game *</label>
+              <app-search-bar
+                [inputClass]="'!bg-[#0F141D] border border-[#222B3D]'"
+              />
+            </div>
+            <div class="flex flex-col gap-2">
+              <label class="text-base text-[#E8ECF4]">Looking for *</label>
+              <div class="grid grid-cols-1 gap-2 xl:grid-cols-3">
+                @for (lookingFor of optionResponse.lookingFors; track lookingFor.value) {
+                  <button type="button"
+                          (click)="selectLookingFor(lookingFor.value)"
+                          class="flex text-left items-start min-w-0 flex-col gap-2 border rounded-lg p-2 cursor-pointer transition-colors duration-200"
+                          [ngClass]="selectedLookingFor === lookingFor.value ? 'border-[#4DA3FF] bg-[#16304D] text-[#B5D8FF]'
+                  : 'border-[#222B3D] hover:border-[#3a4560] hover:bg-[#1b2332]'">
+                    <i [class]=" lookingFor.icon + ' text-[#C5CCDC]'"></i>
+                    <span class="text-[#C5CCDC]">{{ lookingFor.label }}</span>
+                    <span class="text-[#8892a6] text-base font-normal">{{ lookingFor.description }}</span>
+                  </button>
+                }
+              </div>
+
+            </div>
+
+            <div class="flex flex-col gap-2">
+              <label class="text-base text-[#E8ECF4]">Commitment *</label>
+              <div class="grid grid-cols-1 gap-2 xl:grid-cols-3">
+                @for (commitment of optionResponse.commitments; track commitment.value) {
+                  <button type="button"
+                          (click)="selectCommitment(commitment.value)"
+                          class="flex items-center justify-center min-w-0 border rounded-lg p-2 cursor-pointer transition-colors duration-200"
+                          [ngClass]="selectedCommitment === commitment.value ? 'border-[#4DA3FF] bg-[#16304D] text-[#B5D8FF]'
+                  : 'border-[#222B3D] hover:border-[#3a4560] hover:bg-[#1b2332]'">
+                    {{ commitment.label }}
+                  </button>
+                }
+              </div>
+              @if (selectedCommitmentDescription) {
+                <span class="text-sm text-[#C5CCDC]">{{ selectedCommitmentDescription }}</span>
+              }
+
+            </div>
+            <div class="flex flex-col gap-2">
+              <label class="text-base text-[#E8ECF4]">Platform *</label>
+              <div class="flex gap-2 flex-wrap">
+                @for (platform of optionResponse.platforms; track platform.enumName) {
+                  <button
+                    type="button"
+                    (click)="selectPlatform(platform.enumName)"
+                    class="flex w-fit justify-center items-center border rounded-lg p-2 cursor-pointer transition-colors duration-200 gap-2"
+                    [ngClass]="selectedPlatform === platform.enumName ? 'border-[#4DA3FF] bg-[#16304D] text-[#B5D8FF]'
+                  : 'border-[#222B3D] hover:border-[#3a4560] hover:bg-[#1b2332]'">
+                    <i [class]=" platform.icon + ' text-[#C5CCDC]'"></i>
+                    {{ platform.name }}
+                  </button>
+                }
+              </div>
+            </div>
+            <div class="flex flex-col gap-2">
+              <label class="text-base text-[#E8ECF4]">Voice chat *</label>
+              <div class="grid grid-cols-1 gap-2 xl:grid-cols-3">
+                @for (voice of optionResponse.voiceChats; track voice.enumName) {
+                  <button
+                    type="button"
+                    (click)="selectVoiceChat(voice.enumName)"
+                    class="flex items-center justify-center min-w-0 border rounded-lg p-2 cursor-pointer transition-colors duration-200 gap-2"
+                    [ngClass]="selectedVoiceChat === voice.enumName ? 'border-[#4DA3FF] bg-[#16304D] text-[#B5D8FF]'
+                  : 'border-[#222B3D] hover:border-[#3a4560] hover:bg-[#1b2332]'">
+                    <i [class]=" voice.icon + ' text-[#C5CCDC]'"></i>
+                    {{ voice.name }}
+                  </button>
+                }
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-col gap-4">
+            <div class="flex flex-col gap-2">
+              <label class="text-base text-[#E8ECF4]">Play style *</label>
+              <div class="grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-2">
+                @for (playStyle of optionResponse.playStyles; track playStyle.value) {
+                  <button
+                  type="button"
+                  (click)="selectPlayStyle(playStyle.value)"
+                  class="flex items-center justify-center min-w-0 border rounded-lg p-2 cursor-pointer transition-colors duration-200 gap-2"
+                  [ngClass]="selectedPlayStyle === playStyle.value ? 'border-[#4DA3FF] bg-[#16304D] text-[#B5D8FF]'
+                  : 'border-[#222B3D] hover:border-[#3a4560] hover:bg-[#1b2332]'">
+                    <i [class]=" playStyle.icon + ' text-[#C5CCDC]'"></i>
+                    {{playStyle.label}}
+                  </button>
+                }
+              </div>
+              @if (selectedPlayStyleDescription) {
+                <p class=" min-h-5 text-sm text-[#8892a6]">{{selectedPlayStyleDescription}}</p>
+              }
+
+            </div>
+            <div class="flex flex-col gap-2">
+              <div class="bg-[#0F141D] p-3 rounded-lg">
+                <div class="flex justify-between">
+                  <label class="text-base text-[#E8ECF4]">When can you play? *</label>
+                  <div class=" flex justify-center items-center gap-2">
+                    <span>Flexible</span>
+                    <hlm-switch
+                      id="pegiRating"
+                      name="pegiRating"
+                      (click)="flexible = !flexible"
+                      class=" !transition-none"/>
+                  </div>
+                </div>
+
+                @if (!flexible) {
+                  <div class="flex w-full gap-2 mt-3">
+                    @for (days of optionResponse.days; track days.value) {
+                      <button
+                        type="button"
+                        (click)="toggleDay(days.value)"
+                        class="flex w-full items-center justify-center min-w-0 border rounded-lg p-2 cursor-pointer transition-colors duration-200"
+                        [ngClass]="selectedDays.includes(days.value!) ? 'border-[#4DA3FF] bg-[#16304D] text-[#B5D8FF]'
+                  : 'border-[#222B3D] hover:border-[#3a4560] hover:bg-[#1b2332]'">
+                        {{days.description}}
+                      </button>
+                    }
+                  </div>
+                  <div>
+                    <div class="grid grid-cols-2 gap-2 sm:grid-cols-4 mt-3 mb-3">
+                      @for (timeOfDay of optionResponse.timesOfDay; track timeOfDay.value) {
+                        <button
+                          type="button"
+                          (click)="selectTimeOfDay(timeOfDay.value)"
+                          class="flex w-full min-w-0 flex-col items-center justify-center gap-0.5 rounded-lg border p-1 text-sm cursor-pointer transition-colors duration-200"
+                          [ngClass]="selectedTimeOfDay === timeOfDay.value
+                        ? 'border-[#4DA3FF] bg-[#16304D] text-[#B5D8FF]'
+                        : 'border-[#222B3D] hover:border-[#3a4560] hover:bg-[#1b2332]'">
+                          <span class="text-[#8892a6] text-sm">{{timeOfDay.label}}</span>
+                          {{timeOfDay.description}}
+                        </button>
+                      }
+                    </div>
+                  </div>
+                  <span class="text-[#8892a6] text-sm">Times are in your local time zone. Players from other regions see them as a hint.</span>
+                } @else {
+                  <div class="bg-[#112238] border border-[#1F4A78] p-4 rounded-lg mt-3">
+                    <div class="flex items-center gap-3">
+                      <div class="flex size-12 shrink-0 items-center justify-center bg-[#16304D] rounded-xl">
+                        <i class="fa-solid fa-calendar text-[#8FC2FF]"></i>
+                      </div>
+                      <div class="flex flex-col gap-0.5">
+                        <span class="text-[#E8ECF4]">Any day, any time</span>
+                        <span class="text-sm text-[#8892a6]">Your post will show "Flexible" instead of a schedule. You can agree on the time with the other player.</span>
+                      </div>
+                    </div>
+
+
+                  </div>
+                }
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-2">
+              <label class="text-base text-[#E8ECF4]">Personality (Optional)</label>
+              <div class="grid grid-cols-1 gap-2 xl:grid-cols-3">
+                @for (personality of optionResponse.personalities; track personality.value) {
+                  <button type="button"
+                          (click)="selectPersonality(personality.value)"
+                          class="flex items-center justify-center min-w-0 border rounded-lg p-2 cursor-pointer transition-colors duration-200"
+                          [ngClass]="selectedPersonality === personality.value ? 'border-[#4DA3FF] bg-[#16304D] text-[#B5D8FF]'
+                  : 'border-[#222B3D] hover:border-[#3a4560] hover:bg-[#1b2332]'">
+                    {{ personality.label }}
+                  </button>
+                }
+              </div>
+              @if (selectedPersonalityDescription) {
+                <span class="text-sm text-[#C5CCDC]">{{ selectedPersonalityDescription }}</span>
+              }
+
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div> Languages</div>
+              <div> Open to regions</div>
+            </div>
+          </div>
+        </div>
+        <div class="user-divider"></div>
+        <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <div>
+            Description
+          </div>
+          <div>
+            How long should the post stay active ?
+          </div>
+        </div>
+      </div>
+    }
+
+  </section>
+
+</main>

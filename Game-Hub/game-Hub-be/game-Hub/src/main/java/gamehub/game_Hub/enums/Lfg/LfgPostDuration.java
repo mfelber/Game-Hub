@@ -1,8 +1,10 @@
-package gamehub.game_Hub.enums;
+package gamehub.game_Hub.enums.Lfg;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
+@RequiredArgsConstructor
 public enum LfgPostDuration {
 
   ONE_DAY("1 Day", 1, false),
@@ -14,10 +16,4 @@ public enum LfgPostDuration {
   private final String label;
   private final int days;
   private final boolean supporterOnly;
-
-  LfgPostDuration(String label, int days, boolean supporterOnly) {
-    this.label = label;
-    this.days = days;
-    this.supporterOnly = supporterOnly;
-  }
 }

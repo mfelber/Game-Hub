@@ -1,9 +1,12 @@
-package gamehub.game_Hub.enums;
+package gamehub.game_Hub.enums.Lfg;
 
+import gamehub.game_Hub.enums.LfgOption;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-public enum Personality {
+@RequiredArgsConstructor
+public enum Personality implements LfgOption {
 
   INTROVERT("Introvert", "I'm quiet and reserved, and I prefer calm sessions with fewer people."),
   AMBIVERT("Ambivert", "I'm a mix of both: talkative with people I know, quiet with new ones."),
@@ -11,10 +14,5 @@ public enum Personality {
 
   private final String label;
   private final String description;
-
-  Personality(String label, String description) {
-    this.label = label;
-    this.description = description;
-  }
 
 }

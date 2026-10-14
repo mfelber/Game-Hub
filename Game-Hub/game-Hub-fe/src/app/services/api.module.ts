@@ -12,6 +12,7 @@ import { StoreControllerService } from './services/store-controller.service';
 import { ReportControllerService } from './services/report-controller.service';
 import { NewsControllerService } from './services/news-controller.service';
 import { LibraryControllerService } from './services/library-controller.service';
+import { LfgControllerService } from './services/lfg-controller.service';
 import { CommunityControllerService } from './services/community-controller.service';
 import { CartControllerService } from './services/cart-controller.service';
 import { AuthenticationService } from './services/authentication.service';
@@ -36,6 +37,7 @@ import { CardColorControllerService } from './services/card-color-controller.ser
     ReportControllerService,
     NewsControllerService,
     LibraryControllerService,
+    LfgControllerService,
     CommunityControllerService,
     CartControllerService,
     AuthenticationService,

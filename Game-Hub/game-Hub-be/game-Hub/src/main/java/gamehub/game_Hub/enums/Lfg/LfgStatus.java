@@ -1,8 +1,10 @@
-package gamehub.game_Hub.enums;
+package gamehub.game_Hub.enums.Lfg;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
+@RequiredArgsConstructor
 public enum LfgStatus {
 
   ACTIVE("Active"),
@@ -10,9 +12,5 @@ public enum LfgStatus {
   EXPIRED("Expired");
 
   private final String label;
-
-  LfgStatus(String label) {
-    this.label = label;
-  }
 
 }
