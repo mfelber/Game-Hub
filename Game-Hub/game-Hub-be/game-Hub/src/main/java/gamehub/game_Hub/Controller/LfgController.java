@@ -26,6 +26,9 @@ public class LfgController {
     return ResponseEntity.ok(lfgService.createLfg(connectedUser, request));
   }
 
+  // @GetMapping("/lfg-posts")
+  // public ResponseEntity<>
+
   @GetMapping("/lfg-options")
   public ResponseEntity<LfgOptionsResponse> getLfgOptions(Authentication connectedUser) {
     return ResponseEntity.ok(lfgService.getLfgOptions(connectedUser));

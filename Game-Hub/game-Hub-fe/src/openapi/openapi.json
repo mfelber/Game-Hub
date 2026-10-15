@@ -3605,6 +3605,35 @@
               "ONE_SESSION"
             ]
           },
+          "gameTypes": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "SHOOTER",
+                "CO_OP",
+                "RPG",
+                "SURVIVAL",
+                "SANDBOX",
+                "MOBA",
+                "COZY",
+                "STRATEGY",
+                "HORROR",
+                "RACING",
+                "SPORTS",
+                "SIMULATION",
+                "ROGUELIKE",
+                "STORY_DRIVEN",
+                "TACTICAL",
+                "MMO_RPG",
+                "FIGHTING",
+                "PARTY",
+                "PUZZLE",
+                "PLATFORMER"
+              ]
+            }
+          },
           "voiceChat": {
             "type": "string",
             "enum": [
@@ -4327,10 +4356,10 @@
               "$ref": "#/components/schemas/SubtitleResponse"
             }
           },
-          "inWishList": {
+          "inLibrary": {
             "type": "boolean"
           },
-          "inLibrary": {
+          "inWishList": {
             "type": "boolean"
           },
           "inCart": {

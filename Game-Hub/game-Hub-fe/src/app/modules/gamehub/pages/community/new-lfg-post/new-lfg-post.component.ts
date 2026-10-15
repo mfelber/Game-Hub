@@ -10,7 +10,8 @@ import {ToastService} from '../../../../../services/ToastService/toast.service';
 import {LoadingComponent} from '../../../components/loading/loading.component';
 import {HlmSwitch} from '@spartan/switch';
 import {HlmTextarea} from '@spartan/textarea';
-import {ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {LfgCreationRequest} from '../../../../../services/models/lfg-creation-request';
 
 @Component({
   selector: 'app-new-lfg-post',
@@ -23,6 +24,7 @@ import {ReactiveFormsModule} from '@angular/forms';
     HlmTextarea,
     ReactiveFormsModule,
     DatePipe,
+    FormsModule,
   ],
   templateUrl: './new-lfg-post.component.html',
   styleUrl: './new-lfg-post.component.scss',
@@ -279,5 +281,40 @@ export class NewLfgPostComponent implements OnInit {
 
   onFlexibleChange(value: boolean) {
     this.flexible = value;
+  }
+
+  description = '';
+
+  publishLfgPost(): void {
+
+    // TODO validate req
+
+    if (!this.selectedPlatform || !this.selectedLookingFor || !this.selectedVoiceChat || !this.selectedDuration) {
+      return;
+    }
+
+    const request: LfgCreationRequest = {
+      gameId: 1,
+      platforms: [this.selectedPlatform] as LfgCreationRequest['platforms'],
+      lookingFor: this.selectedLookingFor as LfgCreationRequest['lookingFor'],
+      playStyle: this.selectedPlayStyle as LfgCreationRequest['playStyle'],
+      commitment: this.selectedCommitment as LfgCreationRequest['commitment'],
+      gameTypes: this.selectedGameTypes as LfgCreationRequest['gameTypes'],
+      voiceChat: this.selectedVoiceChat as LfgCreationRequest['voiceChat'],
+      personality: this.selectedPersonality as LfgCreationRequest['personality'],
+      days: (this.flexible ? [] : this.selectedDays) as LfgCreationRequest['days'],
+      timeOfDay: (this.flexible || !this.selectedTimeOfDay ? [] : [this.selectedTimeOfDay]) as LfgCreationRequest['timeOfDay'],
+      openToRegion: (this.isAnyRegion ? [] : this.selectedRegions) as LfgCreationRequest['openToRegion'],
+      preferredLanguages: this.selectedLanguages as LfgCreationRequest['preferredLanguages'],
+      flexible: this.flexible,
+      description: this.description,
+      lfgPostDuration: this.selectedDuration as LfgCreationRequest['lfgPostDuration']
+    }
+
+    this.lfgService.createLfg({body: request}).subscribe({
+      next: (response) => {
+        console.log(response);
+      }
+    });
   }
 }

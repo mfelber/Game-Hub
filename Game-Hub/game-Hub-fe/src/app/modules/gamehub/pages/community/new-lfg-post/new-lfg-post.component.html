@@ -331,11 +331,12 @@
               <div class="gap-3">
                 <div class="flex justify-between items-center">
                   <label class="text-base text-[#E8ECF4]">Description</label>
-                  <span class="text-[#8892a6] text-sm">0 / 300 </span>
+                  <span class="text-[#8892a6] text-sm">{{description.length}} / 300 </span>
                 </div>
 
                 <textarea
                   hlmTextarea
+                  [(ngModel)]="description"
                   class="mt-2 w-full min-h-30 resize-none !transition-none
                   !bg-[#0F141D] border border-[#222B3D]
                   focus:!ring-1 focus:!ring-[#4DA3FF] text-white"
@@ -380,7 +381,7 @@
             </div>
             <div class="flex gap-2 max-sm:flex-col-reverse sm:shrink-0">
               <button class="medium-button transparent justify-center border border-[#222B3D]">Cancel</button>
-              <button class="medium-button bg-[#4DA3FF] justify-center text-[#0B0F15] hover:bg-[#2F82DB]">Publish post</button>
+              <button class="medium-button bg-[#4DA3FF] justify-center text-[#0B0F15] hover:bg-[#2F82DB]" (click)="publishLfgPost()">Publish post</button>
             </div>
           </section>
 

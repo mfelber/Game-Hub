@@ -5,6 +5,7 @@ import java.util.Set;
 
 import gamehub.game_Hub.enums.Lfg.Commitment;
 import gamehub.game_Hub.enums.Languages;
+import gamehub.game_Hub.enums.Lfg.GameType;
 import gamehub.game_Hub.enums.Lfg.LookingFor;
 import gamehub.game_Hub.enums.Lfg.LfgPostDuration;
 import gamehub.game_Hub.enums.MicrophoneUsage;
@@ -28,6 +29,7 @@ public record LfgCreationRequest(
     LookingFor lookingFor,
     PlayStyle playStyle,
     Commitment commitment,
+    Set<GameType> gameTypes,
     @NotNull
     MicrophoneUsage voiceChat,
     Personality personality,

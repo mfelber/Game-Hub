@@ -82,6 +82,7 @@ public class LfgServiceImpl implements LfgService {
         .lookingFor(request.lookingFor())
         .playStyle(request.playStyle())
         .commitment(request.commitment())
+        .gameTypes(request.gameTypes())
         .voiceChat(request.voiceChat())
         .personality(request.personality())
         .days(request.days())
