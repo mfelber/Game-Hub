@@ -1,4 +1,4 @@
-<main>
+<main class="pb-5">
   <section class="header mb-3">
     <div>
       <h1 class="text-[#E8ECF4]">New LFG post</h1>
@@ -13,21 +13,18 @@
         <app-loading></app-loading>
       </div>
     } @else {
-      <div class="mx-auto flex max-w-3xl flex-col gap-4">
-        <section class="flex flex-col gap-5 rounded-lg border border-[#222B3D] bg-[#151B27]">
+      <div class=" grid w-full grid-cols-1 items-start xl:grid-cols-2 gap-4">
+        <div class="left-side flex flex-col gap-4">
+          <section class="flex flex-col gap-5 p-5 rounded-lg border border-[#222B3D] bg-[#151B27]">
+            <h2 class="text-lg font-medium text-[#E8ECF4]">What are you looking for?</h2>
 
-        </section>
-      </div>
-
-      <div class=" bg-[#151B27] rounded-lg p-5 border border-[#222B3D]">
-        <div class="grid grid-cols-1 gap-10 lg:gap-10 lg:grid-cols-2">
-          <div class="flex flex-col gap-4">
             <div class="flex flex-col gap-2">
               <label class="text-base text-[#E8ECF4]">Game *</label>
               <app-search-bar
                 [inputClass]="'!bg-[#0F141D] border border-[#222B3D]'"
               />
             </div>
+
             <div class="flex flex-col gap-2">
               <label class="text-base text-[#E8ECF4]">Looking for *</label>
               <div class="grid grid-cols-1 gap-2 xl:grid-cols-3">
@@ -46,7 +43,6 @@
                   </button>
                 }
               </div>
-
             </div>
 
             <div class="flex flex-col gap-2">
@@ -65,8 +61,12 @@
               @if (selectedCommitmentDescription) {
                 <span class="text-sm text-[#C5CCDC]">{{ selectedCommitmentDescription }}</span>
               }
-
             </div>
+          </section>
+
+          <section class="flex flex-col gap-5 rounded-lg border border-[#222B3D] bg-[#151B27] p-5">
+            <h2 class="text-lg font-medium text-[#E8ECF4]">How do you play?</h2>
+
             <div class="flex flex-col gap-2">
               <label class="text-base text-[#E8ECF4]">Platform *</label>
               <div class="flex gap-2 flex-wrap">
@@ -85,6 +85,7 @@
                 }
               </div>
             </div>
+
             <div class="flex flex-col gap-2">
               <label class="text-base text-[#E8ECF4]">Voice chat *</label>
               <div class="grid grid-cols-1 gap-2 xl:grid-cols-3">
@@ -103,6 +104,29 @@
                 }
               </div>
             </div>
+
+            <div class="flex flex-col gap-2">
+              <label class="text-base text-[#E8ECF4]">Play style *</label>
+              <div class="grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-2">
+                @for (playStyle of optionResponse.playStyles; track playStyle.value) {
+                  <button
+                    type="button"
+                    (click)="selectPlayStyle(playStyle.value)"
+                    class="flex items-center justify-center min-w-0 border rounded-lg p-2 cursor-pointer transition-colors duration-200 gap-2"
+                    [ngClass]="selectedPlayStyle === playStyle.value ? 'border-[#4DA3FF] bg-[#16304D] text-[#B5D8FF]'
+                  : 'border-[#222B3D] hover:border-[#3a4560] hover:bg-[#1b2332]'">
+                    <i [class]="playStyle.icon!"
+                       [ngClass]="selectedPlayStyle === playStyle.value ? 'text-[#B5D8FF]' : 'text-[#C5CCDC]'"></i>
+                    <span
+                      [ngClass]="selectedPlayStyle === playStyle.value ? 'text-[#B5D8FF]' : 'text-[#C5CCDC]'">{{ playStyle.label }}</span>
+                  </button>
+                }
+              </div>
+              @if (selectedPlayStyleDescription) {
+                <p class=" min-h-5 text-sm text-[#8892a6]">{{ selectedPlayStyleDescription }}</p>
+              }
+            </div>
+
             <div class="flex flex-col gap-2">
               <div class="flex flex-col">
                 <div class="flex justify-between">
@@ -138,31 +162,33 @@
                   }
                 </button>
               </div>
-
             </div>
-          </div>
-          <div class="flex flex-col gap-4">
+
             <div class="flex flex-col gap-2">
-              <label class="text-base text-[#E8ECF4]">Play style *</label>
-              <div class="grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-2">
-                @for (playStyle of optionResponse.playStyles; track playStyle.value) {
-                  <button
-                    type="button"
-                    (click)="selectPlayStyle(playStyle.value)"
-                    class="flex items-center justify-center min-w-0 border rounded-lg p-2 cursor-pointer transition-colors duration-200 gap-2"
-                    [ngClass]="selectedPlayStyle === playStyle.value ? 'border-[#4DA3FF] bg-[#16304D] text-[#B5D8FF]'
+              <label class="text-base text-[#E8ECF4]">Personality <span class="text-sm text-[#8892a6]">(optional)</span>
+              </label>
+              <div class="grid grid-cols-1 gap-2 xl:grid-cols-3">
+                @for (personality of optionResponse.personalities; track personality.value) {
+                  <button type="button"
+                          (click)="selectPersonality(personality.value)"
+                          class="flex items-center justify-center min-w-0 border rounded-lg p-2 cursor-pointer transition-colors duration-200"
+                          [ngClass]="selectedPersonality === personality.value ? 'border-[#4DA3FF] bg-[#16304D]'
                   : 'border-[#222B3D] hover:border-[#3a4560] hover:bg-[#1b2332]'">
-                    <i [class]="playStyle.icon!"
-                       [ngClass]="selectedPlayStyle === playStyle.value ? 'text-[#B5D8FF]' : 'text-[#C5CCDC]'"></i>
                     <span
-                      [ngClass]="selectedPlayStyle === playStyle.value ? 'text-[#B5D8FF]' : 'text-[#C5CCDC]'">{{ playStyle.label }}</span>
+                      [ngClass]="selectedPersonality === personality.value ? 'text-[#B5D8FF]' : 'text-[#C5CCDC]'">{{ personality.label }}</span>
                   </button>
                 }
               </div>
-              @if (selectedPlayStyleDescription) {
-                <p class=" min-h-5 text-sm text-[#8892a6]">{{ selectedPlayStyleDescription }}</p>
+              @if (selectedPersonalityDescription) {
+                <span class="text-sm text-[#C5CCDC]">{{ selectedPersonalityDescription }}</span>
               }
             </div>
+          </section>
+        </div>
+
+        <div class="right-side flex flex-col gap-4">
+          <section class="flex flex-col gap-5 rounded-lg border border-[#222B3D] bg-[#151B27] p-5">
+            <h2 class="text-lg font-medium text-[#E8ECF4]">When and with whom?</h2>
 
             <div class="flex flex-col gap-2">
               <div class="bg-[#0F141D] p-3 rounded-lg">
@@ -171,8 +197,8 @@
                   <div class=" flex items-center gap-2">
                     <span>Flexible</span>
                     <hlm-switch
-                      id="pegiRating"
-                      name="pegiRating"
+                      id="flexible"
+                      name="flexible"
                       [checked]="flexible"
                       (checkedChange)="onFlexibleChange($event)"
                       class=" !transition-none"/>
@@ -223,99 +249,144 @@
                         <span class="text-sm text-[#8892a6]">Your post will show "Flexible" instead of a schedule. You can agree on the time with the other player.</span>
                       </div>
                     </div>
-
-
                   </div>
                 }
               </div>
             </div>
 
             <div class="flex flex-col gap-2">
-              <label class="text-base text-[#E8ECF4]">Personality <span class="text-sm text-[#8892a6]">(optional)</span> </label>
-              <div class="grid grid-cols-1 gap-2 xl:grid-cols-3">
-                @for (personality of optionResponse.personalities; track personality.value) {
-                  <button type="button"
-                          (click)="selectPersonality(personality.value)"
-                          class="flex items-center justify-center min-w-0 border rounded-lg p-2 cursor-pointer transition-colors duration-200"
-                          [ngClass]="selectedPersonality === personality.value ? 'border-[#4DA3FF] bg-[#16304D]'
-                  : 'border-[#222B3D] hover:border-[#3a4560] hover:bg-[#1b2332]'">
+              <div class="flex flex-col">
+                <div class="flex justify-between">
+                  <label class="text-base text-[#E8ECF4]">Languages <span
+                    class="text-sm text-[#8892a6]">(optional)</span> </label>
+                  <span class="text-[#8892a6] text-sm">{{ numberOfSelectedLanguages }} / 3</span>
+                </div>
+                <p class="text-xs text-[#8892a6]">Which languages do you speak or prefer to play in? Pick up to 3.</p>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                @for (language of visibleLanguages; track language.name) {
+                  <button
+                    type="button"
+                    (click)="toggleLanguage(language.name)"
+                    [disabled]="isLanguagesDisabled(language.name)"
+                    class="flex w-fit text-sm text-[#C5CCDC] justify-center items-center border rounded-full p-2
+                      cursor-pointer transition duration-200 disabled:cursor-default disabled:opacity-40 disabled:border-[#3a4560]"
+                    [ngClass]="selectedLanguages.includes(language.name!) ? 'border-[#4DA3FF] bg-[#16304D]'
+                    : 'border-[#222B3D] text-[#C5CCDC] hover:border-[#3a4560] hover:bg-[#1b2332]'">
                     <span
-                      [ngClass]="selectedPersonality === personality.value ? 'text-[#B5D8FF]' : 'text-[#C5CCDC]'">{{ personality.label }}</span>
+                      [ngClass]="selectedLanguages.includes(language.name!) ? 'text-[#B5D8FF]' : 'text-[#C5CCDC]'">{{ language.label }}</span>
+                  </button>
+                }
+                <button
+                  type="button"
+                  (click)="showAllLanguages = !showAllLanguages"
+                  class="flex items-center gap-1 rounded-full border border-dashed border-[#3a4560] px-3 py-2 text-sm text-[#8892a6]
+                    cursor-pointer transition-colors duration-200 hover:border-[#4DA3FF] hover:text-[#B5D8FF]">
+                  @if (showAllLanguages) {
+                    Less <i class="fa-solid fa-minus text-xs"></i>
+                  } @else {
+                    +{{ hiddenLanguagesCount }} more
+                  }
+                </button>
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-2">
+              <div class="flex flex-col">
+                <div class="flex justify-between">
+                  <label class="text-base text-[#E8ECF4]">Preferred regions *</label>
+                  <span class="text-[#8892a6] text-sm">{{ numberOfSelectedRegions }} / 3</span>
+                </div>
+                <p class="text-xs text-[#8892a6]">Pick up to 3, or leave on All to be open to everyone.</p>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  (click)="selectAnyRegion()"
+                  [disabled]="selectedRegions.length >= maxRegions"
+                  class="flex w-fit text-sm text-[#C5CCDC] justify-center items-center border rounded-full p-2
+                      cursor-pointer transition duration-200 disabled:cursor-default disabled:opacity-40 disabled:border-[#3a4560]"
+                  [ngClass]="isAnyRegion ? 'border-[#4DA3FF] bg-[#16304D]'
+                    : 'border-[#222B3D] text-[#C5CCDC] hover:border-[#3a4560] hover:bg-[#1b2332]'">
+                  <i class="fa-solid fa-globe mr-2"></i> All regions
+                </button>
+                @for (region of optionResponse.preferredRegions; track region.enumName) {
+                  <button
+                    type="button"
+                    (click)="toggleRegion(region.enumName)"
+                    [disabled]="isRegionsDisabled(region.enumName)"
+                    class="flex w-fit text-sm text-[#C5CCDC] justify-center items-center border rounded-full p-2
+                      cursor-pointer transition duration-200 disabled:cursor-default disabled:opacity-40 disabled:border-[#3a4560]"
+                    [ngClass]="selectedRegions.includes(region.enumName!) ? 'border-[#4DA3FF] bg-[#16304D]'
+                    : 'border-[#222B3D] text-[#C5CCDC] hover:border-[#3a4560] hover:bg-[#1b2332]'">
+                    {{ region.name }}
                   </button>
                 }
               </div>
-              @if (selectedPersonalityDescription) {
-                <span class="text-sm text-[#C5CCDC]">{{ selectedPersonalityDescription }}</span>
-              }
+            </div>
+          </section>
 
+          <section class="flex flex-col gap-3 rounded-lg border border-[#222B3D] bg-[#151B27] p-5">
+            <div class="flex flex-col">
+              <div class="gap-3">
+                <div class="flex justify-between items-center">
+                  <label class="text-base text-[#E8ECF4]">Description</label>
+                  <span class="text-[#8892a6] text-sm">0 / 300 </span>
+                </div>
+
+                <textarea
+                  hlmTextarea
+                  class="mt-2 w-full min-h-30 resize-none !transition-none
+                  !bg-[#0F141D] border border-[#222B3D]
+                  focus:!ring-1 focus:!ring-[#4DA3FF] text-white"
+                  placeholder="Tell others who you are and what you like to play. Example: Chill dad of two, mostly co-op and cozy games in the evenings."></textarea>
+              </div>
             </div>
 
-            <div class="flex flex-col gap-4">
-              <div class="flex flex-col gap-2">
-                <div>
-                  <label class="text-base text-[#E8ECF4]">Languages <span class="text-sm text-[#8892a6]">(optional)</span> </label>
-                  <p class="text-xs text-[#8892a6]">Which languages do you speak or prefer to play in? Pick up to 3.</p>
-                </div>
-                <div class="flex flex-wrap gap-2">
-                  @for (language of visibleLanguages; track language.name) {
-                    <button
-                      type="button"
-                      (click)="toggleLanguage(language.name)"
-                      class="flex w-fit text-sm text-[#C5CCDC] justify-center items-center border rounded-full p-2
-                      cursor-pointer transition duration-200 disabled:cursor-default disabled:opacity-40 disabled:border-[#3a4560]"
-                      [ngClass]="selectedLanguages.includes(language.name!) ? 'border-[#4DA3FF] bg-[#16304D]'
-                    : 'border-[#222B3D] text-[#C5CCDC] hover:border-[#3a4560] hover:bg-[#1b2332]'">
-                       <span [ngClass]="selectedLanguages.includes(language.name!) ? 'text-[#B5D8FF]' : 'text-[#C5CCDC]'">{{ language.label }}</span>
-                    </button>
-                  }
+            <div class="flex flex-col gap-2">
+              <div class="gap-3">
+                <label class="text-base text-[#E8ECF4]">How long should the post stay active? *</label>
+                <p class="text-xs text-[#8892a6]">After that it is hidden from search.</p>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                @for (duration of optionResponse.postDurations; track duration.name) {
                   <button
+                    [disabled]="duration.locked"
                     type="button"
-                    (click)="showAllLanguages = !showAllLanguages"
-                    class="flex items-center gap-1 rounded-full border border-dashed border-[#3a4560] px-3 py-2 text-sm text-[#8892a6]
-                    cursor-pointer transition-colors duration-200 hover:border-[#4DA3FF] hover:text-[#B5D8FF]">
-                    @if (showAllLanguages) {
-                      Less <i class="fa-solid fa-minus text-xs"></i>
-                    } @else {
-                    +{{ hiddenLanguagesCount }} more
+                    (click)="selectDuration(duration.name)"
+                    class="flex w-fit text-sm text-[#C5CCDC] justify-center items-center border rounded-lg p-2
+                      cursor-pointer transition duration-200 disabled:cursor-default disabled:text-[#8892a6] disabled:border-[#3a4560] disabled:border-dashed disabled:hover:bg-transparent "
+                    [ngClass]="selectedDuration === duration.name ? 'border-[#4DA3FF] bg-[#16304D]'
+                    : 'border-[#222B3D] text-[#C5CCDC] hover:border-[#3a4560] hover:bg-[#1b2332]'">
+                    {{ duration.label }}
+                    @if (duration.locked) {
+                      <span class="ml-2 inline-flex items-center gap-1 rounded-full bg-[#3A2F12] px-2 py-0.5 text-[11px] font-medium leading-4 text-[#F5C451]">
+                      <i class="fa-solid fa-lock text-[9px]"></i>
+                      Supporter
+                      </span>
                     }
                   </button>
-                </div>
-              </div>
-
-              <div class="flex flex-col gap-4">
-                <div class="flex flex-col gap-2">
-                  <div>
-                    <label class="text-base text-[#E8ECF4]">Preferred regions <span class="text-sm text-[#8892a6]">(optional)</span> </label>
-                    <p class="text-xs text-[#8892a6]">Where would you like your teammates to be from? Pick up to 3.</p>
-                  </div>
-                  <div class="flex flex-wrap gap-2">
-                    @for (region of optionResponse.preferredRegions; track region.enumName) {
-                      <button
-                      type="button"
-                      class="flex w-fit text-sm text-[#C5CCDC] justify-center items-center border rounded-full p-2
-                      cursor-pointer transition duration-200 disabled:cursor-default disabled:opacity-40 disabled:border-[#3a4560]"
-                      >
-                        {{region.name}}
-                      </button>
-                    }
-                  </div>
-                </div>
+                }
               </div>
             </div>
-          </div>
-        </div>
-        <div class="user-divider"></div>
-        <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
-          <div>
-            Description
-          </div>
-          <div>
-            How long should the post stay active ?
-          </div>
+
+          </section>
+
+          <section class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between rounded-lg border border-[#222B3D] bg-[#151B27] p-5">
+            <div class="min-w-0">
+              @if (expirationDate) {
+                <span class="text-[#8892a6] text-sm">Your post will be active approximately until <span class="text-[#C5CCDC]">{{ expirationDate | date: 'd MMMM y' }}</span>.</span>
+              }
+            </div>
+            <div class="flex gap-2 max-sm:flex-col-reverse sm:shrink-0">
+              <button class="medium-button transparent justify-center border border-[#222B3D]">Cancel</button>
+              <button class="medium-button bg-[#4DA3FF] justify-center text-[#0B0F15] hover:bg-[#2F82DB]">Publish post</button>
+            </div>
+          </section>
+
         </div>
       </div>
     }
-
   </section>
 
 </main>

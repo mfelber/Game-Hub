@@ -7,7 +7,8 @@ public record LfgPostDurationResponse(
     String name,
     String label,
     int days,
-    boolean supporterOnly
+    boolean supporterOnly,
+    boolean locked
 ) {
 
 }

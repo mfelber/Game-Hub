@@ -98,7 +98,12 @@ public class LfgServiceImpl implements LfgService {
   }
 
   @Override
-  public LfgOptionsResponse getLfgOptions() {
+  public LfgOptionsResponse getLfgOptions(Authentication connectedUser) {
+
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
     return LfgOptionsResponse.builder()
         .lookingFors(lfgMapper.toIconOptions(LookingFor.class))
         .commitments(lfgMapper.toOptions(Commitment.class))
@@ -121,7 +126,7 @@ public class LfgServiceImpl implements LfgService {
             Arrays.stream(Languages.values()).map(pl -> new LanguagesResponse(pl.name(), pl.getLabel())).toList())
         .preferredRegions(Arrays.stream(Region.values()).map(r -> new RegionResponse(r.name(), r.getRegionName())).toList())
         .postDurations(Arrays.stream(LfgPostDuration.values()).map(d -> new LfgPostDurationResponse(d.name(),
-            d.getLabel(), d.getDays(), d.isSupporterOnly())).toList())
+            d.getLabel(), d.getDays(), d.isSupporterOnly(), d.isSupporterOnly() && !user.isSupporter())).toList())
         .build();
   }
 

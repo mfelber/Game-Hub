@@ -5,7 +5,7 @@
   (submit)="handleReport($event)">
 </app-report-user-modal>
 
-<main class="users-page">
+<main class="users-page !min-h-[calc(100vh-2.1rem)]">
 
   <!-- HEADER -->
   <section>
@@ -19,9 +19,9 @@
   </section>
 
   <!-- SEARCH -->
-  <section>
+  <section class="flex flex-1 flex-col">
 
-    <hlm-tabs [tab]="activeTab" (brnTabsChange)="onTabChange($event)">
+    <hlm-tabs [tab]="activeTab" (brnTabsChange)="onTabChange($event)" class="flex-1">
 
       <hlm-tabs-list class="find-players-tabs-list">
         <button hlmTabsTrigger="find-players" class="find-players-tabs">Players</button>
@@ -29,7 +29,7 @@
       </hlm-tabs-list>
 
 
-      <div hlmTabsContent="find-players">
+      <div hlmTabsContent="find-players" class="flex-1 flex-col [&:not([hidden])]:flex">
         <div class="search !mb-2 w-full flex flex-col gap-3 sm:flex-row sm:items-center">
           <div class="min-w-0 flex-1 sm:max-w-sm lg:min-w-[420px] lg:max-w-xl">
             <app-search-bar
@@ -195,7 +195,7 @@
                     <button class="medium-button transparent max-sm:flex-1 max-sm:justify-center"
                             (click)="resetFilters()">Clear all
                     </button>
-                    <button class="medium-button bg-[#4DA3FF] max-sm:flex-1 max-sm:justify-center text-[#0B0F15]"
+                    <button class="medium-button bg-[#4DA3FF] hover:bg-[#2F82DB] max-sm:flex-1 max-sm:justify-center text-[#0B0F15]"
                             (click)="applyFilters()">Apply
                     </button>
                   </div>
@@ -362,17 +362,16 @@
               </div>
             }
           </section>
-          <section class="pagination-wrapper">
-            @if (filteredUsers.length && userCommunityResponse.totalPages! > 1) {
-              <app-pagination
-                [currentPage]="page"
-                [totalPages]="userCommunityResponse.totalPages!"
-                (pageChange)="changePage($event)">
-              </app-pagination>
-            }
-          </section>
         </div>
-
+        <section class="pagination-wrapper">
+          @if (filteredUsers.length && userCommunityResponse.totalPages! > 1) {
+            <app-pagination
+              [currentPage]="page"
+              [totalPages]="userCommunityResponse.totalPages!"
+              (pageChange)="changePage($event)">
+            </app-pagination>
+          }
+        </section>
 
       </div>
 

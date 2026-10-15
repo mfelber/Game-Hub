@@ -14,7 +14,7 @@ export interface LfgCreationRequest {
   personality?: 'INTROVERT' | 'AMBIVERT' | 'EXTROVERT';
   platforms: Array<'PC' | 'PS' | 'XBOX' | 'NINTENDO' | 'MOBILE'>;
   playStyle?: 'CASUAL' | 'CHILL' | 'COMPETITIVE' | 'HARDCORE' | 'SOCIAL' | 'COMPLETIONIST';
-  preferredLanguages: Array<'EN' | 'ES' | 'PT' | 'RU' | 'DE' | 'FR' | 'ZH' | 'JA' | 'KO' | 'TR' | 'PL' | 'IT' | 'AR' | 'UK' | 'NL' | 'SV' | 'HU' | 'SK' | 'CS'>;
+  preferredLanguages: Array<'EN' | 'SK' | 'CS' | 'ES' | 'DE' | 'PT' | 'RU' | 'FR' | 'ZH' | 'JA' | 'KO' | 'TR' | 'PL' | 'IT' | 'AR' | 'UK' | 'NL' | 'SV' | 'HU'>;
   timeOfDay: Array<'MORNING' | 'AFTERNOON' | 'EVENING' | 'NIGHT'>;
   voiceChat: 'YES' | 'OPTIONAL' | 'NO';
 }

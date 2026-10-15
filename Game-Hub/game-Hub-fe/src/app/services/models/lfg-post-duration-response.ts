@@ -5,6 +5,7 @@
 export interface LfgPostDurationResponse {
   days?: number;
   label?: string;
+  locked?: boolean;
   name?: string;
   supporterOnly?: boolean;
 }

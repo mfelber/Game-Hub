@@ -11,6 +11,6 @@ public interface LfgService {
 
   Long createLfg(Authentication connectedUser, @Valid LfgCreationRequest request);
 
-  LfgOptionsResponse getLfgOptions();
+  LfgOptionsResponse getLfgOptions(Authentication connectedUser);
 
 }

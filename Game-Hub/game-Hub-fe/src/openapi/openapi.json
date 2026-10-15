@@ -3674,10 +3674,12 @@
               "type": "string",
               "enum": [
                 "EN",
+                "SK",
+                "CS",
                 "ES",
+                "DE",
                 "PT",
                 "RU",
-                "DE",
                 "FR",
                 "ZH",
                 "JA",
@@ -3689,9 +3691,7 @@
                 "UK",
                 "NL",
                 "SV",
-                "HU",
-                "SK",
-                "CS"
+                "HU"
               ]
             }
           },
@@ -5188,6 +5188,9 @@
             "format": "int32"
           },
           "supporterOnly": {
+            "type": "boolean"
+          },
+          "locked": {
             "type": "boolean"
           }
         }

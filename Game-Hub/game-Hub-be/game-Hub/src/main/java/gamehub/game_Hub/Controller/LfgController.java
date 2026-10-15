@@ -27,8 +27,8 @@ public class LfgController {
   }
 
   @GetMapping("/lfg-options")
-  public ResponseEntity<LfgOptionsResponse> getLfgOptions() {
-    return ResponseEntity.ok(lfgService.getLfgOptions());
+  public ResponseEntity<LfgOptionsResponse> getLfgOptions(Authentication connectedUser) {
+    return ResponseEntity.ok(lfgService.getLfgOptions(connectedUser));
   }
 
 }
