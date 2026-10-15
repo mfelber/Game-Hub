@@ -71,3 +71,12 @@ CREATE TABLE game_hub.lfg_post_languages
   CONSTRAINT fk_lfg_post_languages_post FOREIGN KEY (lfg_post_id)
     REFERENCES game_hub.lfg_post (id) ON DELETE CASCADE
 );
+
+CREATE TABLE game_hub.lfg_post_game_types
+(
+  lfg_post_id BIGINT      NOT NULL,
+  game_type  VARCHAR(30) NOT NULL,
+  PRIMARY KEY (lfg_post_id, game_type),
+  CONSTRAINT fk_lfg_post_game_types_post FOREIGN KEY (lfg_post_id)
+    REFERENCES game_hub.lfg_post (id) ON DELETE CASCADE
+)

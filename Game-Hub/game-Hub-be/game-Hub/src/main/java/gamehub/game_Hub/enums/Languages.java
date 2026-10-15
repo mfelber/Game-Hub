@@ -8,10 +8,12 @@ import lombok.RequiredArgsConstructor;
 public enum Languages {
 
   EN("English"),
+  SK("Slovak"),
+  CS("Czech"),
   ES("Spanish"),
+  DE("German"),
   PT("Portuguese"),
   RU("Russian"),
-  DE("German"),
   FR("French"),
   ZH("Chinese"),
   JA("Japanese"),
@@ -23,9 +25,8 @@ public enum Languages {
   UK("Ukrainian"),
   NL("Dutch"),
   SV("Swedish"),
-  HU("Hungarian"),
-  SK("Slovak"),
-  CS("Czech");
+  HU("Hungarian");
+
 
   private final String label;
 

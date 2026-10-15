@@ -7,6 +7,7 @@ import java.util.Set;
 import gamehub.game_Hub.Module.Game;
 import gamehub.game_Hub.enums.Lfg.Commitment;
 import gamehub.game_Hub.enums.Languages;
+import gamehub.game_Hub.enums.Lfg.GameType;
 import gamehub.game_Hub.enums.Lfg.LookingFor;
 import gamehub.game_Hub.enums.Lfg.LfgStatus;
 import gamehub.game_Hub.enums.MicrophoneUsage;
@@ -68,6 +69,12 @@ public class LfgPost {
   @Enumerated(EnumType.STRING)
   @Column(name = "play_style")
   private PlayStyle playStyle;
+
+  @ElementCollection
+  @CollectionTable(name = "lfg_post_game_types", schema = "game_hub", joinColumns = @JoinColumn(name = "lfg_post_id"))
+  @Column(name = "game_type")
+  @Enumerated(EnumType.STRING)
+  private Set<GameType> gameTypes;
 
   @Enumerated(EnumType.STRING)
   private Commitment commitment;

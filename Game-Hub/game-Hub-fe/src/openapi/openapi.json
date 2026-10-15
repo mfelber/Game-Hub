@@ -2437,9 +2437,9 @@
                 "type": "string",
                 "enum": [
                   "PC",
-                  "NINTENDO",
-                  "XBOX",
                   "PS",
+                  "XBOX",
+                  "NINTENDO",
                   "MOBILE"
                 ]
               }
@@ -3571,9 +3571,9 @@
               "type": "string",
               "enum": [
                 "PC",
-                "NINTENDO",
-                "XBOX",
                 "PS",
+                "XBOX",
+                "NINTENDO",
                 "MOBILE"
               ]
             }
@@ -4036,9 +4036,9 @@
             "type": "string",
             "enum": [
               "PC",
-              "NINTENDO",
-              "XBOX",
               "PS",
+              "XBOX",
+              "NINTENDO",
               "MOBILE"
             ]
           },
@@ -4327,13 +4327,13 @@
               "$ref": "#/components/schemas/SubtitleResponse"
             }
           },
-          "inCart": {
+          "inWishList": {
             "type": "boolean"
           },
           "inLibrary": {
             "type": "boolean"
           },
-          "inWishList": {
+          "inCart": {
             "type": "boolean"
           }
         }
@@ -5128,6 +5128,12 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/LfgIconOptionResponse"
+            }
+          },
+          "gameTypes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LfgOptionResponse"
             }
           },
           "days": {

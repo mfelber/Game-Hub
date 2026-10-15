@@ -4,7 +4,7 @@
 
 export interface OnboardRequest {
   genreIds?: Array<number>;
-  mainPlatform: 'PC' | 'NINTENDO' | 'XBOX' | 'PS' | 'MOBILE';
+  mainPlatform: 'PC' | 'PS' | 'XBOX' | 'NINTENDO' | 'MOBILE';
   microphoneUsage: 'YES' | 'OPTIONAL' | 'NO';
   region: 'EUROPE' | 'NA' | 'SA' | 'ASIA' | 'AFRICA' | 'ME' | 'OC' | 'CAB';
 }

@@ -12,7 +12,7 @@ export interface LfgCreationRequest {
   lookingFor: 'FRIEND' | 'DUO' | 'SQUAD';
   openToRegion: Array<'EUROPE' | 'NA' | 'SA' | 'ASIA' | 'AFRICA' | 'ME' | 'OC' | 'CAB'>;
   personality?: 'INTROVERT' | 'AMBIVERT' | 'EXTROVERT';
-  platforms: Array<'PC' | 'NINTENDO' | 'XBOX' | 'PS' | 'MOBILE'>;
+  platforms: Array<'PC' | 'PS' | 'XBOX' | 'NINTENDO' | 'MOBILE'>;
   playStyle?: 'CASUAL' | 'CHILL' | 'COMPETITIVE' | 'HARDCORE' | 'SOCIAL' | 'COMPLETIONIST';
   preferredLanguages: Array<'EN' | 'ES' | 'PT' | 'RU' | 'DE' | 'FR' | 'ZH' | 'JA' | 'KO' | 'TR' | 'PL' | 'IT' | 'AR' | 'UK' | 'NL' | 'SV' | 'HU' | 'SK' | 'CS'>;
   timeOfDay: Array<'MORNING' | 'AFTERNOON' | 'EVENING' | 'NIGHT'>;

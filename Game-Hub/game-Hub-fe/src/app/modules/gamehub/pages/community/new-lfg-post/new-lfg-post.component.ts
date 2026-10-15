@@ -9,6 +9,7 @@ import {NgClass} from '@angular/common';
 import {ToastService} from '../../../../../services/ToastService/toast.service';
 import {LoadingComponent} from '../../../components/loading/loading.component';
 import {HlmSwitch} from '@spartan/switch';
+import {filter} from 'rxjs/operators';
 
 @Component({
   selector: 'app-new-lfg-post',
@@ -32,11 +33,17 @@ export class NewLfgPostComponent implements OnInit {
   selectedVoiceChat: string | null = null;
   selectedPlayStyle: string | null = null;
   selectedDays: string[] = [];
+  selectedGameTypes: string[] = [];
   selectedTimeOfDay: string | null = null;
   selectedPersonality: string | null = null;
+  selectedLanguages: string[] = [];
+
+  readonly maxGameTypes = 3;
 
   isLoading = false;
   flexible = false;
+  showAllLanguages = false;
+  showAllGameTypes = false;
 
   ngOnInit(): void {
     this.loadLfgOptions()
@@ -98,6 +105,26 @@ export class NewLfgPostComponent implements OnInit {
     }
   }
 
+  selectGameType(value: string | undefined) {
+    if (!value) {
+      return;
+    }
+    if (this.selectedGameTypes.includes(value)) {
+      this.selectedGameTypes = this.selectedGameTypes.filter(gameType => gameType !== value);
+      return;
+    }
+
+    if (this.selectedGameTypes.length >= this.maxGameTypes) {
+      return;
+    }
+
+    this.selectedGameTypes = [...this.selectedGameTypes, value];
+  }
+
+  isGameTypeDisabled(value: string | undefined): boolean {
+    return this.selectedGameTypes.length >= this.maxGameTypes && !this.selectedGameTypes.includes(value!)
+  }
+
   toggleDay(value: string | undefined) {
     if (!value) {
       return;
@@ -107,10 +134,27 @@ export class NewLfgPostComponent implements OnInit {
       : [...this.selectedDays, value];
   }
 
+  toggleLanguage(value: string | undefined) {
+    if (!value) {
+      return;
+    }
+
+    this.selectedLanguages = this.selectedLanguages.includes(value)
+      ? this.selectedLanguages.filter(language => language !== value)
+      : [...this.selectedLanguages, value];
+  }
+
   selectTimeOfDay(value: string | undefined) {
     if (value) {
       this.selectedTimeOfDay = value;
     }
+  }
+
+  selectPersonality(value: string | undefined) {
+    if (!value) {
+      return;
+    }
+    this.selectedPersonality = this.selectedPersonality === value ? null : value;
   }
 
   get selectedCommitmentDescription(): string | undefined {
@@ -125,10 +169,45 @@ export class NewLfgPostComponent implements OnInit {
     return this.optionResponse.personalities?.find(p => p.value === this.selectedPersonality)?.description;
   }
 
-  selectPersonality(value: string | undefined) {
-    if (!value) {
-      return;
+  get numberOfSelectedGameTypes(): number {
+    return this.selectedGameTypes?.length ? this.selectedGameTypes.length : 0;
+  }
+
+  get visibleLanguages() {
+    const all = this.optionResponse.preferredLanguages ?? [];
+
+    if (this.showAllLanguages) {
+      return all;
     }
-    this.selectedPersonality = this.selectedPersonality === value ? null : value;
+
+    const firstFive = all.slice(0, 5);
+    const hiddenSelected = all.slice(5).filter(l => this.selectedLanguages.includes(l.name!));
+
+    return [...firstFive, ...hiddenSelected];
+  }
+
+  get hiddenLanguagesCount():number {
+    const total = this.optionResponse.preferredLanguages?.length ?? 0;
+    return total - this.visibleLanguages.length;
+  }
+
+  get visibleGameTypes() {
+    const all = this.optionResponse.gameTypes ?? [];
+
+    if (this.showAllGameTypes) {
+      return all;
+    }
+    const firstTwelve = all.slice(0, 12);
+    const hiddenSelected = all.slice(12).filter(gt => this.selectedGameTypes.includes(gt.value!));
+    return [...firstTwelve, ...hiddenSelected];
+  }
+
+  get hiddenGameTypes():number {
+    const total = this.optionResponse.gameTypes?.length ?? 0;
+    return total - this.visibleGameTypes.length;
+  }
+
+  onFlexibleChange($event: boolean) {
+
   }
 }

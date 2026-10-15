@@ -12,6 +12,7 @@ import { RegionResponse } from '../models/region-response';
 export interface LfgOptionsResponse {
   commitments?: Array<LfgOptionResponse>;
   days?: Array<LfgOptionResponse>;
+  gameTypes?: Array<LfgOptionResponse>;
   lookingFors?: Array<LfgIconOptionResponse>;
   personalities?: Array<LfgOptionResponse>;
   platforms?: Array<PlatformResponse>;

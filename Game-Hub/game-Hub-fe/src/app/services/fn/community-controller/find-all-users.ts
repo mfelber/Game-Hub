@@ -14,7 +14,7 @@ export interface FindAllUsers$Params {
   query?: string;
   countries?: Array<'SK' | 'CZ' | 'PL' | 'HU' | 'DE' | 'LA' | 'BA' | 'BU' | 'KU' | 'LI' | 'US' | 'NOT_SPECIFIED'>;
   regions?: Array<'EUROPE' | 'NA' | 'SA' | 'ASIA' | 'AFRICA' | 'ME' | 'OC' | 'CAB'>;
-  platforms?: Array<'PC' | 'NINTENDO' | 'XBOX' | 'PS' | 'MOBILE'>;
+  platforms?: Array<'PC' | 'PS' | 'XBOX' | 'NINTENDO' | 'MOBILE'>;
   voice?: Array<'YES' | 'OPTIONAL' | 'NO'>;
   onlyOnline?: boolean;
   page?: number;

@@ -28,6 +28,7 @@ import gamehub.game_Hub.Response.lfg.LfgPostDurationResponse;
 import gamehub.game_Hub.Service.LfgService;
 import gamehub.game_Hub.enums.Languages;
 import gamehub.game_Hub.enums.Lfg.Commitment;
+import gamehub.game_Hub.enums.Lfg.GameType;
 import gamehub.game_Hub.enums.Lfg.LookingFor;
 import gamehub.game_Hub.enums.Lfg.LfgPostDuration;
 import gamehub.game_Hub.enums.Lfg.LfgStatus;
@@ -110,6 +111,7 @@ public class LfgServiceImpl implements LfgService {
                 microphoneUsage.getMicrophoneUsageName(), microphoneUsage.getMicrophoneUsageIcon()))
             .toList())
         .playStyles(lfgMapper.toIconOptions(PlayStyle.class))
+        .gameTypes(lfgMapper.toOptions(GameType.class))
         .days(
             Arrays.stream(DayOfWeek.values()).map(d -> new LfgOptionResponse(d.name(), d.getDisplayName(TextStyle.FULL,
                 Locale.ENGLISH), d.getDisplayName(TextStyle.SHORT, Locale.ENGLISH))).toList())

@@ -18,6 +18,7 @@ public record LfgOptionsResponse(
     List<PlatformResponse> platforms,
     List<MicrophoneUsageResponse> voiceChats,
     List<LfgIconOptionResponse> playStyles,
+    List<LfgOptionResponse> gameTypes,
     List<LfgOptionResponse> days,
     List<LfgOptionResponse> timesOfDay,
     List<LfgOptionResponse> personalities,
