@@ -20,6 +20,6 @@ export interface LfgOptionsResponse {
   postDurations?: Array<LfgPostDurationResponse>;
   preferredLanguages?: Array<LanguagesResponse>;
   preferredRegions?: Array<RegionResponse>;
-  timesOfDay?: Array<LfgOptionResponse>;
+  timesOfDay?: Array<LfgIconOptionResponse>;
   voiceChats?: Array<MicrophoneUsageResponse>;
 }

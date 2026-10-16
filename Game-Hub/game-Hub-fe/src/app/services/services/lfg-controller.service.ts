@@ -13,9 +13,12 @@ import { StrictHttpResponse } from '../strict-http-response';
 
 import { createLfg } from '../fn/lfg-controller/create-lfg';
 import { CreateLfg$Params } from '../fn/lfg-controller/create-lfg';
+import { getAllActiveLfgs } from '../fn/lfg-controller/get-all-active-lfgs';
+import { GetAllActiveLfgs$Params } from '../fn/lfg-controller/get-all-active-lfgs';
 import { getLfgOptions } from '../fn/lfg-controller/get-lfg-options';
 import { GetLfgOptions$Params } from '../fn/lfg-controller/get-lfg-options';
 import { LfgOptionsResponse } from '../models/lfg-options-response';
+import { LfgResponse } from '../models/lfg-response';
 
 @Injectable({ providedIn: 'root' })
 export class LfgControllerService extends BaseService {
@@ -45,6 +48,31 @@ export class LfgControllerService extends BaseService {
   createLfg(params: CreateLfg$Params, context?: HttpContext): Observable<number> {
     return this.createLfg$Response(params, context).pipe(
       map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `getAllActiveLfgs()` */
+  static readonly GetAllActiveLfgsPath = '/lfg/lfg-posts';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAllActiveLfgs()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllActiveLfgs$Response(params?: GetAllActiveLfgs$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<LfgResponse>>> {
+    return getAllActiveLfgs(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getAllActiveLfgs$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAllActiveLfgs(params?: GetAllActiveLfgs$Params, context?: HttpContext): Observable<Array<LfgResponse>> {
+    return this.getAllActiveLfgs$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<LfgResponse>>): Array<LfgResponse> => r.body)
     );
   }
 

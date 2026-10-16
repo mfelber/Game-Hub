@@ -20,7 +20,7 @@ public record LfgOptionsResponse(
     List<LfgIconOptionResponse> playStyles,
     List<LfgOptionResponse> gameTypes,
     List<LfgOptionResponse> days,
-    List<LfgOptionResponse> timesOfDay,
+    List<LfgIconOptionResponse> timesOfDay,
     List<LfgOptionResponse> personalities,
     List<LanguagesResponse> preferredLanguages,
     List<RegionResponse> preferredRegions,

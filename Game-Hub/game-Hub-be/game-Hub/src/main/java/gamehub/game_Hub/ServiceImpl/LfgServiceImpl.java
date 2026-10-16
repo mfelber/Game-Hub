@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.time.format.TextStyle;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 import org.springframework.security.core.Authentication;
@@ -19,6 +20,7 @@ import gamehub.game_Hub.Repository.game.GameRepository;
 import gamehub.game_Hub.Repository.user.UserRepository;
 import gamehub.game_Hub.Request.LfgCreationRequest;
 import gamehub.game_Hub.Response.LanguagesResponse;
+import gamehub.game_Hub.Response.LfgResponse;
 import gamehub.game_Hub.Response.MicrophoneUsageResponse;
 import gamehub.game_Hub.Response.PlatformResponse;
 import gamehub.game_Hub.Response.RegionResponse;
@@ -121,7 +123,7 @@ public class LfgServiceImpl implements LfgService {
         .days(
             Arrays.stream(DayOfWeek.values()).map(d -> new LfgOptionResponse(d.name(), d.getDisplayName(TextStyle.FULL,
                 Locale.ENGLISH), d.getDisplayName(TextStyle.SHORT, Locale.ENGLISH))).toList())
-        .timesOfDay(lfgMapper.toOptions(TimeOfDay.class))
+        .timesOfDay(lfgMapper.toIconOptions(TimeOfDay.class))
         .personalities(lfgMapper.toOptions(Personality.class))
         .preferredLanguages(
             Arrays.stream(Languages.values()).map(pl -> new LanguagesResponse(pl.name(), pl.getLabel())).toList())
@@ -129,6 +131,18 @@ public class LfgServiceImpl implements LfgService {
         .postDurations(Arrays.stream(LfgPostDuration.values()).map(d -> new LfgPostDurationResponse(d.name(),
             d.getLabel(), d.getDays(), d.isSupporterOnly(), d.isSupporterOnly() && !user.isSupporter())).toList())
         .build();
+  }
+
+  @Override
+  public List<LfgResponse> getAllActiveLfgs(final Authentication connectedUser) {
+
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+
+
+    return List.of();
   }
 
 }

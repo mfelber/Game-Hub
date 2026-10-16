@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import gamehub.game_Hub.Response.LfgResponse;
 import gamehub.game_Hub.Response.lfg.LfgIconOptionResponse;
 import gamehub.game_Hub.Response.lfg.LfgOptionResponse;
 import gamehub.game_Hub.enums.IconLfgOption;
@@ -26,5 +27,7 @@ public class LfgMapper {
         .map(e -> new LfgIconOptionResponse(e.name(), e.getLabel(), e.getDescription(), e.getIcon()))
         .toList();
   }
+
+  // public LfgResponse
 
 }

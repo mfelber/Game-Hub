@@ -41,6 +41,7 @@ export type { LfgIconOptionResponse } from './models/lfg-icon-option-response';
 export type { LfgOptionResponse } from './models/lfg-option-response';
 export type { LfgOptionsResponse } from './models/lfg-options-response';
 export type { LfgPostDurationResponse } from './models/lfg-post-duration-response';
+export type { LfgResponse } from './models/lfg-response';
 export type { MicrophoneUsageResponse } from './models/microphone-usage-response';
 export type { NewsItemRequest } from './models/news-item-request';
 export type { NewsItemResponse } from './models/news-item-response';

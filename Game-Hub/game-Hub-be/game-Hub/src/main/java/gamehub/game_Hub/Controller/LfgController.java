@@ -1,5 +1,7 @@
 package gamehub.game_Hub.Controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import gamehub.game_Hub.Request.LfgCreationRequest;
+import gamehub.game_Hub.Response.LfgResponse;
 import gamehub.game_Hub.Response.lfg.LfgOptionsResponse;
 import gamehub.game_Hub.Service.LfgService;
 import jakarta.validation.Valid;
@@ -26,8 +29,10 @@ public class LfgController {
     return ResponseEntity.ok(lfgService.createLfg(connectedUser, request));
   }
 
-  // @GetMapping("/lfg-posts")
-  // public ResponseEntity<>
+  @GetMapping("/lfg-posts")
+  public ResponseEntity<List<LfgResponse>> getAllActiveLfgs(Authentication connectedUser) {
+    return ResponseEntity.ok(lfgService.getAllActiveLfgs(connectedUser));
+  }
 
   @GetMapping("/lfg-options")
   public ResponseEntity<LfgOptionsResponse> getLfgOptions(Authentication connectedUser) {

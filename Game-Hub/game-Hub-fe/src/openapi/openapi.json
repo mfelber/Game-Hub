@@ -2299,6 +2299,29 @@
         }
       }
     },
+    "/lfg/lfg-posts": {
+      "get": {
+        "tags": [
+          "lfg-controller"
+        ],
+        "operationId": "getAllActiveLfgs",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LfgResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/lfg/lfg-options": {
       "get": {
         "tags": [
@@ -4356,13 +4379,13 @@
               "$ref": "#/components/schemas/SubtitleResponse"
             }
           },
-          "inLibrary": {
+          "inCart": {
             "type": "boolean"
           },
           "inWishList": {
             "type": "boolean"
           },
-          "inCart": {
+          "inLibrary": {
             "type": "boolean"
           }
         }
@@ -5174,7 +5197,7 @@
           "timesOfDay": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/LfgOptionResponse"
+              "$ref": "#/components/schemas/LfgIconOptionResponse"
             }
           },
           "personalities": {
@@ -5221,6 +5244,82 @@
           },
           "locked": {
             "type": "boolean"
+          }
+        }
+      },
+      "LfgResponse": {
+        "type": "object",
+        "properties": {
+          "lfgId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "username": {
+            "type": "string"
+          },
+          "userProfilePicture": {
+            "type": "string",
+            "format": "byte"
+          },
+          "onlineStatus": {
+            "type": "string",
+            "enum": [
+              "Online",
+              "Playing",
+              "Offline",
+              "Away"
+            ]
+          },
+          "gameName": {
+            "type": "string"
+          },
+          "lookingFor": {
+            "$ref": "#/components/schemas/LfgIconOptionResponse"
+          },
+          "commitment": {
+            "$ref": "#/components/schemas/LfgOptionsResponse"
+          },
+          "lfgDescription": {
+            "type": "string"
+          },
+          "gameTypes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LfgOptionsResponse"
+            }
+          },
+          "platform": {
+            "$ref": "#/components/schemas/PlatformResponse"
+          },
+          "microphoneUsage": {
+            "$ref": "#/components/schemas/MicrophoneUsageResponse"
+          },
+          "languages": {
+            "$ref": "#/components/schemas/LanguagesResponse"
+          },
+          "playStyle": {
+            "$ref": "#/components/schemas/LfgIconOptionResponse"
+          },
+          "personality": {
+            "$ref": "#/components/schemas/LfgOptionsResponse"
+          },
+          "preferredRegions": {
+            "$ref": "#/components/schemas/RegionResponse"
+          },
+          "days": {
+            "type": "string",
+            "enum": [
+              "MONDAY",
+              "TUESDAY",
+              "WEDNESDAY",
+              "THURSDAY",
+              "FRIDAY",
+              "SATURDAY",
+              "SUNDAY"
+            ]
+          },
+          "timeOfDay": {
+            "$ref": "#/components/schemas/LfgOptionsResponse"
           }
         }
       },
