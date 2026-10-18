@@ -8,6 +8,7 @@ CREATE TABLE game_hub.lfg_post
   commitment  VARCHAR(30),
   voice_chat  VARCHAR(30),
   personality VARCHAR(30),
+  time_of_day VARCHAR(20),
   description VARCHAR(300),
   flexible    BOOLEAN     NOT NULL DEFAULT FALSE,
   lfg_status  VARCHAR(20) NOT NULL,
@@ -42,15 +43,6 @@ CREATE TABLE game_hub.lfg_post_days
   day         VARCHAR(20) NOT NULL,
   PRIMARY KEY (lfg_post_id, day),
   CONSTRAINT fk_lfg_post_day_post FOREIGN KEY (lfg_post_id)
-    REFERENCES game_hub.lfg_post (id) ON DELETE CASCADE
-);
-
-CREATE TABLE game_hub.lfg_post_times_of_day
-(
-  lfg_post_id BIGINT      NOT NULL,
-  time_of_day VARCHAR(20) NOT NULL,
-  PRIMARY KEY (lfg_post_id, time_of_day),
-  CONSTRAINT fk_lfg_post_times_of_day_post FOREIGN KEY (lfg_post_id)
     REFERENCES game_hub.lfg_post (id) ON DELETE CASCADE
 );
 

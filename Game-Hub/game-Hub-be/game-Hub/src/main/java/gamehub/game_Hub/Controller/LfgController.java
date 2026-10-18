@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import gamehub.game_Hub.Common.PageResponse;
 import gamehub.game_Hub.Request.LfgCreationRequest;
 import gamehub.game_Hub.Response.LfgResponse;
 import gamehub.game_Hub.Response.lfg.LfgOptionsResponse;
@@ -30,8 +32,10 @@ public class LfgController {
   }
 
   @GetMapping("/lfg-posts")
-  public ResponseEntity<List<LfgResponse>> getAllActiveLfgs(Authentication connectedUser) {
-    return ResponseEntity.ok(lfgService.getAllActiveLfgs(connectedUser));
+  public ResponseEntity<PageResponse<LfgResponse>> getAllActiveLfgs(Authentication connectedUser,
+      @RequestParam(name = "page", defaultValue = "0", required = false) int page,
+      @RequestParam(name = "size", defaultValue = "10", required = false) int size) {
+    return ResponseEntity.ok(lfgService.getAllActiveLfgs(connectedUser, page, size));
   }
 
   @GetMapping("/lfg-options")

@@ -23,11 +23,13 @@ public record LfgCreationRequest(
 
     @NotNull @Positive
     Long gameId,
-    @NotEmpty @NotNull
+    @NotEmpty
     Set<Platform> platforms,
     @NotNull
     LookingFor lookingFor,
+    @NotNull
     PlayStyle playStyle,
+    @NotNull
     Commitment commitment,
     Set<GameType> gameTypes,
     @NotNull
@@ -35,11 +37,10 @@ public record LfgCreationRequest(
     Personality personality,
     @NotNull
     Set<DayOfWeek> days,
-    @NotNull
-    Set<TimeOfDay> timeOfDay,
-    @NotNull
+    TimeOfDay timeOfDay,
+    @NotEmpty
     Set<Region> openToRegion,
-    @NotNull
+    @NotEmpty
     Set<Languages> preferredLanguages,
     boolean flexible,
     @Size(max = 300)

@@ -9,11 +9,14 @@
     @apply w-full p-[15px] transition-colors border-0 rounded-xl text-base cursor-pointer mt-3;
   }
 
+  .big-btn-w-full-sm {
+    @apply w-full p-2 transition-colors border-0 rounded-lg text-base cursor-pointer;
+  }
+
   .medium-button {
     @apply h-10 flex items-center gap-2 px-4 py-2 rounded-[9px]
     text-white cursor-pointer transition duration-200 ease-in-out;
   }
-
 
   .filter-button {
     @apply flex items-center gap-2 px-4 py-2 rounded-[12px] min-h-[44px]
@@ -32,6 +35,11 @@
   .icon-button {
     @apply w-10.5 h-10.5 rounded-xl flex items-center justify-center text-white text-[15px]
     transition-colors max-sm:w-8 max-sm:h-8 max-sm:text-xs max-sm:rounded-lg;
+  }
+
+  .icon-button-lg-round {
+    @apply w-11.5 h-11.5 rounded-lg flex items-center justify-center text-white text-[15px]
+    transition-colors max-sm:w-8 max-sm:h-8 max-sm:text-xs max-sm:rounded-lg cursor-pointer duration-200 ease-in-out;
   }
 
   .tag-remove {

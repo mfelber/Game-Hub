@@ -7,10 +7,18 @@ import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
+import gamehub.game_Hub.Common.PageResponse;
 import gamehub.game_Hub.Mapper.LfgMapper;
 import gamehub.game_Hub.Module.Game;
 import gamehub.game_Hub.Module.User.LfgPost;
@@ -59,7 +67,7 @@ public class LfgServiceImpl implements LfgService {
   public Long createLfg(final Authentication connectedUser, final LfgCreationRequest request) {
 
     // TODO check how many posts user has FREE account max 3 active SUPPORTER account 5 active
-
+    // check everithing that cant be null or empty
     User authUser = (User) connectedUser.getPrincipal();
     User user = userRepository.findById(authUser.getId())
         .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + authUser.getId()));
@@ -88,7 +96,7 @@ public class LfgServiceImpl implements LfgService {
         .voiceChat(request.voiceChat())
         .personality(request.personality())
         .days(request.days())
-        .timesOfDay(request.timeOfDay())
+        .timeOfDay(request.timeOfDay())
         .openToRegions(request.openToRegion())
         .languages(request.preferredLanguages())
         .description(request.description())
@@ -96,6 +104,21 @@ public class LfgServiceImpl implements LfgService {
         .expiresAt(now.plus(duration.getDays(), ChronoUnit.DAYS))
         .lfgStatus(LfgStatus.ACTIVE)
         .build();
+
+    boolean hasDays = request.days() != null && !request.days().isEmpty();
+    boolean hasTimeOfDay = request.timeOfDay() != null;
+
+    if (!request.flexible() && (!hasDays || !hasTimeOfDay)) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+          "Choose days and time of day, or mark the post as flexible.");
+    }
+
+    lfgPost.setFlexible(false);
+
+    if (request.flexible()) {
+      lfgPost.setTimeOfDay(null);
+      lfgPost.setDays(Set.of());
+    }
 
     return lfgPostRepository.save(lfgPost).getId();
   }
@@ -134,15 +157,29 @@ public class LfgServiceImpl implements LfgService {
   }
 
   @Override
-  public List<LfgResponse> getAllActiveLfgs(final Authentication connectedUser) {
+  public PageResponse<LfgResponse> getAllActiveLfgs(final Authentication connectedUser, final int page, final int size) {
 
     User authUser = (User) connectedUser.getPrincipal();
     User user = userRepository.findById(authUser.getId())
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
 
+    Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
 
 
-    return List.of();
+    Page<LfgPost> lfgPosts = lfgPostRepository.findAllByLfgStatus(LfgStatus.ACTIVE,pageable);
+    List<LfgResponse> lfgResponse = lfgPosts.stream().map(
+        lfg -> lfgMapper.toLfgResponse(lfg)
+    ).toList();
+
+    return new PageResponse<>(
+        lfgResponse,
+        lfgPosts.getNumber(),
+        lfgPosts.getSize(),
+        lfgPosts.getTotalElements(),
+        lfgPosts.getTotalPages(),
+        lfgPosts.isFirst(),
+        lfgPosts.isLast()
+    );
   }
 
 }

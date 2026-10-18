@@ -23,6 +23,7 @@ export type { CommunitySettingsResponse } from './models/community-settings-resp
 export type { CountryResponse } from './models/country-response';
 export type { DashboardReportResponse } from './models/dashboard-report-response';
 export type { DashboardResponse } from './models/dashboard-response';
+export type { DayAvailabilityResponse } from './models/day-availability-response';
 export type { ForgotPasswordRequest } from './models/forgot-password-request';
 export type { FriendProfileResponse } from './models/friend-profile-response';
 export type { FriendRequestResponse } from './models/friend-request-response';
@@ -58,6 +59,7 @@ export type { PageResponseAdminUserResponse } from './models/page-response-admin
 export type { PageResponseFriendRequestResponse } from './models/page-response-friend-request-response';
 export type { PageResponseGamePreviewResponse } from './models/page-response-game-preview-response';
 export type { PageResponseGameResponse } from './models/page-response-game-response';
+export type { PageResponseLfgResponse } from './models/page-response-lfg-response';
 export type { PageResponseUserCommunityResponse } from './models/page-response-user-community-response';
 export type { PageResponseUserLibraryResponse } from './models/page-response-user-library-response';
 export type { PageResponseWishlistResponse } from './models/page-response-wishlist-response';

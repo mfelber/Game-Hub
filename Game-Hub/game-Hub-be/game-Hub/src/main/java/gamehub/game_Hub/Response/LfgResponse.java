@@ -1,11 +1,14 @@
 package gamehub.game_Hub.Response;
 
 import java.time.DayOfWeek;
+import java.time.Instant;
 import java.util.List;
 
 import gamehub.game_Hub.Response.lfg.LfgIconOptionResponse;
+import gamehub.game_Hub.Response.lfg.LfgOptionResponse;
 import gamehub.game_Hub.Response.lfg.LfgOptionsResponse;
 import gamehub.game_Hub.enums.Lfg.Commitment;
+import gamehub.game_Hub.enums.Lfg.LfgStatus;
 import gamehub.game_Hub.enums.Lfg.LookingFor;
 import gamehub.game_Hub.enums.MicrophoneUsage;
 import gamehub.game_Hub.enums.Platform;
@@ -17,21 +20,27 @@ public record LfgResponse(
 
     Long lfgId,
     String username,
+    RegionResponse userRegion,
+    CountryResponse country,
     byte [] userProfilePicture,
+    String profileColor,
     Status onlineStatus,
     String gameName,
     LfgIconOptionResponse lookingFor,
-    LfgOptionsResponse commitment,
+    LfgOptionResponse commitment,
     String lfgDescription,
-    List<LfgOptionsResponse> gameTypes,
-    PlatformResponse platform,
+    List <LfgOptionResponse> gameTypes,
+    List <PlatformResponse> platform,
     MicrophoneUsageResponse microphoneUsage,
-    LanguagesResponse languages,
+    List <LanguagesResponse> languages,
     LfgIconOptionResponse playStyle,
-    LfgOptionsResponse personality,
-    RegionResponse preferredRegions,
-    DayOfWeek days,
-    LfgIconOptionResponse timeOfDay
+    LfgOptionResponse personality,
+    List <RegionResponse> openToRegions,
+    List<DayAvailabilityResponse> days,
+    LfgIconOptionResponse timeOfDay,
+    boolean flexible,
+    LfgStatus lfgStatus,
+    Instant createdAt
 ) {
 
 }

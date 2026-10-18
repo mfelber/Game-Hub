@@ -1,36 +1,254 @@
-<div class="search !mb-2 flex w-full flex-col gap-3 2xl:flex-row 2xl:items-center 2xl:justify-between">
-  <div class="flex min-w-0 flex-1 flex-col gap-3 2xl:flex-row 2xl:items-center">
-
-    <hlm-tabs tab="All" class="max-2xl:w-full">
+<hlm-tabs [tab]="activeTab" (brnTabsChange)="onTabChange($event)" class="max-2xl:w-full">
+  <div class="search !mb-2 flex w-full flex-col gap-3 2xl:flex-row 2xl:items-center 2xl:justify-between">
+    <div class="flex min-w-0 flex-1 flex-col gap-3 2xl:flex-row 2xl:items-center">
 
       <hlm-tabs-list class="lfg-tabs-list">
         <button hlmTabsTrigger="All" class="lfg-tabs">All posts</button>
-        <button hlmTabsTrigger="Saved" class="lfg-tabs"> <i class="fa-solid fa-bookmark"></i> Saved</button>
-        <button hlmTabsTrigger="my-posts" class="lfg-tabs"> <i class="fa-regular fa-file-lines"></i> My posts</button>
+        <button hlmTabsTrigger="Saved" class="lfg-tabs"><i class="fa-solid fa-bookmark"></i> Saved</button>
+        <button hlmTabsTrigger="MyPosts" class="lfg-tabs"><i class="fa-regular fa-file-lines"></i> My posts</button>
       </hlm-tabs-list>
-    </hlm-tabs>
-    <div class="min-w-0 w-full 2xl:flex-1 2xl:min-w-[420px] 2xl:max-w-xl">
-      <app-search-bar placeholder="Search post"> </app-search-bar>
-    </div>
 
-    <div class="filter-options max-2xl:w-full">
-      <button
-        class="filter-button max-2xl:w-full max-2xl:justify-center"
-        (click)="openLfgFilter = !openLfgFilter"
-        [ngClass]="{ 'open': openLfgFilter }">
-        <i class="fa-solid fa-filter"></i>
-        Filters
-        <!--   TODO add count of active filters   -->
-        <i
-          class="fa-solid fa-chevron-down transition-transform duration-300"
-          [class.rotate-180]="openLfgFilter"></i>
+      @if (activeTab !== 'MyPosts') {
+        <div class="min-w-0 w-full 2xl:flex-1 2xl:min-w-[420px] 2xl:max-w-xl">
+          <app-search-bar placeholder="Search post" [value]="searchQuery"
+                          (search)="searchQuery = $event"></app-search-bar>
+        </div>
+
+        <div class="filter-options max-2xl:w-full">
+          <button
+            class="filter-button max-2xl:w-full max-2xl:justify-center"
+            (click)="openLfgFilter = !openLfgFilter"
+            [ngClass]="{ 'open': openLfgFilter }">
+            <i class="fa-solid fa-filter"></i>
+            Filters
+            <!--   TODO add count of active filters   -->
+            <i
+              class="fa-solid fa-chevron-down transition-transform duration-300"
+              [class.rotate-180]="openLfgFilter"></i>
+          </button>
+        </div>
+      }
+
+    </div>
+    <div>
+      <button class="medium-button bg-[#4DA3FF] hover:bg-[#2F82DB] text-[#0B0F15] max-2xl:w-full max-2xl:justify-center"
+              (click)="navigateToNewPost()">
+        <i class="fa-solid fa-plus"></i> Add new LFG
       </button>
     </div>
-  </div>
-  <div>
-    <button class="medium-button bg-[#4DA3FF] hover:bg-[#2F82DB] text-[#0B0F15] max-2xl:w-full max-2xl:justify-center" (click)="navigateToNewPost()">
-      <i class="fa-solid fa-plus"></i> Add new LFG
-    </button>
+
   </div>
 
-</div>
+  <div hlmTabsContent="All">
+    <section class="all-posts grid grid-cols-1 lg:grid-cols-3 gap-5.5 mt-3">
+      @for (post of allLfgResponse.content; track post) {
+        <div class="p-4 rounded-lg border border-[#222B3D] bg-[#151B27] flex flex-col gap-2">
+          <div class="flex gap-2">
+            @if (post.userProfilePicture) {
+              <img
+                [src]="getProfilePicture(post)"
+                class="smaller-img"/>
+            }
+            @if (!post.userProfilePicture) {
+              <div class="smaller-img items-center flex justify-center text-[#101521] lg:text-2xl"
+                   [ngStyle]="{'background-color': post.profileColor}">
+                {{ post.username!.slice(0, 2).toUpperCase() }}
+              </div>
+            }
+            <div class="flex flex-col gap-y-1">
+              <div class="flex items-end gap-2">
+                <span class="text-[#E8ECF4] text-sm leading-none">{{ post.username }}</span>
+                <img class="w-5 lg:w-7 rounded-[5px]" [src]="post.country?.iconPath" alt="">
+              </div>
+              <div class="text-xs 2xl:text-sm">
+              <span class="text-[#8892A6]">
+                <span
+                  [ngClass]="{
+                    'online': post.onlineStatus === 'Online',
+                    'away': post.onlineStatus === 'Away',
+                    'offline': post.onlineStatus === 'Offline'
+                  }">
+                  <span
+                    class="inline-block size-2 rounded-full bg-current align-middle mr-1"></span>{{ post.onlineStatus }}
+                </span>
+                <span class="mx-1">•</span>
+                <span [ngClass]="{
+                'text-[#6366F1]': post.userRegion?.enumName === 'EUROPE',
+                'text-[#F97316]': post.userRegion?.enumName === 'NA',
+                'text-[#A3E635]': post.userRegion?.enumName === 'SA',
+                'text-[#EC4899]': post.userRegion?.enumName === 'ASIA',
+                'text-[#EAB308]': post.userRegion?.enumName === 'AFRICA',
+                'text-[#D97706]': post.userRegion?.enumName === 'ME',
+                'text-[#14B8A6]': post.userRegion?.enumName === 'OC',
+                'text-[#38BDF8]': post.userRegion?.enumName === 'CAB',
+                }"> {{ post.userRegion?.name }}
+                </span>
+
+                <span class="mx-1">•</span>{{ post.createdAt | date: 'dd.MM.yyyy' }}
+              </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-1 mb-1">
+            <span class="text-[#8892A6] text-sm">Looking to play</span>
+            <span class="text-[#E8ECF4]">{{ post.gameName }}</span>
+          </div>
+
+          <div class="flex gap-2 mb-1">
+            <div>
+              <span class="bg-[#4DA3FF] text-[#0B0F15] px-2 py-1 rounded-full text-sm">
+                <i [class]="post.lookingFor?.icon"></i> {{ post.lookingFor?.label }}
+              </span>
+            </div>
+            <div>
+              <span
+                class="border border-[#222B3D] bg-[#151B27] px-2 py-1 rounded-full text-sm">{{ post.commitment?.label }}</span>
+            </div>
+          </div>
+
+          <div>
+            <span class="text-xs text-[#CBD3E3]">{{ post.lfgDescription }}</span>
+          </div>
+
+          @if (post.gameTypes?.length) {
+            <div class="flex gap-2 mt-1">
+              @for (gameType of post.gameTypes; track gameType) {
+                <div>
+                  <span
+                    class="px-2 py-1 text-xs 2xl:px-3 2xl:py-2 2xl:text-sm rounded-full text-[#B5D8FF] bg-[#16304D]">#{{ gameType.label }}</span>
+                </div>
+              }
+            </div>
+          }
+
+
+          <div class="mt-auto flex flex-col gap-2">
+            <div class="user-divider"></div>
+
+            <div class="grid grid-cols-2 mb-1">
+              <div class="flex flex-col gap-0.5">
+                @for (platform of post.platform; track platform) {
+                  <span class="text-xs 2xl:text-sm text-[#8892A6]"> <i [class]="platform.icon"></i> Platform</span>
+                  <span class="text-sm 2xl:text-base text-[#E8ECF4]">{{ platform.name }}</span>
+                }
+              </div>
+              <div class="flex flex-col gap-0.5">
+                <span class="text-xs 2xl:text-sm text-[#8892A6]"> <i
+                  [class]="post.playStyle?.icon"></i> Play style</span>
+                <span class="text-sm 2xl:text-base text-[#E8ECF4]">{{ post.playStyle?.label }}</span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 mb-1">
+              <div class="flex flex-col gap-0.5">
+
+                <span class="text-xs 2xl:text-sm text-[#8892A6]"> <i [class]="post.microphoneUsage?.icon"></i> Voice chat</span>
+                <span class="text-sm 2xl:text-base text-[#E8ECF4]">{{ post.microphoneUsage?.name }}</span>
+
+              </div>
+              @if (post.personality) {
+                <div class="flex flex-col gap-0.5">
+                  <span class="text-xs 2xl:text-sm text-[#8892A6]"> <i class="fa-solid fa-smile"></i> Personality</span>
+                  <span class="text-sm 2xl:text-base text-[#E8ECF4]">{{ post.personality.label }}</span>
+                </div>
+              }
+
+            </div>
+
+            <div class="grid grid-cols-2 mb-1">
+              <div class="flex flex-col gap-0.5">
+                <span class="text-xs 2xl:text-sm text-[#8892A6]"> <i class="fa-solid fa-language"></i> Languges</span>
+                <div class="flex flex-wrap gap-1">
+                  @for (language of post.languages; track language; let last = $last) {
+                    <span class="text-sm 2xl:text-base text-[#E8ECF4]">{{language.label}}@if(!last){,} </span>
+                  }
+                </div>
+              </div>
+              <div class="flex flex-col gap-0.5">
+                <span class="text-xs 2xl:text-sm text-[#8892A6]"> <i
+                  class="fa-solid fa-earth"></i> Prefered region</span>
+                @if (post.openToRegions?.length) {
+                  <div class="flex flex-wrap gap-1">
+                    @for (region of post.openToRegions; track region; let last = $last) {
+                      <span class="text-sm 2xl:text-base" [ngClass]="{
+                      'text-[#6366F1]': region.enumName === 'EUROPE',
+                      'text-[#F97316]': region.enumName === 'NA',
+                      'text-[#A3E635]': region.enumName === 'SA',
+                      'text-[#EC4899]': region.enumName === 'ASIA',
+                      'text-[#EAB308]': region.enumName === 'AFRICA',
+                      'text-[#D97706]': region.enumName === 'ME',
+                      'text-[#14B8A6]': region.enumName === 'OC',
+                      'text-[#38BDF8]': region.enumName === 'CAB',
+                      }"> {{region.name}}@if(!last){,}</span>
+                    }
+                  </div>
+                } @else {
+                  <span class="text-sm 2xl:text-base text-[#E8ECF4]">All</span>
+                }
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between">
+                <div class="text-xs 2xl:text-sm text-[#8892A6]"> When I can play</div>
+                @if (!post.flexible) {
+                  <div class="text-xs 2xl:text-sm text-[#8892A6]">
+                    <i [class]="post.timeOfDay?.icon" class="text-xs 2xl:text-sm text-[#4DA3FF]"></i> {{ post.timeOfDay?.label }}
+                    <span class="mx-1">•</span> {{ post.timeOfDay?.description }}
+                  </div>
+                }
+              </div>
+
+              @if (post.flexible === true) {
+                <div class="w-full bg-[#16304D] border border-[#4DA3FF] py-2 px-2 mt-2 rounded-md">
+                  <i class="fa-solid fa-calendar text-[#B5D8FF]"></i> <span class="text-[#B5D8FF] text-xs 2xl:text-sm"> Flexible</span>
+                  <span class="text-xs 2xl:text-sm text-[#8FC2FF]"> - available any day at any time.</span>
+                </div>
+              } @else {
+                <div class="flex w-full gap-1 mt-2">
+                  @for (day of post.days; track day) {
+                    <div class="flex-1 py-2 rounded-md text-center text-xs 2xl:text-sm"
+                         [ngClass]="day.selected ? 'bg-[#16304D] text-[#B5D8FF] border border-[#4DA3FF]' : 'border border-[#222B3D] text-[#8892A6]'"> {{ day.shortName }}
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+
+          <div class="w-full flex gap-2">
+            <button class="big-btn-w-full-sm bg-[#4DA3FF] text-[#0B0F15] hover:bg-[#2F82DB]">Message</button>
+            <button class="icon-button-lg-round border border-[#222B3D] text-[#8892A6] hover:text-white"><i
+              class="fa-regular fa-bookmark"></i></button>
+          </div>
+
+        </div>
+
+      }
+    </section>
+  </div>
+  <div hlmTabsContent="Saved">
+    saved
+  </div>
+  <div hlmTabsContent="MyPosts">
+    my
+  </div>
+
+
+</hlm-tabs>
+
+@if (activeTab === 'All') {
+  <section class="pagination-wrapper mt-2">
+    <app-pagination
+      [currentPage]="page"
+      [totalPages]="allLfgResponse.totalPages!"
+      (pageChange)="changePage($event)">
+    </app-pagination>
+  </section>
+}
+
+
+
+
+

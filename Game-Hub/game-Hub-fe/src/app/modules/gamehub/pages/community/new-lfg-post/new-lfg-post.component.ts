@@ -299,17 +299,19 @@ export class NewLfgPostComponent implements OnInit {
       lookingFor: this.selectedLookingFor as LfgCreationRequest['lookingFor'],
       playStyle: this.selectedPlayStyle as LfgCreationRequest['playStyle'],
       commitment: this.selectedCommitment as LfgCreationRequest['commitment'],
-      gameTypes: this.selectedGameTypes as LfgCreationRequest['gameTypes'],
+      gameTypes:( this.selectedGameTypes ?? [] ) as LfgCreationRequest['gameTypes'],
       voiceChat: this.selectedVoiceChat as LfgCreationRequest['voiceChat'],
       personality: this.selectedPersonality as LfgCreationRequest['personality'],
       days: (this.flexible ? [] : this.selectedDays) as LfgCreationRequest['days'],
-      timeOfDay: (this.flexible || !this.selectedTimeOfDay ? [] : [this.selectedTimeOfDay]) as LfgCreationRequest['timeOfDay'],
+      timeOfDay: this.flexible ? undefined : (this.selectedTimeOfDay as LfgCreationRequest['timeOfDay']),
       openToRegion: (this.isAnyRegion ? [] : this.selectedRegions) as LfgCreationRequest['openToRegion'],
-      preferredLanguages: this.selectedLanguages as LfgCreationRequest['preferredLanguages'],
+      preferredLanguages: (this.selectedLanguages ?? []) as LfgCreationRequest['preferredLanguages'],
       flexible: this.flexible,
       description: this.description,
       lfgPostDuration: this.selectedDuration as LfgCreationRequest['lfgPostDuration']
     }
+
+    console.log(request);
 
     this.lfgService.createLfg({body: request}).subscribe({
       next: (response) => {

@@ -92,11 +92,9 @@ public class LfgPost {
   @Enumerated(EnumType.STRING)
   private Set<DayOfWeek> days;
 
-  @ElementCollection
-  @CollectionTable(name = "lfg_post_times_of_day", schema = "game_hub", joinColumns = @JoinColumn(name = "lfg_post_id"))
   @Column(name = "time_of_day")
   @Enumerated(EnumType.STRING)
-  private Set<TimeOfDay> timesOfDay;
+  private TimeOfDay timeOfDay;
 
   @Column(nullable = false)
   private boolean flexible;

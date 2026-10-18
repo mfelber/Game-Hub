@@ -8,14 +8,18 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { LfgResponse } from '../../models/lfg-response';
+import { PageResponseLfgResponse } from '../../models/page-response-lfg-response';
 
 export interface GetAllActiveLfgs$Params {
+  page?: number;
+  size?: number;
 }
 
-export function getAllActiveLfgs(http: HttpClient, rootUrl: string, params?: GetAllActiveLfgs$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<LfgResponse>>> {
+export function getAllActiveLfgs(http: HttpClient, rootUrl: string, params?: GetAllActiveLfgs$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseLfgResponse>> {
   const rb = new RequestBuilder(rootUrl, getAllActiveLfgs.PATH, 'get');
   if (params) {
+    rb.query('page', params.page, {});
+    rb.query('size', params.size, {});
   }
 
   return http.request(
@@ -23,7 +27,7 @@ export function getAllActiveLfgs(http: HttpClient, rootUrl: string, params?: Get
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<LfgResponse>>;
+      return r as StrictHttpResponse<PageResponseLfgResponse>;
     })
   );
 }

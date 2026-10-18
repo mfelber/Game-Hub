@@ -18,7 +18,7 @@ import { GetAllActiveLfgs$Params } from '../fn/lfg-controller/get-all-active-lfg
 import { getLfgOptions } from '../fn/lfg-controller/get-lfg-options';
 import { GetLfgOptions$Params } from '../fn/lfg-controller/get-lfg-options';
 import { LfgOptionsResponse } from '../models/lfg-options-response';
-import { LfgResponse } from '../models/lfg-response';
+import { PageResponseLfgResponse } from '../models/page-response-lfg-response';
 
 @Injectable({ providedIn: 'root' })
 export class LfgControllerService extends BaseService {
@@ -60,7 +60,7 @@ export class LfgControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getAllActiveLfgs$Response(params?: GetAllActiveLfgs$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<LfgResponse>>> {
+  getAllActiveLfgs$Response(params?: GetAllActiveLfgs$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseLfgResponse>> {
     return getAllActiveLfgs(this.http, this.rootUrl, params, context);
   }
 
@@ -70,9 +70,9 @@ export class LfgControllerService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  getAllActiveLfgs(params?: GetAllActiveLfgs$Params, context?: HttpContext): Observable<Array<LfgResponse>> {
+  getAllActiveLfgs(params?: GetAllActiveLfgs$Params, context?: HttpContext): Observable<PageResponseLfgResponse> {
     return this.getAllActiveLfgs$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<LfgResponse>>): Array<LfgResponse> => r.body)
+      map((r: StrictHttpResponse<PageResponseLfgResponse>): PageResponseLfgResponse => r.body)
     );
   }
 

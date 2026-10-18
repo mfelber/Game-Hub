@@ -2305,16 +2305,35 @@
           "lfg-controller"
         ],
         "operationId": "getAllActiveLfgs",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/LfgResponse"
-                  }
+                  "$ref": "#/components/schemas/PageResponseLfgResponse"
                 }
               }
             }
@@ -3571,14 +3590,15 @@
       },
       "LfgCreationRequest": {
         "required": [
+          "commitment",
           "days",
           "gameId",
           "lfgPostDuration",
           "lookingFor",
           "openToRegion",
           "platforms",
+          "playStyle",
           "preferredLanguages",
-          "timeOfDay",
           "voiceChat"
         ],
         "type": "object",
@@ -3690,17 +3710,13 @@
             }
           },
           "timeOfDay": {
-            "uniqueItems": true,
-            "type": "array",
-            "items": {
-              "type": "string",
-              "enum": [
-                "MORNING",
-                "AFTERNOON",
-                "EVENING",
-                "NIGHT"
-              ]
-            }
+            "type": "string",
+            "enum": [
+              "MORNING",
+              "AFTERNOON",
+              "EVENING",
+              "NIGHT"
+            ]
           },
           "openToRegion": {
             "uniqueItems": true,
@@ -4379,13 +4395,13 @@
               "$ref": "#/components/schemas/SubtitleResponse"
             }
           },
-          "inCart": {
+          "inLibrary": {
             "type": "boolean"
           },
           "inWishList": {
             "type": "boolean"
           },
-          "inLibrary": {
+          "inCart": {
             "type": "boolean"
           }
         }
@@ -5107,6 +5123,20 @@
           }
         }
       },
+      "DayAvailabilityResponse": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "shortName": {
+            "type": "string"
+          },
+          "selected": {
+            "type": "boolean"
+          }
+        }
+      },
       "LanguagesResponse": {
         "type": "object",
         "properties": {
@@ -5145,6 +5175,181 @@
             "type": "string"
           },
           "description": {
+            "type": "string"
+          }
+        }
+      },
+      "LfgResponse": {
+        "type": "object",
+        "properties": {
+          "lfgId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "username": {
+            "type": "string"
+          },
+          "userRegion": {
+            "$ref": "#/components/schemas/RegionResponse"
+          },
+          "country": {
+            "$ref": "#/components/schemas/CountryResponse"
+          },
+          "userProfilePicture": {
+            "type": "string",
+            "format": "byte"
+          },
+          "profileColor": {
+            "type": "string"
+          },
+          "onlineStatus": {
+            "type": "string",
+            "enum": [
+              "Online",
+              "Playing",
+              "Offline",
+              "Away"
+            ]
+          },
+          "gameName": {
+            "type": "string"
+          },
+          "lookingFor": {
+            "$ref": "#/components/schemas/LfgIconOptionResponse"
+          },
+          "commitment": {
+            "$ref": "#/components/schemas/LfgOptionResponse"
+          },
+          "lfgDescription": {
+            "type": "string"
+          },
+          "gameTypes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LfgOptionResponse"
+            }
+          },
+          "platform": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlatformResponse"
+            }
+          },
+          "microphoneUsage": {
+            "$ref": "#/components/schemas/MicrophoneUsageResponse"
+          },
+          "languages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LanguagesResponse"
+            }
+          },
+          "playStyle": {
+            "$ref": "#/components/schemas/LfgIconOptionResponse"
+          },
+          "personality": {
+            "$ref": "#/components/schemas/LfgOptionResponse"
+          },
+          "openToRegions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RegionResponse"
+            }
+          },
+          "days": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DayAvailabilityResponse"
+            }
+          },
+          "timeOfDay": {
+            "$ref": "#/components/schemas/LfgIconOptionResponse"
+          },
+          "flexible": {
+            "type": "boolean"
+          },
+          "lfgStatus": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "CLOSED",
+              "EXPIRED"
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "MicrophoneUsageResponse": {
+        "type": "object",
+        "properties": {
+          "enumName": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "icon": {
+            "type": "string"
+          }
+        }
+      },
+      "PageResponseLfgResponse": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LfgResponse"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PlatformResponse": {
+        "type": "object",
+        "properties": {
+          "enumName": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "icon": {
+            "type": "string"
+          }
+        }
+      },
+      "RegionResponse": {
+        "type": "object",
+        "properties": {
+          "enumName": {
+            "type": "string"
+          },
+          "name": {
             "type": "string"
           }
         }
@@ -5244,121 +5449,6 @@
           },
           "locked": {
             "type": "boolean"
-          }
-        }
-      },
-      "LfgResponse": {
-        "type": "object",
-        "properties": {
-          "lfgId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "username": {
-            "type": "string"
-          },
-          "userProfilePicture": {
-            "type": "string",
-            "format": "byte"
-          },
-          "onlineStatus": {
-            "type": "string",
-            "enum": [
-              "Online",
-              "Playing",
-              "Offline",
-              "Away"
-            ]
-          },
-          "gameName": {
-            "type": "string"
-          },
-          "lookingFor": {
-            "$ref": "#/components/schemas/LfgIconOptionResponse"
-          },
-          "commitment": {
-            "$ref": "#/components/schemas/LfgOptionsResponse"
-          },
-          "lfgDescription": {
-            "type": "string"
-          },
-          "gameTypes": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/LfgOptionsResponse"
-            }
-          },
-          "platform": {
-            "$ref": "#/components/schemas/PlatformResponse"
-          },
-          "microphoneUsage": {
-            "$ref": "#/components/schemas/MicrophoneUsageResponse"
-          },
-          "languages": {
-            "$ref": "#/components/schemas/LanguagesResponse"
-          },
-          "playStyle": {
-            "$ref": "#/components/schemas/LfgIconOptionResponse"
-          },
-          "personality": {
-            "$ref": "#/components/schemas/LfgOptionsResponse"
-          },
-          "preferredRegions": {
-            "$ref": "#/components/schemas/RegionResponse"
-          },
-          "days": {
-            "type": "string",
-            "enum": [
-              "MONDAY",
-              "TUESDAY",
-              "WEDNESDAY",
-              "THURSDAY",
-              "FRIDAY",
-              "SATURDAY",
-              "SUNDAY"
-            ]
-          },
-          "timeOfDay": {
-            "$ref": "#/components/schemas/LfgOptionsResponse"
-          }
-        }
-      },
-      "MicrophoneUsageResponse": {
-        "type": "object",
-        "properties": {
-          "enumName": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "icon": {
-            "type": "string"
-          }
-        }
-      },
-      "PlatformResponse": {
-        "type": "object",
-        "properties": {
-          "enumName": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "icon": {
-            "type": "string"
-          }
-        }
-      },
-      "RegionResponse": {
-        "type": "object",
-        "properties": {
-          "enumName": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
           }
         }
       },

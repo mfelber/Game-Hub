@@ -140,6 +140,10 @@
     @apply w-18.75 h-18.75 rounded-[5px] object-cover max-sm:w-14 max-sm:h-14;
   }
 
+  .smaller-img {
+    @apply w-13.5 h-13.5 rounded-[5px] object-cover max-sm:w-14 max-sm:h-14;
+  }
+
   .find-player-top {
     @apply flex items-center justify-between;
   }

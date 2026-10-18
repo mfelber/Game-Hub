@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.security.core.Authentication;
 
+import gamehub.game_Hub.Common.PageResponse;
 import gamehub.game_Hub.Request.LfgCreationRequest;
 import gamehub.game_Hub.Response.LfgResponse;
 import gamehub.game_Hub.Response.lfg.LfgOptionsResponse;
@@ -16,6 +17,6 @@ public interface LfgService {
 
   LfgOptionsResponse getLfgOptions(Authentication connectedUser);
 
-  List<LfgResponse> getAllActiveLfgs(Authentication connectedUser);
+  PageResponse<LfgResponse> getAllActiveLfgs(Authentication connectedUser, int page, int size);
 
 }
