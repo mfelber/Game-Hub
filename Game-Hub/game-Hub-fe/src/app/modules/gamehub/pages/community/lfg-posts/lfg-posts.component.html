@@ -40,27 +40,29 @@
   </div>
 
   <div hlmTabsContent="All">
-    <section class="all-posts grid grid-cols-1 lg:grid-cols-3 gap-5.5 mt-3">
+    <section class="all-posts grid grid-cols-1 lg:grid-cols-3 gap-x-5.5 gap-y-2 mt-3">
       @for (post of allLfgResponse.content; track post) {
-        <div class="p-4 rounded-lg border border-[#222B3D] bg-[#151B27] flex flex-col gap-2">
-          <div class="flex gap-2">
-            @if (post.userProfilePicture) {
-              <img
-                [src]="getProfilePicture(post)"
-                class="smaller-img"/>
-            }
-            @if (!post.userProfilePicture) {
-              <div class="smaller-img items-center flex justify-center text-[#101521] lg:text-2xl"
-                   [ngStyle]="{'background-color': post.profileColor}">
-                {{ post.username!.slice(0, 2).toUpperCase() }}
-              </div>
-            }
-            <div class="flex flex-col gap-y-1">
-              <div class="flex items-end gap-2">
-                <span class="text-[#E8ECF4] text-sm leading-none">{{ post.username }}</span>
-                <img class="w-5 lg:w-7 rounded-[5px]" [src]="post.country?.iconPath" alt="">
-              </div>
-              <div class="text-xs 2xl:text-sm">
+        <div class="row-span-3 grid grid-rows-subgrid mb-3.5 p-4 rounded-lg border border-[#222B3D] bg-[#151B27]">
+          <div class="flex flex-col gap-2">
+
+            <div class="flex gap-2">
+              @if (post.userProfilePicture) {
+                <img
+                  [src]="getProfilePicture(post)"
+                  class="smaller-img"/>
+              }
+              @if (!post.userProfilePicture) {
+                <div class="smaller-img items-center flex justify-center text-[#101521] lg:text-2xl"
+                     [ngStyle]="{'background-color': post.profileColor}">
+                  {{ post.username!.slice(0, 2).toUpperCase() }}
+                </div>
+              }
+              <div class="flex flex-col gap-y-1">
+                <div class="flex items-end gap-2">
+                  <span class="text-[#E8ECF4] text-sm leading-none">{{ post.username }}</span>
+                  <img class="w-5 lg:w-7 rounded-[5px]" [src]="post.country?.iconPath" alt="">
+                </div>
+                <div class="text-xs 2xl:text-sm">
               <span class="text-[#8892A6]">
                 <span
                   [ngClass]="{
@@ -84,46 +86,54 @@
                 }"> {{ post.userRegion?.name }}
                 </span>
 
-                <span class="mx-1">•</span>{{ post.createdAt | date: 'dd.MM.yyyy' }}
+                <span class="mx-1">•</span>{{ post.createdAt | timeAgo }}
               </span>
+                </div>
               </div>
+              @if (isExpiring(post.expiresAt)) {
+                <span class="ml-auto h-fit inline-flex items-center gap-1.5 rounded-full border border-[#4a3d12] bg-[#2a2410] px-2 py-0.5 text-xs font-semibold text-[#F5C451]" title="Expiring soon">
+                <i class="fa-solid fa-hourglass-half"></i> <span class="hidden 2xl:inline">Expiring soon</span>
+              </span>
+              }
             </div>
-          </div>
 
-          <div class="flex flex-col gap-1 mb-1">
-            <span class="text-[#8892A6] text-sm">Looking to play</span>
-            <span class="text-[#E8ECF4]">{{ post.gameName }}</span>
-          </div>
 
-          <div class="flex gap-2 mb-1">
-            <div>
+
+            <div class="flex flex-col gap-1 mb-1">
+              <span class="text-[#8892A6] text-sm">Looking to play</span>
+              <span class="text-[#E8ECF4]">{{ post.gameName }}</span>
+            </div>
+
+            <div class="flex gap-2 mb-1">
+              <div>
               <span class="bg-[#4DA3FF] text-[#0B0F15] px-2 py-1 rounded-full text-sm">
                 <i [class]="post.lookingFor?.icon"></i> {{ post.lookingFor?.label }}
               </span>
-            </div>
-            <div>
+              </div>
+              <div>
               <span
                 class="border border-[#222B3D] bg-[#151B27] px-2 py-1 rounded-full text-sm">{{ post.commitment?.label }}</span>
+              </div>
             </div>
-          </div>
 
-          <div>
-            <span class="text-xs text-[#CBD3E3]">{{ post.lfgDescription }}</span>
-          </div>
+            <div>
+              <p class="text-xs text-[#CBD3E3] break-words line-clamp-4">{{ post.lfgDescription }}</p>
+            </div>
 
-          @if (post.gameTypes?.length) {
-            <div class="flex gap-2 mt-1">
-              @for (gameType of post.gameTypes; track gameType) {
-                <div>
+            @if (post.gameTypes?.length) {
+              <div class="flex gap-2 mt-1">
+                @for (gameType of post.gameTypes; track gameType) {
+                  <div>
                   <span
                     class="px-2 py-1 text-xs 2xl:px-3 2xl:py-2 2xl:text-sm rounded-full text-[#B5D8FF] bg-[#16304D]">#{{ gameType.label }}</span>
-                </div>
-              }
-            </div>
-          }
+                  </div>
+                }
+              </div>
+            }
 
+          </div>
 
-          <div class="mt-auto flex flex-col gap-2">
+          <div class="flex flex-col gap-2">
             <div class="user-divider"></div>
 
             <div class="grid grid-cols-2 mb-1">
@@ -147,12 +157,12 @@
                 <span class="text-sm 2xl:text-base text-[#E8ECF4]">{{ post.microphoneUsage?.name }}</span>
 
               </div>
-              @if (post.personality) {
+
                 <div class="flex flex-col gap-0.5">
                   <span class="text-xs 2xl:text-sm text-[#8892A6]"> <i class="fa-solid fa-smile"></i> Personality</span>
-                  <span class="text-sm 2xl:text-base text-[#E8ECF4]">{{ post.personality.label }}</span>
+                  <span class="text-sm 2xl:text-base text-[#E8ECF4]">{{ post.personality?.label ?? 'Not specified' }}</span>
                 </div>
-              }
+
 
             </div>
 

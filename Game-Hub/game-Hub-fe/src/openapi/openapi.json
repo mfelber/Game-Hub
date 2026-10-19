@@ -3592,6 +3592,7 @@
         "required": [
           "commitment",
           "days",
+          "description",
           "gameId",
           "lfgPostDuration",
           "lookingFor",
@@ -3768,7 +3769,7 @@
           },
           "description": {
             "maxLength": 300,
-            "minLength": 0,
+            "minLength": 10,
             "type": "string"
           },
           "lfgPostDuration": {
@@ -4395,10 +4396,10 @@
               "$ref": "#/components/schemas/SubtitleResponse"
             }
           },
-          "inLibrary": {
+          "inWishList": {
             "type": "boolean"
           },
-          "inWishList": {
+          "inLibrary": {
             "type": "boolean"
           },
           "inCart": {
@@ -5277,6 +5278,10 @@
             ]
           },
           "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "expiresAt": {
             "type": "string",
             "format": "date-time"
           }

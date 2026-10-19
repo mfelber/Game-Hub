@@ -14,6 +14,7 @@ import gamehub.game_Hub.enums.Platform;
 import gamehub.game_Hub.enums.Lfg.PlayStyle;
 import gamehub.game_Hub.enums.Region;
 import gamehub.game_Hub.enums.Lfg.TimeOfDay;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -38,12 +39,13 @@ public record LfgCreationRequest(
     @NotNull
     Set<DayOfWeek> days,
     TimeOfDay timeOfDay,
-    @NotEmpty
+    @NotNull
     Set<Region> openToRegion,
     @NotEmpty
     Set<Languages> preferredLanguages,
     boolean flexible,
-    @Size(max = 300)
+    @NotBlank
+    @Size(min = 10, max = 300)
     String description,
     @NotNull
     LfgPostDuration lfgPostDuration

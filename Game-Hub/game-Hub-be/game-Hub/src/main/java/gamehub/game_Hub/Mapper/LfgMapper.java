@@ -126,6 +126,7 @@ public class LfgMapper {
         .flexible(post.isFlexible())
         .lfgStatus(post.getLfgStatus())
         .createdAt(post.getCreatedAt())
+        .expiresAt(post.getExpiresAt())
         .build();
   }
 

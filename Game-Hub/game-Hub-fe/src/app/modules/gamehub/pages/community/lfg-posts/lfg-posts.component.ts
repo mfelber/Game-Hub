@@ -8,6 +8,7 @@ import {LfgResponse} from '../../../../../services/models/lfg-response';
 import {PageResponseLfgResponse} from '../../../../../services/models/page-response-lfg-response';
 import {PaginationComponent} from '../../../components/pagination/pagination.component';
 import {UserCommunityResponse} from '../../../../../services/models/user-community-response';
+import {TimeAgoPipe} from '../../../../../services/TimeAgoPipe/time-ago-pipe';
 
 @Component({
   selector: 'app-lfg-posts',
@@ -20,7 +21,8 @@ import {UserCommunityResponse} from '../../../../../services/models/user-communi
     HlmTabsContent,
     PaginationComponent,
     NgStyle,
-    DatePipe
+    DatePipe,
+    TimeAgoPipe
   ],
   templateUrl: './lfg-posts.component.html',
   styleUrl: './lfg-posts.component.scss',
@@ -31,7 +33,6 @@ export class LfgPostsComponent implements OnInit {
   public size = 10;
 
   allLfgResponse: PageResponseLfgResponse = {};
-
 
   activeTab = 'All'
   openLfgFilter = false;
@@ -51,6 +52,16 @@ export class LfgPostsComponent implements OnInit {
 
   resetFilters() {
 
+  }
+
+  isExpiring(expiresAt: string | Date | null | undefined): boolean {
+    if (!expiresAt) {
+      return false;
+    }
+
+    const expiring = new Date(expiresAt).getTime();
+    const twoDays = 2 * 24 * 60 * 60 * 1000;
+    return expiring - Date.now() <= twoDays && expiring > Date.now();
   }
 
   navigateToNewPost() {

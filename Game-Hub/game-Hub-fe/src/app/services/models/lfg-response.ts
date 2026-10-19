@@ -15,6 +15,7 @@ export interface LfgResponse {
   country?: CountryResponse;
   createdAt?: string;
   days?: Array<DayAvailabilityResponse>;
+  expiresAt?: string;
   flexible?: boolean;
   gameName?: string;
   gameTypes?: Array<LfgOptionResponse>;

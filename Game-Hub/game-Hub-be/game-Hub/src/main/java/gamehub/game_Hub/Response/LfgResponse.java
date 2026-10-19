@@ -40,7 +40,8 @@ public record LfgResponse(
     LfgIconOptionResponse timeOfDay,
     boolean flexible,
     LfgStatus lfgStatus,
-    Instant createdAt
+    Instant createdAt,
+    Instant expiresAt
 ) {
 
 }

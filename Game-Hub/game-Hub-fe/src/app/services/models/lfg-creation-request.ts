@@ -5,7 +5,7 @@
 export interface LfgCreationRequest {
   commitment: 'LONG_TERM' | 'SHORT_TERM' | 'ONE_SESSION';
   days: Array<'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY'>;
-  description?: string;
+  description: string;
   flexible?: boolean;
   gameId: number;
   gameTypes?: Array<'SHOOTER' | 'CO_OP' | 'RPG' | 'SURVIVAL' | 'SANDBOX' | 'MOBA' | 'COZY' | 'STRATEGY' | 'HORROR' | 'RACING' | 'SPORTS' | 'SIMULATION' | 'ROGUELIKE' | 'STORY_DRIVEN' | 'TACTICAL' | 'MMO_RPG' | 'FIGHTING' | 'PARTY' | 'PUZZLE' | 'PLATFORMER'>;

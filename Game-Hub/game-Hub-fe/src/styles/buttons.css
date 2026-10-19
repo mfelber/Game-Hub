@@ -39,7 +39,7 @@
 
   .icon-button-lg-round {
     @apply w-11.5 h-11.5 rounded-lg flex items-center justify-center text-white text-[15px]
-    transition-colors max-sm:w-8 max-sm:h-8 max-sm:text-xs max-sm:rounded-lg cursor-pointer duration-200 ease-in-out;
+    transition-colors max-sm:text-xs max-sm:rounded-lg cursor-pointer duration-200 ease-in-out;
   }
 
   .tag-remove {
