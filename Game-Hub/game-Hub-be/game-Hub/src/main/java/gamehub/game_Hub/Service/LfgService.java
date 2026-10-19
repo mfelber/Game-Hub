@@ -19,4 +19,8 @@ public interface LfgService {
 
   PageResponse<LfgResponse> getAllActiveLfgs(Authentication connectedUser, int page, int size);
 
+  Integer getCountOfActivePosts(Authentication connectedUser);
+
+  Integer getMyLfgPosts(Authentication connectedUser);
+
 }

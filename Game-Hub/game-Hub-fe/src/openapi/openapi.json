@@ -2299,6 +2299,27 @@
         }
       }
     },
+    "/lfg/my-lfg-posts": {
+      "get": {
+        "tags": [
+          "lfg-controller"
+        ],
+        "operationId": "getMyLfgPosts",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/lfg/lfg-posts": {
       "get": {
         "tags": [
@@ -2354,6 +2375,27 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/LfgOptionsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/lfg/active-posts": {
+      "get": {
+        "tags": [
+          "lfg-controller"
+        ],
+        "operationId": "getCountOfActivePosts",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
                 }
               }
             }
@@ -3594,6 +3636,7 @@
           "days",
           "description",
           "gameId",
+          "gameTypes",
           "lfgPostDuration",
           "lookingFor",
           "openToRegion",
@@ -3609,6 +3652,8 @@
             "format": "int64"
           },
           "platforms": {
+            "maxItems": 1,
+            "minItems": 0,
             "uniqueItems": true,
             "type": "array",
             "items": {
@@ -3650,6 +3695,8 @@
             ]
           },
           "gameTypes": {
+            "maxItems": 3,
+            "minItems": 0,
             "uniqueItems": true,
             "type": "array",
             "items": {
@@ -4396,13 +4443,13 @@
               "$ref": "#/components/schemas/SubtitleResponse"
             }
           },
-          "inWishList": {
+          "inCart": {
             "type": "boolean"
           },
           "inLibrary": {
             "type": "boolean"
           },
-          "inCart": {
+          "inWishList": {
             "type": "boolean"
           }
         }
@@ -5433,6 +5480,17 @@
             "items": {
               "$ref": "#/components/schemas/LfgPostDurationResponse"
             }
+          },
+          "canCreate": {
+            "type": "boolean"
+          },
+          "activePosts": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "maxActivePosts": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },

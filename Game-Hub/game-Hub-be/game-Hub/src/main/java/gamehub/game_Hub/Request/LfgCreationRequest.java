@@ -25,6 +25,7 @@ public record LfgCreationRequest(
     @NotNull @Positive
     Long gameId,
     @NotEmpty
+    @Size(max = 1)
     Set<Platform> platforms,
     @NotNull
     LookingFor lookingFor,
@@ -32,6 +33,8 @@ public record LfgCreationRequest(
     PlayStyle playStyle,
     @NotNull
     Commitment commitment,
+    @NotEmpty
+    @Size(max = 3)
     Set<GameType> gameTypes,
     @NotNull
     MicrophoneUsage voiceChat,

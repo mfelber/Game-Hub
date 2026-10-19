@@ -12,6 +12,9 @@ import {HlmSwitch} from '@spartan/switch';
 import {HlmTextarea} from '@spartan/textarea';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {LfgCreationRequest} from '../../../../../services/models/lfg-creation-request';
+import {UserLibraryResponse} from '../../../../../services/models/user-library-response';
+import {UserProfileControllerService} from '../../../../../services/services/user-profile-controller.service';
+import {GameResponse} from '../../../../../services/models/game-response';
 
 @Component({
   selector: 'app-new-lfg-post',
@@ -33,6 +36,7 @@ export class NewLfgPostComponent implements OnInit {
 
   optionResponse: LfgOptionsResponse = {};
 
+  selectedGameId: number | null = null;
   selectedLookingFor: string | null = null;
   selectedCommitment: string | null = null;
   selectedPlatform: string | null = null;
@@ -45,6 +49,7 @@ export class NewLfgPostComponent implements OnInit {
   selectedLanguages: string[] = [];
   selectedRegions: string[] = [];
   selectedDuration: string | null = null;
+  description = '';
 
   readonly maxGameTypes = 3;
   readonly maxLanguages = 3;
@@ -55,14 +60,18 @@ export class NewLfgPostComponent implements OnInit {
   showAllLanguages = false;
   showAllGameTypes = false;
 
+  searchedQuery = '';
+  userLibraryResponse: UserLibraryResponse[] = [];
+
   ngOnInit(): void {
-    this.loadLfgOptions()
+    this.loadLfgOptions();
   }
 
   constructor(
     private lfgService: LfgControllerService,
-    private router: Router,
+    private userService: UserProfileControllerService,
     private toastService: ToastService,
+    private router: Router
   ) {
   }
 
@@ -70,6 +79,11 @@ export class NewLfgPostComponent implements OnInit {
     this.isLoading = true;
     this.lfgService.getLfgOptions().subscribe({
       next: data => {
+        if (data.canCreate === false) {
+          this.toastService.error(`You already have ${data.maxActivePosts} active LFG posts.`);
+          this.router.navigate(['/gamehub/find-players'], {queryParams: {tab:'lfg'},replaceUrl: true});
+          return;
+        }
         console.log(data);
         this.optionResponse = data;
         this.selectedLookingFor = data.lookingFors?.[0]?.value ?? null;
@@ -81,6 +95,21 @@ export class NewLfgPostComponent implements OnInit {
         this.isLoading = false;
         console.log(err);
         this.toastService.error("Error loading Lfg options");
+      }
+    })
+  }
+
+  searchLibrary(query: string) {
+    this.searchedQuery = query;
+    this.getLibraryGames(this.searchedQuery);
+  }
+
+  getLibraryGames(query: string) {
+    this.userService.getLibraryGames({
+      query : query,
+    }).subscribe({
+      next: data => {
+        this.userLibraryResponse = data;
       }
     })
   }
@@ -264,7 +293,7 @@ export class NewLfgPostComponent implements OnInit {
     return total - this.visibleGameTypes.length;
   }
 
-  get selectedDurationDays(): number | undefined{
+  get selectedDurationDays(): number | undefined {
     return this.optionResponse.postDurations?.find(d => d.name === this.selectedDuration)?.days;
   }
 
@@ -283,23 +312,19 @@ export class NewLfgPostComponent implements OnInit {
     this.flexible = value;
   }
 
-  description = '';
-
   publishLfgPost(): void {
 
-    // TODO validate req
-
-    if (!this.selectedPlatform || !this.selectedLookingFor || !this.selectedVoiceChat || !this.selectedDuration) {
+    if (!this.isFormValid()) {
       return;
     }
 
     const request: LfgCreationRequest = {
-      gameId: 1,
+      gameId: this.selectedGameId!,
       platforms: [this.selectedPlatform] as LfgCreationRequest['platforms'],
       lookingFor: this.selectedLookingFor as LfgCreationRequest['lookingFor'],
       playStyle: this.selectedPlayStyle as LfgCreationRequest['playStyle'],
       commitment: this.selectedCommitment as LfgCreationRequest['commitment'],
-      gameTypes:( this.selectedGameTypes ?? [] ) as LfgCreationRequest['gameTypes'],
+      gameTypes: (this.selectedGameTypes ?? []) as LfgCreationRequest['gameTypes'],
       voiceChat: this.selectedVoiceChat as LfgCreationRequest['voiceChat'],
       personality: this.selectedPersonality as LfgCreationRequest['personality'],
       days: (this.flexible ? [] : this.selectedDays) as LfgCreationRequest['days'],
@@ -315,8 +340,53 @@ export class NewLfgPostComponent implements OnInit {
 
     this.lfgService.createLfg({body: request}).subscribe({
       next: (response) => {
-        console.log(response);
+        this.toastService.success('Successfully created post');
+        this.router.navigate(['/gamehub/find-players'], {queryParams: {tab:'lfg'},replaceUrl: true});
+      },
+      error: (error) => {
+        this.toastService.error(error?.error?.message ?? 'Could not create post');
+        console.error(error);
       }
     });
+  }
+
+  isFormValid(): boolean {
+    const description = this.description.trim();
+    const hasSchedule = this.flexible || (this.selectedDays.length > 0 && !!this.selectedTimeOfDay);
+
+    return !!this.selectedGameId
+      && !!this.selectedLookingFor
+      && !!this.selectedCommitment
+      && !!this.selectedPlayStyle
+      && !!this.selectedPlatform
+      && !!this.selectedVoiceChat
+      && !!this.selectedDuration
+      && this.selectedGameTypes.length > 0
+      && hasSchedule
+      && this.selectedLanguages.length > 0
+      && description.length >= 10
+      && description.length <= 300;
+  }
+
+  selectedGame: UserLibraryResponse | null = null;
+  selectGame(game: UserLibraryResponse) {
+    this.selectedGameId = game.gameId!;
+    this.selectedGame = game;
+  }
+
+  getGameImageCoverLibrary(game: UserLibraryResponse): string {
+    if (game.gameCoverImage) {
+      return 'data:image/jpeg;base64,' + game.gameCoverImage;
+    }
+    return 'https://images.pexels.com/photos/1054655/pexels-photo-1054655.jpeg';
+  }
+
+  removeSelectedGame() {
+    this.selectedGameId = null;
+    this.searchedQuery = '';
+  }
+
+  cancel() {
+    this.router.navigate(['/gamehub/find-players'], {queryParams: {tab:'lfg'},replaceUrl: true});
   }
 }

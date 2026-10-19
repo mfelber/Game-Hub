@@ -10,10 +10,13 @@ import { MicrophoneUsageResponse } from '../models/microphone-usage-response';
 import { PlatformResponse } from '../models/platform-response';
 import { RegionResponse } from '../models/region-response';
 export interface LfgOptionsResponse {
+  activePosts?: number;
+  canCreate?: boolean;
   commitments?: Array<LfgOptionResponse>;
   days?: Array<LfgOptionResponse>;
   gameTypes?: Array<LfgOptionResponse>;
   lookingFors?: Array<LfgIconOptionResponse>;
+  maxActivePosts?: number;
   personalities?: Array<LfgOptionResponse>;
   platforms?: Array<PlatformResponse>;
   playStyles?: Array<LfgIconOptionResponse>;

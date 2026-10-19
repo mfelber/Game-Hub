@@ -38,9 +38,19 @@ public class LfgController {
     return ResponseEntity.ok(lfgService.getAllActiveLfgs(connectedUser, page, size));
   }
 
+  @GetMapping("/my-lfg-posts")
+  public ResponseEntity<Integer> getMyLfgPosts(Authentication connectedUser) {
+    return ResponseEntity.ok(lfgService.getMyLfgPosts(connectedUser));
+  }
+
   @GetMapping("/lfg-options")
   public ResponseEntity<LfgOptionsResponse> getLfgOptions(Authentication connectedUser) {
     return ResponseEntity.ok(lfgService.getLfgOptions(connectedUser));
+  }
+
+  @GetMapping("/active-posts")
+  public ResponseEntity<Integer> getCountOfActivePosts(Authentication connectedUser) {
+    return ResponseEntity.ok(lfgService.getCountOfActivePosts(connectedUser));
   }
 
 }

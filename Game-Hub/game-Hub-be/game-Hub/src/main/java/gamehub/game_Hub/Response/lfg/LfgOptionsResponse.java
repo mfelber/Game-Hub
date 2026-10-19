@@ -24,7 +24,10 @@ public record LfgOptionsResponse(
     List<LfgOptionResponse> personalities,
     List<LanguagesResponse> preferredLanguages,
     List<RegionResponse> preferredRegions,
-    List<LfgPostDurationResponse> postDurations
+    List<LfgPostDurationResponse> postDurations,
+    boolean canCreate,
+    int activePosts,
+    int maxActivePosts
 ) {
 
 }

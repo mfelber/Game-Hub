@@ -120,7 +120,7 @@ export class FindPlayersComponent implements OnInit {
       this.extraCountries = this.selectedCountries.filter(country => !this.pinnedCountries.includes(country));
 
       const filterKey = [params['page'], params['countries'], params['region'], params['platforms'], params['voice'], params['onlyOnline']].join('|');
-      if (filterKey !== this.lastFiltersKey) {
+      if (this.activeTab === 'find-players' && filterKey !== this.lastFiltersKey) {
         this.lastFiltersKey = filterKey;
         this.loadAllUsers();
       }
@@ -149,7 +149,6 @@ export class FindPlayersComponent implements OnInit {
           this.userCommunityResponse = users;
           this.filteredUsers = [...(users.content || [])];
           this.isLoading = false;
-          console.log(this.userCommunityResponse);
 
         }, error: error => {
           console.log(error);
@@ -423,6 +422,7 @@ export class FindPlayersComponent implements OnInit {
       },
       queryParamsHandling: 'merge'
     });
+    document.getElementById('page-container')?.scrollTo({top: 0, behavior: 'smooth'});
   }
 
   changeFilter() {
@@ -481,7 +481,15 @@ export class FindPlayersComponent implements OnInit {
 
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: {tab: tab === 'lfg' ? 'lfg' : null},
+      queryParams: {
+        tab: tab === 'lfg' ? 'lfg' : null,
+        page: null,
+        countries: null,
+        region: null,
+        platforms: null,
+        voice: null,
+        onlyOnline: false,
+      },
       queryParamsHandling: 'merge'
     });
   }

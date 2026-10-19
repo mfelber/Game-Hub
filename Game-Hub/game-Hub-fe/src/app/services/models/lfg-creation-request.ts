@@ -8,7 +8,7 @@ export interface LfgCreationRequest {
   description: string;
   flexible?: boolean;
   gameId: number;
-  gameTypes?: Array<'SHOOTER' | 'CO_OP' | 'RPG' | 'SURVIVAL' | 'SANDBOX' | 'MOBA' | 'COZY' | 'STRATEGY' | 'HORROR' | 'RACING' | 'SPORTS' | 'SIMULATION' | 'ROGUELIKE' | 'STORY_DRIVEN' | 'TACTICAL' | 'MMO_RPG' | 'FIGHTING' | 'PARTY' | 'PUZZLE' | 'PLATFORMER'>;
+  gameTypes: Array<'SHOOTER' | 'CO_OP' | 'RPG' | 'SURVIVAL' | 'SANDBOX' | 'MOBA' | 'COZY' | 'STRATEGY' | 'HORROR' | 'RACING' | 'SPORTS' | 'SIMULATION' | 'ROGUELIKE' | 'STORY_DRIVEN' | 'TACTICAL' | 'MMO_RPG' | 'FIGHTING' | 'PARTY' | 'PUZZLE' | 'PLATFORMER'>;
   lfgPostDuration: 'ONE_DAY' | 'THREE_DAYS' | 'SEVEN_DAYS' | 'FOURTEEN_DAYS' | 'THIRTY_DAYS';
   lookingFor: 'FRIEND' | 'DUO' | 'SQUAD';
   openToRegion: Array<'EUROPE' | 'NA' | 'SA' | 'ASIA' | 'AFRICA' | 'ME' | 'OC' | 'CAB'>;

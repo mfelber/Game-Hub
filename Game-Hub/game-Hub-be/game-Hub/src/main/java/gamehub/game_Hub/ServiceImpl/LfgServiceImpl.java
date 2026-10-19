@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.time.format.TextStyle;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -55,6 +56,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LfgServiceImpl implements LfgService {
 
+  private static final int FREE_MAX_ACTIVE_POSTS = 3;
+  private static final int SUPPORTER_MAX_ACTIVE_POSTS = 5;
+
   private final UserRepository userRepository;
 
   private final GameRepository gameRepository;
@@ -66,8 +70,18 @@ public class LfgServiceImpl implements LfgService {
   @Override
   public Long createLfg(final Authentication connectedUser, final LfgCreationRequest request) {
 
-    // TODO check how many posts user has FREE account max 3 active SUPPORTER account 5 active
-    // check everithing that cant be null or empty
+    final boolean flexible = request.flexible();
+
+    if (!flexible) {
+      boolean hasDays = request.days() != null && !request.days().isEmpty();
+      boolean hasTimeOfDay = request.timeOfDay() != null;
+
+      if (!hasDays || !hasTimeOfDay) {
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+            "Choose days and time of day, or mark the post as flexible.");
+      }
+    }
+
     User authUser = (User) connectedUser.getPrincipal();
     User user = userRepository.findById(authUser.getId())
         .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + authUser.getId()));
@@ -75,15 +89,19 @@ public class LfgServiceImpl implements LfgService {
     Game game = gameRepository.findById(request.gameId())
         .orElseThrow(() -> new EntityNotFoundException("Game with id: " + request.gameId() + " was not found"));
 
+    int activePosts = countActivePosts(user);
+    int maxActivePosts = getMaxActivePosts(user);
+
+    if (activePosts >= maxActivePosts) {
+      throw new IllegalArgumentException("Free accounts can have only " + maxActivePosts + " active LFG posts.");
+    }
+
     LfgPostDuration duration = request.lfgPostDuration();
     if (duration.isSupporterOnly() && !user.isSupporter()) {
       throw new IllegalArgumentException("This duration is available for supporters only");
     }
 
     Instant now = Instant.now();
-
-    // check if flexible true days, times of day set to null
-    // and set flexible based on response
 
     LfgPost lfgPost = LfgPost.builder()
         .author(user)
@@ -95,30 +113,16 @@ public class LfgServiceImpl implements LfgService {
         .gameTypes(request.gameTypes())
         .voiceChat(request.voiceChat())
         .personality(request.personality())
-        .days(request.days())
-        .timeOfDay(request.timeOfDay())
+        .flexible(flexible)
+        .days(flexible ? new HashSet<>() : request.days())
+        .timeOfDay(flexible ? null : request.timeOfDay())
         .openToRegions(request.openToRegion())
         .languages(request.preferredLanguages())
-        .description(request.description())
+        .description(request.description().trim())
         .createdAt(now)
         .expiresAt(now.plus(duration.getDays(), ChronoUnit.DAYS))
         .lfgStatus(LfgStatus.ACTIVE)
         .build();
-
-    boolean hasDays = request.days() != null && !request.days().isEmpty();
-    boolean hasTimeOfDay = request.timeOfDay() != null;
-
-    if (!request.flexible() && (!hasDays || !hasTimeOfDay)) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-          "Choose days and time of day, or mark the post as flexible.");
-    }
-
-    lfgPost.setFlexible(false);
-
-    if (request.flexible()) {
-      lfgPost.setTimeOfDay(null);
-      lfgPost.setDays(Set.of());
-    }
 
     return lfgPostRepository.save(lfgPost).getId();
   }
@@ -129,6 +133,9 @@ public class LfgServiceImpl implements LfgService {
     User authUser = (User) connectedUser.getPrincipal();
     User user = userRepository.findById(authUser.getId())
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+    int activePosts = countActivePosts(user);
+    int maxActivePosts = getMaxActivePosts(user);
 
     return LfgOptionsResponse.builder()
         .lookingFors(lfgMapper.toIconOptions(LookingFor.class))
@@ -153,6 +160,9 @@ public class LfgServiceImpl implements LfgService {
         .preferredRegions(Arrays.stream(Region.values()).map(r -> new RegionResponse(r.name(), r.getRegionName())).toList())
         .postDurations(Arrays.stream(LfgPostDuration.values()).map(d -> new LfgPostDurationResponse(d.name(),
             d.getLabel(), d.getDays(), d.isSupporterOnly(), d.isSupporterOnly() && !user.isSupporter())).toList())
+        .canCreate(activePosts < maxActivePosts)
+        .activePosts(activePosts)
+        .maxActivePosts(maxActivePosts)
         .build();
   }
 
@@ -180,6 +190,33 @@ public class LfgServiceImpl implements LfgService {
         lfgPosts.isFirst(),
         lfgPosts.isLast()
     );
+  }
+
+  @Override
+  public Integer getCountOfActivePosts(Authentication connectedUser) {
+
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+    return countActivePosts(user);
+  }
+
+  @Override
+  public Integer getMyLfgPosts(final Authentication connectedUser) {
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+    return getMaxActivePosts(user);
+  }
+
+  private int getMaxActivePosts(final User user) {
+    return user.isSupporter() ? SUPPORTER_MAX_ACTIVE_POSTS : FREE_MAX_ACTIVE_POSTS;
+  }
+
+  private int countActivePosts(final User user) {
+    return Math.toIntExact(lfgPostRepository.countLfgPostByLfgStatusAndAuthor(LfgStatus.ACTIVE, user));
   }
 
 }

@@ -18,12 +18,66 @@
           <section class="flex flex-col gap-5 p-5 rounded-lg border border-[#222B3D] bg-[#151B27]">
             <h2 class="text-lg font-medium text-[#E8ECF4]">What are you looking for?</h2>
 
-            <div class="flex flex-col gap-2">
-              <label class="text-base text-[#E8ECF4]">Game *</label>
-              <app-search-bar
-                [inputClass]="'!bg-[#0F141D] border border-[#222B3D]'"
-              />
-            </div>
+            @if (selectedGameId === null) {
+              <div class="relative flex flex-col gap-2">
+                <label class="text-base text-[#E8ECF4]">Game *</label>
+                <app-search-bar
+                  [value]="searchedQuery"
+                  [placeholder]="'Search game'"
+                  (search)="searchLibrary($event)"
+                  [inputClass]="'!bg-[#0F141D] border border-[#222B3D]'"
+                />
+
+                @if (searchedQuery !== '' && userLibraryResponse.length) {
+                  <div class="absolute left-0 top-full z-50 mt-1 w-full max-h-40 overflow-y-auto
+                             rounded-lg border border-[#222B3D]
+                             bg-[#0F141D] p-1.5 shadow-xl shadow-black/30">
+                    @for (game of userLibraryResponse; track game.gameId) {
+                      <div
+                        class="flex min-h-[54px] w-full cursor-pointer items-center gap-2.5
+                               rounded-[7px] p-[7px] transition-colors duration-150 hover:bg-white/7"
+                        (click)="selectGame(game)">
+                        <img
+                          class="h-[54px] w-[42px] shrink-0 rounded-[5px] object-cover"
+                          [src]="getGameImageCoverLibrary(game)"
+                          [alt]="game.title">
+
+                        <div class="min-w-0">
+                          <h2 class="truncate text-base font-medium text-white/92">
+                            {{ game.title }}
+                          </h2>
+                        </div>
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+            } @else {
+              <div class="bg-[#0F141D] border border-[#222B3D] rounded-lg">
+                <div class="flex justify-between p-4 items-center">
+                  <div class="flex items-center gap-2">
+                      <img
+                        class="w-10 h-11 2xl:w-20 2xl:h-24 shrink-0 rounded-[5px] object-cover"
+                        [src]="getGameImageCoverLibrary(selectedGame!)"
+                        [alt]="selectedGame!.title">
+                      <span class="text-[#C5CCDC]">{{selectedGame?.title}}</span>
+                  </div>
+                  <button
+                    type="button"
+                    class="ml-auto flex h-7 w-7 items-center justify-center
+           rounded-full border border-red-500/25
+           bg-red-500/12 text-red-400
+           transition-colors hover:bg-red-500/20 hover:cursor-pointer"
+                    (click)="removeSelectedGame()"
+                  >
+                    <i class="fa-solid fa-xmark"></i>
+                  </button>
+                </div>
+
+              </div>
+
+            }
+
 
             <div class="flex flex-col gap-2">
               <label class="text-base text-[#E8ECF4]">Looking for *</label>
@@ -130,11 +184,10 @@
             <div class="flex flex-col gap-2">
               <div class="flex flex-col">
                 <div class="flex justify-between">
-                  <label class="text-base text-[#E8ECF4]">Game types <span
-                    class="text-sm text-[#8892a6]">(optional)</span></label>
+                  <label class="text-base text-[#E8ECF4]">Game types *</label>
                   <span class="text-[#8892a6] text-sm">{{ numberOfSelectedGameTypes }} / 3</span>
                 </div>
-                <span class="text-xs text-[#8892a6]">What kind of games do you enjoy? Pick up to 3.</span>
+                <span class="text-xs text-[#8892a6]">What kind of games do you enjoy? Pick 1 to 3.</span>
               </div>
               <div class="flex gap-2 flex-wrap">
                 @for (gameType of visibleGameTypes; track gameType.value) {
@@ -260,7 +313,7 @@
                   <label class="text-base text-[#E8ECF4]">Languages *</label>
                   <span class="text-[#8892a6] text-sm">{{ numberOfSelectedLanguages }} / 3</span>
                 </div>
-                <p class="text-xs text-[#8892a6]">Which languages do you speak or prefer to play in? Pick up to 3.</p>
+                <p class="text-xs text-[#8892a6]">Which languages do you speak or prefer to play in? Pick 1 to 3.</p>
               </div>
               <div class="flex flex-wrap gap-2">
                 @for (language of visibleLanguages; track language.name) {
@@ -296,7 +349,7 @@
                   <label class="text-base text-[#E8ECF4]">Preferred regions *</label>
                   <span class="text-[#8892a6] text-sm">{{ numberOfSelectedRegions }} / 3</span>
                 </div>
-                <p class="text-xs text-[#8892a6]">Pick up to 3, or leave on All to be open to everyone.</p>
+                <p class="text-xs text-[#8892a6]">Pick 1 to 3, or leave on All to be open to everyone.</p>
               </div>
               <div class="flex flex-wrap gap-2">
                 <button
@@ -307,7 +360,7 @@
                       cursor-pointer transition duration-200 disabled:cursor-default disabled:opacity-40 disabled:border-[#3a4560]"
                   [ngClass]="isAnyRegion ? 'border-[#4DA3FF] bg-[#16304D]'
                     : 'border-[#222B3D] text-[#C5CCDC] hover:border-[#3a4560] hover:bg-[#1b2332]'">
-                  <i class="fa-solid fa-globe mr-2"></i> All regions
+                  <i class="fa-solid fa-earth mr-2"></i> All regions
                 </button>
                 @for (region of optionResponse.preferredRegions; track region.enumName) {
                   <button
@@ -329,7 +382,7 @@
             <div class="flex flex-col">
               <div class="gap-3">
                 <div class="flex justify-between items-center">
-                  <label class="text-base text-[#E8ECF4]">Description</label>
+                  <label class="text-base text-[#E8ECF4]">Description<span class="text-sm text-[#8892a6]"> (min 10 characters)</span></label>
                   <span class="text-[#8892a6] text-sm">{{description.length}} / 300 </span>
                 </div>
 
@@ -379,8 +432,8 @@
               }
             </div>
             <div class="flex gap-2 max-sm:flex-col-reverse sm:shrink-0">
-              <button class="medium-button transparent justify-center border border-[#222B3D]">Cancel</button>
-              <button class="medium-button bg-[#4DA3FF] justify-center text-[#0B0F15] hover:bg-[#2F82DB]" (click)="publishLfgPost()">Publish post</button>
+              <button class="medium-button transparent justify-center border border-[#222B3D]" (click)="cancel()">Cancel</button>
+              <button class="medium-button bg-[#4DA3FF] justify-center text-[#0B0F15] hover:bg-[#2F82DB]" (click)="publishLfgPost()" [disabled]="!isFormValid()" >Publish</button>
             </div>
           </section>
 

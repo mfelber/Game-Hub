@@ -86,7 +86,7 @@
 
         <section class="find-players-filter" [class.filter-open]="filterOpen">
           <div class="filter-content">
-            <div class="bg-[#151B27] rounded-[18px] mb-2">
+            <div class="bg-[#151B27] border border-[#222B3D] rounded-[18px] mb-2">
               <div class="px-4 py-4 sm:px-6">
                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 mb-3">
                   <div>
@@ -232,87 +232,86 @@
         }
 
         <div class="users-content">
-          <section class="users-cards">
+          <section class="users-cards" [class.min-h-[80vh]]="isLoading">
 
             @if (isLoading) {
               <app-loading/>
-            }
+            } @else {
+              @for (user of filteredUsers; track user) {
+                <div class="user-card" (click)="navigateToUser(user.userId)">
 
-            @for (user of filteredUsers; track user) {
-              <div class="user-card" (click)="navigateToUser(user.userId)">
+                  <div class="find-player-top">
 
-                <div class="find-player-top">
+                    <div class="user-main">
+                      @if (user.userProfilePicture) {
+                        <img
+                          [src]="getProfilePicture(user)"
+                          class="small-img"/>
+                      }
+                      @if (!user.userProfilePicture) {
+                        <div class="small-img items-center flex justify-center text-[#101521] text-xl"
+                             [ngStyle]="{'background-color': user.profileColor}">
+                          {{ user.username!.slice(0, 2).toUpperCase() }}
+                        </div>
+                      }
 
-                  <div class="user-main">
-                    @if (user.userProfilePicture) {
-                      <img
-                        [src]="getProfilePicture(user)"
-                        class="small-img"/>
-                    }
-                    @if (!user.userProfilePicture) {
-                      <div class="small-img items-center flex justify-center text-[#101521] text-xl"
-                           [ngStyle]="{'background-color': user.profileColor}">
-                        {{ user.username!.slice(0, 2).toUpperCase() }}
-                      </div>
-                    }
-
-                    <div class="user-info">
-                      <div class="username">
-                        <h3>{{ user.username }}</h3>
-                        <img class="flag" [src]="user.country?.iconPath" alt="">
-                      </div>
-                      <span [ngClass]="{
+                      <div class="user-info">
+                        <div class="username">
+                          <h3>{{ user.username }}</h3>
+                          <img class="flag" [src]="user.country?.iconPath" alt="">
+                        </div>
+                        <span [ngClass]="{
           'online': user.status === 'Online' || user.status === 'Playing',
           'offline': user.status === 'Offline',
           'away': user.status === 'Away'
           }">• {{
-                          user.status === 'Playing' ? 'In Game ' + user.currentlyPlaying?.title
-                            : user.status
-                        }} </span>
+                            user.status === 'Playing' ? 'In Game ' + user.currentlyPlaying?.title
+                              : user.status
+                          }} </span>
+                      </div>
+                    </div>
+
+                    <div class="user-actions">
+                      @if (user.isFriend) {
+                        <button (click)="$event.stopPropagation()"
+                                class="icon-button is-friend">
+                          <i class="fa-solid fa-user-group"></i>
+                        </button>
+                      }
+                      @if (user.friendRequestReceived) {
+                        <button
+                          (click)=" acceptFriendRequest(user.userId!) ; $event.stopPropagation()"
+                          class="icon-button accept">
+                          <i class="fa-solid fa-user-check"></i></button>
+                      }
+                      @if (user.friendRequestReceived) {
+                        <button
+                          (click)=" rejectFriendRequest(user.userId!) ; $event.stopPropagation()"
+                          class="icon-button remove">
+                          <i class="fa-solid fa-user-xmark"></i></button>
+                      }
+                      @if (user.friendRequestSent === false && user.isFriend === false && user.friendRequestReceived === false) {
+                        <button
+                          (click)="sendFriendRequest(user.userId!) ; $event.stopPropagation()"
+                          class="icon-button accept">
+                          <i class="fa-solid fa-user-plus"></i>
+                        </button>
+                      }
+                      @if (user.friendRequestSent) {
+                        <button
+                          (click)="cancelFriendRequest(user.userId!) ; $event.stopPropagation()"
+                          class="icon-button cancel-friend">
+                          <i class="fa-solid fa-user-clock"></i>
+                        </button>
+                      }
+                      <button (click)="openReportUserModal(user) ; $event.stopPropagation()"
+                              class="icon-button report">
+                        <i class="fa-solid fa-exclamation"></i>
+                      </button>
                     </div>
                   </div>
 
-                  <div class="user-actions">
-                    @if (user.isFriend) {
-                      <button (click)="$event.stopPropagation()"
-                              class="icon-button is-friend">
-                        <i class="fa-solid fa-user-group"></i>
-                      </button>
-                    }
-                    @if (user.friendRequestReceived) {
-                      <button
-                        (click)=" acceptFriendRequest(user.userId!) ; $event.stopPropagation()"
-                        class="icon-button accept">
-                        <i class="fa-solid fa-user-check"></i></button>
-                    }
-                    @if (user.friendRequestReceived) {
-                      <button
-                        (click)=" rejectFriendRequest(user.userId!) ; $event.stopPropagation()"
-                        class="icon-button remove">
-                        <i class="fa-solid fa-user-xmark"></i></button>
-                    }
-                    @if (user.friendRequestSent === false && user.isFriend === false && user.friendRequestReceived === false) {
-                      <button
-                        (click)="sendFriendRequest(user.userId!) ; $event.stopPropagation()"
-                        class="icon-button accept">
-                        <i class="fa-solid fa-user-plus"></i>
-                      </button>
-                    }
-                    @if (user.friendRequestSent) {
-                      <button
-                        (click)="cancelFriendRequest(user.userId!) ; $event.stopPropagation()"
-                        class="icon-button cancel-friend">
-                        <i class="fa-solid fa-user-clock"></i>
-                      </button>
-                    }
-                    <button (click)="openReportUserModal(user) ; $event.stopPropagation()"
-                            class="icon-button report">
-                      <i class="fa-solid fa-exclamation"></i>
-                    </button>
-                  </div>
-                </div>
-
-                <div class="user-tags">
+                  <div class="user-tags">
             <span class="user-tag tag-button-selected" [ngClass]="{
             'tag-pc': user.mainPlatform?.enumName === 'PC',
             'tag-ps': user.mainPlatform?.enumName === 'PS',
@@ -321,13 +320,13 @@
             'tag-mobile': user.mainPlatform?.enumName === 'MOBILE',
             }"><i [class]="user.mainPlatform?.icon" class="mr-1"></i>{{ user.mainPlatform?.name }}</span>
 
-                  <span class="user-tag mic-tag" [ngClass]="{
+                    <span class="user-tag mic-tag" [ngClass]="{
             'mic-yes': user.microphoneUsage?.enumName === 'YES',
             'mic-optional': user.microphoneUsage?.enumName === 'OPTIONAL',
             'mic-no': user.microphoneUsage?.enumName === 'NO'
             }"><i [class]="user.microphoneUsage?.icon"></i> {{ user.microphoneUsage?.name }}</span>
 
-                  <span class="user-tag region-tag tag-button-selected" [ngClass]="{
+                    <span class="user-tag region-tag tag-button-selected" [ngClass]="{
             'region-europe': user.region?.enumName === 'EUROPE',
             'region-na': user.region?.enumName === 'NA',
             'region-sa': user.region?.enumName === 'SA',
@@ -338,29 +337,31 @@
             'region-cab': user.region?.enumName === 'CAB',
             }"> {{ user.region?.name }}
             </span>
-                </div>
-
-                <div class="user-divider"></div>
-
-                <div class="flex justify-between">
-                  <div class="user-meta">
-                    <span> <i class="fa-solid fa-user-group friends-count"></i> {{ user.friendsCount }}</span>
-                    <span class="max-sm:hidden"> <i
-                      class="fa-solid fa-calendar joined-date"></i> {{ user.joinedDate | date: 'd MMMM y' }}</span>
-                    <span class="sm:hidden"> <i
-                      class="fa-solid fa-calendar joined-date"></i> {{ user.joinedDate | date: 'MMM y' }}</span>
                   </div>
-                  <div class="flex gap-2">
-                    <span class="account-tag creator"> <i class="fa-regular fa-gem"></i> Creator</span>
-                    @if (user.supporter) {
-                      <span class="account-tag supporter"> <i class="fa-regular fa-heart text-sm"></i> Supporter</span>
-                    }
+
+                  <div class="user-divider"></div>
+
+                  <div class="flex justify-between">
+                    <div class="user-meta">
+                      <span> <i class="fa-solid fa-user-group friends-count"></i> {{ user.friendsCount }}</span>
+                      <span class="max-sm:hidden"> <i
+                        class="fa-solid fa-calendar joined-date"></i> {{ user.joinedDate | date: 'd MMMM y' }}</span>
+                      <span class="sm:hidden"> <i
+                        class="fa-solid fa-calendar joined-date"></i> {{ user.joinedDate | date: 'MMM y' }}</span>
+                    </div>
+                    <div class="flex gap-2">
+                      <span class="account-tag creator"> <i class="fa-regular fa-gem"></i> Creator</span>
+                      @if (user.supporter) {
+                        <span class="account-tag supporter"> <i class="fa-regular fa-heart text-sm"></i> Supporter</span>
+                      }
+                    </div>
                   </div>
+
+
                 </div>
-
-
-              </div>
+              }
             }
+
           </section>
         </div>
         <section class="pagination-wrapper">
@@ -376,7 +377,7 @@
       </div>
 
       <div hlmTabsContent="lfg" class="flex-1 flex-col [&:not([hidden])]:flex">
-        <app-lfg-posts></app-lfg-posts>
+        <app-lfg-posts class="flex flex-1 flex-col"></app-lfg-posts>
       </div>
     </hlm-tabs>
 

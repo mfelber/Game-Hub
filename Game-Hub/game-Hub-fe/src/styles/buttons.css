@@ -38,7 +38,7 @@
   }
 
   .icon-button-lg-round {
-    @apply w-11.5 h-11.5 rounded-lg flex items-center justify-center text-white text-[15px]
+    @apply w-12.5 h-12.5 rounded-lg flex items-center justify-center text-white text-[15px]
     transition-colors max-sm:text-xs max-sm:rounded-lg cursor-pointer duration-200 ease-in-out;
   }
 

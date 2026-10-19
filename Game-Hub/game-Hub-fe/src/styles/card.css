@@ -88,7 +88,7 @@
   }
 
   .user-card {
-    @apply bg-[#151B27] p-4 rounded-[18px]
+    @apply bg-[#151B27] border border-[#222B3D] p-4 rounded-[18px]
     transition duration-250 hover:-translate-y-1 hover:cursor-pointer;
 
     & .flag {
@@ -141,7 +141,7 @@
   }
 
   .smaller-img {
-    @apply w-13.5 h-13.5 rounded-[5px] object-cover max-sm:w-14 max-sm:h-14;
+    @apply w-13.5 h-13.5 shrink-0 rounded-[5px] object-cover max-sm:w-14 max-sm:h-14;
   }
 
   .find-player-top {

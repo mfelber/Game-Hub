@@ -98,7 +98,6 @@ public class LfgMapper {
         selected.contains(day)
     )).toList();
   }
-  // time of day and days can be null, gametypes could be null, languages, description, personality
 
   public LfgResponse toLfgResponse(LfgPost post) {
 

@@ -9,6 +9,10 @@ import {PageResponseLfgResponse} from '../../../../../services/models/page-respo
 import {PaginationComponent} from '../../../components/pagination/pagination.component';
 import {UserCommunityResponse} from '../../../../../services/models/user-community-response';
 import {TimeAgoPipe} from '../../../../../services/TimeAgoPipe/time-ago-pipe';
+import {HlmTooltip} from '@spartan/tooltip';
+import {ToastService} from '../../../../../services/ToastService/toast.service';
+import {EmptyStateComponent} from '../../../components/empty-state/empty-state.component';
+import {LoadingComponent} from '../../../components/loading/loading.component';
 
 @Component({
   selector: 'app-lfg-posts',
@@ -22,7 +26,10 @@ import {TimeAgoPipe} from '../../../../../services/TimeAgoPipe/time-ago-pipe';
     PaginationComponent,
     NgStyle,
     DatePipe,
-    TimeAgoPipe
+    TimeAgoPipe,
+    HlmTooltip,
+    EmptyStateComponent,
+    LoadingComponent
   ],
   templateUrl: './lfg-posts.component.html',
   styleUrl: './lfg-posts.component.scss',
@@ -30,24 +37,36 @@ import {TimeAgoPipe} from '../../../../../services/TimeAgoPipe/time-ago-pipe';
 export class LfgPostsComponent implements OnInit {
 
   public page = 0;
-  public size = 10;
+  public size = 12;
 
   allLfgResponse: PageResponseLfgResponse = {};
 
   activeTab = 'All'
   openLfgFilter = false;
   searchQuery: string = '';
+  countOfActivePosts: number = 0;
+  maxActivePosts: number = 0;
+  filteredPosts: LfgResponse[] = []
+
+  isLoading = false;
 
 
   constructor(
     private lfgService: LfgControllerService,
     private router: Router,
     private route: ActivatedRoute,
+    private toastService: ToastService,
   ) {
   }
 
   ngOnInit() {
-    this.getAllLfgPosts();
+    this.route.queryParams.subscribe((params) => {
+      this.page = Number(params['page'] ?? 1) - 1;
+      this.getAllLfgPosts();
+    })
+
+    this.getCountOfActivePosts();
+    this.getMyLfgPosts();
   }
 
   resetFilters() {
@@ -69,12 +88,37 @@ export class LfgPostsComponent implements OnInit {
   }
 
   getAllLfgPosts() {
+    this.isLoading = true;
     this.lfgService.getAllActiveLfgs({
       page: this.page,
       size: this.size,
     }).subscribe({
       next: response => {
         this.allLfgResponse = response;
+        this.filteredPosts = [...(response.content || [])];
+        console.log(response);
+        this.isLoading = false;
+      },
+      error: error => {
+        this.toastService.error('Error with loading LFG posts')
+        this.isLoading = false;
+      }
+    })
+  }
+
+  getCountOfActivePosts() {
+    this.lfgService.getCountOfActivePosts().subscribe({
+      next: response => {
+        this.countOfActivePosts = response;
+        console.log(this.countOfActivePosts);
+      }
+    })
+  }
+
+  getMyLfgPosts() {
+    this.lfgService.getMyLfgPosts().subscribe({
+      next: response => {
+        this.maxActivePosts = response;
         console.log(response);
       }
     })
@@ -91,10 +135,15 @@ export class LfgPostsComponent implements OnInit {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
-        page: page + 1
+        page: page + 1,
       },
       queryParamsHandling: 'merge'
     });
+    this.scrollToTop();
+  }
+
+  private scrollToTop() {
+    document.getElementById('page-container')?.scrollTo({top: 0});
   }
 
   getProfilePicture(user: UserCommunityResponse) {
