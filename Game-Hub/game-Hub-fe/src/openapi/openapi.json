@@ -1031,6 +1031,37 @@
         }
       }
     },
+    "/lfg/create": {
+      "post": {
+        "tags": [
+          "lfg-controller"
+        ],
+        "operationId": "createLfg",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LfgCreationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/find-players/send/friend-request/{userId}": {
       "post": {
         "tags": [
@@ -2268,6 +2299,110 @@
         }
       }
     },
+    "/lfg/my-lfg-posts": {
+      "get": {
+        "tags": [
+          "lfg-controller"
+        ],
+        "operationId": "getMyLfgPosts",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/lfg/lfg-posts": {
+      "get": {
+        "tags": [
+          "lfg-controller"
+        ],
+        "operationId": "getAllActiveLfgs",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseLfgResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/lfg/lfg-options": {
+      "get": {
+        "tags": [
+          "lfg-controller"
+        ],
+        "operationId": "getLfgOptions",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LfgOptionsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/lfg/active-posts": {
+      "get": {
+        "tags": [
+          "lfg-controller"
+        ],
+        "operationId": "getCountOfActivePosts",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/find-players/voice-chat-options": {
       "get": {
         "tags": [
@@ -2386,9 +2521,9 @@
                 "type": "string",
                 "enum": [
                   "PC",
-                  "NINTENDO",
-                  "XBOX",
                   "PS",
+                  "XBOX",
+                  "NINTENDO",
                   "MOBILE"
                 ]
               }
@@ -3495,6 +3630,207 @@
           }
         }
       },
+      "LfgCreationRequest": {
+        "required": [
+          "commitment",
+          "days",
+          "description",
+          "gameId",
+          "gameTypes",
+          "lfgPostDuration",
+          "lookingFor",
+          "openToRegion",
+          "platforms",
+          "playStyle",
+          "preferredLanguages",
+          "voiceChat"
+        ],
+        "type": "object",
+        "properties": {
+          "gameId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "platforms": {
+            "maxItems": 1,
+            "minItems": 0,
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "PC",
+                "PS",
+                "XBOX",
+                "NINTENDO",
+                "MOBILE"
+              ]
+            }
+          },
+          "lookingFor": {
+            "type": "string",
+            "enum": [
+              "FRIEND",
+              "DUO",
+              "SQUAD"
+            ]
+          },
+          "playStyle": {
+            "type": "string",
+            "enum": [
+              "CASUAL",
+              "CHILL",
+              "COMPETITIVE",
+              "HARDCORE",
+              "SOCIAL",
+              "COMPLETIONIST"
+            ]
+          },
+          "commitment": {
+            "type": "string",
+            "enum": [
+              "LONG_TERM",
+              "SHORT_TERM",
+              "ONE_SESSION"
+            ]
+          },
+          "gameTypes": {
+            "maxItems": 3,
+            "minItems": 0,
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "SHOOTER",
+                "CO_OP",
+                "RPG",
+                "SURVIVAL",
+                "SANDBOX",
+                "MOBA",
+                "COZY",
+                "STRATEGY",
+                "HORROR",
+                "RACING",
+                "SPORTS",
+                "SIMULATION",
+                "ROGUELIKE",
+                "STORY_DRIVEN",
+                "TACTICAL",
+                "MMO_RPG",
+                "FIGHTING",
+                "PARTY",
+                "PUZZLE",
+                "PLATFORMER"
+              ]
+            }
+          },
+          "voiceChat": {
+            "type": "string",
+            "enum": [
+              "YES",
+              "OPTIONAL",
+              "NO"
+            ]
+          },
+          "personality": {
+            "type": "string",
+            "enum": [
+              "INTROVERT",
+              "AMBIVERT",
+              "EXTROVERT"
+            ]
+          },
+          "days": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ]
+            }
+          },
+          "timeOfDay": {
+            "type": "string",
+            "enum": [
+              "MORNING",
+              "AFTERNOON",
+              "EVENING",
+              "NIGHT"
+            ]
+          },
+          "openToRegion": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "EUROPE",
+                "NA",
+                "SA",
+                "ASIA",
+                "AFRICA",
+                "ME",
+                "OC",
+                "CAB"
+              ]
+            }
+          },
+          "preferredLanguages": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "EN",
+                "SK",
+                "CS",
+                "ES",
+                "DE",
+                "PT",
+                "RU",
+                "FR",
+                "ZH",
+                "JA",
+                "KO",
+                "TR",
+                "PL",
+                "IT",
+                "AR",
+                "UK",
+                "NL",
+                "SV",
+                "HU"
+              ]
+            }
+          },
+          "flexible": {
+            "type": "boolean"
+          },
+          "description": {
+            "maxLength": 300,
+            "minLength": 10,
+            "type": "string"
+          },
+          "lfgPostDuration": {
+            "type": "string",
+            "enum": [
+              "ONE_DAY",
+              "THREE_DAYS",
+              "SEVEN_DAYS",
+              "FOURTEEN_DAYS",
+              "THIRTY_DAYS"
+            ]
+          }
+        }
+      },
       "UserCartRequest": {
         "required": [
           "gameId"
@@ -3816,9 +4152,9 @@
             "type": "string",
             "enum": [
               "PC",
-              "NINTENDO",
-              "XBOX",
               "PS",
+              "XBOX",
+              "NINTENDO",
               "MOBILE"
             ]
           },
@@ -4835,6 +5171,169 @@
           }
         }
       },
+      "DayAvailabilityResponse": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "shortName": {
+            "type": "string"
+          },
+          "selected": {
+            "type": "boolean"
+          }
+        }
+      },
+      "LanguagesResponse": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          }
+        }
+      },
+      "LfgIconOptionResponse": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "icon": {
+            "type": "string"
+          }
+        }
+      },
+      "LfgOptionResponse": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "LfgResponse": {
+        "type": "object",
+        "properties": {
+          "lfgId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "username": {
+            "type": "string"
+          },
+          "userRegion": {
+            "$ref": "#/components/schemas/RegionResponse"
+          },
+          "country": {
+            "$ref": "#/components/schemas/CountryResponse"
+          },
+          "userProfilePicture": {
+            "type": "string",
+            "format": "byte"
+          },
+          "profileColor": {
+            "type": "string"
+          },
+          "onlineStatus": {
+            "type": "string",
+            "enum": [
+              "Online",
+              "Playing",
+              "Offline",
+              "Away"
+            ]
+          },
+          "gameName": {
+            "type": "string"
+          },
+          "lookingFor": {
+            "$ref": "#/components/schemas/LfgIconOptionResponse"
+          },
+          "commitment": {
+            "$ref": "#/components/schemas/LfgOptionResponse"
+          },
+          "lfgDescription": {
+            "type": "string"
+          },
+          "gameTypes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LfgOptionResponse"
+            }
+          },
+          "platform": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlatformResponse"
+            }
+          },
+          "microphoneUsage": {
+            "$ref": "#/components/schemas/MicrophoneUsageResponse"
+          },
+          "languages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LanguagesResponse"
+            }
+          },
+          "playStyle": {
+            "$ref": "#/components/schemas/LfgIconOptionResponse"
+          },
+          "personality": {
+            "$ref": "#/components/schemas/LfgOptionResponse"
+          },
+          "openToRegions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RegionResponse"
+            }
+          },
+          "days": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DayAvailabilityResponse"
+            }
+          },
+          "timeOfDay": {
+            "$ref": "#/components/schemas/LfgIconOptionResponse"
+          },
+          "flexible": {
+            "type": "boolean"
+          },
+          "lfgStatus": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "CLOSED",
+              "EXPIRED"
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
       "MicrophoneUsageResponse": {
         "type": "object",
         "properties": {
@@ -4849,24 +5348,13 @@
           }
         }
       },
-      "RegionResponse": {
-        "type": "object",
-        "properties": {
-          "enumName": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          }
-        }
-      },
-      "PageResponseUserCommunityResponse": {
+      "PageResponseLfgResponse": {
         "type": "object",
         "properties": {
           "content": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/UserCommunityResponse"
+              "$ref": "#/components/schemas/LfgResponse"
             }
           },
           "number": {
@@ -4904,6 +5392,159 @@
           },
           "icon": {
             "type": "string"
+          }
+        }
+      },
+      "RegionResponse": {
+        "type": "object",
+        "properties": {
+          "enumName": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "LfgOptionsResponse": {
+        "type": "object",
+        "properties": {
+          "lookingFors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LfgIconOptionResponse"
+            }
+          },
+          "commitments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LfgOptionResponse"
+            }
+          },
+          "platforms": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlatformResponse"
+            }
+          },
+          "voiceChats": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MicrophoneUsageResponse"
+            }
+          },
+          "playStyles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LfgIconOptionResponse"
+            }
+          },
+          "gameTypes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LfgOptionResponse"
+            }
+          },
+          "days": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LfgOptionResponse"
+            }
+          },
+          "timesOfDay": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LfgIconOptionResponse"
+            }
+          },
+          "personalities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LfgOptionResponse"
+            }
+          },
+          "preferredLanguages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LanguagesResponse"
+            }
+          },
+          "preferredRegions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RegionResponse"
+            }
+          },
+          "postDurations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LfgPostDurationResponse"
+            }
+          },
+          "canCreate": {
+            "type": "boolean"
+          },
+          "activePosts": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "maxActivePosts": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "LfgPostDurationResponse": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "days": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "supporterOnly": {
+            "type": "boolean"
+          },
+          "locked": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PageResponseUserCommunityResponse": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserCommunityResponse"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
           }
         }
       },
@@ -4971,6 +5612,9 @@
           },
           "region": {
             "$ref": "#/components/schemas/RegionResponse"
+          },
+          "supporter": {
+            "type": "boolean"
           }
         }
       },

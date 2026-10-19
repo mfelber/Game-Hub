@@ -63,6 +63,7 @@ public class CommunityMapper {
         .mainPlatform(new PlatformResponse(foundUser.getMainPlatform().name(),foundUser.getMainPlatform().getPlatformName(), foundUser.getMainPlatform().getPlatformIcon()))
         .microphoneUsage(new MicrophoneUsageResponse(foundUser.getMicrophoneUsage().name(),foundUser.getMicrophoneUsage().getMicrophoneUsageName(), foundUser.getMicrophoneUsage().getMicrophoneUsageIcon()))
         .region(new RegionResponse(foundUser.getRegion().name(),foundUser.getRegion().getRegionName()))
+        .isSupporter(foundUser.isSupporter())
         .build();
   }
 

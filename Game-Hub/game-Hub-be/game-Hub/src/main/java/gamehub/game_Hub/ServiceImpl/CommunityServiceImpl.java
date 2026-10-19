@@ -236,7 +236,6 @@ public class CommunityServiceImpl implements CommunityService {
   @Override
   public List<PlatformResponse> getAllGamingPlatforms() {
     return Arrays.stream(Platform.values())
-        .sorted(Comparator.comparing(Platform::getPlatformName))
         .map(platform -> new PlatformResponse(platform.name(),
             platform.getPlatformName(), platform.getPlatformIcon()))
         .toList();

@@ -8,6 +8,7 @@ export { StoreControllerService } from './services/store-controller.service';
 export { ReportControllerService } from './services/report-controller.service';
 export { NewsControllerService } from './services/news-controller.service';
 export { LibraryControllerService } from './services/library-controller.service';
+export { LfgControllerService } from './services/lfg-controller.service';
 export { CommunityControllerService } from './services/community-controller.service';
 export { CartControllerService } from './services/cart-controller.service';
 export { AuthenticationService } from './services/authentication.service';

@@ -20,7 +20,8 @@ import {PlatformResponse} from '../../../../services/models/platform-response';
 import {ToastService} from '../../../../services/ToastService/toast.service';
 import {CountryResponse} from '../../../../services/models/country-response';
 import {MicrophoneUsageResponse} from '../../../../services/models/microphone-usage-response';
-import {HlmTabs, HlmTabsList, HlmTabsTrigger} from '@spartan/tabs';
+import {HlmTabs, HlmTabsContent, HlmTabsList, HlmTabsTrigger} from '@spartan/tabs';
+import {LfgPostsComponent} from '../community/lfg-posts/lfg-posts.component';
 
 @Component({
   selector: 'app-find-players',
@@ -35,7 +36,12 @@ import {HlmTabs, HlmTabsList, HlmTabsTrigger} from '@spartan/tabs';
     UserActionsComponent,
     PaginationComponent,
     LoadingComponent,
-    DatePipe
+    DatePipe,
+    HlmTabs,
+    HlmTabsList,
+    HlmTabsTrigger,
+    HlmTabsContent,
+    LfgPostsComponent
   ],
   templateUrl: './find-players.component.html',
   styleUrl: './find-players.component.scss',
@@ -64,6 +70,7 @@ export class FindPlayersComponent implements OnInit {
   allCommunityGuidelines: { id: number; reason: string }[] = [];
   allCountries: string[] = [];
 
+  activeTab = 'find-players';
 
   userCommunityResponse: PageResponseUserCommunityResponse = {};
   filteredUsers: UserCommunityResponse[] = [];
@@ -84,6 +91,8 @@ export class FindPlayersComponent implements OnInit {
   countryOpen = false;
   countrySearchQuery = '';
 
+  private lastFiltersKey = '';
+
   constructor(
     private communityService: CommunityControllerService,
     private reportService: ReportControllerService,
@@ -98,6 +107,7 @@ export class FindPlayersComponent implements OnInit {
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.page = Number(params['page'] ?? 1) - 1;
+      this.activeTab = params['tab'] === 'lfg' ? 'lfg' : 'find-players';
 
       this.selectedCountries = params['countries']?.split(',') ?? [];
       this.selectedRegions = this.selectedCountries.length > 0 ? [] : params['region']?.split(',') ?? [];
@@ -109,7 +119,11 @@ export class FindPlayersComponent implements OnInit {
 
       this.extraCountries = this.selectedCountries.filter(country => !this.pinnedCountries.includes(country));
 
-      this.loadAllUsers();
+      const filterKey = [params['page'], params['countries'], params['region'], params['platforms'], params['voice'], params['onlyOnline']].join('|');
+      if (this.activeTab === 'find-players' && filterKey !== this.lastFiltersKey) {
+        this.lastFiltersKey = filterKey;
+        this.loadAllUsers();
+      }
     });
 
     this.getCountries();
@@ -135,11 +149,11 @@ export class FindPlayersComponent implements OnInit {
           this.userCommunityResponse = users;
           this.filteredUsers = [...(users.content || [])];
           this.isLoading = false;
-          console.log(this.userCommunityResponse);
 
         }, error: error => {
           console.log(error);
-          this.isLoading = true;
+          this.toastService.error("Error with loading players");
+          this.isLoading = false;
         }
       }
     )
@@ -408,6 +422,7 @@ export class FindPlayersComponent implements OnInit {
       },
       queryParamsHandling: 'merge'
     });
+    document.getElementById('page-container')?.scrollTo({top: 0, behavior: 'smooth'});
   }
 
   changeFilter() {
@@ -419,7 +434,7 @@ export class FindPlayersComponent implements OnInit {
         region: this.selectedRegions.join(',') || null,
         platforms: this.selectedPlatforms.join(',') || null,
         voice: this.selectedVoiceChatOptions.join(',') || null,
-        onlyOnline: this.filters.onlyOnline || null,
+        onlyOnline: this.filters.onlyOnline || false,
       }
     })
   }
@@ -457,5 +472,25 @@ export class FindPlayersComponent implements OnInit {
   removeFilter(filter: { label: string; remove: () => void }) {
     filter.remove();
     this.changeFilter();
+  }
+
+  onTabChange(tab: string | undefined) {
+    if (!tab || tab === this.activeTab) {
+      return;
+    }
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        tab: tab === 'lfg' ? 'lfg' : null,
+        page: null,
+        countries: null,
+        region: null,
+        platforms: null,
+        voice: null,
+        onlyOnline: false,
+      },
+      queryParamsHandling: 'merge'
+    });
   }
 }
