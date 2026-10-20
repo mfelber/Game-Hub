@@ -2,7 +2,6 @@ package gamehub.game_Hub.Service;
 
 import static gamehub.game_Hub.enums.AccountType.ADULT;
 import static gamehub.game_Hub.enums.AccountType.CHILD;
-import static java.util.stream.Collectors.toList;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -23,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import gamehub.game_Hub.Email.SendEmailUserService;
 import gamehub.game_Hub.Module.CardColor;
 import gamehub.game_Hub.Module.Level;
-import gamehub.game_Hub.Module.userSettings.Access;
+import gamehub.game_Hub.enums.user.Access;
 import gamehub.game_Hub.Module.userSettings.CommunitySettings;
 import gamehub.game_Hub.Module.userSettings.PrivacySettings;
 import gamehub.game_Hub.Module.userSettings.StoreSettings;

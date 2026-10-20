@@ -1,4 +1,4 @@
-package gamehub.game_Hub.Module.userSettings;
+package gamehub.game_Hub.enums.user;
 
 import lombok.Getter;
 

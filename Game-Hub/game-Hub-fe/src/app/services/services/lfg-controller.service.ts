@@ -19,15 +19,43 @@ import { getCountOfActivePosts } from '../fn/lfg-controller/get-count-of-active-
 import { GetCountOfActivePosts$Params } from '../fn/lfg-controller/get-count-of-active-posts';
 import { getLfgOptions } from '../fn/lfg-controller/get-lfg-options';
 import { GetLfgOptions$Params } from '../fn/lfg-controller/get-lfg-options';
-import { getMyLfgPosts } from '../fn/lfg-controller/get-my-lfg-posts';
-import { GetMyLfgPosts$Params } from '../fn/lfg-controller/get-my-lfg-posts';
+import { getMyLfgPostsLimit } from '../fn/lfg-controller/get-my-lfg-posts-limit';
+import { GetMyLfgPostsLimit$Params } from '../fn/lfg-controller/get-my-lfg-posts-limit';
 import { LfgOptionsResponse } from '../models/lfg-options-response';
 import { PageResponseLfgResponse } from '../models/page-response-lfg-response';
+import { SavedLfgPostId } from '../models/saved-lfg-post-id';
+import { saveLfgPost } from '../fn/lfg-controller/save-lfg-post';
+import { SaveLfgPost$Params } from '../fn/lfg-controller/save-lfg-post';
 
 @Injectable({ providedIn: 'root' })
 export class LfgControllerService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
+  }
+
+  /** Path part for operation `saveLfgPost()` */
+  static readonly SaveLfgPostPath = '/lfg/save-lfg-post/{lfgPostId}';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `saveLfgPost()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  saveLfgPost$Response(params: SaveLfgPost$Params, context?: HttpContext): Observable<StrictHttpResponse<SavedLfgPostId>> {
+    return saveLfgPost(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `saveLfgPost$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  saveLfgPost(params: SaveLfgPost$Params, context?: HttpContext): Observable<SavedLfgPostId> {
+    return this.saveLfgPost$Response(params, context).pipe(
+      map((r: StrictHttpResponse<SavedLfgPostId>): SavedLfgPostId => r.body)
+    );
   }
 
   /** Path part for operation `createLfg()` */
@@ -55,27 +83,52 @@ export class LfgControllerService extends BaseService {
     );
   }
 
-  /** Path part for operation `getMyLfgPosts()` */
-  static readonly GetMyLfgPostsPath = '/lfg/my-lfg-posts';
+  /** Path part for operation `getMyLfgPostsLimit()` */
+  static readonly GetMyLfgPostsLimitPath = '/lfg/my-lfg-posts-limit';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getMyLfgPosts()` instead.
+   * To access only the response body, use `getMyLfgPostsLimit()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getMyLfgPosts$Response(params?: GetMyLfgPosts$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
-    return getMyLfgPosts(this.http, this.rootUrl, params, context);
+  getMyLfgPostsLimit$Response(params?: GetMyLfgPostsLimit$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return getMyLfgPostsLimit(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getMyLfgPosts$Response()` instead.
+   * To access the full response (for headers, for example), `getMyLfgPostsLimit$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  getMyLfgPosts(params?: GetMyLfgPosts$Params, context?: HttpContext): Observable<number> {
-    return this.getMyLfgPosts$Response(params, context).pipe(
+  getMyLfgPostsLimit(params?: GetMyLfgPostsLimit$Params, context?: HttpContext): Observable<number> {
+    return this.getMyLfgPostsLimit$Response(params, context).pipe(
+      map((r: StrictHttpResponse<number>): number => r.body)
+    );
+  }
+
+  /** Path part for operation `getCountOfActivePosts()` */
+  static readonly GetCountOfActivePostsPath = '/lfg/my-active-posts-cout';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getCountOfActivePosts()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCountOfActivePosts$Response(params?: GetCountOfActivePosts$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
+    return getCountOfActivePosts(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getCountOfActivePosts$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getCountOfActivePosts(params?: GetCountOfActivePosts$Params, context?: HttpContext): Observable<number> {
+    return this.getCountOfActivePosts$Response(params, context).pipe(
       map((r: StrictHttpResponse<number>): number => r.body)
     );
   }
@@ -127,31 +180,6 @@ export class LfgControllerService extends BaseService {
   getLfgOptions(params?: GetLfgOptions$Params, context?: HttpContext): Observable<LfgOptionsResponse> {
     return this.getLfgOptions$Response(params, context).pipe(
       map((r: StrictHttpResponse<LfgOptionsResponse>): LfgOptionsResponse => r.body)
-    );
-  }
-
-  /** Path part for operation `getCountOfActivePosts()` */
-  static readonly GetCountOfActivePostsPath = '/lfg/active-posts';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `getCountOfActivePosts()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getCountOfActivePosts$Response(params?: GetCountOfActivePosts$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
-    return getCountOfActivePosts(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `getCountOfActivePosts$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  getCountOfActivePosts(params?: GetCountOfActivePosts$Params, context?: HttpContext): Observable<number> {
-    return this.getCountOfActivePosts$Response(params, context).pipe(
-      map((r: StrictHttpResponse<number>): number => r.body)
     );
   }
 

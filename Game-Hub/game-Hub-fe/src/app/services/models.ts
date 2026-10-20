@@ -73,6 +73,7 @@ export type { RegistrationRequest } from './models/registration-request';
 export type { ReportRequest } from './models/report-request';
 export type { ReportStatusResponse } from './models/report-status-response';
 export type { RoleResponse } from './models/role-response';
+export type { SavedLfgPostId } from './models/saved-lfg-post-id';
 export type { StatusResponse } from './models/status-response';
 export type { StoreSettingsResponse } from './models/store-settings-response';
 export type { SubtitleResponse } from './models/subtitle-response';

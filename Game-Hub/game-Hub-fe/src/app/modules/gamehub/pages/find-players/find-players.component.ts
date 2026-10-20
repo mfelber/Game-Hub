@@ -478,7 +478,8 @@ export class FindPlayersComponent implements OnInit {
     if (!tab || tab === this.activeTab) {
       return;
     }
-
+    this.searchQuery = '';
+    this.lastFiltersKey = '';
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import gamehub.game_Hub.File.FileUtils;
 import gamehub.game_Hub.Module.Game;
 import gamehub.game_Hub.Module.User.LfgPost;
+import gamehub.game_Hub.Repository.UserSavedLfgPostRepository;
 import gamehub.game_Hub.Repository.game.GameRepository;
 import gamehub.game_Hub.Response.CountryResponse;
 import gamehub.game_Hub.Response.DayAvailabilityResponse;
@@ -36,6 +37,8 @@ import lombok.RequiredArgsConstructor;
 public class LfgMapper {
 
   private final GameRepository gameRepository;
+
+  private final UserSavedLfgPostRepository userSavedLfgPostRepository;
 
   public <E extends Enum<E> & LfgOption> List<LfgOptionResponse> toOptions(Class<E> type) {
     return Arrays.stream(type.getEnumConstants())
@@ -101,6 +104,8 @@ public class LfgMapper {
 
   public LfgResponse toLfgResponse(LfgPost post) {
 
+    userSavedLfgPostRepository.findByUserAndLfgPost(post.getAuthor(),post);
+
     return LfgResponse.builder()
         .lfgId(post.getId())
         .username(post.getAuthor().getName())
@@ -126,6 +131,7 @@ public class LfgMapper {
         .lfgStatus(post.getLfgStatus())
         .createdAt(post.getCreatedAt())
         .expiresAt(post.getExpiresAt())
+        .saved()
         .build();
   }
 

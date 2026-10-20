@@ -65,8 +65,8 @@ export class LfgPostsComponent implements OnInit {
       this.getAllLfgPosts();
     })
 
-    this.getCountOfActivePosts();
-    this.getMyLfgPosts();
+    this.getMyPosts();
+    this.getMyLfgPostsLimit();
   }
 
   resetFilters() {
@@ -106,7 +106,7 @@ export class LfgPostsComponent implements OnInit {
     })
   }
 
-  getCountOfActivePosts() {
+  getMyPosts() {
     this.lfgService.getCountOfActivePosts().subscribe({
       next: response => {
         this.countOfActivePosts = response;
@@ -115,8 +115,8 @@ export class LfgPostsComponent implements OnInit {
     })
   }
 
-  getMyLfgPosts() {
-    this.lfgService.getMyLfgPosts().subscribe({
+  getMyLfgPostsLimit() {
+    this.lfgService.getMyLfgPostsLimit().subscribe({
       next: response => {
         this.maxActivePosts = response;
         console.log(response);

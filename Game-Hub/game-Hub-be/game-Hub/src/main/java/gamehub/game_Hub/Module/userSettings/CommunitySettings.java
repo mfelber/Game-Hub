@@ -1,7 +1,7 @@
 package gamehub.game_Hub.Module.userSettings;
 
 import gamehub.game_Hub.Module.User.User;
-import jakarta.persistence.Column;
+import gamehub.game_Hub.enums.user.Access;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
