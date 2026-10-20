@@ -79,7 +79,7 @@ public class CommunityServiceImpl implements CommunityService {
         UserSpecification.hasRole(Role.USER),
         UserSpecification.accountStatusIn(FINDABLE_STATUSES));
 
-    if (query != null && query.isBlank()) {
+    if (query != null && !query.isBlank()) {
       spec = spec.and(UserSpecification.usernameContains(query));
     }
 

@@ -2,6 +2,7 @@ package gamehub.game_Hub.ServiceImpl;
 
 import java.time.DayOfWeek;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.format.TextStyle;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
@@ -24,7 +25,10 @@ import gamehub.game_Hub.Mapper.LfgMapper;
 import gamehub.game_Hub.Module.Game;
 import gamehub.game_Hub.Module.User.LfgPost;
 import gamehub.game_Hub.Module.User.User;
+import gamehub.game_Hub.Module.UserSavedLfgPost;
+import gamehub.game_Hub.Module.embededIds.SavedLfgPostId;
 import gamehub.game_Hub.Repository.LfgPostRepository;
+import gamehub.game_Hub.Repository.UserSavedLfgPostRepository;
 import gamehub.game_Hub.Repository.game.GameRepository;
 import gamehub.game_Hub.Repository.user.UserRepository;
 import gamehub.game_Hub.Request.LfgCreationRequest;
@@ -57,6 +61,7 @@ import lombok.RequiredArgsConstructor;
 public class LfgServiceImpl implements LfgService {
 
   private static final int FREE_MAX_ACTIVE_POSTS = 3;
+
   private static final int SUPPORTER_MAX_ACTIVE_POSTS = 5;
 
   private final UserRepository userRepository;
@@ -66,6 +71,8 @@ public class LfgServiceImpl implements LfgService {
   private final LfgPostRepository lfgPostRepository;
 
   private final LfgMapper lfgMapper;
+
+  private final UserSavedLfgPostRepository userSavedLfgPostRepository;
 
   @Override
   public Long createLfg(final Authentication connectedUser, final LfgCreationRequest request) {
@@ -157,7 +164,8 @@ public class LfgServiceImpl implements LfgService {
         .personalities(lfgMapper.toOptions(Personality.class))
         .preferredLanguages(
             Arrays.stream(Languages.values()).map(pl -> new LanguagesResponse(pl.name(), pl.getLabel())).toList())
-        .preferredRegions(Arrays.stream(Region.values()).map(r -> new RegionResponse(r.name(), r.getRegionName())).toList())
+        .preferredRegions(
+            Arrays.stream(Region.values()).map(r -> new RegionResponse(r.name(), r.getRegionName())).toList())
         .postDurations(Arrays.stream(LfgPostDuration.values()).map(d -> new LfgPostDurationResponse(d.name(),
             d.getLabel(), d.getDays(), d.isSupporterOnly(), d.isSupporterOnly() && !user.isSupporter())).toList())
         .canCreate(activePosts < maxActivePosts)
@@ -167,7 +175,8 @@ public class LfgServiceImpl implements LfgService {
   }
 
   @Override
-  public PageResponse<LfgResponse> getAllActiveLfgs(final Authentication connectedUser, final int page, final int size) {
+  public PageResponse<LfgResponse> getAllActiveLfgs(final Authentication connectedUser, final int page,
+      final int size) {
 
     User authUser = (User) connectedUser.getPrincipal();
     User user = userRepository.findById(authUser.getId())
@@ -175,8 +184,7 @@ public class LfgServiceImpl implements LfgService {
 
     Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
 
-
-    Page<LfgPost> lfgPosts = lfgPostRepository.findAllByLfgStatus(LfgStatus.ACTIVE,pageable);
+    Page<LfgPost> lfgPosts = lfgPostRepository.findAllByLfgStatus(LfgStatus.ACTIVE, pageable);
     List<LfgResponse> lfgResponse = lfgPosts.stream().map(
         lfg -> lfgMapper.toLfgResponse(lfg)
     ).toList();
@@ -203,12 +211,42 @@ public class LfgServiceImpl implements LfgService {
   }
 
   @Override
-  public Integer getMyLfgPosts(final Authentication connectedUser) {
+  public Integer getMyLfgPostsLimit(final Authentication connectedUser) {
     User authUser = (User) connectedUser.getPrincipal();
     User user = userRepository.findById(authUser.getId())
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
 
     return getMaxActivePosts(user);
+  }
+
+  @Override
+  public SavedLfgPostId saveLfgPost(final Long lfgPostId, final Authentication connectedUser) {
+
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+    LfgPost lfgPost = lfgPostRepository.findById(lfgPostId)
+        .orElseThrow(() -> new EntityNotFoundException("No LFG post with id: " + lfgPostId));
+
+    System.out.println(user.getUsername() + " " + lfgPost.getId());
+
+    if (lfgPostRepository.findByAuthorAndId(user, lfgPost.getId()).isPresent()) {
+      throw new IllegalStateException("You cant save your own post");
+    }
+
+    if (userSavedLfgPostRepository.findByUserAndLfgPost(user, lfgPost).isPresent()) {
+      throw new IllegalStateException("You already saved this post");
+    }
+
+    UserSavedLfgPost savedLfgPost = UserSavedLfgPost.builder()
+        .id(new SavedLfgPostId(user.getId(), lfgPost.getId()))
+        .lfgPost(lfgPost)
+        .user(user)
+        .savedAt(LocalDateTime.now())
+        .build();
+
+    return userSavedLfgPostRepository.save(savedLfgPost).getId();
   }
 
   private int getMaxActivePosts(final User user) {

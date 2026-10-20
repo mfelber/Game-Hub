@@ -27,4 +27,4 @@ export function getCountOfActivePosts(http: HttpClient, rootUrl: string, params?
   );
 }
 
-getCountOfActivePosts.PATH = '/lfg/active-posts';
+getCountOfActivePosts.PATH = '/lfg/my-active-posts-cout';

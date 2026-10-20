@@ -121,10 +121,9 @@
                 'text-[#D97706]': post.userRegion?.enumName === 'ME',
                 'text-[#14B8A6]': post.userRegion?.enumName === 'OC',
                 'text-[#38BDF8]': post.userRegion?.enumName === 'CAB',
-                }"> {{ post.userRegion?.name }}
+                }">{{post.userRegion?.name}}
                 </span>
-
-                <span class="mx-1">•</span>{{ post.createdAt | timeAgo }}
+                <span class="mx-0.5">•</span>{{ post.createdAt | timeAgo }}
               </span>
                   </div>
                 </div>

@@ -34,6 +34,7 @@
           <div class="min-w-0 flex-1 sm:max-w-sm lg:min-w-[420px] lg:max-w-xl">
             <app-search-bar
               placeholder="Search user"
+              [value]="searchQuery"
               (search)="searchByUsername($event)">
             </app-search-bar>
           </div>

@@ -1,5 +1,7 @@
 package gamehub.game_Hub.Repository;
 
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,5 +15,7 @@ public interface LfgPostRepository extends JpaRepository<LfgPost, Long> {
   Page<LfgPost> findAllByLfgStatus(LfgStatus lfgStatus, Pageable pageable);
 
   Long countLfgPostByLfgStatusAndAuthor(LfgStatus lfgStatus, User user);
+
+  Optional<LfgPost> findByAuthorAndId(User author, Long id);
 
 }
