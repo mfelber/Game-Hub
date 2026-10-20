@@ -25,20 +25,22 @@ public class FileStorageServiceImpl implements FileStorageService {
   @Value("${application.file.upload.image-cover-path}")
   private String fileUploadPath;
 
+  private static final String SEPARATOR = "/";
+
   @Override
   public String saveGameCoverImage(@NonNull final MultipartFile sourceFile, Long gameId) {
-    final String fileUploadSubPath = "games" + separator + gameId;
+    final String fileUploadSubPath = "games" + SEPARATOR + gameId;
     return uploadFile(sourceFile, fileUploadSubPath);
   }
 
   @Override
   public String saveUserImages(@NonNull final MultipartFile sourceFile, @NonNull final Long userId) {
-    final String fileUploadSubPath = "users" + separator + userId;
+    final String fileUploadSubPath = "users" + SEPARATOR + userId;
     return uploadUserImages(sourceFile, fileUploadSubPath);
   }
 
   private String uploadUserImages(final @NonNull MultipartFile sourceFile, @NonNull final String fileUploadSubPath) {
-    String finalfileUploadPath = fileUploadPath + separator + fileUploadSubPath;
+    String finalfileUploadPath = fileUploadPath + SEPARATOR + fileUploadSubPath;
 
     File targetFolder = new File(finalfileUploadPath);
     if (!targetFolder.exists()) {
@@ -50,7 +52,7 @@ public class FileStorageServiceImpl implements FileStorageService {
     }
 
     final String fileExtension = getFileExtension(sourceFile.getOriginalFilename());
-    String targetFilePath = finalfileUploadPath + separator + currentTimeMillis() + "." + fileExtension;
+    String targetFilePath = finalfileUploadPath + SEPARATOR + currentTimeMillis() + "." + fileExtension;
     Path targetPath = Paths.get(targetFilePath);
 
     try {
@@ -65,7 +67,7 @@ public class FileStorageServiceImpl implements FileStorageService {
   }
 
   private String uploadFile(final @NonNull MultipartFile sourceFile, final String fileUploadSubPath) {
-    final String finalUploadPath = fileUploadPath + separator + fileUploadSubPath;
+    final String finalUploadPath = fileUploadPath + SEPARATOR + fileUploadSubPath;
     File targetFolder = new File(finalUploadPath);
     if (!targetFolder.exists()) {
       boolean folderCreated = targetFolder.mkdirs();
@@ -76,7 +78,7 @@ public class FileStorageServiceImpl implements FileStorageService {
     }
 
     final String fileExtension = getFileExtension(sourceFile.getOriginalFilename());
-    String targetFilePath = finalUploadPath + separator + sourceFile.getOriginalFilename();
+    String targetFilePath = finalUploadPath + SEPARATOR + sourceFile.getOriginalFilename();
     Path targetPath = Paths.get(targetFilePath);
     try {
       Files.write(targetPath, sourceFile.getBytes());
