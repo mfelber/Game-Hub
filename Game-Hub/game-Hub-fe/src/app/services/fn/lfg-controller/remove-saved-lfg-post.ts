@@ -9,12 +9,12 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 
-export interface RemoveFromSavedLfgPost$Params {
+export interface RemoveSavedLfgPost$Params {
   lfgPostId: number;
 }
 
-export function removeFromSavedLfgPost(http: HttpClient, rootUrl: string, params: RemoveFromSavedLfgPost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, removeFromSavedLfgPost.PATH, 'delete');
+export function removeSavedLfgPost(http: HttpClient, rootUrl: string, params: RemoveSavedLfgPost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  const rb = new RequestBuilder(rootUrl, removeSavedLfgPost.PATH, 'delete');
   if (params) {
     rb.path('lfgPostId', params.lfgPostId, {});
   }
@@ -29,4 +29,4 @@ export function removeFromSavedLfgPost(http: HttpClient, rootUrl: string, params
   );
 }
 
-removeFromSavedLfgPost.PATH = '/lfg/delete-lfg-post/{lfgPostId}';
+removeSavedLfgPost.PATH = '/lfg/remove-saved-lfg-post/{lfgPostId}';

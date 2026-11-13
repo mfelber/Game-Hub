@@ -2330,13 +2330,43 @@
         }
       }
     },
-    "/lfg/saved-lfg-posts": {
+    "/lfg/my-saved-post-count": {
+      "get": {
+        "tags": [
+          "lfg-controller"
+        ],
+        "operationId": "getSavedLfgPostsCount",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/lfg/my-saved-lfg-posts": {
       "get": {
         "tags": [
           "lfg-controller"
         ],
         "operationId": "getSavedLfgPosts",
         "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": ""
+            }
+          },
           {
             "name": "page",
             "in": "query",
@@ -2372,27 +2402,6 @@
         }
       }
     },
-    "/lfg/my-saved-post-count": {
-      "get": {
-        "tags": [
-          "lfg-controller"
-        ],
-        "operationId": "getSavedLfgPostsCount",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/lfg/my-lfg-posts-limit": {
       "get": {
         "tags": [
@@ -2414,12 +2423,12 @@
         }
       }
     },
-    "/lfg/my-active-posts-cout": {
+    "/lfg/my-active-posts-count": {
       "get": {
         "tags": [
           "lfg-controller"
         ],
-        "operationId": "getCountOfActivePosts",
+        "operationId": "getMyActiveLfgPostsCount",
         "responses": {
           "200": {
             "description": "OK",
@@ -2428,6 +2437,29 @@
                 "schema": {
                   "type": "integer",
                   "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/lfg/my-active-lfg-posts": {
+      "get": {
+        "tags": [
+          "lfg-controller"
+        ],
+        "operationId": "getMyActiveLfgPosts",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LfgResponse"
+                  }
                 }
               }
             }
@@ -3245,12 +3277,12 @@
         }
       }
     },
-    "/lfg/delete-lfg-post/{lfgPostId}": {
+    "/lfg/remove-saved-lfg-post/{lfgPostId}": {
       "delete": {
         "tags": [
           "lfg-controller"
         ],
-        "operationId": "removeFromSavedLfgPost",
+        "operationId": "removeSavedLfgPost",
         "parameters": [
           {
             "name": "lfgPostId",
@@ -4583,10 +4615,10 @@
               "$ref": "#/components/schemas/SubtitleResponse"
             }
           },
-          "inLibrary": {
+          "inWishList": {
             "type": "boolean"
           },
-          "inWishList": {
+          "inLibrary": {
             "type": "boolean"
           },
           "inCart": {

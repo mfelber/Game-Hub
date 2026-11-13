@@ -11,6 +11,7 @@ import { RequestBuilder } from '../../request-builder';
 import { PageResponseLfgResponse } from '../../models/page-response-lfg-response';
 
 export interface GetSavedLfgPosts$Params {
+  query?: string;
   page?: number;
   size?: number;
 }
@@ -18,6 +19,7 @@ export interface GetSavedLfgPosts$Params {
 export function getSavedLfgPosts(http: HttpClient, rootUrl: string, params?: GetSavedLfgPosts$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseLfgResponse>> {
   const rb = new RequestBuilder(rootUrl, getSavedLfgPosts.PATH, 'get');
   if (params) {
+    rb.query('query', params.query, {});
     rb.query('page', params.page, {});
     rb.query('size', params.size, {});
   }
@@ -32,4 +34,4 @@ export function getSavedLfgPosts(http: HttpClient, rootUrl: string, params?: Get
   );
 }
 
-getSavedLfgPosts.PATH = '/lfg/saved-lfg-posts';
+getSavedLfgPosts.PATH = '/lfg/my-saved-lfg-posts';

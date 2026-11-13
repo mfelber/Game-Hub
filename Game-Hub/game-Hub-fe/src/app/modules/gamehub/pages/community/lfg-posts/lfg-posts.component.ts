@@ -14,7 +14,6 @@ import {ToastService} from '../../../../../services/ToastService/toast.service';
 import {EmptyStateComponent} from '../../../components/empty-state/empty-state.component';
 import {LoadingComponent} from '../../../components/loading/loading.component';
 import {LfgPostCardComponent} from '../../../components/lfg-post-card/lfg-post-card.component';
-import {getSavedLfgPosts} from '../../../../../services/fn/lfg-controller/get-saved-lfg-posts';
 
 @Component({
   selector: 'app-lfg-posts',
@@ -40,11 +39,12 @@ export class LfgPostsComponent implements OnInit {
   public savedPage = -1;
   public size = 12;
 
-  countOfActivePosts: number = 0;
   savedCount = 0;
+  myActivePostsCount = 0;
 
   allLfgResponse: PageResponseLfgResponse = {};
   savedLfgResponse: PageResponseLfgResponse = {};
+  myActivePosts: LfgResponse[] = [];
 
   activeTab = 'All'
   openLfgFilter = false;
@@ -56,6 +56,7 @@ export class LfgPostsComponent implements OnInit {
   isLoading = false;
   isLoadingSavedPosts = false;
   savedLoaded = false;
+  isMyPostsLoading = false;
 
 
   constructor(
@@ -89,9 +90,13 @@ export class LfgPostsComponent implements OnInit {
         this.getSavedLfgPosts();
       }
 
+      if (this.activeTab === 'MyPosts' && tabChanged) {
+        this.getMyPosts();
+      }
+
     })
 
-    this.getMyPosts();
+    this.getMyActivePostsCount();
     this.getMyLfgPostsLimit();
     this.getSavedLfgPostsCount()
   }
@@ -146,9 +151,10 @@ export class LfgPostsComponent implements OnInit {
     })
   }
 
-  getSavedLfgPosts() {
+  getSavedLfgPosts(query: string = "") {
     this.isLoadingSavedPosts = true;
     this.lfgService.getSavedLfgPosts({
+      query: query,
       page: this.savedPage,
       size: this.size,
     }).subscribe({
@@ -166,9 +172,11 @@ export class LfgPostsComponent implements OnInit {
   }
 
   getMyPosts() {
-    this.lfgService.getCountOfActivePosts().subscribe({
+    this.isMyPostsLoading = true;
+    this.lfgService.getMyActiveLfgPosts().subscribe({
       next: response => {
-        this.countOfActivePosts = response;
+        this.myActivePosts = response;
+        console.log(this.myActivePosts);
       }
     })
   }
@@ -177,6 +185,14 @@ export class LfgPostsComponent implements OnInit {
     this.lfgService.getSavedLfgPostsCount().subscribe({
       next: response => {
         this.savedCount = response;
+      }
+    })
+  }
+
+  getMyActivePostsCount() {
+    this.lfgService.getMyActiveLfgPostsCount().subscribe({
+      next: response => {
+        this.myActivePostsCount = response;
       }
     })
   }
@@ -218,7 +234,7 @@ export class LfgPostsComponent implements OnInit {
     if (post.lfgId === undefined) {
       return;
     }
-    this.lfgService.removeFromSavedLfgPost({lfgPostId: post.lfgId}).subscribe({
+    this.lfgService.removeSavedLfgPost({lfgPostId: post.lfgId}).subscribe({
       next: response => {
         post.saved = false;
         this.savedCount--;
@@ -280,5 +296,33 @@ export class LfgPostsComponent implements OnInit {
     this.page = 0;
     this.allLfgResponse = {};
     this.getAllLfgPosts(value);
+  }
+
+  searchSavedLfgPosts(value: string) {
+    const query = value.trim();
+
+    if (query === this.searchQuery) {
+      return;
+    }
+
+    this.searchQuery = value;
+    this.savedPage = 0;
+    this.savedLfgResponse = {};
+    this.getSavedLfgPosts(value);
+  }
+
+  getWhenLfgPostExpires(expiresAt: string | Date | null | undefined): number {
+    if (!expiresAt) {
+      return 0;
+    }
+
+    const msLeft = new Date(expiresAt).getTime() - Date.now();
+    const msPerDay = 24 * 60 * 60 * 1000;
+
+    return Math.max(0, Math.ceil(msLeft / msPerDay));
+  }
+
+  edit() {
+
   }
 }

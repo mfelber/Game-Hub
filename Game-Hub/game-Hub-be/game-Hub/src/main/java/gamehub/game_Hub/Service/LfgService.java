@@ -1,5 +1,7 @@
 package gamehub.game_Hub.Service;
 
+import java.util.List;
+
 import org.springframework.security.core.Authentication;
 
 import gamehub.game_Hub.Common.PageResponse;
@@ -15,11 +17,13 @@ public interface LfgService {
 
   PageResponse<LfgResponse> getSavedLfgPosts(Authentication connectedUser, String query , int page, int size);
 
+  List<LfgResponse> getMyActiveLfgPosts(Authentication connectedUser);
+
   Long createLfg(Authentication connectedUser, @Valid LfgCreationRequest request);
 
   LfgOptionsResponse getLfgOptions(Authentication connectedUser);
 
-  Integer getCountOfActivePosts(Authentication connectedUser);
+  Integer getMyActiveLfgPostsCount(Authentication connectedUser);
 
   Integer getSavedLfgPostsCount(Authentication connectedUser);
 
@@ -28,4 +32,5 @@ public interface LfgService {
   SavedLfgPostId saveLfgPost(Long lfgPostId, Authentication connectedUser);
 
   void removeSavedLfgPost(Long lfgPostId, Authentication connectedUser);
+
 }

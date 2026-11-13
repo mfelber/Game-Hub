@@ -153,6 +153,20 @@ public class LfgServiceImpl implements LfgService {
   }
 
   @Override
+  public List<LfgResponse> getMyActiveLfgPosts(final Authentication connectedUser) {
+
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+    List<LfgPost> lfgPosts = lfgPostRepository.findAllByAuthorAndLfgStatus(user, LfgStatus.ACTIVE);
+    List<LfgResponse> lfgResponse = lfgPosts.stream().map(
+        lfg -> lfgMapper.toLfgResponse(user, lfg)).toList();
+
+    return lfgResponse;
+  }
+
+  @Override
   public Long createLfg(final Authentication connectedUser, final LfgCreationRequest request) {
 
     final boolean flexible = request.flexible();
@@ -253,7 +267,7 @@ public class LfgServiceImpl implements LfgService {
   }
 
   @Override
-  public Integer getCountOfActivePosts(Authentication connectedUser) {
+  public Integer getMyActiveLfgPostsCount(Authentication connectedUser) {
 
     User authUser = (User) connectedUser.getPrincipal();
     User user = userRepository.findById(authUser.getId())

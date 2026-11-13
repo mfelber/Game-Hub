@@ -1,5 +1,6 @@
 package gamehub.game_Hub.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -18,5 +19,7 @@ public interface LfgPostRepository extends JpaRepository<LfgPost, Long>, JpaSpec
   Long countLfgPostByLfgStatusAndAuthor(LfgStatus lfgStatus, User user);
 
   Optional<LfgPost> findByAuthorAndId(User author, Long id);
+
+  List<LfgPost> findAllByAuthorAndLfgStatus(User author, LfgStatus lfgStatus);
 
 }

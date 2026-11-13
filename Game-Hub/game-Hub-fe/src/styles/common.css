@@ -31,7 +31,7 @@
 }
 
 .remove {
-  @apply bg-[#4A2024] hover:bg-[#3B1A1D] cursor-pointer text-[#FCA5A5];
+  @apply bg-[#4A2024] border-[0.5px] border-[#FCA5A5] hover:bg-[#3B1A1D] cursor-pointer text-[#FCA5A5];
 }
 
 .report {

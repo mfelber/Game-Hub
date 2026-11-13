@@ -1,5 +1,7 @@
 package gamehub.game_Hub.Controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -40,7 +42,7 @@ public class LfgController {
     return ResponseEntity.ok(lfgService.getAllActiveLfgPosts(connectedUser, query , page, size));
   }
 
-  @GetMapping("/saved-lfg-posts")
+  @GetMapping("/my-saved-lfg-posts")
   public ResponseEntity<PageResponse<LfgResponse>> getSavedLfgPosts(Authentication connectedUser,
       @RequestParam(defaultValue = "") String query,
       @RequestParam(name = "page", defaultValue = "0", required = false) int page,
@@ -48,15 +50,21 @@ public class LfgController {
     return ResponseEntity.ok(lfgService.getSavedLfgPosts(connectedUser, query , page, size));
   }
 
+  // getMyActiveLfgs
+  @GetMapping("/my-active-lfg-posts")
+  public ResponseEntity<List<LfgResponse>> getMyActiveLfgPosts(Authentication connectedUser) {
+    return ResponseEntity.ok(lfgService.getMyActiveLfgPosts(connectedUser));
+  }
+  // getMyLfgHistory fetch last 3 lfgs or 5 if user is supporter
+
   @GetMapping("/my-lfg-posts-limit")
   public ResponseEntity<Integer> getMyLfgPostsLimit(Authentication connectedUser) {
     return ResponseEntity.ok(lfgService.getMyLfgPostsLimit(connectedUser));
   }
 
-  // rename this to my posts and send my countActive posts
-  @GetMapping("/my-active-posts-cout")
-  public ResponseEntity<Integer> getCountOfActivePosts(Authentication connectedUser) {
-    return ResponseEntity.ok(lfgService.getCountOfActivePosts(connectedUser));
+  @GetMapping("/my-active-posts-count")
+  public ResponseEntity<Integer> getMyActiveLfgPostsCount(Authentication connectedUser) {
+    return ResponseEntity.ok(lfgService.getMyActiveLfgPostsCount(connectedUser));
   }
 
   @GetMapping("/my-saved-post-count")
@@ -79,6 +87,5 @@ public class LfgController {
   public ResponseEntity<LfgOptionsResponse> getLfgOptions(Authentication connectedUser) {
     return ResponseEntity.ok(lfgService.getLfgOptions(connectedUser));
   }
-
 
 }
