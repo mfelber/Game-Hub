@@ -9,12 +9,12 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -53,6 +53,8 @@ import gamehub.game_Hub.enums.Lfg.TimeOfDay;
 import gamehub.game_Hub.enums.MicrophoneUsage;
 import gamehub.game_Hub.enums.Platform;
 import gamehub.game_Hub.enums.Region;
+import gamehub.game_Hub.specification.AllLfgPostsSpecification;
+import gamehub.game_Hub.specification.SavedLfgPostSpecification;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
@@ -73,6 +75,82 @@ public class LfgServiceImpl implements LfgService {
   private final LfgMapper lfgMapper;
 
   private final UserSavedLfgPostRepository userSavedLfgPostRepository;
+
+  @Override
+  public PageResponse<LfgResponse> getAllActiveLfgPosts(final Authentication connectedUser,
+      String query,
+      final int page,
+      final int size) {
+
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+    Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+
+    Specification<LfgPost> spec = Specification.allOf(AllLfgPostsSpecification.authorIsNot(user.getId()),
+        AllLfgPostsSpecification.lfgPostStatus(LfgStatus.ACTIVE));
+
+    if (query != null && !query.isBlank()) {
+      spec = spec.and(
+          AllLfgPostsSpecification.authorUsernameContains(query)
+              .or(AllLfgPostsSpecification.gameTitleContains(query)));
+    }
+
+    Page<LfgPost> lfgPosts = lfgPostRepository.findAll(spec, pageable);
+    List<LfgResponse> lfgResponse = lfgPosts.stream().map(
+        lfg -> lfgMapper.toLfgResponse(user, lfg)
+    ).toList();
+
+    return new PageResponse<>(
+        lfgResponse,
+        lfgPosts.getNumber(),
+        lfgPosts.getSize(),
+        lfgPosts.getTotalElements(),
+        lfgPosts.getTotalPages(),
+        lfgPosts.isFirst(),
+        lfgPosts.isLast()
+    );
+  }
+
+  @Override
+  public PageResponse<LfgResponse> getSavedLfgPosts(final Authentication connectedUser,
+      String query,
+      final int page,
+      final int size) {
+
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+    Pageable pageable = PageRequest.of(page, size, Sort.by("savedAt").descending());
+
+    Specification<UserSavedLfgPost> spec = Specification.allOf(
+        SavedLfgPostSpecification.savedByUser(user.getId()),
+        SavedLfgPostSpecification.lfgPostStatus(LfgStatus.ACTIVE));
+
+    if (query != null && !query.isBlank()) {
+      spec = spec.and(
+          SavedLfgPostSpecification.authorUsernameContains(query)
+              .or(SavedLfgPostSpecification.gameTitleContains(query)));
+    }
+
+    Page<UserSavedLfgPost> savedPosts = userSavedLfgPostRepository.findAll(spec, pageable);
+
+    List<LfgResponse> lfgResponse = savedPosts.stream()
+        .map(saved -> lfgMapper.toLfgResponse(user, saved.getLfgPost()))
+        .toList();
+
+    return new PageResponse<>(
+        lfgResponse,
+        savedPosts.getNumber(),
+        savedPosts.getSize(),
+        savedPosts.getTotalElements(),
+        savedPosts.getTotalPages(),
+        savedPosts.isFirst(),
+        savedPosts.isLast()
+    );
+  }
 
   @Override
   public Long createLfg(final Authentication connectedUser, final LfgCreationRequest request) {
@@ -175,32 +253,6 @@ public class LfgServiceImpl implements LfgService {
   }
 
   @Override
-  public PageResponse<LfgResponse> getAllActiveLfgs(final Authentication connectedUser, final int page,
-      final int size) {
-
-    User authUser = (User) connectedUser.getPrincipal();
-    User user = userRepository.findById(authUser.getId())
-        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
-
-    Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
-
-    Page<LfgPost> lfgPosts = lfgPostRepository.findAllByLfgStatus(LfgStatus.ACTIVE, pageable);
-    List<LfgResponse> lfgResponse = lfgPosts.stream().map(
-        lfg -> lfgMapper.toLfgResponse(lfg)
-    ).toList();
-
-    return new PageResponse<>(
-        lfgResponse,
-        lfgPosts.getNumber(),
-        lfgPosts.getSize(),
-        lfgPosts.getTotalElements(),
-        lfgPosts.getTotalPages(),
-        lfgPosts.isFirst(),
-        lfgPosts.isLast()
-    );
-  }
-
-  @Override
   public Integer getCountOfActivePosts(Authentication connectedUser) {
 
     User authUser = (User) connectedUser.getPrincipal();
@@ -208,6 +260,16 @@ public class LfgServiceImpl implements LfgService {
         .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
 
     return countActivePosts(user);
+  }
+
+  @Override
+  public Integer getSavedLfgPostsCount(final Authentication connectedUser) {
+
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+    return Math.toIntExact(userSavedLfgPostRepository.countByUserAndLfgPostLfgStatus(user, LfgStatus.ACTIVE));
   }
 
   @Override
@@ -229,8 +291,6 @@ public class LfgServiceImpl implements LfgService {
     LfgPost lfgPost = lfgPostRepository.findById(lfgPostId)
         .orElseThrow(() -> new EntityNotFoundException("No LFG post with id: " + lfgPostId));
 
-    System.out.println(user.getUsername() + " " + lfgPost.getId());
-
     if (lfgPostRepository.findByAuthorAndId(user, lfgPost.getId()).isPresent()) {
       throw new IllegalStateException("You cant save your own post");
     }
@@ -247,6 +307,24 @@ public class LfgServiceImpl implements LfgService {
         .build();
 
     return userSavedLfgPostRepository.save(savedLfgPost).getId();
+  }
+
+  @Override
+  public void removeSavedLfgPost(final Long lfgPostId, final Authentication connectedUser) {
+
+    User authUser = (User) connectedUser.getPrincipal();
+    User user = userRepository.findById(authUser.getId())
+        .orElseThrow(() -> new EntityNotFoundException("No user found with id: " + authUser.getId()));
+
+    boolean isSaved = userSavedLfgPostRepository.existsById(new SavedLfgPostId(user.getId(), lfgPostId));
+
+    SavedLfgPostId id = new SavedLfgPostId(user.getId(), lfgPostId);
+
+    UserSavedLfgPost savedLfgPost = userSavedLfgPostRepository.findById(id)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+            "This LFG post is not in your saved list."));
+
+    userSavedLfgPostRepository.delete(savedLfgPost);
   }
 
   private int getMaxActivePosts(final User user) {

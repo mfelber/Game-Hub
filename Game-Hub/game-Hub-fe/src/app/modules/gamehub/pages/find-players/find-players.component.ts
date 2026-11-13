@@ -271,8 +271,14 @@ export class FindPlayersComponent implements OnInit {
   }
 
   searchByUsername(value: string) {
+    const query = value.trim();
+
+    if (query === this.searchQuery) {
+      return;
+    }
+
+    this.searchQuery = query;
     this.page = 0;
-    this.searchQuery = value;
     this.userCommunityResponse = {}
     this.loadAllUsers(value);
   }
@@ -484,6 +490,8 @@ export class FindPlayersComponent implements OnInit {
       relativeTo: this.route,
       queryParams: {
         tab: tab === 'lfg' ? 'lfg' : null,
+        lfgTab: null,
+        savedPage: null,
         page: null,
         countries: null,
         region: null,

@@ -2330,6 +2330,69 @@
         }
       }
     },
+    "/lfg/saved-lfg-posts": {
+      "get": {
+        "tags": [
+          "lfg-controller"
+        ],
+        "operationId": "getSavedLfgPosts",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseLfgResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/lfg/my-saved-post-count": {
+      "get": {
+        "tags": [
+          "lfg-controller"
+        ],
+        "operationId": "getSavedLfgPostsCount",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/lfg/my-lfg-posts-limit": {
       "get": {
         "tags": [
@@ -2377,8 +2440,17 @@
         "tags": [
           "lfg-controller"
         ],
-        "operationId": "getAllActiveLfgs",
+        "operationId": "getAllActiveLfgPosts",
         "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": ""
+            }
+          },
           {
             "name": "page",
             "in": "query",
@@ -3169,6 +3241,30 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/lfg/delete-lfg-post/{lfgPostId}": {
+      "delete": {
+        "tags": [
+          "lfg-controller"
+        ],
+        "operationId": "removeFromSavedLfgPost",
+        "parameters": [
+          {
+            "name": "lfgPostId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -4487,10 +4583,10 @@
               "$ref": "#/components/schemas/SubtitleResponse"
             }
           },
-          "inWishList": {
+          "inLibrary": {
             "type": "boolean"
           },
-          "inLibrary": {
+          "inWishList": {
             "type": "boolean"
           },
           "inCart": {
@@ -5356,6 +5452,9 @@
           },
           "timeOfDay": {
             "$ref": "#/components/schemas/LfgIconOptionResponse"
+          },
+          "saved": {
+            "type": "boolean"
           },
           "flexible": {
             "type": "boolean"

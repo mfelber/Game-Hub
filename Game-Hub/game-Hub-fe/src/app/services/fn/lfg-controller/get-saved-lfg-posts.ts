@@ -10,13 +10,13 @@ import { RequestBuilder } from '../../request-builder';
 
 import { PageResponseLfgResponse } from '../../models/page-response-lfg-response';
 
-export interface GetAllActiveLfgs$Params {
+export interface GetSavedLfgPosts$Params {
   page?: number;
   size?: number;
 }
 
-export function getAllActiveLfgs(http: HttpClient, rootUrl: string, params?: GetAllActiveLfgs$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseLfgResponse>> {
-  const rb = new RequestBuilder(rootUrl, getAllActiveLfgs.PATH, 'get');
+export function getSavedLfgPosts(http: HttpClient, rootUrl: string, params?: GetSavedLfgPosts$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseLfgResponse>> {
+  const rb = new RequestBuilder(rootUrl, getSavedLfgPosts.PATH, 'get');
   if (params) {
     rb.query('page', params.page, {});
     rb.query('size', params.size, {});
@@ -32,4 +32,4 @@ export function getAllActiveLfgs(http: HttpClient, rootUrl: string, params?: Get
   );
 }
 
-getAllActiveLfgs.PATH = '/lfg/lfg-posts';
+getSavedLfgPosts.PATH = '/lfg/saved-lfg-posts';

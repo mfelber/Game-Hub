@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import gamehub.game_Hub.File.FileUtils;
 import gamehub.game_Hub.Module.Game;
 import gamehub.game_Hub.Module.User.LfgPost;
+import gamehub.game_Hub.Module.User.User;
 import gamehub.game_Hub.Repository.UserSavedLfgPostRepository;
 import gamehub.game_Hub.Repository.game.GameRepository;
 import gamehub.game_Hub.Response.CountryResponse;
@@ -102,9 +103,7 @@ public class LfgMapper {
     )).toList();
   }
 
-  public LfgResponse toLfgResponse(LfgPost post) {
-
-    userSavedLfgPostRepository.findByUserAndLfgPost(post.getAuthor(),post);
+  public LfgResponse toLfgResponse(User connectedUser, LfgPost post) {
 
     return LfgResponse.builder()
         .lfgId(post.getId())
@@ -131,7 +130,7 @@ public class LfgMapper {
         .lfgStatus(post.getLfgStatus())
         .createdAt(post.getCreatedAt())
         .expiresAt(post.getExpiresAt())
-        .saved()
+        .saved(userSavedLfgPostRepository.findByUserAndLfgPost(connectedUser, post).isPresent())
         .build();
   }
 
