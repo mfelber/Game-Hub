@@ -8,13 +8,18 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { PageResponseLfgResponse } from '../../models/page-response-lfg-response';
 
-export interface GetMyLfgPosts$Params {
+export interface GetSavedLfgPosts$Params {
+  page?: number;
+  size?: number;
 }
 
-export function getMyLfgPosts(http: HttpClient, rootUrl: string, params?: GetMyLfgPosts$Params, context?: HttpContext): Observable<StrictHttpResponse<number>> {
-  const rb = new RequestBuilder(rootUrl, getMyLfgPosts.PATH, 'get');
+export function getSavedLfgPosts(http: HttpClient, rootUrl: string, params?: GetSavedLfgPosts$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseLfgResponse>> {
+  const rb = new RequestBuilder(rootUrl, getSavedLfgPosts.PATH, 'get');
   if (params) {
+    rb.query('page', params.page, {});
+    rb.query('size', params.size, {});
   }
 
   return http.request(
@@ -22,9 +27,9 @@ export function getMyLfgPosts(http: HttpClient, rootUrl: string, params?: GetMyL
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: parseFloat(String((r as HttpResponse<any>).body)) }) as StrictHttpResponse<number>;
+      return r as StrictHttpResponse<PageResponseLfgResponse>;
     })
   );
 }
 
-getMyLfgPosts.PATH = '/lfg/my-lfg-posts';
+getSavedLfgPosts.PATH = '/lfg/saved-lfg-posts';

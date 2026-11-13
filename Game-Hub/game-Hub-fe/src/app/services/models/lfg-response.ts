@@ -31,6 +31,7 @@ export interface LfgResponse {
   platform?: Array<PlatformResponse>;
   playStyle?: LfgIconOptionResponse;
   profileColor?: string;
+  saved?: boolean;
   timeOfDay?: LfgIconOptionResponse;
   userProfilePicture?: string;
   userRegion?: RegionResponse;

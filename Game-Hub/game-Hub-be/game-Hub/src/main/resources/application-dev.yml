@@ -53,6 +53,8 @@ application:
 
 server:
   port: 8088
+  error:
+    include-message: always
 
 springdoc:
   api-docs:

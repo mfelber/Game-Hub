@@ -1,10 +1,8 @@
-package gamehub.game_Hub.Module.User;
+package gamehub.game_Hub.Module.embededIds;
 
-import java.io.Serializable;
-
-import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,14 +10,12 @@ import lombok.Setter;
 @Embeddable
 @Getter
 @Setter
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserGameId implements Serializable {
+public class SavedLfgPostId {
 
-  @Column(name = "user_id")
   private Long userId;
-
-  @Column(name = "game_id")
-  private Long gameId;
+  private Long lfgPostId;
 
 }

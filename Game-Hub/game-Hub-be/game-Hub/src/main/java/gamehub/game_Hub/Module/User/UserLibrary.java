@@ -3,6 +3,7 @@ package gamehub.game_Hub.Module.User;
 import java.time.LocalDateTime;
 
 import gamehub.game_Hub.Module.Game;
+import gamehub.game_Hub.Module.embededIds.UserGameId;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;

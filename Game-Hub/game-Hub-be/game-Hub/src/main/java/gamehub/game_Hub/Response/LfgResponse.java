@@ -38,6 +38,7 @@ public record LfgResponse(
     List <RegionResponse> openToRegions,
     List<DayAvailabilityResponse> days,
     LfgIconOptionResponse timeOfDay,
+    boolean saved,
     boolean flexible,
     LfgStatus lfgStatus,
     Instant createdAt,

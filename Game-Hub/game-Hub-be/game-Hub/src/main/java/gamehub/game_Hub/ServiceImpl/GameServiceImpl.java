@@ -28,7 +28,7 @@ import gamehub.game_Hub.Module.Platform;
 import gamehub.game_Hub.Module.Subtitles;
 import gamehub.game_Hub.Module.SystemRequirements;
 import gamehub.game_Hub.Module.User.User;
-import gamehub.game_Hub.Module.User.UserGameId;
+import gamehub.game_Hub.Module.embededIds.UserGameId;
 import gamehub.game_Hub.Module.User.UserLibrary;
 import gamehub.game_Hub.Module.User.UserWishlistId;
 import gamehub.game_Hub.Module.User.Wishlist;

@@ -13,6 +13,8 @@ import {HlmTooltip} from '@spartan/tooltip';
 import {ToastService} from '../../../../../services/ToastService/toast.service';
 import {EmptyStateComponent} from '../../../components/empty-state/empty-state.component';
 import {LoadingComponent} from '../../../components/loading/loading.component';
+import {LfgPostCardComponent} from '../../../components/lfg-post-card/lfg-post-card.component';
+import {getSavedLfgPosts} from '../../../../../services/fn/lfg-controller/get-saved-lfg-posts';
 
 @Component({
   selector: 'app-lfg-posts',
@@ -24,31 +26,36 @@ import {LoadingComponent} from '../../../components/loading/loading.component';
     HlmTabsTrigger,
     HlmTabsContent,
     PaginationComponent,
-    NgStyle,
-    DatePipe,
-    TimeAgoPipe,
     HlmTooltip,
     EmptyStateComponent,
-    LoadingComponent
+    LoadingComponent,
+    LfgPostCardComponent
   ],
   templateUrl: './lfg-posts.component.html',
   styleUrl: './lfg-posts.component.scss',
 })
 export class LfgPostsComponent implements OnInit {
 
-  public page = 0;
+  public page = -1;
+  public savedPage = -1;
   public size = 12;
 
+  countOfActivePosts: number = 0;
+  savedCount = 0;
+
   allLfgResponse: PageResponseLfgResponse = {};
+  savedLfgResponse: PageResponseLfgResponse = {};
 
   activeTab = 'All'
   openLfgFilter = false;
   searchQuery: string = '';
-  countOfActivePosts: number = 0;
   maxActivePosts: number = 0;
-  filteredPosts: LfgResponse[] = []
+  filteredAllPosts: LfgResponse[] = []
+  filteredSavedPosts: LfgResponse[] = []
 
   isLoading = false;
+  isLoadingSavedPosts = false;
+  savedLoaded = false;
 
 
   constructor(
@@ -61,41 +68,74 @@ export class LfgPostsComponent implements OnInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
-      this.page = Number(params['page'] ?? 1) - 1;
-      this.getAllLfgPosts();
+
+      const tab = params['lfgTab'] ?? 'All';
+      const newAllPage = Number(params['page'] ?? 1) - 1;
+      const newSavedPage = Number(params['savedPage'] ?? 1) - 1;
+
+      const tabChanged = tab !== this.activeTab;
+      const pageChanged = newAllPage !== this.page;
+      const savedPageChanged = newSavedPage !== this.savedPage;
+
+      this.activeTab = tab;
+      this.page = newAllPage;
+      this.savedPage = newSavedPage;
+
+      if (this.activeTab === 'All' && (pageChanged || tabChanged)) {
+        this.getAllLfgPosts();
+      }
+
+      if (this.activeTab === 'Saved' && (savedPageChanged || tabChanged)) {
+        this.getSavedLfgPosts();
+      }
+
     })
 
-    this.getCountOfActivePosts();
-    this.getMyLfgPosts();
+    this.getMyPosts();
+    this.getMyLfgPostsLimit();
+    this.getSavedLfgPostsCount()
   }
 
   resetFilters() {
 
   }
 
-  isExpiring(expiresAt: string | Date | null | undefined): boolean {
-    if (!expiresAt) {
-      return false;
-    }
-
-    const expiring = new Date(expiresAt).getTime();
-    const twoDays = 2 * 24 * 60 * 60 * 1000;
-    return expiring - Date.now() <= twoDays && expiring > Date.now();
-  }
-
   navigateToNewPost() {
     this.router.navigate(['/gamehub/find-players/new-lfg-post']);
   }
 
-  getAllLfgPosts() {
+  onTabChange(tab: string | undefined) {
+
+    const newTab = tab ?? 'All';
+    if (newTab === this.activeTab) {
+      return;
+    }
+
+    this.searchQuery = '';
+    this.page = 0;
+    this.savedPage = 0;
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        lfgTab: newTab === 'All' ? null : newTab,
+        page: null,
+        savedPage: null
+      },
+      queryParamsHandling: 'merge'
+    });
+  }
+
+  getAllLfgPosts(query: string = "") {
     this.isLoading = true;
-    this.lfgService.getAllActiveLfgs({
+    this.lfgService.getAllActiveLfgPosts({
+      query: query,
       page: this.page,
       size: this.size,
     }).subscribe({
       next: response => {
         this.allLfgResponse = response;
-        this.filteredPosts = [...(response.content || [])];
+        this.filteredAllPosts = [...(response.content || [])];
         console.log(response);
         this.isLoading = false;
       },
@@ -106,17 +146,43 @@ export class LfgPostsComponent implements OnInit {
     })
   }
 
-  getCountOfActivePosts() {
-    this.lfgService.getCountOfActivePosts().subscribe({
+  getSavedLfgPosts() {
+    this.isLoadingSavedPosts = true;
+    this.lfgService.getSavedLfgPosts({
+      page: this.savedPage,
+      size: this.size,
+    }).subscribe({
       next: response => {
-        this.countOfActivePosts = response;
-        console.log(this.countOfActivePosts);
+        this.savedLfgResponse = response;
+        this.filteredSavedPosts = [...(response.content ?? [])];
+        this.savedLoaded = true;
+        this.isLoadingSavedPosts = false;
+      },
+      error: () => {
+        this.toastService.error('Error with loading saved LFG posts');
+        this.isLoadingSavedPosts = false;
       }
     })
   }
 
-  getMyLfgPosts() {
-    this.lfgService.getMyLfgPosts().subscribe({
+  getMyPosts() {
+    this.lfgService.getCountOfActivePosts().subscribe({
+      next: response => {
+        this.countOfActivePosts = response;
+      }
+    })
+  }
+
+  getSavedLfgPostsCount() {
+    this.lfgService.getSavedLfgPostsCount().subscribe({
+      next: response => {
+        this.savedCount = response;
+      }
+    })
+  }
+
+  getMyLfgPostsLimit() {
+    this.lfgService.getMyLfgPostsLimit().subscribe({
       next: response => {
         this.maxActivePosts = response;
         console.log(response);
@@ -124,14 +190,60 @@ export class LfgPostsComponent implements OnInit {
     })
   }
 
-  onTabChange(tab: string | undefined) {
-    console.log(tab);
-    this.activeTab = tab ?? 'All';
-    this.searchQuery = '';
+  toggleSave(post: LfgResponse) {
+    if (post.saved) {
+      this.removeFromSavedLfgPosts(post);
+    } else {
+      this.saveLfgPost(post);
+    }
+  }
+
+  saveLfgPost(post: LfgResponse) {
+    if (post.lfgId === undefined) {
+      return;
+    }
+    this.lfgService.saveLfgPost({lfgPostId:post.lfgId}).subscribe({
+      next: response => {
+        post.saved = true;
+        this.savedCount++;
+        this.toastService.success('Lfg Post saved');
+      },
+      error: error => {
+        this.toastService.error(error?.error?.message ?? 'Could not save post');
+      }
+    })
+  }
+
+  removeFromSavedLfgPosts(post: LfgResponse) {
+    if (post.lfgId === undefined) {
+      return;
+    }
+    this.lfgService.removeFromSavedLfgPost({lfgPostId: post.lfgId}).subscribe({
+      next: response => {
+        post.saved = false;
+        this.savedCount--;
+        this.toastService.success('Removed from saved Lfg posts');
+        if (this.activeTab === 'Saved') {
+          this.refreshSavedAfterRemove();
+        }
+      },
+      error: error => {
+        this.toastService.error(error?.error?.message ?? 'Could not remove the post from your saved list.');
+      }
+    })
+  }
+
+  private refreshSavedAfterRemove() {
+    const wasLastOnPage = this.filteredSavedPosts.length === 1;
+
+    if (wasLastOnPage && this.savedPage > 0) {
+      this.changeSavedPage(this.savedPage -1)
+    } else {
+      this.getSavedLfgPosts();
+    }
   }
 
   changePage(page: number) {
-    this.page = page;
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
@@ -142,14 +254,31 @@ export class LfgPostsComponent implements OnInit {
     this.scrollToTop();
   }
 
+  changeSavedPage(page: number) {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        savedPage: page + 1,
+      },
+      queryParamsHandling: 'merge'
+    });
+    this.scrollToTop();
+  }
+
   private scrollToTop() {
     document.getElementById('page-container')?.scrollTo({top: 0});
   }
 
-  getProfilePicture(user: UserCommunityResponse) {
-    if (user.userProfilePicture) {
-      return 'data:image/jpeg;base64,' + user.userProfilePicture;
+  searchLfgPosts(value: string) {
+    const query = value.trim();
+
+    if (query === this.searchQuery) {
+      return;
     }
-    return user.userProfilePicture;
+
+    this.searchQuery = value;
+    this.page = 0;
+    this.allLfgResponse = {};
+    this.getAllLfgPosts(value);
   }
 }

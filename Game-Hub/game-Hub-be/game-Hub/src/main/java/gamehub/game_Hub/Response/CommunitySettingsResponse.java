@@ -1,6 +1,5 @@
 package gamehub.game_Hub.Response;
 
-import gamehub.game_Hub.Module.userSettings.Access;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

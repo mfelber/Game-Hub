@@ -8,18 +8,16 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { PageResponseLfgResponse } from '../../models/page-response-lfg-response';
+import { SavedLfgPostId } from '../../models/saved-lfg-post-id';
 
-export interface GetAllActiveLfgs$Params {
-  page?: number;
-  size?: number;
+export interface SaveLfgPost$Params {
+  lfgPostId: number;
 }
 
-export function getAllActiveLfgs(http: HttpClient, rootUrl: string, params?: GetAllActiveLfgs$Params, context?: HttpContext): Observable<StrictHttpResponse<PageResponseLfgResponse>> {
-  const rb = new RequestBuilder(rootUrl, getAllActiveLfgs.PATH, 'get');
+export function saveLfgPost(http: HttpClient, rootUrl: string, params: SaveLfgPost$Params, context?: HttpContext): Observable<StrictHttpResponse<SavedLfgPostId>> {
+  const rb = new RequestBuilder(rootUrl, saveLfgPost.PATH, 'post');
   if (params) {
-    rb.query('page', params.page, {});
-    rb.query('size', params.size, {});
+    rb.path('lfgPostId', params.lfgPostId, {});
   }
 
   return http.request(
@@ -27,9 +25,9 @@ export function getAllActiveLfgs(http: HttpClient, rootUrl: string, params?: Get
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<PageResponseLfgResponse>;
+      return r as StrictHttpResponse<SavedLfgPostId>;
     })
   );
 }
 
-getAllActiveLfgs.PATH = '/lfg/lfg-posts';
+saveLfgPost.PATH = '/lfg/save-lfg-post/{lfgPostId}';
